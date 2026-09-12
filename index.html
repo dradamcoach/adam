@@ -9,44 +9,124 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>ADAM</h1>
-  <p>منصة التدريب والتأهيل والتغذية</p>
+  <button id="lang-btn" class="lang-toggle">EN</button>
 
-  <!-- شاشة الدخول -->
+  <h1>ADAM</h1>
+  <p data-t="tagline">منصة التدريب والتأهيل والتغذية</p>
+
   <div class="card hidden" id="login-screen">
-    <h2>تسجيل الدخول</h2>
-    <input type="email" id="email" placeholder="الإيميل">
-    <input type="password" id="password" placeholder="الباسورد">
-    <button id="login-btn">دخول</button>
+    <h2 data-t="login_title">تسجيل الدخول</h2>
+    <input type="email" id="email" data-t-ph="email">
+    <input type="password" id="password" data-t-ph="password">
+    <button id="login-btn" data-t="login_btn">دخول</button>
     <p class="message" id="login-message"></p>
   </div>
 
-  <!-- شاشة المدرب -->
-  <div class="card hidden" id="coach-screen">
-    <h2>برنامج عميل</h2>
-    <input type="email" id="client-email" placeholder="إيميل العميل">
-    <button id="load-btn" class="secondary">عرض برنامجه</button>
-    <ul id="coach-list"></ul>
+  <div class="card hidden" id="clients-screen">
+    <h2 data-t="my_clients">عملائي</h2>
+    <ul id="clients-list"></ul>
     <div class="row">
-      <input id="ex-name" placeholder="اسم التمرين">
-      <input id="ex-sets" type="number" placeholder="مجموعات">
-      <input id="ex-reps" placeholder="تكرار">
+      <input id="new-name" data-t-ph="client_name">
+      <input id="new-email" type="email" data-t-ph="client_email">
     </div>
-    <button id="add-btn" class="secondary">+ إضافة تمرين</button>
-    <button id="save-btn">حفظ البرنامج</button>
+    <button id="add-client-btn" class="secondary" data-t="add_client">+ إضافة عميل</button>
+    <p class="message" id="clients-message"></p>
+  </div>
+
+  <div class="card hidden" id="coach-screen">
+    <button id="back-btn" class="link" data-t="back_clients">‹ رجوع لقائمة العملاء</button>
+    <h2 id="coach-title">برنامج العميل</h2>
+
+    <div class="dial-wrap">
+      <div class="dial">
+        <div class="dial-ring" id="coach-ring"></div>
+        <div class="dial-center">
+          <div class="dc-day" id="coach-dc-day"></div>
+          <div class="dc-sub" id="coach-dc-sub"></div>
+        </div>
+      </div>
+    </div>
+
+    <input id="day-title" data-t-ph="day_title">
+    <label class="rest">
+      <input type="checkbox" id="rest-day"> <span data-t="rest_day">يوم راحة</span>
+    </label>
+    <ul id="coach-list"></ul>
+    <button id="open-library-btn" class="secondary" data-t="open_library">📚 اختر من مكتبة التمارين</button>
+    <button id="open-mylib-btn" class="secondary" data-t="open_mylib">⭐ مكتبتي الخاصة</button>
+    <p class="or" data-t="or_manual">أو اكتب التمرين بنفسك</p>
+    <div class="row">
+      <input id="ex-name" data-t-ph="ex_name">
+      <input id="ex-sets" type="number" data-t-ph="ex_sets">
+      <input id="ex-reps" data-t-ph="ex_reps">
+    </div>
+    <button id="add-btn" class="secondary" data-t="add_ex">+ إضافة تمرين</button>
+    <button id="save-btn" data-t="save_program">حفظ البرنامج</button>
     <p class="message" id="coach-message"></p>
   </div>
 
-  <!-- شاشة العميل -->
-  <div class="card hidden" id="client-screen">
-    <h2>تمرين اليوم</h2>
-    <p class="progress" id="progress"></p>
-    <ul id="list"></ul>
-    <button id="finish">إنهاء التمرين</button>
-    <button id="reset" class="secondary">ابدأ من جديد</button>
+  <div class="card hidden" id="library-screen">
+    <button id="lib-back-btn" class="link" data-t="back_program">‹ رجوع للبرنامج</button>
+    <h2 data-t="library_title">مكتبة التمارين</h2>
+    <input id="lib-search" data-t-ph="search_ex">
+    <div class="filters">
+      <select id="lib-muscle"></select>
+      <select id="lib-equip"></select>
+    </div>
+    <p class="message" id="lib-message"></p>
+    <div class="grid" id="lib-grid"></div>
   </div>
 
-  <button id="logout-btn" class="link hidden">تسجيل الخروج</button>
+  <div class="card hidden" id="mylib-screen">
+    <button id="mylib-back-btn" class="link" data-t="back_program">‹ رجوع للبرنامج</button>
+    <h2 data-t="mylib_title">مكتبتي الخاصة</h2>
+    <p class="or" data-t="mylib_hint">التمارين اللي بتضيفها هنا بتفضل محفوظة ليك</p>
+
+    <ul id="mylib-list"></ul>
+
+    <div class="add-box">
+      <h3 data-t="add_new_ex">إضافة تمرين جديد</h3>
+      <input id="my-name" data-t-ph="ex_name">
+      <div class="row">
+        <select id="my-muscle"></select>
+        <select id="my-equip"></select>
+      </div>
+      <input id="my-notes" data-t-ph="ex_notes">
+
+      <label class="file-pick" id="my-file-label">
+        <span data-t="choose_image">🖼️ اختر صورة (اختياري)</span>
+        <input type="file" id="my-file" accept="image/*">
+      </label>
+      <div class="preview-box hidden" id="my-preview-box">
+        <img id="my-preview" alt="">
+        <button type="button" id="my-remove-image" class="delete">✕</button>
+      </div>
+
+      <button id="my-add-btn" class="secondary" data-t="save_to_mylib">+ حفظ في مكتبتي</button>
+    </div>
+
+    <p class="message" id="mylib-message"></p>
+  </div>
+
+  <div class="card hidden" id="client-screen">
+    <div class="dial-wrap">
+      <div class="dial">
+        <div class="dial-ring" id="client-ring"></div>
+        <div class="dial-center">
+          <div class="dc-day" id="client-dc-day"></div>
+          <div class="dc-sub" id="client-dc-sub"></div>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="day-name">تمرين اليوم</h2>
+    <p class="progress" id="progress"></p>
+    <ul id="list"></ul>
+    <button id="finish" data-t="finish_workout">إنهاء التمرين</button>
+    <button id="reset" class="secondary" data-t="start_over">ابدأ من جديد</button>
+  </div>
+
+  <button id="logout-btn" class="link hidden" data-t="logout">تسجيل الخروج</button>
 
   <script type="module" src="app.js"></script>
 </body>
