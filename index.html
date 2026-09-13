@@ -29,6 +29,7 @@
       <input id="new-name" data-t-ph="client_name">
       <input id="new-email" type="email" data-t-ph="client_email">
     </div>
+    <select id="new-sport"></select>
     <button id="add-client-btn" class="secondary" data-t="add_client">+ إضافة عميل</button>
     <p class="message" id="clients-message"></p>
   </div>
@@ -37,38 +38,180 @@
     <button id="back-btn" class="link" data-t="back_clients">‹ رجوع لقائمة العملاء</button>
     <h2 id="coach-title">برنامج العميل</h2>
 
-    <div class="dial-wrap">
-      <div class="dial">
-        <div class="dial-ring" id="coach-ring"></div>
-        <div class="dial-center">
-          <div class="dc-day" id="coach-dc-day"></div>
-          <div class="dc-sub" id="coach-dc-sub"></div>
-        </div>
-      </div>
+    <div class="tabs">
+      <button type="button" class="tab active" id="tab-training" data-t="tab_training">🏋️ تمرين</button>
+      <button type="button" class="tab" id="tab-rehab" data-t="tab_rehab">🩹 تأهيل</button>
+      <button type="button" class="tab" id="tab-nutrition" data-t="tab_nutrition">🍎 تغذية</button>
     </div>
 
-    <input id="day-title" data-t-ph="day_title">
-    <label class="rest">
-      <input type="checkbox" id="rest-day"> <span data-t="rest_day">يوم راحة</span>
-    </label>
-    <ul id="coach-list"></ul>
-    <button id="open-library-btn" class="secondary" data-t="open_library">📚 اختر من مكتبة التمارين</button>
-    <button id="open-mylib-btn" class="secondary" data-t="open_mylib">⭐ مكتبتي الخاصة</button>
-    <p class="or" data-t="or_manual">أو اكتب التمرين بنفسك</p>
-    <div class="row">
-      <input id="ex-name" data-t-ph="ex_name">
-      <input id="ex-sets" type="number" data-t-ph="ex_sets">
-      <input id="ex-reps" data-t-ph="ex_reps">
+    <!-- ============ برنامج التمرين ============ -->
+    <div id="training-panel">
+      <div class="template-box">
+        <label class="field-label" data-t="client_sport">رياضة العميل</label>
+        <select id="coach-sport"></select>
+        <label class="field-label" data-t="use_sport_template">قالب تحضير بدني</label>
+        <select id="sport-template-pick"></select>
+        <button id="apply-sport-template" class="secondary" data-t="apply_template">تحميل القالب لليوم ده</button>
+        <p class="template-note" data-t="sport_template_note">القالب بيتحمّل على اليوم المفتوح — راجعه وعدّله قبل الحفظ.</p>
+      </div>
+
+      <div class="dial-wrap">
+        <div class="dial">
+          <div class="dial-ring" id="coach-ring"></div>
+          <div class="dial-center">
+            <div class="dc-day" id="coach-dc-day"></div>
+            <div class="dc-sub" id="coach-dc-sub"></div>
+          </div>
+        </div>
+      </div>
+
+      <input id="day-title" data-t-ph="day_title">
+      <label class="rest">
+        <input type="checkbox" id="rest-day"> <span data-t="rest_day">يوم راحة</span>
+      </label>
+
+      <div id="coach-sections"></div>
+
+      <div class="add-box">
+        <h3 data-t="add_to">إضافة إلى</h3>
+        <select id="target-section"></select>
+        <div class="row">
+          <button id="open-library-btn" class="secondary" data-t="open_library">📚 المكتبة</button>
+          <button id="open-mylib-btn" class="secondary" data-t="open_mylib">⭐ مكتبتي</button>
+        </div>
+        <p class="or" data-t="or_manual">أو اكتب التمرين بنفسك</p>
+        <div class="row">
+          <input id="ex-name" data-t-ph="ex_name">
+          <input id="ex-sets" type="number" data-t-ph="ex_sets">
+          <input id="ex-reps" data-t-ph="ex_reps">
+        </div>
+        <div class="row four">
+          <input id="ex-rest" data-t-ph="ex_rest">
+          <input id="ex-load" data-t-ph="ex_load">
+          <input id="ex-rpe" data-t-ph="ex_rpe">
+          <input id="ex-tempo" data-t-ph="ex_tempo">
+        </div>
+        <button id="add-btn" class="secondary" data-t="add_ex">+ إضافة تمرين</button>
+      </div>
+
+      <button id="save-btn" data-t="save_program">حفظ برنامج التمرين</button>
     </div>
-    <button id="add-btn" class="secondary" data-t="add_ex">+ إضافة تمرين</button>
-    <button id="save-btn" data-t="save_program">حفظ البرنامج</button>
+
+    <!-- ============ برنامج التأهيل ============ -->
+    <div id="rehab-panel" class="hidden">
+      <div class="template-box">
+        <label class="field-label" data-t="use_template">استخدم قالب جاهز</label>
+        <select id="template-pick"></select>
+        <button id="apply-template-btn" class="secondary" data-t="apply_template">تحميل القالب</button>
+        <p class="template-note" data-t="template_note">القوالب مسودة مبدئية — راجعها وعدّلها قبل ما تسندها لعميل.</p>
+      </div>
+
+      <div class="row">
+        <select id="rehab-bodypart"></select>
+        <input id="rehab-injury" data-t-ph="injury_name">
+      </div>
+
+      <label class="field-label" data-t="injury_about">شرح الإصابة (يقراه العميل)</label>
+      <textarea id="rehab-about" rows="4" data-t-ph="injury_about_ph"></textarea>
+
+      <label class="field-label" data-t="current_phase">المرحلة الحالية</label>
+      <select id="rehab-current"></select>
+
+      <div id="rehab-phases"></div>
+
+      <button id="add-phase-btn" class="secondary" data-t="add_phase">+ إضافة مرحلة</button>
+
+      <div class="add-box">
+        <h3 data-t="add_to_phase">إضافة تمرين إلى مرحلة</h3>
+        <select id="target-phase"></select>
+        <div class="row">
+          <button id="rehab-library-btn" class="secondary" data-t="open_library">📚 المكتبة</button>
+          <button id="rehab-mylib-btn" class="secondary" data-t="open_mylib">⭐ مكتبتي</button>
+        </div>
+        <p class="or" data-t="or_manual">أو اكتب التمرين بنفسك</p>
+        <div class="row">
+          <input id="rex-name" data-t-ph="ex_name">
+          <input id="rex-sets" type="number" data-t-ph="ex_sets">
+          <input id="rex-reps" data-t-ph="ex_reps">
+        </div>
+        <div class="row four">
+          <input id="rex-rest" data-t-ph="ex_rest">
+          <input id="rex-load" data-t-ph="ex_load">
+          <input id="rex-rpe" data-t-ph="ex_rpe">
+          <input id="rex-tempo" data-t-ph="ex_tempo">
+        </div>
+        <button id="rehab-add-btn" class="secondary" data-t="add_ex">+ إضافة تمرين</button>
+      </div>
+
+      <button id="save-rehab-btn" data-t="save_rehab">حفظ برنامج التأهيل</button>
+    </div>
+
+    <div id="nutrition-panel" class="hidden">
+      <div class="add-box">
+        <h3 data-t="daily_targets">الأهداف اليومية</h3>
+        <div class="row four">
+          <input id="tg-kcal" type="number" data-t-ph="t_kcal">
+          <input id="tg-protein" type="number" data-t-ph="t_protein">
+          <input id="tg-carbs" type="number" data-t-ph="t_carbs">
+          <input id="tg-fat" type="number" data-t-ph="t_fat">
+        </div>
+      </div>
+
+      <div class="dial-wrap">
+        <div class="dial">
+          <div class="dial-ring" id="nut-ring"></div>
+          <div class="dial-center">
+            <div class="dc-day" id="nut-dc-day"></div>
+            <div class="dc-sub" id="nut-dc-sub"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="totals" id="nut-totals"></div>
+      <div id="nut-meals"></div>
+
+      <div class="add-box">
+        <h3 data-t="add_to_meal">إضافة إلى وجبة</h3>
+        <select id="target-meal"></select>
+        <button id="open-food-btn" class="secondary" data-t="open_food_library">🍎 مكتبة الأغذية</button>
+      </div>
+
+      <button id="save-nutrition-btn" data-t="save_nutrition">حفظ برنامج التغذية</button>
+    </div>
+
     <p class="message" id="coach-message"></p>
+  </div>
+
+  <div class="card hidden" id="food-screen">
+    <button id="food-back-btn" class="link" data-t="back_program">‹ رجوع للبرنامج</button>
+    <h2 data-t="food_library">مكتبة الأغذية</h2>
+    <input id="food-search" data-t-ph="search_food">
+    <div class="chips" id="food-chips"></div>
+    <p class="message" id="food-message"></p>
+    <ul id="food-list"></ul>
+
+    <div class="add-box">
+      <h3 data-t="add_custom_food">إضافة صنف جديد</h3>
+      <div class="row">
+        <input id="cf-name" data-t-ph="food_name">
+        <select id="cf-cat"></select>
+      </div>
+      <p class="or" data-t="per_100">القيم لكل 100 جرام</p>
+      <div class="row four">
+        <input id="cf-kcal" type="number" data-t-ph="t_kcal">
+        <input id="cf-protein" type="number" data-t-ph="t_protein">
+        <input id="cf-carbs" type="number" data-t-ph="t_carbs">
+        <input id="cf-fat" type="number" data-t-ph="t_fat">
+      </div>
+      <button id="cf-add-btn" class="secondary" data-t="save_food">+ حفظ الصنف</button>
+    </div>
   </div>
 
   <div class="card hidden" id="library-screen">
     <button id="lib-back-btn" class="link" data-t="back_program">‹ رجوع للبرنامج</button>
     <h2 data-t="library_title">مكتبة التمارين</h2>
     <input id="lib-search" data-t-ph="search_ex">
+    <div class="chips" id="lib-chips"></div>
     <div class="filters">
       <select id="lib-muscle"></select>
       <select id="lib-equip"></select>
@@ -109,24 +252,74 @@
   </div>
 
   <div class="card hidden" id="client-screen">
-    <div class="dial-wrap">
-      <div class="dial">
-        <div class="dial-ring" id="client-ring"></div>
-        <div class="dial-center">
-          <div class="dc-day" id="client-dc-day"></div>
-          <div class="dc-sub" id="client-dc-sub"></div>
-        </div>
-      </div>
+    <div class="tabs" id="client-tabs">
+      <button type="button" class="tab active" id="ctab-training" data-t="tab_training">🏋️ تمرين</button>
+      <button type="button" class="tab" id="ctab-rehab" data-t="tab_rehab">🩹 تأهيل</button>
+      <button type="button" class="tab" id="ctab-nutrition" data-t="tab_nutrition">🍎 تغذية</button>
+      <button type="button" class="tab" id="ctab-activity" data-t="tab_activity">🏅 نشاطي</button>
     </div>
 
-    <h2 id="day-name">تمرين اليوم</h2>
-    <p class="progress" id="progress"></p>
-    <ul id="list"></ul>
-    <button id="finish" data-t="finish_workout">إنهاء التمرين</button>
-    <button id="reset" class="secondary" data-t="start_over">ابدأ من جديد</button>
+    <div id="client-training">
+      <div class="dial-wrap">
+        <div class="dial">
+          <div class="dial-ring" id="client-ring"></div>
+          <div class="dial-center">
+            <div class="dc-day" id="client-dc-day"></div>
+            <div class="dc-sub" id="client-dc-sub"></div>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="day-name">تمرين اليوم</h2>
+      <p class="progress" id="progress"></p>
+      <div id="client-sections"></div>
+      <button id="finish" data-t="finish_workout">إنهاء التمرين</button>
+      <button id="reset" class="secondary" data-t="start_over">ابدأ من جديد</button>
+    </div>
+
+    <div id="client-nutrition" class="hidden">
+      <div class="dial-wrap">
+        <div class="dial">
+          <div class="dial-ring" id="cnut-ring"></div>
+          <div class="dial-center">
+            <div class="dc-day" id="cnut-dc-day"></div>
+            <div class="dc-sub" id="cnut-dc-sub"></div>
+          </div>
+        </div>
+      </div>
+      <div class="totals" id="cnut-totals"></div>
+      <div id="cnut-meals"></div>
+    </div>
+
+    <div id="client-activity" class="hidden">
+      <h2 data-t="log_activity">سجّل نشاطك</h2>
+      <div class="add-box">
+        <select id="act-sport"></select>
+        <div class="row" id="act-fields"></div>
+        <input id="act-notes" data-t-ph="act_notes">
+        <button id="act-add-btn" class="secondary" data-t="save_activity">+ تسجيل النشاط</button>
+        <p class="message" id="act-message"></p>
+      </div>
+      <h2 data-t="activity_history">سجل النشاط</h2>
+      <ul id="act-list"></ul>
+    </div>
+
+    <div id="client-rehab" class="hidden">
+      <h2 id="client-rehab-title"></h2>
+      <div class="about-box hidden" id="client-rehab-about"></div>
+      <div id="client-rehab-phases"></div>
+    </div>
   </div>
 
   <button id="logout-btn" class="link hidden" data-t="logout">تسجيل الخروج</button>
+
+  <div class="lightbox hidden" id="lightbox">
+    <div class="lightbox-sheet">
+      <button type="button" class="lightbox-close" id="lightbox-close">✕</button>
+      <div class="lightbox-title" id="lightbox-title"></div>
+      <div class="lightbox-images" id="lightbox-images"></div>
+    </div>
+  </div>
 
   <script type="module" src="app.js"></script>
 </body>
