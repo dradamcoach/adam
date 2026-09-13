@@ -31,7 +31,55 @@
     </div>
     <select id="new-sport"></select>
     <button id="add-client-btn" class="secondary" data-t="add_client">+ إضافة عميل</button>
+    <button id="open-classes-btn" class="secondary" data-t="open_classes">👥 الكلاسات</button>
     <p class="message" id="clients-message"></p>
+  </div>
+
+  <div class="card hidden" id="classes-screen">
+    <button id="classes-back-btn" class="link" data-t="back_clients">‹ رجوع لقائمة العملاء</button>
+    <h2 data-t="classes_title">الكلاسات</h2>
+
+    <ul id="classes-list"></ul>
+
+    <div class="add-box">
+      <h3 data-t="add_class">إضافة كلاس</h3>
+      <input id="cl-name" data-t-ph="class_name">
+      <div class="row">
+        <select id="cl-sport"></select>
+        <input id="cl-time" data-t-ph="class_time">
+      </div>
+      <button id="cl-add-btn" class="secondary" data-t="save_class">+ حفظ الكلاس</button>
+    </div>
+
+    <p class="message" id="classes-message"></p>
+  </div>
+
+  <div class="card hidden" id="class-detail-screen">
+    <button id="class-detail-back" class="link" data-t="back_classes">‹ رجوع للكلاسات</button>
+    <h2 id="class-detail-title"></h2>
+    <p class="progress" id="class-detail-sub"></p>
+
+    <div class="live-row">
+      <span class="live-dot" id="live-dot"></span>
+      <span id="live-label" data-t="live_on">تحديث لحظي</span>
+      <button type="button" id="live-toggle" class="mini-btn" data-t="turn_off">إيقاف</button>
+      <button type="button" id="live-refresh" class="mini-btn" data-t="refresh">تحديث</button>
+    </div>
+
+    <h3 data-t="today_board">لوحة النهاردة</h3>
+    <ul id="class-today"></ul>
+
+    <h3 data-t="week_board">ترتيب الأسبوع</h3>
+    <ul id="class-week"></ul>
+
+    <div class="add-box" id="class-members-box">
+      <h3 data-t="class_members">أعضاء الكلاس</h3>
+      <select id="cl-member-pick"></select>
+      <button id="cl-member-add" class="secondary" data-t="add_member">+ إضافة عضو</button>
+      <ul id="class-members"></ul>
+    </div>
+
+    <p class="message" id="class-detail-message"></p>
   </div>
 
   <div class="card hidden" id="coach-screen">
@@ -257,6 +305,7 @@
       <button type="button" class="tab" id="ctab-rehab" data-t="tab_rehab">🩹 تأهيل</button>
       <button type="button" class="tab" id="ctab-nutrition" data-t="tab_nutrition">🍎 تغذية</button>
       <button type="button" class="tab" id="ctab-activity" data-t="tab_activity">🏅 نشاطي</button>
+      <button type="button" class="tab" id="ctab-classes" data-t="tab_classes">👥 الكلاس</button>
     </div>
 
     <div id="client-training">
@@ -289,6 +338,10 @@
       </div>
       <div class="totals" id="cnut-totals"></div>
       <div id="cnut-meals"></div>
+    </div>
+
+    <div id="client-classes" class="hidden">
+      <div id="client-class-body"></div>
     </div>
 
     <div id="client-activity" class="hidden">

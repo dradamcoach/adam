@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
 import { REHAB_TEMPLATES } from './rehab-templates.js';
 import { FOOD_LIBRARY, FOOD_CATEGORIES } from './food-library.js';
@@ -178,6 +178,35 @@ const TEXT = {
     need_activity: 'اختار رياضة وكمّل بيانة واحدة على الأقل',
     confirm_delete_activity: 'تمسح النشاط ده؟',
     recent_activity: 'آخر نشاط: {text}',
+    tab_classes: '👥 الكلاس',
+    open_classes: '👥 الكلاسات',
+    classes_title: 'الكلاسات',
+    back_classes: '‹ رجوع للكلاسات',
+    add_class: 'إضافة كلاس',
+    class_name: 'اسم الكلاس',
+    class_time: 'الميعاد (مثلاً 6:00 م)',
+    save_class: '+ حفظ الكلاس',
+    class_saved: 'اتحفظ الكلاس ✅',
+    need_class_name: 'اكتب اسم الكلاس',
+    no_classes: 'مفيش كلاسات لسه — ضيف كلاس تحت',
+    class_members: 'أعضاء الكلاس',
+    add_member: '+ إضافة عضو',
+    no_members: 'مفيش أعضاء لسه',
+    members_count: '{n} عضو',
+    today_board: 'لوحة النهاردة',
+    week_board: 'ترتيب الأسبوع',
+    live_on: 'تحديث لحظي شغال',
+    live_off: 'التحديث اللحظي متوقف',
+    turn_off: 'إيقاف',
+    turn_on: 'تشغيل',
+    refresh: 'تحديث',
+    done_today: 'خلّص النهاردة',
+    not_yet_today: 'لسه',
+    days_done: '{n} يوم',
+    me: 'أنا',
+    no_class_yet: 'مش مشترك في أي كلاس لسه',
+    confirm_delete_class: 'تمسح الكلاس ده؟',
+    already_member: 'العضو ده موجود بالفعل',
 
     today_workout: 'تمرين اليوم',
     finish_workout: 'إنهاء التمرين',
@@ -352,6 +381,35 @@ const TEXT = {
     need_activity: 'Pick a sport and fill at least one field',
     confirm_delete_activity: 'Delete this activity?',
     recent_activity: 'Last activity: {text}',
+    tab_classes: '👥 Class',
+    open_classes: '👥 Classes',
+    classes_title: 'Classes',
+    back_classes: '‹ Back to classes',
+    add_class: 'Add a class',
+    class_name: 'Class name',
+    class_time: 'Time (e.g. 6:00 PM)',
+    save_class: '+ Save class',
+    class_saved: 'Class saved ✅',
+    need_class_name: 'Enter a class name',
+    no_classes: 'No classes yet — add one below',
+    class_members: 'Class members',
+    add_member: '+ Add member',
+    no_members: 'No members yet',
+    members_count: '{n} members',
+    today_board: "Today's board",
+    week_board: 'This week',
+    live_on: 'Live updates on',
+    live_off: 'Live updates off',
+    turn_off: 'Turn off',
+    turn_on: 'Turn on',
+    refresh: 'Refresh',
+    done_today: 'Done today',
+    not_yet_today: 'Not yet',
+    days_done: '{n} days',
+    me: 'Me',
+    no_class_yet: 'You are not in a class yet',
+    confirm_delete_class: 'Delete this class?',
+    already_member: 'That member is already in the class',
 
     today_workout: "Today's Workout",
     finish_workout: 'Finish workout',
@@ -463,6 +521,14 @@ applyLanguage();
 
 const today = new Date().toDateString();
 const todayIndex = (new Date().getDay() + 1) % 7;
+
+/* تاريخ بصيغة YYYY-MM-DD — بنستخدمه لسجل الالتزام الأسبوعي */
+function dateStamp(date) {
+  return date.getFullYear() + '-'
+    + String(date.getMonth() + 1).padStart(2, '0') + '-'
+    + String(date.getDate()).padStart(2, '0');
+}
+const todayStamp = dateStamp(new Date());
 
 const SECTION_KEYS = ['warmup', 'main', 'cardio', 'mobility', 'flexibility'];
 const MEAL_KEYS = ['breakfast', 'lunch', 'dinner', 'snack'];
@@ -666,6 +732,17 @@ const clientNutritionPanel = document.getElementById('client-nutrition');
 const ctabNutrition = document.getElementById('ctab-nutrition');
 const clientActivityPanel = document.getElementById('client-activity');
 const ctabActivity = document.getElementById('ctab-activity');
+const classesScreen = document.getElementById('classes-screen');
+const classDetailScreen = document.getElementById('class-detail-screen');
+const clientClassesPanel = document.getElementById('client-classes');
+const ctabClasses = document.getElementById('ctab-classes');
+
+let classes = [];
+let currentClass = null;
+let liveEnabled = localStorage.getItem('adam-live') !== 'off';
+let liveUnsub = null;
+let progressCache = {};
+let clientsCache = [];
 
 let clientActivity = [];
 
@@ -675,11 +752,13 @@ let clientNutrition = emptyNutrition();
 let cNutDay = todayIndex;
 
 function showScreen(screen) {
-  [loginScreen, clientsScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, clientScreen].forEach(function (s) {
+  [loginScreen, clientsScreen, classesScreen, classDetailScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, clientScreen].forEach(function (s) {
     s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
   logoutButton.classList.toggle('hidden', screen === loginScreen);
+  // نقفل الاشتراك اللحظي أول ما نسيب شاشة الكلاس عشان الاستهلاك
+  if (screen !== classDetailScreen && typeof stopLive === 'function') stopLive();
   window.scrollTo(0, 0);
 }
 
@@ -2312,6 +2391,7 @@ let clientDay = todayIndex;
 let clientEmail = '';
 let clientSport = '';
 let doneToday = [];
+let progressHistory = [];
 let clientMode = 'training';
 
 const clientTraining = document.getElementById('client-training');
@@ -2332,10 +2412,12 @@ function setClientMode(mode) {
   clientRehabPanel.classList.toggle('hidden', mode !== 'rehab');
   clientNutritionPanel.classList.toggle('hidden', mode !== 'nutrition');
   clientActivityPanel.classList.toggle('hidden', mode !== 'activity');
+  clientClassesPanel.classList.toggle('hidden', mode !== 'classes');
   ctabTraining.classList.toggle('active', mode === 'training');
   ctabRehab.classList.toggle('active', mode === 'rehab');
   ctabNutrition.classList.toggle('active', mode === 'nutrition');
   ctabActivity.classList.toggle('active', mode === 'activity');
+  ctabClasses.classList.toggle('active', mode === 'classes');
   window.scrollTo(0, 0);
 }
 
@@ -2356,6 +2438,11 @@ ctabNutrition.addEventListener('click', function () {
 ctabActivity.addEventListener('click', function () {
   setClientMode('activity');
   showClientActivity();
+});
+
+ctabClasses.addEventListener('click', function () {
+  setClientMode('classes');
+  showClientClasses();
 });
 
 async function loadClient(email) {
@@ -2381,6 +2468,9 @@ async function loadClient(email) {
     const rawDone = (progressDoc.exists() && progressDoc.data().date === today)
       ? (progressDoc.data().done || [])
       : [];
+    progressHistory = (progressDoc.exists() && Array.isArray(progressDoc.data().history))
+      ? progressDoc.data().history : [];
+
     doneToday = rawDone.map(function (entry) {
       return (typeof entry === 'number') ? ('main:' + entry) : String(entry);
     });
@@ -2431,7 +2521,28 @@ function saveProgress() {
   clientSections.querySelectorAll('li.done').forEach(function (item) {
     if (item.dataset.key) done.push(item.dataset.key);
   });
-  setDoc(doc(db, 'progress', clientEmail), { date: today, day: clientDay, done: done });
+
+  /*
+   * history = الأيام اللي العميل خلّص فيها تمرين، بصيغة YYYY-MM-DD.
+   * من غيرها ترتيب الأسبوع في الكلاس مش هيكون له معنى، لأن المستند
+   * بيحتفظ بآخر يوم بس. بنحتفظ بآخر 60 يوم ونشيل التكرار.
+   */
+  if (done.length && progressHistory.indexOf(todayStamp) === -1) {
+    progressHistory.push(todayStamp);
+  }
+  if (!done.length) {
+    progressHistory = progressHistory.filter(function (d) { return d !== todayStamp; });
+  }
+  if (progressHistory.length > 60) {
+    progressHistory = progressHistory.slice(-60);
+  }
+
+  setDoc(doc(db, 'progress', clientEmail), {
+    date: today,
+    day: clientDay,
+    done: done,
+    history: progressHistory
+  });
 }
 
 function showClientDay() {
@@ -3355,6 +3466,609 @@ function showClientActivity() {
   renderActivity();
 }
 
+
+/* ============================ الكلاسات ============================ */
+
+/*
+ * التحديث اللحظي (onSnapshot) بيستهلك من حصة القراءة المجانية.
+ * عشان كده هو شغال في شاشة الكلاس بس، وبيتقفل تلقائيًا أول ما تخرج
+ * منها، وفيه زرار إيقاف يدوي + تحديث يدوي كبديل.
+ */
+
+
+
+const classesList = document.getElementById('classes-list');
+const classesMessage = document.getElementById('classes-message');
+const clSport = document.getElementById('cl-sport');
+const classDetailTitle = document.getElementById('class-detail-title');
+const classDetailSub = document.getElementById('class-detail-sub');
+const classTodayList = document.getElementById('class-today');
+const classWeekList = document.getElementById('class-week');
+const classMembersList = document.getElementById('class-members');
+const clMemberPick = document.getElementById('cl-member-pick');
+const classDetailMessage = document.getElementById('class-detail-message');
+const liveDot = document.getElementById('live-dot');
+const liveLabel = document.getElementById('live-label');
+const liveToggle = document.getElementById('live-toggle');
+
+/* ---------- تواريخ الأسبوع الحالي ---------- */
+
+function weekStamps() {
+  // آخر 7 أيام بما فيهم النهاردة
+  const out = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    out.push(dateStamp(d));
+  }
+  return out;
+}
+
+/* ---------- تحميل وحفظ ---------- */
+
+async function loadClasses() {
+  classesMessage.textContent = t('loading');
+  try {
+    const snapshot = await getDocs(collection(db, 'classes'));
+    classes = snapshot.docs.map(function (item) {
+      const data = item.data();
+      data.id = item.id;
+      if (!Array.isArray(data.members)) data.members = [];
+      return data;
+    });
+    classesMessage.textContent = '';
+  } catch (error) {
+    classesMessage.textContent = t('problem') + error.message;
+  }
+  renderClasses();
+}
+
+function renderClasses() {
+  classesList.innerHTML = '';
+
+  if (!classes.length) {
+    const empty = document.createElement('p');
+    empty.className = 'empty';
+    empty.textContent = t('no_classes');
+    classesList.appendChild(empty);
+    return;
+  }
+
+  classes.forEach(function (cls) {
+    const item = document.createElement('li');
+    item.className = 'class-card';
+
+    const head = document.createElement('div');
+    head.style.display = 'flex';
+    head.style.justifyContent = 'space-between';
+    head.style.alignItems = 'flex-start';
+    head.style.gap = '8px';
+
+    const info = document.createElement('div');
+
+    const name = document.createElement('div');
+    name.className = 'class-name';
+    name.textContent = cls.name;
+    info.appendChild(name);
+
+    const meta = document.createElement('div');
+    meta.className = 'class-meta';
+    const bits = [];
+    if (cls.sport) bits.push(sportName(cls.sport));
+    if (cls.time) bits.push(cls.time);
+    meta.textContent = bits.join(' · ');
+    info.appendChild(meta);
+
+    const count = document.createElement('div');
+    count.className = 'class-count';
+    count.textContent = fill('members_count', { n: cls.members.length });
+    info.appendChild(count);
+
+    head.appendChild(info);
+
+    const remove = document.createElement('button');
+    remove.className = 'delete';
+    remove.textContent = '✕';
+    remove.addEventListener('click', async function (event) {
+      event.stopPropagation();
+      if (!confirm(t('confirm_delete_class'))) return;
+      try {
+        await deleteDoc(doc(db, 'classes', cls.id));
+        await loadClasses();
+      } catch (error) {
+        classesMessage.textContent = t('problem') + error.message;
+      }
+    });
+    head.appendChild(remove);
+
+    item.appendChild(head);
+
+    item.addEventListener('click', function () {
+      openClassDetail(cls.id);
+    });
+
+    classesList.appendChild(item);
+  });
+}
+
+document.getElementById('open-classes-btn').addEventListener('click', function () {
+  showScreen(classesScreen);
+  fillSportSelect(clSport, true);
+  loadClasses();
+});
+
+document.getElementById('classes-back-btn').addEventListener('click', function () {
+  showScreen(clientsScreen);
+  loadClients();
+});
+
+document.getElementById('cl-add-btn').addEventListener('click', async function () {
+  const name = document.getElementById('cl-name').value.trim();
+  if (!name) {
+    classesMessage.textContent = t('need_class_name');
+    return;
+  }
+
+  classesMessage.textContent = t('saving');
+  const id = 'class_' + Date.now();
+
+  try {
+    await setDoc(doc(db, 'classes', id), {
+      name: name,
+      sport: clSport.value || '',
+      time: document.getElementById('cl-time').value.trim(),
+      members: []
+    });
+    document.getElementById('cl-name').value = '';
+    document.getElementById('cl-time').value = '';
+    await loadClasses();
+    classesMessage.textContent = t('class_saved');
+  } catch (error) {
+    classesMessage.textContent = t('problem') + error.message;
+  }
+});
+
+/* ---------- تفاصيل الكلاس + اللوحات ---------- */
+
+function classById(id) {
+  return classes.filter(function (c) { return c.id === id; })[0] || null;
+}
+
+async function openClassDetail(id) {
+  currentClass = classById(id);
+  if (!currentClass) return;
+
+  showScreen(classDetailScreen);
+  classDetailTitle.textContent = currentClass.name;
+
+  const bits = [];
+  if (currentClass.sport) bits.push(sportName(currentClass.sport));
+  if (currentClass.time) bits.push(currentClass.time);
+  classDetailSub.textContent = bits.join(' · ');
+
+  document.getElementById('class-members-box').classList.remove('hidden');
+
+  await loadClientsCache();
+  fillMemberPicker();
+  await refreshBoards();
+  startLive();
+}
+
+document.getElementById('class-detail-back').addEventListener('click', function () {
+  stopLive();
+  showScreen(classesScreen);
+  renderClasses();
+});
+
+async function loadClientsCache() {
+  try {
+    const snapshot = await getDocs(collection(db, 'clients'));
+    clientsCache = snapshot.docs.map(function (item) {
+      return { email: item.id, name: item.data().name || item.id };
+    });
+  } catch (error) {
+    clientsCache = [];
+  }
+}
+
+function clientNameOf(email) {
+  const found = clientsCache.filter(function (c) { return c.email === email; })[0];
+  return found ? found.name : email;
+}
+
+function fillMemberPicker() {
+  clMemberPick.innerHTML = '';
+  clientsCache.forEach(function (c) {
+    const option = document.createElement('option');
+    option.value = c.email;
+    option.textContent = c.name;
+    clMemberPick.appendChild(option);
+  });
+}
+
+document.getElementById('cl-member-add').addEventListener('click', async function () {
+  if (!currentClass) return;
+  const email = clMemberPick.value;
+  if (!email) return;
+
+  if (currentClass.members.indexOf(email) !== -1) {
+    classDetailMessage.textContent = t('already_member');
+    return;
+  }
+
+  currentClass.members.push(email);
+  classDetailMessage.textContent = t('saving');
+
+  try {
+    await setDoc(doc(db, 'classes', currentClass.id), {
+      name: currentClass.name,
+      sport: currentClass.sport || '',
+      time: currentClass.time || '',
+      members: currentClass.members
+    });
+    classDetailMessage.textContent = '';
+    await refreshBoards();
+  } catch (error) {
+    classDetailMessage.textContent = t('problem') + error.message;
+  }
+});
+
+/* بيقرا تقدّم كل عضو مرة واحدة ويخزّنه */
+async function loadProgressFor(members) {
+  const cache = {};
+  for (const email of members) {
+    try {
+      const snap = await getDoc(doc(db, 'progress', email));
+      cache[email] = snap.exists() ? snap.data() : null;
+    } catch (error) {
+      cache[email] = null;
+    }
+  }
+  return cache;
+}
+
+async function refreshBoards() {
+  if (!currentClass) return;
+  progressCache = await loadProgressFor(currentClass.members);
+  renderBoards();
+  renderClassMembers();
+}
+
+function isDoneToday(entry) {
+  return !!(entry && entry.date === today && Array.isArray(entry.done) && entry.done.length > 0);
+}
+
+function renderBoards(meEmail) {
+  const members = currentClass ? currentClass.members : [];
+
+  /* لوحة النهاردة */
+  classTodayList.innerHTML = '';
+  if (!members.length) {
+    const empty = document.createElement('p');
+    empty.className = 'empty';
+    empty.textContent = t('no_members');
+    classTodayList.appendChild(empty);
+  } else {
+    members.forEach(function (email) {
+      const entry = progressCache[email];
+      const done = isDoneToday(entry);
+
+      const item = document.createElement('li');
+      item.className = 'board-row';
+
+      const badge = document.createElement('span');
+      badge.className = 'rank-badge' + (done ? ' top' : '');
+      badge.textContent = done ? '✓' : '·';
+      item.appendChild(badge);
+
+      const name = document.createElement('span');
+      name.className = 'board-name';
+      name.textContent = clientNameOf(email);
+      if (meEmail && email === meEmail) {
+        const tag = document.createElement('span');
+        tag.className = 'board-me';
+        tag.textContent = t('me');
+        name.appendChild(tag);
+      }
+      item.appendChild(name);
+
+      const stat = document.createElement('span');
+      stat.className = 'board-stat' + (done ? ' done' : '');
+      stat.textContent = done
+        ? fill('done_count', { n: entry.done.length })
+        : t('not_yet_today');
+      item.appendChild(stat);
+
+      classTodayList.appendChild(item);
+    });
+  }
+
+  /* ترتيب الأسبوع — بيعتمد على أيام الالتزام المسجّلة */
+  classWeekList.innerHTML = '';
+  const stamps = weekStamps();
+
+  const ranked = members.map(function (email) {
+    const entry = progressCache[email];
+    // سجل التقدّم بيحتفظ بآخر يوم بس، فبنحسب يوم واحد لو ضمن الأسبوع
+    let daysDone = 0;
+    if (entry && entry.date && stamps.indexOf(entry.date) !== -1
+        && Array.isArray(entry.done) && entry.done.length) {
+      daysDone = 1;
+    }
+    if (entry && Array.isArray(entry.history)) {
+      daysDone = entry.history.filter(function (d) {
+        return stamps.indexOf(d) !== -1;
+      }).length;
+    }
+    return { email: email, days: daysDone };
+  }).sort(function (a, b) { return b.days - a.days; });
+
+  if (!ranked.length) {
+    const empty = document.createElement('p');
+    empty.className = 'empty';
+    empty.textContent = t('no_members');
+    classWeekList.appendChild(empty);
+  } else {
+    ranked.forEach(function (row, index) {
+      const item = document.createElement('li');
+      item.className = 'board-row';
+
+      const badge = document.createElement('span');
+      badge.className = 'rank-badge' + (index < 3 && row.days > 0 ? ' top' : '');
+      badge.textContent = String(index + 1);
+      item.appendChild(badge);
+
+      const name = document.createElement('span');
+      name.className = 'board-name';
+      name.textContent = clientNameOf(row.email);
+      if (meEmail && row.email === meEmail) {
+        const tag = document.createElement('span');
+        tag.className = 'board-me';
+        tag.textContent = t('me');
+        name.appendChild(tag);
+      }
+      item.appendChild(name);
+
+      const stat = document.createElement('span');
+      stat.className = 'board-stat' + (row.days ? ' done' : '');
+      stat.textContent = fill('days_done', { n: row.days });
+      item.appendChild(stat);
+
+      classWeekList.appendChild(item);
+    });
+  }
+}
+
+function renderClassMembers() {
+  classMembersList.innerHTML = '';
+  if (!currentClass) return;
+
+  currentClass.members.forEach(function (email, index) {
+    const item = document.createElement('li');
+
+    const name = document.createElement('div');
+    name.textContent = clientNameOf(email);
+    item.appendChild(name);
+
+    const remove = document.createElement('button');
+    remove.className = 'delete';
+    remove.textContent = '✕';
+    remove.addEventListener('click', async function () {
+      currentClass.members.splice(index, 1);
+      try {
+        await setDoc(doc(db, 'classes', currentClass.id), {
+          name: currentClass.name,
+          sport: currentClass.sport || '',
+          time: currentClass.time || '',
+          members: currentClass.members
+        });
+        await refreshBoards();
+      } catch (error) {
+        classDetailMessage.textContent = t('problem') + error.message;
+      }
+    });
+    item.appendChild(remove);
+
+    classMembersList.appendChild(item);
+  });
+}
+
+/* ---------- التحديث اللحظي (محدود بشاشة الكلاس) ---------- */
+
+function paintLiveState() {
+  liveDot.classList.toggle('off', !liveEnabled);
+  liveLabel.textContent = liveEnabled ? t('live_on') : t('live_off');
+  liveToggle.textContent = liveEnabled ? t('turn_off') : t('turn_on');
+}
+
+function startLive() {
+  stopLive();
+  paintLiveState();
+  if (!liveEnabled || !currentClass) return;
+
+  try {
+    liveUnsub = onSnapshot(doc(db, 'classes', currentClass.id), function (snap) {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      currentClass.name = data.name;
+      currentClass.sport = data.sport || '';
+      currentClass.time = data.time || '';
+      currentClass.members = Array.isArray(data.members) ? data.members : [];
+      refreshBoards();
+    });
+  } catch (error) {
+    liveUnsub = null;
+  }
+}
+
+function stopLive() {
+  if (liveUnsub) {
+    try { liveUnsub(); } catch (error) { /* تجاهل */ }
+    liveUnsub = null;
+  }
+}
+
+liveToggle.addEventListener('click', function () {
+  liveEnabled = !liveEnabled;
+  localStorage.setItem('adam-live', liveEnabled ? 'on' : 'off');
+  if (liveEnabled) startLive(); else { stopLive(); paintLiveState(); }
+});
+
+document.getElementById('live-refresh').addEventListener('click', function () {
+  if (!classDetailScreen.classList.contains('hidden')) refreshBoards();
+  else if (!clientClassesPanel.classList.contains('hidden')) showClientClasses();
+});
+
+/* ---------- شاشة العميل — الكلاس ---------- */
+
+let myClasses = [];
+
+async function showClientClasses() {
+  const box = document.getElementById('client-class-body');
+  box.innerHTML = '';
+
+  try {
+    const snapshot = await getDocs(collection(db, 'classes'));
+    myClasses = snapshot.docs
+      .map(function (item) {
+        const data = item.data();
+        data.id = item.id;
+        if (!Array.isArray(data.members)) data.members = [];
+        return data;
+      })
+      .filter(function (c) { return c.members.indexOf(clientEmail) !== -1; });
+  } catch (error) {
+    myClasses = [];
+  }
+
+  if (!myClasses.length) {
+    const none = document.createElement('p');
+    none.className = 'no-class';
+    none.textContent = t('no_class_yet');
+    box.appendChild(none);
+    return;
+  }
+
+  await loadClientsCache();
+
+  for (const cls of myClasses) {
+    const title = document.createElement('h2');
+    title.textContent = cls.name;
+    box.appendChild(title);
+
+    const sub = document.createElement('p');
+    sub.className = 'progress';
+    const bits = [];
+    if (cls.sport) bits.push(sportName(cls.sport));
+    if (cls.time) bits.push(cls.time);
+    sub.textContent = bits.join(' · ');
+    box.appendChild(sub);
+
+    currentClass = cls;
+    progressCache = await loadProgressFor(cls.members);
+
+    const todayHead = document.createElement('h3');
+    todayHead.textContent = t('today_board');
+    box.appendChild(todayHead);
+
+    const todayUl = document.createElement('ul');
+    todayUl.id = 'class-today';
+    box.appendChild(todayUl);
+
+    const weekHead = document.createElement('h3');
+    weekHead.textContent = t('week_board');
+    box.appendChild(weekHead);
+
+    const weekUl = document.createElement('ul');
+    weekUl.id = 'class-week';
+    box.appendChild(weekUl);
+
+    // نعيد استخدام نفس الرسم بس على العناصر الجديدة
+    renderBoardsInto(todayUl, weekUl, cls, clientEmail);
+  }
+}
+
+/* نسخة من renderBoards بتكتب في عناصر محددة (شاشة العميل) */
+function renderBoardsInto(todayUl, weekUl, cls, meEmail) {
+  const keepToday = classTodayList.innerHTML;
+  const members = cls.members;
+
+  todayUl.innerHTML = '';
+  members.forEach(function (email) {
+    const entry = progressCache[email];
+    const done = isDoneToday(entry);
+
+    const item = document.createElement('li');
+    item.className = 'board-row';
+
+    const badge = document.createElement('span');
+    badge.className = 'rank-badge' + (done ? ' top' : '');
+    badge.textContent = done ? '✓' : '·';
+    item.appendChild(badge);
+
+    const name = document.createElement('span');
+    name.className = 'board-name';
+    name.textContent = clientNameOf(email);
+    if (email === meEmail) {
+      const tag = document.createElement('span');
+      tag.className = 'board-me';
+      tag.textContent = t('me');
+      name.appendChild(tag);
+    }
+    item.appendChild(name);
+
+    const stat = document.createElement('span');
+    stat.className = 'board-stat' + (done ? ' done' : '');
+    stat.textContent = done ? fill('done_count', { n: entry.done.length }) : t('not_yet_today');
+    item.appendChild(stat);
+
+    todayUl.appendChild(item);
+  });
+
+  const stamps = weekStamps();
+  const ranked = members.map(function (email) {
+    const entry = progressCache[email];
+    let daysDone = 0;
+    if (entry && entry.date && stamps.indexOf(entry.date) !== -1
+        && Array.isArray(entry.done) && entry.done.length) daysDone = 1;
+    if (entry && Array.isArray(entry.history)) {
+      daysDone = entry.history.filter(function (d) { return stamps.indexOf(d) !== -1; }).length;
+    }
+    return { email: email, days: daysDone };
+  }).sort(function (a, b) { return b.days - a.days; });
+
+  weekUl.innerHTML = '';
+  ranked.forEach(function (row, index) {
+    const item = document.createElement('li');
+    item.className = 'board-row';
+
+    const badge = document.createElement('span');
+    badge.className = 'rank-badge' + (index < 3 && row.days > 0 ? ' top' : '');
+    badge.textContent = String(index + 1);
+    item.appendChild(badge);
+
+    const name = document.createElement('span');
+    name.className = 'board-name';
+    name.textContent = clientNameOf(row.email);
+    if (row.email === meEmail) {
+      const tag = document.createElement('span');
+      tag.className = 'board-me';
+      tag.textContent = t('me');
+      name.appendChild(tag);
+    }
+    item.appendChild(name);
+
+    const stat = document.createElement('span');
+    stat.className = 'board-stat' + (row.days ? ' done' : '');
+    stat.textContent = fill('days_done', { n: row.days });
+    item.appendChild(stat);
+
+    weekUl.appendChild(item);
+  });
+
+  classTodayList.innerHTML = keepToday;
+}
+
 /* ---------- إعادة الرسم بعد تغيير اللغة ---------- */
 
 function refreshAll() {
@@ -3370,7 +4084,9 @@ function refreshAll() {
   fillFoodCatSelect();
   fillSportSelect(document.getElementById('new-sport'), true);
   fillSportSelect(coachSport, true);
+  fillSportSelect(clSport, true);
   fillSportTemplatePicker();
+  paintLiveState();
 
   if (!coachScreen.classList.contains('hidden')) {
     if (coachMode === 'rehab') showRehab();
@@ -3388,6 +4104,8 @@ function refreshAll() {
     renderFoodList();
   }
   if (!clientsScreen.classList.contains('hidden')) loadClients();
+  if (!classesScreen.classList.contains('hidden')) renderClasses();
+  if (!classDetailScreen.classList.contains('hidden')) { renderBoards(); renderClassMembers(); }
   if (!libraryScreen.classList.contains('hidden')) {
     rebuildLibraryFilters();
     renderLibrary();
