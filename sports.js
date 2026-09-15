@@ -157,10 +157,27 @@ export const SPORTS = [
  */
 export const SPORT_TEMPLATES = [
   {
+    id: 'tpl_endurance_base',
+    group: 'endurance',
+    ar: 'رياضات التحمّل — بناء القاعدة الهوائية',
+    en: 'Endurance sports — Aerobic base phase',
+    note: {
+      ar: 'أحجام تدريب أطول بشدة منخفضة لمتوسطة قبل موسم المنافسات، مع شغل قوة عام يحمي من إصابات الإفراط.',
+      en: 'Longer sessions at low-to-moderate intensity before the race season, plus general strength work to guard against overuse injury.'
+    },
+    sections: {
+      warmup:      [{ en: 'Ankle Circles', sets: 2, reps: '15' }, { en: 'Leg Swings', sets: 2, reps: '12' }],
+      main:        [{ en: 'Bodyweight Squat', sets: 3, reps: '15' }, { en: 'Romanian Deadlift', sets: 3, reps: '10' }, { en: 'Glute Bridge', sets: 3, reps: '15' }],
+      cardio:      [{ en: 'Bicycling, Stationary', sets: 1, reps: '40min' }],
+      mobility:    [{ en: 'Bird Dog', sets: 3, reps: '10' }],
+      flexibility: [{ en: 'Calf Stretch', sets: 2, reps: '30s' }, { en: 'Hamstring Stretch', sets: 2, reps: '30s' }]
+    }
+  },
+  {
     id: 'tpl_endurance',
     group: 'endurance',
-    ar: 'تحضير بدني — رياضات التحمّل',
-    en: 'Conditioning — endurance sports',
+    ar: 'رياضات التحمّل — تحضير بدني عام',
+    en: 'Endurance sports — General conditioning',
     note: {
       ar: 'تركيز على قوة الجذع، ثبات الحوض، وقوة الرجلين المطاطية لتقليل إصابات الإفراط.',
       en: 'Focus on trunk strength, pelvic stability, and elastic leg strength to reduce overuse injury.'
@@ -171,6 +188,23 @@ export const SPORT_TEMPLATES = [
       cardio:      [],
       mobility:    [{ en: 'Bird Dog', sets: 3, reps: '10' }, { en: 'Glute Bridge', sets: 3, reps: '15' }],
       flexibility: [{ en: 'Calf Stretch', sets: 2, reps: '30s' }, { en: 'Hamstring Stretch', sets: 2, reps: '30s' }]
+    }
+  },
+  {
+    id: 'tpl_endurance_peak',
+    group: 'endurance',
+    ar: 'رياضات التحمّل — الذروة قبل السباق',
+    en: 'Endurance sports — Peak/race-specific phase',
+    note: {
+      ar: 'تقليل حجم التمرين العام وزيادة التخصص في شدة قريبة من سرعة السباق، مع راحة كافية للتعافي قبل المنافسة.',
+      en: 'Reduce general volume and shift toward race-pace intensity, with enough rest to recover before competition.'
+    },
+    sections: {
+      warmup:      [{ en: 'Ankle Circles', sets: 2, reps: '12' }, { en: 'Leg Swings', sets: 2, reps: '10' }],
+      main:        [{ en: 'Bulgarian Split Squat', sets: 3, reps: '8' }, { en: 'Standing Calf Raises', sets: 3, reps: '12' }],
+      cardio:      [{ en: 'Interval Running', sets: 8, reps: '60s' }],
+      mobility:    [{ en: 'Bird Dog', sets: 2, reps: '10' }],
+      flexibility: [{ en: 'Hamstring Stretch', sets: 2, reps: '20s' }]
     }
   },
   {
@@ -225,10 +259,27 @@ export const SPORT_TEMPLATES = [
     }
   },
   {
+    id: 'tpl_strength_hypertrophy',
+    group: 'strength',
+    ar: 'رياضات القوة — بناء الحجم العضلي (Hypertrophy)',
+    en: 'Strength sports — Hypertrophy phase',
+    note: {
+      ar: 'حمل متوسط وتكرارات أعلى (8-12) مع حجم تدريبي أكبر — مرحلة بناء الكتلة العضلية قبل مرحلتي القوة والقدرة الانفجارية.',
+      en: 'Moderate load with higher reps (8-12) and more total volume — builds muscle mass ahead of the strength and power phases.'
+    },
+    sections: {
+      warmup:      [{ en: 'Band Pull Apart', sets: 3, reps: '15' }, { en: 'Bodyweight Squat', sets: 2, reps: '15' }],
+      main:        [{ en: 'Barbell Squat', sets: 4, reps: '10' }, { en: 'Barbell Bench Press - Medium Grip', sets: 4, reps: '10' }, { en: 'Bent Over Barbell Row', sets: 4, reps: '10' }, { en: 'Dumbbell Lunge', sets: 3, reps: '12' }],
+      cardio:      [],
+      mobility:    [{ en: 'Thoracic Rotation', sets: 3, reps: '10' }],
+      flexibility: [{ en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }]
+    }
+  },
+  {
     id: 'tpl_strength',
     group: 'strength',
-    ar: 'تحضير بدني — رياضات القوة',
-    en: 'Conditioning — strength sports',
+    ar: 'رياضات القوة — القوة القصوى (Strength)',
+    en: 'Strength sports — Max strength phase',
     note: {
       ar: 'التركيز على الحركات الأساسية بتقنية سليمة وتدرج في الحمل. الاستشفاء جزء من البرنامج مش إضافة.',
       en: 'Focus on the main lifts with sound technique and progressive load. Recovery is part of the plan, not an extra.'
@@ -242,10 +293,44 @@ export const SPORT_TEMPLATES = [
     }
   },
   {
+    id: 'tpl_strength_power',
+    group: 'strength',
+    ar: 'رياضات القوة — القدرة الانفجارية (Power)',
+    en: 'Strength sports — Power phase',
+    note: {
+      ar: 'أحمال عالية وتكرارات قليلة (2-5) مع راحة كاملة بين المجموعات — الهدف سرعة الأداء مش التعب العضلي، وده بييجي بعد مرحلتي الحجم والقوة.',
+      en: 'Heavy loads with low reps (2-5) and full rest between sets — the goal is bar speed, not muscular fatigue. Follows the hypertrophy and strength phases.'
+    },
+    sections: {
+      warmup:      [{ en: 'Band Pull Apart', sets: 3, reps: '15' }, { en: 'Bodyweight Squat', sets: 2, reps: '10' }],
+      main:        [{ en: 'Barbell Squat', sets: 5, reps: '3' }, { en: 'Box Jump', sets: 5, reps: '3' }, { en: 'Barbell Shoulder Press', sets: 4, reps: '3' }, { en: 'Medicine Ball Slam', sets: 4, reps: '8' }],
+      cardio:      [],
+      mobility:    [{ en: 'Thoracic Rotation', sets: 3, reps: '10' }],
+      flexibility: [{ en: 'Hip Flexor Stretch', sets: 2, reps: '20s' }]
+    }
+  },
+  {
+    id: 'tpl_athletics_gpp',
+    group: 'athletics',
+    ar: 'ألعاب القوى — الإعداد العام (GPP)',
+    en: 'Athletics — General Prep (GPP)',
+    note: {
+      ar: 'مرحلة بناء القاعدة قبل موسم المنافسات — قوة عامة وحجم عضلي وتحمّل هوائي أساسي، من غير تخصص حركي عالي لسرعة السباق.',
+      en: 'Base-building phase before the competition season — general strength, muscle mass, and aerobic base, without race-specific speed work yet.'
+    },
+    sections: {
+      warmup:      [{ en: 'Leg Swings', sets: 2, reps: '12' }, { en: 'Arm Circles', sets: 2, reps: '15' }],
+      main:        [{ en: 'Barbell Squat', sets: 4, reps: '8' }, { en: 'Barbell Deadlift', sets: 3, reps: '6' }, { en: 'Pull-up', sets: 3, reps: '8' }, { en: 'Push-up', sets: 3, reps: '15' }],
+      cardio:      [{ en: 'Bicycling, Stationary', sets: 1, reps: '20min' }],
+      mobility:    [{ en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }, { en: 'Thoracic Rotation', sets: 3, reps: '10' }],
+      flexibility: [{ en: 'Hamstring Stretch', sets: 2, reps: '30s' }, { en: 'Calf Stretch', sets: 2, reps: '30s' }]
+    }
+  },
+  {
     id: 'tpl_athletics',
     group: 'athletics',
-    ar: 'تحضير بدني — ألعاب القوى',
-    en: 'Conditioning — athletics',
+    ar: 'ألعاب القوى — الإعداد الخاص (SPP)',
+    en: 'Athletics — Special Prep (SPP)',
     note: {
       ar: 'قدرة انفجارية وسرعة. تمارين الإيكسنتريك لأوتار الركبة أساسية للعدّائين لتقليل الارتجاع.',
       en: 'Power and speed. Eccentric hamstring work is essential for sprinters to cut re-injury risk.'
@@ -256,6 +341,23 @@ export const SPORT_TEMPLATES = [
       cardio:      [{ en: 'Sprint Intervals', sets: 6, reps: '60m' }],
       mobility:    [{ en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }],
       flexibility: [{ en: 'Hamstring Stretch', sets: 2, reps: '30s' }]
+    }
+  },
+  {
+    id: 'tpl_athletics_comp',
+    group: 'athletics',
+    ar: 'ألعاب القوى — مرحلة المنافسات والتايبر',
+    en: 'Athletics — Competition & taper',
+    note: {
+      ar: 'تقليل الحجم الكلي مع الحفاظ على الشدة قبل السباق مباشرة، عشان الجسم يوصل للمنافسة مستريح وقادر على أعلى أداء.',
+      en: 'Cut total volume while keeping intensity high right before competition, so the athlete arrives fresh and at peak power.'
+    },
+    sections: {
+      warmup:      [{ en: 'Leg Swings', sets: 2, reps: '10' }, { en: 'Ankle Circles', sets: 2, reps: '12' }],
+      main:        [{ en: 'Barbell Squat', sets: 3, reps: '3' }, { en: 'Box Jump', sets: 4, reps: '4' }, { en: 'Standing Calf Raises', sets: 2, reps: '8' }],
+      cardio:      [{ en: 'Sprint Intervals', sets: 4, reps: '30m' }],
+      mobility:    [{ en: 'Hip Flexor Stretch', sets: 2, reps: '20s' }],
+      flexibility: [{ en: 'Hamstring Stretch', sets: 2, reps: '20s' }]
     }
   },
   {
@@ -290,6 +392,40 @@ export const SPORT_TEMPLATES = [
       cardio:      [],
       mobility:    [{ en: 'Thoracic Rotation', sets: 3, reps: '10' }, { en: 'Hip Flexor Stretch', sets: 3, reps: '30s' }],
       flexibility: [{ en: 'Hamstring Stretch', sets: 3, reps: '30s' }, { en: 'Shoulder Stretch', sets: 3, reps: '30s' }]
+    }
+  },
+  {
+    id: 'tpl_winter',
+    group: 'winter',
+    ar: 'تحضير بدني — الرياضات الشتوية',
+    en: 'Conditioning — winter sports',
+    note: {
+      ar: 'تركيز على قوة الرجلين والتوازن وثبات الجذع — أساسي في رياضات التزلج بسبب الحمل الجانبي المتكرر على المفاصل.',
+      en: 'Focus on leg strength, balance, and trunk stability — essential for skiing/skating due to repeated lateral joint load.'
+    },
+    sections: {
+      warmup:      [{ en: 'Leg Swings', sets: 2, reps: '12' }, { en: 'Arm Circles', sets: 2, reps: '15' }],
+      main:        [{ en: 'Barbell Squat', sets: 3, reps: '10' }, { en: 'Single Leg Squat', sets: 3, reps: '8' }, { en: 'Lateral Lunge', sets: 3, reps: '10' }, { en: 'Plank', sets: 3, reps: '45s' }],
+      cardio:      [],
+      mobility:    [{ en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }],
+      flexibility: [{ en: 'Calf Stretch', sets: 2, reps: '30s' }]
+    }
+  },
+  {
+    id: 'tpl_other',
+    group: 'other',
+    ar: 'تحضير بدني — رياضات أخرى',
+    en: 'Conditioning — other sports',
+    note: {
+      ar: 'برنامج قوة وثبات عام يصلح كنقطة بداية لرياضات متنوعة زي التسلق والجولف والرماية — عدّله حسب المتطلبات الحركية الخاصة بكل رياضة.',
+      en: 'A general strength & stability starting point for varied sports like climbing, golf, or archery — adapt it to each sport’s specific movement demands.'
+    },
+    sections: {
+      warmup:      [{ en: 'Arm Circles', sets: 2, reps: '15' }, { en: 'Leg Swings', sets: 2, reps: '12' }],
+      main:        [{ en: 'Bodyweight Squat', sets: 3, reps: '12' }, { en: 'Push-up', sets: 3, reps: '12' }, { en: 'Plank', sets: 3, reps: '30s' }, { en: 'Bird Dog', sets: 3, reps: '10' }],
+      cardio:      [],
+      mobility:    [{ en: 'Thoracic Rotation', sets: 3, reps: '10' }],
+      flexibility: [{ en: 'Shoulder Stretch', sets: 2, reps: '30s' }]
     }
   },
   {

@@ -1,0 +1,13 @@
+{
+  "name": "adam-functions",
+  "description": "المساعد الذكي (AI) لشات ADAM — بيرد تلقائيًا على رسايل العملاء باستخدام OpenAI",
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "private": true
+}

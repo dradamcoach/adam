@@ -139,3 +139,27 @@ export function specialtyName(key, lang) {
 export function specialtyIcon(key) {
   return (SPECIALTIES[key] && SPECIALTIES[key].icon) || '•';
 }
+
+/*
+ * أيقونات SVG بديلة للإيموجي — نفس ستايل الخط البسيط المستخدم في باقي
+ * الموقع (ui-icon). بتتحط جوه عنصر (مش جوه <option> لأنه مش بيعرض HTML).
+ */
+const SPECIALTY_ICON_PATHS = {
+  coach: '<rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect>',
+  nutritionist: '<path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path>',
+  rehab: '<rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line>',
+  physio: '<path d="M9 12V5.5a1.3 1.3 0 0 1 2.6 0V11"></path><path d="M11.6 11V4.8a1.3 1.3 0 0 1 2.6 0V11"></path><path d="M14.2 11V6a1.3 1.3 0 0 1 2.6 0v7.5"></path><path d="M16.8 12.5V8.3a1.3 1.3 0 0 1 2.6 0V15c0 3.9-2.4 6.5-6 6.5-2.5 0-4-1-5.4-3l-2.7-4.3c-.5-.8-.2-1.7.5-2.1.7-.4 1.6-.2 2.1.5L9 15"></path>',
+  ortho: '<circle cx="6" cy="6" r="2.4"></circle><circle cx="18" cy="18" r="2.4"></circle><line x1="7.7" y1="7.7" x2="16.3" y2="16.3" stroke-width="3.5"></line>',
+  radiology: '<rect x="3.5" y="3.5" width="17" height="17" rx="2"></rect><line x1="8" y1="8" x2="16" y2="16"></line><line x1="16" y1="8" x2="8" y2="16"></line>',
+  sports_medicine: '<path d="M3 12h3.5l2-6 3 12 2-9 1.5 3H21"></path>',
+  pharmacist: '<rect x="3.5" y="9" width="17" height="6" rx="3" transform="rotate(-30 12 12)"></rect><line x1="12" y1="8" x2="12" y2="16" transform="rotate(-30 12 12)"></line>',
+  massage: '<circle cx="12" cy="6" r="2.2"></circle><path d="M6 17c1-3 3-4.5 6-4.5s5 1.5 6 4.5"></path><path d="M7 20c1-1.5 2.5-2 5-2s4 .5 5 2"></path>',
+  psychologist: '<path d="M9 4.5c-2 0-3.5 1.5-3.5 3.3 0 .6.2 1.1.4 1.6-1 .5-1.7 1.6-1.7 2.8 0 1 .5 1.9 1.3 2.4-.2.4-.3.9-.3 1.4 0 2 1.7 3.5 3.7 3.3"></path><path d="M9 4.5c0-1.3 1.1-2.5 2.5-2.5S14 3.2 14 4.5"></path><path d="M15 4.5c2 0 3.5 1.5 3.5 3.3 0 .6-.2 1.1-.4 1.6 1 .5 1.7 1.6 1.7 2.8 0 1-.5 1.9-1.3 2.4.2.4.3.9.3 1.4 0 2-1.7 3.5-3.7 3.3"></path><line x1="12" y1="4.5" x2="12" y2="19.5"></line>'
+};
+
+const SPECIALTY_ICON_DEFAULT = '<circle cx="12" cy="12" r="8"></circle>';
+
+export function specialtyIconSvg(key) {
+  const inner = SPECIALTY_ICON_PATHS[key] || SPECIALTY_ICON_DEFAULT;
+  return '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + inner + '</svg>';
+}
