@@ -186,6 +186,23 @@ body > p {
   flex: 2;
 }
 
+/* خانة البحث بإيميل في "إدارة الوصول" كانت بتطلع شبه مقفولة (شريط
+   رفيع جدًا) لأن أي زرار جوه .row بياخد عرض 100% افتراضيًا (.card
+   button)، فكان بياكل كل مساحة الصف ويسيب للخانة سنتيمتر واحد بس.
+   هنا بنرجّع الزرار لحجم طبيعي حسب نص "ابحث" ونديله المساحة الفاضلة
+   كلها للخانة عشان تتكتب فيها بشكل طبيعي */
+#access-lookup-email {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+
+#access-lookup-btn {
+  flex: 0 0 auto;
+  width: auto;
+  white-space: nowrap;
+}
+
 .phone-code-select {
   flex: 0 0 auto;
   width: 92px;
@@ -505,7 +522,8 @@ body > p {
 
 /* ---------- clients ---------- */
 
-#clients-list li {
+#clients-list li,
+#providers-list li {
   display: block;
   padding: 14px;
 }
@@ -709,7 +727,11 @@ body > p {
   margin: 6px 0 16px;
 }
 
-.choice-row {
+/* بادئة .card button عشان تكسب أولوية أعلى من قاعدة الزرار الأساسية
+   (.card button) اللي كانت بتخلّي كل صفوف الاختيار تتلوّن أخضر CTA
+   بالكامل حتى الغير مختارة — بدل ما يبقى شكل محايد إلا وقت الاختيار
+   فعلاً (نفس أسلوب .welcome-pillar-btn و.welcome-faq-question) */
+.card button.choice-row {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -722,14 +744,15 @@ body > p {
   cursor: pointer;
   text-align: start;
   font-family: 'Cairo', sans-serif;
+  margin-top: 0;
   transition: border-color 0.15s, background 0.15s;
 }
 
-.choice-row:hover {
+.card button.choice-row:hover {
   border-color: var(--brand);
 }
 
-.choice-row.selected {
+.card button.choice-row.selected {
   border-color: var(--brand);
   background: rgba(34, 197, 94, 0.12);
 }
@@ -864,8 +887,8 @@ body > p {
 }
 
 .fab-icon-btn .ui-icon {
-  width: 26px;
-  height: 26px;
+  width: 21px;
+  height: 21px;
   color: #fff;
 }
 
@@ -884,25 +907,49 @@ body > p {
   white-space: nowrap;
 }
 
-/* ---------- floating icon button: report injury ---------- */
+/* ---------- شريط الأيقونات العائمة: كان عمود رأسي على الجانب،
+   بقى صف أفقي واحد لوحده تحت الشاشة (طلب المستخدم) ---------- */
+
+/* مساحة فاضية تحت شاشة العميل عشان محتواها ميتغطاش بصف الأيقونات
+   العائم الثابت تحت (fab-icon-row) */
+#client-screen {
+  padding-bottom: 82px;
+}
+
+.fab-icon-row {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px)) 10px;
+  background: linear-gradient(180deg, rgba(11, 18, 32, 0), var(--bg) 40%);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.fab-icon-row::-webkit-scrollbar {
+  display: none;
+}
 
 .card button.fab-icon-btn {
-  position: fixed;
-  bottom: 22px;
-  inset-inline-end: 22px;
-  width: 58px;
-  height: 58px;
+  position: static;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   border: none;
   background: linear-gradient(135deg, var(--brand), var(--brand-dark));
   color: #fff;
-  font-size: 26px;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
-  z-index: 60;
   padding: 0;
   margin-top: 0;
   transition: transform 0.15s;
@@ -917,7 +964,6 @@ body > p {
 }
 
 .card button.fab-icon-btn-secondary {
-  bottom: 90px;
   background: var(--surface-2);
   border: 2px solid var(--brand);
   color: var(--brand);
@@ -929,7 +975,6 @@ body > p {
 }
 
 .card button.fab-icon-btn-tertiary {
-  bottom: 158px;
   background: var(--surface-2);
   border: 2px solid #38b6ff;
   color: #38b6ff;
@@ -940,7 +985,6 @@ body > p {
 }
 
 .card button.fab-icon-btn-quaternary {
-  bottom: 226px;
   background: var(--surface-2);
   border: 2px solid var(--warn);
   color: var(--warn);
@@ -951,7 +995,6 @@ body > p {
 }
 
 .card button.fab-icon-btn-quinary {
-  bottom: 294px;
   background: var(--surface-2);
   border: 2px solid #06b6d4;
   color: #06b6d4;
@@ -962,7 +1005,6 @@ body > p {
 }
 
 .card button.fab-icon-btn-senary {
-  bottom: 362px;
   background: var(--surface-2);
   border: 2px solid #a855f7;
   color: #a855f7;
@@ -973,7 +1015,6 @@ body > p {
 }
 
 .card button.fab-icon-btn-septenary {
-  bottom: 430px;
   background: var(--surface-2);
   border: 2px solid #f97316;
   color: #f97316;
@@ -1042,6 +1083,57 @@ body > p {
 
 .review-card .ex-name {
   margin-bottom: 2px;
+}
+
+/* ---------- الريفيوهات المكتوبة من عملاء تانيين لنفس المتخصص ---------- */
+.written-reviews-list {
+  margin: 6px 0 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.written-reviews-list li {
+  /* .card li العامة بتحط display:flex على كل li — ده كان بيخلي اسم
+     العميل ونص الريفيو يتحطوا جنب بعض أفقيًا بدل تحت بعض، والنص
+     الطويل يتلخبط في عمود ضيق برا حدود الكارت. هنا بنرجّعها بلوك
+     عادي عشان العنوان يبقى فوق والنص يبقى تحته وينكسر طبيعي */
+  display: block !important;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  cursor: default;
+}
+
+.written-review-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.written-review-name {
+  font-weight: 700;
+  font-size: 13px;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+.stars-display.small {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* ---------- صورة عضو الفريق في شاشة "فريقك" عند العميل ---------- */
+.team-member-photo {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin-bottom: 8px;
+  border: 2px solid var(--brand);
 }
 
 #ph-reviews-list li,
@@ -1206,6 +1298,33 @@ body > p {
 
 .file-pick input[type="file"] {
   display: none;
+}
+
+.specialty-multi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.specialty-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background-color: var(--field);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.specialty-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  accent-color: var(--brand);
 }
 
 .preview-box {
@@ -1373,10 +1492,109 @@ body > p {
   cursor: zoom-in;
 }
 
+/* ---------- library images uploaded by the coach/specialist ---------- */
+
+.ex-shot.no-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 104px;
+  border: 1px dashed var(--line);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.ex-shot.no-photo .ui-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.card .photo-edit-badge {
+  position: absolute;
+  top: 6px;
+  inset-inline-start: 6px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  background: rgba(11, 18, 32, 0.82);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.card .photo-edit-badge .ui-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.food-thumb {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: none;
+  cursor: zoom-in;
+}
+
+.food-photo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--muted);
+  flex: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.food-photo-btn .ui-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.template-photo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.template-photo-row .preview-box {
+  margin: 0;
+}
+
+.template-photo-row .preview-box img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: zoom-in;
+}
+
 /* ---------- tabs: training / rehab ---------- */
 
 .tabs {
   display: flex;
+  /* التبويبات بقت أكتر (5 عند المدرب و6-7 عند العميل)، ومكانتش بتتظبط
+     في سطر واحد على الموبايل — كان فيه تبويب أو اتنين بيقعوا برّه الشاشة
+     ومش بيتفتحوا خالص. بنخليها تنزل سطر تاني بدل ما تطلع برّه الإطار.
+     (صفوف الحاسبات .calc-tabs ليها قاعدة خاصة بتمنع ده وبتفضل بتمرير) */
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 6px;
   background: var(--field);
   border: 1px solid var(--line);
@@ -1387,7 +1605,9 @@ body > p {
 
 .card .tab {
   position: relative;
-  flex: 1;
+  /* تلات تبويبات في السطر على الموبايل، والباقي بينزل سطر تحتيه */
+  flex: 1 1 calc(33.333% - 6px);
+  min-width: 0;
   width: auto;
   margin: 0;
   padding: 11px 8px;
@@ -1404,6 +1624,13 @@ body > p {
   align-items: center;
   justify-content: center;
   gap: 4px;
+}
+
+/* صف تبويبات العميل هو الأطول (6-7 تبويبات) — بياخد نفس منطق اللف
+   في سطرين بتاع .tabs فوق، بس بمسافات أضيق شوية عشان الأسماء تبان كاملة */
+#client-tabs .tab {
+  padding: 11px 6px;
+  font-size: 13px;
 }
 
 .card .tab .ui-icon {
@@ -1461,7 +1688,9 @@ body > p {
   margin: 4px 0;
 }
 
-.store-add-btn {
+/* .card button (0,1,1) كانت بتكسب على .store-add-btn لوحدها (0,1,0)
+   فتفضل بمقاس الزرار الأساسي الكبير بدل الحجم المدمج المقصود */
+.card button.store-add-btn {
   width: 100%;
   padding: 8px;
   font-size: 12.5px;
@@ -1476,16 +1705,32 @@ body > p {
   border-bottom: 1px dashed var(--line);
 }
 
+/* اسم المنتج في السلة كان بياخد قاعدة .card li span العامة
+   (white-space: nowrap + display: flex) فبيرفض ينكسر سطرين ويدفع
+   الأزرار برا حدود الكارت لو الاسم طويل — هنا بنسمحله ينكسر ويقصّر
+   عرضه بدل ما يوسّع الصف كله */
+.store-cart-row span {
+  display: block;
+  white-space: normal;
+  overflow-wrap: break-word;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .store-cart-row:last-child {
   border-bottom: none;
 }
 
-.store-cart-qty-btn {
+/* نفس المشكلة: .card button (0,1,1) كانت بتغلب .store-cart-qty-btn
+   لوحدها (0,1,0) فيبقى الزرار عرضه 100% وبادينج كبير بدل زرار
+   صغير 26×26 جنب رقم الكمية */
+.card button.store-cart-qty-btn {
   width: 26px;
   height: 26px;
   padding: 0;
   border-radius: 8px;
   font-size: 16px;
+  margin-top: 0;
 }
 
 .calc-result .calc-line {
@@ -2406,15 +2651,25 @@ body > p {
   padding: 14px !important;
 }
 
+/* الصف العلوي في كارت الكلاس (اسم + زرار حذف) كان صفه الداخلي (info)
+   من غير min-width:0، فاسم كلاس طويل أو من غير مسافات كان بيدفع زرار
+   الحذف برا حدود الكارت بدل ما يتقصّر وينكسر سطرين */
+.class-card-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .class-name {
   font-size: 16px;
   font-weight: 700;
+  overflow-wrap: break-word;
 }
 
 .class-meta {
   font-size: 12px;
   color: var(--muted);
   margin-top: 3px;
+  overflow-wrap: break-word;
 }
 
 .class-count {
@@ -2927,6 +3182,16 @@ body > p {
   line-height: 1.6;
 }
 
+/* ---------- انضمام مدربين ومتخصصين ---------- */
+
+.welcome-provider-apply-section {
+  margin-top: 22px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+}
+
 /* ---------- فريق العمل على الصفحة الرئيسية ---------- */
 
 .welcome-team-section {
@@ -3003,7 +3268,11 @@ body > p {
   overflow: hidden;
 }
 
-.welcome-faq-question {
+/* بادئة .card button عشان نكسب أولوية أعلى من قاعدة الزرار الأساسية
+   (.card button) اللي كانت بتطبّع كل أسئلة الأكورديون بشكل زرار أخضر
+   CTA كامل بدل مظهر بند قائمة بسيط — نفس الأسلوب المتّبع مع
+   .welcome-pillar-btn في الملف ده */
+.card button.welcome-faq-question {
   width: 100%;
   background: none;
   border: none;
@@ -3051,9 +3320,28 @@ body > p {
   background: linear-gradient(180deg, rgba(11, 18, 32, 0), var(--bg) 30%);
 }
 
+/* الزرار العائم ده برّه .welcome-screen (.card) فمعندوش شكل الزرار
+   الأساسي (.card button) خالص — بنكرر نفس مظهر زرار الـ CTA هنا
+   عشان يبقى واضح وجذاب زي باقي أزرار التطبيق، مش زرار افتراضي رمادي */
 .welcome-sticky-cta button {
+  width: 100%;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-dark) 100%);
+  color: #06210f;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 13px;
+  padding: 14px;
   margin: 0;
+  cursor: pointer;
+  transition: transform 0.1s, filter 0.15s;
   box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.8);
+}
+
+.welcome-sticky-cta button:active {
+  transform: scale(0.985);
+  filter: brightness(0.95);
 }
 
 @media (max-width: 560px) {

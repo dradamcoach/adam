@@ -7,6 +7,7 @@ import { FOOD_LIBRARY, FOOD_CATEGORIES } from './food-library.js';
 import { SPORTS, SPORT_GROUPS, SPORT_METRICS, METRIC_FIELDS, SPORT_TEMPLATES } from './sports.js';
 import { SPECIALTIES, specialtyName, specialtyIcon, specialtyIconSvg, MED_CATEGORIES, MED_REVIEW, DEFAULT_RED_FLAGS, SESSION_TYPES, BOOKING_STATUS } from './providers.js';
 import { MED_LIBRARY_SEED } from './med-library-seed.js';
+import { EXERCISE_LIBRARY } from './exercise-library.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -17,15 +18,9 @@ const IMAGE_BASE = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/m
 const MAX_SOURCE_BYTES = 12 * 1024 * 1024;   // أقصى حجم للصورة الأصلية قبل الضغط
 const MAX_STORED_BYTES = 700 * 1024;         // أقصى حجم بعد الضغط (حد Firestore مليون بايت)
 const IMAGE_MAX_SIDE = 520;                  // أطول ضلع للصورة بعد التصغير
-
-function setSpecialtyLabel(el, specialty, text) {
-  el.innerHTML = '';
-  const icon = document.createElement('span');
-  icon.className = 'inline-icon';
-  icon.innerHTML = specialtyIconSvg(specialty);
-  el.appendChild(icon);
-  el.appendChild(document.createTextNode(' ' + (text || '')));
-}
+// صور التمارين بتتخزن جوه مستند البرنامج نفسه مع باقي التمارين، فبنصغّرها
+// أكتر من باقي الصور عشان برنامج كامل بصور مايعديش حد المستند (1 ميجا)
+const EXERCISE_IMAGE_MAX_SIDE = 360;
 
 /* ============================ اللغة ============================ */
 
@@ -46,8 +41,12 @@ const TEXT = {
     add_client: '+ إضافة عميل',
     quick_add_coach_btn: '+ إضافة مدرب جديد',
     pv_specialty_coach_hint: 'اختيار "كوتش" بيدّي صلاحيات مدرب كاملة (يشوف ويدير كل العملاء)، وأي تخصص تاني بيشوف بس العملاء اللي متضافين لفريقه',
+    admin_team_badge: 'فريق إداري',
+    grant_admin_team_label: 'صلاحية إدارية كاملة (زي صاحب المنصة بالظبط)',
     loading: 'جاري التحميل...',
     no_clients: 'مفيش عملاء لسه، ضيف عميل تحت',
+    clients_search_ph: 'ابحث باسم العميل أو إيميله',
+    no_client_search_results: 'مفيش عميل بالاسم أو الإيميل ده',
     need_name_email: 'اكتب الاسم والإيميل',
     adding: 'جاري الإضافة...',
     no_activity: 'مفيش نشاط النهاردة',
@@ -96,6 +95,11 @@ const TEXT = {
     image_too_big: 'الصورة كبيرة، اختار واحدة أصغر من 3 ميجا',
     preparing_image: 'جاري تجهيز الصورة...',
     image_failed: 'مش قادر أقرا الصورة دي، جرب صورة تانية',
+    image_uploaded: 'اتضافت الصورة',
+    add_photo_short: 'أضف صورة',
+    change_photo: 'غيّر الصورة',
+    add_template_photo: '+ صورة للبرنامج',
+    pick_template_first: 'اختار برنامج من القائمة الأول',
     start_position: 'وضع البداية',
     end_position: 'وضع النهاية',
     exercise_image: 'صورة التمرين',
@@ -103,6 +107,29 @@ const TEXT = {
     tab_training: 'تمرين',
     tab_rehab: 'تأهيل',
     tab_injuries: 'إصابات',
+    tab_consult: 'استشارة',
+    consult_hint: 'دوّن هنا ملاحظاتك وتوصياتك لهذا العميل — هتفضل محفوظة وتقدر تعدّلها في أي وقت.',
+    consult_notes_label: 'ملاحظات وتوصيات',
+    consult_notes_ph: 'اكتب ملاحظاتك أو توصياتك للعميل هنا...',
+    consult_save_btn: 'حفظ الملاحظات',
+    consult_saved_msg: 'اتحفظت الملاحظات',
+    consult_requests_title: 'طلبات استشارة من العميل',
+    consult_no_requests: 'مفيش طلبات استشارة من العميل ده',
+    consult_status_pending: 'في انتظار الرد',
+    consult_status_answered: 'تم الرد',
+    consult_asked_on: 'اتبعت في',
+    consult_note_updated: 'آخر تحديث',
+    client_consult_ask_title: 'اطلب استشارة',
+    client_consult_ask_hint: 'اختار المتخصص واكتب سؤالك أو شكوتك — هيوصله ويرد عليك هنا',
+    client_consult_pick_provider: '— اختر المتخصص —',
+    client_consult_text_ph: 'اكتب سؤالك أو شكوتك بالتفصيل...',
+    client_consult_send_btn: 'إرسال الطلب',
+    client_consult_need_fields: 'اختار المتخصص واكتب سؤالك الأول',
+    client_consult_sent_msg: 'اتبعت طلبك — هيوصله وهيرد عليك',
+    client_consult_replies_title: 'ردود فريقك',
+    client_consult_no_replies: 'مفيش ردود لسه — أول ما متخصص يكتبلك هتلاقيه هنا',
+    client_consult_requests_title: 'طلباتك السابقة',
+    client_consult_no_requests: 'لسه ما طلبتش أي استشارة',
     add_to: 'إضافة إلى',
     save_rehab: 'حفظ برنامج التأهيل',
     saved_rehab: 'اتحفظ برنامج التأهيل',
@@ -153,7 +180,13 @@ const TEXT = {
     anatomy_add: '+ تفاصيل تشريحية (اختياري)',
     anatomy_edit: 'عدّل التفاصيل التشريحية',
     anatomy_hide: 'اخفِ التفاصيل التشريحية',
+    ex_photo_add: '+ إضافة صورة للتمرين',
+    ex_photo_change: 'تغيير صورة التمرين',
+    ex_photo_remove: 'حذف الصورة',
+    doc_too_big: 'البرنامج بقى كبير جدًا بسبب الصور — امسح صورة أو اتنين من التمارين وجرّب تحفظ تاني',
+    doc_size_warning: 'حجم البرنامج قرّب على الحد الأقصى بسبب الصور — خلي بالك',
     anatomy_section_title: 'تفاصيل تشريحية (اختياري)',
+    anatomy_howto: 'طريقة الأداء',
     anatomy_goal: 'الهدف من التمرين',
     anatomy_primary: 'العضلات الأساسية',
     anatomy_secondary: 'العضلات المساعدة',
@@ -478,9 +511,25 @@ const TEXT = {
     review_comment_ph: 'اكتب رأيك (اختياري)',
     save_review_btn: 'احفظ تقييمك',
     review_saved: 'تم حفظ تقييمك، شكرًا!',
+    trainee_count_label: '{n} متدرب بيتابع معاه',
+    written_reviews_title: 'آراء العملاء',
+    no_written_reviews: 'لسه محدش كتب رأيه',
+    chat_with_provider_btn: 'تواصل معاه',
+    client_label: 'عميل',
     back_to_client: '‹ رجوع',
     reviews_received_title: 'تقييمات العملاء',
     no_reviews_received: 'لسه محدش قيّمك',
+    provider_name_label: 'اسمك',
+    provider_name_ph: 'اسمك الكامل',
+    platform_owner_label: 'صاحب المنصة',
+    your_specialties_label: 'تخصصاتك (تقدر تختار أكتر من واحد)',
+    need_one_specialty: 'اختار تخصص واحد على الأقل',
+    open_client_profile_btn: 'بروفايلك ›',
+    client_profile_title: 'بروفايلك',
+    client_profile_hint: 'عدّل بياناتك في أي وقت — فريقك هيشوف آخر تحديث تلقائيًا',
+    client_name_field_label: 'اسمك',
+    save_profile_btn: 'احفظ التعديلات',
+    need_client_profile_fields: 'اكتب اسمك ووزنك وطولك الأول',
     provider_bio_label: 'نبذة عنك',
     provider_bio_ph: 'اكتب نبذة قصيرة عن خبرتك وأسلوبك في الشغل...',
     provider_certs_label: 'شهاداتك وإنجازاتك',
@@ -565,6 +614,12 @@ const TEXT = {
     seed_author_label: 'محتوى مبدئي — محتاج مراجعة متخصص',
     class_members: 'أعضاء الكلاس',
     add_member: '+ إضافة عضو',
+    class_exercises_title: 'تمارين الكلاس',
+    class_exercises_hint: 'أي حد يقدر يشوفها ويعملها حتى لو مش حاضر الكلاس',
+    add_from_library_btn: '+ أضف من المكتبة',
+    no_class_exercises: 'لسه مفيش تمارين متحددة للكلاس ده',
+    added_class_ex: 'اتضاف: {name}',
+    other_classes_title: 'كلاسات تانية — شوف تمارينها',
     no_members: 'مفيش أعضاء لسه',
     members_count: '{n} عضو',
     today_board: 'لوحة النهاردة',
@@ -680,6 +735,23 @@ const TEXT = {
     lead_submit_btn: 'ابعت',
     lead_submitted_msg: 'وصلت رسالتك — هيتواصل معاك فريقنا قريب',
     need_lead_fields: 'اكتب اسمك ورقم تليفونك أو إيميلك',
+    provider_apply_title: 'مدرب أو متخصص وعايز تنضم لينا؟',
+    provider_apply_sub: 'ابعتلنا بياناتك وهنراجعها ونرجعلك بالرد',
+    provider_apply_name_ph: 'اسمك',
+    provider_apply_email_ph: 'إيميلك',
+    provider_apply_contact_ph: 'رقم تليفونك (اختياري)',
+    provider_apply_message_ph: 'خبرتك أو شهاداتك (اختياري)',
+    provider_apply_submitted_msg: 'وصل طلبك — هنراجعه ونرجعلك بالرد قريب',
+    need_provider_apply_fields: 'اكتب اسمك وإيميلك واختر تخصصك',
+    admin_provider_apps_title: 'طلبات انضمام مدربين ومتخصصين',
+    admin_provider_apps_hint: 'راجع بيانات كل طلب، ولو موافق دوس "قبول" وهيتضاف كمتخصص تلقائي بنفس الإيميل والتخصص اللي كتبهم',
+    provider_apps_empty: 'مفيش طلبات انضمام لسه',
+    provider_app_status_pending: 'قيد المراجعة',
+    provider_app_status_approved: 'اتوافق عليه',
+    provider_app_status_rejected: 'اترفض',
+    provider_app_approve_btn: 'قبول',
+    provider_app_reject_btn: 'رفض',
+    provider_app_approved_msg: 'تمام، اتضاف كمتخصص جديد',
     faq_q1: 'فيه مدرب حقيقي وراه ولا الموضوع كله برنامج آلي؟',
     faq_a1: 'فيه فريق حقيقي — مدرب أو متخصص بيشوف حالتك بنفسه ويبني ويعدّل برنامجك. المنصة بتنظّم المتابعة، مش بتحل محل الفريق.',
     faq_q2: 'ينفع أستخدمه لو عندي إصابة حالية؟',
@@ -729,8 +801,16 @@ const TEXT = {
     subscription_status_none: 'مفيش اشتراك فعّال حاليًا',
     subscription_status_blocked: 'الوصول متوقف حاليًا',
     plans_title: 'خطط الاشتراك',
-    plan_price_label: '{price} جنيه / شهريًا',
+    plan_price_label: '{price} جنيه',
     plan_offer_label: 'عرض: {price} جنيه بدل {original}',
+    plan_duration_opt_1: 'شهر واحد',
+    plan_duration_opt_3: '3 شهور',
+    plan_duration_opt_6: '6 شهور',
+    plan_duration_opt_12: 'سنة كاملة (12 شهر)',
+    plan_duration_suffix_1: '/ شهريًا',
+    plan_duration_suffix_3: '/ كل 3 شهور',
+    plan_duration_suffix_6: '/ كل 6 شهور',
+    plan_duration_suffix_12: '/ سنويًا',
     choose_plan_btn: 'اشترك في الخطة دي',
     payment_method_label: 'طريقة الدفع',
     payment_method_vodafone: 'فودافون كاش',
@@ -833,8 +913,12 @@ const TEXT = {
     add_client: '+ Add client',
     quick_add_coach_btn: '+ Add new coach',
     pv_specialty_coach_hint: 'Picking "Coach" gives full coach access (sees and manages all clients); any other specialty only sees clients added to their own team',
+    admin_team_badge: 'Admin team',
+    grant_admin_team_label: 'Full admin access (exactly like the platform owner)',
     loading: 'Loading...',
     no_clients: 'No clients yet — add one below',
+    clients_search_ph: 'Search by client name or email',
+    no_client_search_results: 'No client matches that name or email',
     need_name_email: 'Enter name and email',
     adding: 'Adding...',
     no_activity: 'No activity today',
@@ -883,6 +967,11 @@ const TEXT = {
     image_too_big: 'Image is too large — pick one under 3 MB',
     preparing_image: 'Preparing image...',
     image_failed: "Couldn't read that image — try another one",
+    image_uploaded: 'Photo added',
+    add_photo_short: 'Add photo',
+    change_photo: 'Change photo',
+    add_template_photo: '+ Photo for this program',
+    pick_template_first: 'Pick a program from the list first',
     start_position: 'Start position',
     end_position: 'End position',
     exercise_image: 'Exercise image',
@@ -890,6 +979,29 @@ const TEXT = {
     tab_training: 'Training',
     tab_rehab: 'Rehab',
     tab_injuries: 'Injuries',
+    tab_consult: 'Consult',
+    consult_hint: 'Write your notes and recommendations for this client here — they stay saved and you can edit them anytime.',
+    consult_notes_label: 'Notes & recommendations',
+    consult_notes_ph: 'Write your notes or recommendations for the client here...',
+    consult_save_btn: 'Save notes',
+    consult_saved_msg: 'Notes saved',
+    consult_requests_title: 'Consultation requests from this client',
+    consult_no_requests: 'No consultation requests from this client',
+    consult_status_pending: 'Awaiting reply',
+    consult_status_answered: 'Answered',
+    consult_asked_on: 'Sent on',
+    consult_note_updated: 'Last updated',
+    client_consult_ask_title: 'Request a consultation',
+    client_consult_ask_hint: "Pick a specialist and write your question — they'll see it and reply here",
+    client_consult_pick_provider: '— Choose a specialist —',
+    client_consult_text_ph: 'Write your question or concern in detail...',
+    client_consult_send_btn: 'Send request',
+    client_consult_need_fields: 'Pick a specialist and write your question first',
+    client_consult_sent_msg: "Request sent — they'll get it and reply",
+    client_consult_replies_title: "Your team's replies",
+    client_consult_no_replies: 'No replies yet — anything a specialist writes for you shows up here',
+    client_consult_requests_title: 'Your previous requests',
+    client_consult_no_requests: "You haven't requested a consultation yet",
     add_to: 'Add to',
     save_rehab: 'Save rehab program',
     saved_rehab: 'Rehab program saved',
@@ -940,7 +1052,13 @@ const TEXT = {
     anatomy_add: '+ Anatomy details (optional)',
     anatomy_edit: 'Edit anatomy details',
     anatomy_hide: 'Hide anatomy details',
+    ex_photo_add: '+ Add exercise photo',
+    ex_photo_change: 'Change exercise photo',
+    ex_photo_remove: 'Remove photo',
+    doc_too_big: 'This program is too large because of the photos — remove one or two exercise photos and save again',
+    doc_size_warning: 'The program is getting close to the size limit because of the photos',
     anatomy_section_title: 'Anatomy details (optional)',
+    anatomy_howto: 'How to perform',
     anatomy_goal: 'Goal of the exercise',
     anatomy_primary: 'Primary muscles',
     anatomy_secondary: 'Assisting muscles',
@@ -1265,9 +1383,25 @@ const TEXT = {
     review_comment_ph: 'Write your thoughts (optional)',
     save_review_btn: 'Save your rating',
     review_saved: 'Your rating was saved, thank you!',
+    trainee_count_label: '{n} trainees currently with them',
+    written_reviews_title: 'Client reviews',
+    no_written_reviews: 'No one has written a review yet',
+    chat_with_provider_btn: 'Message them',
+    client_label: 'Client',
     back_to_client: '‹ Back',
     reviews_received_title: 'Client reviews',
     no_reviews_received: 'No one has reviewed you yet',
+    provider_name_label: 'Your name',
+    provider_name_ph: 'Your full name',
+    platform_owner_label: 'Platform owner',
+    your_specialties_label: 'Your specialties (you can pick more than one)',
+    need_one_specialty: 'Pick at least one specialty',
+    open_client_profile_btn: 'Your profile ›',
+    client_profile_title: 'Your profile',
+    client_profile_hint: 'Update your info any time — your team sees the latest automatically',
+    client_name_field_label: 'Your name',
+    save_profile_btn: 'Save changes',
+    need_client_profile_fields: 'Fill in your name, weight, and height first',
     provider_bio_label: 'About you',
     provider_bio_ph: 'Write a short bio about your experience and approach...',
     provider_certs_label: 'Certifications & achievements',
@@ -1352,6 +1486,12 @@ const TEXT = {
     seed_author_label: 'Starter content — needs specialist review',
     class_members: 'Class members',
     add_member: '+ Add member',
+    class_exercises_title: 'Class exercises',
+    class_exercises_hint: 'Anyone can view and do these, even without attending the class',
+    add_from_library_btn: '+ Add from library',
+    no_class_exercises: 'No exercises set for this class yet',
+    added_class_ex: 'Added: {name}',
+    other_classes_title: 'Other classes — view their exercises',
     no_members: 'No members yet',
     members_count: '{n} members',
     today_board: "Today's board",
@@ -1467,6 +1607,23 @@ const TEXT = {
     lead_submit_btn: 'Send',
     lead_submitted_msg: "Your message was sent — our team will reach out soon",
     need_lead_fields: 'Enter your name and phone number or email',
+    provider_apply_title: 'Are you a coach or specialist who wants to join us?',
+    provider_apply_sub: "Send us your details and we'll review them and get back to you",
+    provider_apply_name_ph: 'Your name',
+    provider_apply_email_ph: 'Your email',
+    provider_apply_contact_ph: 'Your phone number (optional)',
+    provider_apply_message_ph: 'Your experience or certifications (optional)',
+    provider_apply_submitted_msg: "Your application was sent — we'll review it and get back to you soon",
+    need_provider_apply_fields: 'Enter your name, email and pick your specialty',
+    admin_provider_apps_title: 'Coach & specialist applications',
+    admin_provider_apps_hint: 'Review each application, and hit "Approve" to add them as a specialist automatically with the email and specialty they entered',
+    provider_apps_empty: 'No applications yet',
+    provider_app_status_pending: 'Under review',
+    provider_app_status_approved: 'Approved',
+    provider_app_status_rejected: 'Rejected',
+    provider_app_approve_btn: 'Approve',
+    provider_app_reject_btn: 'Reject',
+    provider_app_approved_msg: 'Done, added as a new specialist',
     faq_q1: 'Is there a real coach behind it, or is it all automated?',
     faq_a1: "There's a real team — a coach or specialist reviews your case themselves and builds and adjusts your program. The platform organizes the follow-up, it doesn't replace the team.",
     faq_q2: 'Can I use it if I have a current injury?',
@@ -1516,8 +1673,16 @@ const TEXT = {
     subscription_status_none: 'No active subscription',
     subscription_status_blocked: 'Access is currently paused',
     plans_title: 'Subscription plans',
-    plan_price_label: '{price} EGP / month',
+    plan_price_label: '{price} EGP',
     plan_offer_label: 'Offer: {price} EGP instead of {original}',
+    plan_duration_opt_1: '1 month',
+    plan_duration_opt_3: '3 months',
+    plan_duration_opt_6: '6 months',
+    plan_duration_opt_12: '1 year (12 months)',
+    plan_duration_suffix_1: '/ month',
+    plan_duration_suffix_3: '/ every 3 months',
+    plan_duration_suffix_6: '/ every 6 months',
+    plan_duration_suffix_12: '/ year',
     choose_plan_btn: 'Subscribe to this plan',
     payment_method_label: 'Payment method',
     payment_method_vodafone: 'Vodafone Cash',
@@ -1684,6 +1849,19 @@ function equipName(key) {
   return (EQUIPMENT[key] && EQUIPMENT[key][lang]) || key || t('all_equipment');
 }
 
+/* اسم تمرين من مكتبة التمارين المحلية (ثنائي اللغة) — لو الاسم نص عادي
+   (مصدر قديم) بيرجعه زي ما هو من غير تعديل */
+function exerciseLibName(exercise) {
+  if (!exercise || !exercise.name) return '';
+  return (typeof exercise.name === 'object') ? (exercise.name[lang] || exercise.name.ar || exercise.name.en || '') : exercise.name;
+}
+
+/* نص مترجم مجمّع لقائمة عضلات (مصفوفة مفاتيح زي primaryMuscles) —
+   بيتحط جاهز جوه makeExercise() لما نضيف تمرين من المكتبة */
+function musclesListText(muscles) {
+  return (Array.isArray(muscles) ? muscles : []).map(muscleName).join(lang === 'ar' ? '، ' : ', ');
+}
+
 function days() {
   return TEXT[lang].days;
 }
@@ -1823,6 +2001,9 @@ function makeExercise(data) {
     secondaryMuscles: data.secondaryMuscles || '',
     origin: data.origin || '',
     insertion: data.insertion || '',
+    /* شرح طريقة أداء التمرين — بيتملي تلقائي لما تضيف من مكتبة التمارين،
+       وتقدر تكتبه بنفسك لأي تمرين تضيفه من "مكتبتي" */
+    howTo: data.howTo || '',
     /* ملحوظة خاصة بالتأهيل: مدى إفادة التمرين ده للإصابة تحديدًا */
     injuryBenefit: data.injuryBenefit || '',
     /* تفاصيل كل مجموعة لوحدها — اختياري. مصفوفة، عنصر لكل مجموعة:
@@ -1834,7 +2015,7 @@ function makeExercise(data) {
 
 /* بترجع true لو أي حقل من حقول التفاصيل التشريحية متملي */
 function exerciseHasAnatomyDetail(exercise) {
-  return !!(exercise && (exercise.goal || exercise.primaryMuscles || exercise.secondaryMuscles || exercise.origin || exercise.insertion || exercise.injuryBenefit));
+  return !!(exercise && (exercise.goal || exercise.primaryMuscles || exercise.secondaryMuscles || exercise.origin || exercise.insertion || exercise.injuryBenefit || exercise.howTo));
 }
 
 /* رقم من نص — بيرجع صفر لو مش قابل للتحويل، عشان حسابات الحمل الإجمالي متتعطلش */
@@ -2056,6 +2237,7 @@ const welcomeStoriesGrid = document.getElementById('welcome-stories-grid');
 const providerSubscriptionScreen = document.getElementById('provider-subscription-screen');
 const trustStatItem = document.getElementById('trust-stat-item');
 const trustStatText = document.getElementById('trust-stat-text');
+const paSpecialtyMulti = document.getElementById('pa-specialty-multi');
 const trialEndedScreen = document.getElementById('trial-ended-screen');
 const trialBanner = document.getElementById('trial-banner');
 const loginScreen = document.getElementById('login-screen');
@@ -2099,12 +2281,15 @@ const ctabStore = document.getElementById('ctab-store');
 const providersScreen = document.getElementById('providers-screen');
 const providersList = document.getElementById('providers-list');
 const providersMessage = document.getElementById('providers-message');
-const pvSpecialty = document.getElementById('pv-specialty');
+const pvSpecialtyMulti = document.getElementById('pv-specialty-multi');
 
 const providerHomeScreen = document.getElementById('provider-home-screen');
 const providerHomeTitle = document.getElementById('provider-home-title');
 const providerHomeSpecialty = document.getElementById('provider-home-specialty');
 const providerHomeMessage = document.getElementById('provider-home-message');
+const phName = document.getElementById('ph-name');
+const phSpecialtyBox = document.getElementById('ph-specialty-box');
+const phSpecialtyMulti = document.getElementById('ph-specialty-multi');
 const phPhoto = document.getElementById('ph-photo');
 const phPhotoLabel = document.querySelector('#ph-photo-label span');
 const phPhotoBox = document.getElementById('ph-photo-box');
@@ -2147,6 +2332,222 @@ const teamBackBtn = document.getElementById('team-back-btn');
 
 const teamViewScreen = document.getElementById('team-view-screen');
 const teamViewList = document.getElementById('team-view-list');
+
+/* ---------- بروفايل العميل — يقدر يفتحه ويعدّله بنفسه في أي وقت ---------- */
+const clientProfileScreen = document.getElementById('client-profile-screen');
+const cpPhoto = document.getElementById('cp-photo');
+const cpPhotoLabel = document.querySelector('#cp-photo-label span');
+const cpPhotoBox = document.getElementById('cp-photo-box');
+const cpPhotoPreview = document.getElementById('cp-photo-preview');
+const cpName = document.getElementById('cp-name');
+const cpWeight = document.getElementById('cp-weight');
+const cpHeight = document.getElementById('cp-height');
+const cpSport = document.getElementById('cp-sport');
+const cpActivity = document.getElementById('cp-activity');
+const cpGoal = document.getElementById('cp-goal');
+const cpDobDay = document.getElementById('cp-dob-day');
+const cpDobMonth = document.getElementById('cp-dob-month');
+const cpDobYear = document.getElementById('cp-dob-year');
+const cpTrainingDays = document.getElementById('cp-training-days');
+const cpSleepTime = document.getElementById('cp-sleep-time');
+const cpWakeTime = document.getElementById('cp-wake-time');
+const cpMealsPerDay = document.getElementById('cp-meals-per-day');
+const cpFirstMealTime = document.getElementById('cp-first-meal-time');
+const cpLastMealTime = document.getElementById('cp-last-meal-time');
+const cpMessage = document.getElementById('cp-message');
+let cpPickedImage = '';
+
+function fillGenericSelect(select, keys, nameFn, placeholderKey) {
+  if (!select) return;
+  const keep = select.value;
+  select.innerHTML = '';
+  const none = document.createElement('option');
+  none.value = '';
+  none.textContent = t(placeholderKey);
+  select.appendChild(none);
+  keys.forEach(function (key) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = nameFn(key);
+    select.appendChild(option);
+  });
+  select.value = keep;
+}
+
+function fillClientProfileSelects() {
+  fillSportSelect(cpSport, true);
+  fillGenericSelect(cpActivity, ACTIVITY_LEVELS, activityName, 'pick_activity');
+  fillGenericSelect(cpGoal, GOAL_KEYS, goalName, 'pick_goal');
+  fillGenericSelect(cpTrainingDays, TRAINING_DAYS_KEYS, trainingDaysName, 'pick_training_days');
+  fillGenericSelect(cpMealsPerDay, MEALS_PER_DAY_KEYS, mealsPerDayName, 'pick_meals_per_day');
+  fillCpDobSelects();
+}
+
+// نفس منطق fillDobSelects بالظبط بس على صناديق اختيار بروفايل العميل
+// (cp-dob-*) بدل صناديق شاشة التعريف الأولى (ob-dob-*)
+function fillCpDobSelects() {
+  const keepDay = cpDobDay.value;
+  const keepMonth = cpDobMonth.value;
+  const keepYear = cpDobYear.value;
+
+  cpDobDay.innerHTML = '';
+  const dayNone = document.createElement('option');
+  dayNone.value = '';
+  dayNone.textContent = t('dob_day');
+  cpDobDay.appendChild(dayNone);
+  for (let day = 1; day <= 31; day++) {
+    const option = document.createElement('option');
+    option.value = day;
+    option.textContent = day;
+    cpDobDay.appendChild(option);
+  }
+  cpDobDay.value = keepDay;
+
+  cpDobMonth.innerHTML = '';
+  const monthNone = document.createElement('option');
+  monthNone.value = '';
+  monthNone.textContent = t('dob_month');
+  cpDobMonth.appendChild(monthNone);
+  MONTH_NAMES[lang].forEach(function (name, index) {
+    const option = document.createElement('option');
+    option.value = index + 1;
+    option.textContent = name;
+    cpDobMonth.appendChild(option);
+  });
+  cpDobMonth.value = keepMonth;
+
+  cpDobYear.innerHTML = '';
+  const yearNone = document.createElement('option');
+  yearNone.value = '';
+  yearNone.textContent = t('dob_year');
+  cpDobYear.appendChild(yearNone);
+  const nowYear = new Date().getFullYear();
+  for (let year = nowYear - 10; year >= nowYear - 90; year--) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = year;
+    cpDobYear.appendChild(option);
+  }
+  cpDobYear.value = keepYear;
+}
+
+async function openClientProfile() {
+  showScreen(clientProfileScreen);
+  cpMessage.textContent = t('loading');
+  fillClientProfileSelects();
+  try {
+    const clientDoc = await getDoc(doc(db, 'clients', clientEmail));
+    const data = clientDoc.exists() ? clientDoc.data() : {};
+    cpName.value = data.name || '';
+    cpWeight.value = data.weight || '';
+    cpHeight.value = data.height || '';
+    cpSport.value = data.sport || '';
+    cpActivity.value = data.activity || '';
+    cpGoal.value = data.goal || '';
+    cpDobDay.value = (data.dob && data.dob.day) || '';
+    cpDobMonth.value = (data.dob && data.dob.month) || '';
+    cpDobYear.value = (data.dob && data.dob.year) || '';
+    cpTrainingDays.value = data.trainingDaysPref || '';
+    cpSleepTime.value = data.sleepTime || '';
+    cpWakeTime.value = data.wakeTime || '';
+    cpMealsPerDay.value = data.mealsPerDay || '';
+    cpFirstMealTime.value = data.firstMealTime || '';
+    cpLastMealTime.value = data.lastMealTime || '';
+    cpPickedImage = data.photo || '';
+    if (data.photo) {
+      cpPhotoPreview.src = data.photo;
+      cpPhotoBox.classList.remove('hidden');
+      cpPhotoLabel.textContent = t('image_chosen');
+    } else {
+      cpPhotoPreview.removeAttribute('src');
+      cpPhotoBox.classList.add('hidden');
+      cpPhotoLabel.textContent = t('choose_photo');
+    }
+    cpMessage.textContent = '';
+  } catch (error) {
+    cpMessage.textContent = t('problem') + error.message;
+  }
+}
+
+cpPhoto.addEventListener('change', async function () {
+  const file = cpPhoto.files[0];
+  if (!file) return;
+
+  if (file.size > MAX_SOURCE_BYTES) {
+    cpMessage.textContent = t('image_too_big');
+    cpPhoto.value = '';
+    return;
+  }
+
+  cpMessage.textContent = t('preparing_image');
+  try {
+    cpPickedImage = await compressImage(file, IMAGE_MAX_SIDE, 0.7);
+    cpPhotoPreview.src = cpPickedImage;
+    cpPhotoBox.classList.remove('hidden');
+    cpPhotoLabel.textContent = t('image_chosen');
+    cpMessage.textContent = '';
+  } catch (error) {
+    cpMessage.textContent = t('image_failed');
+  }
+});
+
+document.getElementById('cp-photo-remove').addEventListener('click', function () {
+  cpPickedImage = '';
+  cpPhoto.value = '';
+  cpPhotoPreview.removeAttribute('src');
+  cpPhotoBox.classList.add('hidden');
+  cpPhotoLabel.textContent = t('choose_photo');
+});
+
+document.getElementById('cp-save-btn').addEventListener('click', async function () {
+  const name = cpName.value.trim();
+  const weight = Number(cpWeight.value);
+  const height = Number(cpHeight.value);
+
+  if (!name || !weight || !height) {
+    cpMessage.textContent = t('need_client_profile_fields');
+    return;
+  }
+
+  cpMessage.textContent = t('saving');
+  try {
+    const dobDay = Number(cpDobDay.value);
+    const dobMonth = Number(cpDobMonth.value);
+    const dobYear = Number(cpDobYear.value);
+    const payload = {
+      name: name,
+      weight: weight,
+      height: height,
+      sport: cpSport.value || '',
+      activity: cpActivity.value || '',
+      goal: cpGoal.value || '',
+      trainingDaysPref: cpTrainingDays.value || '',
+      sleepTime: cpSleepTime.value || '',
+      wakeTime: cpWakeTime.value || '',
+      mealsPerDay: cpMealsPerDay.value || '',
+      firstMealTime: cpFirstMealTime.value || '',
+      lastMealTime: cpLastMealTime.value || '',
+      photo: cpPickedImage
+    };
+    // نحسب السن من تاريخ الميلاد بس لو العميل فعلاً اختار يوم/شهر/سنة
+    // كاملين — عشان ميحصلش تعارض بين تاريخ ميلاد ناقص وسن قديم محفوظ
+    if (dobDay && dobMonth && dobYear) {
+      payload.dob = { day: dobDay, month: dobMonth, year: dobYear };
+      payload.age = calcAge(dobDay, dobMonth, dobYear);
+    }
+    await setDoc(doc(db, 'clients', clientEmail), payload, { merge: true });
+    clientName = name;
+    setStatusMessage(cpMessage, t('profile_saved'), 'success');
+  } catch (error) {
+    cpMessage.textContent = t('problem') + error.message;
+  }
+});
+
+document.getElementById('open-client-profile-btn').addEventListener('click', openClientProfile);
+
+document.getElementById('client-profile-back-btn').addEventListener('click', function () {
+  showScreen(clientScreen);
+});
 
 const medLibraryScreen = document.getElementById('med-library-screen');
 const medLibraryList = document.getElementById('med-library-list');
@@ -2197,7 +2598,74 @@ let classes = [];
 let currentClass = null;
 let currentProviderEmail = '';
 let currentProviderSpecialty = '';
+// دلوقتي المتخصص ممكن يكون له أكتر من تخصص مع بعض (مثلاً مدرب + أخصائي تغذية) —
+// currentProviderSpecialties هي القايمة الكاملة، وcurrentProviderSpecialty بتفضل
+// "التخصص الأساسي" (أول واحد) عشان الأماكن اللي محتاجة قيمة واحدة بس (خطط الاشتراك مثلاً)
+let currentProviderSpecialties = [];
 let currentProviderData = null;
+
+// بترجع قايمة تخصصات أي مستند متخصص (provider أو providerApplication) —
+// بتدعم الشكل الجديد (specialties: []) وبترجع للقديم (specialty: '') لو مفيش
+function providerSpecialties(data) {
+  if (data && Array.isArray(data.specialties) && data.specialties.length) return data.specialties.slice();
+  if (data && data.specialty) return [data.specialty];
+  return [];
+}
+
+// عرض/إجراء بيحتاج "هل عند المتخصص القدرة دي؟" على أي حد من تخصصاته
+function specialtiesHaveFlag(specialties, flag) {
+  return specialties.some(function (key) {
+    return !!(SPECIALTIES[key] && SPECIALTIES[key][flag]);
+  });
+}
+
+function fillSpecialtyCheckboxes(container, selected) {
+  if (!container) return;
+  const sel = selected || [];
+  container.innerHTML = '';
+  Object.keys(SPECIALTIES).forEach(function (key) {
+    const label = document.createElement('label');
+    label.className = 'specialty-check';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.value = key;
+    input.checked = sel.indexOf(key) !== -1;
+    label.appendChild(input);
+    const span = document.createElement('span');
+    span.textContent = specialtyIcon(key) + ' ' + specialtyName(key, lang);
+    label.appendChild(span);
+    container.appendChild(label);
+  });
+}
+
+function readSpecialtyCheckboxes(container) {
+  if (!container) return [];
+  return Array.prototype.slice.call(container.querySelectorAll('input[type="checkbox"]:checked')).map(function (input) {
+    return input.value;
+  });
+}
+
+// نص/أيقونات معروضة لمجموعة تخصصات (بدل تخصص واحد) — بيقبل سترينج واحد كمان
+// عشان الأماكن اللي لسه بتبعت قيمة قديمة
+function setSpecialtyLabel(el, specialtyOrList, text) {
+  const list = Array.isArray(specialtyOrList) ? specialtyOrList : (specialtyOrList ? [specialtyOrList] : []);
+  el.innerHTML = '';
+  if (!list.length) {
+    el.appendChild(document.createTextNode(text || ''));
+    return;
+  }
+  list.forEach(function (key) {
+    const icon = document.createElement('span');
+    icon.className = 'inline-icon';
+    icon.innerHTML = specialtyIconSvg(key);
+    el.appendChild(icon);
+  });
+  el.appendChild(document.createTextNode(' ' + (text || '')));
+}
+
+function specialtyListName(list) {
+  return (list || []).map(function (key) { return specialtyName(key, lang); }).join('، ');
+}
 let phPickedImage = '';
 let onboardingEmail = '';
 let onboardingIsNewSignup = false;
@@ -2219,7 +2687,7 @@ let clientNutrition = emptyNutrition();
 let cNutDay = todayIndex;
 
 function showScreen(screen) {
-  [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, clientScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen].forEach(function (s) {
+  [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen].forEach(function (s) {
     s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
@@ -2382,6 +2850,7 @@ onAuthStateChanged(auth, async function (user) {
   if (!user) {
     currentProviderEmail = '';
     currentProviderSpecialty = '';
+    currentProviderSpecialties = [];
     currentProviderData = null;
     showScreen(welcomeScreen);
     return;
@@ -2406,16 +2875,27 @@ onAuthStateChanged(auth, async function (user) {
     return;
   }
 
-  if (isLegacyCoach || (providerData && providerData.specialty === 'coach')) {
+  const loginSpecs = providerData ? providerSpecialties(providerData) : [];
+
+  if (isLegacyCoach || loginSpecs.indexOf('coach') !== -1) {
     currentProviderEmail = email;
     currentProviderSpecialty = 'coach';
+    currentProviderSpecialties = isLegacyCoach ? ['coach'] : loginSpecs;
     currentProviderData = providerData;
     showScreen(clientsScreen);
     loadClients();
-    touchProviderActivity(email);
+    // مهم: منستدعيش touchProviderActivity هنا لو الكوتش ده "قديم"
+    // (isLegacyCoach) ومفيش مستند providers ليه أصلاً — لأنها بتعمل
+    // setDoc({merge:true}) وهتنشئ مستند providers/{الإيميل} بحقل
+    // lastActiveAt بس من غير specialty، وده هيبوّظ isLegacyCoach في
+    // أول تسجيل دخول جاي (لأنها بتتحسب من !providerData) ويحوّل صاحب
+    // المنصة لمتخصص من غير تخصص. لو المستند موجود فعلاً (كوتش تاني
+    // مُضاف بتخصص coach) فالتحديث آمن عادي
+    if (providerData) touchProviderActivity(email);
   } else if (providerData) {
     currentProviderEmail = email;
-    currentProviderSpecialty = providerData.specialty;
+    currentProviderSpecialties = loginSpecs;
+    currentProviderSpecialty = loginSpecs[0] || '';
     currentProviderData = providerData;
     showScreen(clientsScreen);
     loadClients();
@@ -2453,24 +2933,64 @@ onAuthStateChanged(auth, async function (user) {
 const clientsList = document.getElementById('clients-list');
 const clientsMessage = document.getElementById('clients-message');
 const clientsAdminBox = document.getElementById('clients-admin-box');
+const clientsSearch = document.getElementById('clients-search');
 const openMyProfileBtn = document.getElementById('open-my-profile-btn');
 const openBookingsBtn = document.getElementById('open-bookings-btn');
 const openAdminPanelBtn = document.getElementById('open-admin-panel-btn');
 
+/*
+ * بحث سريع جوه قائمة عملائك — بيفلتر السطور المعروضة بالاسم أو الإيميل
+ * وانت بتكتب، من غير ما يجيب من الداتابيز تاني. (ده غير خانة البحث اللي
+ * في لوحة التحكم تحت "إدارة الوصول" — دي بتاعة إيقاف/تمديد وصول أي حد،
+ * مش عشان تفتح برنامج عميل)
+ */
+let clientsSearchMsgShown = false;
+
+function applyClientsFilter() {
+  if (!clientsSearch) return;
+  const query = clientsSearch.value.trim().toLowerCase();
+  let visible = 0;
+
+  Array.prototype.forEach.call(clientsList.children, function (item) {
+    const nameEl = item.querySelector('.client-name');
+    const emailEl = item.querySelector('.client-email');
+    const name = (nameEl ? nameEl.textContent : '').toLowerCase();
+    const email = (emailEl ? emailEl.textContent : '').toLowerCase();
+    const match = !query || name.indexOf(query) !== -1 || email.indexOf(query) !== -1;
+    item.classList.toggle('hidden', !match);
+    if (match) visible++;
+  });
+
+  if (query && !visible && clientsList.children.length) {
+    clientsMessage.textContent = t('no_client_search_results');
+    clientsSearchMsgShown = true;
+  } else if (clientsSearchMsgShown) {
+    clientsMessage.textContent = '';
+    clientsSearchMsgShown = false;
+  }
+}
+
+if (clientsSearch) {
+  clientsSearch.addEventListener('input', applyClientsFilter);
+}
+
 function isFullCoachRole() {
-  return currentProviderSpecialty === 'coach';
+  return currentProviderSpecialties.indexOf('coach') !== -1;
 }
 
 function providerTakesBookings() {
-  return !!(SPECIALTIES[currentProviderSpecialty] && SPECIALTIES[currentProviderSpecialty].books);
+  return specialtiesHaveFlag(currentProviderSpecialties, 'books');
 }
 
 async function loadClients() {
-  clientsAdminBox.classList.toggle('hidden', !isFullCoachRole());
-  openMyProfileBtn.classList.toggle('hidden', isFullCoachRole());
+  const fullAccess = isFullCoachRole() || isFullAdminAccount();
+  clientsAdminBox.classList.toggle('hidden', !fullAccess);
+  // كل حساب (مدرب/صاحب منصة/فريق إداري) لازم يقدر يفتح ويعدّل بروفايله
+  // الشخصي (صورة، نبذة، شهادات) — مبقاش في داعي نخفي الزرار ده عن حد
+  openMyProfileBtn.classList.remove('hidden');
   openBookingsBtn.classList.toggle('hidden', !providerTakesBookings());
-  openAdminPanelBtn.classList.toggle('hidden', !isLegacyCoachAccount());
-  openProviderSubscriptionBtn.classList.toggle('hidden', isLegacyCoachAccount());
+  openAdminPanelBtn.classList.toggle('hidden', !isFullAdminAccount());
+  openProviderSubscriptionBtn.classList.toggle('hidden', isFullAdminAccount());
   refreshProviderSubBanner();
 
   clientsList.innerHTML = '';
@@ -2478,7 +2998,10 @@ async function loadClients() {
   try {
     const snapshot = await getDocs(collection(db, 'clients'));
     let mine;
-    if (isFullCoachRole()) {
+    if (isFullAdminAccount()) {
+      // عضو الفريق الإداري (أو صاحب المنصة) يشوف كل العملاء من غير استثناء
+      mine = snapshot.docs;
+    } else if (isFullCoachRole()) {
       // كل مدرب يشوف عملاءه بس — العملاء القدام من غير coachEmail بيفضلوا
       // تابعين للحساب القديم (COACH_EMAIL) عشان مانخسرش بيانات موجودة
       mine = snapshot.docs.filter(function (clientDoc) {
@@ -2493,6 +3016,9 @@ async function loadClients() {
       });
     }
 
+    // خانة البحث مالهاش لازمة لو مفيش عملاء أصلاً
+    if (clientsSearch) clientsSearch.classList.toggle('hidden', !mine.length);
+
     if (!mine.length) {
       clientsMessage.textContent = t('no_clients');
       return;
@@ -2501,6 +3027,8 @@ async function loadClients() {
     for (const clientDoc of mine) {
       await showClientRow(clientDoc.id, clientDoc.data().name, clientDoc.data().sport || '');
     }
+    // لو كان في بحث مكتوب قبل ما القائمة تتحدّث، نطبّقه على السطور الجديدة
+    applyClientsFilter();
   } catch (error) {
     clientsMessage.textContent = t('problem') + error.message;
   }
@@ -2649,6 +3177,7 @@ function openPreview(exercise) {
   if (exerciseHasAnatomyDetail(exercise)) {
     lightboxAnatomy.classList.remove('hidden');
     const rows = [
+      ['anatomy_howto', exercise.howTo],
       ['anatomy_goal', exercise.goal],
       ['anatomy_primary', exercise.primaryMuscles],
       ['anatomy_secondary', exercise.secondaryMuscles],
@@ -2903,6 +3432,7 @@ function buildEditor(exercise, onChange) {
     anatomyBox = document.createElement('div');
     anatomyBox.className = 'per-set-box anatomy-box';
 
+    anatomyBox.appendChild(field(t('anatomy_howto'), 'howTo'));
     anatomyBox.appendChild(field(t('anatomy_goal'), 'goal'));
 
     const anatomyRow1 = document.createElement('div');
@@ -2938,6 +3468,96 @@ function buildEditor(exercise, onChange) {
     anatomyToggleBtn.textContent = t('anatomy_hide');
     renderAnatomyBox();
   }
+
+  // صورة اختيارية للتمرين ده بالذات (لو المدرب كتبه بنفسه أو عدّله)،
+  // بتتخزن كـ data URL على exercise.imageUrl — نفس الحقل اللي exerciseRow/
+  // thumbSrc/openPreview بتقراه أصلًا لو التمرين جاي من المكتبة، فبمجرد
+  // ما نحطه هنا هيتعرض بنفس الطريقة تلقائيًا من غير أي تعديل تاني
+  const photoToggleBtn = document.createElement('button');
+  photoToggleBtn.type = 'button';
+  photoToggleBtn.className = 'link anatomy-toggle';
+  photoToggleBtn.textContent = exercise.imageUrl ? t('ex_photo_change') : t('ex_photo_add');
+  box.appendChild(photoToggleBtn);
+
+  let photoBox = null;
+
+  function renderPhotoBox() {
+    if (photoBox) photoBox.remove();
+    photoBox = document.createElement('div');
+    photoBox.className = 'per-set-box';
+
+    if (exercise.imageUrl) {
+      const previewBox = document.createElement('div');
+      previewBox.className = 'preview-box';
+      const preview = document.createElement('img');
+      preview.src = exercise.imageUrl;
+      preview.alt = '';
+      previewBox.appendChild(preview);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'delete';
+      removeBtn.innerHTML = DELETE_ICON_SVG;
+      removeBtn.title = t('ex_photo_remove');
+      removeBtn.addEventListener('click', function (event) {
+        event.stopPropagation();
+        exercise.imageUrl = '';
+        photoToggleBtn.textContent = t('ex_photo_add');
+        renderPhotoBox();
+        if (onChange) onChange();
+      });
+      previewBox.appendChild(removeBtn);
+      photoBox.appendChild(previewBox);
+    }
+
+    const fileLabel = document.createElement('label');
+    fileLabel.className = 'file-pick';
+    const fileSpan = document.createElement('span');
+    fileSpan.textContent = exercise.imageUrl ? t('image_chosen') : t('choose_photo');
+    fileLabel.appendChild(fileSpan);
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.addEventListener('click', function (event) {
+      event.stopPropagation();
+    });
+    fileInput.addEventListener('change', async function () {
+      const file = fileInput.files[0];
+      fileInput.value = '';
+      if (!file) return;
+      if (file.size > MAX_SOURCE_BYTES) {
+        fileSpan.textContent = t('image_too_big');
+        return;
+      }
+      fileSpan.textContent = t('preparing_image');
+      try {
+        // صورة التمرين بتتخزن جوه مستند البرنامج نفسه (مش ملف منفصل)،
+        // وحد المستند 1 ميجا — فبنضغطها أصغر من باقي صور التطبيق عشان
+        // المدرب يقدر يحط صور لتمارين كتير من غير ما يوصل للحد
+        exercise.imageUrl = await compressImage(file, EXERCISE_IMAGE_MAX_SIDE, 0.6);
+        photoToggleBtn.textContent = t('ex_photo_change');
+        renderPhotoBox();
+        if (onChange) onChange();
+      } catch (error) {
+        fileSpan.textContent = t('image_failed');
+      }
+    });
+    fileLabel.appendChild(fileInput);
+    photoBox.appendChild(fileLabel);
+
+    box.appendChild(photoBox);
+  }
+
+  photoToggleBtn.addEventListener('click', function (event) {
+    event.stopPropagation();
+    if (photoBox) {
+      photoBox.remove();
+      photoBox = null;
+      return;
+    }
+    renderPhotoBox();
+  });
 
   return box;
 }
@@ -3013,6 +3633,13 @@ const tabInjuries = document.getElementById('tab-injuries');
 const tabInjuriesBadge = document.getElementById('tab-injuries-badge');
 const coachInjuriesList = document.getElementById('coach-injuries-list');
 const coachInjuriesMessage = document.getElementById('coach-injuries-message');
+const tabConsult = document.getElementById('tab-consult');
+const tabConsultBadge = document.getElementById('tab-consult-badge');
+const consultPanel = document.getElementById('consult-panel');
+const consultNotesText = document.getElementById('consult-notes-text');
+const consultSaveBtn = document.getElementById('consult-save-btn');
+const consultMessage = document.getElementById('consult-message');
+const consultRequestsList = document.getElementById('consult-requests-list');
 
 function setCoachMode(mode) {
   coachMode = mode;
@@ -3020,10 +3647,12 @@ function setCoachMode(mode) {
   rehabPanel.classList.toggle('hidden', mode !== 'rehab');
   nutritionPanel.classList.toggle('hidden', mode !== 'nutrition');
   injuriesPanel.classList.toggle('hidden', mode !== 'injuries');
+  consultPanel.classList.toggle('hidden', mode !== 'consult');
   tabTraining.classList.toggle('active', mode === 'training');
   tabRehab.classList.toggle('active', mode === 'rehab');
   tabNutrition.classList.toggle('active', mode === 'nutrition');
   tabInjuries.classList.toggle('active', mode === 'injuries');
+  tabConsult.classList.toggle('active', mode === 'consult');
   coachMessage.textContent = '';
   window.scrollTo(0, 0);
 }
@@ -3053,29 +3682,165 @@ tabInjuries.addEventListener('click', function () {
   loadCoachInjuryReports();
 });
 
+tabConsult.addEventListener('click', function () {
+  saveCurrentDay();
+  if (coachMode === 'rehab') readRehabFields();
+  setCoachMode('consult');
+  loadCoachConsultNotes();
+});
+
+// بتاخد إيميل العميل والمتخصص وترجّع معرّف مستند ملاحظات الاستشارة
+// الخاص بيهم (كل متخصص له ملاحظاته الخاصة عن نفس العميل، منفصلة عن
+// باقي أعضاء الفريق)
+function consultNoteDocId(clientEmail, providerEmail) {
+  return clientEmail + '__' + providerEmail;
+}
+
+/* تاريخ مقروء لأي حقل createdAt/updatedAt (ISO) — بيرجع فاضي لو التاريخ بايظ */
+function consultDateText(iso) {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB');
+  } catch (error) {
+    return '';
+  }
+}
+
 /*
- * كل متخصص (غير المدرب) بيشتغل بس في نطاقه (scopes) المحدد في
- * providers.js — أخصائي التغذية يشوف تبويب التغذية بس، أخصائي
- * التأهيل يشوف التأهيل، وهكذا. تبويب "إصابات" فاضل متاح للكل
- * دايمًا لأنه معلومة أمان مش برنامج بيتحرر.
- * حساب المدرب (isFullCoachRole) بيشوف كل حاجة زي ما هو معتاد،
- * من غير أي تغيير في سلوكه الحالي.
+ * طلبات الاستشارة اللي بعتها عميل معيّن لمتخصص معيّن. المتخصص (isCoach)
+ * مسموحله يقرا كل الطلبات، فبنجيبها كلها ونفلتر هنا — نفس اللي بيحصل
+ * في بلاغات الإصابة بالظبط
+ */
+async function fetchConsultRequestsFor(clientEmailValue, providerEmail) {
+  const snapshot = await getDocs(collection(db, 'consultRequests'));
+  return snapshot.docs
+    .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
+    .filter(function (row) { return row.clientEmail === clientEmailValue && row.providerEmail === providerEmail; })
+    .sort(function (a, b) { return String(b.createdAt || '').localeCompare(String(a.createdAt || '')); });
+}
+
+function consultRequestCard(row) {
+  const item = document.createElement('li');
+  item.className = 'injury-report-card status-' + ((row.status || 'pending') === 'answered' ? 'done' : 'requested');
+
+  const body = document.createElement('div');
+  body.className = 'client-name';
+  body.style.whiteSpace = 'pre-wrap';
+  body.textContent = row.text || '';
+  item.appendChild(body);
+
+  const meta = document.createElement('div');
+  meta.className = 'ex-meta';
+  const when = consultDateText(row.createdAt);
+  meta.textContent = ((row.status || 'pending') === 'answered' ? t('consult_status_answered') : t('consult_status_pending'))
+    + (when ? ' — ' + t('consult_asked_on') + ' ' + when : '');
+  item.appendChild(meta);
+
+  return item;
+}
+
+async function renderCoachConsultRequests() {
+  if (!consultRequestsList) return;
+  consultRequestsList.innerHTML = '';
+  try {
+    const rows = await fetchConsultRequestsFor(currentClient, currentProviderEmail);
+    if (!rows.length) {
+      const empty = document.createElement('li');
+      empty.className = 'section-empty';
+      empty.textContent = t('consult_no_requests');
+      consultRequestsList.appendChild(empty);
+      return;
+    }
+    rows.forEach(function (row) {
+      consultRequestsList.appendChild(consultRequestCard(row));
+    });
+  } catch (error) {
+    // لو القراءة فشلت مش هنوقف باقي الشاشة — الملاحظات نفسها أهم
+  }
+}
+
+/* عداد صغير على تبويب "استشارة" بعدد الطلبات اللي لسه محدش رد عليها */
+async function refreshConsultBadge(email) {
+  if (!tabConsultBadge) return;
+  tabConsultBadge.classList.add('hidden');
+  tabConsultBadge.textContent = '';
+  if (!currentProviderEmail) return;
+  try {
+    const rows = await fetchConsultRequestsFor(email, currentProviderEmail);
+    const pending = rows.filter(function (row) { return (row.status || 'pending') !== 'answered'; }).length;
+    if (pending) {
+      tabConsultBadge.textContent = pending;
+      tabConsultBadge.classList.remove('hidden');
+    }
+  } catch (error) {
+    // مش مشكلة لو فشل تحميل العداد
+  }
+}
+
+async function loadCoachConsultNotes() {
+  if (!currentClient || !currentProviderEmail) return;
+  consultNotesText.value = '';
+  consultMessage.textContent = t('loading');
+  try {
+    const noteDoc = await getDoc(doc(db, 'consultNotes', consultNoteDocId(currentClient, currentProviderEmail)));
+    consultNotesText.value = (noteDoc.exists() && noteDoc.data().text) || '';
+    await renderCoachConsultRequests();
+    consultMessage.textContent = '';
+  } catch (error) {
+    consultMessage.textContent = t('problem') + error.message;
+  }
+}
+
+consultSaveBtn.addEventListener('click', async function () {
+  if (!currentClient || !currentProviderEmail) return;
+  consultMessage.textContent = t('saving');
+  try {
+    await setDoc(doc(db, 'consultNotes', consultNoteDocId(currentClient, currentProviderEmail)), {
+      clientEmail: currentClient,
+      providerEmail: currentProviderEmail,
+      providerName: (currentProviderData && currentProviderData.name) || '',
+      text: consultNotesText.value.trim(),
+      updatedAt: new Date().toISOString()
+    });
+
+    // أي طلب استشارة من العميل ده ليا لسه "في انتظار الرد" يتحوّل
+    // لـ "تم الرد" بمجرد ما أحفظ ملاحظتي — عشان العميل يعرف إنه اترد عليه
+    try {
+      const rows = await fetchConsultRequestsFor(currentClient, currentProviderEmail);
+      const pending = rows.filter(function (row) { return (row.status || 'pending') !== 'answered'; });
+      await Promise.all(pending.map(function (row) {
+        return updateDoc(doc(db, 'consultRequests', row.id), {
+          status: 'answered',
+          answeredAt: new Date().toISOString()
+        });
+      }));
+      await renderCoachConsultRequests();
+      await refreshConsultBadge(currentClient);
+    } catch (markError) {
+      // الملاحظة اتحفظت فعلاً — لو تحديث حالة الطلبات فشل مش هنفشّل الحفظ
+    }
+
+    setStatusMessage(consultMessage, t('consult_saved_msg'), 'success');
+  } catch (error) {
+    consultMessage.textContent = t('problem') + error.message;
+  }
+});
+
+/*
+ * أي مدرب أو متخصص عنده عميل في فريقه لازم يقدر يبني له أي جزء من
+ * البرنامج (تمرين/تأهيل/تغذية) أو يكتب استشارة، من غير ما يتقيّد
+ * بتخصصه هو بالذات — طلب صريح من صاحب المنصة إن أي حد يفتح عميل
+ * يلاقي كل الأدوات قدامه ويقدر يشتغل معاه بأي حاجة يحتاجها، مش بس
+ * الحاجة المرتبطة بتخصصه. تبويب "إصابات" فاضل متاح للكل دايمًا زي
+ * ما كان، وتبويب "استشارة" (ملاحظات حرة) بقى متاح للكل كمان عشان
+ * أي حد (حتى المدرب) يقدر يدوّن ملاحظة سريعة من غير برنامج رسمي.
  */
 function applyCoachScopeTabs() {
-  const fullCoach = isFullCoachRole();
-  const scopes = (SPECIALTIES[currentProviderSpecialty] && SPECIALTIES[currentProviderSpecialty].scopes) || [];
-  const canTraining = fullCoach || scopes.indexOf('training') !== -1;
-  const canRehab = fullCoach || scopes.indexOf('rehab') !== -1;
-  const canNutrition = fullCoach || scopes.indexOf('nutrition') !== -1;
-
-  tabTraining.classList.toggle('hidden', !canTraining);
-  tabRehab.classList.toggle('hidden', !canRehab);
-  tabNutrition.classList.toggle('hidden', !canNutrition);
-
-  if (canTraining) return 'training';
-  if (canRehab) return 'rehab';
-  if (canNutrition) return 'nutrition';
-  return 'injuries';
+  tabTraining.classList.remove('hidden');
+  tabRehab.classList.remove('hidden');
+  tabNutrition.classList.remove('hidden');
+  tabConsult.classList.remove('hidden');
+  return 'training';
 }
 
 document.getElementById('back-btn').addEventListener('click', function () {
@@ -3093,6 +3858,7 @@ async function openCoachScreen(email, name, sport) {
   const defaultMode = applyCoachScopeTabs();
   setCoachMode(defaultMode);
   if (defaultMode === 'injuries') loadCoachInjuryReports();
+  if (defaultMode === 'consult') loadCoachConsultNotes();
 
   try {
     const workoutDoc = await getDoc(doc(db, 'workouts', email));
@@ -3116,6 +3882,7 @@ async function openCoachScreen(email, name, sport) {
     showRehab();
     showNutrition();
     refreshInjuryBadge(email);
+    refreshConsultBadge(email);
     coachMessage.textContent = '';
   } catch (error) {
     coachMessage.textContent = t('problem') + error.message;
@@ -3295,8 +4062,42 @@ document.getElementById('add-btn').addEventListener('click', function () {
   document.getElementById('ex-tempo').value = '';
 });
 
+/*
+ * حد المستند الواحد في Firestore حوالي 1 ميجا. الصور اللي بتتحط على
+ * التمارين بتتخزن جوه مستند البرنامج نفسه، يعني برنامج فيه صور كتير
+ * ممكن يعدّي الحد فيفشل الحفظ برسالة غامضة ويضيع تعديل المدرب.
+ * الدالة دي بتقيس حجم المستند قبل ما نبعته، وبترجّع رسالة تحذير
+ * مفهومة بدل ما نسيب Firestore يرفض من غير ما المدرب يعرف السبب.
+ * (الحل الجذري إن الصور تروح Firebase Storage — ده مخطط له بعدين)
+ */
+const FIRESTORE_DOC_LIMIT = 1048576;
+const DOC_SIZE_SAFE_LIMIT = 900000;
+
+function docSizeBytes(data) {
+  try {
+    return new Blob([JSON.stringify(data)]).size;
+  } catch (error) {
+    try { return JSON.stringify(data).length; } catch (innerError) { return 0; }
+  }
+}
+
+/* بترجّع true لو المستند كبير أوي ولازم نوقف الحفظ */
+function docTooBig(data, messageEl) {
+  const size = docSizeBytes(data);
+  if (size > DOC_SIZE_SAFE_LIMIT) {
+    if (messageEl) messageEl.textContent = t('doc_too_big');
+    return true;
+  }
+  if (size > DOC_SIZE_SAFE_LIMIT * 0.75 && messageEl) {
+    // تحذير بس — الحفظ بيكمل عادي
+    setStatusMessage(messageEl, t('doc_size_warning'), 'warning');
+  }
+  return false;
+}
+
 document.getElementById('save-btn').addEventListener('click', async function () {
   saveCurrentDay();
+  if (docTooBig({ week: coachWeek }, coachMessage)) return;
   coachMessage.textContent = t('saving');
   try {
     await setDoc(doc(db, 'workouts', currentClient), { week: coachWeek });
@@ -3333,6 +4134,52 @@ function fillTemplatePicker() {
   });
 
   templatePick.value = keep;
+  updateTemplatePhotoPreview();
+}
+
+// معاينة/رفع صورة لبرنامج التأهيل المختار في القائمة (rehab_<id> في libraryImages)
+const templatePhotoBox = document.getElementById('template-photo-box');
+const templatePhotoPreview = document.getElementById('template-photo-preview');
+const templatePhotoBtn = document.getElementById('template-photo-btn');
+
+function updateTemplatePhotoPreview() {
+  if (!templatePhotoBox || !templatePhotoPreview) return;
+  const id = templatePick.value;
+  const photo = id ? libraryImageFor('rehab_' + id) : '';
+  if (photo) {
+    templatePhotoPreview.src = photo;
+    templatePhotoBox.classList.remove('hidden');
+  } else {
+    templatePhotoBox.classList.add('hidden');
+    templatePhotoPreview.src = '';
+  }
+}
+
+templatePick.addEventListener('change', updateTemplatePhotoPreview);
+
+if (templatePhotoBtn) {
+  templatePhotoBtn.addEventListener('click', function () {
+    const id = templatePick.value;
+    if (!id) {
+      coachMessage.textContent = t('pick_template_first');
+      return;
+    }
+    pickLibraryImage('rehab_' + id);
+  });
+}
+
+if (templatePhotoPreview) {
+  templatePhotoPreview.addEventListener('click', function () {
+    const id = templatePick.value;
+    if (!id) return;
+    const photo = libraryImageFor('rehab_' + id);
+    if (!photo) return;
+    const template = REHAB_TEMPLATES.filter(function (item) { return item.id === id; })[0];
+    lightboxTitle.textContent = template ? template.name[lang] : '';
+    lightboxImages.innerHTML = '';
+    addShot(photo, '');
+    lightbox.classList.remove('hidden');
+  });
 }
 
 /* ينسخ القالب لبرنامج قابل للتعديل — مش مربوط بالقالب الأصلي */
@@ -3605,6 +4452,7 @@ rehabCurrent.addEventListener('change', function () {
 
 document.getElementById('save-rehab-btn').addEventListener('click', async function () {
   readRehabFields();
+  if (docTooBig(coachRehab, coachMessage)) return;
   coachMessage.textContent = t('saving');
   try {
     await setDoc(doc(db, 'rehab', currentClient), coachRehab);
@@ -3726,7 +4574,9 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
 
 /* ============================ المكتبة الجاهزة ============================ */
 
-let libraryData = null;
+// المكتبة بقت محلية وثنائية اللغة (عربي/إنجليزي) من exercise-library.js —
+// من غير أي اعتماد على الإنترنت أو مصدر خارجي، فبتشتغل فورًا ومترجمة كاملة
+let libraryData = EXERCISE_LIBRARY;
 
 const libSearch = document.getElementById('lib-search');
 const libMuscle = document.getElementById('lib-muscle');
@@ -3737,7 +4587,86 @@ let suggestedCategory = '';
 const libGrid = document.getElementById('lib-grid');
 const libMessage = document.getElementById('lib-message');
 
+/* ============ صور المكتبات (يرفعها المدرب/المختص بنفسه) ============ */
+// المكتبات الجاهزة (تمارين/أكل/تأهيل) معندهاش صور حقيقية أصلًا —
+// المجموعة دي في Firestore بتسمح لأي مدرب/مختص إنه يرفع صورة لأي عنصر
+// (سواء جاهز أو مضاف حديثًا) بمعرف ثابت: exercise_<id> / food_<id> / rehab_<id>
+let libraryImagesMap = {};
+let libraryImagesLoaded = false;
+let pendingLibraryImageKey = '';
+const libImageInput = document.getElementById('lib-image-input');
+
+async function ensureLibraryImagesLoaded() {
+  if (libraryImagesLoaded) return;
+  try {
+    const snapshot = await getDocs(collection(db, 'libraryImages'));
+    snapshot.forEach(function (docSnap) {
+      libraryImagesMap[docSnap.id] = docSnap.data();
+    });
+    libraryImagesLoaded = true;
+  } catch (error) {
+    // هيفضل يعرض المكتبة من غير صور لو فشل التحميل
+  }
+}
+
+function libraryImageFor(key) {
+  return (libraryImagesMap[key] && libraryImagesMap[key].photo) || '';
+}
+
+function pickLibraryImage(key) {
+  if (!libImageInput) return;
+  pendingLibraryImageKey = key;
+  libImageInput.value = '';
+  libImageInput.click();
+}
+
+function setLibraryImageMessage(msg) {
+  if (!libraryScreen.classList.contains('hidden')) { libMessage.textContent = msg; return; }
+  if (typeof foodScreen !== 'undefined' && foodScreen && !foodScreen.classList.contains('hidden')) { foodMessage.textContent = msg; return; }
+  if (typeof coachMessage !== 'undefined' && coachMessage) coachMessage.textContent = msg;
+}
+
+function refreshLibraryImageViews() {
+  if (!libraryScreen.classList.contains('hidden')) renderLibrary();
+  if (typeof foodScreen !== 'undefined' && foodScreen && !foodScreen.classList.contains('hidden')) renderFoodList();
+  if (typeof updateTemplatePhotoPreview === 'function') updateTemplatePhotoPreview();
+}
+
+if (libImageInput) {
+  libImageInput.addEventListener('change', async function () {
+    const file = libImageInput.files[0];
+    const key = pendingLibraryImageKey;
+    libImageInput.value = '';
+    if (!file || !key) return;
+
+    if (file.size > MAX_SOURCE_BYTES) {
+      setLibraryImageMessage(t('image_too_big'));
+      return;
+    }
+
+    setLibraryImageMessage(t('preparing_image'));
+    try {
+      const compressed = await compressImage(file, IMAGE_MAX_SIDE, 0.7);
+      await setDoc(doc(db, 'libraryImages', key), {
+        photo: compressed,
+        updatedAt: new Date().toISOString(),
+        updatedBy: currentProviderEmail || ''
+      }, { merge: true });
+      libraryImagesMap[key] = { photo: compressed };
+      setLibraryImageMessage(t('image_uploaded'));
+      refreshLibraryImageViews();
+    } catch (error) {
+      setLibraryImageMessage(t('image_failed'));
+    }
+  });
+}
+
+// المكتبة المشتركة بتتفتح إما من برنامج عميل (تمرين/تأهيل) أو من كلاس —
+// المتغير ده بيحدد لمين التمرين اللي هيتضاف لما نضغط على كارت في المكتبة
+let libraryContext = 'coach';
+
 function openLibrary() {
+  libraryContext = 'coach';
   saveCurrentDay();
   if (coachMode === 'rehab') readRehabFields();
   // اقترح نوع التمرين حسب القسم اللي بتضيف فيه
@@ -3752,27 +4681,25 @@ document.getElementById('open-library-btn').addEventListener('click', openLibrar
 document.getElementById('rehab-library-btn').addEventListener('click', openLibrary);
 
 document.getElementById('lib-back-btn').addEventListener('click', function () {
+  if (libraryContext === 'class') {
+    renderClassExercises(classExercisesList, currentClass, true);
+    showScreen(classDetailScreen);
+    return;
+  }
   showScreen(coachScreen);
   if (coachMode === 'rehab') showRehab(); else showCoachDay();
 });
 
-async function loadLibrary() {
-  if (libraryData) {
-    rebuildLibraryFilters();
-    renderLibrary();
-    return;
-  }
-  libMessage.textContent = t('loading_library');
-  libGrid.innerHTML = '';
-  try {
-    const response = await fetch(LIBRARY_URL);
-    libraryData = await response.json();
-    rebuildLibraryFilters();
-    libMessage.textContent = '';
-    renderLibrary();
-  } catch (error) {
-    libMessage.textContent = t('library_failed');
-  }
+function loadLibrary() {
+  // المكتبة محلية دلوقتي (EXERCISE_LIBRARY) فمفيش حاجة تتحمّل من النت —
+  // بتظهر فورًا بالعربي أو الإنجليزي حسب لغة الموقع الحالية
+  rebuildLibraryFilters();
+  libMessage.textContent = '';
+  renderLibrary();
+  // نجيب صور المكتبات (لو اتضافت) ونعيد الرسم لما توصل
+  ensureLibraryImagesLoaded().then(function () {
+    if (!libraryScreen.classList.contains('hidden')) renderLibrary();
+  });
 }
 
 function rebuildLibraryFilters() {
@@ -3896,7 +4823,7 @@ function renderLibrary() {
     if (category && exercise.category !== category) return false;
     if (muscle && exercise.primaryMuscles.indexOf(muscle) === -1) return false;
     if (equip && exercise.equipment !== equip) return false;
-    if (term && exercise.name.toLowerCase().indexOf(term) === -1) return false;
+    if (term && exerciseLibName(exercise).toLowerCase().indexOf(term) === -1) return false;
     return true;
   });
 
@@ -3907,10 +4834,42 @@ function renderLibrary() {
     const card = document.createElement('div');
     card.className = 'ex-card';
 
-    if (exercise.images && exercise.images.length) {
-      const shot = document.createElement('div');
-      shot.className = 'ex-shot';
+    const libImageKey = 'exercise_' + exercise.id;
+    const libPhoto = libraryImageFor(libImageKey);
+    const shot = document.createElement('div');
+    shot.className = 'ex-shot';
 
+    if (libPhoto) {
+      const image = document.createElement('img');
+      image.src = libPhoto;
+      image.alt = '';
+      image.loading = 'lazy';
+      shot.appendChild(image);
+
+      const zoom = document.createElement('button');
+      zoom.type = 'button';
+      zoom.className = 'zoom-badge';
+      zoom.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="20" y2="20"></line></svg>';
+      zoom.addEventListener('click', function (event) {
+        event.stopPropagation();
+        lightboxTitle.textContent = exerciseLibName(exercise);
+        lightboxImages.innerHTML = '';
+        addShot(libPhoto, '');
+        lightbox.classList.remove('hidden');
+      });
+      shot.appendChild(zoom);
+
+      const editBadge = document.createElement('button');
+      editBadge.type = 'button';
+      editBadge.className = 'photo-edit-badge';
+      editBadge.title = t('change_photo');
+      editBadge.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2"></rect><circle cx="8.5" cy="10" r="1.7"></circle><path d="M4 17l5-5 3.5 3.5L16 12l4 5"></path></svg>';
+      editBadge.addEventListener('click', function (event) {
+        event.stopPropagation();
+        pickLibraryImage(libImageKey);
+      });
+      shot.appendChild(editBadge);
+    } else if (exercise.images && exercise.images.length) {
       const image = document.createElement('img');
       image.src = IMAGE_BASE + exercise.images[0];
       image.alt = '';
@@ -3923,34 +4882,58 @@ function renderLibrary() {
       zoom.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="20" y2="20"></line></svg>';
       zoom.addEventListener('click', function (event) {
         event.stopPropagation();
-        openPreview({ name: exercise.name, image: exercise.images[0], imageUrl: '' });
+        openPreview({ name: exerciseLibName(exercise), image: exercise.images[0], imageUrl: '' });
       });
       shot.appendChild(zoom);
-
-      card.appendChild(shot);
+    } else {
+      shot.classList.add('no-photo');
+      shot.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2"></rect><circle cx="8.5" cy="10" r="1.7"></circle><path d="M4 17l5-5 3.5 3.5L16 12l4 5"></path></svg><span>' + t('add_photo_short') + '</span>';
+      shot.addEventListener('click', function (event) {
+        event.stopPropagation();
+        pickLibraryImage(libImageKey);
+      });
     }
+
+    card.appendChild(shot);
 
     const body = document.createElement('div');
     body.className = 'ex-body';
 
     const name = document.createElement('div');
     name.className = 'ex-name';
-    name.textContent = exercise.name;
+    name.textContent = exerciseLibName(exercise);
 
     const meta = document.createElement('div');
     meta.className = 'ex-meta';
-    meta.textContent = exercise.primaryMuscles.map(muscleName).join('، ') + ' · ' + equipName(exercise.equipment);
+    meta.textContent = musclesListText(exercise.primaryMuscles) + ' · ' + equipName(exercise.equipment);
 
     body.appendChild(name);
     body.appendChild(meta);
+
+    if (exercise.howTo) {
+      const howTo = document.createElement('div');
+      howTo.className = 'ex-meta';
+      howTo.textContent = (typeof exercise.howTo === 'object') ? (exercise.howTo[lang] || exercise.howTo.ar || exercise.howTo.en || '') : exercise.howTo;
+      body.appendChild(howTo);
+    }
+
     card.appendChild(body);
 
     card.addEventListener('click', function () {
+      const built = makeExercise({
+        name: exerciseLibName(exercise),
+        primaryMuscles: musclesListText(exercise.primaryMuscles),
+        secondaryMuscles: musclesListText(exercise.secondaryMuscles),
+        howTo: (exercise.howTo && typeof exercise.howTo === 'object') ? (exercise.howTo[lang] || exercise.howTo.ar || exercise.howTo.en || '') : (exercise.howTo || ''),
+        image: (!libPhoto && exercise.images && exercise.images.length) ? exercise.images[0] : '',
+        imageUrl: libPhoto || ''
+      });
+      if (libraryContext === 'class') {
+        addExerciseToCurrentClass(built);
+        return;
+      }
       showScreen(coachScreen);
-      addToTarget(makeExercise({
-        name: exercise.name,
-        image: (exercise.images && exercise.images.length) ? exercise.images[0] : ''
-      }));
+      addToTarget(built);
     });
 
     libGrid.appendChild(card);
@@ -4035,6 +5018,7 @@ const myName = document.getElementById('my-name');
 const myMuscle = document.getElementById('my-muscle');
 const myEquip = document.getElementById('my-equip');
 const myNotes = document.getElementById('my-notes');
+const myHowTo = document.getElementById('my-howto');
 const myGoal = document.getElementById('my-goal');
 const myPrimary = document.getElementById('my-primary');
 const mySecondary = document.getElementById('my-secondary');
@@ -4213,6 +5197,7 @@ function renderMyLib() {
       addToTarget(makeExercise({
         name: exercise.name,
         imageUrl: exercise.imageUrl || '',
+        howTo: exercise.howTo || '',
         goal: exercise.goal || '',
         primaryMuscles: exercise.primaryMuscles || '',
         secondaryMuscles: exercise.secondaryMuscles || '',
@@ -4242,6 +5227,7 @@ document.getElementById('my-add-btn').addEventListener('click', async function (
       muscle: myMuscle.value,
       equipment: myEquip.value,
       notes: myNotes.value.trim(),
+      howTo: myHowTo.value.trim(),
       goal: myGoal.value.trim(),
       primaryMuscles: myPrimary.value.trim(),
       secondaryMuscles: mySecondary.value.trim(),
@@ -4252,6 +5238,7 @@ document.getElementById('my-add-btn').addEventListener('click', async function (
 
     myName.value = '';
     myNotes.value = '';
+    myHowTo.value = '';
     myGoal.value = '';
     myPrimary.value = '';
     mySecondary.value = '';
@@ -4286,6 +5273,20 @@ const ctabTraining = document.getElementById('ctab-training');
 const ctabRehab = document.getElementById('ctab-rehab');
 const clientTabs = document.getElementById('client-tabs');
 
+const ctabConsult = document.getElementById('ctab-consult');
+const ctabConsultBadge = document.getElementById('ctab-consult-badge');
+const clientConsultPanel = document.getElementById('client-consult');
+const clientConsultProvider = document.getElementById('client-consult-provider');
+const clientConsultText = document.getElementById('client-consult-text');
+const clientConsultSendBtn = document.getElementById('client-consult-send-btn');
+const clientConsultMessage = document.getElementById('client-consult-message');
+const clientConsultReplies = document.getElementById('client-consult-replies');
+const clientConsultRequests = document.getElementById('client-consult-requests');
+
+// فريق العميل (المدرب الأساسي + أي متخصص اختاره) بأسمائهم — بيتحمّل
+// أول ما يفتح تبويب الاستشارة عشان نعرف نعرض الأسماء ونملا قائمة الاختيار
+let clientConsultTeam = [];
+
 const clientSections = document.getElementById('client-sections');
 const dayName = document.getElementById('day-name');
 const progress = document.getElementById('progress');
@@ -4302,12 +5303,14 @@ function setClientMode(mode) {
   clientActivityPanel.classList.toggle('hidden', mode !== 'activity');
   clientClassesPanel.classList.toggle('hidden', mode !== 'classes');
   clientStorePanel.classList.toggle('hidden', mode !== 'store');
+  clientConsultPanel.classList.toggle('hidden', mode !== 'consult');
   ctabTraining.classList.toggle('active', mode === 'training');
   ctabRehab.classList.toggle('active', mode === 'rehab');
   ctabNutrition.classList.toggle('active', mode === 'nutrition');
   ctabActivity.classList.toggle('active', mode === 'activity');
   ctabClasses.classList.toggle('active', mode === 'classes');
   ctabStore.classList.toggle('active', mode === 'store');
+  ctabConsult.classList.toggle('active', mode === 'consult');
   window.scrollTo(0, 0);
 }
 
@@ -4338,6 +5341,201 @@ ctabClasses.addEventListener('click', function () {
 ctabStore.addEventListener('click', function () {
   setClientMode('store');
   showClientStore();
+});
+
+ctabConsult.addEventListener('click', function () {
+  setClientMode('consult');
+  loadClientConsult();
+});
+
+/* ---------- استشارة: جانب العميل ---------- */
+
+/*
+ * فريق العميل = المدرب الأساسي + أي متخصص اختاره في "فريقك". بنجيب
+ * أسماءهم من مستندات providers عشان قائمة الاختيار والردود تبقى بأسماء
+ * حقيقية مش إيميلات
+ */
+async function loadClientConsultTeam() {
+  const clientDoc = await getDoc(doc(db, 'clients', clientEmail));
+  const data = clientDoc.exists() ? clientDoc.data() : {};
+  const team = data.team || {};
+  const coachEmail = (data.coachEmail || COACH_EMAIL).toLowerCase();
+
+  const members = [{ specialty: 'coach', email: coachEmail }];
+  Object.keys(team).forEach(function (key) {
+    const memberEmail = team[key];
+    if (!memberEmail) return;
+    const already = members.some(function (member) { return member.email === memberEmail; });
+    if (!already) members.push({ specialty: key, email: memberEmail });
+  });
+
+  const providerDocs = await Promise.all(members.map(function (member) {
+    return getDoc(doc(db, 'providers', member.email));
+  }));
+
+  clientConsultTeam = members.map(function (member, index) {
+    const provider = providerDocs[index].exists() ? providerDocs[index].data() : {};
+    const fallbackName = member.email === COACH_EMAIL.toLowerCase() ? t('platform_owner_label') : member.email;
+    return {
+      email: member.email,
+      specialty: (provider.specialty || member.specialty),
+      name: provider.name || fallbackName
+    };
+  });
+}
+
+function fillClientConsultProviders() {
+  const keep = clientConsultProvider.value;
+  clientConsultProvider.innerHTML = '';
+
+  const none = document.createElement('option');
+  none.value = '';
+  none.textContent = t('client_consult_pick_provider');
+  clientConsultProvider.appendChild(none);
+
+  clientConsultTeam.forEach(function (member) {
+    const option = document.createElement('option');
+    option.value = member.email;
+    option.textContent = member.name + ' — ' + specialtyName(member.specialty, lang);
+    clientConsultProvider.appendChild(option);
+  });
+
+  clientConsultProvider.value = keep;
+}
+
+/* الردود = ملاحظة كل متخصص عن العميل ده (قراءة بس من ناحية العميل) */
+async function renderClientConsultReplies() {
+  clientConsultReplies.innerHTML = '';
+
+  const notes = await Promise.all(clientConsultTeam.map(function (member) {
+    return getDoc(doc(db, 'consultNotes', consultNoteDocId(clientEmail, member.email)))
+      .catch(function () { return null; });
+  }));
+
+  let shown = 0;
+  notes.forEach(function (snap, index) {
+    if (!snap || !snap.exists()) return;
+    const noteData = snap.data();
+    if (!noteData.text) return;
+    shown++;
+
+    const member = clientConsultTeam[index];
+    const card = document.createElement('div');
+    card.className = 'about-box';
+
+    const who = document.createElement('div');
+    who.className = 'ex-name';
+    who.textContent = member.name + ' — ' + specialtyName(member.specialty, lang);
+    card.appendChild(who);
+
+    const when = consultDateText(noteData.updatedAt);
+    if (when) {
+      const meta = document.createElement('div');
+      meta.className = 'ex-meta';
+      meta.textContent = t('consult_note_updated') + ' ' + when;
+      card.appendChild(meta);
+    }
+
+    const body = document.createElement('p');
+    body.className = 'or';
+    body.style.whiteSpace = 'pre-wrap';
+    body.style.textAlign = 'start';
+    body.textContent = noteData.text;
+    card.appendChild(body);
+
+    clientConsultReplies.appendChild(card);
+  });
+
+  if (!shown) {
+    const empty = document.createElement('p');
+    empty.className = 'message';
+    empty.textContent = t('client_consult_no_replies');
+    clientConsultReplies.appendChild(empty);
+  }
+}
+
+/*
+ * طلبات العميل نفسه — لازم تتجاب باستعلام مقيّد بإيميله (where) مش
+ * قراءة المجموعة كلها، عشان قاعدة الأمان مش بتسمحله يقرا طلبات غيره
+ */
+async function fetchMyConsultRequests() {
+  const snapshot = await getDocs(query(collection(db, 'consultRequests'), where('clientEmail', '==', clientEmail)));
+  return snapshot.docs
+    .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
+    .filter(function (row) { return row.clientEmail === clientEmail; })
+    .sort(function (a, b) { return String(b.createdAt || '').localeCompare(String(a.createdAt || '')); });
+}
+
+function clientConsultProviderName(email) {
+  const found = clientConsultTeam.filter(function (member) { return member.email === email; })[0];
+  return found ? found.name : email;
+}
+
+async function renderClientConsultRequests() {
+  clientConsultRequests.innerHTML = '';
+  const rows = await fetchMyConsultRequests();
+
+  if (!rows.length) {
+    const empty = document.createElement('li');
+    empty.className = 'section-empty';
+    empty.textContent = t('client_consult_no_requests');
+    clientConsultRequests.appendChild(empty);
+  } else {
+    rows.forEach(function (row) {
+      const item = consultRequestCard(row);
+      const to = document.createElement('div');
+      to.className = 'client-email';
+      to.textContent = clientConsultProviderName(row.providerEmail);
+      item.insertBefore(to, item.firstChild);
+      clientConsultRequests.appendChild(item);
+    });
+  }
+
+  const pending = rows.filter(function (row) { return (row.status || 'pending') !== 'answered'; }).length;
+  ctabConsultBadge.textContent = pending ? pending : '';
+  ctabConsultBadge.classList.toggle('hidden', !pending);
+}
+
+async function loadClientConsult() {
+  if (!clientEmail) return;
+  clientConsultMessage.textContent = t('loading');
+  try {
+    await loadClientConsultTeam();
+    fillClientConsultProviders();
+    await renderClientConsultReplies();
+    await renderClientConsultRequests();
+    clientConsultMessage.textContent = '';
+  } catch (error) {
+    clientConsultMessage.textContent = t('problem') + error.message;
+  }
+}
+
+clientConsultSendBtn.addEventListener('click', async function () {
+  const providerEmail = clientConsultProvider.value;
+  const text = clientConsultText.value.trim();
+
+  if (!providerEmail || !text) {
+    clientConsultMessage.textContent = t('client_consult_need_fields');
+    return;
+  }
+
+  clientConsultMessage.textContent = t('saving');
+  try {
+    const id = 'creq_' + Date.now();
+    await setDoc(doc(db, 'consultRequests', id), {
+      clientEmail: clientEmail,
+      clientName: clientName || '',
+      providerEmail: providerEmail,
+      text: text,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    });
+    clientConsultText.value = '';
+    await renderClientConsultRequests();
+    setStatusMessage(clientConsultMessage, t('client_consult_sent_msg'), 'success');
+  } catch (error) {
+    clientConsultMessage.textContent = t('problem') + error.message;
+  }
 });
 
 async function loadClient(email) {
@@ -4383,15 +5581,34 @@ async function loadClient(email) {
     const hasNutrition = nutritionHasContent(clientNutrition);
     ctabRehab.classList.toggle('hidden', !hasRehab);
     ctabNutrition.classList.toggle('hidden', !hasNutrition);
-    clientTabs.classList.toggle('hidden', !hasRehab && !hasNutrition);
+    // شريط التابات نفسه كان بيتخفي بالكامل لو مفيش تأهيل أو تغذية —
+    // ده كان بيمنع الوصول لتابات "نشاطي" و"الكلاس" و"المتجر" كمان
+    // (مالهاش علاقة بالتأهيل/التغذية) لو العميل لسه ملوش برنامج منهم.
+    // التاب الوحيد اللي فعلاً لازم يتخفي هو تاب التمرين الأساسي نفسه
+    // لو مفيش أي محتوى خالص (تمرين ولا تأهيل ولا تغذية)
+    clientTabs.classList.remove('hidden');
     setClientMode('training');
 
     showClientDay();
     showClientRehab();
     showClientNutrition();
     showClientActivity();
+    refreshClientConsultBadge();
   } catch (error) {
     progress.textContent = t('problem') + error.message;
+  }
+}
+
+/* عداد على تبويب "استشارة" عند العميل بعدد طلباته اللي لسه محدش رد عليها */
+async function refreshClientConsultBadge() {
+  if (!ctabConsultBadge || !clientEmail) return;
+  try {
+    const rows = await fetchMyConsultRequests();
+    const pending = rows.filter(function (row) { return (row.status || 'pending') !== 'answered'; }).length;
+    ctabConsultBadge.textContent = pending ? pending : '';
+    ctabConsultBadge.classList.toggle('hidden', !pending);
+  } catch (error) {
+    // مش مشكلة لو فشل تحميل العداد
   }
 }
 
@@ -5315,6 +6532,9 @@ async function loadMyFoods() {
   }
   renderFoodChips();
   renderFoodList();
+  ensureLibraryImagesLoaded().then(function () {
+    if (typeof foodScreen !== 'undefined' && foodScreen && !foodScreen.classList.contains('hidden')) renderFoodList();
+  });
 }
 
 function renderFoodChips() {
@@ -5349,6 +6569,36 @@ function renderFoodList() {
 
   matches.slice(0, 80).forEach(function (food) {
     const li = document.createElement('li');
+
+    const foodImageKey = 'food_' + food.id;
+    const foodPhoto = libraryImageFor(foodImageKey);
+
+    if (foodPhoto) {
+      const thumb = document.createElement('img');
+      thumb.className = 'food-thumb';
+      thumb.src = foodPhoto;
+      thumb.alt = '';
+      thumb.loading = 'lazy';
+      thumb.addEventListener('click', function (event) {
+        event.stopPropagation();
+        lightboxTitle.textContent = food[lang] || food.ar || food.en;
+        lightboxImages.innerHTML = '';
+        addShot(foodPhoto, '');
+        lightbox.classList.remove('hidden');
+      });
+      li.appendChild(thumb);
+    } else {
+      const addPhotoBtn = document.createElement('button');
+      addPhotoBtn.type = 'button';
+      addPhotoBtn.className = 'food-photo-btn';
+      addPhotoBtn.title = t('add_photo_short');
+      addPhotoBtn.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2"></rect><circle cx="8.5" cy="10" r="1.7"></circle><path d="M4 17l5-5 3.5 3.5L16 12l4 5"></path></svg>';
+      addPhotoBtn.addEventListener('click', function (event) {
+        event.stopPropagation();
+        pickLibraryImage(foodImageKey);
+      });
+      li.appendChild(addPhotoBtn);
+    }
 
     const info = document.createElement('div');
 
@@ -5731,6 +6981,7 @@ const classDetailSub = document.getElementById('class-detail-sub');
 const classTodayList = document.getElementById('class-today');
 const classWeekList = document.getElementById('class-week');
 const classMembersList = document.getElementById('class-members');
+const classExercisesList = document.getElementById('class-exercises-list');
 const clMemberPick = document.getElementById('cl-member-pick');
 const classDetailMessage = document.getElementById('class-detail-message');
 const liveDot = document.getElementById('live-dot');
@@ -5760,6 +7011,7 @@ async function loadClasses() {
       const data = item.data();
       data.id = item.id;
       if (!Array.isArray(data.members)) data.members = [];
+      if (!Array.isArray(data.exercises)) data.exercises = [];
       return data;
     });
     classesMessage.textContent = '';
@@ -5791,6 +7043,7 @@ function renderClasses() {
     head.style.gap = '8px';
 
     const info = document.createElement('div');
+    info.className = 'class-card-info';
 
     const name = document.createElement('div');
     name.className = 'class-name';
@@ -5863,7 +7116,8 @@ document.getElementById('cl-add-btn').addEventListener('click', async function (
       name: name,
       sport: clSport.value || '',
       time: document.getElementById('cl-time').value.trim(),
-      members: []
+      members: [],
+      exercises: []
     });
     document.getElementById('cl-name').value = '';
     document.getElementById('cl-time').value = '';
@@ -5893,6 +7147,8 @@ async function openClassDetail(id) {
   classDetailSub.textContent = bits.join(' · ');
 
   document.getElementById('class-members-box').classList.remove('hidden');
+  if (!Array.isArray(currentClass.exercises)) currentClass.exercises = [];
+  renderClassExercises(classExercisesList, currentClass, true);
 
   await loadClientsCache();
   fillMemberPicker();
@@ -5946,12 +7202,7 @@ document.getElementById('cl-member-add').addEventListener('click', async functio
   classDetailMessage.textContent = t('saving');
 
   try {
-    await setDoc(doc(db, 'classes', currentClass.id), {
-      name: currentClass.name,
-      sport: currentClass.sport || '',
-      time: currentClass.time || '',
-      members: currentClass.members
-    });
+    await saveCurrentClassDoc();
     classDetailMessage.textContent = '';
     await refreshBoards();
   } catch (error) {
@@ -6102,12 +7353,7 @@ function renderClassMembers() {
     remove.addEventListener('click', async function () {
       currentClass.members.splice(index, 1);
       try {
-        await setDoc(doc(db, 'classes', currentClass.id), {
-          name: currentClass.name,
-          sport: currentClass.sport || '',
-          time: currentClass.time || '',
-          members: currentClass.members
-        });
+        await saveCurrentClassDoc();
         await refreshBoards();
       } catch (error) {
         classDetailMessage.textContent = t('problem') + error.message;
@@ -6117,6 +7363,88 @@ function renderClassMembers() {
 
     classMembersList.appendChild(item);
   });
+}
+
+/* ---------- تمارين الكلاس — عشان اللي مش حاضر يقدر يعمل نفس التمرين ---------- */
+
+async function saveCurrentClassDoc() {
+  if (!currentClass) return;
+  await setDoc(doc(db, 'classes', currentClass.id), {
+    name: currentClass.name,
+    sport: currentClass.sport || '',
+    time: currentClass.time || '',
+    members: currentClass.members,
+    exercises: currentClass.exercises || []
+  });
+}
+
+function renderClassExercises(listEl, cls, allowEdit) {
+  listEl.innerHTML = '';
+  const exercises = (cls && Array.isArray(cls.exercises)) ? cls.exercises : [];
+
+  if (!exercises.length) {
+    const empty = document.createElement('p');
+    empty.className = 'empty';
+    empty.textContent = t('no_class_exercises');
+    listEl.appendChild(empty);
+    return;
+  }
+
+  exercises.forEach(function (exercise, index) {
+    const item = document.createElement('li');
+
+    const name = document.createElement('span');
+    name.textContent = exercise.name;
+    item.appendChild(name);
+
+    item.addEventListener('click', function () {
+      openPreview(exercise);
+    });
+
+    if (allowEdit) {
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'delete';
+      remove.innerHTML = DELETE_ICON_SVG;
+      remove.addEventListener('click', async function (event) {
+        event.stopPropagation();
+        cls.exercises.splice(index, 1);
+        try {
+          await saveCurrentClassDoc();
+          renderClassExercises(listEl, cls, true);
+        } catch (error) {
+          classDetailMessage.textContent = t('problem') + error.message;
+        }
+      });
+      item.appendChild(remove);
+    }
+
+    listEl.appendChild(item);
+  });
+}
+
+async function addExerciseToCurrentClass(exercise) {
+  if (!currentClass) return;
+  if (!Array.isArray(currentClass.exercises)) currentClass.exercises = [];
+  currentClass.exercises.push(exercise);
+  libMessage.textContent = t('saving');
+  try {
+    await saveCurrentClassDoc();
+    setStatusMessage(libMessage, fill('added_class_ex', { name: exercise.name }), 'success');
+  } catch (error) {
+    libMessage.textContent = t('problem') + error.message;
+  }
+}
+
+document.getElementById('class-add-exercise-btn').addEventListener('click', function () {
+  openLibraryForClass();
+});
+
+function openLibraryForClass() {
+  libraryContext = 'class';
+  suggestedCategory = '';
+  showScreen(libraryScreen);
+  loadLibrary();
 }
 
 /* ---------- التحديث اللحظي (محدود بشاشة الكلاس) ---------- */
@@ -6140,6 +7468,8 @@ function startLive() {
       currentClass.sport = data.sport || '';
       currentClass.time = data.time || '';
       currentClass.members = Array.isArray(data.members) ? data.members : [];
+      currentClass.exercises = Array.isArray(data.exercises) ? data.exercises : [];
+      renderClassExercises(classExercisesList, currentClass, true);
       refreshBoards();
     });
   } catch (error) {
@@ -6173,64 +7503,122 @@ async function showClientClasses() {
   const box = document.getElementById('client-class-body');
   box.innerHTML = '';
 
+  let allClasses = [];
   try {
     const snapshot = await getDocs(collection(db, 'classes'));
-    myClasses = snapshot.docs
-      .map(function (item) {
-        const data = item.data();
-        data.id = item.id;
-        if (!Array.isArray(data.members)) data.members = [];
-        return data;
-      })
-      .filter(function (c) { return c.members.indexOf(clientEmail) !== -1; });
+    allClasses = snapshot.docs.map(function (item) {
+      const data = item.data();
+      data.id = item.id;
+      if (!Array.isArray(data.members)) data.members = [];
+      if (!Array.isArray(data.exercises)) data.exercises = [];
+      return data;
+    });
   } catch (error) {
-    myClasses = [];
+    allClasses = [];
   }
+
+  myClasses = allClasses.filter(function (c) { return c.members.indexOf(clientEmail) !== -1; });
+  const otherClasses = allClasses.filter(function (c) { return c.members.indexOf(clientEmail) === -1; });
 
   if (!myClasses.length) {
     const none = document.createElement('p');
     none.className = 'no-class';
     none.textContent = t('no_class_yet');
     box.appendChild(none);
-    return;
+  } else {
+    await loadClientsCache();
+
+    for (const cls of myClasses) {
+      const title = document.createElement('h2');
+      title.textContent = cls.name;
+      box.appendChild(title);
+
+      const sub = document.createElement('p');
+      sub.className = 'progress';
+      const bits = [];
+      if (cls.sport) bits.push(sportName(cls.sport));
+      if (cls.time) bits.push(cls.time);
+      sub.textContent = bits.join(' · ');
+      box.appendChild(sub);
+
+      currentClass = cls;
+      progressCache = await loadProgressFor(cls.members);
+
+      const todayHead = document.createElement('h3');
+      todayHead.textContent = t('today_board');
+      box.appendChild(todayHead);
+
+      const todayUl = document.createElement('ul');
+      todayUl.id = 'class-today';
+      box.appendChild(todayUl);
+
+      const weekHead = document.createElement('h3');
+      weekHead.textContent = t('week_board');
+      box.appendChild(weekHead);
+
+      const weekUl = document.createElement('ul');
+      weekUl.id = 'class-week';
+      box.appendChild(weekUl);
+
+      // نعيد استخدام نفس الرسم بس على العناصر الجديدة
+      renderBoardsInto(todayUl, weekUl, cls, clientEmail);
+
+      if (cls.exercises.length) {
+        const exHead = document.createElement('h3');
+        exHead.textContent = t('class_exercises_title');
+        box.appendChild(exHead);
+
+        const exList = document.createElement('ul');
+        box.appendChild(exList);
+        renderClassExercises(exList, cls, false);
+      }
+    }
   }
 
-  await loadClientsCache();
+  // كلاسات تانية العميل مش عضو فيها — بس تمارينها متاحة لأي حد يشوفها
+  // ويعملها بنفسه حتى لو مش حاضر الكلاس فعليًا
+  const otherWithExercises = otherClasses.filter(function (c) { return c.exercises.length; });
+  if (otherWithExercises.length) {
+    const otherHead = document.createElement('h2');
+    otherHead.textContent = t('other_classes_title');
+    box.appendChild(otherHead);
 
-  for (const cls of myClasses) {
-    const title = document.createElement('h2');
-    title.textContent = cls.name;
-    box.appendChild(title);
+    const otherList = document.createElement('ul');
+    otherWithExercises.forEach(function (cls) {
+      const wrapper = document.createElement('li');
+      wrapper.className = 'class-card';
 
-    const sub = document.createElement('p');
-    sub.className = 'progress';
-    const bits = [];
-    if (cls.sport) bits.push(sportName(cls.sport));
-    if (cls.time) bits.push(cls.time);
-    sub.textContent = bits.join(' · ');
-    box.appendChild(sub);
+      const head = document.createElement('div');
+      head.className = 'class-card-info';
+      head.style.cursor = 'pointer';
 
-    currentClass = cls;
-    progressCache = await loadProgressFor(cls.members);
+      const name = document.createElement('span');
+      name.className = 'class-name';
+      name.textContent = cls.name;
+      head.appendChild(name);
 
-    const todayHead = document.createElement('h3');
-    todayHead.textContent = t('today_board');
-    box.appendChild(todayHead);
+      const count = document.createElement('span');
+      count.className = 'class-meta';
+      count.textContent = fill('count_ex', { n: cls.exercises.length });
+      head.appendChild(count);
 
-    const todayUl = document.createElement('ul');
-    todayUl.id = 'class-today';
-    box.appendChild(todayUl);
+      wrapper.appendChild(head);
 
-    const weekHead = document.createElement('h3');
-    weekHead.textContent = t('week_board');
-    box.appendChild(weekHead);
+      const exBox = document.createElement('div');
+      exBox.className = 'hidden';
+      const exList = document.createElement('ul');
+      exBox.appendChild(exList);
+      wrapper.appendChild(exBox);
 
-    const weekUl = document.createElement('ul');
-    weekUl.id = 'class-week';
-    box.appendChild(weekUl);
+      head.addEventListener('click', function () {
+        const willOpen = exBox.classList.contains('hidden');
+        exBox.classList.toggle('hidden', !willOpen);
+        if (willOpen) renderClassExercises(exList, cls, false);
+      });
 
-    // نعيد استخدام نفس الرسم بس على العناصر الجديدة
-    renderBoardsInto(todayUl, weekUl, cls, clientEmail);
+      otherList.appendChild(wrapper);
+    });
+    box.appendChild(otherList);
   }
 }
 
@@ -6333,9 +7721,28 @@ function refreshAll() {
   fillSportSelect(coachSport, true);
   fillSportSelect(clSport, true);
   fillSportTemplatePicker();
+  // القوايم دي كانت بتتبني مرة واحدة بس وقت التحميل وبتفضل عالقة بلغة
+  // التحميل الأولانية حتى لو المستخدم بدّل اللغة بعدين — لازم تتبنى تاني
+  // هنا زي كل القوايم التانية فوق
+  fillProviderPlanSpecialtySelect(newProviderPlanSpecialty);
+  fillPlanDurationSelect(newPlanDurationSelect, 1);
+  fillPlanDurationSelect(newProviderPlanDurationSelect, 1);
+  fillStoreCategoryFilter();
+  fillStorePayMethodSelect();
   paintLiveState();
 
-  if (!welcomeScreen.classList.contains('hidden')) renderWelcomePillarDetail(currentWelcomePillar);
+  if (!welcomeScreen.classList.contains('hidden')) {
+    renderWelcomePillarDetail(currentWelcomePillar);
+    // البنود دي بتتبني بـ textContent وقت التحميل مش بـ data-t، فلازم
+    // نعيد بناءها يدويًا بعد تغيير اللغة عشان محتواها يتترجم صح
+    renderWelcomeFaq();
+    loadWelcomeTeamPreview();
+    loadWelcomeStories();
+    loadWelcomeTrustStat();
+    fillProviderApplySpecialtySelect();
+  }
+  if (!calculatorsScreen.classList.contains('hidden')) fillCalcSelects();
+  if (!progressScreen.classList.contains('hidden')) fillCheckinSelects();
   if (!coachScreen.classList.contains('hidden')) {
     if (coachMode === 'rehab') showRehab();
     else if (coachMode === 'nutrition') showNutrition();
@@ -6347,6 +7754,7 @@ function refreshAll() {
     showClientRehab();
     showClientNutrition();
     showClientActivity();
+    showClientClasses();
   }
   if (!foodScreen.classList.contains('hidden')) {
     renderFoodChips();
@@ -6359,9 +7767,12 @@ function refreshAll() {
   if (!teamScreen.classList.contains('hidden')) loadTeamPicker(selectedTeam);
   if (!injuryScreen.classList.contains('hidden')) { refreshHotspots(); loadInjuryHistory(); }
   if (!teamViewScreen.classList.contains('hidden')) loadTeamView();
+  if (!clientProfileScreen.classList.contains('hidden')) fillClientProfileSelects();
+  if (!clientConsultPanel.classList.contains('hidden')) loadClientConsult();
+  if (!consultPanel.classList.contains('hidden')) renderCoachConsultRequests();
   if (!medLibraryScreen.classList.contains('hidden')) loadMedLibrary();
   if (!classesScreen.classList.contains('hidden')) renderClasses();
-  if (!classDetailScreen.classList.contains('hidden')) { renderBoards(); renderClassMembers(); }
+  if (!classDetailScreen.classList.contains('hidden')) { renderBoards(); renderClassMembers(); renderClassExercises(classExercisesList, currentClass, true); }
   if (!libraryScreen.classList.contains('hidden')) {
     rebuildLibraryFilters();
     renderLibrary();
@@ -6384,8 +7795,17 @@ let providers = [];
 
 function showProviderHome(data) {
   currentProviderData = data;
-  setSpecialtyLabel(providerHomeTitle, data.specialty, data.name || '');
-  providerHomeSpecialty.textContent = specialtyName(data.specialty, lang);
+  // صاحب المنصة (الحساب القديم) غالبًا مفيهوش مستند providers أصلاً، يعني
+  // data ممكن توصل فاضية — في الحالة دي بنعتبر تخصصه "مدرب" افتراضيًا
+  // عشان الأيقونة والتسمية تظهر صح من غير ما نضطر ننشئ مستند بس عشان كده
+  const specs = providerSpecialties(data).length ? providerSpecialties(data) : (isLegacyCoachAccount() ? ['coach'] : []);
+  phName.value = data.name || '';
+  setSpecialtyLabel(providerHomeTitle, specs, data.name || (isLegacyCoachAccount() ? t('platform_owner_label') : ''));
+  providerHomeSpecialty.textContent = specs.length ? specialtyListName(specs) : '';
+
+  // صاحب المنصة (الحساب القديم) تخصصه "مدرب" ثابت مايتغيرش من هنا
+  if (phSpecialtyBox) phSpecialtyBox.classList.toggle('hidden', isLegacyCoachAccount());
+  fillSpecialtyCheckboxes(phSpecialtyMulti, specs);
 
   phBio.value = data.bio || '';
   phCerts.value = data.certifications || '';
@@ -6402,7 +7822,7 @@ function showProviderHome(data) {
   }
 
   providerHomeMessage.textContent = '';
-  phOpenMedlibBtn.classList.toggle('hidden', !(SPECIALTIES[data.specialty] && SPECIALTIES[data.specialty].medical));
+  phOpenMedlibBtn.classList.toggle('hidden', !specialtiesHaveFlag(specs, 'medical'));
   phBackBtn.classList.remove('hidden');
   loadProviderOwnReviews();
 }
@@ -6461,22 +7881,8 @@ async function loadProviderOwnReviews() {
 }
 
 function fillSpecialtySelect() {
-  const keep = pvSpecialty.value;
-  pvSpecialty.innerHTML = '';
-
-  const none = document.createElement('option');
-  none.value = '';
-  none.textContent = t('pick_specialty');
-  pvSpecialty.appendChild(none);
-
-  Object.keys(SPECIALTIES).forEach(function (key) {
-    const option = document.createElement('option');
-    option.value = key;
-    option.textContent = specialtyIcon(key) + ' ' + specialtyName(key, lang);
-    pvSpecialty.appendChild(option);
-  });
-
-  pvSpecialty.value = keep;
+  const keep = readSpecialtyCheckboxes(pvSpecialtyMulti);
+  fillSpecialtyCheckboxes(pvSpecialtyMulti, keep);
 }
 
 async function loadProviders() {
@@ -6488,6 +7894,33 @@ async function loadProviders() {
       return Object.assign({ id: item.id }, item.data());
     });
 
+    // بنحسب هنا عدد المتدربين الفعلي لكل متخصص (من مجموعة العملاء
+    // كاملة) ونخزنه في مستند المتخصص نفسه كـ clientsCount — عشان شاشة
+    // "فريقك" عند العميل تقدر تعرض الرقم، مع إن قواعد الأمان مش بتسمح
+    // لحساب عميل عادي إنه يقرا مجموعة العملاء كلها بنفسه
+    try {
+      const clientsSnapshot = await getDocs(collection(db, 'clients'));
+      const counts = {};
+      clientsSnapshot.docs.forEach(function (clientDoc) {
+        const data = clientDoc.data();
+        const coachEmail = (data.coachEmail || COACH_EMAIL).toLowerCase();
+        counts[coachEmail] = (counts[coachEmail] || 0) + 1;
+        const team = data.team || {};
+        Object.keys(team).forEach(function (key) {
+          const specialistEmail = team[key];
+          if (specialistEmail) counts[specialistEmail] = (counts[specialistEmail] || 0) + 1;
+        });
+      });
+      await Promise.all(providers.map(function (provider) {
+        const n = counts[provider.email] || 0;
+        if (provider.clientsCount === n) return Promise.resolve();
+        provider.clientsCount = n;
+        return setDoc(doc(db, 'providers', provider.email), { clientsCount: n }, { merge: true }).catch(function () {});
+      }));
+    } catch (countError) {
+      // مش هيمنع عرض القايمة لو فشل حساب العدد لأي سبب
+    }
+
     if (!providers.length) {
       providersMessage.textContent = t('no_providers');
       return;
@@ -6497,13 +7930,14 @@ async function loadProviders() {
     providers.forEach(function (provider) {
       const item = document.createElement('li');
 
+      const providerSpecs = providerSpecialties(provider);
       const nameLine = document.createElement('div');
       nameLine.className = 'client-name';
-      setSpecialtyLabel(nameLine, provider.specialty, provider.name);
+      setSpecialtyLabel(nameLine, providerSpecs, provider.name);
 
       const specLine = document.createElement('div');
       specLine.className = 'client-status';
-      specLine.textContent = specialtyName(provider.specialty, lang);
+      specLine.textContent = specialtyListName(providerSpecs) + (provider.isAdminTeam ? (' · ' + t('admin_team_badge')) : '');
 
       const emailLine = document.createElement('div');
       emailLine.className = 'client-email';
@@ -6512,6 +7946,38 @@ async function loadProviders() {
       item.appendChild(nameLine);
       item.appendChild(specLine);
       item.appendChild(emailLine);
+
+      // بس صاحب المنصة أو عضو إداري موجود فعلاً يقدر يمنح/يسحب الصلاحية
+      // الإدارية الكاملة — ومحدش يقدر يعدّلها لنفسه (نفس القيد في قاعدة
+      // الأمان)، عشان محدش يمنح نفسه صلاحية زيادة
+      if (isFullAdminAccount() && provider.email !== currentProviderEmail) {
+        const adminLabel = document.createElement('label');
+        adminLabel.className = 'rest';
+        const adminCheckbox = document.createElement('input');
+        adminCheckbox.type = 'checkbox';
+        adminCheckbox.checked = !!provider.isAdminTeam;
+        adminLabel.appendChild(adminCheckbox);
+        const adminSpan = document.createElement('span');
+        adminSpan.textContent = t('grant_admin_team_label');
+        adminLabel.appendChild(adminSpan);
+        item.appendChild(adminLabel);
+
+        const adminRowMessage = document.createElement('p');
+        adminRowMessage.className = 'message';
+        item.appendChild(adminRowMessage);
+
+        adminCheckbox.addEventListener('change', async function () {
+          adminRowMessage.textContent = t('saving');
+          try {
+            await updateDoc(doc(db, 'providers', provider.email), { isAdminTeam: adminCheckbox.checked });
+            setStatusMessage(adminRowMessage, t('saved'), 'success');
+          } catch (error) {
+            adminCheckbox.checked = !adminCheckbox.checked;
+            adminRowMessage.textContent = t('problem') + error.message;
+          }
+        });
+      }
+
       providersList.appendChild(item);
     });
   } catch (error) {
@@ -6527,9 +7993,8 @@ document.getElementById('open-providers-btn').addEventListener('click', function
 
 document.getElementById('quick-add-coach-btn').addEventListener('click', function () {
   showScreen(providersScreen);
-  fillSpecialtySelect();
+  fillSpecialtyCheckboxes(pvSpecialtyMulti, ['coach']);
   loadProviders();
-  pvSpecialty.value = 'coach';
   document.getElementById('pv-name').focus();
 });
 
@@ -6543,23 +8008,31 @@ document.getElementById('pv-add-btn').addEventListener('click', async function (
   const emailInput = document.getElementById('pv-email');
   const name = nameInput.value.trim();
   const email = emailInput.value.trim().toLowerCase();
-  const specialty = pvSpecialty.value;
+  const specialties = readSpecialtyCheckboxes(pvSpecialtyMulti);
 
-  if (!name || !email || !specialty) {
+  if (!name || !email || !specialties.length) {
     providersMessage.textContent = t('need_provider_fields');
     return;
   }
 
   providersMessage.textContent = t('adding');
   try {
+    // isMedical بيتحسب هنا من تعريف التخصصات في providers.js وقت الإضافة،
+    // ومحفوظ على مستند المتخصص نفسه — عشان قاعدة الأمان في firestore.rules
+    // تقدر تتحقق منه من غير ما تحتاج قائمة تخصصات مكتوبة يدويًا؛ يعني
+    // أي تخصص جديد تضيفه في SPECIALTIES بيشتغل صح تلقائي من غير ما
+    // نرجع نعدّل firestore.rules تاني. المتخصص ممكن يكون له أكتر من
+    // تخصص مع بعض (مدرب + أخصائي تغذية مثلًا)
     await setDoc(doc(db, 'providers', email), {
       name: name,
       email: email,
-      specialty: specialty
+      specialty: specialties[0],
+      specialties: specialties,
+      isMedical: specialtiesHaveFlag(specialties, 'medical')
     });
     nameInput.value = '';
     emailInput.value = '';
-    pvSpecialty.value = '';
+    fillSpecialtyCheckboxes(pvSpecialtyMulti, []);
     setStatusMessage(providersMessage, t('provider_saved'), 'success');
     await loadProviders();
   } catch (error) {
@@ -6600,15 +8073,43 @@ document.getElementById('ph-photo-remove').addEventListener('click', function ()
 });
 
 document.getElementById('ph-save-btn').addEventListener('click', async function () {
+  const updated = {
+    name: phName.value.trim(),
+    bio: phBio.value.trim(),
+    certifications: phCerts.value.trim(),
+    photo: phPickedImage
+  };
+
+  // مهم: صاحب المنصة (الحساب القديم) مفيهوش مستند providers أصلاً —
+  // أول مرة يحفظ بروفايله هينشئ المستند ده لأول مرة، فلازم نحط فيه
+  // specialty:'coach' صراحةً من غير ما نسيبه فاضي، عشان تسجيل الدخول
+  // الجاي يعرف يتعامل معاه كمدرب صح (زي الشرح في onAuthStateChanged)
+  // من غير ما يفقد صلاحياته أو قائمة عملائه. غير كده، المتخصص بيختار
+  // تخصصاته بنفسه (ممكن أكتر من واحد) من صناديق الاختيار
+  let newSpecialties;
+  if (isLegacyCoachAccount()) {
+    newSpecialties = ['coach'];
+  } else {
+    newSpecialties = readSpecialtyCheckboxes(phSpecialtyMulti);
+    if (!newSpecialties.length) {
+      providerHomeMessage.textContent = t('need_one_specialty');
+      return;
+    }
+  }
+  updated.specialties = newSpecialties;
+  updated.specialty = newSpecialties[0];
+  updated.isMedical = specialtiesHaveFlag(newSpecialties, 'medical');
+
   providerHomeMessage.textContent = t('saving');
   try {
-    const updated = {
-      bio: phBio.value.trim(),
-      certifications: phCerts.value.trim(),
-      photo: phPickedImage
-    };
     await setDoc(doc(db, 'providers', currentProviderEmail), updated, { merge: true });
     currentProviderData = Object.assign({}, currentProviderData, updated);
+    currentProviderSpecialties = newSpecialties;
+    currentProviderSpecialty = newSpecialties.indexOf('coach') !== -1 ? 'coach' : (newSpecialties[0] || '');
+    applyCoachScopeTabs();
+    phOpenMedlibBtn.classList.toggle('hidden', !specialtiesHaveFlag(newSpecialties, 'medical'));
+    providerHomeSpecialty.textContent = specialtyListName(newSpecialties);
+    setSpecialtyLabel(providerHomeTitle, newSpecialties, updated.name || '');
     setStatusMessage(providerHomeMessage, t('profile_saved'), 'success');
   } catch (error) {
     providerHomeMessage.textContent = t('problem') + error.message;
@@ -6857,7 +8358,7 @@ async function loadWelcomeTeamPreview() {
     const snapshot = await getDocs(collection(db, 'providers'));
     providers = snapshot.docs
       .map(function (item) { return Object.assign({ email: item.id }, item.data()); })
-      .filter(function (p) { return p.name && p.specialty; })
+      .filter(function (p) { return p.name && providerSpecialties(p).length; })
       .slice(0, 8);
   } catch (error) {
     providers = [];
@@ -6872,12 +8373,13 @@ async function loadWelcomeTeamPreview() {
 
   welcomeTeamSection.classList.remove('hidden');
   providers.forEach(function (provider) {
+    const specs = providerSpecialties(provider);
     const card = document.createElement('div');
     card.className = 'welcome-team-card';
 
     const avatar = document.createElement('div');
     avatar.className = 'welcome-team-avatar';
-    avatar.innerHTML = (typeof specialtyIconSvg === 'function') ? specialtyIconSvg(provider.specialty) : '';
+    avatar.innerHTML = (typeof specialtyIconSvg === 'function' && specs[0]) ? specialtyIconSvg(specs[0]) : '';
     card.appendChild(avatar);
 
     const name = document.createElement('div');
@@ -6887,7 +8389,7 @@ async function loadWelcomeTeamPreview() {
 
     const specialty = document.createElement('div');
     specialty.className = 'welcome-team-specialty';
-    specialty.textContent = specialtyName(provider.specialty);
+    specialty.textContent = specialtyListName(specs);
     card.appendChild(specialty);
 
     welcomeTeamGrid.appendChild(card);
@@ -6939,6 +8441,13 @@ function loadWelcomeExtras() {
   loadWelcomeTrustStat();
   loadWelcomeTeamPreview();
   loadWelcomeStories();
+  fillProviderApplySpecialtySelect();
+}
+
+function fillProviderApplySpecialtySelect() {
+  if (!paSpecialtyMulti) return;
+  const keep = readSpecialtyCheckboxes(paSpecialtyMulti);
+  fillSpecialtyCheckboxes(paSpecialtyMulti, keep);
 }
 
 /* ---------- لسه مش متأكد؟ اتكلم مع فريقنا الأول (نموذج تواصل) ---------- */
@@ -6972,6 +8481,48 @@ document.getElementById('lead-submit-btn').addEventListener('click', async funct
     leadMessageInput.value = '';
   } catch (error) {
     leadMessageStatus.textContent = t('problem') + error.message;
+  }
+});
+
+/* ---------- طلب انضمام مدرب أو متخصص جديد ---------- */
+
+const paNameInput = document.getElementById('pa-name');
+const paEmailInput = document.getElementById('pa-email');
+const paContactInput = document.getElementById('pa-contact');
+const paMessageInput = document.getElementById('pa-message');
+const providerApplyStatus = document.getElementById('provider-apply-status');
+
+document.getElementById('provider-apply-submit-btn').addEventListener('click', async function () {
+  const name = paNameInput.value.trim();
+  const email = paEmailInput.value.trim().toLowerCase();
+  const contact = paContactInput.value.trim();
+  const specialties = readSpecialtyCheckboxes(paSpecialtyMulti);
+  if (!name || !email || !specialties.length) {
+    providerApplyStatus.textContent = t('need_provider_apply_fields');
+    return;
+  }
+
+  providerApplyStatus.textContent = t('saving');
+  try {
+    const id = 'app_' + Date.now();
+    await setDoc(doc(db, 'providerApplications', id), {
+      name: name,
+      email: email,
+      contact: contact,
+      specialty: specialties[0],
+      specialties: specialties,
+      message: paMessageInput.value.trim(),
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    });
+    setStatusMessage(providerApplyStatus, t('provider_apply_submitted_msg'), 'success');
+    paNameInput.value = '';
+    paEmailInput.value = '';
+    paContactInput.value = '';
+    paMessageInput.value = '';
+    fillSpecialtyCheckboxes(paSpecialtyMulti, []);
+  } catch (error) {
+    providerApplyStatus.textContent = t('problem') + error.message;
   }
 });
 
@@ -7783,6 +9334,17 @@ function isLegacyCoachAccount() {
 }
 
 /*
+ * فريق إداري كامل الصلاحية: صاحب المنصة (isLegacyCoachAccount) يقدر
+ * يمنح متخصصين موجودين صلاحية إدارية كاملة زيه بالظبط (حقل isAdminTeam
+ * على مستند المتخصص نفسه). القاعدة الأمنية في firestore.rules بتمنع
+ * أي حد يمنح نفسه الصلاحية دي — بس صاحب المنصة أو عضو إداري موجود
+ * فعلاً يقدر يحطها لغيره
+ */
+function isFullAdminAccount() {
+  return isLegacyCoachAccount() || !!(currentProviderData && currentProviderData.isAdminTeam);
+}
+
+/*
  * accessOverride بيتحط يدويًا من لوحة التحكم على مستند العميل أو
  * المتخصص: { until: 'YYYY-MM-DD' } معناها وصول ممدود لغاية تاريخ
  * معين حتى لو التجربة خلصت، و { blocked: true } معناها إيقاف
@@ -7847,6 +9409,35 @@ function planEffectivePrice(plan) {
   return planHasOffer(plan) ? Number(plan.offerPrice) : Number(plan.price) || 0;
 }
 
+// جديد: مدة الاشتراك (شهر / 3 شهور / 6 شهور / سنة) — حقل durationMonths
+// اختياري على مستند الخطة؛ لو مش موجود (خطط قديمة اتعملت قبل الميزة دي)
+// بيتحسب شهر واحد تلقائيًا عشان الشكل يفضل زي ما هو بالظبط من غير أي تغيير
+const PLAN_DURATIONS = [1, 3, 6, 12];
+
+function planDurationMonths(plan) {
+  const months = Number(plan && plan.durationMonths);
+  return PLAN_DURATIONS.indexOf(months) !== -1 ? months : 1;
+}
+
+function planDurationOptionLabel(months) {
+  return t('plan_duration_opt_' + months);
+}
+
+function planDurationSuffix(plan) {
+  return t('plan_duration_suffix_' + planDurationMonths(plan));
+}
+
+function fillPlanDurationSelect(select, selectedMonths) {
+  select.innerHTML = '';
+  PLAN_DURATIONS.forEach(function (months) {
+    const option = document.createElement('option');
+    option.value = String(months);
+    option.textContent = planDurationOptionLabel(months);
+    select.appendChild(option);
+  });
+  select.value = String(PLAN_DURATIONS.indexOf(Number(selectedMonths)) !== -1 ? Number(selectedMonths) : 1);
+}
+
 function paymentInstructionLines() {
   const lines = [];
   if (paymentSettings) {
@@ -7896,6 +9487,7 @@ function buildPlanCard(plan, allowSubmit, targetEmail, onSubmitted, submitFn) {
 
   const priceRow = document.createElement('div');
   priceRow.className = 'plan-price-row';
+  const durationSuffix = planDurationSuffix(plan);
   if (planHasOffer(plan)) {
     const original = document.createElement('span');
     original.className = 'plan-price-original';
@@ -7904,11 +9496,11 @@ function buildPlanCard(plan, allowSubmit, targetEmail, onSubmitted, submitFn) {
 
     const offer = document.createElement('span');
     offer.className = 'plan-price-offer';
-    offer.textContent = fill('plan_offer_label', { price: plan.offerPrice, original: plan.price });
+    offer.textContent = fill('plan_offer_label', { price: plan.offerPrice, original: plan.price }) + ' ' + durationSuffix;
     priceRow.appendChild(offer);
   } else {
     const price = document.createElement('span');
-    price.textContent = fill('plan_price_label', { price: plan.price });
+    price.textContent = fill('plan_price_label', { price: plan.price }) + ' ' + durationSuffix;
     priceRow.appendChild(price);
   }
   card.appendChild(priceRow);
@@ -8381,7 +9973,7 @@ document.getElementById('provider-sub-banner-btn').addEventListener('click', fun
 // مالوش اشتراك فعّال (accessOverride) بيشوف رسالة تفكير بس، وبيفضل
 // يستخدم كل مميزات المنصة عادي
 async function refreshProviderSubBanner() {
-  if (isLegacyCoachAccount()) {
+  if (isFullAdminAccount()) {
     providerSubBanner.classList.add('hidden');
     return;
   }
@@ -8439,6 +10031,8 @@ const settingsMessage = document.getElementById('settings-message');
 const publicStatsMessage = document.getElementById('public-stats-message');
 const adminPlansList = document.getElementById('admin-plans-list');
 const plansAdminMessage = document.getElementById('plans-admin-message');
+const newPlanDurationSelect = document.getElementById('new-plan-duration');
+fillPlanDurationSelect(newPlanDurationSelect, 1);
 const adminPaymentsList = document.getElementById('admin-payments-list');
 const accessResultBox = document.getElementById('access-result-box');
 const accessMessage = document.getElementById('access-message');
@@ -8472,6 +10066,7 @@ async function loadAdminPanel() {
   await loadStoreOrdersAdmin();
   await loadStoriesAdmin();
   await loadLeadsAdmin();
+  await loadProviderApplicationsAdmin();
 
   accessResultBox.innerHTML = '';
   accessResultBox.classList.add('hidden');
@@ -8546,6 +10141,10 @@ async function renderAdminPlansList() {
     priceInput.value = (plan.price !== undefined && plan.price !== null) ? plan.price : '';
     box.appendChild(priceInput);
 
+    const durationSelect = document.createElement('select');
+    fillPlanDurationSelect(durationSelect, planDurationMonths(plan));
+    box.appendChild(durationSelect);
+
     const featuresArInput = document.createElement('textarea');
     featuresArInput.rows = 3;
     featuresArInput.placeholder = t('plan_features_ph');
@@ -8608,6 +10207,7 @@ async function renderAdminPlansList() {
           nameAr: nameArInput.value.trim(),
           nameEn: nameEnInput.value.trim(),
           price: Number(priceInput.value) || 0,
+          durationMonths: Number(durationSelect.value) || 1,
           featuresAr: featuresArInput.value,
           featuresEn: featuresEnInput.value,
           offerLabelAr: offerLabelInput.value.trim(),
@@ -8649,6 +10249,7 @@ document.getElementById('add-plan-btn').addEventListener('click', async function
       nameAr: nameAr,
       nameEn: document.getElementById('new-plan-name-en').value.trim(),
       price: price,
+      durationMonths: Number(newPlanDurationSelect.value) || 1,
       featuresAr: document.getElementById('new-plan-features-ar').value,
       featuresEn: document.getElementById('new-plan-features-en').value,
       offerLabelAr: document.getElementById('new-plan-offer-label').value.trim(),
@@ -8660,6 +10261,7 @@ document.getElementById('add-plan-btn').addEventListener('click', async function
     ['new-plan-name-ar', 'new-plan-name-en', 'new-plan-price', 'new-plan-features-ar', 'new-plan-features-en', 'new-plan-offer-label', 'new-plan-offer-price'].forEach(function (id) {
       document.getElementById(id).value = '';
     });
+    newPlanDurationSelect.value = '1';
     setStatusMessage(plansAdminMessage, t('saved'), 'success');
     renderAdminPlansList();
   } catch (error) {
@@ -8731,6 +10333,10 @@ async function renderAdminProviderPlansList() {
     priceInput.value = (plan.price !== undefined && plan.price !== null) ? plan.price : '';
     box.appendChild(priceInput);
 
+    const durationSelect = document.createElement('select');
+    fillPlanDurationSelect(durationSelect, planDurationMonths(plan));
+    box.appendChild(durationSelect);
+
     const featuresArInput = document.createElement('textarea');
     featuresArInput.rows = 3;
     featuresArInput.placeholder = t('plan_features_ph');
@@ -8780,6 +10386,7 @@ async function renderAdminProviderPlansList() {
           nameAr: nameArInput.value.trim(),
           nameEn: nameEnInput.value.trim(),
           price: Number(priceInput.value) || 0,
+          durationMonths: Number(durationSelect.value) || 1,
           featuresAr: featuresArInput.value,
           featuresEn: featuresEnInput.value,
           active: activeCheckbox.checked
@@ -8806,6 +10413,9 @@ async function renderAdminProviderPlansList() {
 
 fillProviderPlanSpecialtySelect(newProviderPlanSpecialty);
 
+const newProviderPlanDurationSelect = document.getElementById('new-provider-plan-duration');
+fillPlanDurationSelect(newProviderPlanDurationSelect, 1);
+
 document.getElementById('add-provider-plan-btn').addEventListener('click', async function () {
   const nameAr = document.getElementById('new-provider-plan-name-ar').value.trim();
   const price = Number(document.getElementById('new-provider-plan-price').value) || 0;
@@ -8820,6 +10430,7 @@ document.getElementById('add-provider-plan-btn').addEventListener('click', async
       nameAr: nameAr,
       nameEn: document.getElementById('new-provider-plan-name-en').value.trim(),
       price: price,
+      durationMonths: Number(newProviderPlanDurationSelect.value) || 1,
       featuresAr: document.getElementById('new-provider-plan-features-ar').value,
       featuresEn: document.getElementById('new-provider-plan-features-en').value,
       active: true
@@ -8827,6 +10438,7 @@ document.getElementById('add-provider-plan-btn').addEventListener('click', async
     ['new-provider-plan-name-ar', 'new-provider-plan-name-en', 'new-provider-plan-price', 'new-provider-plan-features-ar', 'new-provider-plan-features-en'].forEach(function (id) {
       document.getElementById(id).value = '';
     });
+    newProviderPlanDurationSelect.value = '1';
     setStatusMessage(providerPlansAdminMessage, t('provider_plan_saved'), 'success');
     renderAdminProviderPlansList();
   } catch (error) {
@@ -8867,7 +10479,7 @@ async function renderAdminPaymentsList() {
     const name = document.createElement('div');
     name.className = 'ex-name';
     name.textContent = (account.name || account.email) + ' — ' + payment.planName +
-      (account.collectionName === 'providers' ? ' (' + specialtyName(account.specialty) + ')' : '');
+      (account.collectionName === 'providers' ? ' (' + specialtyListName(providerSpecialties(account)) + ')' : '');
     card.appendChild(name);
 
     const meta = document.createElement('div');
@@ -9087,7 +10699,7 @@ function medStatusName(key) {
 }
 
 function isMedicalAuthor() {
-  return !!(currentProviderEmail && SPECIALTIES[currentProviderSpecialty] && SPECIALTIES[currentProviderSpecialty].medical);
+  return !!(currentProviderEmail && specialtiesHaveFlag(currentProviderSpecialties, 'medical'));
 }
 
 function fillMedCategorySelect() {
@@ -9196,6 +10808,7 @@ async function saveMedArticle(status) {
     await setDoc(doc(db, 'medLibrary', id), {
       category: category,
       specialty: currentProviderSpecialty,
+      specialties: currentProviderSpecialties,
       title: title,
       body: body,
       image: medPickedImage,
@@ -9224,6 +10837,18 @@ function medStatusOptionsMarkup(currentStatus) {
   return Object.keys(MED_REVIEW).map(function (key) {
     return '<option value="' + key + '"' + (key === (currentStatus || 'draft') ? ' selected' : '') + '>' + medStatusName(key) + '</option>';
   }).join('');
+}
+
+function medItemTitle(item) {
+  if (!item) return '';
+  if (lang === 'en' && item.titleEn) return item.titleEn;
+  return item.title || item.titleEn || '';
+}
+
+function medItemBody(item) {
+  if (!item) return '';
+  if (lang === 'en' && item.bodyEn) return item.bodyEn;
+  return item.body || item.bodyEn || '';
 }
 
 function renderMedLibraryList() {
@@ -9256,7 +10881,7 @@ function renderMedLibraryList() {
 
     const title = document.createElement('div');
     title.className = 'client-name';
-    title.textContent = item.title;
+    title.textContent = medItemTitle(item);
     card.appendChild(title);
 
     if (item.image) {
@@ -9268,7 +10893,7 @@ function renderMedLibraryList() {
       thumb.alt = '';
       thumbBtn.appendChild(thumb);
       thumbBtn.addEventListener('click', function () {
-        lightboxTitle.textContent = item.title;
+        lightboxTitle.textContent = medItemTitle(item);
         lightboxImages.innerHTML = '';
         addShot(item.image, '');
         lightbox.classList.remove('hidden');
@@ -9278,12 +10903,12 @@ function renderMedLibraryList() {
 
     const body = document.createElement('p');
     body.className = 'ex-meta';
-    body.textContent = item.body;
+    body.textContent = medItemBody(item);
     card.appendChild(body);
 
     const author2 = document.createElement('div');
     author2.className = 'client-email';
-    setSpecialtyLabel(author2, item.specialty, item.authorName || '');
+    setSpecialtyLabel(author2, providerSpecialties(item), item.authorName || '');
     card.appendChild(author2);
 
     if (author) {
@@ -9438,11 +11063,14 @@ async function loadTeamPicker(prefillTeam) {
     }
     teamMessage.textContent = '';
 
-    // تجميع حسب التخصص، وترتيب كل مجموعة بالأعلى ترشيحًا الأول
+    // تجميع حسب التخصص — المتخصص اللي عنده أكتر من تخصص بيظهر في كل قسم يخصه
+    // (مثلاً مدرب + أخصائي تغذية بيظهر تحت "مدربين" وتحت "أخصائيي تغذية")
     const bySpecialty = {};
     teamProviders.forEach(function (provider) {
-      if (!bySpecialty[provider.specialty]) bySpecialty[provider.specialty] = [];
-      bySpecialty[provider.specialty].push(provider);
+      providerSpecialties(provider).forEach(function (key) {
+        if (!bySpecialty[key]) bySpecialty[key] = [];
+        bySpecialty[key].push(provider);
+      });
     });
     Object.keys(bySpecialty).forEach(function (specialty) {
       bySpecialty[specialty].sort(function (a, b) { return providerScore(b) - providerScore(a); });
@@ -9494,7 +11122,7 @@ async function loadTeamPicker(prefillTeam) {
 
         const name = document.createElement('div');
         name.className = 'ex-name';
-        setSpecialtyLabel(name, provider.specialty, provider.name);
+        setSpecialtyLabel(name, specialty, provider.name);
         body.appendChild(name);
 
         const meta = document.createElement('div');
@@ -9511,16 +11139,16 @@ async function loadTeamPicker(prefillTeam) {
         card.appendChild(body);
 
         card.addEventListener('click', function () {
-          const already = selectedTeam[provider.specialty] === provider.email;
+          const already = selectedTeam[specialty] === provider.email;
           if (already) {
-            delete selectedTeam[provider.specialty];
+            delete selectedTeam[specialty];
           } else {
-            selectedTeam[provider.specialty] = provider.email;
+            selectedTeam[specialty] = provider.email;
           }
           renderTeamSelection();
         });
 
-        teamGroupedProviders.push(provider);
+        teamGroupedProviders.push({ provider: provider, specialty: specialty });
         section.appendChild(card);
       });
     });
@@ -9533,10 +11161,10 @@ async function loadTeamPicker(prefillTeam) {
 
 function renderTeamSelection() {
   const cards = teamList.querySelectorAll('.ex-card');
-  teamGroupedProviders.forEach(function (provider, index) {
+  teamGroupedProviders.forEach(function (entry, index) {
     const card = cards[index];
     if (!card) return;
-    card.classList.toggle('selected', selectedTeam[provider.specialty] === provider.email);
+    card.classList.toggle('selected', selectedTeam[entry.specialty] === entry.provider.email);
   });
 }
 
@@ -10004,34 +11632,51 @@ async function loadTeamView() {
 
   try {
     const clientDoc = await getDoc(doc(db, 'clients', clientEmail));
-    const team = (clientDoc.exists() && clientDoc.data().team) ? clientDoc.data().team : {};
-    const specialties = Object.keys(team).filter(function (key) { return !!team[key]; });
+    const clientData = clientDoc.exists() ? clientDoc.data() : {};
+    const team = clientData.team || {};
+    const pickedSpecialties = Object.keys(team).filter(function (key) { return !!team[key]; });
 
-    if (!specialties.length) {
-      teamViewList.innerHTML = '<p class="message">' + t('no_team_yet') + '</p>';
-      return;
-    }
+    // المدرب الأساسي جزء من "فريقك" دايمًا، حتى لو العميل ما اختارش
+    // حد في specialties بتاعته — coachEmail لو مش محفوظ (عملاء قدام)
+    // بيرجع لصاحب المنصة الافتراضي زي ما بقية الكود بيعمل
+    const coachEmail = (clientData.coachEmail || COACH_EMAIL).toLowerCase();
+    const members = [{ specialty: 'coach', email: coachEmail }].concat(
+      pickedSpecialties.map(function (specialty) { return { specialty: specialty, email: team[specialty] }; })
+    );
 
     await fetchAllProviderReviews();
 
-    const providerDocs = await Promise.all(specialties.map(function (specialty) {
-      return getDoc(doc(db, 'providers', team[specialty]));
+    const providerDocs = await Promise.all(members.map(function (member) {
+      return getDoc(doc(db, 'providers', member.email));
     }));
 
     teamViewList.innerHTML = '';
 
-    specialties.forEach(function (specialty, index) {
+    members.forEach(function (member, index) {
       const providerSnap = providerDocs[index];
-      if (!providerSnap.exists()) return;
-      const provider = providerSnap.data();
-      const providerEmail = team[specialty];
+      const specialty = member.specialty;
+      const providerEmail = member.email;
+      // المدرب الأساسي (لو هو صاحب المنصة القديم) ممكن ميكونش ليه مستند
+      // providers أصلاً — في الحالة دي لسه نعرض كارت بسيط بيه، من غير
+      // ما نعمل return ونخفيه زي أي متخصص تاني ملوش مستند
+      const isOwnerCoach = specialty === 'coach' && providerEmail === COACH_EMAIL.toLowerCase();
+      if (!providerSnap.exists() && !isOwnerCoach) return;
+      const provider = providerSnap.exists() ? providerSnap.data() : { specialty: 'coach' };
 
       const card = document.createElement('div');
       card.className = 'review-card';
 
+      if (provider.photo) {
+        const photo = document.createElement('img');
+        photo.src = provider.photo;
+        photo.alt = '';
+        photo.className = 'team-member-photo';
+        card.appendChild(photo);
+      }
+
       const name = document.createElement('div');
       name.className = 'ex-name';
-      setSpecialtyLabel(name, specialty, provider.name || '');
+      setSpecialtyLabel(name, specialty, provider.name || (isOwnerCoach ? t('platform_owner_label') : ''));
       card.appendChild(name);
 
       const meta = document.createElement('div');
@@ -10039,11 +11684,83 @@ async function loadTeamView() {
       meta.textContent = specialtyName(specialty, lang);
       card.appendChild(meta);
 
+      if (provider.bio) {
+        const bio = document.createElement('p');
+        bio.className = 'or';
+        bio.textContent = provider.bio;
+        card.appendChild(bio);
+      }
+
+      if (provider.certifications) {
+        const certs = document.createElement('p');
+        certs.className = 'or';
+        certs.textContent = provider.certifications;
+        card.appendChild(certs);
+      }
+
       const stats = ratingStatsFor(providerEmail);
       const statsRow = document.createElement('div');
       statsRow.className = 'stars-display';
       statsRow.innerHTML = starsDisplayMarkup(stats.avg, stats.count);
       card.appendChild(statsRow);
+
+      if (provider.clientsCount) {
+        const traineeLine = document.createElement('p');
+        traineeLine.className = 'ex-meta';
+        traineeLine.textContent = fill('trainee_count_label', { n: provider.clientsCount });
+        card.appendChild(traineeLine);
+      }
+
+      const chatBtn = document.createElement('button');
+      chatBtn.type = 'button';
+      chatBtn.className = 'secondary';
+      chatBtn.textContent = t('chat_with_provider_btn');
+      chatBtn.addEventListener('click', function () {
+        openChatThread(clientEmail, teamViewScreen);
+      });
+      card.appendChild(chatBtn);
+
+      const writtenReviews = allProviderReviews.filter(function (review) {
+        return review.providerEmail === providerEmail && (review.comment || '').trim();
+      }).sort(function (a, b) {
+        return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
+      }).slice(0, 6);
+
+      if (writtenReviews.length) {
+        const reviewsTitle = document.createElement('div');
+        reviewsTitle.className = 'field-label';
+        reviewsTitle.textContent = t('written_reviews_title');
+        card.appendChild(reviewsTitle);
+
+        const reviewsList = document.createElement('ul');
+        reviewsList.className = 'written-reviews-list';
+        writtenReviews.forEach(function (review) {
+          const reviewItem = document.createElement('li');
+
+          const reviewHead = document.createElement('div');
+          reviewHead.className = 'written-review-head';
+
+          const reviewerName = document.createElement('span');
+          reviewerName.className = 'written-review-name';
+          reviewerName.textContent = review.clientName || t('client_label');
+          reviewHead.appendChild(reviewerName);
+
+          const reviewStars = document.createElement('span');
+          reviewStars.className = 'stars-display small';
+          reviewStars.innerHTML = starsDisplayMarkup(Number(review.rating) || 0, 0);
+          reviewHead.appendChild(reviewStars);
+
+          reviewItem.appendChild(reviewHead);
+
+          const reviewComment = document.createElement('p');
+          reviewComment.className = 'or';
+          reviewComment.textContent = review.comment;
+          reviewItem.appendChild(reviewComment);
+
+          reviewsList.appendChild(reviewItem);
+        });
+        card.appendChild(reviewsList);
+      }
 
       const myReview = allProviderReviews.find(function (review) {
         return review.providerEmail === providerEmail && review.clientEmail === clientEmail;
@@ -11113,6 +12830,7 @@ const storeOrderMessage = document.getElementById('store-order-message');
 const storeOrdersList = document.getElementById('store-orders-list');
 
 function fillStoreCategoryFilter() {
+  const keep = storeCategoryFilter.value;
   storeCategoryFilter.innerHTML = '';
   const anyOption = document.createElement('option');
   anyOption.value = '';
@@ -11124,6 +12842,7 @@ function fillStoreCategoryFilter() {
     option.textContent = storeCategoryName(key);
     storeCategoryFilter.appendChild(option);
   });
+  storeCategoryFilter.value = keep;
 }
 
 async function loadStoreProducts() {
@@ -11268,6 +12987,22 @@ function renderCart() {
   storeCartTotal.textContent = t('store_total_label') + ': ' + cartTotal() + ' ' + t('currency_egp');
 }
 
+function fillStorePayMethodSelect() {
+  const keep = storePayMethod.value;
+  storePayMethod.innerHTML = '';
+  [
+    ['vodafone_cash', 'payment_method_vodafone'],
+    ['instapay', 'payment_method_instapay'],
+    ['bank_transfer', 'payment_method_bank']
+  ].forEach(function (pair) {
+    const option = document.createElement('option');
+    option.value = pair[0];
+    option.textContent = t(pair[1]);
+    storePayMethod.appendChild(option);
+  });
+  storePayMethod.value = keep;
+}
+
 document.getElementById('store-checkout-btn').addEventListener('click', async function () {
   if (!storeCart.length) return;
   const willShow = storeCheckoutForm.classList.contains('hidden');
@@ -11276,18 +13011,6 @@ document.getElementById('store-checkout-btn').addEventListener('click', async fu
     await fetchPaymentSettings();
     const lines = paymentInstructionLines();
     storePaymentInstructions.textContent = lines.length ? lines.join(' · ') : t('no_payment_settings');
-    if (!storePayMethod.options.length) {
-      [
-        ['vodafone_cash', 'payment_method_vodafone'],
-        ['instapay', 'payment_method_instapay'],
-        ['bank_transfer', 'payment_method_bank']
-      ].forEach(function (pair) {
-        const option = document.createElement('option');
-        option.value = pair[0];
-        option.textContent = t(pair[1]);
-        storePayMethod.appendChild(option);
-      });
-    }
   }
 });
 
@@ -11895,6 +13618,118 @@ async function loadLeadsAdmin() {
     });
 
     adminLeadsList.appendChild(card);
+  });
+}
+
+/* ---------- إدارة طلبات انضمام المدربين والمتخصصين ---------- */
+
+const adminProviderAppsList = document.getElementById('admin-provider-apps-list');
+
+function providerAppStatusLabel(status) {
+  if (status === 'approved') return t('provider_app_status_approved');
+  if (status === 'rejected') return t('provider_app_status_rejected');
+  return t('provider_app_status_pending');
+}
+
+async function loadProviderApplicationsAdmin() {
+  adminProviderAppsList.innerHTML = '';
+  let apps = [];
+  try {
+    const snapshot = await getDocs(collection(db, 'providerApplications'));
+    apps = snapshot.docs.map(function (item) { return Object.assign({ id: item.id }, item.data()); });
+    apps.sort(function (a, b) { return (b.createdAt || '').localeCompare(a.createdAt || ''); });
+  } catch (error) {
+    apps = [];
+  }
+
+  if (!apps.length) {
+    const note = document.createElement('p');
+    note.className = 'message';
+    note.textContent = t('provider_apps_empty');
+    adminProviderAppsList.appendChild(note);
+    return;
+  }
+
+  apps.forEach(function (app) {
+    const card = document.createElement('div');
+    card.className = 'review-card';
+
+    const name = document.createElement('div');
+    name.className = 'ex-name';
+    name.textContent = app.name + ' — ' + specialtyListName(providerSpecialties(app));
+    card.appendChild(name);
+
+    const emailLine = document.createElement('div');
+    emailLine.className = 'ex-meta';
+    emailLine.textContent = app.email + (app.contact ? (' · ' + app.contact) : '');
+    card.appendChild(emailLine);
+
+    if (app.message) {
+      const message = document.createElement('div');
+      message.className = 'ex-meta';
+      message.textContent = app.message;
+      card.appendChild(message);
+    }
+
+    const statusLine = document.createElement('div');
+    statusLine.className = 'ex-meta';
+    statusLine.textContent = providerAppStatusLabel(app.status);
+    card.appendChild(statusLine);
+
+    const rowMessage = document.createElement('p');
+    rowMessage.className = 'message';
+
+    if (app.status !== 'approved' && app.status !== 'rejected') {
+      const actionsRow = document.createElement('div');
+      actionsRow.className = 'row';
+
+      const approveBtn = document.createElement('button');
+      approveBtn.type = 'button';
+      approveBtn.textContent = t('provider_app_approve_btn');
+      actionsRow.appendChild(approveBtn);
+
+      const rejectBtn = document.createElement('button');
+      rejectBtn.type = 'button';
+      rejectBtn.className = 'secondary';
+      rejectBtn.textContent = t('provider_app_reject_btn');
+      actionsRow.appendChild(rejectBtn);
+
+      approveBtn.addEventListener('click', async function () {
+        rowMessage.textContent = t('saving');
+        try {
+          // نفس منطق إضافة متخصص يدويًا: isMedical بيتحسب من تعريف
+          // التخصصات في providers.js عشان أي تخصص جديد يشتغل صح تلقائي
+          const appSpecs = providerSpecialties(app);
+          await setDoc(doc(db, 'providers', app.email), {
+            name: app.name,
+            email: app.email,
+            specialty: appSpecs[0] || app.specialty,
+            specialties: appSpecs.length ? appSpecs : (app.specialty ? [app.specialty] : []),
+            isMedical: specialtiesHaveFlag(appSpecs, 'medical')
+          });
+          await updateDoc(doc(db, 'providerApplications', app.id), { status: 'approved' });
+          setStatusMessage(rowMessage, t('provider_app_approved_msg'), 'success');
+          await loadProviderApplicationsAdmin();
+        } catch (error) {
+          rowMessage.textContent = t('problem') + error.message;
+        }
+      });
+
+      rejectBtn.addEventListener('click', async function () {
+        rowMessage.textContent = t('saving');
+        try {
+          await updateDoc(doc(db, 'providerApplications', app.id), { status: 'rejected' });
+          await loadProviderApplicationsAdmin();
+        } catch (error) {
+          rowMessage.textContent = t('problem') + error.message;
+        }
+      });
+
+      card.appendChild(actionsRow);
+    }
+
+    card.appendChild(rowMessage);
+    adminProviderAppsList.appendChild(card);
   });
 }
 

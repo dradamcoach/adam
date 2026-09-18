@@ -138,6 +138,47 @@ export const FOOD_LIBRARY = [
   { id: 'whey',             cat: 'supplement', ar: 'بروتين واي',     en: 'Whey protein',    c: 400, p: 80, cb: 8,  f: 6 },
   { id: 'casein',           cat: 'supplement', ar: 'كازين',          en: 'Casein protein',  c: 370, p: 78, cb: 7,  f: 3 },
   { id: 'mass_gainer',      cat: 'supplement', ar: 'ماس جينر',       en: 'Mass gainer',     c: 380, p: 20, cb: 65, f: 4 },
-  { id: 'creatine',         cat: 'supplement', ar: 'كرياتين',        en: 'Creatine',        c: 0,   p: 0,  cb: 0,  f: 0 }
+  { id: 'creatine',         cat: 'supplement', ar: 'كرياتين',        en: 'Creatine',        c: 0,   p: 0,  cb: 0,  f: 0 },
+  { id: 'bcaa',             cat: 'supplement', ar: 'بي سي إيه إيه',  en: 'BCAA',            c: 0,   p: 0,  cb: 0,  f: 0 },
+  { id: 'fish_oil',         cat: 'supplement', ar: 'زيت سمك',        en: 'Fish oil',        c: 900, p: 0,  cb: 0,  f: 100 },
+
+  /* ---------------- إضافات: بروتين ---------------- */
+  { id: 'lamb_chop',        cat: 'protein', ar: 'ريش ضاني مشوي',      en: 'Lamb chop, grilled',   c: 250, p: 25,  cb: 0,  f: 16 },
+  { id: 'cod',              cat: 'protein', ar: 'سمك قد (كود) مسلوق', en: 'Cod, cooked',          c: 105, p: 23,  cb: 0,  f: 0.9 },
+  { id: 'sardines_canned',  cat: 'protein', ar: 'سردين معلب',         en: 'Sardines, canned',     c: 208, p: 25,  cb: 0,  f: 11.5 },
+
+  /* ---------------- إضافات: نشويات ---------------- */
+  { id: 'quinoa',           cat: 'carb', ar: 'كينوا مسلوقة',       en: 'Quinoa, cooked',    c: 120, p: 4.4, cb: 21, f: 1.9 },
+  { id: 'couscous',         cat: 'carb', ar: 'كسكسي مسلوق',        en: 'Couscous, cooked',  c: 112, p: 3.8, cb: 23, f: 0.2 },
+  { id: 'barley',           cat: 'carb', ar: 'شعير مسلوق',         en: 'Barley, cooked',    c: 123, p: 2.3, cb: 28, f: 0.4 },
+
+  /* ---------------- إضافات: ألبان ---------------- */
+  { id: 'cheese_feta',      cat: 'dairy', ar: 'جبنة فيتا',        en: 'Feta cheese',        c: 264, p: 14, cb: 4,   f: 21 },
+  { id: 'cheese_mozzarella',cat: 'dairy', ar: 'جبنة موزاريلا',    en: 'Mozzarella cheese',  c: 254, p: 24, cb: 2.8, f: 16 },
+  { id: 'laban_rayeb',      cat: 'dairy', ar: 'لبن رايب',         en: 'Fermented milk',     c: 62,  p: 3.3,cb: 4.8, f: 3.3 },
+
+  /* ---------------- إضافات: فاكهة ---------------- */
+  { id: 'kiwi',             cat: 'fruit', ar: 'كيوي',            en: 'Kiwi',            c: 61, p: 1.1, cb: 15, f: 0.5 },
+  { id: 'pineapple',        cat: 'fruit', ar: 'أناناس',          en: 'Pineapple',       c: 50, p: 0.5, cb: 13, f: 0.1 },
+  { id: 'pomegranate',      cat: 'fruit', ar: 'رمان',             en: 'Pomegranate',     c: 83, p: 1.7, cb: 19, f: 1.2 },
+
+  /* ---------------- إضافات: خضار ---------------- */
+  { id: 'cauliflower',      cat: 'veg', ar: 'قرنبيط',           en: 'Cauliflower',     c: 25, p: 1.9, cb: 5,  f: 0.3 },
+  { id: 'mushroom',         cat: 'veg', ar: 'مشروم',            en: 'Mushroom',        c: 22, p: 3.1, cb: 3.3,f: 0.3 },
+  { id: 'beetroot',         cat: 'veg', ar: 'بنجر',             en: 'Beetroot, cooked',c: 44, p: 1.7, cb: 10, f: 0.2 },
+
+  /* ---------------- إضافات: دهون ومكسرات ---------------- */
+  { id: 'pumpkin_seeds',    cat: 'fat', ar: 'بذر قرع',          en: 'Pumpkin seeds',   c: 559, p: 30, cb: 11, f: 49 },
+  { id: 'chia_seeds',       cat: 'fat', ar: 'بذر شيا',          en: 'Chia seeds',      c: 486, p: 17, cb: 42, f: 31 },
+  { id: 'flaxseed',         cat: 'fat', ar: 'بذر كتان',         en: 'Flaxseed',        c: 534, p: 18, cb: 29, f: 42 },
+
+  /* ---------------- إضافات: أكلات مصرية ---------------- */
+  { id: 'fattah',           cat: 'dish', ar: 'فتة',              en: 'Fattah',           c: 180, p: 9,   cb: 20, f: 7 },
+  { id: 'sayadeya',         cat: 'dish', ar: 'صيادية سمك',       en: 'Sayadeya (fish & rice)', c: 150, p: 10, cb: 18, f: 4.5 },
+  { id: 'lentil_soup',      cat: 'dish', ar: 'شوربة عدس',        en: 'Lentil soup',      c: 70,  p: 4.5, cb: 11, f: 1 },
+
+  /* ---------------- إضافات: مشروبات ---------------- */
+  { id: 'karkade',          cat: 'drink', ar: 'كركديه بدون سكر', en: 'Hibiscus tea, unsweetened', c: 2,  p: 0,   cb: 0.4, f: 0 },
+  { id: 'coconut_water',    cat: 'drink', ar: 'مياه جوز الهند',   en: 'Coconut water',              c: 19, p: 0.7, cb: 3.7, f: 0.2 }
 
 ];

@@ -147,6 +147,21 @@
       </div>
     </div>
 
+    <div class="welcome-provider-apply-section">
+      <h3 class="welcome-section-title" data-t="provider_apply_title">مدرب أو متخصص وعايز تنضم لينا؟</h3>
+      <p class="welcome-lead-sub" data-t="provider_apply_sub">ابعتلنا بياناتك وهنراجعها ونرجعلك بالرد</p>
+      <div id="welcome-provider-apply-form">
+        <input id="pa-name" data-t-ph="provider_apply_name_ph">
+        <input id="pa-email" type="email" data-t-ph="provider_apply_email_ph">
+        <input id="pa-contact" data-t-ph="provider_apply_contact_ph">
+        <label class="field-label" data-t="your_specialties_label">تخصصاتك (تقدر تختار أكتر من واحد)</label>
+        <div class="specialty-multi" id="pa-specialty-multi"></div>
+        <textarea id="pa-message" rows="2" data-t-ph="provider_apply_message_ph"></textarea>
+        <button type="button" id="provider-apply-submit-btn" data-t="lead_submit_btn">ابعت</button>
+        <p class="message" id="provider-apply-status"></p>
+      </div>
+    </div>
+
     <div class="welcome-cta">
       <h3 class="welcome-section-title" data-t="welcome_cta_title">جاهز تبدأ؟</h3>
       <p class="welcome-cta-note" data-t="welcome_cta_note">30 يوم تجربة مجانية كاملة — من غير أي بطاقة ائتمان</p>
@@ -247,6 +262,7 @@
       <input id="new-plan-name-ar" data-t-ph="plan_name_ph">
       <input id="new-plan-name-en" data-t-ph="plan_name_en_ph">
       <input id="new-plan-price" type="number" inputmode="decimal" data-t-ph="plan_price_ph">
+      <select id="new-plan-duration"></select>
       <textarea id="new-plan-features-ar" rows="3" data-t-ph="plan_features_ph"></textarea>
       <textarea id="new-plan-features-en" rows="3" data-t-ph="plan_features_en_ph"></textarea>
       <input id="new-plan-offer-label" data-t-ph="plan_offer_label_ph">
@@ -263,6 +279,7 @@
       <input id="new-provider-plan-name-ar" data-t-ph="plan_name_ph">
       <input id="new-provider-plan-name-en" data-t-ph="plan_name_en_ph">
       <input id="new-provider-plan-price" type="number" inputmode="decimal" data-t-ph="plan_price_ph">
+      <select id="new-provider-plan-duration"></select>
       <textarea id="new-provider-plan-features-ar" rows="3" data-t-ph="plan_features_ph"></textarea>
       <textarea id="new-provider-plan-features-en" rows="3" data-t-ph="plan_features_en_ph"></textarea>
       <button type="button" id="add-provider-plan-btn" class="secondary" data-t="admin_add_provider_plan_btn">إضافة خطة جديدة</button>
@@ -338,6 +355,10 @@
     <h3 class="welcome-section-title" data-t="admin_leads_title">رسائل تواصل من الصفحة الرئيسية</h3>
     <p class="hint-text" data-t="admin_leads_hint">زوار عاوزين يتكلموا مع الفريق قبل ما يسجّلوا — رد عليهم بتليفون أو واتساب</p>
     <div id="admin-leads-list"></div>
+
+    <h3 class="welcome-section-title" data-t="admin_provider_apps_title">طلبات انضمام مدربين ومتخصصين</h3>
+    <p class="hint-text" data-t="admin_provider_apps_hint">راجع بيانات كل طلب، ولو موافق دوس "قبول" وهيتضاف كمتخصص تلقائي بنفس الإيميل والتخصص اللي كتبهم</p>
+    <div id="admin-provider-apps-list"></div>
 
     <h3 class="welcome-section-title" data-t="admin_access_title">إدارة الوصول</h3>
     <p class="or" data-t="admin_access_hint">دوّر بإيميل أي عميل أو متخصص عشان تمدّله أو توقف وصوله</p>
@@ -611,6 +632,83 @@
     <div id="team-view-list"></div>
   </div>
 
+  <div class="card hidden" id="client-profile-screen">
+    <button id="client-profile-back-btn" class="link" data-t="back_to_client">‹ رجوع</button>
+    <h2 data-t="client_profile_title">بروفايلك</h2>
+    <p class="or" data-t="client_profile_hint">عدّل بياناتك في أي وقت — فريقك هيشوف آخر تحديث تلقائيًا</p>
+
+    <label class="file-pick" id="cp-photo-label">
+      <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2"></rect><circle cx="8.5" cy="10" r="1.7"></circle><path d="M4 17l5-5 3.5 3.5L16 12l4 5"></path></svg>
+      <span data-t="choose_photo">اختر صورتك (اختياري)</span>
+      <input type="file" id="cp-photo" accept="image/*">
+    </label>
+    <div class="preview-box hidden" id="cp-photo-box">
+      <img id="cp-photo-preview" alt="">
+      <button type="button" id="cp-photo-remove" class="delete"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    </div>
+
+    <label class="field-label" data-t="client_name_field_label">اسمك</label>
+    <input id="cp-name" data-t-ph="provider_name_ph">
+
+    <label class="field-label" data-t="ob_weight_label">وزنك (كجم)</label>
+    <input id="cp-weight" type="number" inputmode="decimal" placeholder="70">
+
+    <label class="field-label" data-t="ob_height_label">طولك (سم)</label>
+    <input id="cp-height" type="number" inputmode="decimal" placeholder="175">
+
+    <label class="field-label" data-t="pick_sport">رياضتك</label>
+    <select id="cp-sport"></select>
+
+    <label class="field-label" data-t="pick_activity">مستوى نشاطك</label>
+    <select id="cp-activity"></select>
+
+    <label class="field-label" data-t="pick_goal">هدفك</label>
+    <select id="cp-goal"></select>
+
+    <label class="field-label field-label-icon">
+      <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="16" y1="2" x2="16" y2="6"></line></svg>
+      <span data-t="ob_dob_label">تاريخ ميلادك</span>
+    </label>
+    <div class="row three">
+      <select id="cp-dob-day"></select>
+      <select id="cp-dob-month"></select>
+      <select id="cp-dob-year"></select>
+    </div>
+
+    <label class="field-label" data-t="ob_training_days_label">تحب تتمرن كام يوم في الأسبوع؟</label>
+    <select id="cp-training-days"></select>
+
+    <label class="field-label" data-t="ob_sleep_label">مواعيد نومك</label>
+    <div class="row">
+      <div class="field-block">
+        <label class="field-label" data-t="ob_sleep_time_label">بتنام الساعة كام</label>
+        <input id="cp-sleep-time" type="time">
+      </div>
+      <div class="field-block">
+        <label class="field-label" data-t="ob_wake_time_label">بتصحى الساعة كام</label>
+        <input id="cp-wake-time" type="time">
+      </div>
+    </div>
+
+    <label class="field-label" data-t="ob_meals_per_day_label">حابب تاكل كام وجبة في اليوم؟</label>
+    <select id="cp-meals-per-day"></select>
+
+    <label class="field-label" data-t="ob_meal_times_label">مواعيد أكلك</label>
+    <div class="row">
+      <div class="field-block">
+        <label class="field-label" data-t="ob_first_meal_label">أول وجبة</label>
+        <input id="cp-first-meal-time" type="time">
+      </div>
+      <div class="field-block">
+        <label class="field-label" data-t="ob_last_meal_label">آخر وجبة</label>
+        <input id="cp-last-meal-time" type="time">
+      </div>
+    </div>
+
+    <button type="button" id="cp-save-btn" data-t="save_profile_btn">احفظ التعديلات</button>
+    <p class="message" id="cp-message"></p>
+  </div>
+
   <div class="card hidden" id="med-library-screen">
     <button id="med-library-back-btn" class="link" data-t="back_to_client">‹ رجوع</button>
     <h2 data-t="med_library_title">المكتبة الطبية</h2>
@@ -665,6 +763,7 @@
     <button type="button" class="secondary icon-btn hidden" id="open-bookings-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"></rect><line x1="3.5" y1="9.5" x2="20.5" y2="9.5"></line><line x1="8" y1="3" x2="8" y2="6.5"></line><line x1="16" y1="3" x2="16" y2="6.5"></line></svg><span data-t="open_bookings_btn">حجوزاتي</span></button>
     <button type="button" class="secondary icon-btn hidden" id="open-admin-panel-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19 12c0 .4 0 .8-.1 1.2l2 1.6-2 3.4-2.3-.9c-.6.5-1.3.9-2 1.2L14 21h-4l-.6-2.5c-.7-.3-1.4-.7-2-1.2l-2.3.9-2-3.4 2-1.6C5 12.8 5 12.4 5 12s0-.8.1-1.2l-2-1.6 2-3.4 2.3.9c.6-.5 1.3-.9 2-1.2L10 3h4l.6 2.5c.7.3 1.4.7 2 1.2l2.3-.9 2 3.4-2 1.6c.1.4.1.8.1 1.2z"></path></svg><span data-t="open_admin_btn">لوحة التحكم</span></button>
     <button type="button" class="secondary icon-btn" id="open-chat-inbox-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10.5H9l-4 3.5v-3.5H4z"></path><line x1="8" y1="9.5" x2="16" y2="9.5"></line><line x1="8" y1="12.5" x2="13" y2="12.5"></line></svg><span data-t="open_chat_inbox_btn">المحادثات</span></button>
+    <input id="clients-search" type="search" data-t-ph="clients_search_ph">
     <ul id="clients-list"></ul>
 
     <div class="hidden" id="clients-admin-box">
@@ -693,8 +792,8 @@
       <h3 data-t="add_provider">إضافة متخصص</h3>
       <input id="pv-name" data-t-ph="provider_name">
       <input id="pv-email" type="email" data-t-ph="provider_email">
-      <select id="pv-specialty"></select>
-      <p class="hint-text" data-t="pv_specialty_coach_hint">اختيار "كوتش" بيدّي صلاحيات مدرب كاملة (يشوف ويدير كل العملاء)، وأي تخصص تاني بيشوف بس العملاء اللي متضافين لفريقه</p>
+      <div class="specialty-multi" id="pv-specialty-multi"></div>
+      <p class="hint-text" data-t="pv_specialty_coach_hint">اختيار "كوتش" بيدّي صلاحيات مدرب كاملة (يشوف ويدير كل العملاء)، وأي تخصص تاني بيشوف بس العملاء اللي متضافين لفريقه — تقدر تختار أكتر من تخصص لنفس المتخصص</p>
       <button id="pv-add-btn" class="secondary" data-t="save_provider">+ حفظ المتخصص</button>
     </div>
 
@@ -706,6 +805,14 @@
     <h2 id="provider-home-title"></h2>
     <p class="progress" id="provider-home-specialty"></p>
     <div class="stars-display" id="ph-rating-summary"></div>
+
+    <label class="field-label" data-t="provider_name_label">اسمك</label>
+    <input id="ph-name" data-t-ph="provider_name_ph">
+
+    <div id="ph-specialty-box">
+      <label class="field-label" data-t="your_specialties_label">تخصصاتك (تقدر تختار أكتر من واحد)</label>
+      <div class="specialty-multi" id="ph-specialty-multi"></div>
+    </div>
 
     <button type="button" class="secondary icon-btn hidden" id="ph-open-medlib-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"></path></svg><span data-t="open_medlib_btn">المكتبة الطبية</span></button>
 
@@ -769,6 +876,13 @@
     <h3 data-t="week_board">ترتيب الأسبوع</h3>
     <ul id="class-week"></ul>
 
+    <div class="add-box" id="class-exercises-box">
+      <h3 data-t="class_exercises_title">تمارين الكلاس</h3>
+      <p class="or" data-t="class_exercises_hint">أي حد يقدر يشوفها ويعملها حتى لو مش حاضر الكلاس</p>
+      <button type="button" id="class-add-exercise-btn" class="secondary" data-t="add_from_library_btn">+ أضف من المكتبة</button>
+      <ul id="class-exercises-list"></ul>
+    </div>
+
     <div class="add-box" id="class-members-box">
       <h3 data-t="class_members">أعضاء الكلاس</h3>
       <select id="cl-member-pick"></select>
@@ -789,6 +903,7 @@
       <button type="button" class="tab active" id="tab-training"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg><span data-t="tab_training">تمرين</span></button>
       <button type="button" class="tab" id="tab-rehab"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line></svg><span data-t="tab_rehab">تأهيل</span></button>
       <button type="button" class="tab" id="tab-nutrition"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path></svg><span data-t="tab_nutrition">تغذية</span></button>
+      <button type="button" class="tab" id="tab-consult"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4h9L20 9.5V18.5c0 .8-.7 1.5-1.5 1.5h-13C4.7 20 4 19.3 4 18.5z"></path><path d="M13 4v4.5a1 1 0 0 0 1 1H19"></path><line x1="8" y1="12.5" x2="15" y2="12.5"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg><span data-t="tab_consult">استشارة</span><span class="tab-badge hidden" id="tab-consult-badge"></span></button>
       <button type="button" class="tab" id="tab-injuries"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg><span data-t="tab_injuries">إصابات</span><span class="tab-badge hidden" id="tab-injuries-badge"></span></button>
     </div>
 
@@ -852,6 +967,12 @@
         <select id="template-pick"></select>
         <button id="apply-template-btn" class="secondary" data-t="apply_template">تحميل القالب</button>
         <p class="template-note"><span class="inline-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 21.5 20h-19L12 3.5z"></path><line x1="12" y1="9.5" x2="12" y2="13.5"></line><circle cx="12" cy="16.8" r="0.6" fill="currentColor" stroke="none"></circle></svg></span><span data-t="template_note">القوالب مسودة مبدئية — راجعها وعدّلها قبل ما تسندها لعميل.</span></p>
+        <div class="template-photo-row">
+          <div class="preview-box hidden" id="template-photo-box">
+            <img id="template-photo-preview" alt="">
+          </div>
+          <button type="button" class="link" id="template-photo-btn" data-t="add_template_photo">+ صورة للبرنامج</button>
+        </div>
       </div>
 
       <div class="row">
@@ -933,6 +1054,18 @@
       <ul class="injury-report-list" id="coach-injuries-list"></ul>
     </div>
 
+    <!-- ============ ملاحظات استشارية (تخصصات الاستشارة) ============ -->
+    <div id="consult-panel" class="hidden">
+      <h3 data-t="consult_requests_title">طلبات استشارة من العميل</h3>
+      <ul class="injury-report-list" id="consult-requests-list"></ul>
+
+      <p class="hint-text" data-t="consult_hint">دوّن هنا ملاحظاتك وتوصياتك لهذا العميل — هتفضل محفوظة وتقدر تعدّلها في أي وقت.</p>
+      <label class="field-label" data-t="consult_notes_label">ملاحظات وتوصيات</label>
+      <textarea id="consult-notes-text" rows="10" data-t-ph="consult_notes_ph"></textarea>
+      <button type="button" id="consult-save-btn" data-t="consult_save_btn">حفظ الملاحظات</button>
+      <p class="message" id="consult-message"></p>
+    </div>
+
     <p class="message" id="coach-message"></p>
   </div>
 
@@ -972,6 +1105,7 @@
     </div>
     <p class="message" id="lib-message"></p>
     <div class="grid" id="lib-grid"></div>
+    <input type="file" id="lib-image-input" accept="image/*" class="hidden">
   </div>
 
   <div class="card hidden" id="mylib-screen">
@@ -991,6 +1125,7 @@
       <input id="my-notes" data-t-ph="ex_notes">
 
       <p class="or" data-t="anatomy_section_title">تفاصيل تشريحية (اختياري)</p>
+      <textarea id="my-howto" rows="2" data-t-ph="anatomy_howto"></textarea>
       <input id="my-goal" data-t-ph="anatomy_goal">
       <div class="row">
         <input id="my-primary" data-t-ph="anatomy_primary">
@@ -1019,22 +1154,26 @@
 
   <div class="card hidden" id="client-screen">
     <p class="trial-banner hidden" id="trial-banner"></p>
+    <button type="button" class="link" id="open-client-profile-btn" data-t="open_client_profile_btn">بروفايلك ›</button>
     <div class="tabs" id="client-tabs">
       <button type="button" class="tab active" id="ctab-training"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg><span data-t="tab_training">تمرين</span></button>
       <button type="button" class="tab" id="ctab-rehab"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line></svg><span data-t="tab_rehab">تأهيل</span></button>
       <button type="button" class="tab" id="ctab-nutrition"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path></svg><span data-t="tab_nutrition">تغذية</span></button>
+      <button type="button" class="tab" id="ctab-consult"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4h9L20 9.5V18.5c0 .8-.7 1.5-1.5 1.5h-13C4.7 20 4 19.3 4 18.5z"></path><path d="M13 4v4.5a1 1 0 0 0 1 1H19"></path><line x1="8" y1="12.5" x2="15" y2="12.5"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg><span data-t="tab_consult">استشارة</span><span class="tab-badge hidden" id="ctab-consult-badge"></span></button>
       <button type="button" class="tab" id="ctab-activity"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="4.5"></circle><path d="M9.5 11 7 4h3l2 6"></path><path d="M14.5 11 17 4h-3l-2 6"></path></svg><span data-t="tab_activity">نشاطي</span></button>
       <button type="button" class="tab" id="ctab-classes"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path><circle cx="17" cy="9" r="2.4"></circle><path d="M15.5 14c2.5.3 4.5 2.3 4.5 6"></path></svg><span data-t="tab_classes">الكلاس</span></button>
       <button type="button" class="tab" id="ctab-store"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l1.5-4h13L20 8"></path><path d="M4 8h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"></path><path d="M9 12a3 3 0 0 0 6 0"></path></svg><span data-t="tab_store">المتجر</span></button>
     </div>
 
-    <button type="button" id="report-injury-btn" class="fab-icon-btn" data-t-title="report_injury_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg></button>
-    <button type="button" id="view-team-btn" class="fab-icon-btn fab-icon-btn-secondary" data-t-title="view_team_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path><circle cx="17" cy="9" r="2.4"></circle><path d="M15.5 14c2.5.3 4.5 2.3 4.5 6"></path></svg></button>
-    <button type="button" id="open-medlib-btn" class="fab-icon-btn fab-icon-btn-tertiary" data-t-title="open_medlib_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"></path></svg></button>
-    <button type="button" id="open-subscription-btn" class="fab-icon-btn fab-icon-btn-quaternary" data-t-title="open_subscription_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"></rect><line x1="3" y1="9.5" x2="21" y2="9.5"></line><line x1="6.5" y1="14" x2="10.5" y2="14"></line></svg></button>
-    <button type="button" id="open-chat-btn" class="fab-icon-btn fab-icon-btn-quinary" data-t-title="open_chat_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10.5H9l-4 3.5v-3.5H4z"></path><line x1="8" y1="9.5" x2="16" y2="9.5"></line><line x1="8" y1="12.5" x2="13" y2="12.5"></line></svg></button>
-    <button type="button" id="open-calc-btn" class="fab-icon-btn fab-icon-btn-senary" data-t-title="open_calc_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><line x1="8" y1="7.5" x2="16" y2="7.5"></line><line x1="8.5" y1="12" x2="8.5" y2="12.01"></line><line x1="12" y1="12" x2="12" y2="12.01"></line><line x1="15.5" y1="12" x2="15.5" y2="12.01"></line><line x1="8.5" y1="16" x2="8.5" y2="16.01"></line><line x1="12" y1="16" x2="12" y2="16.01"></line><line x1="15.5" y1="16" x2="15.5" y2="16.01"></line></svg></button>
-    <button type="button" id="open-progress-btn" class="fab-icon-btn fab-icon-btn-septenary" data-t-title="open_progress_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 6"></polyline><polyline points="15 6 21 6 21 12"></polyline></svg></button>
+    <div class="fab-icon-row" id="client-fab-row">
+      <button type="button" id="report-injury-btn" class="fab-icon-btn" data-t-title="report_injury_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg></button>
+      <button type="button" id="view-team-btn" class="fab-icon-btn fab-icon-btn-secondary" data-t-title="view_team_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path><circle cx="17" cy="9" r="2.4"></circle><path d="M15.5 14c2.5.3 4.5 2.3 4.5 6"></path></svg></button>
+      <button type="button" id="open-medlib-btn" class="fab-icon-btn fab-icon-btn-tertiary" data-t-title="open_medlib_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"></path></svg></button>
+      <button type="button" id="open-subscription-btn" class="fab-icon-btn fab-icon-btn-quaternary" data-t-title="open_subscription_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"></rect><line x1="3" y1="9.5" x2="21" y2="9.5"></line><line x1="6.5" y1="14" x2="10.5" y2="14"></line></svg></button>
+      <button type="button" id="open-chat-btn" class="fab-icon-btn fab-icon-btn-quinary" data-t-title="open_chat_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10.5H9l-4 3.5v-3.5H4z"></path><line x1="8" y1="9.5" x2="16" y2="9.5"></line><line x1="8" y1="12.5" x2="13" y2="12.5"></line></svg></button>
+      <button type="button" id="open-calc-btn" class="fab-icon-btn fab-icon-btn-senary" data-t-title="open_calc_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><line x1="8" y1="7.5" x2="16" y2="7.5"></line><line x1="8.5" y1="12" x2="8.5" y2="12.01"></line><line x1="12" y1="12" x2="12" y2="12.01"></line><line x1="15.5" y1="12" x2="15.5" y2="12.01"></line><line x1="8.5" y1="16" x2="8.5" y2="16.01"></line><line x1="12" y1="16" x2="12" y2="16.01"></line><line x1="15.5" y1="16" x2="15.5" y2="16.01"></line></svg></button>
+      <button type="button" id="open-progress-btn" class="fab-icon-btn fab-icon-btn-septenary" data-t-title="open_progress_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 6"></polyline><polyline points="15 6 21 6 21 12"></polyline></svg></button>
+    </div>
 
     <div id="client-training">
       <div class="dial-wrap">
@@ -1096,6 +1235,22 @@
       <h2 id="client-rehab-title"></h2>
       <div class="about-box hidden" id="client-rehab-about"></div>
       <div id="client-rehab-phases"></div>
+    </div>
+
+    <!-- ============ استشارة: العميل يطلب ويقرا رد فريقه ============ -->
+    <div id="client-consult" class="hidden">
+      <h3 data-t="client_consult_ask_title">اطلب استشارة</h3>
+      <p class="or" data-t="client_consult_ask_hint">اختار المتخصص واكتب سؤالك أو شكوتك — هيوصله ويرد عليك هنا</p>
+      <select id="client-consult-provider"></select>
+      <textarea id="client-consult-text" rows="4" data-t-ph="client_consult_text_ph"></textarea>
+      <button type="button" id="client-consult-send-btn" data-t="client_consult_send_btn">إرسال الطلب</button>
+      <p class="message" id="client-consult-message"></p>
+
+      <h3 data-t="client_consult_replies_title">ردود فريقك</h3>
+      <div id="client-consult-replies"></div>
+
+      <h3 data-t="client_consult_requests_title">طلباتك السابقة</h3>
+      <ul class="injury-report-list" id="client-consult-requests"></ul>
     </div>
 
     <div id="client-store" class="hidden">

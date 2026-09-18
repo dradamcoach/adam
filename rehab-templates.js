@@ -741,6 +741,142 @@ export const REHAB_TEMPLATES = [
           { name: { ar: 'تدريبات تسارع', en: 'Acceleration drills' }, sets: 4, reps: '20 متر' }
         ] }
     ]
+  },
+
+  /* ==================== الركبة (إضافي) ==================== */
+  {
+    id: 'knee_meniscus_nonop',
+    bodyPart: 'knee',
+    name: { ar: 'قطع غضروف هلالي (تأهيل تحفظي)', en: 'Meniscus tear — non-operative' },
+    about: {
+      ar: 'مناسب لقطع غضروف هلالي بسيط بدون قفل مفصلي واضح، وبيتقرر مع الطبيب المعالج. التركيز على تقليل التورم أول حاجة، وبعدين بناء قوة الفخذ الأمامي والخلفي تدريجيًا مع تجنب السكوات العميق والاستدارة الحادة في المراحل الأولى.',
+      en: 'Suitable for a minor meniscus tear without clear locking, decided together with the treating physician. Focus on reducing swelling first, then gradually building quadriceps and hamstring strength while avoiding deep squats and sharp twisting in the early phases.'
+    },
+    phases: [
+      { name: { ar: 'تقليل التورم', en: 'Swelling control' },
+        goal: { ar: 'تقليل الألم والتورم', en: 'Reduce pain and swelling' },
+        criteria: { ar: 'مشي طبيعي بدون ألم', en: 'Normal pain-free walking' },
+        exercises: [
+          { name: { ar: 'ثني وفرد الركبة (نطاق مريح)', en: 'Pain-free range of motion' }, sets: 3, reps: '15' },
+          { name: { ar: 'شد الفخذ الأمامي إيزومترك', en: 'Quad isometric sets' }, sets: 4, reps: '10 ثوانٍ' }
+        ] },
+      { name: { ar: 'بناء القوة', en: 'Strength building' },
+        goal: { ar: 'قوة متوازنة في الفخذ الأمامي والخلفي', en: 'Balanced quad/hamstring strength' },
+        criteria: { ar: 'سكوات جزئي بدون ألم', en: 'Partial squat pain-free' },
+        exercises: [
+          { name: { ar: 'سكوات جزئي', en: 'Mini squat' }, sets: 3, reps: '12' },
+          { name: { ar: 'رفع رجل مستقيمة', en: 'Straight leg raise' }, sets: 3, reps: '15' }
+        ] },
+      { name: { ar: 'تحميل وظيفي', en: 'Functional loading' },
+        goal: { ar: 'الرجوع للحركة اليومية والرياضية الخفيفة', en: 'Return to daily activity and light sport' },
+        criteria: { ar: 'سكوات كامل ونزول درج بدون ألم', en: 'Full squat and stairs pain-free' },
+        exercises: [
+          { name: { ar: 'سكوات كامل تدريجي', en: 'Progressive full squat' }, sets: 3, reps: '10' },
+          { name: { ar: 'صعود ونزول درجة', en: 'Step-up/down' }, sets: 3, reps: '10' }
+        ] }
+    ]
+  },
+
+  /* ==================== الساق (إضافي) ==================== */
+  {
+    id: 'shin_splints',
+    bodyPart: 'other',
+    name: { ar: 'التهاب الساق الأمامي (شين سبلينتس)', en: 'Shin splints (medial tibial stress syndrome)' },
+    about: {
+      ar: 'ألم منتشر على طول عظمة الساق الأمامية، شائع عند زيادة حجم الجري فجأة أو الجري على أرض صلبة. أهم حاجة تقليل الحمل مؤقتًا (تقليل مسافة الجري أو التبديل لأنشطة بدون صدمة) قبل الرجوع التدريجي.',
+      en: 'Diffuse pain along the front of the shin, common with a sudden increase in running volume or running on hard surfaces. The priority is temporarily reducing load (cutting running distance or switching to low-impact activity) before a gradual return.'
+    },
+    phases: [
+      { name: { ar: 'تخفيف الحمل', en: 'Load reduction' },
+        goal: { ar: 'تقليل الألم وقت المشي', en: 'Reduce pain during walking' },
+        criteria: { ar: 'مشي 20 دقيقة بدون ألم', en: '20-minute walk pain-free' },
+        exercises: [
+          { name: { ar: 'تدليك بفوم رول للساق', en: 'Foam rolling — shin/calf' }, sets: 2, reps: '2 دقيقة' },
+          { name: { ar: 'رفع سمانة جالسًا', en: 'Seated calf raise' }, sets: 3, reps: '15' }
+        ] },
+      { name: { ar: 'تقوية وتحمل', en: 'Strength and endurance' },
+        goal: { ar: 'تقوية عضلات الساق الأمامية والخلفية', en: 'Strengthen anterior and posterior shin muscles' },
+        criteria: { ar: 'مشي سريع 30 دقيقة بدون ألم', en: 'Brisk 30-minute walk pain-free' },
+        exercises: [
+          { name: { ar: 'رفع مقدمة القدم (توي ريزس)', en: 'Toe raises' }, sets: 3, reps: '15' },
+          { name: { ar: 'مشي على الكعبين', en: 'Heel walking' }, sets: 3, reps: '20 متر' }
+        ] },
+      { name: { ar: 'العودة للجري', en: 'Return to running' },
+        goal: { ar: 'الرجوع للجري بحمل متدرج', en: 'Graded return to running' },
+        criteria: { ar: 'جري 20 دقيقة بدون ألم في نفس اليوم وبعده', en: '20-minute run pain-free same day and next day' },
+        exercises: [
+          { name: { ar: 'جري/مشي متبادل', en: 'Run/walk intervals' }, sets: 1, reps: '20 دقيقة' },
+          { name: { ar: 'جري متواصل تدريجي', en: 'Progressive continuous running' }, sets: 1, reps: '25 دقيقة' }
+        ] }
+    ]
+  },
+
+  /* ==================== الفخذ (إضافي) ==================== */
+  {
+    id: 'quad_strain',
+    bodyPart: 'other',
+    name: { ar: 'شد عضلة الفخذ الأمامي', en: 'Quadriceps strain' },
+    about: {
+      ar: 'إصابة شائعة في الرياضات اللي فيها ركل أو تسارع مفاجئ. زي شد السمانة، مهم الحفاظ على نطاق الحركة أول حاجة قبل بناء القوة، وتجنب الرجوع المبكر للركض السريع.',
+      en: 'Common in sports involving kicking or sudden sprinting. As with calf strains, it is important to maintain range of motion first before rebuilding strength, and to avoid an early return to sprinting.'
+    },
+    phases: [
+      { name: { ar: 'حماية', en: 'Protection' },
+        goal: { ar: 'تقليل الألم والمشي الطبيعي', en: 'Reduce pain, restore normal walking' },
+        criteria: { ar: 'مشي بدون عرج', en: 'Walking without a limp' },
+        exercises: [
+          { name: { ar: 'ثني الركبة اللطيف (نطاق مريح)', en: 'Gentle knee flexion — pain-free range' }, sets: 3, reps: '15' },
+          { name: { ar: 'شد الفخذ الأمامي إيزومترك', en: 'Quad isometric sets' }, sets: 4, reps: '10 ثوانٍ' }
+        ] },
+      { name: { ar: 'تحميل تدريجي', en: 'Progressive loading' },
+        goal: { ar: 'استعادة قوة الفخذ الأمامي', en: 'Rebuild quad strength' },
+        criteria: { ar: 'سكوات جزئي بدون ألم', en: 'Partial squat pain-free' },
+        exercises: [
+          { name: { ar: 'سكوات جزئي', en: 'Mini squat' }, sets: 3, reps: '12' },
+          { name: { ar: 'لنج ثابت خفيف', en: 'Light stationary lunge' }, sets: 3, reps: '10' }
+        ] },
+      { name: { ar: 'العودة للجري', en: 'Return to running' },
+        goal: { ar: 'الرجوع للجري والتسارع', en: 'Return to running and sprinting' },
+        criteria: { ar: 'تسارع كامل بدون ألم', en: 'Full sprint pain-free' },
+        exercises: [
+          { name: { ar: 'جري متدرج', en: 'Graded running' }, sets: 1, reps: '20 دقيقة' },
+          { name: { ar: 'تدريبات تسارع قصيرة', en: 'Short acceleration drills' }, sets: 4, reps: '15 متر' }
+        ] }
+    ]
+  },
+
+  /* ==================== أسفل الظهر (إضافي) ==================== */
+  {
+    id: 'si_joint_dysfunction',
+    bodyPart: 'lower_back',
+    name: { ar: 'خلل المفصل العجزي الحرقفي', en: 'Sacroiliac (SI) joint dysfunction' },
+    about: {
+      ar: 'ألم غالبًا على جانب واحد من أسفل الظهر قريب من عظمة الحوض، وبيزيد مع الوقوف الطويل على رجل واحدة أو صعود السلم. التأهيل بيركز على استقرار الحوض والعضلات المحيطة بيه.',
+      en: 'Pain usually on one side of the lower back near the pelvis, often worsened by prolonged single-leg standing or climbing stairs. Rehab focuses on pelvic stability and the surrounding musculature.'
+    },
+    phases: [
+      { name: { ar: 'تهدئة الأعراض', en: 'Symptom calming' },
+        goal: { ar: 'تقليل الألم في الأنشطة اليومية', en: 'Reduce pain during daily activity' },
+        criteria: { ar: 'وقوف 10 دقائق بدون ألم', en: '10-minute standing pain-free' },
+        exercises: [
+          { name: { ar: 'إمالة الحوض', en: 'Pelvic tilts' }, sets: 3, reps: '12' },
+          { name: { ar: 'جسر الألوية اللطيف', en: 'Gentle glute bridge' }, sets: 3, reps: '10' }
+        ] },
+      { name: { ar: 'استقرار الحوض', en: 'Pelvic stability' },
+        goal: { ar: 'تقوية عضلات الألوية والبطن العميقة', en: 'Strengthen glutes and deep core' },
+        criteria: { ar: 'وقوف على رجل واحدة 20 ثانية بدون ألم', en: '20-second single-leg stand pain-free' },
+        exercises: [
+          { name: { ar: 'بيرد دوج', en: 'Bird dog' }, sets: 3, reps: '10' },
+          { name: { ar: 'مشي جانبي بالأستك', en: 'Band lateral walk' }, sets: 3, reps: '15 خطوة' }
+        ] },
+      { name: { ar: 'العودة الكاملة', en: 'Full return' },
+        goal: { ar: 'الرجوع الكامل للأنشطة والرياضة', en: 'Full return to activity and sport' },
+        criteria: { ar: 'كل الأنشطة اليومية والرياضية بدون ألم', en: 'All daily and sport activities pain-free' },
+        exercises: [
+          { name: { ar: 'سكوات أحادي الرجل خفيف', en: 'Light single-leg squat' }, sets: 3, reps: '10' },
+          { name: { ar: 'جري تدريجي', en: 'Graded running' }, sets: 1, reps: '15 دقيقة' }
+        ] }
+    ]
   }
 
 ];
