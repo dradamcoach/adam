@@ -46,6 +46,8 @@ const TEXT = {
     loading: 'جاري التحميل...',
     no_clients: 'مفيش عملاء لسه، ضيف عميل تحت',
     clients_search_ph: 'ابحث باسم العميل أو إيميله',
+    client_injury_flag: 'بلاغ إصابة محتاج مراجعة',
+    client_injury_flag_many: '{n} بلاغات إصابة محتاجة مراجعة',
     no_client_search_results: 'مفيش عميل بالاسم أو الإيميل ده',
     need_name_email: 'اكتب الاسم والإيميل',
     adding: 'جاري الإضافة...',
@@ -918,6 +920,8 @@ const TEXT = {
     loading: 'Loading...',
     no_clients: 'No clients yet — add one below',
     clients_search_ph: 'Search by client name or email',
+    client_injury_flag: 'Injury report needs review',
+    client_injury_flag_many: '{n} injury reports need review',
     no_client_search_results: 'No client matches that name or email',
     need_name_email: 'Enter name and email',
     adding: 'Adding...',
@@ -1986,6 +1990,9 @@ function bodyPartName(key) {
 function makeExercise(data) {
   return {
     name: data.name || '',
+    // معرّف التمرين في المكتبة (لو اتضاف منها) — بنستخدمه عشان نعرض
+    // الاسم بلغة الواجهة الحالية بدل ما يفضل مخزّن بلغة واحدة للأبد
+    libId: data.libId || '',
     sets: data.sets || 3,
     reps: data.reps || '12',
     rest: data.rest || '',
@@ -2084,7 +2091,13 @@ function findLibraryImage(englishName) {
 
   libraryData.forEach(function (exercise) {
     if (!exercise.images || !exercise.images.length) return;
-    const candidate = normaliseName(exercise.name);
+    // الاسم ممكن يكون نص عادي (المكتبة الكبيرة زمان) أو كائن {ar,en}
+    // (الشكل الموحّد بعد الدمج) — بنقارن دايمًا بالاسم الإنجليزي
+    const rawName = (exercise.name && typeof exercise.name === 'object')
+      ? (exercise.name.en || exercise.name.ar || '')
+      : exercise.name;
+    if (!rawName) return;
+    const candidate = normaliseName(rawName);
 
     let score = 0;
     if (candidate === target) {
@@ -3064,9 +3077,34 @@ async function loadClients() {
       clientsMessage.textContent = t('no_clients');
       return;
     }
+
+    /*
+     * بلاغات الإصابة كانت بتتعرض جوه شاشة العميل بس، يعني المدرب مكانش
+     * يعرف إن في عميل بلّغ غير لما يفتحه هو بنفسه. بنجيب البلاغات اللي
+     * لسه محدش راجعها مرة واحدة هنا، ونحط علامة واضحة على سطر العميل
+     * في القائمة عشان تبان من غير ما يدوّر.
+     */
+    let injuryCounts = {};
+    try {
+      const reportsSnap = await getDocs(collection(db, 'injuryReports'));
+      reportsSnap.forEach(function (docSnap) {
+        const data = docSnap.data();
+        if ((data.status || 'requested') !== 'requested') return;
+        if (!data.clientEmail) return;
+        injuryCounts[data.clientEmail] = (injuryCounts[data.clientEmail] || 0) + 1;
+      });
+    } catch (error) {
+      injuryCounts = {};
+    }
+
     clientsMessage.textContent = '';
     for (const clientDoc of mine) {
-      await showClientRow(clientDoc.id, clientDoc.data().name, clientDoc.data().sport || '');
+      await showClientRow(
+        clientDoc.id,
+        clientDoc.data().name,
+        clientDoc.data().sport || '',
+        injuryCounts[clientDoc.id] || 0
+      );
     }
     // لو كان في بحث مكتوب قبل ما القائمة تتحدّث، نطبّقه على السطور الجديدة
     applyClientsFilter();
@@ -3075,12 +3113,27 @@ async function loadClients() {
   }
 }
 
-async function showClientRow(email, name, sport) {
+async function showClientRow(email, name, sport, injuryCount) {
   const item = document.createElement('li');
 
   const nameLine = document.createElement('div');
   nameLine.className = 'client-name';
   nameLine.textContent = name;
+
+  if (injuryCount) {
+    const flag = document.createElement('div');
+    flag.className = 'client-injury-flag';
+    const flagIcon = document.createElement('span');
+    flagIcon.className = 'inline-icon';
+    flagIcon.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 21.5 20h-19L12 3.5z"></path><line x1="12" y1="9.5" x2="12" y2="14"></line><circle cx="12" cy="17" r="0.7" fill="currentColor" stroke="none"></circle></svg>';
+    flag.appendChild(flagIcon);
+    const flagText = document.createElement('span');
+    flagText.textContent = injuryCount > 1
+      ? fill('client_injury_flag_many', { n: injuryCount })
+      : t('client_injury_flag');
+    flag.appendChild(flagText);
+    item.appendChild(flag);
+  }
 
   const emailLine = document.createElement('div');
   emailLine.className = 'client-email';
@@ -3200,7 +3253,7 @@ function showNoImage() {
 }
 
 function openPreview(exercise) {
-  lightboxTitle.textContent = exercise.name || t('exercise_image');
+  lightboxTitle.textContent = exerciseDisplayName(exercise) || t('exercise_image');
   lightboxImages.innerHTML = '';
 
   if (exercise.imageUrl) {
@@ -3250,6 +3303,31 @@ function thumbSrc(exercise) {
   return '';
 }
 
+/* بندوّر على تمرين في المكتبة بمعرّفه (المكتبة العربية أو المدموجة) */
+function libraryEntryById(id) {
+  if (!id) return null;
+  const list = libraryData || EXERCISE_LIBRARY;
+  for (let i = 0; i < list.length; i++) {
+    if (list[i] && list[i].id === id) return list[i];
+  }
+  return null;
+}
+
+/*
+ * اسم التمرين المعروض: لو اتضاف من المكتبة بنعرضه بلغة الواجهة الحالية،
+ * وإلا بنعرض الاسم المحفوظ (تمارين قديمة أو المدرب كتبها بنفسه)
+ */
+function exerciseDisplayName(exercise) {
+  if (exercise && exercise.libId) {
+    const entry = libraryEntryById(exercise.libId);
+    if (entry) {
+      const name = exerciseLibName(entry);
+      if (name) return name;
+    }
+  }
+  return (exercise && exercise.name) || '';
+}
+
 function exerciseRow(exercise) {
   const left = document.createElement('div');
   left.className = 'lib-item';
@@ -3273,7 +3351,7 @@ function exerciseRow(exercise) {
   const info = document.createElement('div');
 
   const label = document.createElement('div');
-  label.textContent = exercise.name;
+  label.textContent = exerciseDisplayName(exercise);
   info.appendChild(label);
 
   if (!src && exerciseHasAnatomyDetail(exercise)) {
@@ -4592,6 +4670,9 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
    */
   coachMessage.textContent = t('matching_images');
   await ensureLibraryImagesLoaded();
+  // نضمن إن المكتبة الكبيرة (بصورها) متحمّلة قبل المطابقة، حتى لو المدرب
+  // ما فتحش شاشة المكتبة في الجلسة دي
+  await ensureRemoteLibrary();
 
   SECTION_KEYS.forEach(function (key) {
     const list = tpl.sections[key] || [];
@@ -4599,6 +4680,7 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
       const match = matchLibraryExercise(source.en);
       const libPhoto = match ? libraryImageFor('exercise_' + match.id) : '';
       coachWeek[coachDay].sections[key].push(makeExercise({
+        libId: match ? match.id : '',
         name: match ? exerciseLibName(match) : source.en,
         sets: source.sets,
         reps: source.reps,
@@ -4738,8 +4820,92 @@ document.getElementById('lib-back-btn').addEventListener('click', function () {
   if (coachMode === 'rehab') showRehab(); else showCoachDay();
 });
 
+/*
+ * المكتبة الكبيرة (المصدر المفتوح free-exercise-db) — دي اللي فيها مئات
+ * التمارين بصورها. المكتبة العربية المحلية (EXERCISE_LIBRARY) بتفضل هي
+ * الأساس لأنها مترجمة ومشروحة بالعربي، وبنضيف عليها:
+ *   1) صور التمارين العربية من المكتبة الكبيرة بمطابقة الاسم الإنجليزي
+ *   2) باقي تمارين المكتبة الكبيرة اللي مش موجودة عندنا (بالإنجليزي بصورها)
+ * الشاشة بتفتح فورًا بالعربي من غير انتظار، والباقي بيتضاف لما التحميل يخلص.
+ * لو النت فشل بتفضل المكتبة العربية شغالة عادي.
+ */
+let remoteLibraryState = 'idle';   // idle | loading | done
+
+function remoteLibraryId(name) {
+  return 'db_' + String(name).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+}
+
+function mergeRemoteLibrary(remote) {
+  if (!Array.isArray(remote) || !remote.length) return;
+
+  // فهرس بالاسم الإنجليزي المبسّط عشان المطابقة تبقى سريعة
+  const localByName = {};
+  EXERCISE_LIBRARY.forEach(function (exercise) {
+    const enName = (exercise.name && exercise.name.en) ? normaliseName(exercise.name.en) : '';
+    if (enName) localByName[enName] = exercise;
+  });
+
+  const merged = EXERCISE_LIBRARY.slice();
+
+  remote.forEach(function (item) {
+    if (!item || !item.name || !item.primaryMuscles) return;
+    const key = normaliseName(item.name);
+    const local = localByName[key];
+
+    if (local) {
+      // تمرين عربي عندنا بنفس الاسم — ناخد صورته بس ونسيب الترجمة زي ما هي
+      if (item.images && item.images.length && !local.images) local.images = item.images;
+      return;
+    }
+
+    merged.push({
+      id: remoteLibraryId(item.name),
+      name: { ar: '', en: item.name },
+      category: item.category || 'strength',
+      equipment: item.equipment || 'other',
+      primaryMuscles: item.primaryMuscles || [],
+      secondaryMuscles: item.secondaryMuscles || [],
+      howTo: { ar: '', en: (item.instructions || []).join(' ') },
+      images: item.images || []
+    });
+  });
+
+  libraryData = merged;
+
+  /*
+   * مرحلة تانية: التمارين العربية اللي اسمها الإنجليزي مش مطابق حرفيًا
+   * لاسم في المكتبة الكبيرة (زي "Barbell Bench Press" مقابل
+   * "Barbell Bench Press - Medium Grip") — بندوّرلها بمطابقة تقريبية
+   * عشان تاخد صورتها هي كمان بدل ما تفضل من غير صورة
+   */
+  EXERCISE_LIBRARY.forEach(function (exercise) {
+    if (exercise.images && exercise.images.length) return;
+    const enName = (exercise.name && exercise.name.en) ? exercise.name.en : '';
+    if (!enName) return;
+    const path = findLibraryImage(enName);
+    if (path) exercise.images = [path];
+  });
+}
+
+async function ensureRemoteLibrary() {
+  if (remoteLibraryState !== 'idle') return;
+  remoteLibraryState = 'loading';
+  try {
+    const response = await fetch(LIBRARY_URL);
+    const remote = await response.json();
+    mergeRemoteLibrary(remote);
+    remoteLibraryState = 'done';
+    if (!libraryScreen.classList.contains('hidden')) {
+      rebuildLibraryFilters();
+      renderLibrary();
+    }
+  } catch (error) {
+    // مفيش نت أو المصدر مش متاح — المكتبة العربية المحلية بتفضل شغالة
+    remoteLibraryState = 'idle';
+  }
+}
+
 function loadLibrary() {
-  // المكتبة محلية دلوقتي (EXERCISE_LIBRARY) فمفيش حاجة تتحمّل من النت —
   // بتظهر فورًا بالعربي أو الإنجليزي حسب لغة الموقع الحالية
   rebuildLibraryFilters();
   libMessage.textContent = '';
@@ -4748,6 +4914,8 @@ function loadLibrary() {
   ensureLibraryImagesLoaded().then(function () {
     if (!libraryScreen.classList.contains('hidden')) renderLibrary();
   });
+  // وبعدين نضم المكتبة الكبيرة بصورها فوقها
+  ensureRemoteLibrary();
 }
 
 function rebuildLibraryFilters() {
@@ -4969,6 +5137,7 @@ function renderLibrary() {
 
     card.addEventListener('click', function () {
       const built = makeExercise({
+        libId: exercise.id,
         name: exerciseLibName(exercise),
         primaryMuscles: musclesListText(exercise.primaryMuscles),
         secondaryMuscles: musclesListText(exercise.secondaryMuscles),
@@ -6225,12 +6394,28 @@ function normalizeNutrition(data) {
 function makeFoodItem(food, grams) {
   return {
     name: food[lang] || food.ar || food.en || food.name || '',
+    // بنحفظ معرّف الصنف كمان مش الاسم بس، عشان لما العميل يبدّل اللغة
+    // يشوف الاسم بلغته هو مش بلغة اللي كتب الوجبة
+    foodId: food.id || '',
     grams: Number(grams) || 100,
     c100: Number(food.c) || 0,
     p100: Number(food.p) || 0,
     cb100: Number(food.cb) || 0,
     f100: Number(food.f) || 0
   };
+}
+
+/*
+ * اسم الصنف المعروض: لو الصنف اتضاف من المكتبة (عنده foodId) بنعرض اسمه
+ * بلغة الواجهة الحالية، ولو مش موجود (صنف قديم أو مكتوب بالإيد) بنعرض
+ * الاسم المحفوظ زي ما هو
+ */
+function foodDisplayName(item) {
+  if (item && item.foodId) {
+    const found = allFoods().filter(function (f) { return f.id === item.foodId; })[0];
+    if (found) return found[lang] || found.ar || found.en || item.name || '';
+  }
+  return (item && item.name) || '';
 }
 
 function itemMacros(item) {
@@ -6383,7 +6568,7 @@ function foodItemRow(item, list, index, editable, onChange) {
 
   const name = document.createElement('div');
   name.className = 'food-name';
-  name.textContent = item.name;
+  name.textContent = foodDisplayName(item);
   info.appendChild(name);
 
   const m = itemMacros(item);
