@@ -592,6 +592,8 @@ const TEXT = {
     platform_owner_label: 'صاحب المنصة',
     your_specialties_label: 'تخصصاتك (تقدر تختار أكتر من واحد)',
     need_one_specialty: 'اختار تخصص واحد على الأقل',
+    specialty_locked_hint: 'التخصص ده مقفول على حسابك ومايتشالش — تقدر تزوّد عليه أي تخصص تاني',
+    specialties_hint: 'خد كورس جديد؟ علّم عليه هنا وهيظهر في بروفايلك وللعملاء وهم بيختاروا فريقهم',
     open_client_profile_btn: 'بروفايلك ›',
     client_profile_title: 'بروفايلك',
     client_profile_hint: 'عدّل بياناتك في أي وقت — فريقك هيشوف آخر تحديث تلقائيًا',
@@ -1531,6 +1533,8 @@ const TEXT = {
     platform_owner_label: 'Platform owner',
     your_specialties_label: 'Your specialties (you can pick more than one)',
     need_one_specialty: 'Pick at least one specialty',
+    specialty_locked_hint: 'This specialty is locked on your account and cannot be removed — you can still add others',
+    specialties_hint: 'Finished a new course? Tick it here and it shows on your profile and to clients choosing their team',
     open_client_profile_btn: 'Your profile ›',
     client_profile_title: 'Your profile',
     client_profile_hint: 'Update your info any time — your team sees the latest automatically',
@@ -2805,27 +2809,46 @@ function specialtiesHaveFlag(specialties, flag) {
   });
 }
 
-function fillSpecialtyCheckboxes(container, selected) {
+/*
+ * lockedKeys = تخصصات مقفولة مايتشالوش (بتتبعت لصاحب المنصة عشان
+ * "مدرب" يفضل مختار دايمًا فمايفقدش صلاحياته وقائمة عملائه بالغلط).
+ * بتفضل ظاهرة ومعلّمة بس مش قابلة لإلغاء التحديد.
+ */
+function fillSpecialtyCheckboxes(container, selected, lockedKeys) {
   if (!container) return;
   const sel = selected || [];
+  const locked = lockedKeys || [];
   container.innerHTML = '';
   Object.keys(SPECIALTIES).forEach(function (key) {
+    const isLocked = locked.indexOf(key) !== -1;
     const label = document.createElement('label');
-    label.className = 'specialty-check';
+    label.className = 'specialty-check' + (isLocked ? ' specialty-check-locked' : '');
     const input = document.createElement('input');
     input.type = 'checkbox';
     input.value = key;
-    input.checked = sel.indexOf(key) !== -1;
+    input.checked = isLocked || sel.indexOf(key) !== -1;
+    if (isLocked) {
+      input.disabled = true;
+      label.title = t('specialty_locked_hint');
+    }
     label.appendChild(input);
     const span = document.createElement('span');
     span.textContent = specialtyIcon(key) + ' ' + specialtyName(key, lang);
     label.appendChild(span);
+    if (isLocked) {
+      const lock = document.createElement('span');
+      lock.className = 'specialty-lock';
+      lock.textContent = '🔒';
+      label.appendChild(lock);
+    }
     container.appendChild(label);
   });
 }
 
 function readSpecialtyCheckboxes(container) {
   if (!container) return [];
+  // :checked بتشمل المقفولة كمان (disabled) وده المطلوب — التخصص
+  // المقفول جزء من تخصصات الحساب فعلاً مش مجرد شكل
   return Array.prototype.slice.call(container.querySelectorAll('input[type="checkbox"]:checked')).map(function (input) {
     return input.value;
   });
@@ -6262,9 +6285,22 @@ clientConsultSendBtn.addEventListener('click', async function () {
   }
 });
 
+/*
+ * علامة نشاط للعميل — بنكتب وقت آخر دخول على مستنده. بنستعملها في
+ * التقرير اليومي عشان تعرف كام عميل لسه بيفتح البرنامج فعلاً، وده
+ * أهم رقم في المتابعة: العميل اللي وقف يفتح هو اللي بيسيب بعد كده
+ */
+function touchClientActivity(email) {
+  setDoc(doc(db, 'clients', email), { lastActiveAt: new Date().toISOString() }, { merge: true })
+    .catch(function () {
+      // مش مشكلة لو فشلت — مجرد إشارة نشاط، مش بيانات أساسية
+    });
+}
+
 async function loadClient(email) {
   clientEmail = email;
   progress.textContent = t('loading');
+  touchClientActivity(email);
   try {
     const workoutDoc = await getDoc(doc(db, 'workouts', email));
     const progressDoc = await getDoc(doc(db, 'progress', email));
@@ -8885,9 +8921,15 @@ function showProviderHome(data) {
   // بدل سطر واحد مكتوب بفاصلات — أوضح بكتير لما يبقى أكتر من تخصص
   renderSpecialtyChips(providerHomeSpecialty, specs);
 
-  // صاحب المنصة (الحساب القديم) تخصصه "مدرب" ثابت مايتغيرش من هنا
-  if (phSpecialtyBox) phSpecialtyBox.classList.toggle('hidden', isLegacyCoachAccount());
-  fillSpecialtyCheckboxes(phSpecialtyMulti, specs);
+  /*
+   * قبل كده كان صندوق التخصصات مخفي تمامًا عن صاحب المنصة، فماكانش
+   * يقدر يزوّد لنفسه تخصص جديد (مثلاً خد كورس تغذية وعايز يضيفه).
+   * دلوقتي الصندوق ظاهر للكل — وصاحب المنصة "مدرب" عنده مقفول بس
+   * (مايقدرش يشيله) عشان مايفقدش صلاحياته وقائمة عملائه بالغلط،
+   * وأي تخصص تاني يزوّده أو يشيله زي أي متخصص
+   */
+  if (phSpecialtyBox) phSpecialtyBox.classList.remove('hidden');
+  fillSpecialtyCheckboxes(phSpecialtyMulti, specs, isLegacyCoachAccount() ? ['coach'] : []);
 
   phBio.value = data.bio || '';
   phCerts.value = data.certifications || '';
@@ -9168,18 +9210,19 @@ document.getElementById('ph-save-btn').addEventListener('click', async function 
   // الجاي يعرف يتعامل معاه كمدرب صح (زي الشرح في onAuthStateChanged)
   // من غير ما يفقد صلاحياته أو قائمة عملائه. غير كده، المتخصص بيختار
   // تخصصاته بنفسه (ممكن أكتر من واحد) من صناديق الاختيار
-  let newSpecialties;
-  if (isLegacyCoachAccount()) {
-    newSpecialties = ['coach'];
-  } else {
-    newSpecialties = readSpecialtyCheckboxes(phSpecialtyMulti);
-    if (!newSpecialties.length) {
-      providerHomeMessage.textContent = t('need_one_specialty');
-      return;
-    }
+  let newSpecialties = readSpecialtyCheckboxes(phSpecialtyMulti);
+  if (isLegacyCoachAccount() && newSpecialties.indexOf('coach') === -1) {
+    // حزام أمان: حتى لو حصل أي خلل في الواجهة، صاحب المنصة يفضل مدرب
+    newSpecialties = ['coach'].concat(newSpecialties);
+  }
+  if (!newSpecialties.length) {
+    providerHomeMessage.textContent = t('need_one_specialty');
+    return;
   }
   updated.specialties = newSpecialties;
-  updated.specialty = newSpecialties[0];
+  // "مدرب" بيفضل التخصص الأساسي لو موجود — عشان شاشات كتير بتتعامل
+  // مع specialty كقيمة واحدة وبتتوقع المدرب فيها
+  updated.specialty = newSpecialties.indexOf('coach') !== -1 ? 'coach' : newSpecialties[0];
   updated.isMedical = specialtiesHaveFlag(newSpecialties, 'medical');
 
   providerHomeMessage.textContent = t('saving');

@@ -4064,3 +4064,17 @@ body > p {
 @media (max-width: 360px) {
   .report-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* تخصص مقفول على الحساب (زي "مدرب" لصاحب المنصة) */
+.specialty-check-locked {
+  opacity: 0.85;
+}
+
+.specialty-check-locked input {
+  cursor: not-allowed;
+}
+
+.specialty-lock {
+  font-size: 10px;
+  margin-inline-start: 3px;
+}
