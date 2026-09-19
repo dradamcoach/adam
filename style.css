@@ -1571,6 +1571,18 @@ body > p {
   height: 16px;
 }
 
+/* أيقونة الصنف نفسه بدل الزرار الفاضي — أكبر شوية وبخلفية خفيفة عشان
+   تبان كأنها صورة مصغّرة، ولسه بتفتح رفع صورة حقيقية لما تدوس عليها */
+.card button.food-icon-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  font-size: 21px;
+  line-height: 1;
+  border-style: solid;
+  background: var(--field);
+}
+
 .template-photo-row {
   display: flex;
   align-items: center;
@@ -2095,6 +2107,43 @@ body > p {
   margin-top: 0;
 }
 
+/* صندوق "احفظ اليوم ده كقالب" جوه صندوق القوالب — أزراره لازم تبقى
+   صغيرة وجنب بعض، والقاعدة `.card button` (عرض 100% وخلفية خضرا) بتغلب
+   أي كلاس واحد، فبنكتبها بـ `.card button.<class>` عشان تتغلب عليها */
+.my-tpl-box {
+  border-top: 1px dashed var(--line);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.my-tpl-box .row {
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.card .my-tpl-box button {
+  width: auto;
+  flex: 1 1 auto;
+  padding: 10px 12px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.card .my-tpl-box #my-template-name {
+  flex: 2 1 140px;
+  margin: 0;
+  min-width: 0;
+}
+
+.my-tpl-box .hint-text {
+  margin: 4px 0 0;
+}
+
+.my-tpl-box .message {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+}
+
 .template-note {
   display: flex;
   align-items: flex-start;
@@ -2445,6 +2494,15 @@ body > p {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
+}
+
+/* أيقونة الصنف جنب اسمه جوه الوجبة نفسها */
+.meal-food-icon {
+  font-size: 18px;
+  line-height: 1;
+  flex: none;
+  margin-inline-end: 8px;
 }
 
 .food-name {
@@ -3657,4 +3715,212 @@ body > p {
 .client-injury-flag .ui-icon {
   width: 14px;
   height: 14px;
+}
+
+/* ================= مكتبة المكملات والفيتامينات ================= */
+
+.supp-disclaimer {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--warn, #f59e0b);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 0 0 14px;
+}
+
+.supp-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* القاعدة العامة `.card li` بتخلي أي عنصر قائمة صف أفقي، وكارت المكمل
+   محتاج يبقى عمود — وكمان `.card li span` بتلوّن أي span وتمنع اللف،
+   فبنلغي التأثير ده جوه الكارت بس */
+.card li.supp-card {
+  display: block;
+  background: var(--field);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  cursor: default;
+}
+
+.card li.supp-card:active {
+  transform: none;
+}
+
+.card li.supp-card span,
+.card li.supp-plan-item span {
+  color: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  white-space: normal;
+  display: inline;
+}
+
+.card li.supp-card .supp-icon,
+.card li.supp-plan-item .supp-icon {
+  display: block;
+}
+
+.card li.supp-card .supp-grade,
+.card li.supp-card .supp-cat {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.supp-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.supp-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex: none;
+}
+
+.supp-title-box {
+  min-width: 0;
+  flex: 1;
+}
+
+.supp-name {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.supp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.supp-grade,
+.supp-cat {
+  font-size: 10.5px;
+  border-radius: 6px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.supp-cat {
+  color: var(--muted);
+  background: var(--surface-2);
+}
+
+.supp-grade-strong {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.14);
+}
+
+.supp-grade-moderate {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.14);
+}
+
+.supp-grade-limited {
+  color: var(--muted);
+  background: var(--surface-2);
+}
+
+.supp-body {
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+
+.supp-row-label {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.supp-care {
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--muted);
+  border-top: 1px dashed var(--line);
+  margin: 8px 0 0;
+  padding-top: 8px;
+}
+
+.card button.supp-add-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 9px;
+  font-size: 13px;
+}
+
+.card button.supp-add-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* ---- خطة المكملات (عند المدرب وعند العميل) ---- */
+
+.supp-plan-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+}
+
+.card li.supp-plan-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  background: var(--field);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  cursor: default;
+}
+
+.card li.supp-plan-item:active {
+  transform: none;
+}
+
+.supp-plan-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card .supp-plan-info input.supp-input {
+  width: 100%;
+  margin: 6px 0 0;
+  padding: 7px 9px;
+  font-size: 12.5px;
+}
+
+.supp-plan-detail {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+  line-height: 1.7;
+}
+
+.supp-plan-note {
+  font-size: 12.5px;
+  margin-top: 4px;
+  line-height: 1.7;
+}
+
+.card button.supp-del-btn {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  padding: 0;
+  flex: none;
+  font-size: 14px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
 }

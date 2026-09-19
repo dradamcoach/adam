@@ -4,6 +4,7 @@ import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, delete
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
 import { REHAB_TEMPLATES } from './rehab-templates.js';
 import { FOOD_LIBRARY, FOOD_CATEGORIES } from './food-library.js';
+import { SUPPLEMENT_LIBRARY, SUPPLEMENT_CATEGORIES, EVIDENCE_GRADES } from './supplement-library.js';
 import { SPORTS, SPORT_GROUPS, SPORT_METRICS, METRIC_FIELDS, SPORT_TEMPLATES } from './sports.js';
 import { SPECIALTIES, specialtyName, specialtyIcon, specialtyIconSvg, MED_CATEGORIES, MED_REVIEW, DEFAULT_RED_FLAGS, SESSION_TYPES, BOOKING_STATUS } from './providers.js';
 import { MED_LIBRARY_SEED } from './med-library-seed.js';
@@ -48,6 +49,19 @@ const TEXT = {
     clients_search_ph: 'ابحث باسم العميل أو إيميله',
     coach_muscle_label: 'العضلة المستهدفة النهاردة',
     coach_muscle_hint: 'لما تفتح المكتبة هتلاقيها مفلترة على العضلة دي على طول',
+    save_day_as_template: '💾 احفظ اليوم ده كقالب',
+    delete_my_template: '🗑 امسح القالب',
+    my_template_name_ph: 'اسم القالب (مثلاً: يوم دفع — لاعبين كورة)',
+    my_template_hint: 'القالب بيتحفظ باسمك وبيظهر لك في أي عميل — والمتخصصين التانيين يقدروا يستعملوه كمان',
+    my_template_save: 'حفظ',
+    my_template_cancel: 'إلغاء',
+    my_templates_group: 'قوالبي',
+    ready_templates_group: 'قوالب جاهزة',
+    other_coaches_templates_group: 'قوالب متخصصين تانيين',
+    template_day_empty: 'اليوم ده فاضي — ضيف تمارين الأول وبعدين احفظه كقالب',
+    template_needs_name: 'اكتب اسم للقالب',
+    template_saved: 'اتحفظ القالب "{name}" ({count} تمرين) — هتلاقيه في قوالبي',
+    template_deleted: 'اتمسح القالب "{name}"',
     client_injury_flag: 'بلاغ إصابة محتاج مراجعة',
     client_injury_flag_many: '{n} بلاغات إصابة محتاجة مراجعة',
     no_client_search_results: 'مفيش عميل بالاسم أو الإيميل ده',
@@ -407,6 +421,22 @@ const TEXT = {
     grams: 'جم',
     my_food: 'بتاعي',
     all_foods: 'كل الأصناف',
+    all_supps: 'كل المكملات',
+    supp_library: 'مكتبة المكملات والفيتامينات',
+    supp_search_ph: 'ابحث عن مكمل أو فيتامين...',
+    supp_disclaimer: '⚠️ المكتبة دي مرجع تعليمي مش وصفة طبية. أي عميل عنده حالة مرضية أو بياخد دوا أو حامل — لازم يرجع لطبيب أو أخصائي تغذية إكلينيكي قبل أي مكمل.',
+    supp_dose: 'الجرعة',
+    supp_when: 'التوقيت',
+    supp_use: 'بيستخدم ليه',
+    supp_add_to_plan: '+ ضيفه لخطة العميل',
+    supp_already_added: '✓ موجود في الخطة',
+    supp_added: 'اتضاف "{name}" لخطة المكملات — متنساش تحفظ البرنامج',
+    supp_note_ph: 'ملاحظة للعميل (اختياري)',
+    supp_plan_title: '💊 المكملات والفيتامينات',
+    supp_plan_empty: 'مفيش مكملات في الخطة — افتح المكتبة واختار اللي محتاجه',
+    supp_client_note: 'دي المكملات اللي مدربك حددهالك. لو بتاخد أي دوا أو عندك حالة مرضية، اسأل دكتورك الأول.',
+    open_supp_library: 'مكتبة المكملات',
+    remove: 'شيل',
     food_count: '{n} صنف',
     tab_activity: 'نشاطي',
     client_sport: 'رياضة العميل',
@@ -924,6 +954,19 @@ const TEXT = {
     clients_search_ph: 'Search by client name or email',
     coach_muscle_label: "Today's target muscle",
     coach_muscle_hint: 'The library opens already filtered to this muscle',
+    save_day_as_template: '💾 Save this day as a template',
+    delete_my_template: '🗑 Delete template',
+    my_template_name_ph: 'Template name (e.g. Push day — footballers)',
+    my_template_hint: 'Saved under your name and available for any client — other specialists can use it too',
+    my_template_save: 'Save',
+    my_template_cancel: 'Cancel',
+    my_templates_group: 'My templates',
+    ready_templates_group: 'Ready-made templates',
+    other_coaches_templates_group: 'Other specialists\' templates',
+    template_day_empty: 'This day is empty — add exercises first, then save it as a template',
+    template_needs_name: 'Enter a name for the template',
+    template_saved: 'Template "{name}" saved ({count} exercises) — find it under My templates',
+    template_deleted: 'Template "{name}" deleted',
     client_injury_flag: 'Injury report needs review',
     client_injury_flag_many: '{n} injury reports need review',
     no_client_search_results: 'No client matches that name or email',
@@ -1283,6 +1326,22 @@ const TEXT = {
     grams: 'g',
     my_food: 'mine',
     all_foods: 'All foods',
+    all_supps: 'All supplements',
+    supp_library: 'Supplements & vitamins library',
+    supp_search_ph: 'Search for a supplement or vitamin...',
+    supp_disclaimer: '⚠️ This library is an educational reference, not a prescription. Any client with a medical condition, on medication, or pregnant must see a doctor or clinical dietitian before taking anything.',
+    supp_dose: 'Dose',
+    supp_when: 'Timing',
+    supp_use: 'What it is for',
+    supp_add_to_plan: '+ Add to client plan',
+    supp_already_added: '✓ Already in the plan',
+    supp_added: '"{name}" added to the supplement plan — remember to save the program',
+    supp_note_ph: 'Note for the client (optional)',
+    supp_plan_title: '💊 Supplements & vitamins',
+    supp_plan_empty: 'No supplements in the plan — open the library and pick what is needed',
+    supp_client_note: 'These are the supplements your coach selected for you. If you take any medication or have a medical condition, ask your doctor first.',
+    open_supp_library: 'Supplements library',
+    remove: 'Remove',
     food_count: '{n} foods',
     tab_activity: 'My activity',
     client_sport: "Client's sport",
@@ -2305,6 +2364,7 @@ const libraryScreen = document.getElementById('library-screen');
 const mylibScreen = document.getElementById('mylib-screen');
 const clientScreen = document.getElementById('client-screen');
 const foodScreen = document.getElementById('food-screen');
+const supplementsScreen = document.getElementById('supplements-screen');
 const subscriptionScreen = document.getElementById('subscription-screen');
 const adminPanelScreen = document.getElementById('admin-panel-screen');
 const chatScreen = document.getElementById('chat-screen');
@@ -2745,7 +2805,7 @@ let clientNutrition = emptyNutrition();
 let cNutDay = todayIndex;
 
 function showScreen(screen) {
-  [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen].forEach(function (s) {
+  [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, supplementsScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen].forEach(function (s) {
     s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
@@ -4028,6 +4088,9 @@ async function openCoachScreen(email, name, sport) {
     fillSportSelect(coachSport, true);
     fillCoachMuscleSelect();
     coachSport.value = currentClientSport;
+    // قوالب المدربين بتتحمّل مرة واحدة في الجلسة — بعد كده بنستعمل النسخة
+    // اللي في الذاكرة، فمفيش قراءة زيادة كل مرة تفتح عميل
+    if (!myTemplatesLoaded) await loadMyTemplates();
     fillSportTemplatePicker();
     showCoachDay();
     showRehab();
@@ -4649,6 +4712,78 @@ function templatesForSport(sportId) {
   );
 }
 
+/* ---------- قوالب المدرب نفسه (myTemplates) ---------- */
+/*
+ * غير القوالب الجاهزة اللي جوه sports.js، أي مدرب أو متخصص يقدر يحفظ
+ * اليوم اللي بناه كقالب باسمه ويرجعه لأي عميل تاني. بنخزّن في القالب
+ * معرف التمرين في المكتبة (libId) مش الصورة نفسها — عشان المستند
+ * مايكبرش، والصورة بتتجمّع من المكتبة وقت التحميل زي أي تمرين عادي.
+ */
+let myTemplates = [];
+let myTemplatesLoaded = false;
+
+const myTemplateForm = document.getElementById('my-template-form');
+const myTemplateName = document.getElementById('my-template-name');
+const myTemplateMessage = document.getElementById('my-template-message');
+const saveDayTemplateBtn = document.getElementById('save-day-template-btn');
+const deleteMyTemplateBtn = document.getElementById('delete-my-template-btn');
+
+function templateTitle(tpl) {
+  return (tpl && tpl[lang]) || (tpl && tpl.ar) || (tpl && tpl.en) || '';
+}
+
+function isMyTemplate(tpl) {
+  return !!(tpl && tpl.custom && tpl.ownerEmail
+    && tpl.ownerEmail.toLowerCase() === (currentProviderEmail || '').toLowerCase());
+}
+
+async function loadMyTemplates() {
+  try {
+    const snap = await getDocs(collection(db, 'myTemplates'));
+    myTemplates = [];
+    snap.forEach(function (docSnap) {
+      const data = docSnap.data() || {};
+      myTemplates.push({
+        id: docSnap.id,
+        custom: true,
+        group: 'custom',
+        ownerEmail: data.ownerEmail || '',
+        ownerName: data.ownerName || '',
+        ar: data.ar || data.en || '',
+        en: data.en || data.ar || '',
+        note: data.note || null,
+        sections: data.sections || {}
+      });
+    });
+    myTemplates.sort(function (a, b) { return templateTitle(a).localeCompare(templateTitle(b)); });
+    myTemplatesLoaded = true;
+  } catch (error) {
+    // مش مشكلة تمنع الشغل — القوالب الجاهزة تفضل شغالة عادي
+    myTemplates = [];
+    myTemplatesLoaded = false;
+  }
+}
+
+function templateById(id) {
+  const built = SPORT_TEMPLATES.filter(function (item) { return item.id === id; })[0];
+  if (built) return built;
+  return myTemplates.filter(function (item) { return item.id === id; })[0] || null;
+}
+
+function addTemplateGroup(label, list) {
+  if (!list.length) return;
+  const group = document.createElement('optgroup');
+  group.label = label;
+  list.forEach(function (tpl) {
+    const option = document.createElement('option');
+    option.value = tpl.id;
+    option.textContent = templateTitle(tpl)
+      + (tpl.custom && !isMyTemplate(tpl) && tpl.ownerName ? ' — ' + tpl.ownerName : '');
+    group.appendChild(option);
+  });
+  sportTemplatePick.appendChild(group);
+}
+
 function fillSportTemplatePicker() {
   const keep = sportTemplatePick.value;
   sportTemplatePick.innerHTML = '';
@@ -4658,15 +4793,129 @@ function fillSportTemplatePicker() {
   none.textContent = t('pick_sport_template');
   sportTemplatePick.appendChild(none);
 
-  templatesForSport(coachSport.value).forEach(function (tpl) {
-    const option = document.createElement('option');
-    option.value = tpl.id;
-    option.textContent = tpl[lang];
-    sportTemplatePick.appendChild(option);
-  });
+  const mine = myTemplates.filter(isMyTemplate);
+  const others = myTemplates.filter(function (tpl) { return !isMyTemplate(tpl); });
+
+  addTemplateGroup(t('my_templates_group'), mine);
+  addTemplateGroup(t('ready_templates_group'), templatesForSport(coachSport.value));
+  addTemplateGroup(t('other_coaches_templates_group'), others);
 
   sportTemplatePick.value = keep;
+  refreshMyTemplateButtons();
 }
+
+function refreshMyTemplateButtons() {
+  if (!deleteMyTemplateBtn) return;
+  const tpl = templateById(sportTemplatePick.value);
+  deleteMyTemplateBtn.classList.toggle('hidden', !isMyTemplate(tpl));
+}
+
+/* تحويل اليوم المفتوح لقالب قابل للحفظ — من غير صور عشان حجم المستند */
+function currentDayAsTemplateSections() {
+  const out = {};
+  let count = 0;
+  SECTION_KEYS.forEach(function (key) {
+    const list = (coachWeek[coachDay] && coachWeek[coachDay].sections[key]) || [];
+    out[key] = list.map(function (ex) {
+      const entry = ex.libId ? libraryEntryById(ex.libId) : null;
+      count++;
+      return {
+        libId: ex.libId || '',
+        name: ex.name || '',
+        en: entry ? (entry.name && entry.name.en ? entry.name.en : '') : '',
+        sets: ex.sets || 3,
+        reps: ex.reps || '',
+        rest: ex.rest || '',
+        load: ex.load || '',
+        rpe: ex.rpe || '',
+        tempo: ex.tempo || ''
+      };
+    });
+  });
+  return { sections: out, count: count };
+}
+
+if (saveDayTemplateBtn) {
+  saveDayTemplateBtn.addEventListener('click', function () {
+    myTemplateMessage.textContent = '';
+    const built = currentDayAsTemplateSections();
+    if (!built.count) {
+      myTemplateMessage.textContent = t('template_day_empty');
+      return;
+    }
+    myTemplateForm.classList.remove('hidden');
+    myTemplateName.value = (coachWeek[coachDay] && coachWeek[coachDay].title) || '';
+    myTemplateName.focus();
+  });
+}
+
+if (document.getElementById('my-template-cancel-btn')) {
+  document.getElementById('my-template-cancel-btn').addEventListener('click', function () {
+    myTemplateForm.classList.add('hidden');
+    myTemplateMessage.textContent = '';
+  });
+}
+
+if (document.getElementById('my-template-save-btn')) {
+  document.getElementById('my-template-save-btn').addEventListener('click', async function () {
+    const name = myTemplateName.value.trim();
+    if (!name) {
+      myTemplateMessage.textContent = t('template_needs_name');
+      return;
+    }
+    saveCurrentDay();
+    const built = currentDayAsTemplateSections();
+    if (!built.count) {
+      myTemplateMessage.textContent = t('template_day_empty');
+      return;
+    }
+
+    const payload = {
+      ownerEmail: (currentProviderEmail || '').toLowerCase(),
+      ownerName: (currentProviderData && currentProviderData.name) || '',
+      ar: name,
+      en: name,
+      sections: built.sections,
+      createdAt: new Date().toISOString()
+    };
+
+    if (docTooBig(payload, myTemplateMessage)) return;
+
+    myTemplateMessage.textContent = t('saving');
+    try {
+      const ref = await addDoc(collection(db, 'myTemplates'), payload);
+      myTemplates.push(Object.assign({ id: ref.id, custom: true, group: 'custom' }, payload));
+      myTemplates.sort(function (a, b) { return templateTitle(a).localeCompare(templateTitle(b)); });
+      fillSportTemplatePicker();
+      sportTemplatePick.value = ref.id;
+      refreshMyTemplateButtons();
+      myTemplateForm.classList.add('hidden');
+      myTemplateName.value = '';
+      myTemplateMessage.textContent = fill('template_saved', { name: name, count: built.count });
+    } catch (error) {
+      myTemplateMessage.textContent = t('problem') + error.message;
+    }
+  });
+}
+
+if (deleteMyTemplateBtn) {
+  deleteMyTemplateBtn.addEventListener('click', async function () {
+    const tpl = templateById(sportTemplatePick.value);
+    if (!isMyTemplate(tpl)) return;
+    myTemplateMessage.textContent = t('saving');
+    try {
+      await deleteDoc(doc(db, 'myTemplates', tpl.id));
+      myTemplates = myTemplates.filter(function (item) { return item.id !== tpl.id; });
+      sportTemplatePick.value = '';
+      fillSportTemplatePicker();
+      myTemplateMessage.textContent = fill('template_deleted', { name: templateTitle(tpl) });
+    } catch (error) {
+      myTemplateMessage.textContent = t('problem') + error.message;
+    }
+  });
+}
+
+sportTemplatePick.addEventListener('change', refreshMyTemplateButtons);
 
 coachSport.addEventListener('change', async function () {
   currentClientSport = coachSport.value;
@@ -4686,7 +4935,7 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
   const id = sportTemplatePick.value;
   if (!id) return;
 
-  const tpl = SPORT_TEMPLATES.filter(function (item) { return item.id === id; })[0];
+  const tpl = templateById(id);
   if (!tpl) return;
 
   saveCurrentDay();
@@ -4709,15 +4958,25 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
   SECTION_KEYS.forEach(function (key) {
     const list = tpl.sections[key] || [];
     list.forEach(function (source) {
-      const match = matchLibraryExercise(source.en);
+      /*
+       * قالب جاهز فيه الاسم الإنجليزي بس، أما قالب المدرب نفسه فبيحفظ
+       * libId — فبنجيب التمرين بالمعرف الأول وده أدق، ولو مش موجود
+       * (تمرين المدرب كتبه بإيده) بنرجع للمطابقة بالاسم.
+       */
+      const match = (source.libId ? libraryEntryById(source.libId) : null)
+        || matchLibraryExercise(source.en || source.name);
       const libPhoto = match ? libraryImageFor('exercise_' + match.id) : '';
       coachWeek[coachDay].sections[key].push(makeExercise({
         libId: match ? match.id : '',
-        name: match ? exerciseLibName(match) : source.en,
+        name: match ? exerciseLibName(match) : (source.name || source.en),
         sets: source.sets,
         reps: source.reps,
+        rest: source.rest || '',
+        load: source.load || '',
+        rpe: source.rpe || '',
+        tempo: source.tempo || '',
         imageUrl: libPhoto,
-        image: libPhoto ? '' : ((match && match.images && match.images.length) ? match.images[0] : findLibraryImage(source.en)),
+        image: libPhoto ? '' : ((match && match.images && match.images.length) ? match.images[0] : findLibraryImage(source.en || source.name)),
         primaryMuscles: match ? musclesListText(match.primaryMuscles) : '',
         secondaryMuscles: match ? musclesListText(match.secondaryMuscles) : '',
         howTo: (match && match.howTo) ? (match.howTo[lang] || match.howTo.ar || match.howTo.en || '') : ''
@@ -4726,12 +4985,12 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
   });
 
   if (!coachWeek[coachDay].title) {
-    coachWeek[coachDay].title = tpl[lang];
+    coachWeek[coachDay].title = templateTitle(tpl);
   }
 
   showCoachDay();
   coachMessage.textContent = fill('sport_template_loaded', { day: days()[coachDay] })
-    + ' — ' + (tpl.note ? tpl.note[lang] : '');
+    + (tpl.note ? ' — ' + (tpl.note[lang] || tpl.note.ar || '') : '');
 });
 
 /* ============================ المكتبة الجاهزة ============================ */
@@ -4920,15 +5179,122 @@ function mergeRemoteLibrary(remote) {
     const path = findLibraryImage(enName);
     if (path) exercise.images = [path];
   });
+
+  /*
+   * مرحلة تالتة: تمارين اسمها عندنا مختلف تمامًا عن اسمها في المكتبة
+   * الكبيرة (زي "Battle Ropes" اللي اسمها هناك "Battling Ropes")، فلا
+   * المطابقة الحرفية ولا التقريبية بتلاقيها. الأسماء البديلة مكتوبة
+   * في EXERCISE_IMAGE_ALIASES تحت، وكل واحد منها اتأكدنا إن صورته
+   * فعلاً بتوصف نفس الحركة — مش مجرد اسم قريب
+   */
+  Object.keys(EXERCISE_IMAGE_ALIASES).forEach(function (localName) {
+    const exercise = EXERCISE_LIBRARY.filter(function (item) {
+      return item.name && item.name.en === localName;
+    })[0];
+    if (!exercise || (exercise.images && exercise.images.length)) return;
+    const aliases = EXERCISE_IMAGE_ALIASES[localName];
+    for (let i = 0; i < aliases.length; i++) {
+      const path = findLibraryImage(aliases[i]);
+      if (path) { exercise.images = [path]; return; }
+    }
+  });
+}
+
+/*
+ * أسماء بديلة عشان التمرين ياخد صورته من المكتبة الكبيرة.
+ * المفتاح = الاسم الإنجليزي عندنا، القيمة = اسمه في المكتبة الكبيرة.
+ * التمارين اللي مش موجودة أصلًا هناك (زي Bird Dog و Wall Sit و
+ * Hollow Body Hold) سايبينها من غير بديل — أحسن ما نحطّ لها صورة
+ * لحركة تانية تغلّط المدرب أو العميل.
+ */
+const EXERCISE_IMAGE_ALIASES = {
+  'Overhead Barbell Press': ['Standing Military Press', 'Seated Barbell Military Press'],
+  'Barbell Back Squat': ['Barbell Squat', 'Barbell Full Squat'],
+  'Bulgarian Split Squat': ['Split Squat with Dumbbells', 'Split Squats'],
+  'Cable Woodchopper': ['Standing Cable Wood Chop'],
+  'Ab Wheel Rollout': ['Barbell Ab Rollout - On Knees', 'Barbell Ab Rollout'],
+  'Rowing Machine': ['Rowing, Stationary'],
+  'Stair Climber': ['Stairmaster'],
+  'Cross-Body Shoulder Stretch': ['Shoulder Stretch'],
+  'Cat-Cow': ['Cat Stretch'],
+  "Farmer's Carry": ["Farmer's Walk"],
+  'Cable Pull-Through': ['Pull Through'],
+  'Band Lateral Walk': ['Monster Walk'],
+  'Seated Machine Shoulder Press': ['Machine Shoulder (Military) Press'],
+  'Standing Machine Calf Raise': ['Smith Machine Calf Raise', 'Rocking Standing Calf Raise'],
+  'Battle Ropes': ['Battling Ropes'],
+  'Nordic Hamstring Curl': ['Natural Glute Ham Raise', 'Glute Ham Raise'],
+  'Copenhagen Plank': ['Side Bridge'],
+  'Interval Running': ['Running, Treadmill'],
+  'Sprint Intervals': ['Wind Sprints'],
+  'Shuttle Run': ['Single-Cone Sprint Drill'],
+  'Adductor Stretch': ['Adductor/Groin', 'Adductor']
+};
+
+/*
+ * المكتبة الكبيرة (876 تمرين بصورهم) بتتحمّل من مصدر خارجي على النت.
+ * المصدر ده ممكن يرفض الطلب لو اتفتح كتير من نفس الشبكة (429) أو لو
+ * النت واقع — ووقتها كانت التمارين بتظهر من غير صور خالص. عشان كده
+ * بنحتفظ بنسخة في المتصفح لمدة أسبوع: أول فتح بيجيبها من النت ويخزّنها،
+ * وبعد كده بتفتح فورًا من التخزين المحلي من غير أي طلب.
+ */
+const REMOTE_LIB_CACHE_KEY = 'adam-exercise-db-v1';
+const REMOTE_LIB_CACHE_MS = 7 * 24 * 60 * 60 * 1000;
+
+function readRemoteLibraryCache() {
+  try {
+    const raw = localStorage.getItem(REMOTE_LIB_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.items) || !parsed.savedAt) return null;
+    if (Date.now() - parsed.savedAt > REMOTE_LIB_CACHE_MS) return null;
+    return parsed.items;
+  } catch (error) {
+    return null;
+  }
+}
+
+function writeRemoteLibraryCache(remote) {
+  try {
+    // بنخزّن الحقول اللي بنستعملها بس عشان الحجم يفضل صغير
+    const trimmed = remote.map(function (item) {
+      return {
+        name: item.name,
+        category: item.category,
+        equipment: item.equipment,
+        primaryMuscles: item.primaryMuscles,
+        secondaryMuscles: item.secondaryMuscles,
+        instructions: item.instructions,
+        images: item.images
+      };
+    });
+    localStorage.setItem(REMOTE_LIB_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), items: trimmed }));
+  } catch (error) {
+    // مساحة المتصفح مليانة — مش مشكلة، هنجيبها من النت المرة الجاية
+  }
 }
 
 async function ensureRemoteLibrary() {
   if (remoteLibraryState !== 'idle') return;
   remoteLibraryState = 'loading';
+
+  const cached = readRemoteLibraryCache();
+  if (cached) {
+    mergeRemoteLibrary(cached);
+    remoteLibraryState = 'done';
+    if (!libraryScreen.classList.contains('hidden')) {
+      rebuildLibraryFilters();
+      renderLibrary();
+    }
+    return;
+  }
+
   try {
     const response = await fetch(LIBRARY_URL);
+    if (!response.ok) throw new Error('HTTP ' + response.status);
     const remote = await response.json();
     mergeRemoteLibrary(remote);
+    writeRemoteLibraryCache(remote);
     remoteLibraryState = 'done';
     if (!libraryScreen.classList.contains('hidden')) {
       rebuildLibraryFilters();
@@ -6390,6 +6756,16 @@ function foodCategoryName(key) {
   return (FOOD_CATEGORIES[key] && FOOD_CATEGORIES[key][lang]) || key;
 }
 
+// أيقونة احتياطية للأصناف اللي المدرب بيضيفها بنفسه (مالهاش أيقونة محفوظة)
+const FOOD_CATEGORY_ICONS = {
+  protein: '🍗', carb: '🍚', dairy: '🥛', fruit: '🍎', veg: '🥗',
+  fat: '🥜', dish: '🍲', drink: '🥤', supplement: '💊'
+};
+
+function foodCategoryIcon(key) {
+  return FOOD_CATEGORY_ICONS[key] || '🍽️';
+}
+
 function blankMeals() {
   const meals = {};
   MEAL_KEYS.forEach(function (key) { meals[key] = []; });
@@ -6409,6 +6785,7 @@ function normalizeNutritionDay(day) {
 function emptyNutrition() {
   return {
     targets: { kcal: 0, protein: 0, carbs: 0, fat: 0 },
+    supplements: [],
     week: [0, 1, 2, 3, 4, 5, 6].map(function () { return normalizeNutritionDay(null); })
   };
 }
@@ -6426,6 +6803,21 @@ function normalizeNutrition(data) {
 
   if (Array.isArray(data.week)) {
     for (let i = 0; i < 7; i++) clean.week[i] = normalizeNutritionDay(data.week[i]);
+  }
+
+  // خطة المكملات — بتتحفظ جنب الوجبات في نفس المستند
+  if (Array.isArray(data.supplements)) {
+    clean.supplements = data.supplements.filter(function (item) {
+      return item && typeof item === 'object';
+    }).map(function (item) {
+      return {
+        supId: item.supId || '',
+        name: item.name || '',
+        dose: item.dose || '',
+        when: item.when || '',
+        note: item.note || ''
+      };
+    });
   }
   return clean;
 }
@@ -6451,9 +6843,14 @@ function makeFoodItem(food, grams) {
  * بلغة الواجهة الحالية، ولو مش موجود (صنف قديم أو مكتوب بالإيد) بنعرض
  * الاسم المحفوظ زي ما هو
  */
+function foodById(id) {
+  if (!id) return null;
+  return allFoods().filter(function (f) { return f.id === id; })[0] || null;
+}
+
 function foodDisplayName(item) {
   if (item && item.foodId) {
-    const found = allFoods().filter(function (f) { return f.id === item.foodId; })[0];
+    const found = foodById(item.foodId);
     if (found) return found[lang] || found.ar || found.en || item.name || '';
   }
   return (item && item.name) || '';
@@ -6502,6 +6899,9 @@ function nutritionDayCount(day) {
 function nutritionHasContent(data) {
   if (!data) return false;
   if (data.targets && (data.targets.kcal || data.targets.protein)) return true;
+  // خطة مكملات لوحدها من غير وجبات لسه محتوى — لازم تبويب التغذية
+  // يفضل ظاهر للعميل عشان يشوفها
+  if (Array.isArray(data.supplements) && data.supplements.length) return true;
   return data.week.some(function (day) { return nutritionDayCount(day) > 0; });
 }
 
@@ -6604,6 +7004,16 @@ function fillMealPicker() {
 
 function foodItemRow(item, list, index, editable, onChange) {
   const li = document.createElement('li');
+
+  /* أيقونة الصنف جنب اسمه في الوجبة — بتتجاب من المكتبة بالمعرّف،
+     فالبرامج القديمة اللي اتحفظت قبل الأيقونات بتشتغل عادي من غيرها */
+  const source = item.foodId ? foodById(item.foodId) : null;
+  if (source && (source.icon || source.cat)) {
+    const icon = document.createElement('span');
+    icon.className = 'meal-food-icon';
+    icon.textContent = source.icon || foodCategoryIcon(source.cat);
+    li.appendChild(icon);
+  }
 
   const info = document.createElement('div');
 
@@ -6728,6 +7138,7 @@ function showNutrition() {
   renderTotals(nutTotalsBox, dayTotals(day), coachNutrition.targets);
   renderMeals(nutMeals, day, true, showNutrition);
   fillMealPicker();
+  renderSuppPlan();
   showNutritionDays();
 }
 
@@ -6777,6 +7188,276 @@ document.getElementById('food-back-btn').addEventListener('click', function () {
   showScreen(coachScreen);
   showNutrition();
 });
+
+/* ==================== مكتبة المكملات والفيتامينات ==================== */
+/*
+ * مرجع تعليمي للمدرب/المتخصص: كل مكمل مكتوب جنبه الجرعة الشائعة
+ * والتوقيت وبيستخدم ليه وتحذيراته وقوة الدليل العلمي عليه. المدرب
+ * بيختار اللي يناسب العميل فيتحفظ جوه مستند التغذية بتاعه (supplements)
+ * والعميل بيشوفه في تبويب التغذية للقراءة بس.
+ */
+
+const suppSearch = document.getElementById('supp-search');
+const suppChips = document.getElementById('supp-chips');
+const suppList = document.getElementById('supp-list');
+const suppMessage = document.getElementById('supp-message');
+const suppPlanList = document.getElementById('supp-plan-list');
+const suppPlanEmpty = document.getElementById('supp-plan-empty');
+let activeSuppCat = '';
+
+function suppCategoryName(key) {
+  return (SUPPLEMENT_CATEGORIES[key] && SUPPLEMENT_CATEGORIES[key][lang]) || key;
+}
+
+function suppGradeName(key) {
+  return (EVIDENCE_GRADES[key] && EVIDENCE_GRADES[key][lang]) || key;
+}
+
+function supplementById(id) {
+  return SUPPLEMENT_LIBRARY.filter(function (s) { return s.id === id; })[0] || null;
+}
+
+function suppText(field) {
+  return (field && (field[lang] || field.ar || field.en)) || '';
+}
+
+function openSupplementLibrary() {
+  showScreen(supplementsScreen);
+  suppSearch.value = '';
+  renderSuppChips();
+  renderSuppList();
+}
+
+function renderSuppChips() {
+  suppChips.innerHTML = '';
+  [''].concat(Object.keys(SUPPLEMENT_CATEGORIES)).forEach(function (key) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip' + (key === activeSuppCat ? ' active' : '');
+    chip.textContent = key === '' ? t('all_supps') : suppCategoryName(key);
+    chip.addEventListener('click', function () {
+      activeSuppCat = key;
+      renderSuppChips();
+      renderSuppList();
+    });
+    suppChips.appendChild(chip);
+  });
+}
+
+function suppDetailRow(label, value) {
+  if (!value) return null;
+  const row = document.createElement('div');
+  row.className = 'supp-row';
+  const strong = document.createElement('span');
+  strong.className = 'supp-row-label';
+  strong.textContent = label + ': ';
+  row.appendChild(strong);
+  row.appendChild(document.createTextNode(value));
+  return row;
+}
+
+function renderSuppList() {
+  const term = suppSearch.value.trim().toLowerCase();
+
+  const matches = SUPPLEMENT_LIBRARY.filter(function (item) {
+    if (activeSuppCat && item.cat !== activeSuppCat) return false;
+    if (!term) return true;
+    return String(item.ar).toLowerCase().indexOf(term) !== -1
+        || String(item.en).toLowerCase().indexOf(term) !== -1;
+  });
+
+  suppList.innerHTML = '';
+
+  matches.forEach(function (item) {
+    const li = document.createElement('li');
+    li.className = 'supp-card';
+
+    const head = document.createElement('div');
+    head.className = 'supp-head';
+
+    const icon = document.createElement('span');
+    icon.className = 'supp-icon';
+    icon.textContent = item.icon || '💊';
+    head.appendChild(icon);
+
+    const titleBox = document.createElement('div');
+    titleBox.className = 'supp-title-box';
+
+    const title = document.createElement('div');
+    title.className = 'supp-name';
+    title.textContent = item[lang] || item.ar;
+    titleBox.appendChild(title);
+
+    const meta = document.createElement('div');
+    meta.className = 'supp-meta';
+    const grade = document.createElement('span');
+    grade.className = 'supp-grade supp-grade-' + item.grade;
+    grade.textContent = suppGradeName(item.grade);
+    meta.appendChild(grade);
+    const cat = document.createElement('span');
+    cat.className = 'supp-cat';
+    cat.textContent = suppCategoryName(item.cat);
+    meta.appendChild(cat);
+    titleBox.appendChild(meta);
+
+    head.appendChild(titleBox);
+    li.appendChild(head);
+
+    const body = document.createElement('div');
+    body.className = 'supp-body';
+    [
+      suppDetailRow(t('supp_dose'), suppText(item.dose)),
+      suppDetailRow(t('supp_when'), suppText(item.when)),
+      suppDetailRow(t('supp_use'), suppText(item.use))
+    ].forEach(function (row) { if (row) body.appendChild(row); });
+
+    const care = document.createElement('p');
+    care.className = 'supp-care';
+    care.textContent = suppText(item.care);
+    body.appendChild(care);
+    li.appendChild(body);
+
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'secondary supp-add-btn';
+    const already = suppPlan().some(function (p) { return p.supId === item.id; });
+    addBtn.textContent = already ? t('supp_already_added') : t('supp_add_to_plan');
+    addBtn.disabled = already;
+    addBtn.addEventListener('click', function () {
+      addSupplementToPlan(item);
+      renderSuppList();
+      suppMessage.textContent = fill('supp_added', { name: item[lang] || item.ar });
+    });
+    li.appendChild(addBtn);
+
+    suppList.appendChild(li);
+  });
+
+  if (!matches.length) suppMessage.textContent = t('no_matches');
+}
+
+function suppPlan() {
+  if (!coachNutrition) return [];
+  if (!Array.isArray(coachNutrition.supplements)) coachNutrition.supplements = [];
+  return coachNutrition.supplements;
+}
+
+function addSupplementToPlan(item) {
+  const plan = suppPlan();
+  if (plan.some(function (p) { return p.supId === item.id; })) return;
+  plan.push({
+    supId: item.id,
+    name: item[lang] || item.ar,
+    dose: suppText(item.dose),
+    when: suppText(item.when),
+    note: ''
+  });
+  renderSuppPlan();
+}
+
+/* بيرسم خطة المكملات — عند المدرب قابلة للتعديل، وعند العميل للقراءة بس */
+function renderSuppPlanInto(listEl, plan, editable) {
+  listEl.innerHTML = '';
+
+  plan.forEach(function (entry, index) {
+    const source = supplementById(entry.supId);
+    const li = document.createElement('li');
+    li.className = 'supp-plan-item';
+
+    const icon = document.createElement('span');
+    icon.className = 'supp-icon';
+    icon.textContent = (source && source.icon) || '💊';
+    li.appendChild(icon);
+
+    const info = document.createElement('div');
+    info.className = 'supp-plan-info';
+
+    const name = document.createElement('div');
+    name.className = 'supp-name';
+    // الاسم بيتاخد من المكتبة بلغة الواجهة، وبيرجع للمحفوظ لو المكمل اتشال
+    name.textContent = source ? (source[lang] || source.ar) : (entry.name || '');
+    info.appendChild(name);
+
+    if (editable) {
+      const doseInput = document.createElement('input');
+      doseInput.className = 'supp-input';
+      doseInput.value = entry.dose || '';
+      doseInput.placeholder = t('supp_dose');
+      doseInput.addEventListener('input', function () { entry.dose = doseInput.value; });
+      info.appendChild(doseInput);
+
+      const whenInput = document.createElement('input');
+      whenInput.className = 'supp-input';
+      whenInput.value = entry.when || '';
+      whenInput.placeholder = t('supp_when');
+      whenInput.addEventListener('input', function () { entry.when = whenInput.value; });
+      info.appendChild(whenInput);
+
+      const noteInput = document.createElement('input');
+      noteInput.className = 'supp-input';
+      noteInput.value = entry.note || '';
+      noteInput.placeholder = t('supp_note_ph');
+      noteInput.addEventListener('input', function () { entry.note = noteInput.value; });
+      info.appendChild(noteInput);
+    } else {
+      const detail = document.createElement('div');
+      detail.className = 'supp-plan-detail';
+      const bits = [];
+      if (entry.dose) bits.push(t('supp_dose') + ': ' + entry.dose);
+      if (entry.when) bits.push(t('supp_when') + ': ' + entry.when);
+      detail.textContent = bits.join('  ·  ');
+      info.appendChild(detail);
+
+      if (entry.note) {
+        const note = document.createElement('div');
+        note.className = 'supp-plan-note';
+        note.textContent = entry.note;
+        info.appendChild(note);
+      }
+      if (source) {
+        const care = document.createElement('div');
+        care.className = 'supp-care';
+        care.textContent = suppText(source.care);
+        info.appendChild(care);
+      }
+    }
+
+    li.appendChild(info);
+
+    if (editable) {
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'secondary supp-del-btn';
+      del.textContent = '✕';
+      del.title = t('remove');
+      del.addEventListener('click', function () {
+        plan.splice(index, 1);
+        renderSuppPlan();
+      });
+      li.appendChild(del);
+    }
+
+    listEl.appendChild(li);
+  });
+}
+
+function renderSuppPlan() {
+  if (!suppPlanList) return;
+  const plan = suppPlan();
+  renderSuppPlanInto(suppPlanList, plan, true);
+  if (suppPlanEmpty) suppPlanEmpty.classList.toggle('hidden', plan.length > 0);
+}
+
+if (document.getElementById('open-supplements-btn')) {
+  document.getElementById('open-supplements-btn').addEventListener('click', openSupplementLibrary);
+}
+
+document.getElementById('supp-back-btn').addEventListener('click', function () {
+  showScreen(coachScreen);
+  showNutrition();
+});
+
+suppSearch.addEventListener('input', renderSuppList);
 
 function fillFoodCatSelect() {
   const keep = cfCat.value;
@@ -6862,16 +7543,22 @@ function renderFoodList() {
       });
       li.appendChild(thumb);
     } else {
-      const addPhotoBtn = document.createElement('button');
-      addPhotoBtn.type = 'button';
-      addPhotoBtn.className = 'food-photo-btn';
-      addPhotoBtn.title = t('add_photo_short');
-      addPhotoBtn.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2"></rect><circle cx="8.5" cy="10" r="1.7"></circle><path d="M4 17l5-5 3.5 3.5L16 12l4 5"></path></svg>';
-      addPhotoBtn.addEventListener('click', function (event) {
+      /*
+       * مفيش صورة مرفوعة للصنف ده — بنعرض أيقونة الصنف نفسه (كل صنف في
+       * المكتبة ليه أيقونته) بدل زرار فاضي، فالمكتبة بقى ليها شكل بصري
+       * من غير ما نحمّل أي صور من النت. الضغط على الأيقونة لسه بيفتح
+       * رفع صورة حقيقية لو المدرب عايز
+       */
+      const iconBtn = document.createElement('button');
+      iconBtn.type = 'button';
+      iconBtn.className = 'food-photo-btn food-icon-btn';
+      iconBtn.title = t('add_photo_short');
+      iconBtn.textContent = food.icon || foodCategoryIcon(food.cat);
+      iconBtn.addEventListener('click', function (event) {
         event.stopPropagation();
         pickLibraryImage(foodImageKey);
       });
-      li.appendChild(addPhotoBtn);
+      li.appendChild(iconBtn);
     }
 
     const info = document.createElement('div');
@@ -6956,7 +7643,19 @@ document.getElementById('cf-add-btn').addEventListener('click', async function (
 const cnutTotals = document.getElementById('cnut-totals');
 const cnutMeals = document.getElementById('cnut-meals');
 
+function showClientSupplements() {
+  const box = document.getElementById('cnut-supp-box');
+  const list = document.getElementById('cnut-supp-list');
+  if (!box || !list) return;
+  const plan = (clientNutrition && Array.isArray(clientNutrition.supplements))
+    ? clientNutrition.supplements : [];
+  box.classList.toggle('hidden', !plan.length);
+  if (plan.length) renderSuppPlanInto(list, plan, false);
+}
+
 function showClientNutrition() {
+  showClientSupplements();
+
   if (!nutritionHasContent(clientNutrition)) {
     cnutTotals.innerHTML = '';
     cnutMeals.innerHTML = '';
@@ -8034,6 +8733,10 @@ function refreshAll() {
     renderFoodChips();
     renderFoodList();
   }
+  if (!supplementsScreen.classList.contains('hidden')) {
+    renderSuppChips();
+    renderSuppList();
+  }
   if (!clientsScreen.classList.contains('hidden')) loadClients();
   if (!providersScreen.classList.contains('hidden')) { fillSpecialtySelect(); loadProviders(); }
   if (!providerHomeScreen.classList.contains('hidden') && currentProviderData) showProviderHome(currentProviderData);
@@ -8042,7 +8745,7 @@ function refreshAll() {
   if (!injuryScreen.classList.contains('hidden')) { refreshHotspots(); loadInjuryHistory(); }
   if (!teamViewScreen.classList.contains('hidden')) loadTeamView();
   if (!clientProfileScreen.classList.contains('hidden')) fillClientProfileSelects();
-  if (!coachScreen.classList.contains('hidden')) fillCoachMuscleSelect();
+  if (!coachScreen.classList.contains('hidden')) { fillCoachMuscleSelect(); fillSportTemplatePicker(); }
   if (!clientConsultPanel.classList.contains('hidden')) loadClientConsult();
   if (!consultPanel.classList.contains('hidden')) renderCoachConsultRequests();
   if (!medLibraryScreen.classList.contains('hidden')) loadMedLibrary();

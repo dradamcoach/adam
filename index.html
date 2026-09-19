@@ -916,6 +916,20 @@
         <select id="sport-template-pick"></select>
         <button id="apply-sport-template" class="secondary" data-t="apply_template">تحميل القالب لليوم ده</button>
 
+        <div class="my-tpl-box">
+          <div class="row">
+            <button type="button" id="save-day-template-btn" class="secondary" data-t="save_day_as_template">💾 احفظ اليوم ده كقالب</button>
+            <button type="button" id="delete-my-template-btn" class="secondary hidden" data-t="delete_my_template">🗑 امسح القالب</button>
+          </div>
+          <div class="row hidden" id="my-template-form">
+            <input id="my-template-name" data-t-ph="my_template_name_ph">
+            <button type="button" id="my-template-save-btn" class="secondary" data-t="my_template_save">حفظ</button>
+            <button type="button" id="my-template-cancel-btn" class="secondary" data-t="my_template_cancel">إلغاء</button>
+          </div>
+          <p class="hint-text" data-t="my_template_hint">القالب بيتحفظ باسمك وبيظهر لك في أي عميل — والمتخصصين التانيين يقدروا يستعملوه كمان</p>
+          <p class="message" id="my-template-message"></p>
+        </div>
+
         <label class="field-label" data-t="coach_muscle_label">العضلة المستهدفة النهاردة</label>
         <select id="coach-muscle"></select>
         <p class="hint-text" data-t="coach_muscle_hint">لما تفتح المكتبة هتلاقيها مفلترة على العضلة دي على طول</p>
@@ -1049,6 +1063,14 @@
         <button id="open-food-btn" class="secondary icon-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path></svg><span data-t="open_food_library">مكتبة الأغذية</span></button>
       </div>
 
+      <!-- ====== خطة المكملات ====== -->
+      <div class="add-box">
+        <h3 data-t="supp_plan_title">💊 المكملات والفيتامينات</h3>
+        <ul class="supp-plan-list" id="supp-plan-list"></ul>
+        <p class="message" id="supp-plan-empty" data-t="supp_plan_empty">مفيش مكملات في الخطة — افتح المكتبة واختار اللي محتاجه</p>
+        <button id="open-supplements-btn" class="secondary icon-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-45 12 12)"></rect><line x1="9" y1="9" x2="15" y2="15"></line></svg><span data-t="open_supp_library">مكتبة المكملات</span></button>
+      </div>
+
       <button id="save-nutrition-btn" data-t="save_nutrition">حفظ برنامج التغذية</button>
     </div>
 
@@ -1096,6 +1118,17 @@
       </div>
       <button id="cf-add-btn" class="secondary" data-t="save_food">+ حفظ الصنف</button>
     </div>
+  </div>
+
+  <!-- ============ مكتبة المكملات والفيتامينات ============ -->
+  <div class="card hidden" id="supplements-screen">
+    <button id="supp-back-btn" class="link" data-t="back_program">‹ رجوع للبرنامج</button>
+    <h2 data-t="supp_library">مكتبة المكملات والفيتامينات</h2>
+    <p class="supp-disclaimer" data-t="supp_disclaimer">⚠️ المكتبة دي مرجع تعليمي مش وصفة طبية. أي عميل عنده حالة مرضية أو بياخد دوا أو حامل — لازم يرجع لطبيب أو أخصائي تغذية إكلينيكي قبل أي مكمل.</p>
+    <input id="supp-search" data-t-ph="supp_search_ph">
+    <div class="chips" id="supp-chips"></div>
+    <p class="message" id="supp-message"></p>
+    <ul class="supp-list" id="supp-list"></ul>
   </div>
 
   <div class="card hidden" id="library-screen">
@@ -1211,6 +1244,12 @@
       </div>
       <div class="totals" id="cnut-totals"></div>
       <div id="cnut-meals"></div>
+
+      <div class="add-box hidden" id="cnut-supp-box">
+        <h3 data-t="supp_plan_title">💊 المكملات والفيتامينات</h3>
+        <ul class="supp-plan-list" id="cnut-supp-list"></ul>
+        <p class="supp-disclaimer" data-t="supp_client_note">دي المكملات اللي مدربك حددهالك. لو بتاخد أي دوا أو عندك حالة مرضية، اسأل دكتورك الأول.</p>
+      </div>
     </div>
 
     <div id="client-classes" class="hidden">
