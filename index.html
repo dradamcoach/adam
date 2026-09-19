@@ -15,109 +15,103 @@
   <p data-t="tagline">منصة التدريب والتأهيل والتغذية</p>
 
   <div class="card hidden" id="welcome-screen">
-    <div class="welcome-hero">
-      <div class="welcome-hero-badges">
-        <span class="welcome-badge wb-1"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg></span>
-        <span class="welcome-badge wb-2"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line></svg></span>
-        <span class="welcome-badge wb-3"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path></svg></span>
-        <span class="welcome-badge wb-4"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"></path></svg></span>
+    <!-- ============ الواجهة الأولى: قصيرة، فيها حاجة تتشاف ============ -->
+    <div class="hero2">
+      <span class="hero2-badge" data-t="hero2_badge">🎁 30 يوم مجانًا — من غير بطاقة</span>
+
+      <h2 class="hero2-title" data-t="hero2_title">برنامجك. من متخصص حقيقي.</h2>
+      <p class="hero2-sub" data-t="hero2_sub">تمرين · تأهيل · تغذية · استشارة طبية</p>
+
+      <!-- شريط عريض بعرض الشاشة بيوصّل أجزاء البرنامج ببعض، وفيه نقطة
+           بتتحرك على المسار — بيقول "ده كله حاجة واحدة متوصّلة" من
+           غير أي كلام -->
+      <div class="hero-band" id="hero-band"></div>
+
+      <div class="hero2-cta">
+        <button type="button" id="hero2-start-btn" data-t="welcome_start_btn">ابدأ تجربتك المجانية</button>
+        <button type="button" id="hero2-demo-btn" class="secondary" data-t="hero2_demo_btn">شوف برنامج نموذجي ↓</button>
       </div>
-      <h2 data-t="welcome_hero_title">برنامجك الرياضي والتأهيلي والغذائي، في مكان واحد</h2>
-      <p class="welcome-hero-sub" data-t="welcome_hero_sub">ADAM بيجمّعلك التمرين والتأهيل والتغذية والاستشارة الطبية مع فريق متخصصين، وكله متابع خطوة بخطوة</p>
+
+      <!-- الموبايل: مرسوم بالكامل بالـCSS ومفيش صورة بتتحمّل. بيلف
+           على ست شاشات حقيقية من التطبيق، ولونه بيتغيّر مع كل تخصص
+           ومتزامن مع المحطة المنوّرة في الشريط فوق -->
+      <div class="hero2-phone" id="hero2-phone">
+        <div class="hero2-phone-notch"></div>
+        <div class="hero2-phone-screen">
+          <div class="hp-statusbar">
+            <span id="hero-live-tag" class="hp-chip"></span>
+            <span class="hp-dots"><i></i><i></i><i></i></span>
+          </div>
+          <div class="hp-top">
+            <span class="hp-avatar" id="hp-avatar">🏋️</span>
+            <div class="hp-titles">
+              <div class="hp-name" id="hp-name">برنامج النهاردة</div>
+              <div class="hp-sub" id="hp-sub">الجزء العلوي — دفع</div>
+            </div>
+          </div>
+          <div class="hp-rows" id="hp-rows"></div>
+          <div class="hp-bar"><div class="hp-bar-fill" id="hp-bar-fill"></div></div>
+          <div class="hp-foot" id="hp-foot">3 من 5 تمارين خلصت</div>
+        </div>
+      </div>
+
+      <div class="hero2-trust">
+        <span class="hero2-trust-item" data-t="hero2_trust_1">✓ متخصصين حقيقيين</span>
+        <span class="hero2-trust-item" data-t="hero2_trust_2">✓ بياناتك خاصة</span>
+        <span class="hero2-trust-item" data-t="hero2_trust_3">✓ محتوى مراجَع علميًا</span>
+      </div>
     </div>
 
-    <div class="welcome-trust-bar" id="welcome-trust-bar">
-      <div class="trust-item">
-        <span class="trust-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <span data-t="trust_item_real_team">فريق متخصصين حقيقي وراك، مش خوارزمية بس</span>
+    <!-- ============ الفريق: صور بتحكي بدل كلام ============ -->
+    <!-- شخصيات مرسومة بالـSVG، كل واحدة بتمثّل تخصص. رسم واضح إنه رسم،
+         ومكتوب تحته الدور مش اسم شخص — عشان مايتفهمش غلط إنه صورة
+         حقيقية لحد. أول ما يتضاف متخصصين بصورهم الحقيقية، قسم
+         "فريقك المتخصص" تحت بيعرضهم -->
+    <div class="team-strip">
+      <h3 class="team-strip-title" data-t="team_strip_title">فريق كامل وراك</h3>
+      <!-- كاروسيل دائري بيلف لوحده — الشخصية اللي قدام بتكبر وعليها
+           كشاف، وتحتها سطر واحد بيقول بتعمل إيه -->
+      <div class="orbit" id="orbit">
+        <div class="orbit-glow" id="orbit-glow"></div>
+        <div class="orbit-stage" id="orbit-stage"></div>
       </div>
-      <div class="trust-item">
-        <span class="trust-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <span data-t="trust_item_private">بياناتك ومتابعتك خاصة بيك وبفريقك بس</span>
+      <div class="orbit-caption">
+        <div class="orbit-role" id="orbit-role"></div>
+        <div class="orbit-line" id="orbit-line"></div>
       </div>
-      <div class="trust-item">
-        <span class="trust-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <span data-t="trust_item_medical">محتوى تأهيلي مبني على أساس علمي، ومراجَع قبل ما ينشر</span>
-      </div>
-      <div class="trust-item hidden" id="trust-stat-item">
-        <span class="trust-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <span id="trust-stat-text"></span>
-      </div>
+      <div class="orbit-dots" id="orbit-dots"></div>
+
+      <!-- صفحات فوق بعض: كل تخصص وصفحته، بتتقلب لما تدوس على تخصص
+           في الكاروسيل. دي بقت مكان "كل حاجة في مكان واحد" و"لمحة من
+           المكتبة" و"شكل البرنامج" التلاتة مع بعض -->
+      <div class="specpages" id="specpages"></div>
     </div>
 
     <h3 class="welcome-section-title" data-t="how_it_works_title">هيبقى إزاي؟</h3>
-    <div class="welcome-steps">
+    <div class="steps-note" data-t="how_it_works_note">3 خطوات وخلاص</div>
+    <div class="welcome-steps journey">
       <div class="welcome-step">
-        <span class="welcome-step-num">1</span>
+        <span class="step-art-wrap"><svg class="step-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="8" width="40" height="48" rx="7" fill="#0e1729" stroke="#22c55e" stroke-width="2.2"/><circle cx="32" cy="24" r="7" fill="#22c55e"/><path d="M20 44c0-6 5.5-9 12-9s12 3 12 9z" fill="#22c55e" opacity=".7"/><rect x="20" y="50" width="24" height="3" rx="1.5" fill="#22c55e" opacity=".35"/></svg><span class="welcome-step-num">1</span></span>
         <div class="welcome-step-title" data-t="how_it_works_step1_title">سجّل واحكيلنا عن هدفك</div>
         <div class="welcome-step-text" data-t="how_it_works_step1_text">هدفك، رياضتك، أي إصابة حالية أو سابقة، وأي حاجة محتاجها فريقك يعرفها</div>
       </div>
       <div class="welcome-step">
-        <span class="welcome-step-num">2</span>
+        <span class="step-art-wrap"><svg class="step-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="10" width="36" height="44" rx="6" fill="#0e1729" stroke="#22c55e" stroke-width="2.2"/><rect x="17" y="20" width="22" height="3.4" rx="1.7" fill="#22c55e"/><rect x="17" y="29" width="16" height="3.4" rx="1.7" fill="#22c55e" opacity=".5"/><rect x="17" y="38" width="20" height="3.4" rx="1.7" fill="#22c55e" opacity=".5"/><path d="M42 40l12-12 6 6-12 12-7 1z" fill="#22c55e"/></svg><span class="welcome-step-num">2</span></span>
         <div class="welcome-step-title" data-t="how_it_works_step2_title">هيتظبطلك برنامج فعلي</div>
         <div class="welcome-step-text" data-t="how_it_works_step2_text">مدرب أو متخصص حقيقي بيراجع حالتك ويبني برنامجك بنفسه، مش برنامج جاهز للكل</div>
       </div>
       <div class="welcome-step">
-        <span class="welcome-step-num">3</span>
+        <span class="step-art-wrap"><svg class="step-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="12" width="48" height="40" rx="7" fill="#0e1729" stroke="#22c55e" stroke-width="2.2"/><path d="M16 42l10-9 8 6 14-15" fill="none" stroke="#22c55e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="48" cy="24" r="4" fill="#22c55e"/><rect x="16" y="46" width="32" height="2.6" rx="1.3" fill="#22c55e" opacity=".3"/></svg><span class="welcome-step-num">3</span></span>
         <div class="welcome-step-title" data-t="how_it_works_step3_title">تابع وعدّل أسبوعيًا</div>
         <div class="welcome-step-text" data-t="how_it_works_step3_text">تسجّل تقدمك أول بأول، وفريقك يعدّل البرنامج معاك حسب اللي بتحسّه</div>
       </div>
     </div>
 
-    <h3 class="welcome-section-title" data-t="welcome_pillars_title">مش تمرين بس... ولا أكل بس... ولا تأهيل بس</h3>
-    <p class="welcome-pillars-sub" data-t="welcome_pillars_sub">دوس على أي جزء تحت تشوف شكله الكامل وبرنامج أسبوع كامل ليه</p>
-    <div class="welcome-pillars-wheel">
-      <button type="button" class="welcome-pillar-btn active" data-pillar="training">
-        <span class="welcome-pillar-circle wb-1"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg></span>
-        <span data-t="welcome_feature_training_title">تمرين مخصص ليك</span>
-      </button>
-      <button type="button" class="welcome-pillar-btn" data-pillar="rehab">
-        <span class="welcome-pillar-circle wb-2"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line></svg></span>
-        <span data-t="welcome_feature_rehab_title">تأهيل من الإصابات</span>
-      </button>
-      <button type="button" class="welcome-pillar-btn" data-pillar="nutrition">
-        <span class="welcome-pillar-circle wb-3"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path></svg></span>
-        <span data-t="welcome_feature_nutrition_title">خطة تغذية متكاملة</span>
-      </button>
-      <button type="button" class="welcome-pillar-btn" data-pillar="medical">
-        <span class="welcome-pillar-circle wb-4"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"></path></svg></span>
-        <span data-t="welcome_feature_medical_title">استشارة طبية موثوقة</span>
-      </button>
-    </div>
-    <div class="welcome-pillar-detail" id="welcome-pillar-detail"></div>
-
-    <h3 class="welcome-section-title" id="welcome-samples-title" data-t="welcome_samples_title">لمحة من مكتبة التمارين</h3>
-    <div class="welcome-samples" id="welcome-samples"></div>
-
-    <h3 class="welcome-section-title" id="welcome-program-title" data-t="welcome_program_title">شكل برنامجك هيبقى إزاي</h3>
-    <div class="welcome-program-preview">
-      <div class="wp-day-title" id="wp-day-title">يوم 1 — الجزء العلوي</div>
-      <div class="wp-line" id="wp-line-1">إحماء عام — 8 دقايق</div>
-      <div class="wp-line" id="wp-line-2">ضغط بنش — 4×10</div>
-      <div class="wp-line" id="wp-line-3">سحب أرضي — 4×10</div>
-      <div class="wp-line" id="wp-line-4">كتف دمبل — 3×12</div>
-    </div>
-
     <div class="welcome-audience-section">
       <h3 class="welcome-section-title" data-t="welcome_audience_title">مين البرنامج ده مناسبله؟</h3>
-      <div class="welcome-audience-grid">
-        <div class="welcome-audience-card">
-          <span class="welcome-audience-icon wb-2"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line></svg></span>
-          <div class="welcome-audience-text" data-t="welcome_audience_1">رياضي عائد من إصابة وعاوز تأهيل مضبوط قبل ما يرجع يلعب</div>
-        </div>
-        <div class="welcome-audience-card">
-          <span class="welcome-audience-icon wb-1"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg></span>
-          <div class="welcome-audience-text" data-t="welcome_audience_2">مبتدئ عاوز يبدأ صح من غير ما يتلخبط في تمارين مش مناسبة له</div>
-        </div>
-        <div class="welcome-audience-card">
-          <span class="welcome-audience-icon wb-4"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v5a5 5 0 0 1-10 0z"></path><path d="M7 5H4a3 3 0 0 0 3 4"></path><path d="M17 5h3a3 3 0 0 1-3 4"></path></svg></span>
-          <div class="welcome-audience-text" data-t="welcome_audience_3">لاعب بيستعد لموسم أو بطولة ومحتاج برنامج مبني على توقيت محدد</div>
-        </div>
-        <div class="welcome-audience-card">
-          <span class="welcome-audience-icon wb-3"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path></svg></span>
-          <div class="welcome-audience-text" data-t="welcome_audience_4">حد عاوز يتابع نظام غذائي فعلي مع أخصائي، مش أرقام عامة بس</div>
-        </div>
-      </div>
+      <div class="deck" id="audience-deck"></div>
+      <div class="deck-nav" id="audience-nav"></div>
+      <p class="deck-hint" data-t="deck_swipe_hint">اسحب يمين أو شمال</p>
     </div>
 
     <div class="welcome-stories-section hidden" id="welcome-stories-section">
@@ -132,13 +126,16 @@
 
     <div class="welcome-faq-section">
       <h3 class="welcome-section-title" data-t="welcome_faq_title">أسئلة شائعة</h3>
-      <div class="welcome-faq-list" id="welcome-faq-list"></div>
+      <div class="deck notif-stack" id="welcome-faq-list"></div>
+      <div class="deck-nav" id="faq-nav"></div>
+      <p class="deck-hint" data-t="deck_tap_hint">دوس على الكارت تقرا الإجابة · اسحب تشوف التاني</p>
     </div>
 
     <div class="welcome-lead-section">
       <h3 class="welcome-section-title" data-t="welcome_lead_title">لسه مش متأكد؟ اتكلم مع فريقنا الأول</h3>
       <p class="welcome-lead-sub" data-t="welcome_lead_sub">اكتب بياناتك وهيتواصل معاك حد من الفريق يجاوبك على أي سؤال</p>
-      <div id="welcome-lead-form">
+      <button type="button" class="secondary reveal-btn" id="lead-reveal-btn" data-t="lead_reveal_btn">✉️ اكتب رسالتك</button>
+      <div id="welcome-lead-form" class="hidden">
         <input id="lead-name" data-t-ph="lead_name_ph">
         <div class="row">
           <select id="lead-phone-code" class="phone-code-select"></select>
@@ -156,7 +153,8 @@
     <div class="welcome-provider-apply-section">
       <h3 class="welcome-section-title" data-t="provider_apply_title">مدرب أو متخصص وعايز تنضم لينا؟</h3>
       <p class="welcome-lead-sub" data-t="provider_apply_sub">ابعتلنا بياناتك وهنراجعها ونرجعلك بالرد</p>
-      <div id="welcome-provider-apply-form">
+      <button type="button" class="secondary reveal-btn" id="pa-reveal-btn" data-t="pa_reveal_btn">🎓 قدّم طلب انضمام</button>
+      <div id="welcome-provider-apply-form" class="hidden">
         <input id="pa-name" data-t-ph="provider_apply_name_ph">
         <input id="pa-email" type="email" data-t-ph="provider_apply_email_ph">
         <input id="pa-contact" data-t-ph="provider_apply_contact_ph">
@@ -792,7 +790,7 @@
       <button id="add-client-btn" class="secondary" data-t="add_client">+ إضافة عميل</button>
       <button id="quick-add-coach-btn" class="secondary icon-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"></path><line x1="17" y1="8" x2="17" y2="14"></line><line x1="14" y1="11" x2="20" y2="11"></line></svg><span data-t="quick_add_coach_btn">+ إضافة مدرب جديد</span></button>
       <button id="open-classes-btn" class="secondary icon-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path><circle cx="17" cy="9" r="2.4"></circle><path d="M15.5 14c2.5.3 4.5 2.3 4.5 6"></path></svg><span data-t="open_classes">الكلاسات</span></button>
-      <button id="open-providers-btn" class="secondary icon-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8.5" cy="11" r="2"></circle><path d="M5.5 16c.5-1.8 1.7-2.5 3-2.5s2.5.7 3 2.5"></path><line x1="14" y1="9.5" x2="18.5" y2="9.5"></line><line x1="14" y1="13" x2="18.5" y2="13"></line></svg><span data-t="open_providers">المتخصصين</span></button>
+      <button id="open-providers-btn" class="secondary icon-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8.5" cy="11" r="2"></circle><path d="M5.5 16c.5-1.8 1.7-2.5 3-2.5s2.5.7 3 2.5"></path><line x1="14" y1="9.5" x2="18.5" y2="9.5"></line><line x1="14" y1="13" x2="18.5" y2="13"></line></svg><span data-t="open_providers">المتخصصين</span><span class="tab-badge hidden" id="pending-specs-badge"></span></button>
       <button id="seed-medlib-btn" class="secondary icon-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"></path></svg><span data-t="seed_medlib_btn">تحميل محتوى مبدئي للمكتبة الطبية</span></button>
     </div>
 
@@ -830,6 +828,11 @@
       <label class="field-label" data-t="your_specialties_label">تخصصاتك (تقدر تختار أكتر من واحد)</label>
       <div class="specialty-multi" id="ph-specialty-multi"></div>
       <p class="hint-text" data-t="specialties_hint">خد كورس جديد؟ علّم عليه هنا وهيظهر في بروفايلك وللعملاء وهم بيختاروا فريقهم</p>
+      <p class="pending-note hidden" id="ph-pending-note"></p>
+      <div class="lib-access-box hidden" id="ph-lib-access-box">
+        <label class="field-label" data-t="lib_access_mine_label">المكتبات المتاحة ليك</label>
+        <div class="specialty-chips" id="ph-lib-access-list"></div>
+      </div>
     </div>
 
     <button type="button" class="secondary icon-btn hidden" id="ph-open-medlib-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"></path></svg><span data-t="open_medlib_btn">المكتبة الطبية</span></button>

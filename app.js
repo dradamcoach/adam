@@ -422,6 +422,67 @@ const TEXT = {
     my_food: 'بتاعي',
     all_foods: 'كل الأصناف',
     all_supps: 'كل المكملات',
+    hero2_badge: '🎁 30 يوم مجانًا — من غير بطاقة',
+    team_strip_title: 'فريق كامل وراك',
+    orbit_rating_line: '⭐ {avg} من {n} تقييم',
+    faq_badge: 'سؤال شائع',
+    deck_prev: 'السابق',
+    deck_next: 'التالي',
+    deck_tap_hint: 'دوس على الكارت تقرا الإجابة · اسحب تشوف التاني',
+    deck_swipe_hint: 'اسحب يمين أو شمال',
+    team_strip_hint: 'دوس على أي تخصص تشوف شغله',
+    coach_does: 'بيكتب برنامجك ويعدّله كل أسبوع',
+    medical_case_physio: 'ألم ومدى حركة',
+    medical_case_ortho: 'كسور وأربطة وخشونة',
+    medical_case_sports_medicine: 'إصابات الملعب والرجوع للّعب',
+    medical_case_psychologist: 'ضغط المنافسة والثقة',
+    rehab_does: 'بيرجّعك تلعب بعد الإصابة بأمان',
+    nutrition_does: 'بيحسب أكلك على وزنك وهدفك',
+    doctor_does: 'بيراجع حالتك ويطمّنك',
+    psych_does: 'بيشتغل على تركيزك وثقتك',
+    role_coach: 'مدرب',
+    role_rehab: 'تأهيل',
+    role_nutrition: 'تغذية',
+    role_doctor: 'طبيب',
+    role_psych: 'نفسي',
+    hero2_title: 'برنامجك. من متخصص حقيقي.',
+    hero2_sub: 'تمرين · تأهيل · تغذية · استشارة طبية',
+    hero2_demo_btn: 'شوف برنامج نموذجي ↓',
+    hero2_trust_1: '✓ متخصصين حقيقيين',
+    hero2_trust_2: '✓ بياناتك خاصة',
+    hero2_trust_3: '✓ محتوى مراجَع علميًا',
+    stat_exercises: 'تمرين بالصور',
+    stat_templates: 'قالب جاهز',
+    stat_supps: 'مكمل مشروح',
+    stat_specialists: 'متخصص',
+    how_it_works_note: '3 خطوات وخلاص',
+    lead_reveal_btn: '✉️ اكتب رسالتك',
+    pa_reveal_btn: '🎓 قدّم طلب انضمام',
+    role_progress: 'متابعة',
+    hero_slide5_title: 'جلسة نفسي رياضي',
+    hero_slide5_sub: 'قبل المباراة بيومين',
+    hero_slide5_rows: 'تمرين تنفّس — 5 دقايق|تصوّر ذهني للأداء|روتين ثابت قبل الماتش|نوم 8 ساعات',
+    hero_slide5_foot: 'شغل على التركيز والثقة',
+    hero_slide6_title: 'تقدمك الشهر ده',
+    hero_slide6_sub: 'قياسات ووزن وأداء',
+    hero_slide6_rows: 'الوزن — 82 ← 78.4 كجم|الدهون — 22% ← 18%|بنش برس — 60 ← 72.5 كجم|التزامك بالبرنامج 85%',
+    hero_slide6_foot: 'كل رقم اتسجّل بإيدك واتراجع مع مدربك',
+    hero_slide4_title: 'استشارة مع متخصص',
+    hero_slide4_sub: 'د. — طبيب طب رياضي',
+    hero_slide4_rows: 'بلّغت عن ألم في الركبة|اتراجعت حالتك في ساعتين|وصلك رد وخطة تعديل|تمرين السكوات اتوقف مؤقتًا',
+    hero_slide4_foot: 'اترد عليك من غير ما تستنى ميعاد',
+    hero_slide1_title: 'برنامج النهاردة',
+    hero_slide1_sub: 'الجزء العلوي — دفع',
+    hero_slide1_rows: 'إحماء عام — 8 د|بنش برس بار — 4×8|ضغط كتف — 3×10|تفتيح دمبل — 3×12|ترايسبس حبل — 3×15',
+    hero_slide1_foot: '3 من 5 تمارين خلصت',
+    hero_slide2_title: 'تأهيل الركبة',
+    hero_slide2_sub: 'المرحلة 2 — استعادة القوة',
+    hero_slide2_rows: 'جسر المؤخرة — 3×15|رفع الساق — 3×12|سكوات جزئي — 3×10|توازن رجل واحدة — 3×30ث',
+    hero_slide2_foot: 'متابَع مع أخصائي تأهيل',
+    hero_slide3_title: 'خطة اليوم الغذائية',
+    hero_slide3_sub: '2,400 سعر — 165 جم بروتين',
+    hero_slide3_rows: 'فطار — شوفان وبيض|سناك — زبادي يوناني|غدا — فراخ وأرز وسلطة|عشا — سمك وخضار',
+    hero_slide3_foot: 'محسوبة على وزنك وهدفك',
     phone_required: 'اكتب رقم موبايلك — ده الرقم اللي هنتواصل بيه معاك',
     phone_too_short: 'الرقم ناقص — رقم {code} لازم يكون {count} أرقام. مثال: {example}',
     phone_too_long: 'الرقم زايد — رقم {code} لازم يكون {count} أرقام. مثال: {example}',
@@ -593,6 +654,26 @@ const TEXT = {
     your_specialties_label: 'تخصصاتك (تقدر تختار أكتر من واحد)',
     need_one_specialty: 'اختار تخصص واحد على الأقل',
     specialty_locked_hint: 'التخصص ده مقفول على حسابك ومايتشالش — تقدر تزوّد عليه أي تخصص تاني',
+    need_one_approved_specialty: 'لازم تفضل بتخصص واحد معتمد على الأقل — مش هينفع تشيلهم كلهم',
+    specialty_pending_note: '⏳ مستني موافقة إدارة المنصة على: {list}',
+    specialty_sent_for_review: 'اتحفظ ✓ — {list} اتبعت لإدارة المنصة للموافقة، وهيشتغل أول ما يتوافق عليه',
+    pending_specialties_title: '⏳ تخصصات مستنية موافقتك',
+    approve_btn: '✓ وافق',
+    reject_btn: '✕ ارفض',
+    specialty_approved_msg: 'اتوافق على "{spec}" لـ {name} — القسم بتاعه اتفتحله',
+    specialty_rejected_msg: 'اترفض "{spec}" لـ {name}',
+    lib_access_title: '📚 المكتبات المتاحة له',
+    lib_access_mine_label: 'المكتبات المتاحة ليك',
+    lib_access_exercises: 'التمارين',
+    lib_access_food: 'التغذية',
+    lib_access_supplements: 'المكملات',
+    lib_access_rehab: 'قوالب التأهيل',
+    lib_access_medical: 'المكتبة الطبية',
+    lib_opened_msg: 'اتفتحت مكتبة {lib} لـ {name}',
+    lib_closed_msg: 'اتقفلت مكتبة {lib} على {name}',
+    lib_locked_msg: '🔒 المكتبة دي مقفولة على حسابك — كلّم إدارة المنصة',
+    lib_locked_hint: 'مقفولة — كلّم إدارة المنصة',
+    pending_specs_badge: 'طلبات تخصص مستنية',
     specialties_hint: 'خد كورس جديد؟ علّم عليه هنا وهيظهر في بروفايلك وللعملاء وهم بيختاروا فريقهم',
     open_client_profile_btn: 'بروفايلك ›',
     client_profile_title: 'بروفايلك',
@@ -730,8 +811,8 @@ const TEXT = {
     welcome_feature_nutrition_desc: 'وجباتك محسوبة على مدار أسبوعك، وبتقدر تتابعها يوم بيوم',
     welcome_feature_medical_title: 'استشارة طبية موثوقة',
     welcome_feature_medical_desc: 'مكتبة طبية معتمدة من متخصصين، وحجز جلسات مع دكاترة وأخصائيين',
-    welcome_pillars_title: 'مش تمرين بس... ولا أكل بس... ولا تأهيل بس',
-    welcome_pillars_sub: 'دوس على أي جزء تحت تشوف شكله الكامل وبرنامج أسبوع كامل ليه',
+    welcome_pillars_title: 'كل حاجة في مكان واحد',
+    welcome_pillars_sub: 'دوس على أي جزء تشوف تفاصيله',
     welcome_pillars_note: 'الأجزاء دي كلها بتتفعّل مع اشتراكك، وبتتابعها مع مدربينا ومتخصصينا الفعليين — مش برنامج جاهز وخلاص',
     welcome_pillar_training_week_title: 'أسبوعك هيتقسم كده',
     welcome_pillar_training_line_1: 'يوم 1 — تمرين الجزء العلوي (دفع وسحب)',
@@ -782,23 +863,23 @@ const TEXT = {
     trust_stat_clients: '+{n} عميل بيتابعوا برنامجهم دلوقتي',
     how_it_works_title: 'هيبقى إزاي؟',
     how_it_works_step1_title: 'سجّل واحكيلنا عن هدفك',
-    how_it_works_step1_text: 'هدفك، رياضتك، أي إصابة حالية أو سابقة، وأي حاجة محتاجها فريقك يعرفها',
+    how_it_works_step1_text: 'هدفك، رياضتك، وأي إصابة.',
     how_it_works_step2_title: 'هيتظبطلك برنامج فعلي',
-    how_it_works_step2_text: 'مدرب أو متخصص حقيقي بيراجع حالتك ويبني برنامجك بنفسه، مش برنامج جاهز للكل',
+    how_it_works_step2_text: 'متخصص حقيقي بيكتبه بإيده — مش برنامج جاهز للكل.',
     how_it_works_step3_title: 'تابع وعدّل أسبوعيًا',
-    how_it_works_step3_text: 'تسجّل تقدمك أول بأول، وفريقك يعدّل البرنامج معاك حسب اللي بتحسّه',
-    welcome_audience_title: 'مين البرنامج ده مناسبله؟',
-    welcome_audience_1: 'رياضي عائد من إصابة وعاوز تأهيل مضبوط قبل ما يرجع يلعب',
-    welcome_audience_2: 'مبتدئ عاوز يبدأ صح من غير ما يتلخبط في تمارين مش مناسبة له',
-    welcome_audience_3: 'لاعب بيستعد لموسم أو بطولة ومحتاج برنامج مبني على توقيت محدد',
-    welcome_audience_4: 'حد عاوز يتابع نظام غذائي فعلي مع أخصائي، مش أرقام عامة بس',
+    how_it_works_step3_text: 'بتسجّل تقدمك، وفريقك بيعدّل معاك.',
+    welcome_audience_title: 'ده مناسب لمين؟',
+    welcome_audience_1: 'راجع من إصابة ومحتاج تأهيل مضبوط',
+    welcome_audience_2: 'مبتدئ عايز يبدأ صح',
+    welcome_audience_3: 'بتستعد لموسم أو بطولة',
+    welcome_audience_4: 'عايز تغذية مع أخصائي فعلي',
     welcome_stories_title: 'قبل وبعد',
     story_before_label: 'قبل',
     story_after_label: 'بعد',
     welcome_team_title: 'فريقك المتخصص',
     welcome_faq_title: 'أسئلة شائعة',
     welcome_lead_title: 'لسه مش متأكد؟ اتكلم مع فريقنا الأول',
-    welcome_lead_sub: 'اكتب بياناتك وهيتواصل معاك حد من الفريق يجاوبك على أي سؤال',
+    welcome_lead_sub: 'هنرد عليك بنفسنا',
     lead_name_ph: 'اسمك',
     lead_contact_ph: 'رقم تليفونك أو إيميلك',
     lead_message_ph: 'سؤالك أو أي حاجة عاوز تقولها (اختياري)',
@@ -806,7 +887,7 @@ const TEXT = {
     lead_submitted_msg: 'وصلت رسالتك — هيتواصل معاك فريقنا قريب',
     need_lead_fields: 'اكتب اسمك ورقم تليفونك أو إيميلك',
     provider_apply_title: 'مدرب أو متخصص وعايز تنضم لينا؟',
-    provider_apply_sub: 'ابعتلنا بياناتك وهنراجعها ونرجعلك بالرد',
+    provider_apply_sub: 'هنراجع طلبك ونرجعلك',
     provider_apply_name_ph: 'اسمك',
     provider_apply_email_ph: 'إيميلك',
     provider_apply_contact_ph: 'رقم تليفونك (اختياري)',
@@ -1363,6 +1444,67 @@ const TEXT = {
     my_food: 'mine',
     all_foods: 'All foods',
     all_supps: 'All supplements',
+    hero2_badge: '🎁 30 days free — no card needed',
+    team_strip_title: 'A full team behind you',
+    orbit_rating_line: '⭐ {avg} from {n} reviews',
+    faq_badge: 'Common question',
+    deck_prev: 'Previous',
+    deck_next: 'Next',
+    deck_tap_hint: 'Tap a card to read the answer · swipe for the next',
+    deck_swipe_hint: 'Swipe left or right',
+    team_strip_hint: 'Tap any specialty to see what they do',
+    coach_does: 'Writes your program and adjusts it weekly',
+    medical_case_physio: 'Pain and range of motion',
+    medical_case_ortho: 'Fractures, ligaments, arthritis',
+    medical_case_sports_medicine: 'Field injuries and return to play',
+    medical_case_psychologist: 'Competition pressure and confidence',
+    rehab_does: 'Gets you back to playing safely after injury',
+    nutrition_does: 'Builds your meals around your weight and goal',
+    doctor_does: 'Reviews your case and reassures you',
+    psych_does: 'Works on your focus and confidence',
+    role_coach: 'Coach',
+    role_rehab: 'Rehab',
+    role_nutrition: 'Nutrition',
+    role_doctor: 'Doctor',
+    role_psych: 'Psychology',
+    hero2_title: 'Your program. From a real specialist.',
+    hero2_sub: 'Training · Rehab · Nutrition · Medical advice',
+    hero2_demo_btn: 'See a sample program ↓',
+    hero2_trust_1: '✓ Real specialists',
+    hero2_trust_2: '✓ Your data stays private',
+    hero2_trust_3: '✓ Evidence-reviewed content',
+    stat_exercises: 'exercises with photos',
+    stat_templates: 'ready templates',
+    stat_supps: 'supplements explained',
+    stat_specialists: 'specialists',
+    how_it_works_note: 'Three steps, that is it',
+    lead_reveal_btn: '✉️ Write your message',
+    pa_reveal_btn: '🎓 Apply to join',
+    role_progress: 'Progress',
+    hero_slide5_title: 'Sports psychology session',
+    hero_slide5_sub: 'Two days before the match',
+    hero_slide5_rows: 'Breathing drill — 5 min|Performance visualisation|A fixed pre-match routine|Eight hours of sleep',
+    hero_slide5_foot: 'Work on focus and confidence',
+    hero_slide6_title: 'Your progress this month',
+    hero_slide6_sub: 'Measurements, weight, performance',
+    hero_slide6_rows: 'Weight — 82 → 78.4 kg|Body fat — 22% → 18%|Bench press — 60 → 72.5 kg|85% program adherence',
+    hero_slide6_foot: 'Every number logged by you, reviewed with your coach',
+    hero_slide4_title: 'A consultation with a specialist',
+    hero_slide4_sub: 'Sports medicine doctor',
+    hero_slide4_rows: 'You reported knee pain|Reviewed within two hours|A reply and a plan change|Squats paused for now',
+    hero_slide4_foot: 'Answered without waiting for an appointment',
+    hero_slide1_title: "Today's program",
+    hero_slide1_sub: 'Upper body — push',
+    hero_slide1_rows: 'Warm-up — 8 min|Barbell bench press — 4×8|Overhead press — 3×10|Dumbbell flyes — 3×12|Rope triceps — 3×15',
+    hero_slide1_foot: '3 of 5 exercises done',
+    hero_slide2_title: 'Knee rehab',
+    hero_slide2_sub: 'Phase 2 — rebuilding strength',
+    hero_slide2_rows: 'Glute bridge — 3×15|Straight leg raise — 3×12|Partial squat — 3×10|Single-leg balance — 3×30s',
+    hero_slide2_foot: 'Followed by a rehab specialist',
+    hero_slide3_title: "Today's nutrition plan",
+    hero_slide3_sub: '2,400 kcal — 165 g protein',
+    hero_slide3_rows: 'Breakfast — oats and eggs|Snack — Greek yoghurt|Lunch — chicken, rice, salad|Dinner — fish and vegetables',
+    hero_slide3_foot: 'Calculated for your weight and goal',
     phone_required: 'Enter your phone number — this is how we will reach you',
     phone_too_short: 'Number is too short — a {code} number needs {count} digits. Example: {example}',
     phone_too_long: 'Number is too long — a {code} number needs {count} digits. Example: {example}',
@@ -1534,6 +1676,26 @@ const TEXT = {
     your_specialties_label: 'Your specialties (you can pick more than one)',
     need_one_specialty: 'Pick at least one specialty',
     specialty_locked_hint: 'This specialty is locked on your account and cannot be removed — you can still add others',
+    need_one_approved_specialty: 'You must keep at least one approved specialty — you cannot remove them all',
+    specialty_pending_note: '⏳ Waiting for platform approval on: {list}',
+    specialty_sent_for_review: 'Saved ✓ — {list} was sent to the platform for approval and starts working once approved',
+    pending_specialties_title: '⏳ Specialties awaiting your approval',
+    approve_btn: '✓ Approve',
+    reject_btn: '✕ Reject',
+    specialty_approved_msg: '"{spec}" approved for {name} — their section is now open',
+    specialty_rejected_msg: '"{spec}" rejected for {name}',
+    lib_access_title: '📚 Libraries available to them',
+    lib_access_mine_label: 'Libraries available to you',
+    lib_access_exercises: 'Exercises',
+    lib_access_food: 'Nutrition',
+    lib_access_supplements: 'Supplements',
+    lib_access_rehab: 'Rehab templates',
+    lib_access_medical: 'Medical library',
+    lib_opened_msg: '{lib} library opened for {name}',
+    lib_closed_msg: '{lib} library closed for {name}',
+    lib_locked_msg: '🔒 This library is closed for your account — contact the platform admin',
+    lib_locked_hint: 'Closed — contact the platform admin',
+    pending_specs_badge: 'Specialty requests waiting',
     specialties_hint: 'Finished a new course? Tick it here and it shows on your profile and to clients choosing their team',
     open_client_profile_btn: 'Your profile ›',
     client_profile_title: 'Your profile',
@@ -1671,8 +1833,8 @@ const TEXT = {
     welcome_feature_nutrition_desc: 'Your meals planned across the week, trackable day by day',
     welcome_feature_medical_title: 'Trusted medical guidance',
     welcome_feature_medical_desc: 'A medical library reviewed by specialists, and booking with doctors and specialists',
-    welcome_pillars_title: 'Not just training... not just food... not just rehab',
-    welcome_pillars_sub: 'Tap any part below to see its full shape and a complete week\'s program',
+    welcome_pillars_title: 'Everything in one place',
+    welcome_pillars_sub: 'Tap any pillar to see what is inside',
     welcome_pillars_note: 'All of this is unlocked with your subscription, and you follow it with our real coaches and specialists — not just a ready-made plan',
     welcome_pillar_training_week_title: 'Here\'s how your week is split',
     welcome_pillar_training_line_1: 'Day 1 — Upper body (push & pull)',
@@ -1723,23 +1885,23 @@ const TEXT = {
     trust_stat_clients: '+{n} clients are following their program right now',
     how_it_works_title: 'How does it work?',
     how_it_works_step1_title: 'Sign up and tell us your goal',
-    how_it_works_step1_text: 'Your goal, your sport, any current or past injury, and anything your team needs to know',
+    how_it_works_step1_text: 'Your goal, your sport, any injury.',
     how_it_works_step2_title: "You'll get a real program",
-    how_it_works_step2_text: 'A real coach or specialist reviews your case and builds your program themselves — not a one-size-fits-all plan',
+    how_it_works_step2_text: 'A real specialist writes it — not a template.',
     how_it_works_step3_title: 'Track and adjust weekly',
-    how_it_works_step3_text: 'Log your progress as you go, and your team adjusts the program with you based on how you feel',
-    welcome_audience_title: 'Who is this program for?',
-    welcome_audience_1: 'An athlete returning from injury who wants proper rehab before getting back to play',
-    welcome_audience_2: 'A beginner who wants to start right without getting lost in exercises that don\'t suit them',
-    welcome_audience_3: 'A player preparing for a season or competition who needs a program built around a set timeline',
-    welcome_audience_4: 'Someone who wants an actual nutrition plan with a specialist, not just generic numbers',
+    how_it_works_step3_text: 'You log progress, your team adjusts.',
+    welcome_audience_title: 'Who is this for?',
+    welcome_audience_1: 'Coming back from injury',
+    welcome_audience_2: 'Starting out and want it done right',
+    welcome_audience_3: 'Preparing for a season or a competition',
+    welcome_audience_4: 'Want nutrition with a real dietitian',
     welcome_stories_title: 'Before & after',
     story_before_label: 'Before',
     story_after_label: 'After',
     welcome_team_title: 'Your specialist team',
     welcome_faq_title: 'Frequently asked questions',
     welcome_lead_title: "Not sure yet? Talk to our team first",
-    welcome_lead_sub: "Leave your details and someone from the team will reach out to answer any question",
+    welcome_lead_sub: "We will get back to you ourselves",
     lead_name_ph: 'Your name',
     lead_contact_ph: 'Your phone number or email',
     lead_message_ph: 'Your question or anything you want to say (optional)',
@@ -1747,7 +1909,7 @@ const TEXT = {
     lead_submitted_msg: "Your message was sent — our team will reach out soon",
     need_lead_fields: 'Enter your name and phone number or email',
     provider_apply_title: 'Are you a coach or specialist who wants to join us?',
-    provider_apply_sub: "Send us your details and we'll review them and get back to you",
+    provider_apply_sub: "We review your application and reply",
     provider_apply_name_ph: 'Your name',
     provider_apply_email_ph: 'Your email',
     provider_apply_contact_ph: 'Your phone number (optional)',
@@ -2424,8 +2586,6 @@ const welcomeTeamGrid = document.getElementById('welcome-team-grid');
 const welcomeStoriesSection = document.getElementById('welcome-stories-section');
 const welcomeStoriesGrid = document.getElementById('welcome-stories-grid');
 const providerSubscriptionScreen = document.getElementById('provider-subscription-screen');
-const trustStatItem = document.getElementById('trust-stat-item');
-const trustStatText = document.getElementById('trust-stat-text');
 const paSpecialtyMulti = document.getElementById('pa-specialty-multi');
 const trialEndedScreen = document.getElementById('trial-ended-screen');
 const trialBanner = document.getElementById('trial-banner');
@@ -2810,6 +2970,81 @@ function specialtiesHaveFlag(specialties, flag) {
 }
 
 /*
+ * ============ اعتماد التخصصات ============
+ * المتخصص بيختار تخصصاته بنفسه، بس التخصص مايشتغلش غير لما صاحب
+ * المنصة يوافق عليه. يعني حد قال "أنا أخصائي تغذية" مايعرفش يكتب
+ * برنامج غذائي لحد ما الموافقة تتم. التخصصات المعتمدة في
+ * specialties، واللي مستنية في pendingSpecialties.
+ */
+function providerPendingSpecialties(data) {
+  if (data && Array.isArray(data.pendingSpecialties)) return data.pendingSpecialties.slice();
+  return [];
+}
+
+/*
+ * ============ نطاق الصلاحيات ============
+ * كل تخصص معتمد بيفتح أقسام معيّنة (scopes) من برنامج العميل:
+ * مدرب → تمرين، أخصائي تغذية → تغذية، أخصائي تأهيل → تأهيل وتمرين...
+ * صاحب المنصة والفريق الإداري بيشوفوا كل حاجة من غير أي قيد.
+ */
+const ALL_SCOPES = ['training', 'rehab', 'nutrition', 'consult'];
+
+function approvedScopes() {
+  if (isFullAdminAccount()) return ALL_SCOPES.slice();
+  const specs = providerSpecialties(currentProviderData);
+  const scopes = [];
+  specs.forEach(function (key) {
+    ((SPECIALTIES[key] && SPECIALTIES[key].scopes) || []).forEach(function (scope) {
+      if (scopes.indexOf(scope) === -1) scopes.push(scope);
+    });
+  });
+  return scopes;
+}
+
+/*
+ * ============ فتح وقفل المكتبات ============
+ * صاحب المنصة يقدر يقفل أي مكتبة على أي متخصص لحد ما يتأكد من
+ * مستواه. القيمة متخزّنة على مستند المتخصص:
+ *   libraryAccess: { exercises: false, food: true, ... }
+ * الغياب معناه "مفتوحة" — فالمتخصصين القدام مايتأثروش بالتغيير ده.
+ */
+const LIBRARY_KEYS = ['exercises', 'food', 'supplements', 'rehab', 'medical'];
+
+function libraryLabel(key) {
+  return t('lib_access_' + key);
+}
+
+function libraryOpenFor(data, key) {
+  const access = data && data.libraryAccess;
+  if (!access) return true;
+  return access[key] !== false;
+}
+
+function libraryOpen(key) {
+  if (isFullAdminAccount()) return true;
+  return libraryOpenFor(currentProviderData, key);
+}
+
+/* بتقفل زرار مكتبة مقفولة وتوضّح السبب بدل ما تختفي من غير تفسير */
+/*
+ * بتتنادى قبل فتح أي مكتبة. لو مقفولة بترجّع false وتكتب رسالة
+ * للمتخصص بدل ما الشاشة تفتح فاضية أو من غير تفسير.
+ */
+function guardLibrary(key, messageEl) {
+  if (libraryOpen(key)) return true;
+  if (messageEl) messageEl.textContent = t('lib_locked_msg');
+  return false;
+}
+
+function applyLibraryLock(button, key) {
+  if (!button) return;
+  const open = libraryOpen(key);
+  button.disabled = !open;
+  button.classList.toggle('locked-btn', !open);
+  button.title = open ? '' : t('lib_locked_hint');
+}
+
+/*
  * lockedKeys = تخصصات مقفولة مايتشالوش (بتتبعت لصاحب المنصة عشان
  * "مدرب" يفضل مختار دايمًا فمايفقدش صلاحياته وقائمة عملائه بالغلط).
  * بتفضل ظاهرة ومعلّمة بس مش قابلة لإلغاء التحديد.
@@ -2932,7 +3167,11 @@ function showScreen(screen) {
   });
   screen.classList.remove('hidden');
   logoutButton.classList.toggle('hidden', screen === loginScreen || screen === welcomeScreen);
-  welcomeStickyCta.classList.toggle('hidden', screen !== welcomeScreen);
+  // الزرار الثابت تحت بيظهر بعد ما زرار الهيرو يعدّي بس — قبل كده
+  // بيبقى تكرار لزرار ظاهر قدام عين الزائر أصلًا
+  welcomeStickyCta.classList.add('hidden');
+  document.body.classList.toggle('on-welcome', screen === welcomeScreen);
+  if (screen === welcomeScreen) updateStickyCta();
   // نقفل الاشتراك اللحظي أول ما نسيب شاشة الكلاس عشان الاستهلاك
   if (screen !== classDetailScreen && typeof stopLive === 'function') stopLive();
   // ونقفل اشتراك الشات اللحظي أول ما نسيب شاشة الشات عشان الاستهلاك
@@ -3232,7 +3471,7 @@ async function loadClients() {
   openAdminPanelBtn.classList.toggle('hidden', !isFullAdminAccount());
   openProviderSubscriptionBtn.classList.toggle('hidden', isFullAdminAccount());
   refreshProviderSubBanner();
-  if (isFullAdminAccount()) refreshLeadsBadge();
+  if (isFullAdminAccount()) { refreshLeadsBadge(); refreshPendingSpecsBadge(); }
 
   clientsList.innerHTML = '';
   clientsMessage.textContent = t('loading');
@@ -4168,12 +4407,27 @@ consultSaveBtn.addEventListener('click', async function () {
  * ما كان، وتبويب "استشارة" (ملاحظات حرة) بقى متاح للكل كمان عشان
  * أي حد (حتى المدرب) يقدر يدوّن ملاحظة سريعة من غير برنامج رسمي.
  */
+/*
+ * الأقسام اللي بتتفتح للمتخصص في برنامج العميل بتتحدد من تخصصاته
+ * المعتمدة. مثال: حساب "مدرب" معتمد بيفتحله قسم التمرين؛ لما يضيف
+ * "أخصائي تغذية" وصاحب المنصة يوافق، قسم التغذية بيتفتح كمان.
+ * صاحب المنصة والفريق الإداري بيشوفوا الأقسام كلها دايمًا.
+ * تبويب الإصابات مفتوح للكل — أي متخصص لازم يشوف بلاغ إصابة عميله.
+ */
 function applyCoachScopeTabs() {
-  tabTraining.classList.remove('hidden');
-  tabRehab.classList.remove('hidden');
-  tabNutrition.classList.remove('hidden');
-  tabConsult.classList.remove('hidden');
-  return 'training';
+  const scopes = approvedScopes();
+
+  tabTraining.classList.toggle('hidden', scopes.indexOf('training') === -1);
+  tabRehab.classList.toggle('hidden', scopes.indexOf('rehab') === -1);
+  tabNutrition.classList.toggle('hidden', scopes.indexOf('nutrition') === -1);
+  tabConsult.classList.toggle('hidden', scopes.indexOf('consult') === -1);
+
+  if (scopes.indexOf('training') !== -1) return 'training';
+  if (scopes.indexOf('rehab') !== -1) return 'rehab';
+  if (scopes.indexOf('nutrition') !== -1) return 'nutrition';
+  if (scopes.indexOf('consult') !== -1) return 'consult';
+  // تخصص ملوش أقسام برنامج (زي المساج) — بيفتح على الإصابات
+  return 'injuries';
 }
 
 document.getElementById('back-btn').addEventListener('click', function () {
@@ -4189,6 +4443,12 @@ async function openCoachScreen(email, name, sport) {
   coachMessage.textContent = t('loading');
   showScreen(coachScreen);
   const defaultMode = applyCoachScopeTabs();
+  // المكتبات المقفولة بتبان مقفولة على الزرار نفسه، مش بس لما يدوس
+  applyLibraryLock(document.getElementById('open-library-btn'), 'exercises');
+  applyLibraryLock(document.getElementById('open-mylib-btn'), 'exercises');
+  applyLibraryLock(document.getElementById('open-food-btn'), 'food');
+  applyLibraryLock(document.getElementById('open-supplements-btn'), 'supplements');
+  applyLibraryLock(document.getElementById('apply-template-btn'), 'rehab');
   setCoachMode(defaultMode);
   if (defaultMode === 'injuries') loadCoachInjuryReports();
   if (defaultMode === 'consult') loadCoachConsultNotes();
@@ -4550,6 +4810,7 @@ function applyTemplate(template) {
 }
 
 document.getElementById('apply-template-btn').addEventListener('click', async function () {
+  if (!guardLibrary('rehab', coachMessage)) return;
   const id = templatePick.value;
   if (!id) return;
 
@@ -5224,7 +5485,10 @@ function openLibrary() {
   loadLibrary();
 }
 
-document.getElementById('open-library-btn').addEventListener('click', openLibrary);
+document.getElementById('open-library-btn').addEventListener('click', function () {
+  if (!guardLibrary('exercises', coachMessage)) return;
+  openLibrary();
+});
 document.getElementById('rehab-library-btn').addEventListener('click', openLibrary);
 
 document.getElementById('lib-back-btn').addEventListener('click', function () {
@@ -5784,7 +6048,10 @@ function openMyLib() {
   loadMyLib();
 }
 
-document.getElementById('open-mylib-btn').addEventListener('click', openMyLib);
+document.getElementById('open-mylib-btn').addEventListener('click', function () {
+  if (!guardLibrary('exercises', coachMessage)) return;
+  openMyLib();
+});
 document.getElementById('rehab-mylib-btn').addEventListener('click', openMyLib);
 
 document.getElementById('mylib-back-btn').addEventListener('click', function () {
@@ -7318,7 +7585,10 @@ function openFoodLibrary() {
   loadMyFoods();
 }
 
-document.getElementById('open-food-btn').addEventListener('click', openFoodLibrary);
+document.getElementById('open-food-btn').addEventListener('click', function () {
+  if (!guardLibrary('food', coachMessage)) return;
+  openFoodLibrary();
+});
 
 document.getElementById('food-back-btn').addEventListener('click', function () {
   showScreen(coachScreen);
@@ -7585,7 +7855,10 @@ function renderSuppPlan() {
 }
 
 if (document.getElementById('open-supplements-btn')) {
-  document.getElementById('open-supplements-btn').addEventListener('click', openSupplementLibrary);
+  document.getElementById('open-supplements-btn').addEventListener('click', function () {
+    if (!guardLibrary('supplements', coachMessage)) return;
+    openSupplementLibrary();
+  });
 }
 
 document.getElementById('supp-back-btn').addEventListener('click', function () {
@@ -8845,6 +9118,7 @@ function refreshAll() {
     // البنود دي بتتبني بـ textContent وقت التحميل مش بـ data-t، فلازم
     // نعيد بناءها يدويًا بعد تغيير اللغة عشان محتواها يتترجم صح
     renderWelcomeFaq();
+    renderAudienceDeck();
     loadWelcomeTeamPreview();
     loadWelcomeStories();
     loadWelcomeTrustStat();
@@ -8875,6 +9149,17 @@ function refreshAll() {
   }
   fillLeadInterestSelect();
   fillPhoneCodeSelect();
+  renderHeroSlide();
+  renderHeroBand();
+  renderTeamStrip();
+  /*
+   * صفحات التخصص كانت بتترسم مرة واحدة وقت التحميل بس، فكانت بتفضل
+   * عالقة بلغة أول تحميل: تفتح الصفحة بالعربي وتبدّل للإنجليزي فتلاقي
+   * محتوى الصفحات لسه عربي. لازم تترسم تاني مع كل تبديل لغة زي أي
+   * محتوى مبني بالجافاسكريبت
+   */
+  renderSpecPages();
+  renderAudienceDeck();
   if (!clientsScreen.classList.contains('hidden')) loadClients();
   if (!providersScreen.classList.contains('hidden')) { fillSpecialtySelect(); loadProviders(); }
   if (!providerHomeScreen.classList.contains('hidden') && currentProviderData) showProviderHome(currentProviderData);
@@ -8946,9 +9231,48 @@ function showProviderHome(data) {
   }
 
   providerHomeMessage.textContent = '';
+  // التخصص المستني موافقة بيتعلّم عليه في الخانات كمان عشان مايختفيش
+  fillSpecialtyCheckboxes(phSpecialtyMulti, specs.concat(providerPendingSpecialties(data)),
+    isLegacyCoachAccount() ? ['coach'] : []);
+  renderPendingSpecialtyNote();
+  renderMyLibraryAccess();
   phOpenMedlibBtn.classList.toggle('hidden', !specialtiesHaveFlag(specs, 'medical'));
+  applyLibraryLock(phOpenMedlibBtn, 'medical');
   phBackBtn.classList.remove('hidden');
   loadProviderOwnReviews();
+}
+
+/* سطر "تخصصات مستنية موافقة إدارة المنصة" جوه بروفايل المتخصص */
+function renderPendingSpecialtyNote() {
+  const note = document.getElementById('ph-pending-note');
+  if (!note) return;
+  const pending = providerPendingSpecialties(currentProviderData);
+  note.classList.toggle('hidden', !pending.length);
+  if (pending.length) {
+    note.textContent = fill('specialty_pending_note', { list: specialtyListName(pending) });
+  }
+}
+
+/* بيوري المتخصص أنهي مكتبات مفتوحة له وأنهي مقفولة */
+function renderMyLibraryAccess() {
+  const box = document.getElementById('ph-lib-access-box');
+  const list = document.getElementById('ph-lib-access-list');
+  if (!box || !list) return;
+
+  if (isFullAdminAccount()) {
+    box.classList.add('hidden');
+    return;
+  }
+
+  box.classList.remove('hidden');
+  list.innerHTML = '';
+  LIBRARY_KEYS.forEach(function (key) {
+    const open = libraryOpen(key);
+    const chip = document.createElement('span');
+    chip.className = 'specialty-chip' + (open ? '' : ' specialty-chip-off');
+    chip.textContent = (open ? '✓ ' : '🔒 ') + libraryLabel(key);
+    list.appendChild(chip);
+  });
 }
 
 document.getElementById('open-my-profile-btn').addEventListener('click', function () {
@@ -9007,6 +9331,40 @@ async function loadProviderOwnReviews() {
 function fillSpecialtySelect() {
   const keep = readSpecialtyCheckboxes(pvSpecialtyMulti);
   fillSpecialtyCheckboxes(pvSpecialtyMulti, keep);
+}
+
+/*
+ * موافقة أو رفض تخصص مستني. الموافقة بتنقله من pendingSpecialties
+ * لـ specialties (وساعتها بس بيفتحله القسم بتاعه في برنامج العميل)،
+ * والرفض بيشيله من المستنيين من غير ما يمس تخصصاته المعتمدة.
+ */
+async function decidePendingSpecialty(provider, key, approve, messageEl) {
+  const approved = providerSpecialties(provider);
+  const pending = providerPendingSpecialties(provider).filter(function (item) { return item !== key; });
+  const nextApproved = approve && approved.indexOf(key) === -1 ? approved.concat([key]) : approved;
+
+  const payload = {
+    specialties: nextApproved,
+    pendingSpecialties: pending,
+    specialty: nextApproved.indexOf('coach') !== -1 ? 'coach' : (nextApproved[0] || ''),
+    isMedical: specialtiesHaveFlag(nextApproved, 'medical')
+  };
+
+  if (messageEl) messageEl.textContent = t('saving');
+  try {
+    await setDoc(doc(db, 'providers', provider.email), payload, { merge: true });
+    provider.specialties = nextApproved;
+    provider.pendingSpecialties = pending;
+    if (messageEl) {
+      setStatusMessage(messageEl, fill(approve ? 'specialty_approved_msg' : 'specialty_rejected_msg', {
+        spec: specialtyName(key, lang), name: provider.name || provider.email
+      }), 'success');
+    }
+    loadProviders();
+    refreshPendingSpecsBadge();
+  } catch (error) {
+    if (messageEl) messageEl.textContent = t('problem') + error.message;
+  }
 }
 
 async function loadProviders() {
@@ -9070,6 +9428,106 @@ async function loadProviders() {
       item.appendChild(nameLine);
       item.appendChild(specLine);
       item.appendChild(emailLine);
+
+      const rowMsg = document.createElement('p');
+      rowMsg.className = 'message';
+
+      /*
+       * ====== طلبات التخصص المستنية موافقتك ======
+       * المتخصص علّم على تخصص جديد — هنا بتوافق أو ترفض. التخصص
+       * مابيشتغلش (ومابيظهرش للعملاء) غير بعد الموافقة.
+       */
+      if (isFullAdminAccount()) {
+        const pending = providerPendingSpecialties(provider);
+        if (pending.length) {
+          const pendBox = document.createElement('div');
+          pendBox.className = 'pending-box';
+
+          const pendTitle = document.createElement('div');
+          pendTitle.className = 'pending-title';
+          pendTitle.textContent = t('pending_specialties_title');
+          pendBox.appendChild(pendTitle);
+
+          pending.forEach(function (key) {
+            const row = document.createElement('div');
+            row.className = 'pending-row';
+
+            const label = document.createElement('span');
+            label.className = 'pending-name';
+            label.textContent = specialtyIcon(key) + ' ' + specialtyName(key, lang);
+            row.appendChild(label);
+
+            const okBtn = document.createElement('button');
+            okBtn.type = 'button';
+            okBtn.className = 'secondary pending-ok';
+            okBtn.textContent = t('approve_btn');
+            okBtn.addEventListener('click', async function () {
+              await decidePendingSpecialty(provider, key, true, rowMsg);
+            });
+            row.appendChild(okBtn);
+
+            const noBtn = document.createElement('button');
+            noBtn.type = 'button';
+            noBtn.className = 'secondary pending-no';
+            noBtn.textContent = t('reject_btn');
+            noBtn.addEventListener('click', async function () {
+              await decidePendingSpecialty(provider, key, false, rowMsg);
+            });
+            row.appendChild(noBtn);
+
+            pendBox.appendChild(row);
+          });
+
+          item.appendChild(pendBox);
+        }
+
+        /*
+         * ====== فتح وقفل المكتبات على المتخصص ده ======
+         * تقدر تقفل أي مكتبة لحد ما تتأكد من مستواه، وتفتحها بعدين
+         * من غير ما تعمل أي حاجة تانية — التغيير بيشتغل عنده فورًا
+         * أول ما يفتح عميل.
+         */
+        const libBox = document.createElement('div');
+        libBox.className = 'lib-access-box';
+
+        const libTitle = document.createElement('div');
+        libTitle.className = 'pending-title';
+        libTitle.textContent = t('lib_access_title');
+        libBox.appendChild(libTitle);
+
+        const libRow = document.createElement('div');
+        libRow.className = 'lib-access-row';
+
+        LIBRARY_KEYS.forEach(function (key) {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          const open = libraryOpenFor(provider, key);
+          chip.className = 'secondary lib-chip' + (open ? ' lib-chip-on' : ' lib-chip-off');
+          chip.textContent = (open ? '✓ ' : '🔒 ') + libraryLabel(key);
+          chip.addEventListener('click', async function () {
+            const access = Object.assign({}, provider.libraryAccess || {});
+            access[key] = !libraryOpenFor(provider, key);
+            rowMsg.textContent = t('saving');
+            try {
+              await setDoc(doc(db, 'providers', provider.email), { libraryAccess: access }, { merge: true });
+              provider.libraryAccess = access;
+              const nowOpen = access[key] !== false;
+              chip.className = 'secondary lib-chip' + (nowOpen ? ' lib-chip-on' : ' lib-chip-off');
+              chip.textContent = (nowOpen ? '✓ ' : '🔒 ') + libraryLabel(key);
+              setStatusMessage(rowMsg, fill(nowOpen ? 'lib_opened_msg' : 'lib_closed_msg', {
+                lib: libraryLabel(key), name: provider.name || provider.email
+              }), 'success');
+            } catch (error) {
+              rowMsg.textContent = t('problem') + error.message;
+            }
+          });
+          libRow.appendChild(chip);
+        });
+
+        libBox.appendChild(libRow);
+        item.appendChild(libBox);
+        item.appendChild(rowMsg);
+      }
 
       // بس صاحب المنصة أو عضو إداري موجود فعلاً يقدر يمنح/يسحب الصلاحية
       // الإدارية الكاملة — ومحدش يقدر يعدّلها لنفسه (نفس القيد في قاعدة
@@ -9210,16 +9668,43 @@ document.getElementById('ph-save-btn').addEventListener('click', async function 
   // الجاي يعرف يتعامل معاه كمدرب صح (زي الشرح في onAuthStateChanged)
   // من غير ما يفقد صلاحياته أو قائمة عملائه. غير كده، المتخصص بيختار
   // تخصصاته بنفسه (ممكن أكتر من واحد) من صناديق الاختيار
-  let newSpecialties = readSpecialtyCheckboxes(phSpecialtyMulti);
-  if (isLegacyCoachAccount() && newSpecialties.indexOf('coach') === -1) {
+  let picked = readSpecialtyCheckboxes(phSpecialtyMulti);
+  if (isLegacyCoachAccount() && picked.indexOf('coach') === -1) {
     // حزام أمان: حتى لو حصل أي خلل في الواجهة، صاحب المنصة يفضل مدرب
-    newSpecialties = ['coach'].concat(newSpecialties);
+    picked = ['coach'].concat(picked);
   }
-  if (!newSpecialties.length) {
+  if (!picked.length) {
     providerHomeMessage.textContent = t('need_one_specialty');
     return;
   }
+
+  /*
+   * التخصص الجديد مابيشتغلش على طول — بيروح لصاحب المنصة عشان
+   * يوافق عليه. اللي معتمد قبل كده بيفضل شغال، والشيل مش محتاج
+   * موافقة (المتخصص حر يسيب تخصص في أي وقت).
+   * صاحب المنصة والفريق الإداري موافقتهم فورية على نفسهم.
+   */
+  const alreadyApproved = providerSpecialties(currentProviderData);
+  const keptApproved = picked.filter(function (key) { return alreadyApproved.indexOf(key) !== -1; });
+  const requested = picked.filter(function (key) { return alreadyApproved.indexOf(key) === -1; });
+
+  let newSpecialties;
+  let stillPending = [];
+
+  if (isFullAdminAccount()) {
+    newSpecialties = picked;
+  } else {
+    if (!keptApproved.length) {
+      // مايقدرش يشيل آخر تخصص معتمد وإلا هيقفل على نفسه كل حاجة
+      providerHomeMessage.textContent = t('need_one_approved_specialty');
+      return;
+    }
+    newSpecialties = keptApproved;
+    stillPending = requested;
+  }
+
   updated.specialties = newSpecialties;
+  updated.pendingSpecialties = stillPending;
   // "مدرب" بيفضل التخصص الأساسي لو موجود — عشان شاشات كتير بتتعامل
   // مع specialty كقيمة واحدة وبتتوقع المدرب فيها
   updated.specialty = newSpecialties.indexOf('coach') !== -1 ? 'coach' : newSpecialties[0];
@@ -9235,7 +9720,16 @@ document.getElementById('ph-save-btn').addEventListener('click', async function 
     phOpenMedlibBtn.classList.toggle('hidden', !specialtiesHaveFlag(newSpecialties, 'medical'));
     renderSpecialtyChips(providerHomeSpecialty, newSpecialties);
     setSpecialtyLabel(providerHomeTitle, newSpecialties, updated.name || '');
-    setStatusMessage(providerHomeMessage, t('profile_saved'), 'success');
+    renderPendingSpecialtyNote();
+    // الخانات بتترسم تاني عشان التخصص المستني يبان بشكله الصح
+    fillSpecialtyCheckboxes(phSpecialtyMulti, newSpecialties.concat(stillPending),
+      isLegacyCoachAccount() ? ['coach'] : []);
+    if (stillPending.length) {
+      setStatusMessage(providerHomeMessage,
+        fill('specialty_sent_for_review', { list: specialtyListName(stillPending) }), 'success');
+    } else {
+      setStatusMessage(providerHomeMessage, t('profile_saved'), 'success');
+    }
   } catch (error) {
     providerHomeMessage.textContent = t('problem') + error.message;
   }
@@ -9270,46 +9764,132 @@ document.getElementById('welcome-sticky-start-btn').addEventListener('click', fu
 
 /* ---------- عجلة أجزاء البرنامج في صفحة التعريف ---------- */
 
-const WELCOME_PILLAR_KEYS = ['training', 'rehab', 'nutrition', 'medical'];
-const welcomeSamplesTitle = document.getElementById('welcome-samples-title');
-const welcomeSamplesGrid = document.getElementById('welcome-samples');
-const welcomeProgramTitle = document.getElementById('welcome-program-title');
-const wpDayTitle = document.getElementById('wp-day-title');
-const wpLine1 = document.getElementById('wp-line-1');
-const wpLine2 = document.getElementById('wp-line-2');
-const wpLine3 = document.getElementById('wp-line-3');
-const wpLine4 = document.getElementById('wp-line-4');
-let currentWelcomePillar = 'training';
-const welcomePillarDetail = document.getElementById('welcome-pillar-detail');
+/*
+ * وحدات القياس جوه قوالب التأهيل مكتوبة بالعربي جوه نص التكرارات
+ * نفسه (مثال: reps: '30 ثانية')، مش حقل مترجم. بدل ما نعيد كتابة
+ * كل القوالب، بنترجم الكلمات دي وقت العرض بس — فالقالب يفضل زي ما
+ * هو والزائر الإنجليزي يشوف "30 s".
+ */
+const REPS_UNITS_EN = {
+  'ثانية': 's', 'ثواني': 's', 'ثوانٍ': 's', 'ث': 's',
+  'دقيقة': 'min', 'دقائق': 'min', 'د': 'min',
+  'متر': 'm', 'خطوة': 'steps', 'جهة': 'each side',
+  'رجل': 'leg', 'مرة': 'times', 'لكل': 'per', 'كاملة': 'full'
+};
 
-function renderWelcomePillarDetail(pillarKey) {
-  if (!welcomePillarDetail) return;
-  currentWelcomePillar = pillarKey;
-
-  document.querySelectorAll('.welcome-pillar-btn').forEach(function (btn) {
-    btn.classList.toggle('active', btn.getAttribute('data-pillar') === pillarKey);
-  });
-
-  const lines = [1, 2, 3, 4].map(function (n) {
-    return t('welcome_pillar_' + pillarKey + '_line_' + n);
-  });
-
-  welcomePillarDetail.innerHTML =
-    '<h4 class="wp-detail-title">' + t('welcome_pillar_' + pillarKey + '_week_title') + '</h4>' +
-    lines.map(function (line) { return '<div class="wp-detail-line">' + line + '</div>'; }).join('') +
-    '<div class="wp-detail-stat">' + t('welcome_pillar_' + pillarKey + '_stat') + '</div>' +
-    '<div class="wp-detail-team">' + t('welcome_pillar_' + pillarKey + '_team') + '</div>' +
-    '<div class="wp-detail-note">' + t('welcome_pillars_note') + '</div>';
-
-  renderWelcomeTour(pillarKey);
+function localiseReps(text) {
+  if (lang !== 'en' || !text) return text;
+  let out = String(text);
+  // الأطول الأول عشان "ثواني" ماتتقسمش على "ث"
+  Object.keys(REPS_UNITS_EN)
+    .sort(function (a, b) { return b.length - a.length; })
+    .forEach(function (word) {
+      out = out.split(word).join(REPS_UNITS_EN[word]);
+    });
+  return out.replace(/\s+/g, ' ').trim();
 }
 
+/* ---------- صفحات التخصصات تحت الكاروسيل ---------- */
+
+const WELCOME_PILLAR_KEYS = ['training', 'rehab', 'nutrition', 'medical'];
+let currentWelcomePillar = 'training';
+
 /*
- * جولة الصفحة الرئيسية: عينات التمارين/الأكل/التخصصات وشكل البرنامج
- * بتتغيّر حسب التخصص المختار — كل المحتوى ده مسحوب من نفس البيانات
- * الحقيقية المستخدمة جوه التطبيق (REHAB_TEMPLATES / FOOD_LIBRARY /
- * SPECIALTIES)، مش نصوص تسويقية مُلفّقة.
+ * كل تخصص له صفحة: اسمه، شكل البرنامج اللي هيتكتبله، وتلات عيّنات
+ * حقيقية من مكتبة التطبيق. الصفحات فوق بعض والواحدة بتتقلب لما
+ * تدوس على تخصصها في الكاروسيل.
+ * ده بقى مكان تلات أقسام كانت منفصلة: "كل حاجة في مكان واحد"،
+ * "لمحة من المكتبة"، و"شكل البرنامج" — نفس المعلومة في مساحة واحدة
+ * وكلام أقل بكتير.
  */
+function renderSpecPages() {
+  const root = document.getElementById('specpages');
+  if (!root) return;
+
+  root.innerHTML = '';
+
+  WELCOME_PILLAR_KEYS.forEach(function (key) {
+    const page = document.createElement('article');
+    page.className = 'specpage';
+    page.setAttribute('data-pillar', key);
+
+    const head = document.createElement('div');
+    head.className = 'specpage-head';
+    head.innerHTML = '<span class="specpage-dot spd-' + key + '"></span>'
+      + '<span class="specpage-title">' + t('welcome_program_title_' + key) + '</span>';
+    page.appendChild(head);
+
+    // شكل البرنامج — سطور قصيرة زي ما بتظهر جوه التطبيق
+    const preview = welcomeProgramPreview(key);
+    const rows = document.createElement('div');
+    rows.className = 'specpage-rows';
+    preview.lines.slice(0, 4).forEach(function (line, i) {
+      if (!line) return;
+      const row = document.createElement('div');
+      row.className = 'specpage-row';
+      row.style.animationDelay = (i * 0.06) + 's';
+      row.innerHTML = '<span class="specpage-tick"></span><span>' + localiseReps(line) + '</span>';
+      rows.appendChild(row);
+    });
+    page.appendChild(rows);
+
+    // عيّنات حقيقية من المكتبة
+    const chips = document.createElement('div');
+    chips.className = 'specpage-chips';
+    welcomeSampleItems(key).slice(0, 3).forEach(function (item) {
+      const chip = document.createElement('span');
+      chip.className = 'specpage-chip';
+      chip.innerHTML = item.icon + '<span>' + item.name + '</span>';
+      chips.appendChild(chip);
+    });
+    page.appendChild(chips);
+
+    root.appendChild(page);
+  });
+
+  showSpecPage(currentWelcomePillar);
+}
+
+function showSpecPage(pillarKey) {
+  const root = document.getElementById('specpages');
+  if (!root) return;
+  currentWelcomePillar = pillarKey;
+
+  const pages = root.querySelectorAll('.specpage');
+  const order = WELCOME_PILLAR_KEYS.indexOf(pillarKey);
+
+  let front = null;
+
+  pages.forEach(function (page, i) {
+    const offset = ((i - order) % pages.length + pages.length) % pages.length;
+    page.classList.toggle('specpage-front', offset === 0);
+    page.style.zIndex = String(40 - offset);
+    page.style.opacity = offset < 3 ? String(1 - offset * 0.32) : '0';
+    page.style.transform = 'translateY(' + (offset * 9) + 'px) scale(' + (1 - offset * 0.04) + ')';
+    page.style.pointerEvents = offset === 0 ? 'auto' : 'none';
+    if (offset === 0) front = page;
+  });
+
+  /*
+   * الصندوق بياخد ارتفاع الصفحة اللي قدام بالظبط. قبل كده كان
+   * ارتفاعه ثابت، فالتخصص اللي محتواه أطول (التأهيل مثلاً) كان
+   * بيتقص من تحت ويبان ناقص.
+   */
+  if (front) {
+    const needed = front.scrollHeight;
+    root.style.minHeight = (needed + 20) + 'px';
+  }
+}
+
+/* التخصص اللي في الكاروسيل بيحدد الصفحة اللي قدام */
+function renderWelcomePillarDetail(pillarKey) {
+  showSpecPage(pillarKey);
+}
+
+function renderWelcomeTour(pillarKey) {
+  showSpecPage(pillarKey);
+}
+
 function wpIcon(innerPaths) {
   return '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + innerPaths + '</svg>';
 }
@@ -9346,12 +9926,17 @@ function welcomeSampleItems(pillarKey) {
   }
 
   if (pillarKey === 'medical') {
+    /*
+     * كل تخصص ليه سطره الخاص. قبل كده كانوا الأربعة بنفس الجملة
+     * بالظبط ("استشارة متخصصة عن طريق الشات") — تكرار مش بيضيف حاجة
+     * للزائر ولا بيفرّقله بين التخصصات
+     */
     const picks = ['physio', 'ortho', 'sports_medicine', 'psychologist'];
     return picks.map(function (key) {
       return {
         icon: specialtyIconSvg(key),
         name: specialtyName(key, lang),
-        detail: t('welcome_medical_case_detail')
+        detail: t('medical_case_' + key)
       };
     });
   }
@@ -9363,34 +9948,6 @@ function welcomeSampleItems(pillarKey) {
       name: t('welcome_sample_ex_' + n + '_name'),
       detail: t('welcome_sample_ex_' + n + '_detail')
     };
-  });
-}
-
-function renderWelcomeSamples(pillarKey) {
-  if (!welcomeSamplesGrid) return;
-  welcomeSamplesTitle.textContent = t('welcome_samples_title_' + pillarKey);
-
-  welcomeSamplesGrid.innerHTML = '';
-  welcomeSampleItems(pillarKey).forEach(function (item) {
-    const card = document.createElement('div');
-    card.className = 'sample-ex-card';
-
-    const icon = document.createElement('span');
-    icon.className = 'inline-icon';
-    icon.innerHTML = item.icon;
-    card.appendChild(icon);
-
-    const name = document.createElement('div');
-    name.className = 'sample-ex-name';
-    name.textContent = item.name;
-    card.appendChild(name);
-
-    const detail = document.createElement('div');
-    detail.className = 'sample-ex-detail';
-    detail.textContent = item.detail;
-    card.appendChild(detail);
-
-    welcomeSamplesGrid.appendChild(card);
   });
 }
 
@@ -9438,41 +9995,16 @@ function welcomeProgramPreview(pillarKey) {
   };
 }
 
-function renderWelcomeProgramPreview(pillarKey) {
-  if (!wpDayTitle) return;
-  welcomeProgramTitle.textContent = t('welcome_program_title_' + pillarKey);
-
-  const preview = welcomeProgramPreview(pillarKey);
-  wpDayTitle.textContent = preview.title;
-  [wpLine1, wpLine2, wpLine3, wpLine4].forEach(function (el, index) {
-    el.textContent = preview.lines[index] || '';
-    el.classList.toggle('hidden', !preview.lines[index]);
-  });
-}
-
-function renderWelcomeTour(pillarKey) {
-  renderWelcomeSamples(pillarKey);
-  renderWelcomeProgramPreview(pillarKey);
-}
 
 /* ---------- شريط الثقة: عدد العملاء الحقيقي (لو موجود) ---------- */
 
+/*
+ * شريط الأرقام اتشال من الصفحة — الأرقام المجردة ماكانتش بتقول حاجة
+ * للزائر. الدليل الحقيقي بقى شريط الفريق المرسوم وقسم "فريقك
+ * المتخصص" اللي بيعرض المتخصصين الحقيقيين بصورهم.
+ */
 async function loadWelcomeTrustStat() {
-  try {
-    const statsDoc = await getDoc(doc(db, 'publicStats', 'summary'));
-    if (statsDoc.exists()) {
-      const data = statsDoc.data();
-      const count = Number(data.clientsCount) || 0;
-      if (count > 0) {
-        trustStatText.textContent = fill('trust_stat_clients', { n: count });
-        trustStatItem.classList.remove('hidden');
-        return;
-      }
-    }
-  } catch (error) {
-    // من غير Firestore، مفيش رقم نعرضه — نسيب البند مخفي وخلاص
-  }
-  trustStatItem.classList.add('hidden');
+  return;
 }
 
 /* ---------- فريق العمل الحقيقي في الصفحة الرئيسية ---------- */
@@ -9496,7 +10028,26 @@ async function loadWelcomeTeamPreview() {
     return;
   }
 
-  welcomeTeamSection.classList.remove('hidden');
+  /*
+   * بدل قسم منفصل بكروت بتاخد مساحة كبيرة، المتخصصين الحقيقيين
+   * بيتعرضوا في الكاروسيل اللي فوق بصورهم وتقييماتهم. القسم المنفصل
+   * ده بيفضل مخفي طول ما الكاروسيل شايلهم
+   */
+  await fetchAllProviderReviews().catch(function () {});
+  if (setOrbitToProviders(providers)) {
+    welcomeTeamSection.classList.add('hidden');
+    return;
+  }
+
+  /*
+   * القسم المنفصل ده اتلغى — الكاروسيل فوق هو اللي بيمثّل الفريق:
+   * مشاهد مرسومة دلوقتي، وصور المتخصصين الحقيقية أول ما يوصلوا 10.
+   * بنسيب الكود عشان لو حبيت ترجّعه في أي وقت
+   */
+  welcomeTeamSection.classList.add('hidden');
+  return;
+
+  // eslint-disable-next-line no-unreachable
   providers.forEach(function (provider) {
     const specs = providerSpecialties(provider);
     const card = document.createElement('div');
@@ -9525,44 +10076,172 @@ async function loadWelcomeTeamPreview() {
 
 const FAQ_KEYS = ['1', '2', '3', '4', '5'];
 
-function renderWelcomeFaq() {
-  welcomeFaqList.innerHTML = '';
-  FAQ_KEYS.forEach(function (key) {
-    const item = document.createElement('div');
-    item.className = 'welcome-faq-item';
+/*
+ * ============ مكوّن الكروت المتراصّة (Deck) ============
+ * كروت فوق بعض زي الكوتشينة أو إشعارات الموبايل: الكارت اللي قدام
+ * كامل، واللي وراه باينين من تحته شوية. تسحب يمين أو شمال (أو تدوس
+ * على السهم) فيتقلبوا، وتدوس على الكارت نفسه فيفتح يوريك التفاصيل.
+ *
+ * نفس المكوّن بيتستعمل في "ده مناسب لمين؟" وفي الأسئلة الشائعة —
+ * فالتجربة متسقة والكود واحد.
+ */
+function createDeck(options) {
+  const root = document.getElementById(options.rootId);
+  const nav = document.getElementById(options.navId);
+  if (!root) return null;
 
-    const question = document.createElement('button');
-    question.type = 'button';
-    question.className = 'welcome-faq-question';
+  const items = options.items || [];
+  let index = 0;
+  let expanded = false;
 
-    const qText = document.createElement('span');
-    qText.textContent = t('faq_q' + key);
-    question.appendChild(qText);
+  root.innerHTML = '';
+  if (nav) nav.innerHTML = '';
 
-    const arrow = document.createElement('span');
-    arrow.className = 'faq-arrow';
-    arrow.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>';
-    question.appendChild(arrow);
+  const cards = items.map(function (item, i) {
+    const card = document.createElement('article');
+    card.className = 'deck-card' + (options.cardClass ? ' ' + options.cardClass : '');
+    card.innerHTML = options.render(item, i);
+    root.appendChild(card);
+    return card;
+  });
 
-    item.appendChild(question);
+  function layout() {
+    const n = cards.length;
+    cards.forEach(function (card, i) {
+      // المسافة بين الكارت ده واللي قدام (0 = هو اللي قدام)
+      const offset = ((i - index) % n + n) % n;
+      const visible = offset < 3;
 
-    const answer = document.createElement('div');
-    answer.className = 'welcome-faq-answer hidden';
-    answer.textContent = t('faq_a' + key);
-    item.appendChild(answer);
-
-    question.addEventListener('click', function () {
-      const willOpen = answer.classList.contains('hidden');
-      item.classList.toggle('open', willOpen);
-      answer.classList.toggle('hidden', !willOpen);
+      card.style.zIndex = String(50 - offset);
+      card.style.opacity = visible ? String(1 - offset * 0.3) : '0';
+      card.style.transform = 'translateY(' + (offset * 11) + 'px) scale(' + (1 - offset * 0.05) + ')';
+      card.style.pointerEvents = offset === 0 ? 'auto' : 'none';
+      card.classList.toggle('deck-front', offset === 0);
+      card.classList.toggle('deck-open', offset === 0 && expanded);
     });
 
-    welcomeFaqList.appendChild(item);
+    if (nav) {
+      nav.querySelectorAll('.deck-dot').forEach(function (dot, i) {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+    root.style.minHeight = (expanded ? 'var(--deck-open-h, 210px)' : 'var(--deck-h, 132px)');
+  }
+
+  function go(step) {
+    const n = cards.length;
+    index = ((index + step) % n + n) % n;
+    expanded = false;
+    layout();
+  }
+
+  function toggleOpen() {
+    if (!options.expandable) return;
+    expanded = !expanded;
+    layout();
+  }
+
+  cards.forEach(function (card) {
+    card.addEventListener('click', toggleOpen);
+  });
+
+  /* السحب باللمس أو بالماوس */
+  let startX = 0;
+  let dragging = false;
+
+  function onStart(x) { startX = x; dragging = true; }
+  function onEnd(x) {
+    if (!dragging) return;
+    dragging = false;
+    const dx = x - startX;
+    if (Math.abs(dx) > 45) go(dx < 0 ? 1 : -1);
+  }
+
+  root.addEventListener('touchstart', function (e) { onStart(e.touches[0].clientX); }, { passive: true });
+  root.addEventListener('touchend', function (e) { onEnd(e.changedTouches[0].clientX); }, { passive: true });
+  root.addEventListener('mousedown', function (e) { onStart(e.clientX); });
+  root.addEventListener('mouseup', function (e) { onEnd(e.clientX); });
+
+  if (nav) {
+    const prev = document.createElement('button');
+    prev.type = 'button';
+    prev.className = 'deck-arrow';
+    prev.innerHTML = '‹';
+    prev.setAttribute('aria-label', t('deck_prev'));
+    prev.addEventListener('click', function () { go(-1); });
+    nav.appendChild(prev);
+
+    const dots = document.createElement('div');
+    dots.className = 'deck-dots';
+    items.forEach(function (item, i) {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'deck-dot';
+      dot.setAttribute('aria-label', String(i + 1));
+      dot.addEventListener('click', function () { index = i; expanded = false; layout(); });
+      dots.appendChild(dot);
+    });
+    nav.appendChild(dots);
+
+    const next = document.createElement('button');
+    next.type = 'button';
+    next.className = 'deck-arrow';
+    next.innerHTML = '›';
+    next.setAttribute('aria-label', t('deck_next'));
+    next.addEventListener('click', function () { go(1); });
+    nav.appendChild(next);
+  }
+
+  layout();
+  return { go: go, layout: layout };
+}
+
+/* ---------- "ده مناسب لمين؟" — كروت بتتقلب ---------- */
+
+const AUDIENCE_CARDS = [
+  { key: 1, icon: '🩹', c: '#f97316' },
+  { key: 2, icon: '🏋️', c: '#22c55e' },
+  { key: 3, icon: '🏆', c: '#a78bfa' },
+  { key: 4, icon: '🥗', c: '#38bdf8' }
+];
+
+function renderAudienceDeck() {
+  createDeck({
+    rootId: 'audience-deck',
+    navId: 'audience-nav',
+    cardClass: 'aud-card',
+    items: AUDIENCE_CARDS,
+    render: function (item) {
+      return '<div class="aud-icon" style="background:' + item.c + '22;color:' + item.c + '">'
+        + item.icon + '</div>'
+        + '<div class="aud-text">' + t('welcome_audience_' + item.key) + '</div>';
+    }
+  });
+}
+
+/* ---------- الأسئلة الشائعة — إشعارات فوق بعض ---------- */
+
+function renderWelcomeFaq() {
+  createDeck({
+    rootId: 'welcome-faq-list',
+    navId: 'faq-nav',
+    cardClass: 'notif-card',
+    expandable: true,
+    items: FAQ_KEYS,
+    render: function (key) {
+      return '<div class="notif-head">'
+        +   '<span class="notif-app">ADAM</span>'
+        +   '<span class="notif-time">' + t('faq_badge') + '</span>'
+        + '</div>'
+        + '<div class="notif-q">' + t('faq_q' + key) + '</div>'
+        + '<div class="notif-a">' + t('faq_a' + key) + '</div>';
+    }
   });
 }
 
 function loadWelcomeExtras() {
   renderWelcomeFaq();
+  renderAudienceDeck();
   loadWelcomeTrustStat();
   loadWelcomeTeamPreview();
   loadWelcomeStories();
@@ -9764,15 +10443,623 @@ async function loadWelcomeStories() {
   });
 }
 
-document.querySelectorAll('.welcome-pillar-btn').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    renderWelcomePillarDetail(btn.getAttribute('data-pillar'));
-  });
-});
-
-renderWelcomePillarDetail(currentWelcomePillar);
+// عجلة الأعمدة اتشالت — الكاروسيل بقى هو اللي بيختار التخصص
+renderSpecPages();
 loadWelcomeExtras();
 fillLeadInterestSelect();
+
+/* ============ الصفحة الرئيسية: الواجهة الجديدة ============ */
+/*
+ * الصفحة كانت ٤.٨ شاشة موبايل و٥٣٠ كلمة — الزائر كان بيقرا مجهود قبل
+ * ما يشوف حاجة. دلوقتي أول شاشة فيها موبايل بيعرض شكل البرنامج
+ * الحقيقي وهو بيتحرك، والفورمات الطويلة اتخبّت ورا زراير.
+ */
+
+/* شاشة الموبايل اللي في الهيرو — بتلف على ٣ أمثلة حقيقية من التطبيق */
+const HERO_SLIDES = [
+  {
+    icon: '🏋️', pillar: 'training', color: '#22c55e', tagKey: 'role_coach',
+    titleKey: 'hero_slide1_title', subKey: 'hero_slide1_sub',
+    rowsKey: 'hero_slide1_rows', footKey: 'hero_slide1_foot', pct: 60
+  },
+  {
+    icon: '🩹', pillar: 'rehab', color: '#f97316', tagKey: 'role_rehab',
+    titleKey: 'hero_slide2_title', subKey: 'hero_slide2_sub',
+    rowsKey: 'hero_slide2_rows', footKey: 'hero_slide2_foot', pct: 40
+  },
+  {
+    icon: '🍎', pillar: 'nutrition', color: '#38bdf8', tagKey: 'role_nutrition',
+    titleKey: 'hero_slide3_title', subKey: 'hero_slide3_sub',
+    rowsKey: 'hero_slide3_rows', footKey: 'hero_slide3_foot', pct: 75
+  },
+  {
+    icon: '🩺', pillar: 'medical', color: '#a78bfa', tagKey: 'role_doctor',
+    titleKey: 'hero_slide4_title', subKey: 'hero_slide4_sub',
+    rowsKey: 'hero_slide4_rows', footKey: 'hero_slide4_foot', pct: 100
+  },
+  {
+    icon: '🧠', pillar: 'medical', color: '#f472b6', tagKey: 'role_psych',
+    titleKey: 'hero_slide5_title', subKey: 'hero_slide5_sub',
+    rowsKey: 'hero_slide5_rows', footKey: 'hero_slide5_foot', pct: 55
+  },
+  {
+    icon: '📈', pillar: 'training', color: '#fbbf24', tagKey: 'role_progress',
+    titleKey: 'hero_slide6_title', subKey: 'hero_slide6_sub',
+    rowsKey: 'hero_slide6_rows', footKey: 'hero_slide6_foot', pct: 85
+  }
+];
+
+let heroSlideIndex = 0;
+let heroSlideTimer = null;
+
+/*
+ * ============ الشريط العريض ============
+ * بيمتد بعرض الشاشة كلها (بيخرج برا حدود الكارت) وبيوصّل أجزاء
+ * البرنامج الأربعة بمسار واحد، وعليه نقطة بتمشي من أوله لآخره.
+ * الفكرة إن الزائر يشوف من غير كلام إن ده مش أربع خدمات منفصلة —
+ * ده مسار واحد متوصّل من التمرين للتأهيل للتغذية للاستشارة.
+ */
+const BAND_NODES = [
+  { pillar: 'training',  color: '#22c55e', labelKey: 'role_coach',
+    art: '<rect x="-9" y="-3" width="3" height="6" rx="1.2"/><rect x="6" y="-3" width="3" height="6" rx="1.2"/>'
+       + '<rect x="-5.5" y="-5" width="3" height="10" rx="1.4"/><rect x="2.5" y="-5" width="3" height="10" rx="1.4"/>'
+       + '<rect x="-2.5" y="-1.2" width="5" height="2.4" rx="1.2"/>' },
+  { pillar: 'rehab',     color: '#f97316', labelKey: 'role_rehab',
+    art: '<path d="M0-9v6" stroke-width="2.4" fill="none"/><path d="M-4-3h8l-1 5.6a3 3 0 0 1-6 0z" fill="none" stroke-width="2"/>'
+       + '<path d="M0 2.6v6.4" stroke-width="2.4" fill="none"/><path d="M-3.4 9h6.8" stroke-width="2.4" fill="none"/>' },
+  { pillar: 'nutrition', color: '#38bdf8', labelKey: 'role_nutrition',
+    art: '<circle cx="0" cy="0" r="8" fill="none" stroke-width="2"/><path d="M0-8a8 8 0 0 1 6.9 12L0 0z"/>'
+       + '<circle cx="0" cy="0" r="2.4"/>' },
+  { pillar: 'medical',   color: '#a78bfa', labelKey: 'role_doctor',
+    art: '<path d="M-6-8v4.6a4.6 4.6 0 0 0 9.2 0V-8" fill="none" stroke-width="2.2"/>'
+       + '<path d="M-1.4 1.2v2.6a3.6 3.6 0 0 0 7.2 0V2.6" fill="none" stroke-width="2.2"/>'
+       + '<circle cx="5.8" cy="0.6" r="2.4" fill="none" stroke-width="2.2"/>' }
+];
+
+function renderHeroBand() {
+  const root = document.getElementById('hero-band');
+  if (!root) return;
+
+  const W = 400;   // إحداثيات داخلية — الـSVG بيتمدد على عرض الشاشة
+  const H = 118;
+  const n = BAND_NODES.length;
+  const step = W / n;
+  const xs = BAND_NODES.map(function (_, i) { return step * (i + 0.5); });
+  const yTop = 46;
+  const yDip = 64;
+
+  // مسار متموّج بيعدّي على النقط الأربعة
+  let d = 'M0 ' + yDip;
+  xs.forEach(function (x, i) {
+    const prevX = i === 0 ? 0 : xs[i - 1];
+    const cx = (prevX + x) / 2;
+    d += ' Q' + cx + ' ' + (i % 2 ? yTop - 14 : yDip + 14) + ' ' + x + ' ' + yTop;
+  });
+  d += ' Q' + ((xs[n - 1] + W) / 2) + ' ' + (yTop - 12) + ' ' + W + ' ' + yDip;
+
+  let svg = '<svg class="hero-band-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">'
+    + '<defs><linearGradient id="bandGrad" x1="0" y1="0" x2="1" y2="0">';
+  BAND_NODES.forEach(function (node, i) {
+    svg += '<stop offset="' + (i / (n - 1)) + '" stop-color="' + node.color + '"/>';
+  });
+  svg += '</linearGradient></defs>'
+    + '<path d="' + d + '" fill="none" stroke="url(#bandGrad)" stroke-width="2.5" opacity="0.5" '
+    +   'stroke-linecap="round" stroke-dasharray="7 6"/>'
+    + '<path id="band-track" d="' + d + '" fill="none" stroke="none"/>'
+    + '<circle r="5" fill="#fff" opacity="0.95">'
+    +   '<animateMotion dur="9s" repeatCount="indefinite" path="' + d + '"/>'
+    + '</circle>'
+    + '</svg>';
+
+  // النقط نفسها HTML عشان النص يفضل مقروء ومايتمططش مع الـSVG
+  let nodes = '<div class="hero-band-nodes">';
+  BAND_NODES.forEach(function (node) {
+    nodes += '<button type="button" class="band-node" data-pillar="' + node.pillar + '">'
+      +   '<span class="band-dot" style="background:' + node.color + '22;border-color:' + node.color + '66">'
+      +     '<svg viewBox="-12 -12 24 24" stroke="' + node.color + '" fill="' + node.color + '" '
+      +       'stroke-linecap="round" stroke-linejoin="round">' + node.art + '</svg>'
+      +   '</span>'
+      +   '<span class="band-label">' + t(node.labelKey) + '</span>'
+      + '</button>';
+  });
+  nodes += '</div>';
+
+  root.innerHTML = svg + nodes;
+
+  /*
+   * أول ما الشريط يتبني، بننوّر المحطة اللي اللوحة واقفة عليها.
+   * من غير السطر ده، أول عرض للصفحة بيبقى فيه لوحة ملوّنة ومحطة
+   * مطفية — لأن اللوحة بترسم قبل ما الشريط يتبني
+   */
+  const current = HERO_SLIDES[heroSlideIndex % HERO_SLIDES.length];
+  root.querySelectorAll('.band-node').forEach(function (node) {
+    node.classList.toggle('band-node-on', node.getAttribute('data-pillar') === current.pillar);
+  });
+
+  // الضغط على أي جزء بيوَدّي على صفحته تحت
+  root.querySelectorAll('.band-node').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const pillar = btn.getAttribute('data-pillar');
+      const slideIndex = HERO_SLIDES.map(function (s) { return s.pillar; }).indexOf(pillar);
+      if (slideIndex !== -1) {
+        heroSlideIndex = slideIndex;
+        renderHeroSlide();
+        startHeroRotation();   // بيصفّر المؤقّت فاختيارك مايتغيّرش فورًا
+      }
+      /*
+       * الكاروسيل تحت بيلف لوحده وبيغيّر الصفحة كل 3 ثواني — لو
+       * سيبناه، اختيار الزائر كان هيتلغي بعد لحظة. فبنلفّه هو كمان
+       * على نفس التخصص، وده بيصفّر مؤقّته
+       */
+      const orbitTarget = orbitItems.map(function (f) { return f.pillar; }).indexOf(pillar);
+      if (orbitTarget !== -1) goToOrbit(orbitTarget);
+      else showSpecPage(pillar);
+    });
+  });
+}
+
+function renderHeroSlide() {
+  const rowsBox = document.getElementById('hp-rows');
+  if (!rowsBox) return;
+
+  const slide = HERO_SLIDES[heroSlideIndex % HERO_SLIDES.length];
+  const avatar = document.getElementById('hp-avatar');
+  const name = document.getElementById('hp-name');
+  const sub = document.getElementById('hp-sub');
+  const foot = document.getElementById('hp-foot');
+  const fill = document.getElementById('hp-bar-fill');
+
+  if (avatar) avatar.textContent = slide.icon;
+  if (name) name.textContent = t(slide.titleKey);
+  if (sub) sub.textContent = t(slide.subKey);
+  if (foot) foot.textContent = t(slide.footKey);
+  if (fill) {
+    fill.style.width = slide.pct + '%';
+    fill.style.background = 'linear-gradient(90deg, ' + slide.color + ', ' + slide.color + 'aa)';
+  }
+
+  const tag = document.getElementById('hero-live-tag');
+  if (tag) {
+    tag.textContent = t(slide.tagKey);
+    tag.style.color = slide.color;
+    tag.style.background = slide.color + '1f';
+    tag.style.borderColor = slide.color + '55';
+  }
+
+  const phone = document.getElementById('hero2-phone');
+  if (phone) {
+    phone.style.borderColor = slide.color + '66';
+    phone.classList.remove('hero-live-in');
+    // إعادة تشغيل الأنيميشن عشان كل تبديل يبان
+    void phone.offsetWidth;
+    phone.classList.add('hero-live-in');
+  }
+
+  // المحطة المقابلة في الشريط بتنوّر مع اللوحة
+  document.querySelectorAll('.band-node').forEach(function (node) {
+    node.classList.toggle('band-node-on', node.getAttribute('data-pillar') === slide.pillar);
+  });
+
+  rowsBox.innerHTML = '';
+  t(slide.rowsKey).split('|').forEach(function (line, index) {
+    const row = document.createElement('div');
+    row.className = 'hp-row' + (index < 3 ? ' hp-row-done' : '');
+    row.style.animationDelay = (index * 0.07) + 's';
+
+    const tick = document.createElement('span');
+    tick.className = 'hp-tick';
+    tick.textContent = index < 3 ? '✓' : '';
+    row.appendChild(tick);
+
+    const label = document.createElement('span');
+    label.textContent = line.trim();
+    row.appendChild(label);
+
+    rowsBox.appendChild(row);
+  });
+}
+
+function startHeroRotation() {
+  if (heroSlideTimer) clearInterval(heroSlideTimer);
+  renderHeroSlide();
+  heroSlideTimer = setInterval(function () {
+    // بنوقف اللف لو الصفحة مش ظاهرة عشان مانستهلكش من غير داعي
+    if (welcomeScreen.classList.contains('hidden')) return;
+    heroSlideIndex++;
+    renderHeroSlide();
+  }, 3200);
+}
+
+if (document.getElementById('hero2-start-btn')) {
+  document.getElementById('hero2-start-btn').addEventListener('click', function () {
+    showScreen(signupScreen);
+  });
+}
+
+if (document.getElementById('hero2-demo-btn')) {
+  document.getElementById('hero2-demo-btn').addEventListener('click', function () {
+    const target = document.querySelector('.team-strip');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+/* الفورمات الطويلة بتتفتح بالضغط بس — كانت بتاخد ١٣٠٠ بكسل من الصفحة */
+function wireReveal(buttonId, formId) {
+  const button = document.getElementById(buttonId);
+  const form = document.getElementById(formId);
+  if (!button || !form) return;
+  button.addEventListener('click', function () {
+    const open = !form.classList.contains('hidden');
+    form.classList.toggle('hidden', open);
+    button.classList.toggle('reveal-open', !open);
+    if (!open) form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+}
+
+wireReveal('lead-reveal-btn', 'welcome-lead-form');
+wireReveal('pa-reveal-btn', 'welcome-provider-apply-form');
+
+/*
+ * الزرار الثابت تحت: بيظهر بس لما زرار "ابدأ" اللي في الهيرو يطلع
+ * برا الشاشة. كده الزائر دايمًا قدامه زرار واحد مش اتنين فوق بعض.
+ */
+function updateStickyCta() {
+  if (!welcomeStickyCta || welcomeScreen.classList.contains('hidden')) return;
+  const heroBtn = document.getElementById('hero2-start-btn');
+  if (!heroBtn) return;
+  const past = heroBtn.getBoundingClientRect().bottom < 0;
+  welcomeStickyCta.classList.toggle('hidden', !past);
+}
+
+window.addEventListener('scroll', updateStickyCta, { passive: true });
+
+/*
+ * ============ شخصيات الفريق (رسم SVG) ============
+ * كل تخصص ليه شخصية مرسومة بلونه: رأس وكتف بسيطين + شارة صغيرة
+ * فيها أداة التخصص. رسم مجرّد بالكامل — مش صورة حد ولا بيدّعي كده،
+ * والمكتوب تحته اسم الدور مش اسم شخص.
+ * كله SVG جوه الصفحة، يعني مفيش أي ملف بيتحمّل من النت.
+ */
+const TEAM_FIGURES = [
+  { key: 'coach',     c1: '#22c55e', c2: '#15803d', labelKey: 'role_coach',     pillar: 'training' },
+  { key: 'rehab',     c1: '#f97316', c2: '#c2410c', labelKey: 'role_rehab',     pillar: 'rehab' },
+  { key: 'nutrition', c1: '#38bdf8', c2: '#0369a1', labelKey: 'role_nutrition', pillar: 'nutrition' },
+  { key: 'doctor',    c1: '#a78bfa', c2: '#6d28d9', labelKey: 'role_doctor',    pillar: 'medical' },
+  { key: 'psych',     c1: '#f472b6', c2: '#be185d', labelKey: 'role_psych',     pillar: 'medical' }
+];
+
+/*
+ * مشهد مرسوم لكل تخصص — بدل شخصية بلا ملامح، كل بطاقة بتوري
+ * أدوات الشغل نفسها: دمبل وبرنامج، ركبة بدعامة، طبق بماكروز،
+ * سماعة وتقرير، رأس بموجات تركيز. الصورة بتحكي التخصص من غير كلام.
+ */
+function sceneArt(key, c1, c2) {
+  if (key === 'coach') {
+    return ''
+      + '<rect x="18" y="26" width="46" height="60" rx="7" fill="#0b1220" opacity=".85"/>'
+      + '<rect x="25" y="36" width="32" height="4" rx="2" fill="' + c1 + '" opacity=".95"/>'
+      + '<rect x="25" y="46" width="24" height="3.5" rx="1.75" fill="#fff" opacity=".32"/>'
+      + '<rect x="25" y="55" width="30" height="3.5" rx="1.75" fill="#fff" opacity=".32"/>'
+      + '<rect x="25" y="64" width="20" height="3.5" rx="1.75" fill="#fff" opacity=".32"/>'
+      + '<g transform="translate(58 52) rotate(-20)">'
+      +   '<rect x="0" y="12" width="9" height="22" rx="3.5" fill="' + c1 + '"/>'
+      +   '<rect x="37" y="12" width="9" height="22" rx="3.5" fill="' + c1 + '"/>'
+      +   '<rect x="7" y="18" width="32" height="10" rx="4" fill="' + c2 + '"/>'
+      + '</g>';
+  }
+  if (key === 'rehab') {
+    return ''
+      + '<path d="M44 20c7 0 11 5 11 12v14c0 4 3 6 6 8 6 3 9 8 9 15v13" stroke="' + c2 + '" stroke-width="9" fill="none" stroke-linecap="round"/>'
+      + '<circle cx="55" cy="54" r="17" fill="' + c1 + '" opacity=".28"/>'
+      + '<circle cx="55" cy="54" r="10" fill="' + c1 + '"/>'
+      + '<rect x="30" y="44" width="50" height="7" rx="3.5" fill="#0b1220" opacity=".8"/>'
+      + '<rect x="30" y="58" width="50" height="7" rx="3.5" fill="#0b1220" opacity=".8"/>'
+      + '<path d="M22 86h64" stroke="' + c1 + '" stroke-width="4" stroke-linecap="round" opacity=".5"/>';
+  }
+  if (key === 'nutrition') {
+    return ''
+      + '<circle cx="54" cy="54" r="32" fill="#0b1220" opacity=".85"/>'
+      + '<circle cx="54" cy="54" r="32" fill="none" stroke="' + c1 + '" stroke-width="3" opacity=".6"/>'
+      + '<path d="M54 22a32 32 0 0 1 27.7 48L54 54z" fill="' + c1 + '"/>'
+      + '<path d="M81.7 70A32 32 0 0 1 26 68l28-14z" fill="' + c2 + '" opacity=".9"/>'
+      + '<circle cx="54" cy="54" r="10" fill="#0b1220"/>'
+      + '<rect x="20" y="86" width="68" height="5" rx="2.5" fill="' + c1 + '" opacity=".45"/>';
+  }
+  if (key === 'doctor') {
+    return ''
+      + '<rect x="24" y="20" width="48" height="62" rx="7" fill="#0b1220" opacity=".85"/>'
+      + '<rect x="32" y="32" width="26" height="4" rx="2" fill="' + c1 + '" opacity=".9"/>'
+      + '<path d="M32 52h8l4-9 6 18 4-9h10" stroke="' + c1 + '" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+      + '<rect x="32" y="68" width="30" height="3.5" rx="1.75" fill="#fff" opacity=".3"/>'
+      + '<path d="M72 34v14a11 11 0 0 0 22 0V34" stroke="' + c2 + '" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
+      + '<circle cx="83" cy="62" r="7" fill="' + c1 + '"/>';
+  }
+  // psych — رأس بموجات تركيز
+  return ''
+    + '<path d="M54 22a26 26 0 0 1 26 26c0 9-5 15-9 19-3 3-5 5-5 9v6H42v-6c0-4-2-6-5-9-4-4-9-10-9-19a26 26 0 0 1 26-26z" fill="#0b1220" opacity=".85"/>'
+    + '<path d="M54 22a26 26 0 0 1 26 26c0 9-5 15-9 19-3 3-5 5-5 9v6H42v-6c0-4-2-6-5-9-4-4-9-10-9-19a26 26 0 0 1 26-26z" fill="none" stroke="' + c1 + '" stroke-width="3" opacity=".7"/>'
+    + '<path d="M40 52c4-7 8 7 12 0s8 7 12 0" stroke="' + c1 + '" stroke-width="3.6" fill="none" stroke-linecap="round"/>'
+    + '<rect x="43" y="84" width="22" height="5" rx="2.5" fill="' + c2 + '"/>'
+    + '<circle cx="82" cy="34" r="5" fill="' + c1 + '" opacity=".8"/>'
+    + '<circle cx="92" cy="22" r="3" fill="' + c1 + '" opacity=".5"/>';
+}
+
+/*
+ * البطاقة: لو المتخصص عنده صورة حقيقية بتتعرض هي، وغير كده بيتعرض
+ * المشهد المرسوم. يعني أول ما فريقك يرفع صوره، الكاروسيل بيبقى
+ * فريقك الحقيقي بدل الرسم من غير ما نغيّر أي حاجة.
+ */
+function teamFigureSvg(figure) {
+  const id = 'tf-' + figure.key;
+
+  if (figure.photo) {
+    return ''
+      + '<svg class="team-fig-svg" viewBox="0 0 108 108" role="img" aria-hidden="true">'
+      +   '<defs>'
+      +     '<clipPath id="clip-' + id + '"><rect x="4" y="4" width="100" height="100" rx="26"/></clipPath>'
+      +     '<linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="1">'
+      +       '<stop offset="0" stop-color="' + figure.c1 + '"/><stop offset="1" stop-color="' + figure.c2 + '"/>'
+      +     '</linearGradient>'
+      +   '</defs>'
+      +   '<image href="' + figure.photo + '" x="4" y="4" width="100" height="100" '
+      +     'preserveAspectRatio="xMidYMid slice" clip-path="url(#clip-' + id + ')"/>'
+      +   '<rect x="4" y="4" width="100" height="100" rx="26" fill="none" '
+      +     'stroke="url(#' + id + ')" stroke-width="3"/>'
+      + '</svg>';
+  }
+
+  return ''
+    + '<svg class="team-fig-svg" viewBox="0 0 108 108" role="img" aria-hidden="true">'
+    +   '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="1">'
+    +     '<stop offset="0" stop-color="' + figure.c1 + '"/>'
+    +     '<stop offset="1" stop-color="' + figure.c2 + '"/>'
+    +   '</linearGradient></defs>'
+    +   '<rect x="4" y="4" width="100" height="100" rx="26" fill="url(#' + id + ')" opacity="0.14"/>'
+    +   '<rect x="4" y="4" width="100" height="100" rx="26" fill="none" '
+    +     'stroke="url(#' + id + ')" stroke-width="2.5" opacity="0.6"/>'
+    +   '<g transform="translate(0 2)">' + sceneArt(figure.key, figure.c1, figure.c2) + '</g>'
+    + '</svg>';
+}
+
+/*
+ * ============ الكاروسيل الدائري ============
+ * الشخصيات الخمسة بتتوزّع على دايرة بيضاوية وبتلف لوحدها كل 3 ثواني.
+ * اللي قدام بتكبر ويظهر وراها كشاف بلونها، وتحتها سطر واحد بيقول
+ * التخصص ده بيعمل إيه. الباقي بيصغر ويبهت في الخلفية.
+ * الضغط على أي واحدة بيلفّها لقدام، والضغط تاني بيوَدّي على شغلها.
+ * ولو الزائر مفعّل "تقليل الحركة" في نظامه، اللف بيقف ويختار بإيده.
+ */
+const ORBIT_RX = 124;   // نص عرض الدايرة
+const ORBIT_RY = 32;    // نص ارتفاعها — بيضاوية عشان تدّي إحساس عمق
+let orbitIndex = 0;
+let orbitTimer = null;
+
+function prefersReducedMotion() {
+  try {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  } catch (error) {
+    return false;
+  }
+}
+
+function orbitFrontIndex() {
+  const n = orbitItems.length;
+  return ((orbitIndex % n) + n) % n;
+}
+
+function layoutOrbit() {
+  const stage = document.getElementById('orbit-stage');
+  if (!stage) return;
+
+  const count = orbitItems.length;
+  const step = (2 * Math.PI) / count;
+  const front = orbitFrontIndex();
+
+  stage.querySelectorAll('.orbit-fig').forEach(function (cell, i) {
+    const angle = (i - orbitIndex) * step + Math.PI / 2;
+    const x = Math.cos(angle) * ORBIT_RX;
+    const y = Math.sin(angle) * ORBIT_RY;
+    // كل ما العنصر يقرب من قدام كل ما كبر ووضح
+    const depth = (Math.sin(angle) + 1) / 2;
+    /*
+     * اللي ورا بيصغر ويبهت ويتعمّي شوية — التعمية (blur) هي اللي
+     * بتدي الإحساس إنه بعيد فعلاً بدل ما يبان مزاحم على اللي قدام
+     */
+    const scale = 0.4 + depth * 0.72;
+    const blur = (1 - depth) * 2.4;
+
+    cell.style.transform = 'translate(-50%, -50%) translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')';
+    cell.style.opacity = String(0.22 + depth * 0.78);
+    cell.style.filter = blur > 0.15 ? 'blur(' + blur.toFixed(2) + 'px)' : 'none';
+    cell.style.zIndex = String(Math.round(depth * 100));
+    cell.classList.toggle('orbit-front', i === front);
+  });
+
+  const figure = orbitItems[front];
+
+  const glow = document.getElementById('orbit-glow');
+  if (glow) {
+    glow.style.background = 'radial-gradient(circle, ' + figure.c1 + '55 0%, '
+      + figure.c1 + '18 45%, transparent 72%)';
+  }
+
+  if (figure.pillar) showSpecPage(figure.pillar);
+
+  const role = document.getElementById('orbit-role');
+  const line = document.getElementById('orbit-line');
+  if (role) {
+    role.textContent = figure.name || t(figure.labelKey);
+    role.style.color = figure.c1;
+  }
+  if (line) {
+    line.textContent = figure.name
+      ? (figure.roleText + (figure.line ? ' · ' + figure.line : ''))
+      : (figure.line || t(figure.key + '_does'));
+  }
+
+  const dots = document.getElementById('orbit-dots');
+  if (dots) {
+    dots.querySelectorAll('.orbit-dot').forEach(function (dot, i) {
+      const active = i === front;
+      dot.classList.toggle('active', active);
+      dot.style.background = active ? orbitItems[i].c1 : '';
+    });
+  }
+}
+
+function restartOrbitTimer() {
+  if (orbitTimer) clearInterval(orbitTimer);
+  if (prefersReducedMotion()) return;
+  orbitTimer = setInterval(function () {
+    // بتقف وهي برا الشاشة عشان ماتستهلكش من غير داعي
+    if (welcomeScreen.classList.contains('hidden')) return;
+    orbitIndex++;
+    layoutOrbit();
+  }, 3000);
+}
+
+function goToOrbit(index) {
+  orbitIndex = index;
+  layoutOrbit();
+  restartOrbitTimer();
+}
+
+/*
+ * الكاروسيل بيعرض فريقك الحقيقي أول ما يبقى فيه متخصصين — بصورهم
+ * وأسمائهم وتخصصاتهم. لحد ما ده يحصل، بيعرض المشاهد المرسومة
+ * كتعبير عن التخصصات. يعني نفس المكان بيترقّى لوحده.
+ */
+const SPEC_COLORS = {
+  coach:           { c1: '#22c55e', c2: '#15803d', scene: 'coach' },
+  rehab:           { c1: '#f97316', c2: '#c2410c', scene: 'rehab' },
+  physio:          { c1: '#fb923c', c2: '#9a3412', scene: 'rehab' },
+  nutritionist:    { c1: '#38bdf8', c2: '#0369a1', scene: 'nutrition' },
+  ortho:           { c1: '#a78bfa', c2: '#6d28d9', scene: 'doctor' },
+  sports_medicine: { c1: '#818cf8', c2: '#4338ca', scene: 'doctor' },
+  radiology:       { c1: '#c084fc', c2: '#7e22ce', scene: 'doctor' },
+  pharmacist:      { c1: '#2dd4bf', c2: '#0f766e', scene: 'doctor' },
+  massage:         { c1: '#fbbf24', c2: '#b45309', scene: 'rehab' },
+  psychologist:    { c1: '#f472b6', c2: '#be185d', scene: 'psych' }
+};
+
+let orbitItems = TEAM_FIGURES.slice();
+
+/* بيحوّل متخصص حقيقي لبطاقة في الكاروسيل */
+function providerToOrbitItem(provider) {
+  const specs = providerSpecialties(provider);
+  const main = specs[0] || 'coach';
+  const colors = SPEC_COLORS[main] || SPEC_COLORS.coach;
+  const stats = (typeof ratingStatsFor === 'function') ? ratingStatsFor(provider.email) : { avg: 0, count: 0 };
+  return {
+    key: colors.scene,
+    c1: colors.c1,
+    c2: colors.c2,
+    photo: provider.photo || '',
+    name: provider.name,
+    roleText: specialtyListName(specs),
+    line: stats.count
+      ? fill('orbit_rating_line', { avg: stats.avg.toFixed(1), n: stats.count })
+      : t(colors.scene + '_does'),
+    pillar: specs.indexOf('nutritionist') !== -1 ? 'nutrition'
+          : (specialtiesHaveFlag(specs, 'medical') ? 'medical'
+          : (specs.indexOf('rehab') !== -1 ? 'rehab' : 'training'))
+  };
+}
+
+const ORBIT_REAL_TEAM_MIN = 10;
+
+function setOrbitToProviders(providers) {
+  /*
+   * الرسم بيفضل هو المعروض لحد ما يبقى فيه 10 متخصصين أو أكتر.
+   * قبل كده، خمس مشاهد بتغطي كل التخصصات أصدق من عرض متخصص
+   * أو اتنين وكأنهم "الفريق الكامل".
+   */
+  if (!providers || providers.length < ORBIT_REAL_TEAM_MIN) return false;
+  orbitItems = providers.slice(0, 8).map(providerToOrbitItem);
+  orbitIndex = 0;
+  renderTeamStrip();
+  return true;
+}
+
+function renderTeamStrip() {
+  const stage = document.getElementById('orbit-stage');
+  const dots = document.getElementById('orbit-dots');
+  if (!stage) return;
+
+  stage.innerHTML = '';
+  if (dots) dots.innerHTML = '';
+
+  orbitItems.forEach(function (figure, index) {
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'orbit-fig';
+    cell.innerHTML = teamFigureSvg(figure);
+    cell.setAttribute('aria-label', figure.name || t(figure.labelKey));
+
+    cell.addEventListener('click', function () {
+      // الصفحة اللي تحت بتتقلب على التخصص ده فورًا — من غير سكرول،
+      // لأنها ظاهرة تحته على طول
+      goToOrbit(index);
+    });
+
+    stage.appendChild(cell);
+
+    if (dots) {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'orbit-dot';
+      dot.setAttribute('aria-label', figure.name || t(figure.labelKey));
+      dot.addEventListener('click', function () { goToOrbit(index); });
+      dots.appendChild(dot);
+    }
+  });
+
+  layoutOrbit();
+  restartOrbitTimer();
+}
+
+
+renderTeamStrip();
+
+/*
+ * ============ ظهور متدرّج وقت التمرير ============
+ * العناصر بتطلع واحدة ورا التانية أول ما توصل للشاشة بدل ما تكون
+ * كلها ظاهرة من الأول. بيدّي إحساس إن الصفحة حيّة من غير أي كلام
+ * زيادة. ولو الزائر مقفّل الحركة في نظامه، كل حاجة بتظهر عادي.
+ */
+function setupReveal() {
+  const targets = document.querySelectorAll(
+    '.welcome-audience-card, .welcome-faq-item, .welcome-step'
+  );
+  if (!targets.length) return;
+
+  if (prefersReducedMotion() || typeof IntersectionObserver === 'undefined') {
+    targets.forEach(function (el) { el.classList.add('revealed'); });
+    return;
+  }
+
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const order = el.parentElement
+        ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+      el.style.transitionDelay = Math.min(order, 5) * 0.08 + 's';
+      el.classList.add('revealed');
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.15 });
+
+  targets.forEach(function (el) {
+    el.classList.add('reveal-me');
+    observer.observe(el);
+  });
+}
+
+setupReveal();
+
+renderHeroBand();
+startHeroRotation();
 
 document.getElementById('login-back-welcome-btn').addEventListener('click', function () {
   showScreen(welcomeScreen);
@@ -11378,6 +12665,32 @@ document.getElementById('open-admin-panel-btn').addEventListener('click', functi
  */
 const adminLeadsBadge = document.getElementById('admin-leads-badge');
 
+/*
+ * عداد طلبات التخصص المستنية موافقتك — بيظهر على زرار "المتخصصين"
+ * عشان ماتسيبش متخصص مستني أيام من غير ما تاخد بالك
+ */
+const pendingSpecsBadge = document.getElementById('pending-specs-badge');
+
+async function refreshPendingSpecsBadge() {
+  if (!pendingSpecsBadge) return;
+  pendingSpecsBadge.classList.add('hidden');
+  pendingSpecsBadge.textContent = '';
+  if (!isFullAdminAccount()) return;
+  try {
+    const snapshot = await getDocs(collection(db, 'providers'));
+    let pending = 0;
+    snapshot.forEach(function (item) {
+      pending += providerPendingSpecialties(item.data()).length;
+    });
+    if (pending) {
+      pendingSpecsBadge.textContent = pending;
+      pendingSpecsBadge.classList.remove('hidden');
+    }
+  } catch (error) {
+    // مش مشكلة لو فشل العداد
+  }
+}
+
 async function refreshLeadsBadge() {
   if (!adminLeadsBadge) return;
   adminLeadsBadge.classList.add('hidden');
@@ -12454,6 +13767,7 @@ document.getElementById('open-medlib-btn').addEventListener('click', function ()
 });
 
 document.getElementById('ph-open-medlib-btn').addEventListener('click', function () {
+  if (!guardLibrary('medical', providerHomeMessage)) return;
   medLibraryReturnScreen = providerHomeScreen;
   showScreen(medLibraryScreen);
   loadMedLibrary();
