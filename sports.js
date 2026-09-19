@@ -252,7 +252,7 @@ export const SPORT_TEMPLATES = [
     },
     sections: {
       warmup:      [{ en: 'Jump Rope', sets: 3, reps: '60s' }, { en: 'Arm Circles', sets: 2, reps: '15' }],
-      main:        [{ en: 'Barbell Deadlift', sets: 4, reps: '5' }, { en: 'Push-up', sets: 4, reps: '15' }, { en: 'Pull-up', sets: 4, reps: '8' }, { en: 'Medicine Ball Slam', sets: 3, reps: '12' }],
+      main:        [{ en: 'Deadlift', sets: 4, reps: '5' }, { en: 'Push-up', sets: 4, reps: '15' }, { en: 'Pull-up', sets: 4, reps: '8' }, { en: 'Medicine Ball Slam', sets: 3, reps: '12' }],
       cardio:      [{ en: 'Interval Running', sets: 8, reps: '30s' }],
       mobility:    [{ en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }],
       flexibility: [{ en: 'Neck Stretch', sets: 2, reps: '20s' }]
@@ -269,7 +269,7 @@ export const SPORT_TEMPLATES = [
     },
     sections: {
       warmup:      [{ en: 'Band Pull Apart', sets: 3, reps: '15' }, { en: 'Bodyweight Squat', sets: 2, reps: '15' }],
-      main:        [{ en: 'Barbell Squat', sets: 4, reps: '10' }, { en: 'Barbell Bench Press - Medium Grip', sets: 4, reps: '10' }, { en: 'Bent Over Barbell Row', sets: 4, reps: '10' }, { en: 'Dumbbell Lunge', sets: 3, reps: '12' }],
+      main:        [{ en: 'Barbell Squat', sets: 4, reps: '10' }, { en: 'Barbell Bench Press', sets: 4, reps: '10' }, { en: 'Bent Over Barbell Row', sets: 4, reps: '10' }, { en: 'Walking Lunge', sets: 3, reps: '12' }],
       cardio:      [],
       mobility:    [{ en: 'Thoracic Rotation', sets: 3, reps: '10' }],
       flexibility: [{ en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }]
@@ -286,7 +286,7 @@ export const SPORT_TEMPLATES = [
     },
     sections: {
       warmup:      [{ en: 'Band Pull Apart', sets: 3, reps: '15' }, { en: 'Bodyweight Squat', sets: 2, reps: '15' }],
-      main:        [{ en: 'Barbell Squat', sets: 5, reps: '5' }, { en: 'Barbell Bench Press - Medium Grip', sets: 5, reps: '5' }, { en: 'Barbell Deadlift', sets: 3, reps: '5' }, { en: 'Barbell Shoulder Press', sets: 3, reps: '8' }],
+      main:        [{ en: 'Barbell Squat', sets: 5, reps: '5' }, { en: 'Barbell Bench Press', sets: 5, reps: '5' }, { en: 'Deadlift', sets: 3, reps: '5' }, { en: 'Overhead Barbell Press', sets: 3, reps: '8' }],
       cardio:      [],
       mobility:    [{ en: 'Thoracic Rotation', sets: 3, reps: '10' }],
       flexibility: [{ en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }]
@@ -303,7 +303,7 @@ export const SPORT_TEMPLATES = [
     },
     sections: {
       warmup:      [{ en: 'Band Pull Apart', sets: 3, reps: '15' }, { en: 'Bodyweight Squat', sets: 2, reps: '10' }],
-      main:        [{ en: 'Barbell Squat', sets: 5, reps: '3' }, { en: 'Box Jump', sets: 5, reps: '3' }, { en: 'Barbell Shoulder Press', sets: 4, reps: '3' }, { en: 'Medicine Ball Slam', sets: 4, reps: '8' }],
+      main:        [{ en: 'Barbell Squat', sets: 5, reps: '3' }, { en: 'Box Jump', sets: 5, reps: '3' }, { en: 'Overhead Barbell Press', sets: 4, reps: '3' }, { en: 'Medicine Ball Slam', sets: 4, reps: '8' }],
       cardio:      [],
       mobility:    [{ en: 'Thoracic Rotation', sets: 3, reps: '10' }],
       flexibility: [{ en: 'Hip Flexor Stretch', sets: 2, reps: '20s' }]
@@ -320,7 +320,7 @@ export const SPORT_TEMPLATES = [
     },
     sections: {
       warmup:      [{ en: 'Leg Swings', sets: 2, reps: '12' }, { en: 'Arm Circles', sets: 2, reps: '15' }],
-      main:        [{ en: 'Barbell Squat', sets: 4, reps: '8' }, { en: 'Barbell Deadlift', sets: 3, reps: '6' }, { en: 'Pull-up', sets: 3, reps: '8' }, { en: 'Push-up', sets: 3, reps: '15' }],
+      main:        [{ en: 'Barbell Squat', sets: 4, reps: '8' }, { en: 'Deadlift', sets: 3, reps: '6' }, { en: 'Pull-up', sets: 3, reps: '8' }, { en: 'Push-up', sets: 3, reps: '15' }],
       cardio:      [{ en: 'Bicycling, Stationary', sets: 1, reps: '20min' }],
       mobility:    [{ en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }, { en: 'Thoracic Rotation', sets: 3, reps: '10' }],
       flexibility: [{ en: 'Hamstring Stretch', sets: 2, reps: '30s' }, { en: 'Calf Stretch', sets: 2, reps: '30s' }]
@@ -439,7 +439,7 @@ export const SPORT_TEMPLATES = [
     },
     sections: {
       warmup:      [{ en: 'Bodyweight Squat', sets: 2, reps: '15' }, { en: 'Arm Circles', sets: 2, reps: '15' }],
-      main:        [{ en: 'Barbell Squat', sets: 3, reps: '10' }, { en: 'Barbell Bench Press - Medium Grip', sets: 3, reps: '10' }, { en: 'Bent Over Barbell Row', sets: 3, reps: '10' }, { en: 'Barbell Shoulder Press', sets: 3, reps: '10' }],
+      main:        [{ en: 'Barbell Squat', sets: 3, reps: '10' }, { en: 'Barbell Bench Press', sets: 3, reps: '10' }, { en: 'Bent Over Barbell Row', sets: 3, reps: '10' }, { en: 'Overhead Barbell Press', sets: 3, reps: '10' }],
       cardio:      [{ en: 'Bicycling, Stationary', sets: 1, reps: '15min' }],
       mobility:    [{ en: 'Glute Bridge', sets: 3, reps: '15' }],
       flexibility: [{ en: 'Hamstring Stretch', sets: 2, reps: '30s' }]

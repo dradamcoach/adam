@@ -2109,6 +2109,47 @@ function findLibraryImage(englishName) {
   return (best && bestScore >= 30) ? best.images[0] : '';
 }
 
+/*
+ * بتدوّر على تمرين في مكتبة التمارين المحلية بالاسم الإنجليزي وترجّع
+ * المستند نفسه (مش الصورة بس) — عشان نقدر ناخد منه الاسم العربي والصورة
+ * والعضلات وطريقة الأداء. بتستخدمها قوالب التمرين اللي جايه بالإنجليزي.
+ */
+function matchLibraryExercise(englishName) {
+  const target = normaliseName(englishName);
+  if (!target) return null;
+  const targetWords = target.split(' ').filter(function (w) { return w.length > 2; });
+  if (!targetWords.length) return null;
+
+  let best = null;
+  let bestScore = 0;
+
+  EXERCISE_LIBRARY.forEach(function (exercise) {
+    const enName = (exercise.name && exercise.name.en) ? exercise.name.en : '';
+    if (!enName) return;
+    const candidate = normaliseName(enName);
+
+    let score = 0;
+    if (candidate === target) {
+      score = 100;
+    } else {
+      const candidateWords = candidate.split(' ');
+      let hits = 0;
+      targetWords.forEach(function (word) {
+        if (candidateWords.indexOf(word) !== -1) hits++;
+      });
+      const coverage = hits / targetWords.length;
+      if (coverage >= 0.75) score = coverage * 50 - Math.abs(candidateWords.length - targetWords.length);
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      best = exercise;
+    }
+  });
+
+  return (best && bestScore >= 30) ? best : null;
+}
+
 function sportName(id) {
   const sport = SPORTS.filter(function (s) { return s.id === id; })[0];
   return sport ? sport[lang] : '';
@@ -4540,25 +4581,32 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
 
   saveCurrentDay();
 
-  // نحمّل المكتبة عشان نجيب صور التمارين بالاسم الإنجليزي
+  /*
+   * قوالب التمرين مكتوبة بالاسم الإنجليزي بس من غير صور ولا تفاصيل.
+   * قبل كده كنا بنحاول نجيب الصورة بـ findLibraryImage، وده بقى مش
+   * بيرجّع حاجة خالص من يوم ما المكتبة بقت محلية (exercise-library.js
+   * مفيهاش حقل images أصلاً) — فالتمارين الجاية من قالب كانت بتتضاف
+   * من غير أي صورة. دلوقتي بنطابق كل تمرين باسمه الإنجليزي على مكتبة
+   * التمارين، وناخد منه الاسم العربي وصورته والعضلات وطريقة الأداء —
+   * بالظبط زي ما لو المدرب ضافه بإيده من المكتبة.
+   */
   coachMessage.textContent = t('matching_images');
-  try {
-    if (!libraryData) {
-      const response = await fetch(LIBRARY_URL);
-      libraryData = await response.json();
-    }
-  } catch (error) {
-    // مش مشكلة — هنكمل من غير صور
-  }
+  await ensureLibraryImagesLoaded();
 
   SECTION_KEYS.forEach(function (key) {
     const list = tpl.sections[key] || [];
     list.forEach(function (source) {
+      const match = matchLibraryExercise(source.en);
+      const libPhoto = match ? libraryImageFor('exercise_' + match.id) : '';
       coachWeek[coachDay].sections[key].push(makeExercise({
-        name: source.en,
+        name: match ? exerciseLibName(match) : source.en,
         sets: source.sets,
         reps: source.reps,
-        image: findLibraryImage(source.en)
+        imageUrl: libPhoto,
+        image: libPhoto ? '' : ((match && match.images && match.images.length) ? match.images[0] : findLibraryImage(source.en)),
+        primaryMuscles: match ? musclesListText(match.primaryMuscles) : '',
+        secondaryMuscles: match ? musclesListText(match.secondaryMuscles) : '',
+        howTo: (match && match.howTo) ? (match.howTo[lang] || match.howTo.ar || match.howTo.en || '') : ''
       }));
     });
   });

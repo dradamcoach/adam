@@ -854,5 +854,213 @@ export const EXERCISE_LIBRARY = [
       ar: 'امسك طرف كل حبل بإيد، وحرك الذراعين بالتبادل لأعلى وأسفل بسرعة عالية مع نص سكوات ثابت وثبات في الجذع.',
       en: 'Hold one end of each rope, alternate driving your arms up and down rapidly while holding a stable quarter-squat stance with a braced core.'
     }
+  },
+
+  /* ==================== إحماء وحركية — Warm-up & mobility ==================== */
+  {
+    id: 'ex_ankle_circles',
+    name: { ar: 'دوائر الكاحل', en: 'Ankle Circles' },
+    category: 'stretching', equipment: 'body only',
+    primaryMuscles: ['calves'],
+    howTo: {
+      ar: 'ارفع القدم عن الأرض ولف الكاحل في دوائر كاملة وبطيئة في الاتجاهين، مع تثبيت الركبة قدر الإمكان.',
+      en: 'Lift one foot off the floor and draw slow full circles with the ankle in both directions, keeping the knee as still as possible.'
+    }
+  },
+  {
+    id: 'ex_leg_swings',
+    name: { ar: 'مرجحة الرجل', en: 'Leg Swings' },
+    category: 'stretching', equipment: 'body only',
+    primaryMuscles: ['hamstrings'], secondaryMuscles: ['glutes', 'quadriceps'],
+    howTo: {
+      ar: 'امسك حاجة ثابتة للتوازن، ومرجح الرجل لقدام ولورا في مدى مريح ومتحكم فيه، وبعدين كرر بالعرض. حركة إحماء مش إطالة ثابتة.',
+      en: 'Hold something stable for balance and swing one leg forward and back through a comfortable controlled range, then repeat side to side. A warm-up drill, not a static stretch.'
+    }
+  },
+  {
+    id: 'ex_arm_circles',
+    name: { ar: 'دوائر الذراعين', en: 'Arm Circles' },
+    category: 'stretching', equipment: 'body only',
+    primaryMuscles: ['shoulders'],
+    howTo: {
+      ar: 'افرد ذراعيك للجانبين ولف دوائر صغيرة وكبّرها تدريجيًا، وبعدين اعكس الاتجاه.',
+      en: 'Extend your arms to the sides and draw small circles, gradually widening them, then reverse the direction.'
+    }
+  },
+  {
+    id: 'ex_thoracic_rotation',
+    name: { ar: 'دوران الفقرات الصدرية', en: 'Thoracic Rotation' },
+    category: 'stretching', equipment: 'body only',
+    primaryMuscles: ['middle back'], secondaryMuscles: ['abdominals'],
+    howTo: {
+      ar: 'من وضع الركوع على أربع، حط إيد ورا الرأس ولف الكوع لأعلى بالتدريج لحد ما يبص للسقف، وارجع ببطء. الحركة من وسط الظهر مش من أسفل الظهر.',
+      en: 'From all fours, place one hand behind your head and rotate the elbow up toward the ceiling, then return slowly. The movement comes from the mid-back, not the lower back.'
+    }
+  },
+  {
+    id: 'ex_band_pull_apart',
+    name: { ar: 'فتح الأستك للجانبين', en: 'Band Pull Apart' },
+    category: 'strength', equipment: 'bands',
+    primaryMuscles: ['middle back'], secondaryMuscles: ['shoulders', 'traps'],
+    howTo: {
+      ar: 'امسك الأستك بالإيدين بعرض الكتفين والذراعين ممدودة قدامك، واسحبه للجانبين لحد ما يقرب من صدرك مع تقريب لوحي الكتف، وارجع بتحكم.',
+      en: 'Hold a band at shoulder width with arms extended in front, pull it apart until it nears your chest while squeezing the shoulder blades, then return under control.'
+    }
+  },
+  {
+    id: 'ex_band_external_rotation',
+    name: { ar: 'دوران خارجي بالأستك', en: 'Band External Rotation' },
+    category: 'strength', equipment: 'bands',
+    primaryMuscles: ['shoulders'],
+    howTo: {
+      ar: 'ثبّت الكوع جنب جسمك بزاوية 90 درجة، وشد الأستك للخارج بتدوير الساعد بعيد عن البطن من غير ما الكوع يتحرك عن مكانه.',
+      en: 'Keep the elbow tucked at your side at 90°, and rotate the forearm outward against the band without letting the elbow drift away from your body.'
+    }
+  },
+
+  /* ==================== وزن الجسم والأداء — Bodyweight & performance ==================== */
+  {
+    id: 'ex_bodyweight_squat',
+    name: { ar: 'سكوات بوزن الجسم', en: 'Bodyweight Squat' },
+    category: 'strength', equipment: 'body only',
+    primaryMuscles: ['quadriceps'], secondaryMuscles: ['glutes', 'hamstrings'],
+    howTo: {
+      ar: 'قف والقدمين بعرض الكتفين، وانزل بالورك لورا وتحت مع إبقاء الصدر مرفوع والكعبين على الأرض، وقف تاني بالضغط على وسط القدم.',
+      en: 'Stand with feet shoulder-width apart, sit the hips back and down while keeping the chest up and heels down, then stand by pushing through midfoot.'
+    }
+  },
+  {
+    id: 'ex_lateral_lunge',
+    name: { ar: 'لانج جانبي', en: 'Lateral Lunge' },
+    category: 'strength', equipment: 'body only',
+    primaryMuscles: ['quadriceps'], secondaryMuscles: ['glutes', 'adductors'],
+    howTo: {
+      ar: 'اخطي خطوة واسعة للجانب وانزل بالورك على الرجل دي مع إبقاء الرجل التانية ممدودة، وادفع بالكعب للرجوع لوضع الوقوف.',
+      en: 'Take a wide step to the side and sit the hips back over that leg while the other stays straight, then push through the heel to return to standing.'
+    }
+  },
+  {
+    id: 'ex_single_leg_squat',
+    name: { ar: 'سكوات على رجل واحدة', en: 'Single Leg Squat' },
+    category: 'strength', equipment: 'body only',
+    primaryMuscles: ['quadriceps'], secondaryMuscles: ['glutes', 'hamstrings'],
+    howTo: {
+      ar: 'قف على رجل واحدة وانزل بتحكم في المدى اللي تقدر تتحكم فيه من غير ما الركبة تميل للداخل، وارجع لأعلى. تقدر تستعين بحاجة للتوازن في البداية.',
+      en: 'Stand on one leg and lower under control through a range you can manage without the knee caving inward, then rise back up. Use a support for balance at first.'
+    }
+  },
+  {
+    id: 'ex_nordic_hamstring_curl',
+    name: { ar: 'نورديك لأوتار الركبة', en: 'Nordic Hamstring Curl' },
+    category: 'strength', equipment: 'body only',
+    primaryMuscles: ['hamstrings'], secondaryMuscles: ['glutes'],
+    howTo: {
+      ar: 'اركع وخلي حد يثبّت كعبيك، ومِل بجسمك لقدام ببطء شديد مع شد أوتار الركبة ومنع السقوط قدر الإمكان، واستقبل الأرض بإيديك. تمرين قوي جدًا — ابدأ بعدد قليل.',
+      en: 'Kneel with your heels anchored, lower your torso forward as slowly as possible using the hamstrings to resist, and catch yourself with your hands. Very demanding — start with low volume.'
+    }
+  },
+  {
+    id: 'ex_copenhagen_plank',
+    name: { ar: 'بلانك كوبنهاجن', en: 'Copenhagen Plank' },
+    category: 'strength', equipment: 'body only',
+    primaryMuscles: ['adductors'], secondaryMuscles: ['abdominals'],
+    howTo: {
+      ar: 'استند على ساعدك في وضع بلانك جانبي، وحط الرجل العليا على بنش، وارفع الورك والرجل السفلية مع الضغط بالفخذ الداخلي على البنش.',
+      en: 'Set up in a side plank on your forearm with the top leg resting on a bench, then lift the hips and the bottom leg while pressing the inner thigh into the bench.'
+    }
+  },
+  {
+    id: 'ex_hollow_body_hold',
+    name: { ar: 'ثبات الجسم المقوّس (هولو)', en: 'Hollow Body Hold' },
+    category: 'strength', equipment: 'body only',
+    primaryMuscles: ['abdominals'],
+    howTo: {
+      ar: 'استلقِ على ظهرك وارفع الكتفين والرجلين شوية عن الأرض مع لزق أسفل الظهر بالأرض تمامًا، وثبّت. لو أسفل ظهرك اتقوس اقرب رجليك ناحيتك.',
+      en: 'Lie on your back and lift the shoulders and legs slightly off the floor while pressing the lower back flat into the ground, and hold. If the lower back arches, bring the legs closer in.'
+    }
+  },
+  {
+    id: 'ex_medicine_ball_slam',
+    name: { ar: 'ضرب الكرة الطبية', en: 'Medicine Ball Slam' },
+    category: 'plyometrics', equipment: 'medicine ball',
+    primaryMuscles: ['abdominals'], secondaryMuscles: ['shoulders', 'lats'],
+    howTo: {
+      ar: 'ارفع الكرة فوق رأسك بامتداد كامل، واضربها في الأرض بأقصى قوة مع ثني الورك والبطن، والتقطها وكرر.',
+      en: 'Raise the ball overhead to full extension, slam it into the floor as hard as possible by hinging through the hips and trunk, then pick it up and repeat.'
+    }
+  },
+
+  /* ==================== كارديو ميداني — Field cardio ==================== */
+  {
+    id: 'ex_interval_running',
+    name: { ar: 'جري متقطع', en: 'Interval Running' },
+    category: 'cardio', equipment: 'body only',
+    primaryMuscles: ['quadriceps'], secondaryMuscles: ['hamstrings', 'calves'],
+    howTo: {
+      ar: 'بدّل بين فترات جري بسرعة عالية وفترات مشي أو جري خفيف للاستشفاء، حسب التوقيت المحدد في البرنامج.',
+      en: 'Alternate between bouts of hard running and periods of walking or easy jogging for recovery, following the work-to-rest timing set in the program.'
+    }
+  },
+  {
+    id: 'ex_sprint_intervals',
+    name: { ar: 'فترات عدو (سبرنت)', en: 'Sprint Intervals' },
+    category: 'cardio', equipment: 'body only',
+    primaryMuscles: ['hamstrings'], secondaryMuscles: ['glutes', 'quadriceps', 'calves'],
+    howTo: {
+      ar: 'بعد إحماء كويس، اعدُ بأقصى سرعة للمسافة المحددة وبعدين خد راحة كاملة قبل التكرار الجاي. الإحماء هنا مش اختياري.',
+      en: 'After a thorough warm-up, sprint at maximum effort for the prescribed distance, then take full recovery before the next rep. The warm-up is not optional here.'
+    }
+  },
+  {
+    id: 'ex_shuttle_run',
+    name: { ar: 'جري مكوكي', en: 'Shuttle Run' },
+    category: 'cardio', equipment: 'body only',
+    primaryMuscles: ['quadriceps'], secondaryMuscles: ['hamstrings', 'glutes', 'calves'],
+    howTo: {
+      ar: 'اجري بسرعة بين علامتين على مسافة محددة مع الوقوف وتغيير الاتجاه عند كل علامة. ركّز على نزول الورك عند التوقف عشان تحمي الركبة.',
+      en: 'Run at speed between two markers a set distance apart, decelerating and changing direction at each one. Focus on sinking the hips when stopping to protect the knee.'
+    }
+  },
+  {
+    id: 'ex_stationary_bike',
+    name: { ar: 'دراجة ثابتة', en: 'Bicycling, Stationary' },
+    category: 'cardio', equipment: 'machine',
+    primaryMuscles: ['quadriceps'], secondaryMuscles: ['hamstrings', 'glutes', 'calves'],
+    howTo: {
+      ar: 'اظبط ارتفاع الكرسي بحيث تبقى الركبة شبه ممدودة في أخفض نقطة، واحتفظ بإيقاع ثابت على المقاومة والمدة المحددين.',
+      en: 'Set the seat height so the knee is almost straight at the lowest point, and hold a steady cadence at the prescribed resistance and duration.'
+    }
+  },
+
+  /* ==================== إطالات إضافية — Additional stretches ==================== */
+  {
+    id: 'ex_calf_stretch',
+    name: { ar: 'إطالة السمانة', en: 'Calf Stretch' },
+    category: 'stretching', equipment: 'body only',
+    primaryMuscles: ['calves'],
+    howTo: {
+      ar: 'قف مواجه حائط وحط رجل لورا مفرودة والكعب على الأرض، ومِل بجسمك لقدام لحد إحساس إطالة في السمانة، وثبّت.',
+      en: 'Face a wall with one leg back, knee straight and heel on the floor, then lean forward until you feel a stretch in the calf and hold.'
+    }
+  },
+  {
+    id: 'ex_adductor_stretch',
+    name: { ar: 'إطالة المقربات', en: 'Adductor Stretch' },
+    category: 'stretching', equipment: 'body only',
+    primaryMuscles: ['adductors'],
+    howTo: {
+      ar: 'من وضع الوقوف بقدمين متباعدتين، انزل بالورك على رجل واحدة مع إبقاء التانية ممدودة لحد إحساس إطالة في الفخذ الداخلي، وثبّت.',
+      en: 'From a wide stance, shift your hips over one leg while the other stays straight until you feel a stretch in the inner thigh, and hold.'
+    }
+  },
+  {
+    id: 'ex_neck_stretch',
+    name: { ar: 'إطالة الرقبة', en: 'Neck Stretch' },
+    category: 'stretching', equipment: 'body only',
+    primaryMuscles: ['neck'], secondaryMuscles: ['traps'],
+    howTo: {
+      ar: 'مِل رأسك برفق ناحية كتف واحدة لحد إحساس إطالة على الجنب التاني من الرقبة، وثبّت من غير أي شد مفاجئ، وكرر على الناحية التانية.',
+      en: 'Gently tilt your head toward one shoulder until you feel a stretch along the opposite side of the neck, hold without any sudden pulling, then repeat on the other side.'
+    }
   }
 ];
