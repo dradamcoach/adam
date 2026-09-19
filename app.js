@@ -46,6 +46,8 @@ const TEXT = {
     loading: 'جاري التحميل...',
     no_clients: 'مفيش عملاء لسه، ضيف عميل تحت',
     clients_search_ph: 'ابحث باسم العميل أو إيميله',
+    coach_muscle_label: 'العضلة المستهدفة النهاردة',
+    coach_muscle_hint: 'لما تفتح المكتبة هتلاقيها مفلترة على العضلة دي على طول',
     client_injury_flag: 'بلاغ إصابة محتاج مراجعة',
     client_injury_flag_many: '{n} بلاغات إصابة محتاجة مراجعة',
     no_client_search_results: 'مفيش عميل بالاسم أو الإيميل ده',
@@ -920,6 +922,8 @@ const TEXT = {
     loading: 'Loading...',
     no_clients: 'No clients yet — add one below',
     clients_search_ph: 'Search by client name or email',
+    coach_muscle_label: "Today's target muscle",
+    coach_muscle_hint: 'The library opens already filtered to this muscle',
     client_injury_flag: 'Injury report needs review',
     client_injury_flag_many: '{n} injury reports need review',
     no_client_search_results: 'No client matches that name or email',
@@ -3743,6 +3747,33 @@ const dayTitle = document.getElementById('day-title');
 const restCheckbox = document.getElementById('rest-day');
 const targetSection = document.getElementById('target-section');
 
+const coachMuscle = document.getElementById('coach-muscle');
+
+/*
+ * اختيار العضلة المستهدفة لليوم — بيتحفظ في الشاشة بس (مش في البرنامج)
+ * وبيستخدم كفلتر جاهز أول ما المدرب يفتح المكتبة، عشان ميضطرش يفلتر
+ * بإيده كل مرة
+ */
+function fillCoachMuscleSelect() {
+  if (!coachMuscle) return;
+  const keep = coachMuscle.value;
+  coachMuscle.innerHTML = '';
+
+  const none = document.createElement('option');
+  none.value = '';
+  none.textContent = t('all_muscles');
+  coachMuscle.appendChild(none);
+
+  Object.keys(MUSCLES).forEach(function (key) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = muscleName(key);
+    coachMuscle.appendChild(option);
+  });
+
+  coachMuscle.value = keep;
+}
+
 const trainingPanel = document.getElementById('training-panel');
 const rehabPanel = document.getElementById('rehab-panel');
 const injuriesPanel = document.getElementById('injuries-panel');
@@ -3995,6 +4026,7 @@ async function openCoachScreen(email, name, sport) {
     fillBodyParts();
     fillTemplatePicker();
     fillSportSelect(coachSport, true);
+    fillCoachMuscleSelect();
     coachSport.value = currentClientSport;
     fillSportTemplatePicker();
     showCoachDay();
@@ -4714,6 +4746,7 @@ const libEquip = document.getElementById('lib-equip');
 const libChips = document.getElementById('lib-chips');
 let activeCategory = '';
 let suggestedCategory = '';
+let suggestedMuscle = '';
 const libGrid = document.getElementById('lib-grid');
 const libMessage = document.getElementById('lib-message');
 
@@ -4803,6 +4836,8 @@ function openLibrary() {
   suggestedCategory = (coachMode !== 'rehab')
     ? (SECTION_DEFAULT_CATEGORY[targetSection.value] || '')
     : '';
+  // العضلة اللي اختارها المدرب لليوم ده تبقى الفلتر الجاهز في المكتبة
+  suggestedMuscle = (coachMode !== 'rehab' && coachMuscle) ? (coachMuscle.value || '') : '';
   showScreen(libraryScreen);
   loadLibrary();
 }
@@ -4977,7 +5012,13 @@ function rebuildLibraryFilters() {
     libEquip.appendChild(option);
   });
 
-  libMuscle.value = keepMuscle;
+  // لو المدرب اختار عضلة مستهدفة قبل ما يفتح المكتبة، بنفلتر عليها
+  if (suggestedMuscle && muscles.indexOf(suggestedMuscle) !== -1) {
+    libMuscle.value = suggestedMuscle;
+    suggestedMuscle = '';
+  } else {
+    libMuscle.value = keepMuscle;
+  }
   libEquip.value = keepEquip;
 }
 
@@ -8001,6 +8042,7 @@ function refreshAll() {
   if (!injuryScreen.classList.contains('hidden')) { refreshHotspots(); loadInjuryHistory(); }
   if (!teamViewScreen.classList.contains('hidden')) loadTeamView();
   if (!clientProfileScreen.classList.contains('hidden')) fillClientProfileSelects();
+  if (!coachScreen.classList.contains('hidden')) fillCoachMuscleSelect();
   if (!clientConsultPanel.classList.contains('hidden')) loadClientConsult();
   if (!consultPanel.classList.contains('hidden')) renderCoachConsultRequests();
   if (!medLibraryScreen.classList.contains('hidden')) loadMedLibrary();
