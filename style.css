@@ -1546,12 +1546,17 @@ body > p {
   cursor: zoom-in;
 }
 
-.food-photo-btn {
+/* لازم تبدأ بـ .card button عشان تكسب على قاعدة الزرار الأساسية
+   (.card button) اللي بتدي أي زرار جوه كارت عرض 100% وخلفية خضرا —
+   من غير البادئة دي كان زرار الصورة بيطلع شريط أخضر بعرض الصف كله
+   وبيكسر تنسيق سطر الصنف */
+.card button.food-photo-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 34px;
   height: 34px;
+  min-width: 34px;
   border-radius: 8px;
   border: 1px dashed var(--line);
   background: transparent;
