@@ -422,6 +422,40 @@ const TEXT = {
     my_food: 'بتاعي',
     all_foods: 'كل الأصناف',
     all_supps: 'كل المكملات',
+    phone_required: 'اكتب رقم موبايلك — ده الرقم اللي هنتواصل بيه معاك',
+    phone_too_short: 'الرقم ناقص — رقم {code} لازم يكون {count} أرقام. مثال: {example}',
+    phone_too_long: 'الرقم زايد — رقم {code} لازم يكون {count} أرقام. مثال: {example}',
+    phone_bad_start: 'الرقم ده مش شكله صح لـ {code} — راجع أول الرقم. مثال: {example}',
+    bad_email: 'الإيميل ده مش مظبوط — راجعه',
+    lead_phone_ph: 'رقم موبايلك',
+    lead_email_ph: 'إيميلك (عشان نفتحلك حساب)',
+    lead_interest_ph: 'محتاج إيه؟ (اختياري)',
+    lead_interest_label: 'محتاج',
+    lead_new: 'جديد',
+    daily_report_title: '📊 تقرير آخر ٢٤ ساعة',
+    daily_report_refresh: '🔄 حدّث التقرير',
+    daily_report_week: 'تقرير الأسبوع',
+    daily_report_day: 'تقرير اليوم',
+    report_new_clients: 'عملاء جداد',
+    report_new_leads: 'رسايل تواصل',
+    report_new_injuries: 'بلاغات إصابة',
+    report_new_consults: 'طلبات استشارة',
+    report_new_orders: 'طلبات متجر',
+    report_total_clients: 'إجمالي العملاء',
+    report_alert_injuries: '{n} بلاغ إصابة لسه محدش رد عليه',
+    report_alert_leads: '{n} رسالة تواصل جديدة مستنية رد',
+    report_alert_consults: '{n} طلب استشارة مستني رد',
+    report_alert_payments: '{n} دفعة مستنية مراجعتك',
+    report_alert_orders: '{n} طلب متجر جديد',
+    report_all_clear: '✓ مفيش حاجة مستنية منك — كل حاجة تمام',
+    report_generated_at: '{range} — آخر تحديث {time}',
+    report_range_day: 'آخر ٢٤ ساعة',
+    report_range_week: 'آخر ٧ أيام',
+    lead_accept_btn: '✅ اقبله كعميل',
+    lead_accepted_btn: '✓ اتقبل كعميل',
+    lead_needs_email: 'محتاج إيميل عشان تقدر تفتحله حساب',
+    lead_already_client: 'الشخص ده عميل عندك بالفعل',
+    lead_accepted_msg: 'اتعملّه حساب — يسجّل بإيميل {email} ويلاقي نفسه عميل على طول',
     supp_library: 'مكتبة المكملات والفيتامينات',
     supp_search_ph: 'ابحث عن مكمل أو فيتامين...',
     supp_disclaimer: '⚠️ المكتبة دي مرجع تعليمي مش وصفة طبية. أي عميل عنده حالة مرضية أو بياخد دوا أو حامل — لازم يرجع لطبيب أو أخصائي تغذية إكلينيكي قبل أي مكمل.',
@@ -1327,6 +1361,40 @@ const TEXT = {
     my_food: 'mine',
     all_foods: 'All foods',
     all_supps: 'All supplements',
+    phone_required: 'Enter your phone number — this is how we will reach you',
+    phone_too_short: 'Number is too short — a {code} number needs {count} digits. Example: {example}',
+    phone_too_long: 'Number is too long — a {code} number needs {count} digits. Example: {example}',
+    phone_bad_start: 'That does not look like a valid {code} number — check how it starts. Example: {example}',
+    bad_email: 'That email does not look right — please check it',
+    lead_phone_ph: 'Your phone number',
+    lead_email_ph: 'Your email (so we can open an account for you)',
+    lead_interest_ph: 'What do you need? (optional)',
+    lead_interest_label: 'Needs',
+    lead_new: 'New',
+    daily_report_title: '📊 Last 24 hours',
+    daily_report_refresh: '🔄 Refresh report',
+    daily_report_week: 'Weekly report',
+    daily_report_day: 'Daily report',
+    report_new_clients: 'New clients',
+    report_new_leads: 'Contact messages',
+    report_new_injuries: 'Injury reports',
+    report_new_consults: 'Consult requests',
+    report_new_orders: 'Store orders',
+    report_total_clients: 'Total clients',
+    report_alert_injuries: '{n} injury report(s) with no reply yet',
+    report_alert_leads: '{n} new contact message(s) waiting',
+    report_alert_consults: '{n} consult request(s) waiting',
+    report_alert_payments: '{n} payment(s) waiting for review',
+    report_alert_orders: '{n} new store order(s)',
+    report_all_clear: '✓ Nothing waiting on you — all clear',
+    report_generated_at: '{range} — updated {time}',
+    report_range_day: 'Last 24 hours',
+    report_range_week: 'Last 7 days',
+    lead_accept_btn: '✅ Accept as client',
+    lead_accepted_btn: '✓ Accepted as client',
+    lead_needs_email: 'An email is needed to open an account',
+    lead_already_client: 'This person is already one of your clients',
+    lead_accepted_msg: 'Account created — they sign in with {email} and land straight in as a client',
     supp_library: 'Supplements & vitamins library',
     supp_search_ph: 'Search for a supplement or vitamin...',
     supp_disclaimer: '⚠️ This library is an educational reference, not a prescription. Any client with a medical condition, on medication, or pregnant must see a doctor or clinical dietitian before taking anything.',
@@ -2782,7 +2850,38 @@ function setSpecialtyLabel(el, specialtyOrList, text) {
 }
 
 function specialtyListName(list) {
-  return (list || []).map(function (key) { return specialtyName(key, lang); }).join('، ');
+  return (list || []).map(function (key) { return specialtyName(key, lang); }).join('\u060C ');
+}
+
+/*
+ * بترسم التخصصات كخانات (chips) جنب بعض بدل سطر نص واحد.
+ * كل تخصص بيطلع في خانة لوحده بأيقونته، فالمدرب اللي عنده أكتر من
+ * تخصص (مدرب + أخصائي تأهيل + أخصائي تغذية) يبان واضح إنه كده.
+ * extra = خانة زيادة اختيارية (زي "الفريق الإداري").
+ */
+function renderSpecialtyChips(target, list, extra) {
+  if (!target) return;
+  target.innerHTML = '';
+  target.classList.add('specialty-chips');
+  (list || []).forEach(function (key) {
+    const chip = document.createElement('span');
+    chip.className = 'specialty-chip';
+    const icon = specialtyIcon(key);
+    if (icon) {
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'specialty-chip-icon';
+      iconSpan.textContent = icon;
+      chip.appendChild(iconSpan);
+    }
+    chip.appendChild(document.createTextNode(specialtyName(key, lang)));
+    target.appendChild(chip);
+  });
+  if (extra) {
+    const chip = document.createElement('span');
+    chip.className = 'specialty-chip specialty-chip-admin';
+    chip.textContent = extra;
+    target.appendChild(chip);
+  }
 }
 let phPickedImage = '';
 let onboardingEmail = '';
@@ -3110,6 +3209,7 @@ async function loadClients() {
   openAdminPanelBtn.classList.toggle('hidden', !isFullAdminAccount());
   openProviderSubscriptionBtn.classList.toggle('hidden', isFullAdminAccount());
   refreshProviderSubBanner();
+  if (isFullAdminAccount()) refreshLeadsBadge();
 
   clientsList.innerHTML = '';
   clientsMessage.textContent = t('loading');
@@ -8737,6 +8837,8 @@ function refreshAll() {
     renderSuppChips();
     renderSuppList();
   }
+  fillLeadInterestSelect();
+  fillPhoneCodeSelect();
   if (!clientsScreen.classList.contains('hidden')) loadClients();
   if (!providersScreen.classList.contains('hidden')) { fillSpecialtySelect(); loadProviders(); }
   if (!providerHomeScreen.classList.contains('hidden') && currentProviderData) showProviderHome(currentProviderData);
@@ -8779,7 +8881,9 @@ function showProviderHome(data) {
   const specs = providerSpecialties(data).length ? providerSpecialties(data) : (isLegacyCoachAccount() ? ['coach'] : []);
   phName.value = data.name || '';
   setSpecialtyLabel(providerHomeTitle, specs, data.name || (isLegacyCoachAccount() ? t('platform_owner_label') : ''));
-  providerHomeSpecialty.textContent = specs.length ? specialtyListName(specs) : '';
+  // التخصصات بتتعرض كخانات جنب بعض (مدرب · أخصائي تأهيل · أخصائي تغذية)
+  // بدل سطر واحد مكتوب بفاصلات — أوضح بكتير لما يبقى أكتر من تخصص
+  renderSpecialtyChips(providerHomeSpecialty, specs);
 
   // صاحب المنصة (الحساب القديم) تخصصه "مدرب" ثابت مايتغيرش من هنا
   if (phSpecialtyBox) phSpecialtyBox.classList.toggle('hidden', isLegacyCoachAccount());
@@ -8915,7 +9019,7 @@ async function loadProviders() {
 
       const specLine = document.createElement('div');
       specLine.className = 'client-status';
-      specLine.textContent = specialtyListName(providerSpecs) + (provider.isAdminTeam ? (' · ' + t('admin_team_badge')) : '');
+      renderSpecialtyChips(specLine, providerSpecs, provider.isAdminTeam ? t('admin_team_badge') : '');
 
       const emailLine = document.createElement('div');
       emailLine.className = 'client-email';
@@ -9086,7 +9190,7 @@ document.getElementById('ph-save-btn').addEventListener('click', async function 
     currentProviderSpecialty = newSpecialties.indexOf('coach') !== -1 ? 'coach' : (newSpecialties[0] || '');
     applyCoachScopeTabs();
     phOpenMedlibBtn.classList.toggle('hidden', !specialtiesHaveFlag(newSpecialties, 'medical'));
-    providerHomeSpecialty.textContent = specialtyListName(newSpecialties);
+    renderSpecialtyChips(providerHomeSpecialty, newSpecialties);
     setSpecialtyLabel(providerHomeTitle, newSpecialties, updated.name || '');
     setStatusMessage(providerHomeMessage, t('profile_saved'), 'success');
   } catch (error) {
@@ -9367,7 +9471,7 @@ async function loadWelcomeTeamPreview() {
 
     const specialty = document.createElement('div');
     specialty.className = 'welcome-team-specialty';
-    specialty.textContent = specialtyListName(specs);
+    renderSpecialtyChips(specialty, specs);
     card.appendChild(specialty);
 
     welcomeTeamGrid.appendChild(card);
@@ -9435,28 +9539,76 @@ const leadContactInput = document.getElementById('lead-contact');
 const leadMessageInput = document.getElementById('lead-message');
 const leadMessageStatus = document.getElementById('lead-message-status');
 
+/*
+ * الزائر اللي عايز يتكلم مع الفريق قبل ما يسجّل بيسيب بياناته هنا.
+ * بقينا ناخد منه الإيميل والموبايل كل واحد لوحده (مش خانة واحدة زي
+ * الأول) عشان:
+ *   1) الموبايل يتراجع ويتأكد إنه مش ناقص ولا زايد
+ *   2) الإيميل هو اللي بيخلّي صاحب المنصة يقدر "يقبله كعميل" بضغطة
+ *      واحدة فيتعمله حساب جاهز على طول
+ */
+const leadPhoneCode = document.getElementById('lead-phone-code');
+const leadPhoneInput = document.getElementById('lead-phone');
+const leadInterestSelect = document.getElementById('lead-interest');
+
+function fillLeadInterestSelect() {
+  if (!leadInterestSelect) return;
+  const keep = leadInterestSelect.value;
+  leadInterestSelect.innerHTML = '';
+  const none = document.createElement('option');
+  none.value = '';
+  none.textContent = t('lead_interest_ph');
+  leadInterestSelect.appendChild(none);
+  Object.keys(SPECIALTIES).forEach(function (key) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = specialtyName(key, lang);
+    leadInterestSelect.appendChild(option);
+  });
+  leadInterestSelect.value = keep;
+}
+
 document.getElementById('lead-submit-btn').addEventListener('click', async function () {
   const name = leadNameInput.value.trim();
-  const contact = leadContactInput.value.trim();
-  if (!name || !contact) {
+  const email = leadContactInput.value.trim().toLowerCase();
+  const phoneCheck = validatePhone(leadPhoneCode ? leadPhoneCode.value : '+20', leadPhoneInput ? leadPhoneInput.value : '', true);
+
+  if (!name) {
     leadMessageStatus.textContent = t('need_lead_fields');
     return;
   }
+  if (!phoneCheck.ok) {
+    leadMessageStatus.textContent = phoneErrorText(leadPhoneCode ? leadPhoneCode.value : '+20', phoneCheck.error);
+    return;
+  }
+  if (email && !isValidEmail(email)) {
+    leadMessageStatus.textContent = t('bad_email');
+    return;
+  }
+
+  const phone = (leadPhoneCode ? leadPhoneCode.value : '+20') + ' ' + phoneCheck.digits;
 
   leadMessageStatus.textContent = t('saving');
   try {
     const id = 'lead_' + Date.now();
     await setDoc(doc(db, 'leads', id), {
       name: name,
-      contact: contact,
+      phone: phone,
+      email: email,
+      // بنسيب contact زي ما هو عشان الرسايل القديمة تفضل تتعرض عادي
+      contact: email || phone,
+      interest: leadInterestSelect ? leadInterestSelect.value : '',
       message: leadMessageInput.value.trim(),
       contacted: false,
+      accepted: false,
       createdAt: new Date().toISOString()
     });
     setStatusMessage(leadMessageStatus, t('lead_submitted_msg'), 'success');
     leadNameInput.value = '';
     leadContactInput.value = '';
+    if (leadPhoneInput) leadPhoneInput.value = '';
     leadMessageInput.value = '';
+    if (leadInterestSelect) leadInterestSelect.value = '';
   } catch (error) {
     leadMessageStatus.textContent = t('problem') + error.message;
   }
@@ -9577,6 +9729,7 @@ document.querySelectorAll('.welcome-pillar-btn').forEach(function (btn) {
 
 renderWelcomePillarDetail(currentWelcomePillar);
 loadWelcomeExtras();
+fillLeadInterestSelect();
 
 document.getElementById('login-back-welcome-btn').addEventListener('click', function () {
   showScreen(welcomeScreen);
@@ -10097,17 +10250,159 @@ const PHONE_COUNTRY_CODES = [
   { code: '+61', ar: 'أستراليا', en: 'Australia' }
 ];
 
-function fillPhoneCodeSelect() {
-  const keep = obPhoneCode.value;
-  obPhoneCode.innerHTML = '';
+/*
+ * التحقق من رقم الموبايل
+ * =======================
+ * قبل كده كان الرقم بيتحفظ زي ما هو، فممكن العميل يزوّد رقم أو ينقّص
+ * رقم أو يكتب حروف من غير ما حد ياخد باله — وساعتها المدرب مايعرفش
+ * يوصله. دلوقتي بنتأكد من عدد الأرقام حسب الدولة نفسها.
+ *
+ * min/max = عدد الأرقام المطلوب بعد كود الدولة (من غير الصفر اللي في
+ * أول الرقم المحلي — بنشيله تلقائي لأن الناس بتكتبه بالعادة).
+ * الدول اللي مش في الجدول بيتطبق عليها المدى العام (7–13 رقم).
+ */
+const PHONE_RULES = {
+  '+20':  { min: 10, max: 10, starts: ['10', '11', '12', '15'], example: '10 1234 5678' },
+  '+966': { min: 9,  max: 9,  starts: ['5'],  example: '5X XXX XXXX' },
+  '+971': { min: 9,  max: 9,  starts: ['5'],  example: '5X XXX XXXX' },
+  '+974': { min: 8,  max: 8,  starts: [],     example: 'XXXX XXXX' },
+  '+973': { min: 8,  max: 8,  starts: [],     example: 'XXXX XXXX' },
+  '+965': { min: 8,  max: 8,  starts: [],     example: 'XXXX XXXX' },
+  '+968': { min: 8,  max: 8,  starts: [],     example: 'XXXX XXXX' },
+  '+962': { min: 9,  max: 9,  starts: ['7'],  example: '7X XXX XXXX' },
+  '+961': { min: 7,  max: 8,  starts: [],     example: 'XX XXX XXX' },
+  '+963': { min: 9,  max: 9,  starts: ['9'],  example: '9XX XXX XXX' },
+  '+964': { min: 10, max: 10, starts: ['7'],  example: '7XX XXX XXXX' },
+  '+970': { min: 9,  max: 9,  starts: ['5'],  example: '5X XXX XXXX' },
+  '+218': { min: 9,  max: 9,  starts: ['9'],  example: '9X XXX XXXX' },
+  '+216': { min: 8,  max: 8,  starts: [],     example: 'XX XXX XXX' },
+  '+213': { min: 9,  max: 9,  starts: ['5', '6', '7'], example: '5XX XXX XXX' },
+  '+212': { min: 9,  max: 9,  starts: ['6', '7'], example: '6XX XXX XXX' },
+  '+249': { min: 9,  max: 9,  starts: ['9', '1'], example: '9XX XXX XXX' },
+  '+1':   { min: 10, max: 10, starts: [],     example: 'XXX XXX XXXX' },
+  '+44':  { min: 10, max: 10, starts: ['7'],  example: '7XXX XXXXXX' },
+  '+90':  { min: 10, max: 10, starts: ['5'],  example: '5XX XXX XXXX' },
+  '+91':  { min: 10, max: 10, starts: ['6', '7', '8', '9'], example: 'XXXXX XXXXX' }
+};
+
+const PHONE_RULE_DEFAULT = { min: 7, max: 13, starts: [], example: '' };
+
+// بنشيل أي مسافات أو شرط أو أقواس، وبنحوّل الأرقام العربية (٠١٢) لإنجليزية
+function normalisePhoneDigits(raw) {
+  const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
+  return String(raw || '')
+    .split('')
+    .map(function (ch) {
+      const arabicIndex = arabicDigits.indexOf(ch);
+      return arabicIndex !== -1 ? String(arabicIndex) : ch;
+    })
+    .join('')
+    .replace(/[^0-9]/g, '');
+}
+
+/*
+ * بترجع { ok, digits, error } — error مفتاح ترجمة عشان الرسالة تطلع
+ * بلغة الواجهة. required = false معناها إن الرقم الفاضي مقبول.
+ */
+function validatePhone(code, raw, required) {
+  const rule = PHONE_RULES[code] || PHONE_RULE_DEFAULT;
+  let digits = normalisePhoneDigits(raw);
+
+  if (!digits) {
+    return required
+      ? { ok: false, digits: '', error: 'phone_required' }
+      : { ok: true, digits: '' };
+  }
+
+  // الناس بتكتب الصفر اللي في أول الرقم المحلي (010...) — بنشيله
+  while (digits.length > rule.min && digits.charAt(0) === '0') {
+    digits = digits.slice(1);
+  }
+
+  // ولو كتب كود الدولة جوه الخانة كمان (2010...) بنشيله هو كمان
+  const bareCode = code.replace('+', '');
+  if (digits.length > rule.max && digits.indexOf(bareCode) === 0) {
+    digits = digits.slice(bareCode.length).replace(/^0+/, '');
+  }
+
+  if (digits.length < rule.min) return { ok: false, digits: digits, error: 'phone_too_short' };
+  if (digits.length > rule.max) return { ok: false, digits: digits, error: 'phone_too_long' };
+
+  if (rule.starts.length && !rule.starts.some(function (p) { return digits.indexOf(p) === 0; })) {
+    return { ok: false, digits: digits, error: 'phone_bad_start' };
+  }
+
+  return { ok: true, digits: digits };
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(value || '').trim());
+}
+
+function phoneErrorText(code, key) {
+  const rule = PHONE_RULES[code] || PHONE_RULE_DEFAULT;
+  const count = rule.min === rule.max ? String(rule.min) : (rule.min + '–' + rule.max);
+  return fill(key, { count: count, example: rule.example || '', code: code });
+}
+
+/*
+ * بتربط خانة رقم + خانة كود الدولة بسطر رسالة تحت الخانة، فالعميل
+ * يشوف الغلط وهو بيكتب مش بس لما يدوس حفظ
+ */
+function attachPhoneValidation(codeSelect, input, hintEl, required) {
+  if (!input || !hintEl) return;
+
+  function review() {
+    const result = validatePhone(codeSelect ? codeSelect.value : '+20', input.value, required);
+    if (!input.value.trim()) {
+      hintEl.textContent = '';
+      hintEl.className = 'phone-hint';
+      input.classList.remove('field-error');
+      return;
+    }
+    if (result.ok) {
+      hintEl.textContent = '✓ ' + (codeSelect ? codeSelect.value : '') + ' ' + result.digits;
+      hintEl.className = 'phone-hint phone-hint-ok';
+      input.classList.remove('field-error');
+    } else {
+      hintEl.textContent = phoneErrorText(codeSelect ? codeSelect.value : '+20', result.error);
+      hintEl.className = 'phone-hint phone-hint-bad';
+      input.classList.add('field-error');
+    }
+  }
+
+  input.addEventListener('input', review);
+  input.addEventListener('blur', review);
+  if (codeSelect) codeSelect.addEventListener('change', review);
+}
+
+function fillOnePhoneCodeSelect(select) {
+  if (!select) return;
+  const keep = select.value;
+  select.innerHTML = '';
   PHONE_COUNTRY_CODES.forEach(function (item) {
     const option = document.createElement('option');
     option.value = item.code;
-    option.textContent = item.code + ' ' + item[lang];
-    obPhoneCode.appendChild(option);
+    option.textContent = item.code + '  ' + item[lang];
+    select.appendChild(option);
   });
-  obPhoneCode.value = keep || '+20';
+  select.value = keep || '+20';
 }
+
+function fillPhoneCodeSelect() {
+  fillOnePhoneCodeSelect(obPhoneCode);
+  fillOnePhoneCodeSelect(document.getElementById('lead-phone-code'));
+}
+
+// المراجعة اللحظية وانت بتكتب — لخانة العميل وخانة رسالة التواصل
+fillPhoneCodeSelect();
+attachPhoneValidation(obPhoneCode, obPhone, document.getElementById('ob-phone-hint'), true);
+attachPhoneValidation(
+  document.getElementById('lead-phone-code'),
+  document.getElementById('lead-phone'),
+  document.getElementById('lead-phone-hint'),
+  true
+);
 
 /* بتفصل كود الدولة عن رقم الهاتف المخزّن (لو كان متسجل قبل كده بالشكل الجديد) */
 function splitStoredPhone(stored) {
@@ -10223,11 +10518,24 @@ document.getElementById('ob-next-btn').addEventListener('click', async function 
     return;
   }
 
+  /*
+   * رقم الموبايل إجباري دلوقتي وبيتراجع قبل الحفظ — ده الرقم اللي
+   * المدرب هيتواصل بيه، فرقم ناقص أو زايد معناه عميل ضايع
+   */
+  const phoneCheck = validatePhone(obPhoneCode.value, obPhone.value, true);
+  if (!phoneCheck.ok) {
+    onboardingMessage.textContent = phoneErrorText(obPhoneCode.value, phoneCheck.error);
+    obPhone.classList.add('field-error');
+    obPhone.focus();
+    return;
+  }
+  obPhone.classList.remove('field-error');
+
   onboardingMessage.textContent = t('saving');
   try {
     const clientPayload = {
       name: name,
-      phone: (obPhone.value.trim() ? (obPhoneCode.value + ' ' + obPhone.value.trim()) : ''),
+      phone: obPhoneCode.value + ' ' + phoneCheck.digits,
       gender: gender,
       dob: { day: dobDay, month: dobMonth, year: dobYear },
       age: age,
@@ -11020,12 +11328,168 @@ document.getElementById('open-admin-panel-btn').addEventListener('click', functi
   loadAdminPanel();
 });
 
+/*
+ * عداد الرسايل الجديدة من الصفحة الرئيسية — بيظهر رقم أحمر على زرار
+ * لوحة التحكم، فصاحب المنصة ياخد باله إن في حد مستني رد من غير ما
+ * يفتح اللوحة كل شوية
+ */
+const adminLeadsBadge = document.getElementById('admin-leads-badge');
+
+async function refreshLeadsBadge() {
+  if (!adminLeadsBadge) return;
+  adminLeadsBadge.classList.add('hidden');
+  adminLeadsBadge.textContent = '';
+  try {
+    const snapshot = await getDocs(collection(db, 'leads'));
+    let pending = 0;
+    snapshot.forEach(function (item) {
+      const data = item.data() || {};
+      if (!data.contacted && !data.accepted) pending++;
+    });
+    if (pending) {
+      adminLeadsBadge.textContent = pending;
+      adminLeadsBadge.classList.remove('hidden');
+    }
+  } catch (error) {
+    // مش مشكلة لو فشل العداد — اللوحة نفسها بتعرض الرسايل عادي
+  }
+}
+
 document.getElementById('admin-panel-back-btn').addEventListener('click', function () {
   showScreen(clientsScreen);
   loadClients();
 });
 
+/* ==================== التقرير اليومي ==================== */
+/*
+ * ملخّص سريع لكل اللي حصل في الموقع في آخر ٢٤ ساعة (أو آخر أسبوع):
+ * عملاء جداد، رسايل تواصل، بلاغات إصابة، طلبات استشارة، طلبات متجر،
+ * ومدفوعات مستنية. وتحته تنبيهات بالحاجات اللي محتاجة تدخّل منك —
+ * زي بلاغ إصابة لسه محدش رد عليه أو اشتراك قرّب يخلص.
+ *
+ * كل ده بيتحسب من نفس البيانات اللي في Firestore وقت ما تفتح اللوحة،
+ * فمفيش سيرفر ولا خدمة خارجية محتاجة تشتغل عشانه.
+ */
+
+let dailyReportDays = 1;
+
+function reportSince(days) {
+  return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+}
+
+function countNewer(docs, since, field) {
+  return docs.filter(function (item) {
+    const stamp = item[field || 'createdAt'] || '';
+    return stamp && stamp >= since;
+  }).length;
+}
+
+async function collectionDocs(name) {
+  try {
+    const snapshot = await getDocs(collection(db, name));
+    return snapshot.docs.map(function (item) { return Object.assign({ id: item.id }, item.data()); });
+  } catch (error) {
+    return [];
+  }
+}
+
+function reportTile(value, label, danger) {
+  const tile = document.createElement('div');
+  tile.className = 'report-tile' + (danger && value > 0 ? ' report-tile-alert' : '');
+  const num = document.createElement('div');
+  num.className = 'report-value';
+  num.textContent = value;
+  tile.appendChild(num);
+  const cap = document.createElement('div');
+  cap.className = 'report-label';
+  cap.textContent = label;
+  tile.appendChild(cap);
+  return tile;
+}
+
+async function loadDailyReport() {
+  const grid = document.getElementById('daily-report-grid');
+  const alerts = document.getElementById('daily-report-alerts');
+  const timeNote = document.getElementById('daily-report-time');
+  if (!grid) return;
+
+  grid.innerHTML = '';
+  alerts.innerHTML = '';
+  timeNote.textContent = t('loading');
+
+  const since = reportSince(dailyReportDays);
+
+  const [clients, leads, injuries, consults, orders, providers] = await Promise.all([
+    collectionDocs('clients'),
+    collectionDocs('leads'),
+    collectionDocs('injuryReports'),
+    collectionDocs('consultRequests'),
+    collectionDocs('storeOrders'),
+    collectionDocs('providers')
+  ]);
+
+  // الدفعات المستنية مخزّنة جوه مستند العميل/المتخصص نفسه (pendingPayment)
+  // مش في مجموعة لوحدها — فبنعدّها من الاتنين
+  const payments = clients.concat(providers).filter(function (item) {
+    return item.pendingPayment && item.pendingPayment.status === 'submitted';
+  });
+
+  grid.appendChild(reportTile(countNewer(clients, since), t('report_new_clients')));
+  grid.appendChild(reportTile(countNewer(leads, since), t('report_new_leads')));
+  grid.appendChild(reportTile(countNewer(injuries, since), t('report_new_injuries')));
+  grid.appendChild(reportTile(countNewer(consults, since), t('report_new_consults')));
+  grid.appendChild(reportTile(countNewer(orders, since), t('report_new_orders')));
+  grid.appendChild(reportTile(clients.length, t('report_total_clients')));
+
+  // ---- تنبيهات محتاجة تدخّل ----
+  const pendingInjuries = injuries.filter(function (r) { return (r.status || 'requested') === 'requested'; }).length;
+  const pendingConsults = consults.filter(function (r) { return (r.status || 'pending') === 'pending'; }).length;
+  const newLeads = leads.filter(function (l) { return !l.contacted && !l.accepted; }).length;
+  const pendingPayments = payments.length;
+  const newOrders = orders.filter(function (o) { return (o.status || 'new') === 'new'; }).length;
+
+  const rows = [
+    { n: pendingInjuries, text: t('report_alert_injuries') },
+    { n: newLeads, text: t('report_alert_leads') },
+    { n: pendingConsults, text: t('report_alert_consults') },
+    { n: pendingPayments, text: t('report_alert_payments') },
+    { n: newOrders, text: t('report_alert_orders') }
+  ].filter(function (row) { return row.n > 0; });
+
+  if (!rows.length) {
+    const ok = document.createElement('p');
+    ok.className = 'report-all-clear';
+    ok.textContent = t('report_all_clear');
+    alerts.appendChild(ok);
+  } else {
+    rows.forEach(function (row) {
+      const line = document.createElement('div');
+      line.className = 'report-alert';
+      line.textContent = '• ' + fill(row.text, { n: row.n });
+      alerts.appendChild(line);
+    });
+  }
+
+  timeNote.textContent = fill('report_generated_at', {
+    time: new Date().toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-GB'),
+    range: dailyReportDays === 1 ? t('report_range_day') : t('report_range_week')
+  });
+}
+
+if (document.getElementById('daily-report-refresh-btn')) {
+  document.getElementById('daily-report-refresh-btn').addEventListener('click', loadDailyReport);
+}
+
+if (document.getElementById('daily-report-range-btn')) {
+  document.getElementById('daily-report-range-btn').addEventListener('click', function () {
+    dailyReportDays = dailyReportDays === 1 ? 7 : 1;
+    this.textContent = dailyReportDays === 1 ? t('daily_report_week') : t('daily_report_day');
+    loadDailyReport();
+  });
+}
+
 async function loadAdminPanel() {
+  loadDailyReport();
   await fetchPaymentSettings();
   const settingsVodafone = document.getElementById('settings-vodafone');
   const settingsInstapay = document.getElementById('settings-instapay');
@@ -12102,6 +12566,18 @@ async function loadTeamPicker(prefillTeam) {
         name.className = 'ex-name';
         setSpecialtyLabel(name, specialty, provider.name);
         body.appendChild(name);
+
+        /*
+         * كل تخصصات المتخصص كخانات جنب بعض — العميل وهو بيختار أخصائي
+         * تأهيل مثلاً يشوف إن ده كمان مدرب وأخصائي تغذية، فيقدر يختاره
+         * لأكتر من دور بدل ما يفرّق فريقه على ناس كتير من غير داعي
+         */
+        const allSpecs = providerSpecialties(provider);
+        if (allSpecs.length > 1) {
+          const chips = document.createElement('div');
+          renderSpecialtyChips(chips, allSpecs);
+          body.appendChild(chips);
+        }
 
         const meta = document.createElement('div');
         meta.className = 'ex-meta';
@@ -14560,8 +15036,51 @@ async function loadLeadsAdmin() {
 
     const name = document.createElement('div');
     name.className = 'ex-name';
-    name.textContent = lead.name + ' — ' + lead.contact;
+    name.textContent = lead.name;
+    if (!lead.contacted && !lead.accepted) {
+      const badge = document.createElement('span');
+      badge.className = 'lead-new-badge';
+      badge.textContent = t('lead_new');
+      name.appendChild(badge);
+    }
     card.appendChild(name);
+
+    // بيانات التواصل — الموبايل والإيميل كل واحد في سطر وقابل للضغط
+    const contactRow = document.createElement('div');
+    contactRow.className = 'ex-meta lead-contact-row';
+    const phone = lead.phone || (lead.contact && lead.contact.indexOf('@') === -1 ? lead.contact : '');
+    const email = lead.email || (lead.contact && lead.contact.indexOf('@') !== -1 ? lead.contact : '');
+    if (phone) {
+      const tel = document.createElement('a');
+      tel.href = 'tel:' + phone.replace(/\s/g, '');
+      tel.className = 'lead-link';
+      tel.textContent = '📞 ' + phone;
+      contactRow.appendChild(tel);
+      const wa = document.createElement('a');
+      wa.href = 'https://wa.me/' + phone.replace(/[^0-9]/g, '');
+      wa.target = '_blank';
+      wa.rel = 'noopener';
+      wa.className = 'lead-link';
+      wa.textContent = 'واتساب';
+      contactRow.appendChild(wa);
+    }
+    if (email) {
+      const mail = document.createElement('a');
+      mail.href = 'mailto:' + email;
+      mail.className = 'lead-link';
+      mail.textContent = '✉️ ' + email;
+      contactRow.appendChild(mail);
+    }
+    card.appendChild(contactRow);
+
+    // بنعرض التخصص المطلوب بس لو معروف — رسالة قديمة فيها قيمة مش
+    // موجودة في قائمة التخصصات مانعرضش مفتاحها الخام للمستخدم
+    if (lead.interest && SPECIALTIES[lead.interest]) {
+      const interest = document.createElement('div');
+      interest.className = 'ex-meta';
+      interest.textContent = t('lead_interest_label') + ': ' + specialtyName(lead.interest, lang);
+      card.appendChild(interest);
+    }
 
     if (lead.message) {
       const message = document.createElement('div');
@@ -14590,10 +15109,59 @@ async function loadLeadsAdmin() {
       try {
         await updateDoc(doc(db, 'leads', lead.id), { contacted: contactedCheckbox.checked });
         setStatusMessage(rowMessage, t('saved'), 'success');
+        refreshLeadsBadge();
       } catch (error) {
         rowMessage.textContent = t('problem') + error.message;
       }
     });
+
+    /*
+     * "اقبله كعميل" — بيعمل مستند عميل جاهز بالاسم والموبايل بتوعه،
+     * فأول ما يسجّل بالإيميل ده بيلاقي نفسه عميل فعلاً ومايبدأش من الصفر.
+     * محتاج إيميل عشان الإيميل هو معرّف العميل في قاعدة البيانات.
+     */
+    if (!lead.accepted) {
+      const acceptBtn = document.createElement('button');
+      acceptBtn.type = 'button';
+      acceptBtn.className = 'secondary lead-accept-btn';
+      acceptBtn.textContent = t('lead_accept_btn');
+      acceptBtn.disabled = !email;
+      if (!email) acceptBtn.title = t('lead_needs_email');
+      acceptBtn.addEventListener('click', async function () {
+        rowMessage.textContent = t('saving');
+        try {
+          const existing = await getDoc(doc(db, 'clients', email));
+          if (existing.exists()) {
+            rowMessage.textContent = t('lead_already_client');
+            await updateDoc(doc(db, 'leads', lead.id), { accepted: true, contacted: true });
+            return;
+          }
+          await setDoc(doc(db, 'clients', email), {
+            name: lead.name || '',
+            email: email,
+            phone: phone || '',
+            coachEmail: (currentProviderEmail || COACH_EMAIL).toLowerCase(),
+            onboarded: false,
+            fromLead: true,
+            trialStartedAt: new Date().toISOString().slice(0, 10),
+            createdAt: new Date().toISOString()
+          }, { merge: true });
+          await updateDoc(doc(db, 'leads', lead.id), { accepted: true, contacted: true });
+          setStatusMessage(rowMessage, fill('lead_accepted_msg', { email: email }), 'success');
+          acceptBtn.disabled = true;
+          acceptBtn.textContent = t('lead_accepted_btn');
+          refreshLeadsBadge();
+        } catch (error) {
+          rowMessage.textContent = t('problem') + error.message;
+        }
+      });
+      card.appendChild(acceptBtn);
+    } else {
+      const done = document.createElement('div');
+      done.className = 'ex-meta lead-accepted-note';
+      done.textContent = t('lead_accepted_btn');
+      card.appendChild(done);
+    }
 
     adminLeadsList.appendChild(card);
   });
