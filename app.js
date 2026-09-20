@@ -4,10 +4,11 @@ import { getFirestore, doc, getDoc, setDoc as fbSetDoc, addDoc as fbAddDoc, upda
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
 import { REHAB_TEMPLATES } from './rehab-templates.js';
 import { FOOD_LIBRARY, FOOD_CATEGORIES, FOOD_UNITS, FOOD_SERVINGS, CAT_PORTIONS } from './food-library.js';
+import { NUTRITION_PROGRAMS } from './nutrition-programs.js';
 import { HEALTH_CONDITIONS, CONDITION_ORDER, PREGNANCY, POSTPARTUM, CYCLE_PHASES, CYCLE_ORDER, CYCLE_RED_FLAGS } from './health-conditions.js';
 import { SUPPLEMENT_LIBRARY, SUPPLEMENT_CATEGORIES, EVIDENCE_GRADES } from './supplement-library.js';
 import { SPORTS, SPORT_GROUPS, SPORT_METRICS, METRIC_FIELDS, SPORT_TEMPLATES } from './sports.js';
-import { SPECIALTIES, specialtyName, specialtyIcon, specialtyIconSvg, MED_CATEGORIES, MED_REVIEW, DEFAULT_RED_FLAGS, SESSION_TYPES, BOOKING_STATUS, specialtyClears } from './providers.js';
+import { SPECIALTIES, specialtyName, specialtyIconSvg, MED_CATEGORIES, MED_REVIEW, DEFAULT_RED_FLAGS, SESSION_TYPES, BOOKING_STATUS, specialtyClears } from './providers.js';
 import { MED_LIBRARY_SEED } from './med-library-seed.js';
 import { EXERCISE_LIBRARY as BASE_EXERCISES } from './exercise-library.js';
 import { DRILLS_LIBRARY, DRILL_CATEGORIES, DRILL_EQUIPMENT } from './drills-library.js';
@@ -96,8 +97,8 @@ const TEXT = {
     clients_search_ph: 'ابحث باسم العميل أو إيميله',
     coach_muscle_label: 'العضلة المستهدفة النهاردة',
     coach_muscle_hint: 'لما تفتح المكتبة هتلاقيها مفلترة على العضلة دي على طول',
-    save_day_as_template: '💾 احفظ اليوم ده كقالب',
-    delete_my_template: '🗑 امسح القالب',
+    save_day_as_template: 'احفظ اليوم ده كقالب',
+    delete_my_template: 'امسح القالب',
     my_template_name_ph: 'اسم القالب (مثلاً: يوم دفع — لاعبين كورة)',
     my_template_hint: 'القالب بيتحفظ باسمك وبيظهر لك في أي عميل — والمتخصصين التانيين يقدروا يستعملوه كمان',
     my_template_save: 'حفظ',
@@ -123,7 +124,7 @@ const TEXT = {
     day_title: 'اسم اليوم (صدر وترايسبس)',
     rest_day: 'يوم راحة',
     open_library: 'اختر من مكتبة التمارين',
-    open_mylib: '⭐ مكتبتي الخاصة',
+    open_mylib: 'مكتبتي الخاصة',
     or_manual: 'أو اكتب التمرين بنفسك',
     ex_name: 'اسم التمرين',
     ex_sets: 'مجموعات',
@@ -406,6 +407,31 @@ const TEXT = {
     welcome_medical_step_2: 'متخصص حقيقي في المجال يراجع حالتك',
     welcome_medical_step_3: 'بتاخد رد وخطة متابعة واضحة',
     welcome_medical_step_4: 'تكمّل متابعتك مع فريقك من داخل التطبيق',
+    cc_idle: 'مفيش نشاط',
+    no_specialty: 'من غير تخصص',
+    ai_on_label: 'فعّل المساعد الذكي في الشات',
+    ai_on_hint: 'بيستعمل نفس الرابط اللي فوق. قبل ما تفعّله لازم تحط GEMINI_KEY و FIREBASE_API_KEY في Script properties جوه Apps Script — الشرح في ملف الإعداد.',
+    chat_ai_typing: 'المساعد الذكي بيكتب…',
+    nut_lib_title: 'مكتبة برامج التغذية',
+    nut_lib_hint: 'اختار برنامج قريب من حالة عميلك، طبّقه، وبعدين عدّل الكميات عليه. الأرقام اللي جنب كل برنامج محسوبة من الأكل اللي جواه فعلًا.',
+    np_numbers: '{kcal} سعر · {protein}جم بروتين',
+    np_applied: 'اتطبّق "{name}" على الأسبوع — عدّل الكميات وبعدين احفظ',
+    pc_clients_n: '{n} عميل',
+    no_search_results: 'مفيش نتيجة للبحث ده',
+    adm_tab_report: 'تقرير اليوم',
+    adm_tab_payment: 'بيانات الدفع',
+    adm_tab_welcome: 'رسالة الترحيب',
+    adm_tab_stats: 'إحصائية الرئيسية',
+    adm_tab_plans: 'الأسعار',
+    adm_tab_provider_plans: 'خطط المتخصصين',
+    adm_tab_payments: 'طلبات الدفع',
+    adm_tab_store: 'المتجر',
+    adm_tab_orders: 'طلبات المتجر',
+    adm_tab_stories: 'قصص النجاح',
+    adm_tab_leads: 'رسايل التواصل',
+    adm_tab_apps: 'طلبات الانضمام',
+    adm_tab_access: 'إدارة الوصول',
+    tile_clients: 'عملائي',
     nav_home: 'الرئيسية',
     nav_profile: 'بروفايلي',
     nav_chat: 'الشات',
@@ -500,9 +526,9 @@ const TEXT = {
     my_food: 'بتاعي',
     all_foods: 'كل الأصناف',
     all_supps: 'كل المكملات',
-    hero2_badge: '🎁 30 يوم مجانًا — من غير بطاقة',
+    hero2_badge: '30 يوم مجانًا — من غير بطاقة',
     team_strip_title: 'فريق كامل وراك',
-    orbit_rating_line: '⭐ {avg} من {n} تقييم',
+    orbit_rating_line: '{avg} من {n} تقييم',
     faq_badge: 'سؤال شائع',
     deck_prev: 'السابق',
     deck_next: 'التالي',
@@ -525,17 +551,17 @@ const TEXT = {
     role_psych: 'نفسي',
     hero2_title: 'برنامجك. من متخصص حقيقي.',
     hero2_sub: 'تمرين · تأهيل · تغذية · استشارة طبية',
-    hero2_demo_btn: 'شوف برنامج نموذجي ↓',
-    hero2_trust_1: '✓ متخصصين حقيقيين',
-    hero2_trust_2: '✓ بياناتك خاصة',
-    hero2_trust_3: '✓ محتوى مراجَع علميًا',
+    hero2_demo_btn: 'شوف برنامج نموذجي',
+    hero2_trust_1: 'متخصصين حقيقيين',
+    hero2_trust_2: 'بياناتك خاصة',
+    hero2_trust_3: 'محتوى مراجَع علميًا',
     stat_exercises: 'تمرين بالصور',
     stat_templates: 'قالب جاهز',
     stat_supps: 'مكمل مشروح',
     stat_specialists: 'متخصص',
     how_it_works_note: '3 خطوات وخلاص',
-    lead_reveal_btn: '✉️ اكتب رسالتك',
-    pa_reveal_btn: '🎓 قدّم طلب انضمام',
+    lead_reveal_btn: 'اكتب رسالتك',
+    pa_reveal_btn: 'قدّم طلب انضمام',
     role_progress: 'متابعة',
     hero_slide5_title: 'جلسة نفسي رياضي',
     hero_slide5_sub: 'قبل المباراة بيومين',
@@ -543,7 +569,7 @@ const TEXT = {
     hero_slide5_foot: 'شغل على التركيز والثقة',
     hero_slide6_title: 'تقدمك الشهر ده',
     hero_slide6_sub: 'قياسات ووزن وأداء',
-    hero_slide6_rows: 'الوزن — 82 ← 78.4 كجم|الدهون — 22% ← 18%|بنش برس — 60 ← 72.5 كجم|التزامك بالبرنامج 85%',
+    hero_slide6_rows: 'الوزن — 82 78.4 كجم|الدهون — 22% 18%|بنش برس — 60 72.5 كجم|التزامك بالبرنامج 85%',
     hero_slide6_foot: 'كل رقم اتسجّل بإيدك واتراجع مع مدربك',
     hero_slide4_title: 'استشارة مع متخصص',
     hero_slide4_sub: 'د. — طبيب طب رياضي',
@@ -571,8 +597,8 @@ const TEXT = {
     lead_interest_ph: 'محتاج إيه؟ (اختياري)',
     lead_interest_label: 'محتاج',
     lead_new: 'جديد',
-    daily_report_title: '📊 تقرير آخر ٢٤ ساعة',
-    daily_report_refresh: '🔄 حدّث التقرير',
+    daily_report_title: 'تقرير آخر ٢٤ ساعة',
+    daily_report_refresh: 'حدّث التقرير',
     daily_report_week: 'تقرير الأسبوع',
     daily_report_day: 'تقرير اليوم',
     report_new_clients: 'عملاء جداد',
@@ -586,26 +612,26 @@ const TEXT = {
     report_alert_consults: '{n} طلب استشارة مستني رد',
     report_alert_payments: '{n} دفعة مستنية مراجعتك',
     report_alert_orders: '{n} طلب متجر جديد',
-    report_all_clear: '✓ مفيش حاجة مستنية منك — كل حاجة تمام',
+    report_all_clear: 'مفيش حاجة مستنية منك — كل حاجة تمام',
     report_generated_at: '{range} — آخر تحديث {time}',
     report_range_day: 'آخر ٢٤ ساعة',
     report_range_week: 'آخر ٧ أيام',
-    lead_accept_btn: '✅ اقبله كعميل',
-    lead_accepted_btn: '✓ اتقبل كعميل',
+    lead_accept_btn: 'اقبله كعميل',
+    lead_accepted_btn: 'اتقبل كعميل',
     lead_needs_email: 'محتاج إيميل عشان تقدر تفتحله حساب',
     lead_already_client: 'الشخص ده عميل عندك بالفعل',
     lead_accepted_msg: 'اتعملّه حساب — يسجّل بإيميل {email} ويلاقي نفسه عميل على طول',
     supp_library: 'مكتبة المكملات والفيتامينات',
     supp_search_ph: 'ابحث عن مكمل أو فيتامين...',
-    supp_disclaimer: '⚠️ المكتبة دي مرجع تعليمي مش وصفة طبية. أي عميل عنده حالة مرضية أو بياخد دوا أو حامل — لازم يرجع لطبيب أو أخصائي تغذية إكلينيكي قبل أي مكمل.',
+    supp_disclaimer: 'المكتبة دي مرجع تعليمي مش وصفة طبية. أي عميل عنده حالة مرضية أو بياخد دوا أو حامل — لازم يرجع لطبيب أو أخصائي تغذية إكلينيكي قبل أي مكمل.',
     supp_dose: 'الجرعة',
     supp_when: 'التوقيت',
     supp_use: 'بيستخدم ليه',
     supp_add_to_plan: '+ ضيفه لخطة العميل',
-    supp_already_added: '✓ موجود في الخطة',
+    supp_already_added: 'موجود في الخطة',
     supp_added: 'اتضاف "{name}" لخطة المكملات — متنساش تحفظ البرنامج',
     supp_note_ph: 'ملاحظة للعميل (اختياري)',
-    supp_plan_title: '💊 المكملات والفيتامينات',
+    supp_plan_title: 'المكملات والفيتامينات',
     supp_plan_empty: 'مفيش مكملات في الخطة — افتح المكتبة واختار اللي محتاجه',
     supp_client_note: 'دي المكملات اللي مدربك حددهالك. لو بتاخد أي دوا أو عندك حالة مرضية، اسأل دكتورك الأول.',
     open_supp_library: 'مكتبة المكملات',
@@ -683,7 +709,7 @@ const TEXT = {
     body_endo: 'ممتلئ',
     body_endo_note: 'بتزيد بسهولة وبتحتاج مجهود في التنشيف',
     ob_progress_note: 'خلّصت {done} من {total}',
-    ob_progress_done: '✓ كل البيانات تمام — تقدر تكمّل',
+    ob_progress_done: 'كل البيانات تمام — تقدر تكمّل',
     onboarding_title: 'بيانات بسيطة عنك',
     choose_photo: 'اختر صورتك (اختياري)',
     ob_name_ph: 'اسمك',
@@ -745,13 +771,13 @@ const TEXT = {
     specialty_locked_hint: 'التخصص ده مقفول على حسابك ومايتشالش — تقدر تزوّد عليه أي تخصص تاني',
     need_one_approved_specialty: 'لازم تفضل بتخصص واحد معتمد على الأقل — مش هينفع تشيلهم كلهم',
     specialty_pending_note: '⏳ مستني موافقة إدارة المنصة على: {list}',
-    specialty_sent_for_review: 'اتحفظ ✓ — {list} اتبعت لإدارة المنصة للموافقة، وهيشتغل أول ما يتوافق عليه',
+    specialty_sent_for_review: 'اتحفظ — {list} اتبعت لإدارة المنصة للموافقة، وهيشتغل أول ما يتوافق عليه',
     pending_specialties_title: '⏳ تخصصات مستنية موافقتك',
-    approve_btn: '✓ وافق',
-    reject_btn: '✕ ارفض',
+    approve_btn: 'وافق',
+    reject_btn: 'ارفض',
     specialty_approved_msg: 'اتوافق على "{spec}" لـ {name} — القسم بتاعه اتفتحله',
     specialty_rejected_msg: 'اترفض "{spec}" لـ {name}',
-    lib_access_title: '📚 المكتبات المتاحة له',
+    lib_access_title: 'المكتبات المتاحة له',
     lib_access_mine_label: 'المكتبات المتاحة ليك',
     lib_access_exercises: 'التمارين',
     lib_access_food: 'التغذية',
@@ -760,7 +786,7 @@ const TEXT = {
     lib_access_medical: 'المكتبة الطبية',
     lib_opened_msg: 'اتفتحت مكتبة {lib} لـ {name}',
     lib_closed_msg: 'اتقفلت مكتبة {lib} على {name}',
-    lib_locked_msg: '🔒 المكتبة دي مقفولة على حسابك — كلّم إدارة المنصة',
+    lib_locked_msg: 'المكتبة دي مقفولة على حسابك — كلّم إدارة المنصة',
     lib_locked_hint: 'مقفولة — كلّم إدارة المنصة',
     pending_specs_badge: 'طلبات تخصص مستنية',
     specialties_hint: 'خد كورس جديد؟ علّم عليه هنا وهيظهر في بروفايلك وللعملاء وهم بيختاروا فريقهم',
@@ -785,10 +811,10 @@ const TEXT = {
     goal_performance: 'تحسين أداء رياضي',
     goal_rehab_recovery: 'تعافي من إصابة',
     ob_focus_label: 'عايز تشتغل على إيه؟ (اختر كل اللي يهمك)',
-    focus_training: '🏋️ تمرين',
-    focus_nutrition: '🍎 تغذية',
-    focus_rehab: '🩹 تأهيل',
-    focus_medical: '🩺 استشارة طبية',
+    focus_training: 'تمرين',
+    focus_nutrition: 'تغذية',
+    focus_rehab: 'تأهيل',
+    focus_medical: 'استشارة طبية',
     ob_schedule_title: 'جدولك اليومي',
     ob_schedule_hint: 'علشان نظبط برنامجك على مواعيدك الحقيقية',
     ob_work_nature_label: 'طبيعة شغلك ايه؟',
@@ -894,7 +920,7 @@ const TEXT = {
     today_workout: 'تمرين اليوم',
     finish_workout: 'إنهاء التمرين',
     start_over: 'ابدأ من جديد',
-    rest_msg: 'خد راحتك النهاردة — الجسم بيبني وهو مرتاح 😌',
+    rest_msg: 'خد راحتك النهاردة — الجسم بيبني وهو مرتاح',
     rest_title: 'يوم راحة',
     no_plan: 'مفيش برنامج لليوم ده',
     no_plan_title: 'اليوم ده لسه فاضي',
@@ -903,7 +929,7 @@ const TEXT = {
     ob_health_hint: 'اختار اللي ينطبق عليك. ده بيغيّر برنامجك فعلًا — ومحدش هيشوفه غير فريقك المتابع معاك.',
     ob_health_note_label: 'حاجة تانية تحب تقولها لفريقك؟',
     ob_health_note_ph: 'مثلًا: بعمل غسيل كلوي يومين في الأسبوع',
-    ob_health_privacy: '🔒 البيانات دي بتتحفظ عندك في حسابك، وبيشوفها فريقك المتابع معاك بس — مش بتتباع ولا بتروح لأي جهة تانية.',
+    ob_health_privacy: 'البيانات دي بتتحفظ عندك في حسابك، وبيشوفها فريقك المتابع معاك بس — مش بتتباع ولا بتروح لأي جهة تانية.',
     ob_preg_label: 'حامل',
     ob_preg_week_label: 'في الأسبوع كام؟',
     ob_postpartum_label: 'ولدت من فترة قريبة',
@@ -915,11 +941,11 @@ const TEXT = {
     safety_sub: 'برنامجك متظبّط على حالتك',
     safety_sheet_title: 'حالتك وبرنامجك',
     safety_care: 'احتياطات وانت بتتمرن',
-    safety_stop: '🚩 وقّف فورًا واتصل بدكتورك لو حصل:',
+    safety_stop: 'وقّف فورًا واتصل بدكتورك لو حصل:',
     safety_disclaimer: 'الكلام ده إرشادات عامة للتمرين مع حالتك — مش تشخيص ولا علاج ولا بديل عن دكتورك. أي قرار في الدوا أو الجرعة أو التحاليل قرار الطبيب وحده.',
     clearance_needed: 'محتاج إذن من دكتور قبل ما البرنامج يبدأ',
     clearance_waiting: 'الطلب وصل للطبيب — مستني رده',
-    clearance_ok: 'الطبيب وافق على البرنامج ✅',
+    clearance_ok: 'الطبيب وافق على البرنامج',
     clearance_needed_text: 'حالتك محتاجة دكتور يشوفها ويكتب إن التمرين مناسب ليك. فريقك هيتواصل معاك.',
     clearance_ok_text: 'الطبيب راجع حالتك ووافق على البرنامج.',
     coach_health_open: 'شوف الاحتياطات وعلامات التوقّف ›',
@@ -928,7 +954,7 @@ const TEXT = {
     clearance_waiting_coach: 'الطلب اتبعت للطبيب في فريق العميل — مستني رده.',
     clearance_ok_coach: 'الطبيب راجع الحالة ووافق. راجع ملاحظاته قبل ما تكتب.',
     clearance_doctor_note: 'ملاحظة الطبيب',
-    clearance_sent: 'الطلب اتبعت للطبيب ✅',
+    clearance_sent: 'الطلب اتبعت للطبيب',
     clearance_request_text: 'طلب إذن طبي: {name} — الحالة: {list}. محتاج رأيك: التمرين مناسب؟ وفي حاجة ممنوعة؟',
     adh_health_flag: 'حالة خاصة',
     team_search_ph: 'دوّر باسم المتخصص...',
@@ -965,7 +991,7 @@ const TEXT = {
     clearance_screen_title: 'طلبات الإذن الطبي',
     clearance_screen_hint: 'أي طبيب في المنصة يقدر يرد — مش لازم يكون هو طبيب العميل. قرارك بيوصل للمدرب والعميل فورًا.',
     clearance_none: 'مفيش طلبات إذن',
-    clearance_none_pending: 'مفيش طلبات مستنية رد 👏',
+    clearance_none_pending: 'مفيش طلبات مستنية رد',
     clr_filter_pending: 'مستنية رد',
     clr_filter_answered: 'اترد عليها',
     clr_filter_all: 'الكل',
@@ -979,12 +1005,12 @@ const TEXT = {
     clr_btn_denied: 'مرفوض حاليًا',
     clr_note_ph: 'اكتب شروطك أو سببك — ده اللي المدرب هيشتغل بيه',
     clr_need_note: 'اكتب الشروط أو السبب الأول',
-    clr_saved: 'قرارك اتسجّل ووصل للمدرب ✅',
+    clr_saved: 'قرارك اتسجّل ووصل للمدرب',
     clr_client_note: 'ملاحظة العميل',
     clr_from: 'الطلب من',
     clr_by: 'قرار',
-    clearance_restricted: 'الطبيب وافق بشروط ⚠️',
-    clearance_denied: 'الطبيب مش موافق على البرنامج دلوقتي ⛔',
+    clearance_restricted: 'الطبيب وافق بشروط',
+    clearance_denied: 'الطبيب مش موافق على البرنامج دلوقتي',
     clearance_restricted_coach: 'الطبيب وافق بشروط — اشتغل في حدودها بالظبط.',
     clearance_denied_coach: 'الطبيب مش موافق دلوقتي. ماتفعّلش برنامج قبل ما يراجع تاني.',
     clearance_restricted_text: 'دكتورك وافق على التمرين بشروط — فريقك عارفها وهيمشي عليها.',
@@ -994,9 +1020,9 @@ const TEXT = {
     ob_cycle_len_label: 'طول دورتك بالأيام (المتوسط ٢٨)',
     cycle_day_of: 'اليوم {n}',
     cycle_log_btn: 'دورتي بدأت النهاردة',
-    cycle_logged: 'اتسجّلت — البرنامج هيتقرا على أساسها ✅',
+    cycle_logged: 'اتسجّلت — البرنامج هيتقرا على أساسها',
     cycle_train_title: 'التمرين في الفترة دي',
-    cycle_flags_title: '🚩 دي علامات لازم تشوفي دكتور عشانها:',
+    cycle_flags_title: 'دي علامات لازم تشوفي دكتور عشانها:',
     open_adherence_btn: 'لوحة الالتزام',
     adherence_title: 'لوحة الالتزام',
     adherence_hint: 'آخر ٧ أيام — مين ماشي معاك ومين محتاج تكلّمه',
@@ -1006,7 +1032,7 @@ const TEXT = {
     adh_filter_attention: 'محتاجين انتباه',
     adh_filter_all: 'الكل',
     adh_filter_active: 'ماشيين تمام',
-    adh_none_attention: 'مفيش حد محتاج انتباه النهاردة 👏',
+    adh_none_attention: 'مفيش حد محتاج انتباه النهاردة',
     adh_none: 'مفيش عملاء في القايمة دي',
     adh_state_silent: 'ساكت',
     adh_state_slipping: 'فاتر',
@@ -1020,7 +1046,7 @@ const TEXT = {
     adh_logged: 'سجّل أكله',
     adh_water: 'مياه/يوم',
     adh_open: 'افتح برنامجه',
-    water_title: '💧 المياه',
+    water_title: 'المياه',
     water_count: '{a} من {b} أكواب',
     picker_title: 'ضيف صنف',
     picker_search_ph: 'دوّر على صنف...',
@@ -1041,10 +1067,10 @@ const TEXT = {
     focus_close: 'اقفل',
     focus_prev: '‹ السابق',
     focus_next: 'التالي ›',
-    focus_finish: 'خلّصت ✓',
+    focus_finish: 'خلّصت',
     focus_of: 'تمرين {a} من {b}',
     focus_sets_left: 'فاضل {n} مجموعة — دوس على الخرزة بعد كل مجموعة',
-    focus_sets_done: 'خلّصت كل المجموعات 💪',
+    focus_sets_done: 'خلّصت كل المجموعات',
     fab_toggle_title: 'أدوات',
     no_meals_title: 'اليوم ده من غير وجبات',
     no_nutrition_title: 'لسه مفيش تغذية',
@@ -1056,7 +1082,7 @@ const TEXT = {
     fuel_g: 'جم',
     day_plan: 'برنامج يوم {day}',
     of_exercises: '{a} من {b} تمارين',
-    well_done: 'أحسنت يا بطل 💪',
+    well_done: 'أحسنت يا بطل',
     remaining: 'لسه باقي {n} تمارين',
 
     days: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
@@ -1333,8 +1359,8 @@ const TEXT = {
     clients_search_ph: 'Search by client name or email',
     coach_muscle_label: "Today's target muscle",
     coach_muscle_hint: 'The library opens already filtered to this muscle',
-    save_day_as_template: '💾 Save this day as a template',
-    delete_my_template: '🗑 Delete template',
+    save_day_as_template: 'Save this day as a template',
+    delete_my_template: 'Delete template',
     my_template_name_ph: 'Template name (e.g. Push day — footballers)',
     my_template_hint: 'Saved under your name and available for any client — other specialists can use it too',
     my_template_save: 'Save',
@@ -1360,7 +1386,7 @@ const TEXT = {
     day_title: 'Day name (Chest & Triceps)',
     rest_day: 'Rest day',
     open_library: 'Pick from exercise library',
-    open_mylib: '⭐ My own library',
+    open_mylib: 'My own library',
     or_manual: 'Or type the exercise yourself',
     ex_name: 'Exercise name',
     ex_sets: 'Sets',
@@ -1643,6 +1669,31 @@ const TEXT = {
     welcome_medical_step_2: 'A real specialist reviews your case',
     welcome_medical_step_3: 'You get a reply and a clear follow-up plan',
     welcome_medical_step_4: 'You continue tracking with your team in the app',
+    cc_idle: 'No activity',
+    no_specialty: 'No specialty set',
+    ai_on_label: 'Turn on the AI assistant in chat',
+    ai_on_hint: 'It uses the same URL above. Before turning it on, add GEMINI_KEY and FIREBASE_API_KEY to Script properties inside Apps Script — the setup file explains how.',
+    chat_ai_typing: 'The assistant is typing…',
+    nut_lib_title: 'Nutrition program library',
+    nut_lib_hint: 'Pick the program closest to your client, apply it, then adjust the amounts. The numbers next to each one are calculated from the food actually in it.',
+    np_numbers: '{kcal} kcal · {protein}g protein',
+    np_applied: 'Applied "{name}" to the week — adjust the amounts, then save',
+    pc_clients_n: '{n} clients',
+    no_search_results: 'No results for that search',
+    adm_tab_report: "Today's report",
+    adm_tab_payment: 'Payment details',
+    adm_tab_welcome: 'Welcome message',
+    adm_tab_stats: 'Homepage stat',
+    adm_tab_plans: 'Pricing',
+    adm_tab_provider_plans: 'Provider plans',
+    adm_tab_payments: 'Payment requests',
+    adm_tab_store: 'Store',
+    adm_tab_orders: 'Store orders',
+    adm_tab_stories: 'Success stories',
+    adm_tab_leads: 'Contact messages',
+    adm_tab_apps: 'Join requests',
+    adm_tab_access: 'Access control',
+    tile_clients: 'My clients',
     nav_home: 'Home',
     nav_profile: 'My profile',
     nav_chat: 'Chat',
@@ -1737,9 +1788,9 @@ const TEXT = {
     my_food: 'mine',
     all_foods: 'All foods',
     all_supps: 'All supplements',
-    hero2_badge: '🎁 30 days free — no card needed',
+    hero2_badge: '30 days free — no card needed',
     team_strip_title: 'A full team behind you',
-    orbit_rating_line: '⭐ {avg} from {n} reviews',
+    orbit_rating_line: '{avg} from {n} reviews',
     faq_badge: 'Common question',
     deck_prev: 'Previous',
     deck_next: 'Next',
@@ -1762,17 +1813,17 @@ const TEXT = {
     role_psych: 'Psychology',
     hero2_title: 'Your program. From a real specialist.',
     hero2_sub: 'Training · Rehab · Nutrition · Medical advice',
-    hero2_demo_btn: 'See a sample program ↓',
-    hero2_trust_1: '✓ Real specialists',
-    hero2_trust_2: '✓ Your data stays private',
-    hero2_trust_3: '✓ Evidence-reviewed content',
+    hero2_demo_btn: 'See a sample program',
+    hero2_trust_1: 'Real specialists',
+    hero2_trust_2: 'Your data stays private',
+    hero2_trust_3: 'Evidence-reviewed content',
     stat_exercises: 'exercises with photos',
     stat_templates: 'ready templates',
     stat_supps: 'supplements explained',
     stat_specialists: 'specialists',
     how_it_works_note: 'Three steps, that is it',
-    lead_reveal_btn: '✉️ Write your message',
-    pa_reveal_btn: '🎓 Apply to join',
+    lead_reveal_btn: 'Write your message',
+    pa_reveal_btn: 'Apply to join',
     role_progress: 'Progress',
     hero_slide5_title: 'Sports psychology session',
     hero_slide5_sub: 'Two days before the match',
@@ -1780,7 +1831,7 @@ const TEXT = {
     hero_slide5_foot: 'Work on focus and confidence',
     hero_slide6_title: 'Your progress this month',
     hero_slide6_sub: 'Measurements, weight, performance',
-    hero_slide6_rows: 'Weight — 82 → 78.4 kg|Body fat — 22% → 18%|Bench press — 60 → 72.5 kg|85% program adherence',
+    hero_slide6_rows: 'Weight — 82 78.4 kg|Body fat — 22% 18%|Bench press — 60 72.5 kg|85% program adherence',
     hero_slide6_foot: 'Every number logged by you, reviewed with your coach',
     hero_slide4_title: 'A consultation with a specialist',
     hero_slide4_sub: 'Sports medicine doctor',
@@ -1808,8 +1859,8 @@ const TEXT = {
     lead_interest_ph: 'What do you need? (optional)',
     lead_interest_label: 'Needs',
     lead_new: 'New',
-    daily_report_title: '📊 Last 24 hours',
-    daily_report_refresh: '🔄 Refresh report',
+    daily_report_title: 'Last 24 hours',
+    daily_report_refresh: 'Refresh report',
     daily_report_week: 'Weekly report',
     daily_report_day: 'Daily report',
     report_new_clients: 'New clients',
@@ -1823,26 +1874,26 @@ const TEXT = {
     report_alert_consults: '{n} consult request(s) waiting',
     report_alert_payments: '{n} payment(s) waiting for review',
     report_alert_orders: '{n} new store order(s)',
-    report_all_clear: '✓ Nothing waiting on you — all clear',
+    report_all_clear: 'Nothing waiting on you — all clear',
     report_generated_at: '{range} — updated {time}',
     report_range_day: 'Last 24 hours',
     report_range_week: 'Last 7 days',
-    lead_accept_btn: '✅ Accept as client',
-    lead_accepted_btn: '✓ Accepted as client',
+    lead_accept_btn: 'Accept as client',
+    lead_accepted_btn: 'Accepted as client',
     lead_needs_email: 'An email is needed to open an account',
     lead_already_client: 'This person is already one of your clients',
     lead_accepted_msg: 'Account created — they sign in with {email} and land straight in as a client',
     supp_library: 'Supplements & vitamins library',
     supp_search_ph: 'Search for a supplement or vitamin...',
-    supp_disclaimer: '⚠️ This library is an educational reference, not a prescription. Any client with a medical condition, on medication, or pregnant must see a doctor or clinical dietitian before taking anything.',
+    supp_disclaimer: 'This library is an educational reference, not a prescription. Any client with a medical condition, on medication, or pregnant must see a doctor or clinical dietitian before taking anything.',
     supp_dose: 'Dose',
     supp_when: 'Timing',
     supp_use: 'What it is for',
     supp_add_to_plan: '+ Add to client plan',
-    supp_already_added: '✓ Already in the plan',
+    supp_already_added: 'Already in the plan',
     supp_added: '"{name}" added to the supplement plan — remember to save the program',
     supp_note_ph: 'Note for the client (optional)',
-    supp_plan_title: '💊 Supplements & vitamins',
+    supp_plan_title: 'Supplements & vitamins',
     supp_plan_empty: 'No supplements in the plan — open the library and pick what is needed',
     supp_client_note: 'These are the supplements your coach selected for you. If you take any medication or have a medical condition, ask your doctor first.',
     open_supp_library: 'Supplements library',
@@ -1920,7 +1971,7 @@ const TEXT = {
     body_endo: 'Fuller',
     body_endo_note: 'Gains easily, needs more work to lean out',
     ob_progress_note: '{done} of {total} done',
-    ob_progress_done: '✓ All set — you can continue',
+    ob_progress_done: 'All set — you can continue',
     onboarding_title: 'A few quick details',
     choose_photo: 'Choose your photo (optional)',
     ob_name_ph: 'Your name',
@@ -1982,13 +2033,13 @@ const TEXT = {
     specialty_locked_hint: 'This specialty is locked on your account and cannot be removed — you can still add others',
     need_one_approved_specialty: 'You must keep at least one approved specialty — you cannot remove them all',
     specialty_pending_note: '⏳ Waiting for platform approval on: {list}',
-    specialty_sent_for_review: 'Saved ✓ — {list} was sent to the platform for approval and starts working once approved',
+    specialty_sent_for_review: 'Saved — {list} was sent to the platform for approval and starts working once approved',
     pending_specialties_title: '⏳ Specialties awaiting your approval',
-    approve_btn: '✓ Approve',
-    reject_btn: '✕ Reject',
+    approve_btn: 'Approve',
+    reject_btn: 'Reject',
     specialty_approved_msg: '"{spec}" approved for {name} — their section is now open',
     specialty_rejected_msg: '"{spec}" rejected for {name}',
-    lib_access_title: '📚 Libraries available to them',
+    lib_access_title: 'Libraries available to them',
     lib_access_mine_label: 'Libraries available to you',
     lib_access_exercises: 'Exercises',
     lib_access_food: 'Nutrition',
@@ -1997,7 +2048,7 @@ const TEXT = {
     lib_access_medical: 'Medical library',
     lib_opened_msg: '{lib} library opened for {name}',
     lib_closed_msg: '{lib} library closed for {name}',
-    lib_locked_msg: '🔒 This library is closed for your account — contact the platform admin',
+    lib_locked_msg: 'This library is closed for your account — contact the platform admin',
     lib_locked_hint: 'Closed — contact the platform admin',
     pending_specs_badge: 'Specialty requests waiting',
     specialties_hint: 'Finished a new course? Tick it here and it shows on your profile and to clients choosing their team',
@@ -2022,10 +2073,10 @@ const TEXT = {
     goal_performance: 'Improve sports performance',
     goal_rehab_recovery: 'Recover from an injury',
     ob_focus_label: 'What do you want to work on? (pick all that apply)',
-    focus_training: '🏋️ Training',
-    focus_nutrition: '🍎 Nutrition',
-    focus_rehab: '🩹 Rehab',
-    focus_medical: '🩺 Medical consultation',
+    focus_training: 'Training',
+    focus_nutrition: 'Nutrition',
+    focus_rehab: 'Rehab',
+    focus_medical: 'Medical consultation',
     ob_schedule_title: 'Your daily schedule',
     ob_schedule_hint: 'So we can fit your program to your real schedule',
     ob_work_nature_label: 'What\'s the nature of your work?',
@@ -2131,7 +2182,7 @@ const TEXT = {
     today_workout: "Today's Workout",
     finish_workout: 'Finish workout',
     start_over: 'Start over',
-    rest_msg: 'Take it easy today — the body builds while it rests 😌',
+    rest_msg: 'Take it easy today — the body builds while it rests',
     rest_title: 'Rest day',
     no_plan: 'No program for this day',
     no_plan_title: 'This day is still empty',
@@ -2140,7 +2191,7 @@ const TEXT = {
     ob_health_hint: 'Pick whatever applies. It really does change your program — and only your own team can see it.',
     ob_health_note_label: 'Anything else you want to tell your team?',
     ob_health_note_ph: 'e.g. I have dialysis twice a week',
-    ob_health_privacy: '🔒 This is stored on your own account and seen only by the team following you — never sold, never sent anywhere else.',
+    ob_health_privacy: 'This is stored on your own account and seen only by the team following you — never sold, never sent anywhere else.',
     ob_preg_label: 'Pregnant',
     ob_preg_week_label: 'Which week?',
     ob_postpartum_label: 'Recently gave birth',
@@ -2152,11 +2203,11 @@ const TEXT = {
     safety_sub: 'Your program is set around your condition',
     safety_sheet_title: 'Your condition and your program',
     safety_care: 'Precautions while you train',
-    safety_stop: '🚩 Stop immediately and call your doctor if:',
+    safety_stop: 'Stop immediately and call your doctor if:',
     safety_disclaimer: 'This is general guidance for training with your condition — not a diagnosis, not treatment, and not a substitute for your doctor. Any decision about medication, dosing or tests is the doctor\u2019s alone.',
     clearance_needed: 'Needs a doctor\u2019s clearance before the program starts',
     clearance_waiting: 'Request sent to the doctor — awaiting reply',
-    clearance_ok: 'The doctor approved this program ✅',
+    clearance_ok: 'The doctor approved this program',
     clearance_needed_text: 'Your condition needs a doctor to review it and confirm training is suitable for you. Your team will be in touch.',
     clearance_ok_text: 'The doctor reviewed your case and approved the program.',
     coach_health_open: 'See precautions and stop signs \u203a',
@@ -2243,7 +2294,7 @@ const TEXT = {
     adh_filter_attention: 'Need attention',
     adh_filter_all: 'All',
     adh_filter_active: 'On track',
-    adh_none_attention: 'Nobody needs attention today 👏',
+    adh_none_attention: 'Nobody needs attention today',
     adh_none: 'No clients in this list',
     adh_state_silent: 'Silent',
     adh_state_slipping: 'Slipping',
@@ -2257,7 +2308,7 @@ const TEXT = {
     adh_logged: 'Logged food',
     adh_water: 'Water/day',
     adh_open: 'Open program',
-    water_title: '💧 Water',
+    water_title: 'Water',
     water_count: '{a} of {b} cups',
     picker_title: 'Add food',
     picker_search_ph: 'Search for a food...',
@@ -2278,10 +2329,10 @@ const TEXT = {
     focus_close: 'Close',
     focus_prev: '‹ Previous',
     focus_next: 'Next ›',
-    focus_finish: 'Done ✓',
+    focus_finish: 'Done',
     focus_of: 'Exercise {a} of {b}',
     focus_sets_left: '{n} sets left — tap a bead after each set',
-    focus_sets_done: 'All sets done 💪',
+    focus_sets_done: 'All sets done',
     fab_toggle_title: 'Tools',
     no_meals_title: 'No meals for this day',
     no_nutrition_title: 'No nutrition yet',
@@ -2293,7 +2344,7 @@ const TEXT = {
     fuel_g: 'g',
     day_plan: '{day} program',
     of_exercises: '{a} of {b} exercises',
-    well_done: 'Well done, champ 💪',
+    well_done: 'Well done, champ',
     remaining: '{n} exercises left',
 
     days: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -2705,13 +2756,13 @@ const todayStamp = dateStamp(new Date());
 
 const SECTION_KEYS = ['warmup', 'main', 'cardio', 'mobility', 'flexibility'];
 const MEAL_KEYS = ['breakfast', 'lunch', 'dinner', 'snack'];
-const MEAL_ICONS = { breakfast: '🌅', lunch: '🍽️', dinner: '🌙', snack: '🥤' };
+const MEAL_ICONS = { breakfast: 'sunrise', lunch: 'plate', dinner: 'moon', snack: 'cup' };
 const SECTION_ICONS = {
-  warmup: '🔥',
-  main: '🏋️',
-  cardio: '🏃',
-  mobility: '🔄',
-  flexibility: '🧘'
+  warmup: 'flame',
+  main: 'training',
+  cardio: 'run',
+  mobility: 'refresh',
+  flexibility: 'yoga'
 };
 
 // أيقونات SVG بديلة (لاستخدامها في عناصر الصفحة، مش جوه <option>)
@@ -3567,13 +3618,17 @@ function fillSpecialtyCheckboxes(container, selected, lockedKeys) {
       label.title = t('specialty_locked_hint');
     }
     label.appendChild(input);
+    const iconWrap = document.createElement('span');
+    iconWrap.className = 'specialty-chip-icon';
+    iconWrap.innerHTML = specialtyIconSvg(key);
+    label.appendChild(iconWrap);
     const span = document.createElement('span');
-    span.textContent = specialtyIcon(key) + ' ' + specialtyName(key, lang);
+    span.textContent = specialtyName(key, lang);
     label.appendChild(span);
     if (isLocked) {
       const lock = document.createElement('span');
       lock.className = 'specialty-lock';
-      lock.textContent = '🔒';
+      lock.appendChild(iconSvg('lock', 'ui-icon'));
       label.appendChild(lock);
     }
     container.appendChild(label);
@@ -3624,13 +3679,10 @@ function renderSpecialtyChips(target, list, extra) {
   (list || []).forEach(function (key) {
     const chip = document.createElement('span');
     chip.className = 'specialty-chip';
-    const icon = specialtyIcon(key);
-    if (icon) {
-      const iconSpan = document.createElement('span');
-      iconSpan.className = 'specialty-chip-icon';
-      iconSpan.textContent = icon;
-      chip.appendChild(iconSpan);
-    }
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'specialty-chip-icon';
+    iconSpan.innerHTML = specialtyIconSvg(key);
+    chip.appendChild(iconSpan);
     chip.appendChild(document.createTextNode(specialtyName(key, lang)));
     target.appendChild(chip);
   });
@@ -3939,9 +3991,9 @@ function applyClientsFilter() {
 
   Array.prototype.forEach.call(clientsList.children, function (item) {
     const nameEl = item.querySelector('.client-name');
-    const emailEl = item.querySelector('.client-email');
     const name = (nameEl ? nameEl.textContent : '').toLowerCase();
-    const email = (emailEl ? emailEl.textContent : '').toLowerCase();
+    // الإيميل مبقاش معروض في المربع، فبنقراه من الخاصية
+    const email = (item.getAttribute('data-email') || '').toLowerCase();
     const match = !query || name.indexOf(query) !== -1 || email.indexOf(query) !== -1;
     item.classList.toggle('hidden', !match);
     if (match) visible++;
@@ -3983,6 +4035,8 @@ async function loadClients() {
   openProviderSubscriptionBtn.classList.toggle('hidden', isFullAdminAccount());
   refreshProviderSubBanner();
   if (isFullAdminAccount()) { refreshLeadsBadge(); refreshPendingSpecsBadge(); }
+
+  renderCoachTiles();
 
   clientsList.innerHTML = '';
   clientsMessage.textContent = t('loading');
@@ -4330,7 +4384,12 @@ function adherenceCard(row) {
     const flag = document.createElement('div');
     flag.className = 'adh-health';
     if (needsClearance(row.health) && !clearanceOk(row.health)) flag.classList.add('blocked');
-    flag.textContent = healthItems.map(function (h) { return h.icon + ' ' + healthName(h); }).join(' · ');
+    flag.innerHTML = '';
+    healthItems.forEach(function (h, i) {
+      if (i) flag.appendChild(document.createTextNode(' · '));
+      flag.appendChild(healthIconEl(h));
+      flag.appendChild(document.createTextNode(' ' + healthName(h)));
+    });
     item.appendChild(flag);
   }
 
@@ -4380,6 +4439,7 @@ function refreshAdherenceBadge() {
   const n = adhRows.filter(adhNeedsAttention).length;
   badge.textContent = n;
   badge.classList.toggle('hidden', !n);
+  renderCoachTiles();
 }
 
 document.getElementById('open-adherence-btn').addEventListener('click', function () {
@@ -4391,47 +4451,211 @@ document.getElementById('adherence-back-btn').addEventListener('click', function
   showScreen(clientsScreen);
 });
 
+
+/* ============================================================
+   شاشة المدرب كمربعات
+   كانت سبع زراير تحت بعض بتاخد نص الشاشة قبل ما يشوف عميل واحد.
+   دلوقتي مربعات على تلات أعمدة، وكل مربع بيقرا حالته من الزرار
+   الأصلي المخفي (ظاهر ولا لأ، وعليه عدّاد ولا لأ) — فمفيش منطق
+   صلاحيات مكرر، ولو اتغيّر في مكان واحد المربعات بتمشي وراه
+   ============================================================ */
+
+
+/* ============================================================
+   لوحة التحكم: قسم واحد في الشاشة بدل ١٣ فوق بعض
+   كانت صفحة واحدة طولها متر — التقرير والأسعار والمتجر والقصص
+   والرسايل وكل حاجة تحت بعض. دلوقتي مربعات فوق، وكل مربع بيفتح
+   قسمه لوحده. نفس المحتوى، بس الشاشة بتقول حاجة واحدة في المرة
+   ============================================================ */
+
+const ADMIN_SECTION_ICONS = {
+  daily_report_title:        'progress',
+  payment_settings_title:    'card',
+  welcome_mail_title:        'mail',
+  public_stats_title:        'chart',
+  admin_plans_title:         'price',
+  admin_provider_plans_title:'price',
+  admin_payments_title:      'card',
+  store_admin_title:         'store',
+  store_orders_title:        'box',
+  stories_admin_title:       'star',
+  admin_leads_title:         'chat',
+  admin_provider_apps_title: 'clients',
+  admin_access_title:        'lock'
+};
+
+let adminSection = 'daily_report_title';
+
+function adminSections() {
+  return Array.prototype.slice.call(document.querySelectorAll('#admin-panel-screen .adm-section'));
+}
+
+function showAdminSection(key) {
+  adminSection = key;
+  adminSections().forEach(function (box) {
+    box.classList.toggle('hidden', box.getAttribute('data-sec') !== key);
+  });
+  paintAdminTabs();
+}
+
+function paintAdminTabs() {
+  const box = document.getElementById('admin-tabs');
+  if (!box) return;
+  box.querySelectorAll('.home-tile').forEach(function (tile) {
+    tile.classList.toggle('on', tile.getAttribute('data-key') === adminSection);
+  });
+}
+
+function renderAdminTabs() {
+  const box = document.getElementById('admin-tabs');
+  if (!box) return;
+  box.innerHTML = '';
+  adminSections().forEach(function (section) {
+    const key = section.getAttribute('data-sec');
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'home-tile';
+    cell.setAttribute('data-key', key);
+    cell.appendChild(iconSvg(ADMIN_SECTION_ICONS[key] || 'gear', 'home-tile-icon'));
+    const label = document.createElement('span');
+    label.className = 'home-tile-label';
+    // العنوان جوه القسم فيه إيموچي أحيانًا — بناخد الترجمة نضيفة
+    label.textContent = adminTabLabel(key);
+    cell.appendChild(label);
+
+    // عدّاد الرسايل الجديدة بيتنقل على مربعه
+    if (key === 'admin_leads_title') {
+      const src = document.getElementById('admin-leads-badge');
+      if (src && !src.classList.contains('hidden') && src.textContent.trim()) {
+        const dot = document.createElement('span');
+        dot.className = 'home-tile-badge';
+        dot.textContent = src.textContent.trim();
+        cell.appendChild(dot);
+      }
+    }
+
+    cell.addEventListener('click', function () { showAdminSection(key); });
+    box.appendChild(cell);
+  });
+  showAdminSection(adminSection);
+}
+
+/* أسماء قصيرة للمربعات — العناوين الأصلية طويلة على مربع */
+const ADMIN_TAB_SHORT = {
+  daily_report_title:        'adm_tab_report',
+  payment_settings_title:    'adm_tab_payment',
+  welcome_mail_title:        'adm_tab_welcome',
+  public_stats_title:        'adm_tab_stats',
+  admin_plans_title:         'adm_tab_plans',
+  admin_provider_plans_title:'adm_tab_provider_plans',
+  admin_payments_title:      'adm_tab_payments',
+  store_admin_title:         'adm_tab_store',
+  store_orders_title:        'adm_tab_orders',
+  stories_admin_title:       'adm_tab_stories',
+  admin_leads_title:         'adm_tab_leads',
+  admin_provider_apps_title: 'adm_tab_apps',
+  admin_access_title:        'adm_tab_access'
+};
+
+function adminTabLabel(key) {
+  return t(ADMIN_TAB_SHORT[key] || key);
+}
+
+const COACH_TILES = [
+  { key: 'clients',   icon: 'clients',   labelKey: 'tile_clients',   scroll: 'clients-list' },
+  { key: 'adherence', icon: 'progress',  labelKey: 'open_adherence_btn',        btn: 'open-adherence-btn',  badge: 'adherence-badge' },
+  { key: 'chats',     icon: 'chat',      labelKey: 'open_chat_inbox_btn',       btn: 'open-chat-inbox-btn' },
+  { key: 'clearance', icon: 'shield',    labelKey: 'open_clearance_btn',        btn: 'open-clearance-btn',  badge: 'clearance-badge' },
+  { key: 'bookings',  icon: 'classes',   labelKey: 'open_bookings_btn',         btn: 'open-bookings-btn' },
+  { key: 'myprofile', icon: 'profile',   labelKey: 'open_my_profile_btn',       btn: 'open-my-profile-btn' },
+  { key: 'mysub',     icon: 'card',      labelKey: 'open_provider_subscription_btn', btn: 'open-provider-subscription-btn' },
+  { key: 'admin',     icon: 'gear',      labelKey: 'open_admin_btn',            btn: 'open-admin-panel-btn', badge: 'admin-leads-badge' }
+];
+
+function renderCoachTiles() {
+  const box = document.getElementById('coach-tiles');
+  if (!box) return;
+  box.innerHTML = '';
+  COACH_TILES.forEach(function (tile) {
+    const origin = tile.btn ? document.getElementById(tile.btn) : null;
+    // الزرار المخفي لحساب ده = مفيش مربع ليه
+    if (tile.btn && (!origin || origin.classList.contains('hidden'))) return;
+
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'home-tile';
+    cell.setAttribute('data-key', tile.key);
+    cell.appendChild(iconSvg(tile.icon, 'home-tile-icon'));
+    const label = document.createElement('span');
+    label.className = 'home-tile-label';
+    label.textContent = t(tile.labelKey);
+    cell.appendChild(label);
+
+    if (tile.badge) {
+      const src = document.getElementById(tile.badge);
+      if (src && !src.classList.contains('hidden') && src.textContent.trim()) {
+        const dot = document.createElement('span');
+        dot.className = 'home-tile-badge';
+        dot.textContent = src.textContent.trim();
+        cell.appendChild(dot);
+      }
+    }
+
+    cell.addEventListener('click', function () {
+      if (origin) { origin.click(); return; }
+      const target = document.getElementById(tile.scroll);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    box.appendChild(cell);
+  });
+}
+
 async function showClientRow(email, name, sport, injuryCount) {
+  /*
+   * كانت سطور طويلة تحت بعض، والمدرب بينزل كتير عشان يلاقي عميل.
+   * بقت مربعات: الحروف الأولى في دايرة، الاسم، رياضته، وحالة
+   * النهاردة كنقطة ملوّنة. الإيميل اتشال من الوش (بيبان في التلميح
+   * عند اللمس المطوّل) لأن المدرب بيدوّر بالاسم مش بالإيميل
+   */
   const item = document.createElement('li');
+  item.className = 'client-cell';
+  item.title = email;
+  // البحث بيدوّر في النص ده، فبنسيب الإيميل متاح له من غير ما يتعرض
+  item.setAttribute('data-email', email);
+
+  const avatar = document.createElement('span');
+  avatar.className = 'cc-avatar';
+  avatar.style.setProperty('--cc', providerTint(email));
+  avatar.textContent = providerInitials(name || email);
+  item.appendChild(avatar);
 
   const nameLine = document.createElement('div');
   nameLine.className = 'client-name';
-  nameLine.textContent = name;
-
-  if (injuryCount) {
-    const flag = document.createElement('div');
-    flag.className = 'client-injury-flag';
-    const flagIcon = document.createElement('span');
-    flagIcon.className = 'inline-icon';
-    flagIcon.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 21.5 20h-19L12 3.5z"></path><line x1="12" y1="9.5" x2="12" y2="14"></line><circle cx="12" cy="17" r="0.7" fill="currentColor" stroke="none"></circle></svg>';
-    flag.appendChild(flagIcon);
-    const flagText = document.createElement('span');
-    flagText.textContent = injuryCount > 1
-      ? fill('client_injury_flag_many', { n: injuryCount })
-      : t('client_injury_flag');
-    flag.appendChild(flagText);
-    item.appendChild(flag);
-  }
-
-  const emailLine = document.createElement('div');
-  emailLine.className = 'client-email';
-  emailLine.textContent = email;
-
-  const status = document.createElement('div');
-  status.className = 'client-status none';
-  status.textContent = t('no_activity');
-
+  nameLine.textContent = name || email;
   item.appendChild(nameLine);
-  item.appendChild(emailLine);
 
   if (sport) {
     const tag = document.createElement('div');
-    tag.className = 'sport-tag sport-tag-icon';
+    tag.className = 'sport-tag sport-tag-icon cc-sport';
     setSportTag(tag, sport);
     item.appendChild(tag);
   }
 
+  const status = document.createElement('div');
+  status.className = 'client-status none';
+  // نص قصير — المربع ضيق والجملة الطويلة كانت بتتلف على سطرين
+  status.textContent = t('cc_idle');
   item.appendChild(status);
+
+  if (injuryCount) {
+    const flag = document.createElement('span');
+    flag.className = 'cc-injury';
+    flag.textContent = injuryCount > 1 ? String(injuryCount) : '!';
+    flag.title = injuryCount > 1
+      ? fill('client_injury_flag_many', { n: injuryCount })
+      : t('client_injury_flag');
+    item.appendChild(flag);
+  }
 
   item.addEventListener('click', function () {
     openCoachScreen(email, name, sport);
@@ -5441,7 +5665,7 @@ function fillSectionPicker() {
   SECTION_KEYS.forEach(function (key) {
     const option = document.createElement('option');
     option.value = key;
-    option.textContent = SECTION_ICONS[key] + '  ' + sectionName(key);
+    option.textContent = sectionName(key);
     targetSection.appendChild(option);
   });
   targetSection.value = keep || 'main';
@@ -7149,6 +7373,7 @@ let clientWeek = emptyWeek();
 let clientRehab = emptyRehab();
 let clientDay = todayIndex;
 let clientEmail = '';
+let clientRecord = null;
 let clientSport = '';
 let clientName = '';
 let doneToday = [];
@@ -7279,7 +7504,80 @@ const UI_ICONS = {
   card:      '<rect x="3" y="5.5" width="18" height="13" rx="2"/><line x1="3" y1="9.5" x2="21" y2="9.5"/><line x1="6.5" y1="14" x2="10.5" y2="14"/>',
   calc:      '<rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="7.5" x2="16" y2="7.5"/><line x1="8.5" y1="12" x2="8.5" y2="12.01"/><line x1="12" y1="12" x2="12" y2="12.01"/><line x1="15.5" y1="12" x2="15.5" y2="12.01"/><line x1="8.5" y1="16" x2="8.5" y2="16.01"/><line x1="12" y1="16" x2="12" y2="16.01"/><line x1="15.5" y1="16" x2="15.5" y2="16.01"/>',
   progress:  '<polyline points="3 17 9 11 13 15 21 6"/><polyline points="15 6 21 6 21 12"/>',
-  water:     '<path d="M12 3.2c3.4 4 6 7 6 10.2a6 6 0 0 1-12 0c0-3.2 2.6-6.2 6-10.2z"/>'
+  water:     '<path d="M12 3.2c3.4 4 6 7 6 10.2a6 6 0 0 1-12 0c0-3.2 2.6-6.2 6-10.2z"/>',
+  clients:   '<circle cx="8.4" cy="8" r="3"/><path d="M2.6 19.5c0-3.2 2.6-5.8 5.8-5.8s5.8 2.6 5.8 5.8"/><circle cx="17" cy="9.2" r="2.3"/><path d="M15.6 14.1c2.5.3 4.4 2.3 4.4 5.4"/>',
+  shield:    '<path d="M12 3l7 3v5.5c0 4.2-2.9 7.9-7 9-4.1-1.1-7-4.8-7-9V6z"/><polyline points="9 12 11 14 15 9.5"/>',
+  gear:      '<circle cx="12" cy="12" r="3"/><path d="M19 12c0 .4 0 .8-.1 1.2l2 1.6-2 3.4-2.3-.9c-.6.5-1.3.9-2 1.2L14 21h-4l-.6-2.5c-.7-.3-1.4-.7-2-1.2l-2.3.9-2-3.4 2-1.6C5 12.8 5 12.4 5 12s0-.8.1-1.2l-2-1.6 2-3.4 2.3.9c.6-.5 1.3-.9 2-1.2L10 3h4l.6 2.5c.7.3 1.4.7 2 1.2l2.3-.9 2 3.4-2 1.6c.1.4.1.8.1 1.2z"/>',
+  mail:      '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.6 7 8.4 6 8.4-6"/>',
+  chart:     '<path d="M3 20h18"/><rect x="5" y="11" width="3.5" height="7" rx="1"/><rect x="10.25" y="7" width="3.5" height="11" rx="1"/><rect x="15.5" y="14" width="3.5" height="4" rx="1"/>',
+  price:     '<path d="M20.5 12.6 12.4 20.7a2 2 0 0 1-2.8 0l-6.3-6.3a2 2 0 0 1-.6-1.6l.5-6a2 2 0 0 1 1.8-1.8l6-.5a2 2 0 0 1 1.6.6l6.3 6.3a2 2 0 0 1 0 2.8z"/><circle cx="8.4" cy="8.4" r="1.5"/>',
+  box:       '<path d="M3.5 7.5 12 3.6l8.5 3.9v9L12 20.4 3.5 16.4z"/><path d="M3.5 7.5 12 11.4l8.5-3.9"/><line x1="12" y1="11.4" x2="12" y2="20.4"/>',
+  star:      '<path d="m12 3.6 2.6 5.3 5.9.9-4.2 4.1 1 5.8-5.3-2.8-5.3 2.8 1-5.8L3.5 9.8l5.9-.9z"/>',
+  lock:      '<rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/><circle cx="12" cy="15.4" r="1.4"/>',
+  /* شعارات السوشيال بشكلها المعروف — مرسومة، مش إيموچي كيبورد */
+  instagram: '<rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.1" cy="6.9" r="1.15" fill="currentColor" stroke="none"/>',
+  facebook:  '<path d="M13.6 21v-7.6h2.6l.4-3h-3V8.5c0-.9.25-1.5 1.5-1.5h1.6V4.3c-.3 0-1.25-.13-2.35-.13-2.32 0-3.9 1.42-3.9 4.02v2.2H7.8v3h2.65V21"/>',
+  tiktok:    '<path d="M14.2 3.2v10.9a3.4 3.4 0 1 1-3.4-3.4c.34 0 .67.05.98.15"/><path d="M14.2 3.2c.35 2.4 2.1 4.1 4.6 4.35"/>',
+  whatsapp:  '<path d="M3.6 20.4 5 16.5a7.7 7.7 0 1 1 2.9 2.85z"/><path d="M9.1 9c.3 1.4 1 2.6 2 3.6s2.2 1.7 3.6 2"/><path d="M9.1 9c-.2-.5-.6-.9-1.1-.8-.6.1-1.2.7-1.3 1.4"/><path d="M14.7 14.6c.5.2.9.6.8 1.1-.1.6-.7 1.2-1.4 1.3"/>',
+  youtube:   '<rect x="2.6" y="5.4" width="18.8" height="13.2" rx="4"/><path d="M10.4 9.3 15.4 12l-5 2.7z"/>',
+  search:    '<circle cx="10.8" cy="10.8" r="6.4"/><line x1="15.6" y1="15.6" x2="20.5" y2="20.5"/>',
+  friend:    '<circle cx="8.4" cy="8" r="3"/><path d="M2.6 19.5c0-3.2 2.6-5.8 5.8-5.8s5.8 2.6 5.8 5.8"/><circle cx="17" cy="9.2" r="2.3"/><path d="M15.6 14.1c2.5.3 4.4 2.3 4.4 5.4"/>',
+  sparkle:   '<path d="M12 3.4 13.7 9l5.6 1.7-5.6 1.7L12 18l-1.7-5.6L4.7 10.7 10.3 9z"/><path d="M18.4 3.2 19 5l1.8.6-1.8.6-.6 1.8-.6-1.8L16 5.6 17.8 5z"/>',
+  /* حالات النوم */
+  sleep_solid:  '<path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/>',
+  sleep_broken: '<path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/><line x1="3.2" y1="20.8" x2="20.8" y2="3.2" stroke-width="2.2"/>',
+  sleep_short:  '<circle cx="12" cy="13" r="7.8"/><path d="M12 9v4.2l2.8 1.7"/><path d="M9.2 2.6h5.6"/>',
+  sleep_shifts: '<path d="M4.2 11.4a7.8 7.8 0 0 1 13.2-4.6l2.4 2.2"/><path d="M19.8 12.6a7.8 7.8 0 0 1-13.2 4.6L4.2 15"/><path d="M20 5.2v4h-4"/><path d="M4 18.8v-4h4"/>',
+  /* ===== الحالات الصحية: أيقونات طبية مرسومة بدل الإيموچي ===== */
+  drop:      '<path d="M12 3.2c3.4 4 6 7 6 10.2a6 6 0 0 1-12 0c0-3.2 2.6-6.2 6-10.2z"/>',
+  glucose:   '<path d="M12 3.2c3.4 4 6 7 6 10.2a6 6 0 0 1-12 0c0-3.2 2.6-6.2 6-10.2z"/><path d="M9.4 13.4h5.2"/><path d="M12 10.8v5.2"/>',
+  pulse:     '<path d="M3 12.2h3.6l2-5.4 3.2 10.8 2.2-7 1.6 3.4H21"/>',
+  heart:     '<path d="M12 20.5s-7.5-4.6-7.5-9.7A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 7.5 2.8c0 5.1-7.5 9.7-7.5 9.7z"/>',
+  lungs:     '<path d="M12 3.5v9"/><path d="M12 9.5c-1.2-1-2.6-1.4-3.8-.5C6.6 10.1 5 13 5 16.2c0 2.5 1 4.3 2.7 4.3 1.6 0 2.6-1 3.1-2.6"/><path d="M12 9.5c1.2-1 2.6-1.4 3.8-.5C17.4 10.1 19 13 19 16.2c0 2.5-1 4.3-2.7 4.3-1.6 0-2.6-1-3.1-2.6"/>',
+  ovary:     '<circle cx="8.6" cy="14.2" r="4.4"/><circle cx="8.6" cy="14.2" r="1.5"/><path d="M11.6 11 19 3.6"/><path d="M15.4 3.6H19v3.6"/>',
+  thyroid:   '<path d="M7.6 8.2c-1 3.2.4 6.6 2.6 7.8 1.2.6 2.4.6 3.6 0 2.2-1.2 3.6-4.6 2.6-7.8"/><path d="M6.4 6.4h11.2"/><path d="M12 16.6v4"/>',
+  kidney:    '<path d="M9.6 3.8c2.6 0 4.4 2.2 4.4 5.2 0 2.4-1.2 3.4-1.2 5.4 0 2.4 1.8 3.2 1.8 5"/><path d="M9.6 3.8C6.4 3.8 4 7 4 11.4S6.4 20 9.6 20c1.8 0 3.2-1 4-2.6"/>',
+  liver:     '<path d="M4 8.4c3.4-2.6 9-3.4 13.4-2.2 2 .6 2.8 2 2.4 4-.6 3.2-3 6.8-6.4 8.4-2.6 1.2-5 .4-6.8-1.6C4.6 14.8 3.6 11.4 4 8.4z"/><path d="M9.4 6.6c.6 3.4 1.6 6.6 3.4 9.4"/>',
+  spine:     '<path d="M12 3v18"/><path d="M8.8 5.4h6.4"/><path d="M8.8 9.2h6.4"/><path d="M8.8 13h6.4"/><path d="M8.8 16.8h6.4"/>',
+  joint:     '<circle cx="7.4" cy="7.4" r="3"/><circle cx="16.6" cy="16.6" r="3"/><path d="M9.5 9.5l5 5"/>',
+  bone:      '<path d="M6.4 17.6 17 7"/><circle cx="4.9" cy="19.1" r="2.1"/><circle cx="7.4" cy="20" r="2.1"/><circle cx="19.1" cy="4.9" r="2.1"/><circle cx="16.6" cy="4" r="2.1"/>',
+  stomach:   '<path d="M8.6 3.6v5.2c0 2 1.2 3 2.8 3.4 3 .8 5.2 2.4 5.2 5 0 2.6-2.2 4.4-5 4.4-2.6 0-4.6-1.4-5.2-3.6"/><path d="M6.6 3.6h4"/>',
+  toe:       '<path d="M6 20.4c-1-2.4-1.4-5-1.4-7.4C4.6 8 7.6 4 12 4s7.4 4 7.4 9c0 2.4-.4 5-1.4 7.4z"/><circle cx="16.4" cy="8.6" r="1.6"/>',
+  bolt:      '<path d="M13.4 2.6 5.6 13.4h5.2l-1.2 8 7.8-10.8h-5.2z"/>',
+  pregnant:  '<circle cx="11.4" cy="4.4" r="2.4"/><path d="M11.4 8c-1.8 0-3 1.4-3 3.4V21"/><path d="M11.4 10.4c2.6 0 4.6 1.8 4.6 4.2s-2 4.2-4.6 4.2"/>',
+  baby:      '<path d="M7.4 9.6h9.2c0 4.6-2 8.4-4.6 8.4S7.4 14.2 7.4 9.6z"/><path d="M12 9.6V6.4a2.6 2.6 0 0 1 2.6-2.6"/><path d="M9 21h6"/>',
+  seedling:  '<path d="M12 20.4v-7"/><path d="M12 13.4c0-3-2.2-5.4-5.2-5.4 0 3 2.2 5.4 5.2 5.4z"/><path d="M12 13.4c0-3.4 2.4-6 5.6-6 0 3.4-2.4 6-5.6 6z"/>',
+  star:      '<path d="m12 3.6 2.6 5.3 5.9.9-4.2 4.1 1 5.8-5.3-2.8-5.3 2.8 1-5.8L3.5 9.8l5.9-.9z"/>',
+  moon:      '<path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/>',
+  warning:   '<path d="M12 3.6 21.4 20H2.6L12 3.6z"/><line x1="12" y1="9.6" x2="12" y2="14.2"/><line x1="12" y1="16.8" x2="12" y2="16.82"/>',
+  pill:      '<rect x="3.2" y="9" width="17.6" height="6" rx="3" transform="rotate(-38 12 12)"/><line x1="12" y1="8" x2="12" y2="16" transform="rotate(-38 12 12)"/>',
+  check:     '<polyline points="4.5 12.6 9.6 17.4 19.5 6.8"/>',
+  trash:     '<path d="M4.6 6.6h14.8"/><path d="M9.2 6.6V4.8h5.6v1.8"/><path d="M6.4 6.6 7.3 20h9.4l.9-13.4"/><line x1="10.2" y1="10" x2="10.5" y2="16.8"/><line x1="13.8" y1="10" x2="13.5" y2="16.8"/>',
+  save:      '<path d="M5 4.5h11L19.5 8v11a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5z"/><path d="M8 4.5v5h7v-5"/><rect x="8" y="13" width="8" height="6.5"/>',
+  gift:      '<rect x="3.4" y="8.4" width="17.2" height="4.2" rx="1"/><path d="M5 12.6V20h14v-7.4"/><line x1="12" y1="8.4" x2="12" y2="20"/><path d="M12 8.4C10.8 5.6 9.4 4 7.8 4a2.2 2.2 0 0 0 0 4.4z"/><path d="M12 8.4C13.2 5.6 14.6 4 16.2 4a2.2 2.2 0 0 1 0 4.4z"/>',
+  graduate:  '<path d="M2.6 8.8 12 4.6l9.4 4.2L12 13z"/><path d="M6.6 10.6v4.6c0 1.6 2.4 2.8 5.4 2.8s5.4-1.2 5.4-2.8v-4.6"/><line x1="21.4" y1="8.8" x2="21.4" y2="14"/>',
+  refresh:   '<path d="M4.2 11.4a7.8 7.8 0 0 1 13.2-4.6l2.4 2.2"/><path d="M19.8 12.6a7.8 7.8 0 0 1-13.2 4.6L4.2 15"/><path d="M20 5.2v4h-4"/><path d="M4 18.8v-4h4"/>',
+  down:      '<line x1="12" y1="4.5" x2="12" y2="18"/><polyline points="6.5 12.5 12 18.5 17.5 12.5"/>',
+  /* ===== الوجبات وأقسام التمرين وتصنيفات الأكل ===== */
+  sunrise:   '<circle cx="12" cy="14.6" r="3.6"/><path d="M12 6.6V3.4"/><path d="M5.6 8.2 3.9 6.5"/><path d="M18.4 8.2l1.7-1.7"/><path d="M2.6 18.8h18.8"/>',
+  plate:     '<circle cx="12" cy="12" r="7.6"/><circle cx="12" cy="12" r="3.4"/>',
+  cup:       '<path d="M6.4 6.4h11.2l-1 13.2H7.4z"/><path d="M6.4 10.4h11.2"/>',
+  flame:     '<path d="M12 21c3.6 0 6.2-2.4 6.2-5.8 0-4.2-4-5.6-3.4-10.2-2.2.9-4.4 3-4.4 5.6 0 1.4-.9 2.2-1.8 1.4-.6-.5-.9-1.4-.9-2.2-1.2 1.4-2 3.3-2 5.4C5.7 18.6 8.4 21 12 21z"/>',
+  run:       '<circle cx="14.6" cy="4.8" r="2.1"/><path d="M8 21l2.8-5.2-2.4-2.8.9-4.6 3.9-1.4 3 2.7 3.2.9"/><path d="M10.8 15.8 15 17l1.6 4"/><path d="M8.6 9.6 5 10.8"/>',
+  yoga:      '<circle cx="12" cy="4.6" r="2.1"/><path d="M12 8v5"/><path d="M4.6 10.4 12 13l7.4-2.6"/><path d="M12 13 8 20"/><path d="M12 13l4 7"/>',
+  meat:      '<path d="M8.8 4.2c3.6 0 6.6 2.8 6.6 6.4 0 2.6-1.6 4.2-1.6 6.2 0 1.6 1 2.4 1 3.6"/><path d="M8.8 4.2C5.4 4.2 3 7.2 3 11.2s2.4 7.2 5.8 7.2c1.8 0 3.2-1 4-2.4"/>',
+  bowl:      '<path d="M3.4 11.4h17.2c0 4.6-3.8 8.2-8.6 8.2S3.4 16 3.4 11.4z"/><path d="M8.4 8.4c0-1.6 1.6-2 1.6-3.4M12 8.4c0-1.6 1.6-2 1.6-3.4M15.6 8.4c0-1.6 1.6-2 1.6-3.4"/>',
+  milk:      '<path d="M9 3h6v3.4l2 3.4V21H7V9.8l2-3.4z"/><path d="M7 12.6h10"/>',
+  apple:     '<path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"/><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"/>',
+  salad:     '<path d="M3.6 12.6h16.8c0 4.2-3.8 7.4-8.4 7.4S3.6 16.8 3.6 12.6z"/><circle cx="9" cy="8.6" r="2.4"/><circle cx="14.4" cy="9.4" r="2"/>',
+  nut:       '<path d="M12 3.6c4 0 7 3.4 7 7.6S16 20 12 20s-7-4.6-7-8.8 3-7.6 7-7.6z"/><path d="M12 5.6v13"/><path d="M8.4 9.2c1.6 1.2 2.6 2.6 3.6 4.4M15.6 9.2c-1.6 1.2-2.6 2.6-3.6 4.4"/>',
+  target:    '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.2"/>',
+  trophy:    '<path d="M7.6 4h8.8v4.6c0 2.6-2 4.6-4.4 4.6S7.6 11.2 7.6 8.6z"/><path d="M7.6 5.4H4.8v1.4c0 1.8 1.2 3 2.8 3.2M16.4 5.4h2.8v1.4c0 1.8-1.2 3-2.8 3.2"/><path d="M12 13.2V17"/><path d="M8.4 20h7.2"/>',
+  phone:     '<path d="M6.2 3.6h3l1.6 4-2 1.6a12.4 12.4 0 0 0 6 6l1.6-2 4 1.6v3a2 2 0 0 1-2.2 2C10.6 19.4 4.6 13.4 4.2 5.8a2 2 0 0 1 2-2.2z"/>',
+  close:     '<line x1="6.2" y1="6.2" x2="17.8" y2="17.8"/><line x1="17.8" y1="6.2" x2="6.2" y2="17.8"/>',
+  ban:       '<circle cx="12" cy="12" r="8.4"/><line x1="6.1" y1="17.9" x2="17.9" y2="6.1"/>',
+  doctor_kit: '<path d="M8 3v5.4a4 4 0 0 0 8 0V3"/><path d="M6.2 3h2.4M15.4 3h2.4"/><path d="M12 12.4v2.3a4.3 4.3 0 0 0 8.6 0v-1"/><circle cx="20.6" cy="9.6" r="2.2"/>',
+  brain:      '<path d="M9 4.5c-2 0-3.5 1.5-3.5 3.3 0 .6.2 1.1.4 1.6-1 .5-1.7 1.6-1.7 2.8 0 1 .5 1.9 1.3 2.4-.2.4-.3.9-.3 1.4 0 2 1.7 3.5 3.7 3.3"/><path d="M9 4.5c0-1.3 1.1-2.5 2.5-2.5S14 3.2 14 4.5"/><path d="M15 4.5c2 0 3.5 1.5 3.5 3.3 0 .6-.2 1.1-.4 1.6 1 .5 1.7 1.6 1.7 2.8 0 1-.5 1.9-1.3 2.4.2.4.3.9.3 1.4 0 2-1.7 3.5-3.7 3.3"/><line x1="12" y1="4.5" x2="12" y2="19.5"/>'
 };
 
 function iconSvg(key, cls) {
@@ -7436,7 +7734,7 @@ function renderHomeSummary() {
   if (!homeCards) return;
 
   if (homeHello) {
-    const name = (currentClientName || '').split(' ')[0];
+    const name = (clientName || '').split(' ')[0];
     homeHello.textContent = name ? fill('home_hello_named', { name: name }) : t('home_hello');
   }
 
@@ -7723,6 +8021,8 @@ async function loadClient(email) {
 
     clientSport = (meDoc.exists() && meDoc.data().sport) ? meDoc.data().sport : '';
     clientName = (meDoc.exists() && meDoc.data().name) ? meDoc.data().name : '';
+    // بيانات العميل الأساسية — الرئيسية والمساعد الذكي بيقروا منها
+    clientRecord = meDoc.exists() ? meDoc.data() : null;
     clientActivity = (activityDoc.exists() && Array.isArray(activityDoc.data().entries))
       ? activityDoc.data().entries : [];
 
@@ -7761,6 +8061,8 @@ async function loadClient(email) {
 
     await loadFoodLog(email);
     await loadClientHealth(email);
+    // إعدادات المساعد الذكي — العميل محتاجها عشان يعرف مفعّل ولا لأ
+    fetchWelcomeSettings().catch(function () {});
 
     const hasRehab = rehabHasContent(clientRehab);
     const hasNutrition = nutritionHasContent(clientNutrition);
@@ -8986,7 +9288,8 @@ function showClientRehab() {
     if (phase.criteria) {
       const criteria = document.createElement('div');
       criteria.className = 'phase-goal';
-      criteria.textContent = '🎯 ' + phase.criteria;
+      criteria.appendChild(iconSvg('target', 'ui-icon'));
+    criteria.appendChild(document.createTextNode(' ' + phase.criteria));
       block.appendChild(criteria);
     }
 
@@ -9007,12 +9310,12 @@ function foodCategoryName(key) {
 
 // أيقونة احتياطية للأصناف اللي المدرب بيضيفها بنفسه (مالهاش أيقونة محفوظة)
 const FOOD_CATEGORY_ICONS = {
-  protein: '🍗', carb: '🍚', dairy: '🥛', fruit: '🍎', veg: '🥗',
-  fat: '🥜', dish: '🍲', drink: '🥤', supplement: '💊'
+  protein: 'meat', carb: 'bowl', dairy: 'milk', fruit: 'apple', veg: 'salad',
+  fat: 'nut', dish: 'bowl', drink: 'cup', supplement: 'pill'
 };
 
 function foodCategoryIcon(key) {
-  return FOOD_CATEGORY_ICONS[key] || '🍽️';
+  return FOOD_CATEGORY_ICONS[key] || 'plate';
 }
 
 function blankMeals() {
@@ -9244,7 +9547,7 @@ function fillMealPicker() {
   MEAL_KEYS.forEach(function (key) {
     const option = document.createElement('option');
     option.value = key;
-    option.textContent = MEAL_ICONS[key] + '  ' + mealName(key);
+    option.textContent = mealName(key);
     targetMeal.appendChild(option);
   });
   targetMeal.value = keep || 'breakfast';
@@ -9260,7 +9563,7 @@ function foodItemRow(item, list, index, editable, onChange) {
   if (source && (source.icon || source.cat)) {
     const icon = document.createElement('span');
     icon.className = 'meal-food-icon';
-    icon.textContent = source.icon || foodCategoryIcon(source.cat);
+    icon.appendChild(iconSvg(foodCategoryIcon(source.cat), 'ui-icon'));
     li.appendChild(icon);
   }
 
@@ -9374,11 +9677,103 @@ function showNutritionDays() {
   }, nutritionDescribe);
 }
 
+
+/* ============================================================
+   مكتبة برامج التغذية
+   المدرب كان بيبني أسبوع الأكل صنف صنف لكل عميل من الصفر. دلوقتي
+   بيختار برنامج قريب من حالته، بيتطبّق على الأسبوع كله في دوسة،
+   وبعدين يعدّل عليه. الأصناف بتتبني من مكتبة الأغذية وقت التطبيق،
+   فالقيم اللي بتتحفظ هي نفس قيم المكتبة مش أرقام محفوظة قديمة
+   ============================================================ */
+
+function nutProgramName(program) {
+  return program[lang] || program.ar || program.en || program.id;
+}
+
+function nutProgramDesc(program) {
+  const d = program.desc || {};
+  return d[lang] || d.ar || d.en || '';
+}
+
+/* بيحوّل نمط يوم في المكتبة لوجبات حقيقية بقيم من مكتبة الأغذية */
+function buildProgramDay(pattern) {
+  const day = { meals: blankMeals() };
+  MEAL_KEYS.forEach(function (mealKey) {
+    const list = (pattern && pattern[mealKey]) || [];
+    day.meals[mealKey] = list.map(function (row) {
+      const food = foodById(row.id);
+      // صنف مش موجود في المكتبة = بنعدّيه بدل ما نحفظ صفر ونضلّل المدرب
+      if (!food) return null;
+      return makeFoodItem(food, row.g);
+    }).filter(Boolean);
+  });
+  return day;
+}
+
+/* أنماط الأيام بتتوزّع على السبعة بالدور */
+function applyNutritionProgram(program) {
+  const patterns = program.days || [];
+  if (!patterns.length) return;
+  coachNutrition.targets = {
+    kcal: program.targets.kcal,
+    protein: program.targets.protein,
+    carbs: program.targets.carbs,
+    fat: program.targets.fat
+  };
+  for (let i = 0; i < 7; i++) {
+    coachNutrition.week[i] = buildProgramDay(patterns[i % patterns.length]);
+  }
+}
+
+function renderNutProgramLibrary() {
+  const grid = document.getElementById('nut-lib-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  NUTRITION_PROGRAMS.forEach(function (program) {
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'nutprog';
+    cell.setAttribute('data-id', program.id);
+
+    const name = document.createElement('strong');
+    name.className = 'np-name';
+    name.textContent = nutProgramName(program);
+    cell.appendChild(name);
+
+    const nums = document.createElement('span');
+    nums.className = 'np-nums';
+    nums.textContent = fill('np_numbers', {
+      kcal: program.targets.kcal,
+      protein: program.targets.protein
+    });
+    cell.appendChild(nums);
+
+    const desc = document.createElement('span');
+    desc.className = 'np-desc';
+    desc.textContent = nutProgramDesc(program);
+    cell.appendChild(desc);
+
+    cell.addEventListener('click', function () {
+      applyNutritionProgram(program);
+      showNutrition();
+      setStatusMessage(
+        document.getElementById('nut-lib-message'),
+        fill('np_applied', { name: nutProgramName(program) }),
+        'success'
+      );
+    });
+    grid.appendChild(cell);
+  });
+}
+
 function showNutrition() {
   tgKcal.value = coachNutrition.targets.kcal || '';
   tgProtein.value = coachNutrition.targets.protein || '';
   tgCarbs.value = coachNutrition.targets.carbs || '';
   tgFat.value = coachNutrition.targets.fat || '';
+
+  renderNutProgramLibrary();
 
   const day = coachNutrition.week[nutDay];
   renderTotals(nutTotalsBox, dayTotals(day), coachNutrition.targets);
@@ -9526,7 +9921,7 @@ function renderSuppList() {
 
     const icon = document.createElement('span');
     icon.className = 'supp-icon';
-    icon.textContent = item.icon || '💊';
+    icon.appendChild(iconSvg('pill', 'ui-icon'));
     head.appendChild(icon);
 
     const titleBox = document.createElement('div');
@@ -9615,7 +10010,7 @@ function renderSuppPlanInto(listEl, plan, editable) {
 
     const icon = document.createElement('span');
     icon.className = 'supp-icon';
-    icon.textContent = (source && source.icon) || '💊';
+    icon.appendChild(iconSvg('pill', 'ui-icon'));
     li.appendChild(icon);
 
     const info = document.createElement('div');
@@ -9677,7 +10072,7 @@ function renderSuppPlanInto(listEl, plan, editable) {
       const del = document.createElement('button');
       del.type = 'button';
       del.className = 'secondary supp-del-btn';
-      del.textContent = '✕';
+      del.appendChild(iconSvg('close', 'ui-icon'));
       del.title = t('remove');
       del.addEventListener('click', function () {
         plan.splice(index, 1);
@@ -9805,7 +10200,7 @@ function renderFoodList() {
       iconBtn.type = 'button';
       iconBtn.className = 'food-photo-btn food-icon-btn';
       iconBtn.title = t('add_photo_short');
-      iconBtn.textContent = food.icon || foodCategoryIcon(food.cat);
+      iconBtn.appendChild(iconSvg(foodCategoryIcon(food.cat), 'ui-icon'));
       iconBtn.addEventListener('click', function (event) {
         event.stopPropagation();
         pickLibraryImage(foodImageKey);
@@ -10236,7 +10631,7 @@ function renderPickerList() {
 
     const icon = document.createElement('span');
     icon.className = 'meal-food-icon';
-    icon.textContent = food.icon || foodCategoryIcon(food.cat);
+    icon.appendChild(iconSvg(foodCategoryIcon(food.cat), 'ui-icon'));
     li.appendChild(icon);
 
     const info = document.createElement('div');
@@ -10401,7 +10796,7 @@ function loggedFoodRow(item, opts) {
   const source = item.foodId ? foodById(item.foodId) : null;
   const icon = document.createElement('span');
   icon.className = 'meal-food-icon';
-  icon.textContent = (source && (source.icon || foodCategoryIcon(source.cat))) || '🍽';
+  icon.appendChild(iconSvg(source ? foodCategoryIcon(source.cat) : 'plate', 'ui-icon'));
   li.appendChild(icon);
 
   const info = document.createElement('div');
@@ -11143,7 +11538,9 @@ function renderBoards(meEmail) {
 
       const badge = document.createElement('span');
       badge.className = 'rank-badge' + (done ? ' top' : '');
-      badge.textContent = done ? '✓' : '·';
+      badge.innerHTML = '';
+    if (done) badge.appendChild(iconSvg('check', 'ui-icon'));
+    else badge.textContent = '·';
       item.appendChild(badge);
 
       const name = document.createElement('span');
@@ -11525,7 +11922,9 @@ function renderBoardsInto(todayUl, weekUl, cls, meEmail) {
 
     const badge = document.createElement('span');
     badge.className = 'rank-badge' + (done ? ' top' : '');
-    badge.textContent = done ? '✓' : '·';
+    badge.innerHTML = '';
+    if (done) badge.appendChild(iconSvg('check', 'ui-icon'));
+    else badge.textContent = '·';
     item.appendChild(badge);
 
     const name = document.createElement('span');
@@ -11679,6 +12078,7 @@ function refreshAll() {
     renderReferrerRow();
   }
   if (!clientsScreen.classList.contains('hidden')) loadClients();
+  if (!adminPanelScreen.classList.contains('hidden')) renderAdminTabs();
   /*
    * اللوحة مبنية بالجافاسكريبت، فلازم تترسم تاني مع تبديل اللغة —
    * من الذاكرة من غير ما نقرا فايرستور تاني
@@ -11794,7 +12194,8 @@ function renderMyLibraryAccess() {
     const open = libraryOpen(key);
     const chip = document.createElement('span');
     chip.className = 'specialty-chip' + (open ? '' : ' specialty-chip-off');
-    chip.textContent = (open ? '✓ ' : '🔒 ') + libraryLabel(key);
+    chip.appendChild(iconSvg(open ? 'check' : 'lock', 'ui-icon'));
+    chip.appendChild(document.createTextNode(' ' + libraryLabel(key)));
     list.appendChild(chip);
   });
 }
@@ -11891,14 +12292,24 @@ async function decidePendingSpecialty(provider, key, approve, messageEl) {
   }
 }
 
+/*
+ * مستندات المتخصصين مفتاحها هو الإيميل. في مستندات قديمة اتعملت من
+ * غير حقل email جواها (من touchProviderActivity زمان)، والكود اللي
+ * بيقرا provider.email كان بيطلع undefined ويكسّر الشاشة أو يكتب في
+ * مستند اسمه "undefined". الدالة دي هي الباب الوحيد لقراءتهم
+ */
+function providerFromDoc(item) {
+  const data = Object.assign({ id: item.id }, item.data());
+  if (!data.email) data.email = item.id;
+  return data;
+}
+
 async function loadProviders() {
   providersList.innerHTML = '';
   providersMessage.textContent = t('loading');
   try {
     const snapshot = await getDocs(collection(db, 'providers'));
-    providers = snapshot.docs.map(function (item) {
-      return Object.assign({ id: item.id }, item.data());
-    });
+    providers = snapshot.docs.map(providerFromDoc);
 
     // بنحسب هنا عدد المتدربين الفعلي لكل متخصص (من مجموعة العملاء
     // كاملة) ونخزنه في مستند المتخصص نفسه كـ clientsCount — عشان شاشة
@@ -12018,7 +12429,8 @@ async function loadProviders() {
 
             const label = document.createElement('span');
             label.className = 'pending-name';
-            label.textContent = specialtyIcon(key) + ' ' + specialtyName(key, lang);
+            label.innerHTML = specialtyIconSvg(key);
+            label.appendChild(document.createTextNode(' ' + specialtyName(key, lang)));
             row.appendChild(label);
 
             const okBtn = document.createElement('button');
@@ -12067,7 +12479,8 @@ async function loadProviders() {
           chip.type = 'button';
           const open = libraryOpenFor(provider, key);
           chip.className = 'secondary lib-chip' + (open ? ' lib-chip-on' : ' lib-chip-off');
-          chip.textContent = (open ? '✓ ' : '🔒 ') + libraryLabel(key);
+          chip.appendChild(iconSvg(open ? 'check' : 'lock', 'ui-icon'));
+          chip.appendChild(document.createTextNode(' ' + libraryLabel(key)));
           chip.addEventListener('click', async function () {
             const access = Object.assign({}, provider.libraryAccess || {});
             access[key] = !libraryOpenFor(provider, key);
@@ -12077,7 +12490,9 @@ async function loadProviders() {
               provider.libraryAccess = access;
               const nowOpen = access[key] !== false;
               chip.className = 'secondary lib-chip' + (nowOpen ? ' lib-chip-on' : ' lib-chip-off');
-              chip.textContent = (nowOpen ? '✓ ' : '🔒 ') + libraryLabel(key);
+              chip.innerHTML = '';
+              chip.appendChild(iconSvg(nowOpen ? 'check' : 'lock', 'ui-icon'));
+              chip.appendChild(document.createTextNode(' ' + libraryLabel(key)));
               setStatusMessage(rowMsg, fill(nowOpen ? 'lib_opened_msg' : 'lib_closed_msg', {
                 lib: libraryLabel(key), name: provider.name || provider.email
               }), 'success');
@@ -12124,11 +12539,92 @@ async function loadProviders() {
         });
       }
 
+      // التفاصيل الكاملة بتفضل مبنية زي ما هي، بس مخفية لحد ما
+      // صاحب المنصة يدوس على مربع المتخصص
+      item.classList.add('prov-detail', 'hidden');
+      item.setAttribute('data-email', provider.email);
       providersList.appendChild(item);
     });
+
+    renderProviderGrid();
   } catch (error) {
     providersMessage.textContent = t('problem') + error.message;
   }
+}
+
+/* ============================================================
+   المتخصصين كمربعات
+   كل متخصص كان كارت طويل فيه أرقامه وتخصصاته ومكتباته وصلاحياته،
+   فصاحب المنصة بينزل كتير عشان يوصل لواحد. دلوقتي مربعات جمب بعض
+   وصورة/حروف كل واحد، واللي تدوس عليه بيفتحلك كارته كامل تحت
+   ============================================================ */
+
+let openProviderEmail = '';
+
+function renderProviderGrid() {
+  const grid = document.getElementById('providers-grid');
+  const search = document.getElementById('providers-search');
+  if (!grid) return;
+
+  const term = ((search && search.value) || '').trim().toLowerCase();
+  const shown = providers.filter(function (provider) {
+    if (!term) return true;
+    return String(provider.name || '').toLowerCase().indexOf(term) !== -1
+      || String(provider.email || '').toLowerCase().indexOf(term) !== -1;
+  });
+
+  grid.innerHTML = '';
+  shown.forEach(function (provider) {
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'prov-cell' + (openProviderEmail === provider.email ? ' on' : '');
+    cell.setAttribute('data-email', provider.email);
+    cell.appendChild(providerAvatar(provider));
+
+    const name = document.createElement('span');
+    name.className = 'pc-name';
+    name.textContent = providerShortName(provider);
+    cell.appendChild(name);
+
+    const specs = providerSpecialties(provider);
+    const spec = document.createElement('span');
+    spec.className = 'pc-spec';
+    // مستند من غير تخصص = مستند ناقص. بنقولها صريح بدل خانة فاضية
+    spec.textContent = specs.length ? specialtyName(specs[0], lang) : t('no_specialty');
+    cell.appendChild(spec);
+
+    const n = Number(provider.clientsCount) || 0;
+    const count = document.createElement('span');
+    count.className = 'pc-count';
+    count.textContent = fill('pc_clients_n', { n: n });
+    cell.appendChild(count);
+
+    cell.addEventListener('click', function () {
+      openProviderEmail = (openProviderEmail === provider.email) ? '' : provider.email;
+      paintProviderDetails();
+      renderProviderGrid();
+      if (openProviderEmail) {
+        const row = providersList.querySelector('.prov-detail[data-email="' + provider.email + '"]');
+        if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+    grid.appendChild(cell);
+  });
+
+  if (!shown.length) {
+    const empty = document.createElement('p');
+    empty.className = 'empty';
+    empty.textContent = t('no_search_results');
+    grid.appendChild(empty);
+  }
+
+  paintProviderDetails();
+}
+
+function paintProviderDetails() {
+  providersList.querySelectorAll('.prov-detail').forEach(function (row) {
+    row.classList.toggle('hidden', row.getAttribute('data-email') !== openProviderEmail);
+  });
 }
 
 document.getElementById('open-providers-btn').addEventListener('click', function () {
@@ -12136,6 +12632,9 @@ document.getElementById('open-providers-btn').addEventListener('click', function
   fillSpecialtySelect();
   loadProviders();
 });
+
+const providersSearchInput = document.getElementById('providers-search');
+if (providersSearchInput) providersSearchInput.addEventListener('input', renderProviderGrid);
 
 document.getElementById('quick-add-coach-btn').addEventListener('click', function () {
   showScreen(providersScreen);
@@ -12763,10 +13262,10 @@ function createDeck(options) {
 /* ---------- "ده مناسب لمين؟" — كروت بتتقلب ---------- */
 
 const AUDIENCE_CARDS = [
-  { key: 1, icon: '🩹', c: '#f97316' },
-  { key: 2, icon: '🏋️', c: '#22c55e' },
-  { key: 3, icon: '🏆', c: '#a78bfa' },
-  { key: 4, icon: '🥗', c: '#38bdf8' }
+  { key: 1, icon: 'rehab', c: '#f97316' },
+  { key: 2, icon: 'training', c: '#22c55e' },
+  { key: 3, icon: 'trophy', c: '#a78bfa' },
+  { key: 4, icon: 'salad', c: '#38bdf8' }
 ];
 
 function renderAudienceDeck() {
@@ -12777,7 +13276,7 @@ function renderAudienceDeck() {
     items: AUDIENCE_CARDS,
     render: function (item) {
       return '<div class="aud-icon" style="background:' + item.c + '22;color:' + item.c + '">'
-        + item.icon + '</div>'
+        + iconSvg(item.icon, 'ui-icon').outerHTML + '</div>'
         + '<div class="aud-text">' + t('welcome_audience_' + item.key) + '</div>';
     }
   });
@@ -13029,32 +13528,32 @@ fillLeadInterestSelect();
 /* شاشة الموبايل اللي في الهيرو — بتلف على ٣ أمثلة حقيقية من التطبيق */
 const HERO_SLIDES = [
   {
-    icon: '🏋️', key: 'training', pillar: 'training', color: '#22c55e', tagKey: 'role_coach',
+    icon: 'training', key: 'training', pillar: 'training', color: '#22c55e', tagKey: 'role_coach',
     titleKey: 'hero_slide1_title', subKey: 'hero_slide1_sub',
     rowsKey: 'hero_slide1_rows', footKey: 'hero_slide1_foot', pct: 60
   },
   {
-    icon: '💪', key: 'rehab', pillar: 'rehab', color: '#f97316', tagKey: 'role_rehab',
+    icon: 'rehab', key: 'rehab', pillar: 'rehab', color: '#f97316', tagKey: 'role_rehab',
     titleKey: 'hero_slide2_title', subKey: 'hero_slide2_sub',
     rowsKey: 'hero_slide2_rows', footKey: 'hero_slide2_foot', pct: 40
   },
   {
-    icon: '🍎', key: 'nutrition', pillar: 'nutrition', color: '#38bdf8', tagKey: 'role_nutrition',
+    icon: 'apple', key: 'nutrition', pillar: 'nutrition', color: '#38bdf8', tagKey: 'role_nutrition',
     titleKey: 'hero_slide3_title', subKey: 'hero_slide3_sub',
     rowsKey: 'hero_slide3_rows', footKey: 'hero_slide3_foot', pct: 75
   },
   {
-    icon: '🩺', key: 'medical', pillar: 'medical', color: '#a78bfa', tagKey: 'role_doctor',
+    icon: 'doctor_kit', key: 'medical', pillar: 'medical', color: '#a78bfa', tagKey: 'role_doctor',
     titleKey: 'hero_slide4_title', subKey: 'hero_slide4_sub',
     rowsKey: 'hero_slide4_rows', footKey: 'hero_slide4_foot', pct: 100
   },
   {
-    icon: '🧠', key: 'psych', pillar: 'medical', color: '#f472b6', tagKey: 'role_psych',
+    icon: 'brain', key: 'psych', pillar: 'medical', color: '#f472b6', tagKey: 'role_psych',
     titleKey: 'hero_slide5_title', subKey: 'hero_slide5_sub',
     rowsKey: 'hero_slide5_rows', footKey: 'hero_slide5_foot', pct: 55
   },
   {
-    icon: '📈', key: 'progress', pillar: 'training', color: '#fbbf24', tagKey: 'role_progress',
+    icon: 'progress', key: 'progress', pillar: 'training', color: '#fbbf24', tagKey: 'role_progress',
     titleKey: 'hero_slide6_title', subKey: 'hero_slide6_sub',
     rowsKey: 'hero_slide6_rows', footKey: 'hero_slide6_foot', pct: 85
   }
@@ -13261,7 +13760,7 @@ function renderHeroSlide() {
   const foot = document.getElementById('hp-foot');
   const fill = document.getElementById('hp-bar-fill');
 
-  if (avatar) avatar.textContent = slide.icon;
+  if (avatar) { avatar.innerHTML = ''; avatar.appendChild(iconSvg(slide.icon, 'ui-icon')); }
   if (name) name.textContent = t(slide.titleKey);
   if (sub) sub.textContent = t(slide.subKey);
   if (foot) foot.textContent = t(slide.footKey);
@@ -13301,7 +13800,8 @@ function renderHeroSlide() {
 
     const tick = document.createElement('span');
     tick.className = 'hp-tick';
-    tick.textContent = index < 3 ? '✓' : '';
+    tick.innerHTML = '';
+  if (index < 3) tick.appendChild(iconSvg('check', 'ui-icon'));
     row.appendChild(tick);
 
     const label = document.createElement('span');
@@ -13773,7 +14273,11 @@ function renderChoiceRows(container, keys, iconMap, labelFn, currentValue, onPic
 
     const icon = document.createElement('span');
     icon.className = 'choice-icon';
-    icon.innerHTML = iconMap[key];
+    // الخرايط القديمة بتحط SVG جاهز، والجديدة بتحط اسم أيقونة من UI_ICONS
+    const art = iconMap[key];
+    if (typeof art === 'string' && art.charAt(0) === '<') icon.innerHTML = art;
+    else if (UI_ICONS[art]) icon.appendChild(iconSvg(art, 'ui-icon'));
+    else icon.textContent = art;
     row.appendChild(icon);
 
     const label = document.createElement('span');
@@ -13938,10 +14442,10 @@ const MEALS_PER_DAY_ICONS = MEALS_PER_DAY_KEYS.reduce(function (map, key) {
 const SLEEP_QUALITY_KEYS = ['solid', 'broken', 'short', 'shifts'];
 
 const SLEEP_QUALITY_ICONS = {
-  solid:  '😴',
-  broken: '🌙',
-  short:  '⏱️',
-  shifts: '🔄'
+  solid:  'sleep_solid',
+  broken: 'sleep_broken',
+  short:  'sleep_short',
+  shifts: 'sleep_shifts'
 };
 
 function sleepQualityName(key) {
@@ -14393,7 +14897,9 @@ function attachPhoneValidation(codeSelect, input, hintEl, required) {
       return;
     }
     if (result.ok) {
-      hintEl.textContent = '✓ ' + (codeSelect ? codeSelect.value : '') + ' ' + result.digits;
+      hintEl.innerHTML = '';
+  hintEl.appendChild(iconSvg('check', 'ui-icon'));
+  hintEl.appendChild(document.createTextNode(' ' + (codeSelect ? codeSelect.value : '') + ' ' + result.digits));
       hintEl.className = 'phone-hint phone-hint-ok';
       input.classList.remove('field-error');
     } else {
@@ -14930,6 +15436,30 @@ async function loadHealthFor(email) {
 
 /* ---------- شاشة البيانات: اختيار الحالات ---------- */
 
+/* ============================================================
+   أيقونات الحالات الصحية
+   كانت إيموچي كيبورد: شكلها بيختلف من تليفون لتليفون، وبتبان
+   لعبة جنب كلام زي "سكري نوع ٢". بقت أيقونات خط زي باقي الموقع
+   ============================================================ */
+const HEALTH_ICON_KEYS = {
+  diabetes_t1: 'glucose', diabetes_t2: 'glucose', hypertension: 'pulse',
+  heart: 'heart', asthma: 'lungs', pcos: 'ovary', thyroid: 'thyroid',
+  kidney: 'kidney', liver: 'liver', disc: 'spine', arthritis: 'joint',
+  osteoporosis: 'bone', anemia: 'drop', ibs: 'stomach', gout: 'toe',
+  epilepsy: 'bolt', pregnancy: 'pregnant', postpartum: 'baby',
+  period: 'drop', follicular: 'seedling', ovulation: 'star', luteal: 'moon'
+};
+
+/* بنستعمل المفتاح لو عرفناه، وإلا بنرجع لأيقونة عامة */
+function healthIconEl(item, cls) {
+  const key = (item && (item.key || item.id)) || '';
+  return iconSvg(HEALTH_ICON_KEYS[key] || 'pulse', cls || 'ui-icon');
+}
+
+function healthIconHtml(item) {
+  return healthIconEl(item).outerHTML;
+}
+
 function renderHealthChips() {
   const box = document.getElementById('ob-health-chips');
   if (!box) return;
@@ -14945,7 +15475,7 @@ function renderHealthChips() {
 
     const icon = document.createElement('span');
     icon.className = 'hc-icon';
-    icon.textContent = item.icon;
+    icon.appendChild(healthIconEl(Object.assign({ key: key }, item)));
     chip.appendChild(icon);
 
     const label = document.createElement('span');
@@ -15060,7 +15590,9 @@ function renderCycleCard() {
 
   card.classList.remove('hidden');
   card.className = 'cycle-card phase-' + key;
-  document.getElementById('cyc-icon').textContent = phase.icon;
+  const cycIcon = document.getElementById('cyc-icon');
+  cycIcon.innerHTML = '';
+  cycIcon.appendChild(healthIconEl({ key: key }));
   document.getElementById('cyc-phase').textContent = phase[lang] || phase.ar;
   document.getElementById('cyc-day').textContent = fill('cycle_day_of', { n: day });
   document.getElementById('cyc-note').textContent = (phase.note && phase.note[lang]) || phase.note.ar;
@@ -15118,8 +15650,11 @@ function renderCycleBox() {
     const day = cycleDayOf({ track: obCycleTrack, lastPeriod: last.value, length: Number(len.value) || 28 });
     const key = cyclePhaseOf(day);
     if (day && CYCLE_PHASES[key]) {
-      now.textContent = CYCLE_PHASES[key].icon + ' ' + (CYCLE_PHASES[key][lang] || CYCLE_PHASES[key].ar)
-        + ' · ' + fill('cycle_day_of', { n: day });
+      now.innerHTML = '';
+      now.appendChild(healthIconEl({ key: key }));
+      now.appendChild(document.createTextNode(' '
+        + (CYCLE_PHASES[key][lang] || CYCLE_PHASES[key].ar)
+        + ' · ' + fill('cycle_day_of', { n: day })));
       now.classList.remove('hidden');
     } else {
       now.classList.add('hidden');
@@ -15158,9 +15693,9 @@ function canClearMedical() {
 }
 
 const CLEARANCE_STATES = {
-  cleared:    { tone: 'ok',   icon: '✅' },
-  restricted: { tone: 'warn', icon: '⚠️' },
-  denied:     { tone: 'bad',  icon: '⛔' }
+  cleared:    { tone: 'ok',   icon: 'check' },
+  restricted: { tone: 'warn', icon: 'warning' },
+  denied:     { tone: 'bad',  icon: 'ban' }
 };
 
 let clearanceRows = [];
@@ -15259,9 +15794,10 @@ function clearanceCard(row) {
     items.forEach(function (h) {
       const chip = document.createElement('span');
       chip.className = 'ch-pill';
-      let label = h.icon + ' ' + healthName(h);
+      let label = healthName(h);
       if (h.key === 'pregnancy' && h.week) label += ' · ' + fill('preg_week_of', { n: h.week });
-      chip.textContent = label;
+      chip.appendChild(healthIconEl(h));
+      chip.appendChild(document.createTextNode(' ' + label));
       conds.appendChild(chip);
     });
     item.appendChild(conds);
@@ -15379,6 +15915,7 @@ function refreshClearanceBadge() {
   const n = clearanceRows.filter(clearanceIsPending).length;
   badge.textContent = n;
   badge.classList.toggle('hidden', !n);
+  renderCoachTiles();
 }
 
 document.getElementById('open-clearance-btn').addEventListener('click', function () {
@@ -15406,15 +15943,15 @@ document.getElementById('clearance-back-btn').addEventListener('click', function
 const SOURCE_KEYS = ['instagram', 'facebook', 'tiktok', 'whatsapp', 'youtube', 'google', 'friend', 'gym', 'other'];
 
 const SOURCE_ICONS = {
-  instagram: '📷',
-  facebook:  '👍',
-  tiktok:    '🎵',
-  whatsapp:  '💬',
-  youtube:   '▶️',
-  google:    '🔍',
-  friend:    '🤝',
-  gym:       '🏋️',
-  other:     '✨'
+  instagram: 'instagram',
+  facebook:  'facebook',
+  tiktok:    'tiktok',
+  whatsapp:  'whatsapp',
+  youtube:   'youtube',
+  google:    'search',
+  friend:    'friend',
+  gym:       'training',
+  other:     'sparkle'
 };
 
 function sourceName(key) {
@@ -15435,7 +15972,7 @@ function renderSourceRow() {
     chip.setAttribute('data-key', key);
     const icon = document.createElement('span');
     icon.className = 'src-chip-icon';
-    icon.textContent = SOURCE_ICONS[key] || '•';
+    icon.appendChild(iconSvg(SOURCE_ICONS[key] || 'sparkle', 'ui-icon'));
     const label = document.createElement('span');
     label.textContent = sourceName(key);
     chip.appendChild(icon);
@@ -15457,12 +15994,7 @@ async function loadReferrerOptions() {
   if (refProviders.length) return refProviders;
   try {
     const snapshot = await getDocs(collection(db, 'providers'));
-    refProviders = snapshot.docs.map(function (item) {
-      // الـ id هو الإيميل، فلو المستند مالوش حقل email نستعمله
-      const data = Object.assign({ id: item.id }, item.data());
-      if (!data.email) data.email = item.id;
-      return data;
-    });
+    refProviders = snapshot.docs.map(providerFromDoc);
   } catch (error) {
     refProviders = [];
   }
@@ -15526,14 +16058,14 @@ function renderCoachBasics() {
   if (!data) { coachBasics.classList.add('hidden'); return; }
   const bits = [];
   if (data.trainingDaysPref) {
-    bits.push({ icon: '📅', label: t('cb_days'), value: trainingDaysName(String(data.trainingDaysPref)) });
+    bits.push({ icon: 'classes', label: t('cb_days'), value: trainingDaysName(String(data.trainingDaysPref)) });
   }
   if (data.mealsPerDay) {
-    bits.push({ icon: '🍽️', label: t('cb_meals'), value: mealsPerDayName(String(data.mealsPerDay)) });
+    bits.push({ icon: 'nutrition', label: t('cb_meals'), value: mealsPerDayName(String(data.mealsPerDay)) });
   }
   if (data.heardFrom) {
     bits.push({
-      icon: SOURCE_ICONS[data.heardFrom] || '✨',
+      icon: SOURCE_ICONS[data.heardFrom] || 'sparkle',
       label: t('heard_from_label'),
       value: data.heardFrom === 'other' && data.heardFromNote
         ? data.heardFromNote
@@ -15542,7 +16074,7 @@ function renderCoachBasics() {
   }
   if (data.sleepQuality) {
     bits.push({
-      icon: SLEEP_QUALITY_ICONS[data.sleepQuality] || '😴',
+      icon: SLEEP_QUALITY_ICONS[data.sleepQuality] || 'sleep_solid',
       label: t('cb_sleep'),
       value: sleepQualityName(data.sleepQuality),
       warn: data.sleepQuality !== 'solid'
@@ -15556,7 +16088,7 @@ function renderCoachBasics() {
     box.className = 'cbasic' + (bit.warn ? ' warn' : '');
     const icon = document.createElement('span');
     icon.className = 'cbasic-icon';
-    icon.textContent = bit.icon;
+    icon.appendChild(iconSvg(bit.icon, 'ui-icon'));
     const text = document.createElement('div');
     const label = document.createElement('span');
     label.className = 'cbasic-label';
@@ -15586,11 +16118,12 @@ function renderCoachHealth() {
   items.forEach(function (item) {
     const pill = document.createElement('span');
     pill.className = 'ch-pill';
-    let label = item.icon + ' ' + healthName(item);
+    let label = healthName(item);
     if (item.key === 'pregnancy' && item.week) {
       label += ' · ' + fill('preg_week_of', { n: item.week });
     }
-    pill.textContent = label;
+    pill.appendChild(healthIconEl(item));
+    pill.appendChild(document.createTextNode(' ' + label));
     names.appendChild(pill);
   });
 
@@ -15602,7 +16135,9 @@ function renderCoachHealth() {
     if (day && phase) {
       const pill = document.createElement('span');
       pill.className = 'ch-pill cyc';
-      pill.textContent = phase.icon + ' ' + (phase[lang] || phase.ar) + ' · ' + fill('cycle_day_of', { n: day });
+      pill.appendChild(healthIconEl({ key: key }));
+      pill.appendChild(document.createTextNode(' ' + (phase[lang] || phase.ar)
+        + ' · ' + fill('cycle_day_of', { n: day })));
       names.appendChild(pill);
     }
   }
@@ -15779,7 +16314,7 @@ function renderSafetySheet() {
       head.className = 'si-head';
       const icon = document.createElement('span');
       icon.className = 'si-icon';
-      icon.textContent = phase.icon;
+      icon.appendChild(healthIconEl({ key: key }));
       head.appendChild(icon);
       const name = document.createElement('span');
       name.textContent = (phase[lang] || phase.ar) + ' · ' + fill('cycle_day_of', { n: day });
@@ -15803,7 +16338,7 @@ function renderSafetySheet() {
     head.className = 'si-head';
     const icon = document.createElement('span');
     icon.className = 'si-icon';
-    icon.textContent = item.icon;
+    icon.appendChild(healthIconEl(item));
     head.appendChild(icon);
     const name = document.createElement('span');
     name.textContent = healthName(item);
@@ -16258,6 +16793,84 @@ function openChatThread(email, returnScreen) {
   startChatListener(email);
 }
 
+
+/* ============================================================
+   المساعد الذكي — الطريق المجاني
+   بدل Cloud Functions (اللي محتاجة خطة Blaze مدفوعة)، الرسالة
+   بتروح لـ Google Apps Script وهو اللي بيكلّم Gemini بحصته
+   المجانية ويرجّع الرد. والتأمين هنا مش بكلمة سر مشتركة: بنبعت
+   توكن دخول العميل من فايربيز، وApps Script بيسأل فايربيز نفسها
+   هو بتاع مين قبل ما يرد — فحد تاني ما يقدرش يستهلك الحصة
+   ============================================================ */
+
+let aiReplyPending = false;
+
+function aiChatEnabled() {
+  return !!(welcomeSettings && welcomeSettings.url && welcomeSettings.aiEnabled);
+}
+
+/* شوية سطور عن العميل عشان الرد يبقى ليه هو مش رد عام */
+function aiClientContext() {
+  const data = clientRecord || null;
+  return {
+    name: (clientName || '').split(' ')[0] || '',
+    goal: (data && data.goal) ? goalName(data.goal) : '',
+    sport: (data && data.sport) ? sportName(data.sport) : '',
+    trainingDays: (data && data.trainingDaysPref) || ''
+  };
+}
+
+async function requestAiReply(text) {
+  if (!aiChatEnabled() || aiReplyPending) return;
+  if (chatViewerIsCoach()) return;          /* الرد للعميل بس */
+  const conf = welcomeSettings;
+
+  aiReplyPending = true;
+  const typing = document.getElementById('chat-typing');
+  if (typing) typing.classList.remove('hidden');
+
+  try {
+    const user = auth.currentUser;
+    const idToken = user ? await user.getIdToken() : '';
+    if (!idToken) return;
+
+    const res = await fetch(conf.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'ai_chat',
+        idToken: idToken,
+        clientEmail: currentChatEmail,
+        text: text,
+        lang: lang,
+        context: aiClientContext()
+      })
+    });
+    const data = await res.json().catch(function () { return null; });
+    if (!data || !data.ok || !data.reply) return;
+
+    await addDoc(collection(db, 'chats', currentChatEmail, 'messages'), {
+      sender: 'ai',
+      text: data.reply,
+      createdAt: new Date().toISOString()
+    });
+    await setDoc(doc(db, 'chats', currentChatEmail), {
+      clientEmail: currentChatEmail,
+      lastMessage: data.reply,
+      lastMessageAt: new Date().toISOString(),
+      lastSender: 'ai'
+    }, { merge: true });
+  } catch (error) {
+    /*
+     * فشل الرد الذكي مش مشكلة يوقف الشات: رسالة العميل اتبعتت
+     * لمدربه فعلاً، والمدرب هيرد. فبنسكت بدل ما نخوّف العميل
+     */
+  } finally {
+    aiReplyPending = false;
+    if (typing) typing.classList.add('hidden');
+  }
+}
+
 async function sendChatMessage() {
   const text = chatInput.value.trim();
   if (!text || !currentChatEmail) return;
@@ -16278,6 +16891,7 @@ async function sendChatMessage() {
       lastMessageAt: new Date().toISOString(),
       lastSender: sender
     }, { merge: true });
+    requestAiReply(text);
   } catch (error) {
     chatMessage.textContent = t('problem') + error.message;
   }
@@ -16602,6 +17216,7 @@ const accessMessage = document.getElementById('access-message');
 
 document.getElementById('open-admin-panel-btn').addEventListener('click', function () {
   showScreen(adminPanelScreen);
+  renderAdminTabs();
   loadAdminPanel();
 });
 
@@ -16653,6 +17268,7 @@ async function refreshLeadsBadge() {
       adminLeadsBadge.textContent = pending;
       adminLeadsBadge.classList.remove('hidden');
     }
+    renderCoachTiles();
   } catch (error) {
     // مش مشكلة لو فشل العداد — اللوحة نفسها بتعرض الرسايل عادي
   }
@@ -16806,6 +17422,7 @@ async function loadAdminPanel() {
   document.getElementById('settings-welcome-url').value = (welcomeSettings && welcomeSettings.url) || '';
   document.getElementById('settings-welcome-secret').value = (welcomeSettings && welcomeSettings.secret) || '';
   document.getElementById('settings-welcome-on').checked = !!(welcomeSettings && welcomeSettings.enabled);
+  document.getElementById('settings-ai-on').checked = !!(welcomeSettings && welcomeSettings.aiEnabled);
   document.getElementById('welcome-mail-message').textContent = '';
 
   await renderAdminPlansList();
@@ -16893,7 +17510,8 @@ document.getElementById('save-welcome-btn').addEventListener('click', async func
     const payload = {
       url: document.getElementById('settings-welcome-url').value.trim(),
       secret: document.getElementById('settings-welcome-secret').value.trim(),
-      enabled: document.getElementById('settings-welcome-on').checked
+      enabled: document.getElementById('settings-welcome-on').checked,
+      aiEnabled: document.getElementById('settings-ai-on').checked
     };
     await setDoc(doc(db, 'settings', 'welcome'), payload, { merge: true });
     welcomeSettings = payload;
@@ -17955,9 +18573,7 @@ async function loadTeamPicker(prefillTeam) {
 
   try {
     const snapshot = await getDocs(collection(db, 'providers'));
-    teamProviders = snapshot.docs.map(function (item) {
-      return Object.assign({ id: item.id }, item.data());
-    });
+    teamProviders = snapshot.docs.map(providerFromDoc);
 
     await fetchAllProviderReviews();
 
@@ -18000,7 +18616,8 @@ function renderTeamPicker() {
     const heading = document.createElement('div');
     heading.className = 'team-spec-head';
     const title = document.createElement('h3');
-    title.textContent = specialtyIcon(specialty) + ' ' + specialtyName(specialty, lang);
+    title.innerHTML = specialtyIconSvg(specialty);
+    title.appendChild(document.createTextNode(' ' + specialtyName(specialty, lang)));
     heading.appendChild(title);
     const count = document.createElement('span');
     count.className = 'team-spec-count';
@@ -18042,7 +18659,9 @@ function renderTeamPicker() {
       if (stats.count) {
         const rating = document.createElement('span');
         rating.className = 'ap-rating';
-        rating.textContent = '★ ' + stats.avg.toFixed(1);
+        rating.innerHTML = '';
+    rating.appendChild(iconSvg('star', 'ui-icon'));
+    rating.appendChild(document.createTextNode(' ' + stats.avg.toFixed(1)));
         pick.appendChild(rating);
       }
 
@@ -18088,7 +18707,8 @@ function renderTeamSelection() {
     if (!provider) return;
     const chip = document.createElement('span');
     chip.className = 'tp-chip';
-    chip.textContent = specialtyIcon(key) + ' ' + providerShortName(provider);
+    chip.innerHTML = specialtyIconSvg(key);
+    chip.appendChild(document.createTextNode(' ' + providerShortName(provider)));
     row.appendChild(chip);
   });
   box.appendChild(row);
@@ -20651,7 +21271,8 @@ async function loadLeadsAdmin() {
       const tel = document.createElement('a');
       tel.href = 'tel:' + phone.replace(/\s/g, '');
       tel.className = 'lead-link';
-      tel.textContent = '📞 ' + phone;
+      tel.appendChild(iconSvg('phone', 'ui-icon'));
+    tel.appendChild(document.createTextNode(' ' + phone));
       contactRow.appendChild(tel);
       const wa = document.createElement('a');
       wa.href = 'https://wa.me/' + phone.replace(/[^0-9]/g, '');
@@ -20665,7 +21286,8 @@ async function loadLeadsAdmin() {
       const mail = document.createElement('a');
       mail.href = 'mailto:' + email;
       mail.className = 'lead-link';
-      mail.textContent = '✉️ ' + email;
+      mail.appendChild(iconSvg('mail', 'ui-icon'));
+    mail.appendChild(document.createTextNode(' ' + email));
       contactRow.appendChild(mail);
     }
     card.appendChild(contactRow);

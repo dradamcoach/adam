@@ -151,6 +151,7 @@ export function specialtyIcon(key) {
  * الموقع (ui-icon). بتتحط جوه عنصر (مش جوه <option> لأنه مش بيعرض HTML).
  */
 const SPECIALTY_ICON_PATHS = {
+  doctor: '<path d="M8 3v5.4a4 4 0 0 0 8 0V3"></path><path d="M6.2 3h2.4M15.4 3h2.4"></path><path d="M12 12.4v2.3a4.3 4.3 0 0 0 8.6 0v-1"></path><circle cx="20.6" cy="9.6" r="2.2"></circle>',
   coach: '<rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect>',
   nutritionist: '<path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path>',
   rehab: '<rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line>',

@@ -8165,9 +8165,16 @@ body.focus-open { overflow: hidden; }
 }
 
 .cbasic-icon {
-  font-size: 19px;
-  line-height: 1.2;
+  display: inline-flex;
+  color: var(--brand);
 }
+
+.cbasic-icon .ui-icon {
+  width: 21px;
+  height: 21px;
+}
+
+.cbasic.warn .cbasic-icon { color: #f0ad4e; }
 
 .cbasic-label {
   display: block;
@@ -8284,8 +8291,13 @@ body.on-welcome .hero-band {
 }
 
 .src-chip-icon {
-  font-size: 14px;
-  line-height: 1;
+  display: inline-flex;
+  color: var(--brand);
+}
+
+.src-chip-icon .ui-icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* ===================================================================
@@ -8492,4 +8504,381 @@ body.on-client {
 
 @media (max-width: 340px) {
   .home-tiles { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ===== قايمة العملاء كمربعات ===== */
+.clients-grid {
+  list-style: none;
+  margin: 10px 0 16px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.card li.client-cell {
+  position: relative;
+  margin: 0;
+  padding: 14px 7px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--field);
+  cursor: pointer;
+  text-align: center;
+  transition: transform .12s, border-color .15s;
+}
+
+.card li.client-cell:active {
+  transform: scale(.96);
+}
+
+.cc-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--cc, #22c55e);
+  background: color-mix(in srgb, var(--cc, #22c55e) 16%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--cc, #22c55e) 45%, transparent);
+}
+
+.card li.client-cell .client-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.card li.client-cell .cc-sport {
+  margin: 0;
+  font-size: 10px;
+}
+
+.card li.client-cell .client-status {
+  font-size: 10px;
+  color: var(--brand);
+  line-height: 1.2;
+}
+
+.card li.client-cell .client-status.none {
+  color: var(--muted);
+}
+
+.cc-injury {
+  position: absolute;
+  top: 7px;
+  inset-inline-end: 8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 18px;
+}
+
+@media (max-width: 340px) {
+  .clients-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* المربع ضيق — شارة الرياضة والحالة لازم يفضلوا سطر واحد */
+.card li.client-cell .cc-sport {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.card li.client-cell .cc-sport span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card li.client-cell .client-status {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ===== لوحة التحكم: مربعات فوق وقسم واحد تحتها ===== */
+#admin-tabs {
+  margin-bottom: 18px;
+}
+
+.card button.home-tile.on {
+  border-color: var(--brand);
+  background: rgba(34, 197, 94, .13);
+}
+
+.adm-section > .welcome-section-title:first-child {
+  margin-top: 0;
+}
+
+/* ===== المتخصصين كمربعات ===== */
+.prov-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 10px 0 16px;
+}
+
+.card button.prov-cell {
+  width: auto;
+  margin: 0;
+  padding: 13px 6px 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--field);
+  color: var(--ink);
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+  text-align: center;
+  transition: transform .12s, border-color .15s, background .15s;
+}
+
+.card button.prov-cell:active { transform: scale(.96); }
+
+.card button.prov-cell.on {
+  border-color: var(--brand);
+  background: rgba(34, 197, 94, .12);
+}
+
+.pc-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.pc-spec,
+.pc-count {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+#providers-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 340px) {
+  .prov-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ===== مكتبة برامج التغذية ===== */
+.nutprog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 8px 0 4px;
+}
+
+.card button.nutprog {
+  width: auto;
+  margin: 0;
+  padding: 13px 13px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  text-align: start;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--field);
+  color: var(--ink);
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+  transition: transform .12s, border-color .15s;
+}
+
+.card button.nutprog:active { transform: scale(.98); }
+.card button.nutprog:hover  { border-color: var(--brand); }
+
+.np-name {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.np-nums {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--brand);
+  line-height: 1.3;
+}
+
+.np-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ===== المساعد الذكي بيكتب ===== */
+.chat-typing {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 4px 10px;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.chat-typing em {
+  font-style: normal;
+  margin-inline-start: 4px;
+}
+
+.chat-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand);
+  opacity: .5;
+  animation: typingDot 1s infinite ease-in-out;
+}
+
+.chat-typing span:nth-child(2) { animation-delay: .15s; }
+.chat-typing span:nth-child(3) { animation-delay: .3s; }
+
+@keyframes typingDot {
+  0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+  30%           { transform: translateY(-4px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-typing span { animation: none; }
+}
+
+/* ===== أيقونات الحالات الصحية: حجم موحّد جوه الشرايح ===== */
+.hc-icon,
+.si-icon,
+.specialty-chip-icon,
+.specialty-lock {
+  display: inline-flex;
+  align-items: center;
+}
+
+.hc-icon .ui-icon,
+.specialty-chip-icon .ui-icon,
+.specialty-lock .ui-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.si-icon .ui-icon,
+#cyc-icon .ui-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.ch-pill .ui-icon,
+.clr-conds .ui-icon,
+.adh-health-flag .ui-icon {
+  width: 15px;
+  height: 15px;
+  vertical-align: -2px;
+}
+
+#cyc-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ===== أيقونات محل الإيموچي: حجم ومحاذاة موحّدة ===== */
+.hero2-badge,
+.hero2-trust-item,
+.welcome-section-title,
+.water-title,
+.health-privacy,
+.supp-disclaimer,
+.icon-link,
+#supp-plan-box h3,
+.card .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.welcome-section-title,
+.health-privacy,
+.supp-disclaimer {
+  display: flex;
+  align-items: flex-start;
+}
+
+.title-icon,
+.note-icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--brand);
+}
+
+.badge-icon { color: inherit; }
+
+.hero2-trust-item .ui-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--brand);
+  flex: 0 0 auto;
+}
+
+.hero2-badge .ui-icon,
+.water-title .ui-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+.title-icon,
+.note-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.preg-icon .ui-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.ch-icon .ui-icon,
+.sb-icon .ui-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.card button.icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-link .ui-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.hp-avatar .ui-icon {
+  width: 20px;
+  height: 20px;
 }
