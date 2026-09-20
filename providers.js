@@ -20,6 +20,12 @@ export const SPECIALTIES = {
     scopes: ['nutrition'],
     books: false, medical: false
   },
+  doctor: {
+    ar: 'طبيب', en: 'Doctor',
+    icon: '🩺',
+    scopes: ['consult'],
+    books: true, medical: true, clears: true
+  },
   rehab: {
     ar: 'أخصائي تأهيل', en: 'Rehabilitation specialist',
     icon: '🩹',
@@ -36,7 +42,7 @@ export const SPECIALTIES = {
     ar: 'طبيب عظام', en: 'Orthopaedic doctor',
     icon: '🦴',
     scopes: ['rehab', 'consult'],
-    books: true, medical: true
+    books: true, medical: true, clears: true
   },
   radiology: {
     ar: 'طبيب أشعة', en: 'Radiologist',
@@ -46,9 +52,9 @@ export const SPECIALTIES = {
   },
   sports_medicine: {
     ar: 'طبيب طب رياضي', en: 'Sports medicine doctor',
-    icon: '🩺',
+    icon: '🫀',
     scopes: ['rehab', 'consult'],
-    books: true, medical: true
+    books: true, medical: true, clears: true
   },
   pharmacist: {
     ar: 'صيدلي', en: 'Pharmacist',
@@ -162,4 +168,15 @@ const SPECIALTY_ICON_DEFAULT = '<circle cx="12" cy="12" r="8"></circle>';
 export function specialtyIconSvg(key) {
   const inner = SPECIALTY_ICON_PATHS[key] || SPECIALTY_ICON_DEFAULT;
   return '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + inner + '</svg>';
+}
+
+/*
+ * مين له حق يوافق على التمرين لحالة مرضية أو حمل؟
+ * مش أي متخصص طبي — الصيدلي والأخصائي النفسي مثلاً طبيين بس
+ * مش دورهم يقرروا إن التمرين آمن لقلب أو حمل. الحق ده للأطباء
+ * (طبيب عام، عظام، طب رياضي) + صاحب المنصة.
+ * وهو مش شخص معيّن: أي طبيب من دول يقدر يرد.
+ */
+export function specialtyClears(key) {
+  return !!(SPECIALTIES[key] && SPECIALTIES[key].clears);
 }

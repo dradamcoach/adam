@@ -4,9 +4,10 @@ import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, delete
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
 import { REHAB_TEMPLATES } from './rehab-templates.js';
 import { FOOD_LIBRARY, FOOD_CATEGORIES, FOOD_UNITS, FOOD_SERVINGS, CAT_PORTIONS } from './food-library.js';
+import { HEALTH_CONDITIONS, CONDITION_ORDER, PREGNANCY, POSTPARTUM, CYCLE_PHASES, CYCLE_ORDER, CYCLE_RED_FLAGS } from './health-conditions.js';
 import { SUPPLEMENT_LIBRARY, SUPPLEMENT_CATEGORIES, EVIDENCE_GRADES } from './supplement-library.js';
 import { SPORTS, SPORT_GROUPS, SPORT_METRICS, METRIC_FIELDS, SPORT_TEMPLATES } from './sports.js';
-import { SPECIALTIES, specialtyName, specialtyIcon, specialtyIconSvg, MED_CATEGORIES, MED_REVIEW, DEFAULT_RED_FLAGS, SESSION_TYPES, BOOKING_STATUS } from './providers.js';
+import { SPECIALTIES, specialtyName, specialtyIcon, specialtyIconSvg, MED_CATEGORIES, MED_REVIEW, DEFAULT_RED_FLAGS, SESSION_TYPES, BOOKING_STATUS, specialtyClears } from './providers.js';
 import { MED_LIBRARY_SEED } from './med-library-seed.js';
 import { EXERCISE_LIBRARY } from './exercise-library.js';
 
@@ -807,6 +808,92 @@ const TEXT = {
     no_plan: 'مفيش برنامج لليوم ده',
     no_plan_title: 'اليوم ده لسه فاضي',
     no_rehab_title: 'مفيش برنامج تأهيل',
+    ob_health_label: 'في حاجة في صحتك لازم فريقك يعرفها؟',
+    ob_health_hint: 'اختار اللي ينطبق عليك. ده بيغيّر برنامجك فعلًا — ومحدش هيشوفه غير فريقك المتابع معاك.',
+    ob_health_note_label: 'حاجة تانية تحب تقولها لفريقك؟',
+    ob_health_note_ph: 'مثلًا: بعمل غسيل كلوي يومين في الأسبوع',
+    ob_health_privacy: '🔒 البيانات دي بتتحفظ عندك في حسابك، وبيشوفها فريقك المتابع معاك بس — مش بتتباع ولا بتروح لأي جهة تانية.',
+    ob_preg_label: 'حامل',
+    ob_preg_week_label: 'في الأسبوع كام؟',
+    ob_postpartum_label: 'ولدت من فترة قريبة',
+    preg_tri1: 'التلت الأول',
+    preg_tri2: 'التلت التاني',
+    preg_tri3: 'التلت التالت',
+    preg_week_of: 'الأسبوع {n}',
+    safety_open: 'اعرف علامات التوقّف ›',
+    safety_sub: 'برنامجك متظبّط على حالتك',
+    safety_sheet_title: 'حالتك وبرنامجك',
+    safety_care: 'احتياطات وانت بتتمرن',
+    safety_stop: '🚩 وقّف فورًا واتصل بدكتورك لو حصل:',
+    safety_disclaimer: 'الكلام ده إرشادات عامة للتمرين مع حالتك — مش تشخيص ولا علاج ولا بديل عن دكتورك. أي قرار في الدوا أو الجرعة أو التحاليل قرار الطبيب وحده.',
+    clearance_needed: 'محتاج إذن من دكتور قبل ما البرنامج يبدأ',
+    clearance_waiting: 'الطلب وصل للطبيب — مستني رده',
+    clearance_ok: 'الطبيب وافق على البرنامج ✅',
+    clearance_needed_text: 'حالتك محتاجة دكتور يشوفها ويكتب إن التمرين مناسب ليك. فريقك هيتواصل معاك.',
+    clearance_ok_text: 'الطبيب راجع حالتك ووافق على البرنامج.',
+    coach_health_open: 'شوف الاحتياطات وعلامات التوقّف ›',
+    request_clearance_btn: 'اطلب إذن من الطبيب',
+    clearance_needed_coach: 'الحالة دي محتاجة طبيب يراجعها ويكتب إن التمرين مناسب. اكتب البرنامج عادي، بس ماتفعّلوش قبل ما الإذن يوصل.',
+    clearance_waiting_coach: 'الطلب اتبعت للطبيب في فريق العميل — مستني رده.',
+    clearance_ok_coach: 'الطبيب راجع الحالة ووافق. راجع ملاحظاته قبل ما تكتب.',
+    clearance_doctor_note: 'ملاحظة الطبيب',
+    clearance_sent: 'الطلب اتبعت للطبيب ✅',
+    clearance_request_text: 'طلب إذن طبي: {name} — الحالة: {list}. محتاج رأيك: التمرين مناسب؟ وفي حاجة ممنوعة؟',
+    adh_health_flag: 'حالة خاصة',
+    team_search_ph: 'دوّر باسم المتخصص...',
+    team_no_match: 'مفيش متخصص بالاسم ده',
+    team_picked_count: 'اخترت {n} من فريقك',
+    recommended_short: 'مرشّح',
+    provider_profile_title: 'بروفايل المتخصص',
+    ps_clients: 'عميل',
+    ps_reviews: 'تقييم',
+    ps_rating: 'المتوسط',
+    ps_certs: 'شهادات وخبرات',
+    ps_pick: 'اختاره لهذا التخصص',
+    ps_remove: 'شيله من فريقي',
+    ob_ref_label: 'مين رشّحلك ADAM؟',
+    ob_ref_hint: 'لو حد من المدربين أو المتخصصين دلّك علينا، اختاره — عشان ياخد حقه.',
+    ob_ref_picked: 'ترشيح من: {name}',
+    prov_clients: 'عميل',
+    prov_referrals: 'ترشيح',
+    prov_rating: 'تقييم',
+    prov_open_profile: 'شوف البروفيل',
+    open_clearance_btn: 'طلبات الإذن الطبي',
+    clearance_screen_title: 'طلبات الإذن الطبي',
+    clearance_screen_hint: 'أي طبيب في المنصة يقدر يرد — مش لازم يكون هو طبيب العميل. قرارك بيوصل للمدرب والعميل فورًا.',
+    clearance_none: 'مفيش طلبات إذن',
+    clearance_none_pending: 'مفيش طلبات مستنية رد 👏',
+    clr_filter_pending: 'مستنية رد',
+    clr_filter_answered: 'اترد عليها',
+    clr_filter_all: 'الكل',
+    clr_state_pending: 'مستني رد',
+    clr_state_cleared: 'موافق',
+    clr_state_restricted: 'موافق بشروط',
+    clr_state_denied: 'مرفوض حاليًا',
+    clr_state_none: 'من غير قرار',
+    clr_btn_cleared: 'موافق',
+    clr_btn_restricted: 'موافق بشروط',
+    clr_btn_denied: 'مرفوض حاليًا',
+    clr_note_ph: 'اكتب شروطك أو سببك — ده اللي المدرب هيشتغل بيه',
+    clr_need_note: 'اكتب الشروط أو السبب الأول',
+    clr_saved: 'قرارك اتسجّل ووصل للمدرب ✅',
+    clr_client_note: 'ملاحظة العميل',
+    clr_from: 'الطلب من',
+    clr_by: 'قرار',
+    clearance_restricted: 'الطبيب وافق بشروط ⚠️',
+    clearance_denied: 'الطبيب مش موافق على البرنامج دلوقتي ⛔',
+    clearance_restricted_coach: 'الطبيب وافق بشروط — اشتغل في حدودها بالظبط.',
+    clearance_denied_coach: 'الطبيب مش موافق دلوقتي. ماتفعّلش برنامج قبل ما يراجع تاني.',
+    clearance_restricted_text: 'دكتورك وافق على التمرين بشروط — فريقك عارفها وهيمشي عليها.',
+    clearance_denied_text: 'دكتورك شاف إن التمرين مش مناسب دلوقتي. فريقك هيتواصل معاك.',
+    ob_cycle_label: 'أتابع دورتي الشهرية مع البرنامج',
+    ob_cycle_last_label: 'أول يوم في آخر دورة',
+    ob_cycle_len_label: 'طول دورتك بالأيام (المتوسط ٢٨)',
+    cycle_day_of: 'اليوم {n}',
+    cycle_log_btn: 'دورتي بدأت النهاردة',
+    cycle_logged: 'اتسجّلت — البرنامج هيتقرا على أساسها ✅',
+    cycle_train_title: 'التمرين في الفترة دي',
+    cycle_flags_title: '🚩 دي علامات لازم تشوفي دكتور عشانها:',
     open_adherence_btn: 'لوحة الالتزام',
     adherence_title: 'لوحة الالتزام',
     adherence_hint: 'آخر ٧ أيام — مين ماشي معاك ومين محتاج تكلّمه',
@@ -1901,6 +1988,92 @@ const TEXT = {
     no_plan: 'No program for this day',
     no_plan_title: 'This day is still empty',
     no_rehab_title: 'No rehab program',
+    ob_health_label: 'Anything about your health your team should know?',
+    ob_health_hint: 'Pick whatever applies. It really does change your program — and only your own team can see it.',
+    ob_health_note_label: 'Anything else you want to tell your team?',
+    ob_health_note_ph: 'e.g. I have dialysis twice a week',
+    ob_health_privacy: '🔒 This is stored on your own account and seen only by the team following you — never sold, never sent anywhere else.',
+    ob_preg_label: 'Pregnant',
+    ob_preg_week_label: 'Which week?',
+    ob_postpartum_label: 'Recently gave birth',
+    preg_tri1: 'First trimester',
+    preg_tri2: 'Second trimester',
+    preg_tri3: 'Third trimester',
+    preg_week_of: 'Week {n}',
+    safety_open: 'See the stop signs ›',
+    safety_sub: 'Your program is set around your condition',
+    safety_sheet_title: 'Your condition and your program',
+    safety_care: 'Precautions while you train',
+    safety_stop: '🚩 Stop immediately and call your doctor if:',
+    safety_disclaimer: 'This is general guidance for training with your condition — not a diagnosis, not treatment, and not a substitute for your doctor. Any decision about medication, dosing or tests is the doctor\u2019s alone.',
+    clearance_needed: 'Needs a doctor\u2019s clearance before the program starts',
+    clearance_waiting: 'Request sent to the doctor — awaiting reply',
+    clearance_ok: 'The doctor approved this program ✅',
+    clearance_needed_text: 'Your condition needs a doctor to review it and confirm training is suitable for you. Your team will be in touch.',
+    clearance_ok_text: 'The doctor reviewed your case and approved the program.',
+    coach_health_open: 'See precautions and stop signs \u203a',
+    request_clearance_btn: 'Request doctor clearance',
+    clearance_needed_coach: 'This case needs a doctor to review it and confirm training is suitable. Write the program, but do not activate it before clearance arrives.',
+    clearance_waiting_coach: 'The request was sent to the doctor on this client\u2019s team — awaiting reply.',
+    clearance_ok_coach: 'The doctor reviewed the case and approved. Read their note before you write.',
+    clearance_doctor_note: 'Doctor\u2019s note',
+    clearance_sent: 'Request sent to the doctor \u2705',
+    clearance_request_text: 'Medical clearance request: {name} — condition: {list}. Need your opinion: is training suitable? Anything contraindicated?',
+    adh_health_flag: 'Special case',
+    team_search_ph: 'Search by name...',
+    team_no_match: 'No specialist with that name',
+    team_picked_count: 'You picked {n} of your team',
+    recommended_short: 'Top pick',
+    provider_profile_title: 'Specialist profile',
+    ps_clients: 'clients',
+    ps_reviews: 'reviews',
+    ps_rating: 'average',
+    ps_certs: 'Certificates and experience',
+    ps_pick: 'Pick for this specialty',
+    ps_remove: 'Remove from my team',
+    ob_ref_label: 'Who told you about ADAM?',
+    ob_ref_hint: 'If a coach or specialist referred you, pick them — so they get credit.',
+    ob_ref_picked: 'Referred by: {name}',
+    prov_clients: 'clients',
+    prov_referrals: 'referrals',
+    prov_rating: 'rating',
+    prov_open_profile: 'View profile',
+    open_clearance_btn: 'Medical clearance requests',
+    clearance_screen_title: 'Medical clearance requests',
+    clearance_screen_hint: 'Any doctor on the platform can answer — it does not have to be this client\u2019s own doctor. Your decision reaches the coach and client immediately.',
+    clearance_none: 'No clearance requests',
+    clearance_none_pending: 'Nothing waiting for a reply \ud83d\udc4f',
+    clr_filter_pending: 'Awaiting reply',
+    clr_filter_answered: 'Answered',
+    clr_filter_all: 'All',
+    clr_state_pending: 'Awaiting reply',
+    clr_state_cleared: 'Approved',
+    clr_state_restricted: 'Approved with limits',
+    clr_state_denied: 'Not approved yet',
+    clr_state_none: 'No decision',
+    clr_btn_cleared: 'Approve',
+    clr_btn_restricted: 'Approve with limits',
+    clr_btn_denied: 'Not approved yet',
+    clr_note_ph: 'Write your limits or your reason — this is what the coach will work to',
+    clr_need_note: 'Write the limits or the reason first',
+    clr_saved: 'Your decision was saved and sent to the coach \u2705',
+    clr_client_note: 'Client note',
+    clr_from: 'Requested by',
+    clr_by: 'Decided by',
+    clearance_restricted: 'Doctor approved with limits \u26a0\ufe0f',
+    clearance_denied: 'Doctor has not approved the program yet \u26d4',
+    clearance_restricted_coach: 'The doctor approved with limits — work strictly inside them.',
+    clearance_denied_coach: 'The doctor has not approved yet. Do not activate a program before they review again.',
+    clearance_restricted_text: 'Your doctor approved training with limits — your team knows them and will follow them.',
+    clearance_denied_text: 'Your doctor judged that training is not suitable right now. Your team will be in touch.',
+    ob_cycle_label: 'Track my cycle alongside the program',
+    ob_cycle_last_label: 'First day of your last period',
+    ob_cycle_len_label: 'Your cycle length in days (28 is average)',
+    cycle_day_of: 'Day {n}',
+    cycle_log_btn: 'My period started today',
+    cycle_logged: 'Logged — the program reads against it now \u2705',
+    cycle_train_title: 'Training in this phase',
+    cycle_flags_title: '\ud83d\udea9 See a doctor about these:',
     open_adherence_btn: 'Adherence board',
     adherence_title: 'Adherence board',
     adherence_hint: 'Last 7 days — who is on track and who needs a call',
@@ -2777,6 +2950,7 @@ const ctabClasses = document.getElementById('ctab-classes');
 const clientStorePanel = document.getElementById('client-store');
 const ctabStore = document.getElementById('ctab-store');
 
+const clearanceScreen = document.getElementById('clearance-screen');
 const adherenceScreen = document.getElementById('adherence-screen');
 const providersScreen = document.getElementById('providers-screen');
 const providersList = document.getElementById('providers-list');
@@ -3312,7 +3486,7 @@ let clientNutrition = emptyNutrition();
 let cNutDay = todayIndex;
 
 function showScreen(screen) {
-  [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, adherenceScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, supplementsScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen].forEach(function (s) {
+  [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, clearanceScreen, adherenceScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, supplementsScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen].forEach(function (s) {
     s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
@@ -3543,6 +3717,7 @@ onAuthStateChanged(auth, async function (user) {
       onboardingEmail = email;
       // مفيش مستند عميل خالص لسه = حساب اتعمل لوحده من صفحة التعريف، مش كوتش ضايفه
       onboardingIsNewSignup = !clientData;
+      await loadClientHealth(email);
       showScreen(onboardingScreen);
       prefillOnboarding(clientData);
     } else if (isAccessBlocked(clientData)) {
@@ -3618,6 +3793,10 @@ async function loadClients() {
   // الشخصي (صورة، نبذة، شهادات) — مبقاش في داعي نخفي الزرار ده عن حد
   openMyProfileBtn.classList.remove('hidden');
   openBookingsBtn.classList.toggle('hidden', !providerTakesBookings());
+  /* زرار الإذن الطبي بيبان للأطباء ولصاحب المنصة بس */
+  const clearanceBtn = document.getElementById('open-clearance-btn');
+  clearanceBtn.classList.toggle('hidden', !canClearMedical());
+  if (canClearMedical()) loadClearanceRequests().catch(function () {});
   openAdminPanelBtn.classList.toggle('hidden', !isFullAdminAccount());
   openProviderSubscriptionBtn.classList.toggle('hidden', isFullAdminAccount());
   refreshProviderSubBanner();
@@ -3821,11 +4000,14 @@ async function loadAdherence() {
       try { const d = await getDoc(doc(db, 'foodlog', email)); logData = d.exists() ? d.data() : null; } catch (e) { logData = null; }
 
       const stats = adherenceFor(progressData, logData, dates);
+      /* الحالات الخاصة بتتعلّم في القايمة — المدرب بيتعامل معاها بشكل مختلف */
+      const health = await loadHealthFor(email);
       rows.push({
         email: email,
         name: clientDoc.data().name || email,
         sport: clientDoc.data().sport || '',
         waiting: waiting[email] || 0,
+        health: health,
         stats: stats
       });
     }
@@ -3960,6 +4142,15 @@ function adherenceCard(row) {
   pill.textContent = t('adh_state_' + row.stats.state);
   head.appendChild(pill);
   item.appendChild(head);
+
+  const healthItems = activeHealthItems(row.health);
+  if (healthItems.length) {
+    const flag = document.createElement('div');
+    flag.className = 'adh-health';
+    if (needsClearance(row.health) && !clearanceOk(row.health)) flag.classList.add('blocked');
+    flag.textContent = healthItems.map(function (h) { return h.icon + ' ' + healthName(h); }).join(' · ');
+    item.appendChild(flag);
+  }
 
   const sub = document.createElement('div');
   sub.className = 'adh-sub';
@@ -4956,6 +5147,10 @@ async function openCoachScreen(email, name, sport) {
 
     const nutritionDoc = await getDoc(doc(db, 'nutrition', email));
     coachNutrition = normalizeNutrition(nutritionDoc.exists() ? nutritionDoc.data() : null);
+
+    /* الحالة الصحية قبل أي حاجة — المدرب لازم يشوفها قبل ما يكتب حرف */
+    coachHealth = await loadHealthFor(email);
+    renderCoachHealth();
 
     coachDay = todayIndex;
     nutDay = todayIndex;
@@ -7112,6 +7307,7 @@ async function loadClient(email) {
       ? progressDoc.data().rehabActualSets : {};
 
     await loadFoodLog(email);
+    await loadClientHealth(email);
 
     const hasRehab = rehabHasContent(clientRehab);
     const hasNutrition = nutritionHasContent(clientNutrition);
@@ -7125,6 +7321,8 @@ async function loadClient(email) {
     clientTabs.classList.remove('hidden');
     setClientMode('training');
 
+    renderSafetyBanner();
+    renderCycleCard();
     showClientDay();
     showClientRehab();
     showClientNutrition();
@@ -10987,6 +11185,9 @@ function refreshAll() {
     else showCoachDay();
   }
   if (!clientScreen.classList.contains('hidden')) {
+    renderSafetyBanner();
+    renderCycleCard();
+    if (safetySheet && !safetySheet.classList.contains('hidden')) renderSafetySheet();
     showClientDay();
     showClientRehab();
     showClientNutrition();
@@ -11014,12 +11215,19 @@ function refreshAll() {
    */
   renderSpecPages();
   renderAudienceDeck();
+  if (!onboardingScreen.classList.contains('hidden')) {
+    renderHealthChips();
+    renderPregnancyBox();
+    renderCycleBox();
+    renderReferrerRow();
+  }
   if (!clientsScreen.classList.contains('hidden')) loadClients();
   /*
    * اللوحة مبنية بالجافاسكريبت، فلازم تترسم تاني مع تبديل اللغة —
    * من الذاكرة من غير ما نقرا فايرستور تاني
    */
   if (!adherenceScreen.classList.contains('hidden') && adhRows.length) renderAdherence();
+  if (!clearanceScreen.classList.contains('hidden') && clearanceRows.length) renderClearanceList();
   if (!providersScreen.classList.contains('hidden')) { fillSpecialtySelect(); loadProviders(); }
   if (!providerHomeScreen.classList.contains('hidden') && currentProviderData) showProviderHome(currentProviderData);
   if (!onboardingScreen.classList.contains('hidden')) { fillGenderSelect(); fillDobSelects(); fillActivitySelect(); fillSportSelect(obSport, true); fillGoalSelect(); renderGenderRows(); renderActivityTiles(); renderSportGroupDial(); renderSportRows(); renderGoalTiles(); renderFocusChips(); fillWorkNatureSelect(); renderWorkNatureRows(); fillTrainingDaysSelect(); renderTrainingDaysRows(); fillMealsPerDaySelect(); renderMealsPerDayRows(); }
@@ -11242,6 +11450,7 @@ async function loadProviders() {
     try {
       const clientsSnapshot = await getDocs(collection(db, 'clients'));
       const counts = {};
+      const refs = {};
       clientsSnapshot.docs.forEach(function (clientDoc) {
         const data = clientDoc.data();
         const coachEmail = (data.coachEmail || COACH_EMAIL).toLowerCase();
@@ -11251,12 +11460,16 @@ async function loadProviders() {
           const specialistEmail = team[key];
           if (specialistEmail) counts[specialistEmail] = (counts[specialistEmail] || 0) + 1;
         });
+        /* الترشيحات: مين جاب العميل ده للمنصة أصلًا — أساس البونص */
+        if (data.referredBy) refs[data.referredBy] = (refs[data.referredBy] || 0) + 1;
       });
       await Promise.all(providers.map(function (provider) {
         const n = counts[provider.email] || 0;
-        if (provider.clientsCount === n) return Promise.resolve();
+        const r = refs[provider.email] || 0;
+        if (provider.clientsCount === n && provider.referralsCount === r) return Promise.resolve();
         provider.clientsCount = n;
-        return setDoc(doc(db, 'providers', provider.email), { clientsCount: n }, { merge: true }).catch(function () {});
+        provider.referralsCount = r;
+        return setDoc(doc(db, 'providers', provider.email), { clientsCount: n, referralsCount: r }, { merge: true }).catch(function () {});
       }));
     } catch (countError) {
       // مش هيمنع عرض القايمة لو فشل حساب العدد لأي سبب
@@ -11287,6 +11500,41 @@ async function loadProviders() {
       item.appendChild(nameLine);
       item.appendChild(specLine);
       item.appendChild(emailLine);
+
+      /*
+       * أرقام المتخصص قدام عين صاحب المنصة: كام عميل بيتابعهم،
+       * كام عميل جابهم للمنصة (ده اللي البونص بيتحسب عليه)،
+       * وتقييم العملاء ليه
+       */
+      const provStats = ratingStatsFor(provider.email);
+      const statsRow = document.createElement('div');
+      statsRow.className = 'prov-stats';
+      [
+        { value: Number(provider.clientsCount) || 0, label: t('prov_clients'), tone: '' },
+        { value: Number(provider.referralsCount) || 0, label: t('prov_referrals'), tone: 'ref' },
+        { value: provStats.count ? provStats.avg.toFixed(1) : '—', label: t('prov_rating'), tone: 'rate' }
+      ].forEach(function (cell) {
+        const box = document.createElement('div');
+        box.className = 'prov-stat' + (cell.tone ? ' ' + cell.tone : '');
+        const v = document.createElement('strong');
+        v.textContent = cell.value;
+        box.appendChild(v);
+        const l = document.createElement('span');
+        l.textContent = cell.label;
+        box.appendChild(l);
+        statsRow.appendChild(box);
+      });
+      item.appendChild(statsRow);
+
+      const profileBtn = document.createElement('button');
+      profileBtn.type = 'button';
+      profileBtn.className = 'prov-profile-btn';
+      profileBtn.textContent = t('prov_open_profile');
+      profileBtn.addEventListener('click', function (event) {
+        event.stopPropagation();
+        openProviderSheet(provider, '');
+      });
+      item.appendChild(profileBtn);
 
       const rowMsg = document.createElement('p');
       rowMsg.className = 'message';
@@ -13830,6 +14078,29 @@ function prefillOnboarding(data) {
   const bodySelect = document.getElementById('ob-body');
   if (bodySelect) bodySelect.value = (data && data.bodyType) || '';
   renderBodyTypes();
+
+  /* الحالة الصحية بتتقرا من مستندها الخاص، مش من مستند العميل */
+  const health = clientHealth || blankHealth();
+  obConditions = health.conditions.slice();
+  obPregnant = health.pregnancy.active;
+  obPostpartum = health.postpartum;
+  const pregWeek = document.getElementById('ob-preg-week');
+  if (pregWeek) pregWeek.value = health.pregnancy.week || '';
+  const healthNote = document.getElementById('ob-health-note');
+  if (healthNote) healthNote.value = health.note || '';
+
+  obCycleTrack = health.cycle.track;
+  const cycLast = document.getElementById('ob-cycle-last');
+  const cycLen = document.getElementById('ob-cycle-len');
+  if (cycLast) cycLast.value = health.cycle.lastPeriod || '';
+  if (cycLen) cycLen.value = health.cycle.length || '';
+
+  renderHealthChips();
+  renderPregnancyBox();
+  renderCycleBox();
+
+  obReferrer = (data && data.referredBy) || '';
+  loadReferrerOptions().then(renderReferrerRow);
   obDobDay.value = (data && data.dob && data.dob.day) || '';
   obDobMonth.value = (data && data.dob && data.dob.month) || '';
   obDobYear.value = (data && data.dob && data.dob.year) || '';
@@ -13969,6 +14240,7 @@ document.getElementById('ob-next-btn').addEventListener('click', async function 
       mealsPerDay: obMealsPerDay.value || '',
       firstMealTime: obFirstMealTime.value || '',
       lastMealTime: obLastMealTime.value || '',
+      referredBy: obReferrer,
       painFlag: obPainFlag.checked,
       painNote: obPainFlag.checked ? obPainNote.value.trim() : '',
       photo: obPickedImage
@@ -13978,6 +14250,17 @@ document.getElementById('ob-next-btn').addEventListener('click', async function 
       clientPayload.trialStartedAt = new Date().toISOString().slice(0, 10);
     }
     await setDoc(doc(db, 'clients', onboardingEmail), clientPayload, { merge: true });
+
+    /*
+     * الحالة الصحية بتتحفظ في مستند منفصل بصلاحيات أضيق — مش جوه
+     * مستند العميل، لأن قايمة العملاء بيقراها كل المتخصصين عشان
+     * البحث، والبيانات دي مش المفروض توصل غير لفريقه هو
+     */
+    const healthPayload = healthPayloadFromForm();
+    if (!healthIsEmpty(normalizeHealth(healthPayload)) || (clientHealth && !healthIsEmpty(clientHealth))) {
+      await setDoc(doc(db, 'health', onboardingEmail), healthPayload, { merge: true });
+    }
+
     onboardingMessage.textContent = '';
     teamEditEmail = onboardingEmail;
     teamEditMode = 'onboarding';
@@ -13990,6 +14273,937 @@ document.getElementById('ob-next-btn').addEventListener('click', async function 
     onboardingMessage.textContent = t('problem') + error.message;
   }
 });
+
+/* ============================================================
+   الحالات الخاصة — أمراض مزمنة وحمل
+   العميل اللي بيجي مش رياضي بالضرورة، وحتى الرياضي ممكن يكون
+   عنده حاجة. البرنامج هنا مش بيتغيّر لوحده — بيتوقف لحد ما
+   الطبيب يكتب إذنه، والمدرب يشوف الاحتياطات قدام عينه.
+   ============================================================ */
+
+/* health/{email} = { conditions:[], pregnancy:{...}, postpartum:bool, note:'', clearance:{...} } */
+let clientHealth = null;
+let obConditions = [];
+let obPregnant = false;
+let obPostpartum = false;
+
+function blankHealth() {
+  return {
+    conditions: [],
+    pregnancy: { active: false, week: 0 },
+    postpartum: false,
+    cycle: { track: false, lastPeriod: '', length: 28 },
+    note: '',
+    clearance: { status: 'none', by: '', at: '', note: '' }
+  };
+}
+
+function normalizeHealth(data) {
+  const clean = blankHealth();
+  if (!data) return clean;
+  if (Array.isArray(data.conditions)) {
+    clean.conditions = data.conditions.filter(function (key) { return !!HEALTH_CONDITIONS[key]; });
+  }
+  if (data.pregnancy && typeof data.pregnancy === 'object') {
+    clean.pregnancy.active = !!data.pregnancy.active;
+    clean.pregnancy.week = Number(data.pregnancy.week) || 0;
+  }
+  clean.postpartum = !!data.postpartum;
+  if (data.cycle && typeof data.cycle === 'object') {
+    clean.cycle.track = !!data.cycle.track;
+    clean.cycle.lastPeriod = String(data.cycle.lastPeriod || '');
+    const len = Number(data.cycle.length) || 28;
+    clean.cycle.length = Math.max(21, Math.min(40, len));
+  }
+  clean.note = String(data.note || '');
+  if (data.clearance && typeof data.clearance === 'object') {
+    clean.clearance.status = String(data.clearance.status || 'none');
+    clean.clearance.by = String(data.clearance.by || '');
+    clean.clearance.at = String(data.clearance.at || '');
+    clean.clearance.note = String(data.clearance.note || '');
+  }
+  return clean;
+}
+
+function healthIsEmpty(health) {
+  if (!health) return true;
+  return !health.conditions.length && !health.pregnancy.active && !health.postpartum
+      && !(health.cycle && health.cycle.track);
+}
+
+/* كل الحالات المفعّلة كقائمة موحّدة: مرض مزمن أو حمل أو ما بعد ولادة */
+function activeHealthItems(health) {
+  if (!health) return [];
+  const out = [];
+  health.conditions.forEach(function (key) {
+    out.push(Object.assign({ key: key }, HEALTH_CONDITIONS[key]));
+  });
+  if (health.pregnancy.active) out.push(Object.assign({ key: 'pregnancy', week: health.pregnancy.week }, PREGNANCY));
+  if (health.postpartum) out.push(Object.assign({ key: 'postpartum' }, POSTPARTUM));
+  return out;
+}
+
+function healthName(item) {
+  return item[lang] || item.ar || item.key;
+}
+
+function needsClearance(health) {
+  return activeHealthItems(health).some(function (item) { return !!item.clearance; });
+}
+
+/* موافق أو موافق بشروط = البرنامج يمشي. مرفوض أو مفيش قرار = لأ */
+function clearanceOk(health) {
+  const status = health && health.clearance && health.clearance.status;
+  return status === 'cleared' || status === 'restricted';
+}
+
+function clearanceStatusOf(health) {
+  return (health && health.clearance && health.clearance.status) || 'none';
+}
+
+/* عنوان الحالة زي ما بيتعرض في الشاشتين */
+function clearanceTitle(status) {
+  if (status === 'cleared') return t('clearance_ok');
+  if (status === 'restricted') return t('clearance_restricted');
+  if (status === 'denied') return t('clearance_denied');
+  if (status === 'requested') return t('clearance_waiting');
+  return t('clearance_needed');
+}
+
+/* التلات شهور — بتغيّر الاحتياطات فبنعرضها للعميلة والمدرب */
+function trimesterOf(week) {
+  const w = Number(week) || 0;
+  if (!w) return '';
+  if (w <= 13) return 'tri1';
+  if (w <= 27) return 'tri2';
+  return 'tri3';
+}
+
+async function loadClientHealth(email) {
+  try {
+    const snap = await getDoc(doc(db, 'health', email));
+    clientHealth = normalizeHealth(snap.exists() ? snap.data() : null);
+  } catch (error) {
+    clientHealth = blankHealth();
+  }
+  return clientHealth;
+}
+
+async function loadHealthFor(email) {
+  try {
+    const snap = await getDoc(doc(db, 'health', email));
+    return normalizeHealth(snap.exists() ? snap.data() : null);
+  } catch (error) {
+    return blankHealth();
+  }
+}
+
+/* ---------- شاشة البيانات: اختيار الحالات ---------- */
+
+function renderHealthChips() {
+  const box = document.getElementById('ob-health-chips');
+  if (!box) return;
+  box.innerHTML = '';
+
+  CONDITION_ORDER.forEach(function (key) {
+    const item = HEALTH_CONDITIONS[key];
+    if (!item) return;
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'health-chip' + (obConditions.indexOf(key) !== -1 ? ' active' : '');
+    chip.dataset.key = key;
+
+    const icon = document.createElement('span');
+    icon.className = 'hc-icon';
+    icon.textContent = item.icon;
+    chip.appendChild(icon);
+
+    const label = document.createElement('span');
+    label.textContent = item[lang] || item.ar;
+    chip.appendChild(label);
+
+    chip.addEventListener('click', function () {
+      const pos = obConditions.indexOf(key);
+      if (pos === -1) obConditions.push(key);
+      else obConditions.splice(pos, 1);
+      renderHealthChips();
+      updateObProgress();
+    });
+
+    box.appendChild(chip);
+  });
+}
+
+function renderPregnancyBox() {
+  const toggle = document.getElementById('ob-preg-toggle');
+  const post = document.getElementById('ob-postpartum-toggle');
+  const weekBox = document.getElementById('ob-preg-week-box');
+  const box = document.getElementById('ob-preg-box');
+  if (!toggle || !post || !weekBox || !box) return;
+
+  /*
+   * الحمل بيظهر لما النوع يكون أنثى أو لسه مختارش — مش منطقي
+   * نسأل راجل عن أسبوع الحمل
+   */
+  const gender = (obGender && obGender.value) || '';
+  box.classList.toggle('hidden', gender === 'male');
+  if (gender === 'male') { obPregnant = false; obPostpartum = false; }
+
+  toggle.classList.toggle('active', obPregnant);
+  post.classList.toggle('active', obPostpartum);
+  weekBox.classList.toggle('hidden', !obPregnant);
+
+  renderCycleBox();
+
+  const tri = document.getElementById('ob-preg-tri');
+  const weekInput = document.getElementById('ob-preg-week');
+  if (tri && weekInput) {
+    const key = trimesterOf(weekInput.value);
+    tri.textContent = key ? t('preg_' + key) : '';
+    tri.classList.toggle('hidden', !key);
+  }
+}
+
+function wireHealthStep() {
+  const toggle = document.getElementById('ob-preg-toggle');
+  const post = document.getElementById('ob-postpartum-toggle');
+  const weekInput = document.getElementById('ob-preg-week');
+  if (!toggle || !post || !weekInput) return;
+
+  toggle.addEventListener('click', function () {
+    obPregnant = !obPregnant;
+    if (obPregnant) obPostpartum = false;
+    renderPregnancyBox();
+    updateObProgress();
+  });
+  post.addEventListener('click', function () {
+    obPostpartum = !obPostpartum;
+    if (obPostpartum) obPregnant = false;
+    renderPregnancyBox();
+    updateObProgress();
+  });
+  weekInput.addEventListener('input', renderPregnancyBox);
+  if (obGender) obGender.addEventListener('change', renderPregnancyBox);
+}
+
+/* ============================================================
+   الدورة الشهرية — فسيولوجيا مش مرض
+   الأداء بيتغيّر عبر الشهر فعلًا. من غير ما نحسبها، أي هبوط
+   في الأداء بيتفسّر غلط على إنه كسل — وده ظلم وشغل مش علمي
+   ============================================================ */
+
+/* اليوم الحالي في الدورة (١ = أول يوم نزول) */
+function cycleDayOf(cycle) {
+  if (!cycle || !cycle.track || !cycle.lastPeriod) return 0;
+  const gone = daysAgo(cycle.lastPeriod);
+  if (gone === null || gone < 0) return 0;
+  const length = Math.max(21, Math.min(40, Number(cycle.length) || 28));
+  return (gone % length) + 1;
+}
+
+function cyclePhaseOf(day) {
+  if (!day) return '';
+  for (let i = 0; i < CYCLE_ORDER.length; i++) {
+    const key = CYCLE_ORDER[i];
+    const range = CYCLE_PHASES[key].days;
+    if (day >= range[0] && day <= range[1]) return key;
+  }
+  /* دورة أطول من ٢٨: الأيام الزيادة بتفضل ما قبل الدورة */
+  return 'luteal';
+}
+
+function cycleActive(health) {
+  return !!(health && health.cycle && health.cycle.track && health.cycle.lastPeriod
+            && !(health.pregnancy && health.pregnancy.active));
+}
+
+function renderCycleCard() {
+  const card = document.getElementById('client-cycle');
+  if (!card) return;
+
+  if (!cycleActive(clientHealth)) { card.classList.add('hidden'); return; }
+
+  const day = cycleDayOf(clientHealth.cycle);
+  const key = cyclePhaseOf(day);
+  const phase = CYCLE_PHASES[key];
+  if (!day || !phase) { card.classList.add('hidden'); return; }
+
+  card.classList.remove('hidden');
+  card.className = 'cycle-card phase-' + key;
+  document.getElementById('cyc-icon').textContent = phase.icon;
+  document.getElementById('cyc-phase').textContent = phase[lang] || phase.ar;
+  document.getElementById('cyc-day').textContent = fill('cycle_day_of', { n: day });
+  document.getElementById('cyc-note').textContent = (phase.note && phase.note[lang]) || phase.note.ar;
+
+  const tips = document.getElementById('cyc-tips');
+  tips.innerHTML = '';
+  ((phase.train && phase.train[lang]) || phase.train.ar || []).forEach(function (line) {
+    const li = document.createElement('li');
+    li.textContent = line;
+    tips.appendChild(li);
+  });
+}
+
+/* زرار "دورتي بدأت النهاردة" — بيصفّر العدّاد من غير ما تفتح تواريخ */
+const cycLogBtn = document.getElementById('cyc-log-btn');
+if (cycLogBtn) {
+  cycLogBtn.addEventListener('click', async function () {
+    const message = document.getElementById('cyc-message');
+    if (!clientHealth || !clientEmail) return;
+    message.textContent = t('saving');
+    try {
+      clientHealth.cycle.lastPeriod = todayStamp;
+      await setDoc(doc(db, 'health', clientEmail), { cycle: clientHealth.cycle }, { merge: true });
+      renderCycleCard();
+      setStatusMessage(message, t('cycle_logged'), 'success');
+    } catch (error) {
+      message.textContent = t('problem') + error.message;
+    }
+  });
+}
+
+/* ---------- شاشة البيانات: متابعة الدورة ---------- */
+
+let obCycleTrack = false;
+
+function renderCycleBox() {
+  const box = document.getElementById('ob-cycle-box');
+  const toggle = document.getElementById('ob-cycle-toggle');
+  const fields = document.getElementById('ob-cycle-fields');
+  if (!box || !toggle || !fields) return;
+
+  /* بتظهر للإناث بس، وبتختفي لو حامل */
+  const gender = (obGender && obGender.value) || '';
+  const hide = gender === 'male' || obPregnant;
+  box.classList.toggle('hidden', hide);
+  if (hide) obCycleTrack = false;
+
+  toggle.classList.toggle('active', obCycleTrack);
+  fields.classList.toggle('hidden', !obCycleTrack);
+
+  const now = document.getElementById('ob-cycle-now');
+  const last = document.getElementById('ob-cycle-last');
+  const len = document.getElementById('ob-cycle-len');
+  if (now && last && len) {
+    const day = cycleDayOf({ track: obCycleTrack, lastPeriod: last.value, length: Number(len.value) || 28 });
+    const key = cyclePhaseOf(day);
+    if (day && CYCLE_PHASES[key]) {
+      now.textContent = CYCLE_PHASES[key].icon + ' ' + (CYCLE_PHASES[key][lang] || CYCLE_PHASES[key].ar)
+        + ' · ' + fill('cycle_day_of', { n: day });
+      now.classList.remove('hidden');
+    } else {
+      now.classList.add('hidden');
+    }
+  }
+}
+
+function wireCycleStep() {
+  const toggle = document.getElementById('ob-cycle-toggle');
+  const last = document.getElementById('ob-cycle-last');
+  const len = document.getElementById('ob-cycle-len');
+  if (!toggle || !last || !len) return;
+  toggle.addEventListener('click', function () {
+    obCycleTrack = !obCycleTrack;
+    renderCycleBox();
+  });
+  last.addEventListener('input', renderCycleBox);
+  len.addEventListener('input', renderCycleBox);
+}
+
+wireCycleStep();
+
+wireHealthStep();
+
+/* ============================================================
+   الإذن الطبي — أي طبيب يرد، مش طبيب معيّن
+   الحالة المرضية أو الحمل مابتستناش دكتور واحد يفضى. أي طبيب
+   مسجّل في المنصة (طبيب عام/عظام/طب رياضي) + صاحب المنصة
+   يقدر يفتح الطلب ويرد عليه، والقرار بيوصل للمدرب والعميل فورًا
+   ============================================================ */
+
+/* هل الحساب ده له حق الموافقة؟ */
+function canClearMedical() {
+  if (isFullAdminAccount()) return true;
+  return providerSpecialties(currentProviderData).some(specialtyClears);
+}
+
+const CLEARANCE_STATES = {
+  cleared:    { tone: 'ok',   icon: '✅' },
+  restricted: { tone: 'warn', icon: '⚠️' },
+  denied:     { tone: 'bad',  icon: '⛔' }
+};
+
+let clearanceRows = [];
+let clrFilter = 'pending';
+
+async function loadClearanceRequests() {
+  const listBox = document.getElementById('clearance-list');
+  const message = document.getElementById('clearance-message');
+  listBox.innerHTML = '';
+  message.textContent = t('loading');
+
+  try {
+    const snapshot = await getDocs(collection(db, 'consultRequests'));
+    const rows = snapshot.docs
+      .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
+      .filter(function (row) { return row.kind === 'clearance'; })
+      .sort(function (a, b) { return String(b.createdAt || '').localeCompare(String(a.createdAt || '')); });
+
+    /* بنجيب الحالة الصحية لكل طلب عشان الطبيب يقرر وهو شايف الحالة */
+    for (const row of rows) {
+      row.health = await loadHealthFor(row.clientEmail);
+    }
+
+    clearanceRows = rows;
+    message.textContent = rows.length ? '' : t('clearance_none');
+    renderClearanceList();
+    refreshClearanceBadge();
+  } catch (error) {
+    message.textContent = t('problem') + error.message;
+  }
+}
+
+function clearanceIsPending(row) {
+  return (row.status || 'pending') !== 'answered';
+}
+
+function renderClearanceList() {
+  const filters = document.getElementById('clr-filters');
+  const listBox = document.getElementById('clearance-list');
+
+  filters.innerHTML = '';
+  ['pending', 'answered', 'all'].forEach(function (key) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'adh-chip' + (key === clrFilter ? ' active' : '');
+    chip.textContent = t('clr_filter_' + key);
+    chip.addEventListener('click', function () {
+      clrFilter = key;
+      renderClearanceList();
+    });
+    filters.appendChild(chip);
+  });
+
+  const shown = clearanceRows.filter(function (row) {
+    if (clrFilter === 'all') return true;
+    if (clrFilter === 'pending') return clearanceIsPending(row);
+    return !clearanceIsPending(row);
+  });
+
+  listBox.innerHTML = '';
+  if (!shown.length) {
+    const empty = document.createElement('li');
+    empty.className = 'adh-empty';
+    empty.textContent = clrFilter === 'pending' ? t('clearance_none_pending') : t('clearance_none');
+    listBox.appendChild(empty);
+    return;
+  }
+
+  shown.forEach(function (row) { listBox.appendChild(clearanceCard(row)); });
+}
+
+function clearanceCard(row) {
+  const item = document.createElement('li');
+  const status = (row.health && row.health.clearance && row.health.clearance.status) || 'none';
+  const pending = clearanceIsPending(row);
+  item.className = 'clr-card' + (pending ? ' pending' : (' done ' + ((CLEARANCE_STATES[status] || {}).tone || '')));
+
+  const head = document.createElement('div');
+  head.className = 'clr-head';
+  const name = document.createElement('div');
+  name.className = 'clr-name';
+  name.textContent = row.clientName || row.clientEmail;
+  head.appendChild(name);
+
+  const pill = document.createElement('span');
+  pill.className = 'clr-pill ' + (pending ? 'pending' : ((CLEARANCE_STATES[status] || {}).tone || ''));
+  pill.textContent = pending ? t('clr_state_pending') : t('clr_state_' + status);
+  head.appendChild(pill);
+  item.appendChild(head);
+
+  /* الحالة قدام الطبيب وهو بيقرر */
+  const items = activeHealthItems(row.health);
+  if (items.length) {
+    const conds = document.createElement('div');
+    conds.className = 'clr-conds';
+    items.forEach(function (h) {
+      const chip = document.createElement('span');
+      chip.className = 'ch-pill';
+      let label = h.icon + ' ' + healthName(h);
+      if (h.key === 'pregnancy' && h.week) label += ' · ' + fill('preg_week_of', { n: h.week });
+      chip.textContent = label;
+      conds.appendChild(chip);
+    });
+    item.appendChild(conds);
+  }
+
+  if (row.health && row.health.note) {
+    const note = document.createElement('div');
+    note.className = 'clr-note';
+    note.textContent = t('clr_client_note') + ': ' + row.health.note;
+    item.appendChild(note);
+  }
+
+  const meta = document.createElement('div');
+  meta.className = 'clr-meta';
+  meta.textContent = (row.fromProvider ? (t('clr_from') + ': ' + row.fromProvider + ' · ') : '')
+    + String(row.createdAt || '').slice(0, 10);
+  item.appendChild(meta);
+
+  /* شيت الاحتياطات — الطبيب يشوف نفس اللي المدرب شايفه */
+  const seeBtn = document.createElement('button');
+  seeBtn.type = 'button';
+  seeBtn.className = 'prov-profile-btn';
+  seeBtn.textContent = t('coach_health_open');
+  seeBtn.addEventListener('click', function () {
+    const keep = clientHealth;
+    clientHealth = row.health;
+    renderSafetySheet();
+    clientHealth = keep;
+    safetySheet.classList.remove('hidden');
+    document.body.classList.add('focus-open');
+  });
+  item.appendChild(seeBtn);
+
+  if (!pending) {
+    const decided = document.createElement('div');
+    decided.className = 'clr-decided';
+    const by = (row.health && row.health.clearance && row.health.clearance.by) || '';
+    const when = (row.health && row.health.clearance && row.health.clearance.at) || '';
+    const docNote = (row.health && row.health.clearance && row.health.clearance.note) || '';
+    decided.textContent = [by && (t('clr_by') + ': ' + by), when, docNote].filter(Boolean).join(' · ');
+    item.appendChild(decided);
+    return item;
+  }
+
+  /* لوحة القرار */
+  const box = document.createElement('div');
+  box.className = 'clr-decide';
+
+  const noteInput = document.createElement('textarea');
+  noteInput.rows = 2;
+  noteInput.placeholder = t('clr_note_ph');
+  box.appendChild(noteInput);
+
+  const rowMsg = document.createElement('p');
+  rowMsg.className = 'message';
+
+  const buttons = document.createElement('div');
+  buttons.className = 'clr-actions';
+  [
+    { key: 'cleared',    cls: 'ok' },
+    { key: 'restricted', cls: 'warn' },
+    { key: 'denied',     cls: 'bad' }
+  ].forEach(function (choice) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'clr-btn ' + choice.cls;
+    btn.textContent = t('clr_btn_' + choice.key);
+    btn.addEventListener('click', async function () {
+      /* الرفض أو الموافقة بشروط من غير سبب مكتوب مالهاش معنى للمدرب */
+      if (choice.key !== 'cleared' && !noteInput.value.trim()) {
+        rowMsg.textContent = t('clr_need_note');
+        noteInput.focus();
+        return;
+      }
+      await decideClearance(row, choice.key, noteInput.value.trim(), rowMsg);
+    });
+    buttons.appendChild(btn);
+  });
+
+  box.appendChild(buttons);
+  box.appendChild(rowMsg);
+  item.appendChild(box);
+  return item;
+}
+
+async function decideClearance(row, status, note, message) {
+  message.textContent = t('saving');
+  try {
+    const decision = {
+      status: status,
+      by: currentProviderEmail || COACH_EMAIL.toLowerCase(),
+      at: todayStamp,
+      note: note
+    };
+    await setDoc(doc(db, 'health', row.clientEmail), { clearance: decision }, { merge: true });
+    await updateDoc(doc(db, 'consultRequests', row.id), {
+      status: 'answered',
+      reply: t('clr_state_' + status) + (note ? (' — ' + note) : ''),
+      answeredBy: decision.by,
+      answeredAt: new Date().toISOString()
+    });
+    row.status = 'answered';
+    row.health.clearance = decision;
+    renderClearanceList();
+    refreshClearanceBadge();
+    setStatusMessage(message, t('clr_saved'), 'success');
+  } catch (error) {
+    message.textContent = t('problem') + error.message;
+  }
+}
+
+function refreshClearanceBadge() {
+  const badge = document.getElementById('clearance-badge');
+  if (!badge) return;
+  const n = clearanceRows.filter(clearanceIsPending).length;
+  badge.textContent = n;
+  badge.classList.toggle('hidden', !n);
+}
+
+document.getElementById('open-clearance-btn').addEventListener('click', function () {
+  showScreen(clearanceScreen);
+  loadClearanceRequests();
+});
+
+document.getElementById('clearance-back-btn').addEventListener('click', function () {
+  showScreen(clientsScreen);
+});
+
+
+/* ============================================================
+   الترشيح — مين جاب العميل ده
+   المدرب أو المتخصص اللي بيجيب عملاء للمنصة لازم ياخد حقه،
+   وعشان ياخده لازم يبقى مسجّل مين جاب مين
+   ============================================================ */
+
+let obReferrer = '';
+let refProviders = [];
+
+async function loadReferrerOptions() {
+  if (refProviders.length) return refProviders;
+  try {
+    const snapshot = await getDocs(collection(db, 'providers'));
+    refProviders = snapshot.docs.map(function (item) {
+      return Object.assign({ id: item.id }, item.data());
+    });
+  } catch (error) {
+    refProviders = [];
+  }
+  return refProviders;
+}
+
+function renderReferrerRow() {
+  const row = document.getElementById('ob-ref-row');
+  const picked = document.getElementById('ob-ref-picked');
+  const search = document.getElementById('ob-ref-search');
+  if (!row || !picked) return;
+
+  const term = ((search && search.value) || '').trim().toLowerCase();
+  row.innerHTML = '';
+
+  const matches = refProviders.filter(function (provider) {
+    if (!term) return true;
+    return String(provider.name || '').toLowerCase().indexOf(term) !== -1;
+  }).slice(0, 12);
+
+  matches.forEach(function (provider) {
+    const pick = document.createElement('button');
+    pick.type = 'button';
+    pick.className = 'avatar-pick ref-pick' + (obReferrer === provider.email ? ' selected' : '');
+    pick.appendChild(providerAvatar(provider));
+    const name = document.createElement('span');
+    name.className = 'ap-name';
+    name.textContent = providerShortName(provider);
+    pick.appendChild(name);
+    pick.addEventListener('click', function () {
+      obReferrer = (obReferrer === provider.email) ? '' : provider.email;
+      renderReferrerRow();
+    });
+    row.appendChild(pick);
+  });
+
+  const chosen = refProviders.filter(function (p) { return p.email === obReferrer; })[0];
+  picked.classList.toggle('hidden', !chosen);
+  picked.textContent = chosen ? fill('ob_ref_picked', { name: chosen.name || chosen.email }) : '';
+}
+
+const obRefSearch = document.getElementById('ob-ref-search');
+if (obRefSearch) obRefSearch.addEventListener('input', renderReferrerRow);
+
+
+/* ---------- شاشة المدرب: كارت الحالة والبوابة الطبية ---------- */
+
+let coachHealth = null;
+
+function renderCoachHealth() {
+  const card = document.getElementById('coach-health');
+  if (!card) return;
+
+  const items = activeHealthItems(coachHealth);
+  const hasCycle = cycleActive(coachHealth);
+  card.classList.toggle('hidden', !items.length && !hasCycle);
+  if (!items.length && !hasCycle) return;
+
+  const names = document.getElementById('ch-names');
+  names.innerHTML = '';
+  items.forEach(function (item) {
+    const pill = document.createElement('span');
+    pill.className = 'ch-pill';
+    let label = item.icon + ' ' + healthName(item);
+    if (item.key === 'pregnancy' && item.week) {
+      label += ' · ' + fill('preg_week_of', { n: item.week });
+    }
+    pill.textContent = label;
+    names.appendChild(pill);
+  });
+
+  /* طور الدورة الحالي قدام المدرب — عشان يقرا الأداء صح */
+  if (cycleActive(coachHealth)) {
+    const day = cycleDayOf(coachHealth.cycle);
+    const key = cyclePhaseOf(day);
+    const phase = CYCLE_PHASES[key];
+    if (day && phase) {
+      const pill = document.createElement('span');
+      pill.className = 'ch-pill cyc';
+      pill.textContent = phase.icon + ' ' + (phase[lang] || phase.ar) + ' · ' + fill('cycle_day_of', { n: day });
+      names.appendChild(pill);
+    }
+  }
+
+  const note = document.getElementById('ch-note');
+  note.textContent = coachHealth.note || '';
+  note.classList.toggle('hidden', !coachHealth.note);
+
+  /*
+   * البوابة: الحالات اللي محتاجة إذن طبي، البرنامج بيفضل
+   * متعلّم عليه "لسه مش متأكد" لحد ما الطبيب يكتب موافقته.
+   * التطبيق مش بيمنع المدرب — بيمنع إنه ينسى
+   */
+  const gate = document.getElementById('ch-gate');
+  const needs = needsClearance(coachHealth);
+  gate.classList.toggle('hidden', !needs);
+  card.classList.toggle('blocked', needs && !clearanceOk(coachHealth));
+
+  if (needs) {
+    const status = clearanceStatusOf(coachHealth);
+    const title = document.getElementById('ch-gate-title');
+    const text = document.getElementById('ch-gate-text');
+    const btn = document.getElementById('ch-request-clearance');
+    const docNote = (coachHealth.clearance && coachHealth.clearance.note) || '';
+
+    gate.className = 'ch-gate ' + status;
+    title.textContent = clearanceTitle(status);
+
+    if (status === 'cleared' || status === 'restricted' || status === 'denied') {
+      const base = status === 'cleared' ? t('clearance_ok_coach')
+                 : status === 'restricted' ? t('clearance_restricted_coach')
+                 : t('clearance_denied_coach');
+      text.textContent = docNote ? (base + ' — ' + t('clearance_doctor_note') + ': ' + docNote) : base;
+      /* المرفوض يقدر يتطلب تاني بعد ما الحالة تتغيّر */
+      btn.classList.toggle('hidden', status !== 'denied');
+    } else if (status === 'requested') {
+      text.textContent = t('clearance_waiting_coach');
+      btn.classList.add('hidden');
+    } else {
+      text.textContent = t('clearance_needed_coach');
+      btn.classList.remove('hidden');
+    }
+  }
+}
+
+/*
+ * طلب الإذن بيتبعت كاستشارة عادية للطبيب في فريق العميل —
+ * نفس الصندوق اللي بيرد منه على أي استشارة، فمفيش مسار جديد يتعلّمه
+ */
+document.getElementById('ch-request-clearance').addEventListener('click', async function () {
+  const message = document.getElementById('ch-gate-message');
+  if (!currentClient) return;
+  message.textContent = t('saving');
+  try {
+    const items = activeHealthItems(coachHealth).map(healthName).join(' · ');
+    await addDoc(collection(db, 'consultRequests'), {
+      clientEmail: currentClient,
+      clientName: currentClientName || currentClient,
+      providerEmail: '',
+      fromProvider: currentProviderEmail || COACH_EMAIL.toLowerCase(),
+      kind: 'clearance',
+      text: fill('clearance_request_text', { name: currentClientName || currentClient, list: items }),
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    });
+    coachHealth.clearance.status = 'requested';
+    await setDoc(doc(db, 'health', currentClient), { clearance: coachHealth.clearance }, { merge: true });
+    renderCoachHealth();
+    setStatusMessage(message, t('clearance_sent'), 'success');
+  } catch (error) {
+    message.textContent = t('problem') + error.message;
+  }
+});
+
+document.getElementById('ch-open-btn').addEventListener('click', function () {
+  /* نفس شيت العميل بالظبط — بس بالبيانات اللي المدرب فاتحها */
+  const keep = clientHealth;
+  clientHealth = coachHealth;
+  renderSafetySheet();
+  clientHealth = keep;
+  safetySheet.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+});
+
+
+/* ---------- شاشة العميل: شريط الأمان وشيت علامات التوقّف ---------- */
+
+function renderSafetyBanner() {
+  const banner = document.getElementById('client-safety-banner');
+  if (!banner) return;
+
+  const items = activeHealthItems(clientHealth);
+  const hasCycle = cycleActive(clientHealth);
+  /* الشريط بيبان كمان لو الدورة بس متابَعة — عشان توصل لنصايح الفترة */
+  banner.classList.toggle('hidden', !items.length && !hasCycle);
+  if (!items.length && !hasCycle) return;
+
+  const names = items.map(healthName);
+  if (hasCycle) {
+    const day = cycleDayOf(clientHealth.cycle);
+    const phase = CYCLE_PHASES[cyclePhaseOf(day)];
+    if (day && phase) names.push(phase[lang] || phase.ar);
+  }
+  document.getElementById('sb-title').textContent = names.join(' · ');
+
+  const sub = document.getElementById('sb-sub');
+  if (clientHealth.pregnancy.active && clientHealth.pregnancy.week) {
+    const tri = trimesterOf(clientHealth.pregnancy.week);
+    sub.textContent = fill('preg_week_of', { n: clientHealth.pregnancy.week }) + (tri ? ' · ' + t('preg_' + tri) : '');
+  } else {
+    sub.textContent = t('safety_sub');
+  }
+
+  /* حالة الإذن الطبي بتبان للعميل كمان — عشان يعرف هو مستني إيه */
+  banner.classList.toggle('waiting', needsClearance(clientHealth) && !clearanceOk(clientHealth));
+}
+
+function safetyListBlock(titleText, lines, kind) {
+  const box = document.createElement('div');
+  box.className = 'safety-list ' + kind;
+
+  const title = document.createElement('div');
+  title.className = 'sl-title';
+  title.textContent = titleText;
+  box.appendChild(title);
+
+  const ul = document.createElement('ul');
+  lines.forEach(function (line) {
+    const li = document.createElement('li');
+    li.textContent = line;
+    ul.appendChild(li);
+  });
+  box.appendChild(ul);
+  return box;
+}
+
+function renderSafetySheet() {
+  const body = document.getElementById('safety-body');
+  if (!body) return;
+  body.innerHTML = '';
+
+  const items = activeHealthItems(clientHealth);
+  if (!items.length && !cycleActive(clientHealth)) return;
+
+  /* حالة الإذن الطبي الأول — دي أهم معلومة للعميل */
+  if (needsClearance(clientHealth)) {
+    const status = clearanceStatusOf(clientHealth);
+    const card = document.createElement('div');
+    card.className = 'clearance-card ' + status;
+    const head = document.createElement('div');
+    head.className = 'cc-title';
+    head.textContent = clearanceTitle(status);
+    card.appendChild(head);
+    const text = document.createElement('p');
+    text.className = 'cc-text';
+    const docNote = (clientHealth.clearance && clientHealth.clearance.note) || '';
+    if (status === 'cleared') text.textContent = docNote || t('clearance_ok_text');
+    else if (status === 'restricted') text.textContent = docNote || t('clearance_restricted_text');
+    else if (status === 'denied') text.textContent = docNote || t('clearance_denied_text');
+    else text.textContent = t('clearance_needed_text');
+    card.appendChild(text);
+    body.appendChild(card);
+  }
+
+  if (cycleActive(clientHealth)) {
+    const day = cycleDayOf(clientHealth.cycle);
+    const key = cyclePhaseOf(day);
+    const phase = CYCLE_PHASES[key];
+    if (day && phase) {
+      const block = document.createElement('div');
+      block.className = 'safety-item';
+
+      const head = document.createElement('div');
+      head.className = 'si-head';
+      const icon = document.createElement('span');
+      icon.className = 'si-icon';
+      icon.textContent = phase.icon;
+      head.appendChild(icon);
+      const name = document.createElement('span');
+      name.textContent = (phase[lang] || phase.ar) + ' · ' + fill('cycle_day_of', { n: day });
+      head.appendChild(name);
+      block.appendChild(head);
+
+      block.appendChild(safetyListBlock(t('cycle_train_title'),
+        (phase.train && phase.train[lang]) || phase.train.ar || [], 'care'));
+      block.appendChild(safetyListBlock(t('cycle_flags_title'),
+        CYCLE_RED_FLAGS[lang] || CYCLE_RED_FLAGS.ar, 'stop'));
+
+      body.appendChild(block);
+    }
+  }
+
+  items.forEach(function (item) {
+    const block = document.createElement('div');
+    block.className = 'safety-item';
+
+    const head = document.createElement('div');
+    head.className = 'si-head';
+    const icon = document.createElement('span');
+    icon.className = 'si-icon';
+    icon.textContent = item.icon;
+    head.appendChild(icon);
+    const name = document.createElement('span');
+    name.textContent = healthName(item);
+    head.appendChild(name);
+    block.appendChild(head);
+
+    const care = (item.care && item.care[lang]) || (item.care && item.care.ar) || [];
+    const stop = (item.stop && item.stop[lang]) || (item.stop && item.stop.ar) || [];
+    if (care.length) block.appendChild(safetyListBlock(t('safety_care'), care, 'care'));
+    if (stop.length) block.appendChild(safetyListBlock(t('safety_stop'), stop, 'stop'));
+
+    body.appendChild(block);
+  });
+}
+
+const safetySheet = document.getElementById('safety-sheet');
+
+document.getElementById('sb-open-btn').addEventListener('click', function () {
+  renderSafetySheet();
+  safetySheet.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+});
+
+document.getElementById('safety-close').addEventListener('click', function () {
+  safetySheet.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+});
+
+
+function healthPayloadFromForm() {
+  const weekInput = document.getElementById('ob-preg-week');
+  const noteInput = document.getElementById('ob-health-note');
+  const cycLast = document.getElementById('ob-cycle-last');
+  const cycLen = document.getElementById('ob-cycle-len');
+  return {
+    conditions: obConditions.slice(),
+    pregnancy: { active: obPregnant, week: obPregnant ? (Number(weekInput && weekInput.value) || 0) : 0 },
+    postpartum: obPostpartum,
+    cycle: {
+      track: obCycleTrack && !obPregnant,
+      lastPeriod: (cycLast && cycLast.value) || '',
+      length: Number(cycLen && cycLen.value) || 28
+    },
+    note: (noteInput && noteInput.value.trim()) || ''
+  };
+}
 
 /* ============================ التقييمات والريفيوهات ============================ */
 
@@ -15928,7 +17142,93 @@ function touchProviderActivity(email) {
 
 let teamEditEmail = '';
 let teamEditMode = 'onboarding';
-let teamGroupedProviders = [];
+
+/* ============================================================
+   اختيار الفريق — صور دائرية بدل الكروت العريضة
+   الكروت القديمة كانت بتاخد الشاشة كلها لكل متخصص، فالعميل
+   بيلف كتير قبل ما يشوف حد تاني. دلوقتي صف صور صغيرة لكل
+   تخصص، واللي يعجبه يدوس عليه يفتحله البروفيل كامل
+   ============================================================ */
+
+let teamSearchTerm = '';
+
+/*
+ * الألقاب مش جزء من الاسم: "د. سارة عبد الله" اسمها الأول "سارة"
+ * مش "د." — من غير كده الصور كلها هتطلع مكتوب عليها "د" والأسماء
+ * تحتها كلها "د."
+ */
+const NAME_TITLES = ['د', 'د.', 'دكتور', 'دكتورة', 'أ', 'أ.', 'ا', 'ا.', 'م', 'م.', 'مهندس',
+                     'كابتن', 'كابتن.', 'كوتش', 'أستاذ', 'استاذ', 'dr', 'dr.', 'mr', 'mr.',
+                     'mrs', 'mrs.', 'ms', 'ms.', 'coach', 'prof', 'prof.'];
+
+function nameParts(name) {
+  const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+  const stripped = parts.filter(function (part, index) {
+    if (index > 1) return true;
+    return NAME_TITLES.indexOf(part.toLowerCase()) === -1;
+  });
+  return stripped.length ? stripped : parts;
+}
+
+/* الاسم الأول بس — الاسم الكامل جوه البروفيل */
+function providerShortName(provider) {
+  const parts = nameParts(provider && provider.name);
+  return parts[0] || (provider && provider.email) || '';
+}
+
+/* الحروف الأولى من الاسم — بديل محترم لما مفيش صورة */
+function providerInitials(name) {
+  const parts = nameParts(name);
+  if (!parts.length) return '؟';
+  if (parts.length === 1) return parts[0].slice(0, 2);
+  return parts[0].charAt(0) + parts[1].charAt(0);
+}
+
+/* لون ثابت لكل متخصص من اسمه — عشان الحرفين مايبقوش رمادي ممل */
+const AVATAR_TINTS = ['#22c55e', '#38bdf8', '#a78bfa', '#f59e0b', '#f472b6', '#2dd4bf'];
+
+function providerTint(email) {
+  let sum = 0;
+  String(email || '').split('').forEach(function (ch) { sum += ch.charCodeAt(0); });
+  return AVATAR_TINTS[sum % AVATAR_TINTS.length];
+}
+
+function providerAvatar(provider, size) {
+  const wrap = document.createElement('span');
+  wrap.className = 'ap-ring';
+  if (size) wrap.classList.add('ap-ring-' + size);
+
+  if (provider.photo) {
+    const image = document.createElement('img');
+    image.src = provider.photo;
+    image.alt = '';
+    image.loading = 'lazy';
+    image.addEventListener('error', function () {
+      image.remove();
+      wrap.appendChild(initialsNode(provider));
+    });
+    wrap.appendChild(image);
+  } else {
+    wrap.appendChild(initialsNode(provider));
+  }
+  return wrap;
+}
+
+function initialsNode(provider) {
+  const span = document.createElement('span');
+  span.className = 'ap-initials';
+  span.textContent = providerInitials(provider.name);
+  span.style.color = providerTint(provider.email);
+  span.style.background = 'color-mix(in srgb, ' + providerTint(provider.email) + ' 16%, transparent)';
+  return span;
+}
+
+function providerMatchesSearch(provider) {
+  if (!teamSearchTerm) return true;
+  const term = teamSearchTerm.toLowerCase();
+  return String(provider.name || '').toLowerCase().indexOf(term) !== -1
+      || String(provider.email || '').toLowerCase().indexOf(term) !== -1;
+}
 
 async function loadTeamPicker(prefillTeam) {
   teamList.innerHTML = '';
@@ -15948,121 +17248,256 @@ async function loadTeamPicker(prefillTeam) {
       return;
     }
     teamMessage.textContent = '';
-
-    // تجميع حسب التخصص — المتخصص اللي عنده أكتر من تخصص بيظهر في كل قسم يخصه
-    // (مثلاً مدرب + أخصائي تغذية بيظهر تحت "مدربين" وتحت "أخصائيي تغذية")
-    const bySpecialty = {};
-    teamProviders.forEach(function (provider) {
-      providerSpecialties(provider).forEach(function (key) {
-        if (!bySpecialty[key]) bySpecialty[key] = [];
-        bySpecialty[key].push(provider);
-      });
-    });
-    Object.keys(bySpecialty).forEach(function (specialty) {
-      bySpecialty[specialty].sort(function (a, b) { return providerScore(b) - providerScore(a); });
-    });
-
-    teamGroupedProviders = [];
-
-    Object.keys(SPECIALTIES).forEach(function (specialty) {
-      const list = bySpecialty[specialty];
-      if (!list || !list.length) return;
-
-      const section = document.createElement('div');
-      section.className = 'team-specialty-section';
-      const heading = document.createElement('h3');
-      heading.className = 'welcome-section-title';
-      heading.textContent = specialtyName(specialty, lang);
-      section.appendChild(heading);
-      teamList.appendChild(section);
-
-      list.forEach(function (provider, index) {
-        const card = document.createElement('div');
-        card.className = 'ex-card';
-
-        if (provider.photo) {
-          const image = document.createElement('img');
-          image.src = provider.photo;
-          image.alt = '';
-          card.appendChild(image);
-        }
-
-        const body = document.createElement('div');
-        body.className = 'ex-body';
-
-        const badgesRow = document.createElement('div');
-        badgesRow.className = 'team-badges';
-        if (index === 0) {
-          const recBadge = document.createElement('span');
-          recBadge.className = 'team-badge recommended';
-          recBadge.textContent = t('recommended_badge');
-          badgesRow.appendChild(recBadge);
-        }
-        if (isProviderRecentlyActive(provider)) {
-          const activeBadge = document.createElement('span');
-          activeBadge.className = 'team-badge active-now';
-          activeBadge.textContent = t('active_now_badge');
-          badgesRow.appendChild(activeBadge);
-        }
-        if (badgesRow.childNodes.length) body.appendChild(badgesRow);
-
-        const name = document.createElement('div');
-        name.className = 'ex-name';
-        setSpecialtyLabel(name, specialty, provider.name);
-        body.appendChild(name);
-
-        /*
-         * كل تخصصات المتخصص كخانات جنب بعض — العميل وهو بيختار أخصائي
-         * تأهيل مثلاً يشوف إن ده كمان مدرب وأخصائي تغذية، فيقدر يختاره
-         * لأكتر من دور بدل ما يفرّق فريقه على ناس كتير من غير داعي
-         */
-        const allSpecs = providerSpecialties(provider);
-        if (allSpecs.length > 1) {
-          const chips = document.createElement('div');
-          renderSpecialtyChips(chips, allSpecs);
-          body.appendChild(chips);
-        }
-
-        const meta = document.createElement('div');
-        meta.className = 'ex-meta';
-        meta.textContent = provider.bio || '';
-        body.appendChild(meta);
-
-        const stats = ratingStatsFor(provider.email);
-        const stars = document.createElement('div');
-        stars.className = 'stars-display';
-        stars.innerHTML = starsDisplayMarkup(stats.avg, stats.count);
-        body.appendChild(stars);
-
-        card.appendChild(body);
-
-        card.addEventListener('click', function () {
-          const already = selectedTeam[specialty] === provider.email;
-          if (already) {
-            delete selectedTeam[specialty];
-          } else {
-            selectedTeam[specialty] = provider.email;
-          }
-          renderTeamSelection();
-        });
-
-        teamGroupedProviders.push({ provider: provider, specialty: specialty });
-        section.appendChild(card);
-      });
-    });
-
-    renderTeamSelection();
+    renderTeamPicker();
   } catch (error) {
     teamMessage.textContent = t('problem') + error.message;
   }
 }
 
+function renderTeamPicker() {
+  teamList.innerHTML = '';
+
+  /* تجميع حسب التخصص — اللي عنده أكتر من تخصص بيظهر في كل قسم يخصه */
+  const bySpecialty = {};
+  teamProviders.forEach(function (provider) {
+    if (!providerMatchesSearch(provider)) return;
+    providerSpecialties(provider).forEach(function (key) {
+      if (!bySpecialty[key]) bySpecialty[key] = [];
+      bySpecialty[key].push(provider);
+    });
+  });
+  Object.keys(bySpecialty).forEach(function (specialty) {
+    bySpecialty[specialty].sort(function (a, b) { return providerScore(b) - providerScore(a); });
+  });
+
+  let shown = 0;
+  Object.keys(SPECIALTIES).forEach(function (specialty) {
+    const list = bySpecialty[specialty];
+    if (!list || !list.length) return;
+    shown += list.length;
+
+    const section = document.createElement('div');
+    section.className = 'team-specialty-section';
+
+    const heading = document.createElement('div');
+    heading.className = 'team-spec-head';
+    const title = document.createElement('h3');
+    title.textContent = specialtyIcon(specialty) + ' ' + specialtyName(specialty, lang);
+    heading.appendChild(title);
+    const count = document.createElement('span');
+    count.className = 'team-spec-count';
+    count.textContent = list.length;
+    heading.appendChild(count);
+    section.appendChild(heading);
+
+    const row = document.createElement('div');
+    row.className = 'avatar-row';
+
+    list.forEach(function (provider, index) {
+      const pick = document.createElement('button');
+      pick.type = 'button';
+      pick.className = 'avatar-pick';
+      pick.dataset.email = provider.email;
+      pick.dataset.spec = specialty;
+      if (selectedTeam[specialty] === provider.email) pick.classList.add('selected');
+
+      pick.appendChild(providerAvatar(provider));
+
+      if (index === 0 && !teamSearchTerm) {
+        const badge = document.createElement('span');
+        badge.className = 'ap-badge';
+        badge.textContent = t('recommended_short');
+        pick.appendChild(badge);
+      }
+      if (isProviderRecentlyActive(provider)) {
+        const dot = document.createElement('span');
+        dot.className = 'ap-live';
+        pick.appendChild(dot);
+      }
+
+      const name = document.createElement('span');
+      name.className = 'ap-name';
+      name.textContent = providerShortName(provider);
+      pick.appendChild(name);
+
+      const stats = ratingStatsFor(provider.email);
+      if (stats.count) {
+        const rating = document.createElement('span');
+        rating.className = 'ap-rating';
+        rating.textContent = '★ ' + stats.avg.toFixed(1);
+        pick.appendChild(rating);
+      }
+
+      pick.addEventListener('click', function () {
+        openProviderSheet(provider, specialty);
+      });
+
+      row.appendChild(pick);
+    });
+
+    section.appendChild(row);
+    teamList.appendChild(section);
+  });
+
+  const empty = document.getElementById('team-empty');
+  if (empty) empty.classList.toggle('hidden', shown > 0);
+
+  renderTeamSelection();
+}
+
+/* ملخّص اللي اتاختار تحت — عشان العميل يشوف فريقه وهو بيبني */
 function renderTeamSelection() {
-  const cards = teamList.querySelectorAll('.ex-card');
-  teamGroupedProviders.forEach(function (entry, index) {
-    const card = cards[index];
-    if (!card) return;
-    card.classList.toggle('selected', selectedTeam[entry.specialty] === entry.provider.email);
+  teamList.querySelectorAll('.avatar-pick').forEach(function (pick) {
+    pick.classList.toggle('selected', selectedTeam[pick.dataset.spec] === pick.dataset.email);
+  });
+
+  const box = document.getElementById('team-picked');
+  if (!box) return;
+  const keys = Object.keys(selectedTeam).filter(function (key) { return !!selectedTeam[key]; });
+  box.innerHTML = '';
+  box.classList.toggle('hidden', !keys.length);
+  if (!keys.length) return;
+
+  const title = document.createElement('div');
+  title.className = 'tp-title';
+  title.textContent = fill('team_picked_count', { n: keys.length });
+  box.appendChild(title);
+
+  const row = document.createElement('div');
+  row.className = 'tp-row';
+  keys.forEach(function (key) {
+    const provider = teamProviders.filter(function (item) { return item.email === selectedTeam[key]; })[0];
+    if (!provider) return;
+    const chip = document.createElement('span');
+    chip.className = 'tp-chip';
+    chip.textContent = specialtyIcon(key) + ' ' + providerShortName(provider);
+    row.appendChild(chip);
+  });
+  box.appendChild(row);
+}
+
+/* ---------- شيت بروفايل المتخصص ---------- */
+
+const providerSheet = document.getElementById('provider-sheet');
+let sheetProvider = null;
+let sheetSpecialty = '';
+
+function openProviderSheet(provider, specialty) {
+  sheetProvider = provider;
+  sheetSpecialty = specialty || '';
+
+  const body = document.getElementById('ps-body');
+  document.getElementById('ps-title').textContent = specialty
+    ? specialtyName(specialty, lang)
+    : t('provider_profile_title');
+  body.innerHTML = '';
+
+  const head = document.createElement('div');
+  head.className = 'ps-head';
+  head.appendChild(providerAvatar(provider, 'lg'));
+
+  const info = document.createElement('div');
+  info.className = 'ps-info';
+
+  const name = document.createElement('div');
+  name.className = 'ps-name';
+  name.textContent = provider.name || provider.email;
+  info.appendChild(name);
+
+  const stats = ratingStatsFor(provider.email);
+  const stars = document.createElement('div');
+  stars.className = 'stars-display';
+  stars.innerHTML = starsDisplayMarkup(stats.avg, stats.count);
+  info.appendChild(stars);
+
+  if (isProviderRecentlyActive(provider)) {
+    const live = document.createElement('span');
+    live.className = 'team-badge active-now';
+    live.textContent = t('active_now_badge');
+    info.appendChild(live);
+  }
+
+  head.appendChild(info);
+  body.appendChild(head);
+
+  const chips = document.createElement('div');
+  chips.className = 'ps-chips';
+  renderSpecialtyChips(chips, providerSpecialties(provider));
+  body.appendChild(chips);
+
+  /* أرقامه: كام عميل وكام تقييم — العميل بيختار بمعلومة مش بإحساس */
+  const numbers = document.createElement('div');
+  numbers.className = 'ps-numbers';
+  [
+    { value: Number(provider.clientsCount) || 0, label: t('ps_clients') },
+    { value: stats.count, label: t('ps_reviews') },
+    { value: stats.count ? stats.avg.toFixed(1) : '—', label: t('ps_rating') }
+  ].forEach(function (cell) {
+    const box = document.createElement('div');
+    box.className = 'ps-num';
+    const v = document.createElement('strong');
+    v.textContent = cell.value;
+    box.appendChild(v);
+    const l = document.createElement('span');
+    l.textContent = cell.label;
+    box.appendChild(l);
+    numbers.appendChild(box);
+  });
+  body.appendChild(numbers);
+
+  if (provider.bio) {
+    const bio = document.createElement('p');
+    bio.className = 'ps-bio';
+    bio.textContent = provider.bio;
+    body.appendChild(bio);
+  }
+
+  if (provider.certs) {
+    const certs = document.createElement('div');
+    certs.className = 'ps-certs';
+    const certTitle = document.createElement('div');
+    certTitle.className = 'ps-sec-title';
+    certTitle.textContent = t('ps_certs');
+    certs.appendChild(certTitle);
+    const certText = document.createElement('p');
+    certText.textContent = provider.certs;
+    certs.appendChild(certText);
+    body.appendChild(certs);
+  }
+
+  const pickBtn = document.getElementById('ps-pick-btn');
+  const already = sheetSpecialty && selectedTeam[sheetSpecialty] === provider.email;
+  pickBtn.textContent = already ? t('ps_remove') : t('ps_pick');
+  pickBtn.classList.toggle('picked', already);
+  pickBtn.classList.toggle('hidden', !sheetSpecialty);
+
+  providerSheet.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+}
+
+function closeProviderSheet() {
+  providerSheet.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+}
+
+document.getElementById('ps-close').addEventListener('click', closeProviderSheet);
+
+document.getElementById('ps-pick-btn').addEventListener('click', function () {
+  if (!sheetProvider || !sheetSpecialty) return;
+  if (selectedTeam[sheetSpecialty] === sheetProvider.email) {
+    delete selectedTeam[sheetSpecialty];
+  } else {
+    selectedTeam[sheetSpecialty] = sheetProvider.email;
+  }
+  renderTeamSelection();
+  closeProviderSheet();
+});
+
+const teamSearchInput = document.getElementById('team-search');
+if (teamSearchInput) {
+  teamSearchInput.addEventListener('input', function () {
+    teamSearchTerm = teamSearchInput.value.trim();
+    renderTeamPicker();
   });
 }
 
