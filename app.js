@@ -411,6 +411,8 @@ const TEXT = {
     no_specialty: 'من غير تخصص',
     ai_on_label: 'فعّل المساعد الذكي في الشات',
     ai_on_hint: 'بيستعمل نفس الرابط اللي فوق. قبل ما تفعّله لازم تحط GEMINI_KEY و FIREBASE_API_KEY في Script properties جوه Apps Script — الشرح في ملف الإعداد.',
+    settings_migrated: 'الإعدادات اتنقلت للمكان الجديد — المساعد الذكي والترحيب شغالين تاني',
+    settings_missing_url: 'الرابط فاضي — المساعد الذكي والرسالة الترحيبية مش هيشتغلوا من غيره',
     chat_ai_unavailable: 'المساعد الذكي مش متاح دلوقتي — رسالتك وصلت لمدربك وهيرد عليك',
     chat_ai_typing: 'المساعد الذكي بيكتب…',
     nut_lib_title: 'مكتبة برامج التغذية',
@@ -1674,6 +1676,8 @@ const TEXT = {
     no_specialty: 'No specialty set',
     ai_on_label: 'Turn on the AI assistant in chat',
     ai_on_hint: 'It uses the same URL above. Before turning it on, add GEMINI_KEY and FIREBASE_API_KEY to Script properties inside Apps Script — the setup file explains how.',
+    settings_migrated: 'Settings moved to their new home — the assistant and welcome mail are working again',
+    settings_missing_url: 'The URL is empty — the assistant and the welcome email will not work without it',
     chat_ai_unavailable: 'The assistant is unavailable right now — your message reached your coach and they will reply',
     chat_ai_typing: 'The assistant is typing…',
     nut_lib_title: 'Nutrition program library',
@@ -17459,12 +17463,16 @@ async function loadAdminPanel() {
   settingsBank.value = (paymentSettings && paymentSettings.bankDetails) || '';
   settingsMessage.textContent = '';
 
+  const moved = await migrateWelcomeSettings();
   await fetchWelcomeSettings();
   document.getElementById('settings-welcome-url').value = (welcomeSettings && welcomeSettings.url) || '';
   document.getElementById('settings-welcome-secret').value = await fetchWelcomeSecret();
   document.getElementById('settings-welcome-on').checked = !!(welcomeSettings && welcomeSettings.enabled);
   document.getElementById('settings-ai-on').checked = !!(welcomeSettings && welcomeSettings.aiEnabled);
-  document.getElementById('welcome-mail-message').textContent = '';
+  const welcomeMsg = document.getElementById('welcome-mail-message');
+  welcomeMsg.textContent = '';
+  if (moved) setStatusMessage(welcomeMsg, t('settings_migrated'), 'success');
+  else if (!(welcomeSettings && welcomeSettings.url)) welcomeMsg.textContent = t('settings_missing_url');
 
   await renderAdminPlansList();
   await renderAdminProviderPlansList();
@@ -17514,14 +17522,57 @@ let welcomeSettings = null;
  *    بيتبعت للزائر خالص.
  *  • settings/welcome — كلمة السر. الإدارة بس بتقراها.
  */
+/*
+ * الإعدادات كانت كلها في settings/welcome، واتقسمت لما قفلنا كلمة
+ * السر: العام راح لـ settings/public. المستند الجديد ده مش بيتعمل
+ * لوحده — فأي حساب رفع النسخة الجديدة من غير ما يفتح لوحة التحكم
+ * ويحفظ، كان بيلاقي الإعدادات فاضية والمساعد الذكي واقف في سكوت.
+ * عشان كده بنرجع للمستند القديم لو الجديد لسه مش موجود، ولوحة
+ * التحكم بتنقل البيانات لوحدها أول ما تتفتح
+ */
 async function fetchWelcomeSettings() {
+  welcomeSettings = null;
   try {
     const snap = await getDoc(doc(db, 'settings', 'public'));
-    welcomeSettings = snap.exists() ? snap.data() : null;
+    if (snap.exists() && snap.data().url) welcomeSettings = snap.data();
   } catch (error) {
     welcomeSettings = null;
   }
+  if (welcomeSettings) return welcomeSettings;
+
+  // الرجوع للمستند القديم — الإدارة بس هي اللي القواعد بتسمحلها تقراه
+  try {
+    const legacy = await getDoc(doc(db, 'settings', 'welcome'));
+    if (legacy.exists() && legacy.data().url) welcomeSettings = legacy.data();
+  } catch (error) {
+    /* العميل العادي مالوش حق يقراه — طبيعي */
+  }
   return welcomeSettings;
+}
+
+/*
+ * نقل تلقائي: لو الإعدادات لسه في المستند القديم بس، بننسخ الجزء
+ * العام للمستند الجديد عشان العملاء يشوفوه. بتحصل مرة واحدة أول ما
+ * الإدارة تفتح لوحة التحكم
+ */
+async function migrateWelcomeSettings() {
+  try {
+    const pub = await getDoc(doc(db, 'settings', 'public'));
+    if (pub.exists() && pub.data().url) return false;
+
+    const legacy = await getDoc(doc(db, 'settings', 'welcome'));
+    if (!legacy.exists() || !legacy.data().url) return false;
+
+    const data = legacy.data();
+    await setDoc(doc(db, 'settings', 'public'), {
+      url: data.url || '',
+      enabled: !!data.enabled,
+      aiEnabled: !!data.aiEnabled
+    }, { merge: true });
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
 
 /* كلمة السر بتتقرا لما الإدارة تفتح لوحة التحكم بس */
