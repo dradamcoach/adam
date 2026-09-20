@@ -411,6 +411,7 @@ const TEXT = {
     no_specialty: 'من غير تخصص',
     ai_on_label: 'فعّل المساعد الذكي في الشات',
     ai_on_hint: 'بيستعمل نفس الرابط اللي فوق. قبل ما تفعّله لازم تحط GEMINI_KEY و FIREBASE_API_KEY في Script properties جوه Apps Script — الشرح في ملف الإعداد.',
+    chat_ai_unavailable: 'المساعد الذكي مش متاح دلوقتي — رسالتك وصلت لمدربك وهيرد عليك',
     chat_ai_typing: 'المساعد الذكي بيكتب…',
     nut_lib_title: 'مكتبة برامج التغذية',
     nut_lib_hint: 'اختار برنامج قريب من حالة عميلك، طبّقه، وبعدين عدّل الكميات عليه. الأرقام اللي جنب كل برنامج محسوبة من الأكل اللي جواه فعلًا.',
@@ -1673,6 +1674,7 @@ const TEXT = {
     no_specialty: 'No specialty set',
     ai_on_label: 'Turn on the AI assistant in chat',
     ai_on_hint: 'It uses the same URL above. Before turning it on, add GEMINI_KEY and FIREBASE_API_KEY to Script properties inside Apps Script — the setup file explains how.',
+    chat_ai_unavailable: 'The assistant is unavailable right now — your message reached your coach and they will reply',
     chat_ai_typing: 'The assistant is typing…',
     nut_lib_title: 'Nutrition program library',
     nut_lib_hint: 'Pick the program closest to your client, apply it, then adjust the amounts. The numbers next to each one are calculated from the food actually in it.',
@@ -16804,6 +16806,13 @@ function openChatThread(email, returnScreen) {
    ============================================================ */
 
 let aiReplyPending = false;
+/*
+ * الرسايل اللي العميل بعتها والمساعد لسه بيرد على اللي قبلها.
+ * من غير الطابور ده كانت بتتلغي في سكوت: العميل يبعت رسالتين ورا
+ * بعض، يرد على الأولى وميردش على التانية خالص — وده كان شكله
+ * إن المساعد "بيرد مرة وبعدين بيقف"
+ */
+let aiQueue = [];
 
 function aiChatEnabled() {
   return !!(welcomeSettings && welcomeSettings.url && welcomeSettings.aiEnabled);
@@ -16820,19 +16829,37 @@ function aiClientContext() {
   };
 }
 
-async function requestAiReply(text) {
-  if (!aiChatEnabled() || aiReplyPending) return;
-  if (chatViewerIsCoach()) return;          /* الرد للعميل بس */
-  const conf = welcomeSettings;
-
-  aiReplyPending = true;
+function aiTyping(on) {
   const typing = document.getElementById('chat-typing');
-  if (typing) typing.classList.remove('hidden');
+  if (typing) typing.classList.toggle('hidden', !on);
+}
+
+/*
+ * العميل بعت وإحنا لسه بنرد؟ نحط رسالته في الطابور بدل ما نرميها.
+ * أول ما الرد الحالي يخلص بناخد اللي اتجمّع كله ونرد عليه مرة واحدة
+ * — رد واحد مترابط أحسن من كذا رد مقطّع
+ */
+function requestAiReply(text) {
+  if (!aiChatEnabled()) return;
+  if (chatViewerIsCoach()) return;
+  aiQueue.push(text);
+  if (aiReplyPending) return;
+  runAiQueue();
+}
+
+async function runAiQueue() {
+  if (aiReplyPending || !aiQueue.length) return;
+  aiReplyPending = true;
+  aiTyping(true);
+
+  const batch = aiQueue.join('\n');
+  aiQueue = [];
+  const conf = welcomeSettings;
 
   try {
     const user = auth.currentUser;
     const idToken = user ? await user.getIdToken() : '';
-    if (!idToken) return;
+    if (!idToken) { aiFailed('not signed in'); return; }
 
     const res = await fetch(conf.url, {
       method: 'POST',
@@ -16841,13 +16868,17 @@ async function requestAiReply(text) {
         action: 'ai_chat',
         idToken: idToken,
         clientEmail: currentChatEmail,
-        text: text,
+        text: batch,
         lang: lang,
         context: aiClientContext()
       })
     });
     const data = await res.json().catch(function () { return null; });
-    if (!data || !data.ok || !data.reply) return;
+
+    if (!data || !data.ok || !data.reply) {
+      aiFailed((data && data.error) || ('http ' + res.status));
+      return;
+    }
 
     await addDoc(collection(db, 'chats', currentChatEmail, 'messages'), {
       sender: 'ai',
@@ -16861,14 +16892,24 @@ async function requestAiReply(text) {
       lastSender: 'ai'
     }, { merge: true });
   } catch (error) {
-    /*
-     * فشل الرد الذكي مش مشكلة يوقف الشات: رسالة العميل اتبعتت
-     * لمدربه فعلاً، والمدرب هيرد. فبنسكت بدل ما نخوّف العميل
-     */
+    aiFailed(error && error.message ? error.message : 'network');
   } finally {
     aiReplyPending = false;
-    if (typing) typing.classList.add('hidden');
+    aiTyping(false);
+    // لو العميل بعت تاني وإحنا بنرد، نرد على اللي اتجمّع
+    if (aiQueue.length) runAiQueue();
   }
+}
+
+/*
+ * فشل المساعد مش بيوقف الشات — رسالة العميل وصلت لمدربه فعلًا.
+ * بس السكوت التام كان بيخلي أي مشكلة مستحيل تتشاف، فبنكتب السبب
+ * في الكونسول (للمطوّر) وسطر هادي للعميل إنه هيرد عليه مدربه
+ */
+function aiFailed(reason) {
+  try { console.warn('[ADAM] AI reply failed:', reason); } catch (e) { /* تجاهل */ }
+  const box = document.getElementById('chat-message');
+  if (box) setStatusMessage(box, t('chat_ai_unavailable'), '');
 }
 
 async function sendChatMessage() {
@@ -17420,7 +17461,7 @@ async function loadAdminPanel() {
 
   await fetchWelcomeSettings();
   document.getElementById('settings-welcome-url').value = (welcomeSettings && welcomeSettings.url) || '';
-  document.getElementById('settings-welcome-secret').value = (welcomeSettings && welcomeSettings.secret) || '';
+  document.getElementById('settings-welcome-secret').value = await fetchWelcomeSecret();
   document.getElementById('settings-welcome-on').checked = !!(welcomeSettings && welcomeSettings.enabled);
   document.getElementById('settings-ai-on').checked = !!(welcomeSettings && welcomeSettings.aiEnabled);
   document.getElementById('welcome-mail-message').textContent = '';
@@ -17464,14 +17505,33 @@ document.getElementById('refresh-public-stats-btn').addEventListener('click', as
 
 let welcomeSettings = null;
 
+/*
+ * الإعدادات اتقسمت مستندين:
+ *  • settings/public  — الرابط وتشغيل/إيقاف الترحيب والمساعد. مفيهوش
+ *    أي سر، وبيتقرا من غير تسجيل دخول — وده لازم، لأن زائر الصفحة
+ *    الرئيسية اللي بيسيب إيميله مش مسجّل أصلًا. قبل كده كان بيتقرا
+ *    من مستند فيه كلمة السر ومقفول على المسجّلين، فالترحيب مكانش
+ *    بيتبعت للزائر خالص.
+ *  • settings/welcome — كلمة السر. الإدارة بس بتقراها.
+ */
 async function fetchWelcomeSettings() {
   try {
-    const snap = await getDoc(doc(db, 'settings', 'welcome'));
+    const snap = await getDoc(doc(db, 'settings', 'public'));
     welcomeSettings = snap.exists() ? snap.data() : null;
   } catch (error) {
     welcomeSettings = null;
   }
   return welcomeSettings;
+}
+
+/* كلمة السر بتتقرا لما الإدارة تفتح لوحة التحكم بس */
+async function fetchWelcomeSecret() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'welcome'));
+    return snap.exists() ? (snap.data().secret || '') : '';
+  } catch (error) {
+    return '';
+  }
 }
 
 async function sendWelcomeMail(lead) {
@@ -17488,7 +17548,7 @@ async function sendWelcomeMail(lead) {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
-        secret: conf.secret || '',
+        action: 'welcome',
         name: lead.name || '',
         email: lead.email,
         phone: lead.phone || '',
@@ -17507,14 +17567,18 @@ document.getElementById('save-welcome-btn').addEventListener('click', async func
   const message = document.getElementById('welcome-mail-message');
   message.textContent = t('saving');
   try {
-    const payload = {
+    const publicPart = {
       url: document.getElementById('settings-welcome-url').value.trim(),
-      secret: document.getElementById('settings-welcome-secret').value.trim(),
       enabled: document.getElementById('settings-welcome-on').checked,
       aiEnabled: document.getElementById('settings-ai-on').checked
     };
-    await setDoc(doc(db, 'settings', 'welcome'), payload, { merge: true });
-    welcomeSettings = payload;
+    // السر لوحده في مستند مقفول — مابيوصلش لمتصفح أي عميل
+    const secretPart = {
+      secret: document.getElementById('settings-welcome-secret').value.trim()
+    };
+    await setDoc(doc(db, 'settings', 'public'), publicPart, { merge: true });
+    await setDoc(doc(db, 'settings', 'welcome'), secretPart, { merge: true });
+    welcomeSettings = publicPart;
     setStatusMessage(message, t('saved'), 'success');
   } catch (error) {
     message.textContent = t('problem') + error.message;
