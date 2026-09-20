@@ -31,11 +31,6 @@
            غير أي كلام -->
       <div class="hero-band" id="hero-band"></div>
 
-      <div class="hero2-cta">
-        <button type="button" id="hero2-start-btn" data-t="welcome_start_btn">ابدأ تجربتك المجانية</button>
-        <button type="button" id="hero2-demo-btn" class="secondary" data-t="hero2_demo_btn">شوف برنامج نموذجي ↓</button>
-      </div>
-
       <!-- الموبايل: مرسوم بالكامل بالـCSS ومفيش صورة بتتحمّل. بيلف
            على ست شاشات حقيقية من التطبيق، ولونه بيتغيّر مع كل تخصص
            ومتزامن مع المحطة المنوّرة في الشريط فوق -->
@@ -57,6 +52,11 @@
           <div class="hp-bar"><div class="hp-bar-fill" id="hp-bar-fill"></div></div>
           <div class="hp-foot" id="hp-foot">3 من 5 تمارين خلصت</div>
         </div>
+      </div>
+
+      <div class="hero2-cta">
+        <button type="button" id="hero2-start-btn" data-t="welcome_start_btn">ابدأ تجربتك المجانية</button>
+        <button type="button" id="hero2-demo-btn" class="secondary" data-t="hero2_demo_btn">شوف برنامج نموذجي ↓</button>
       </div>
 
       <div class="hero2-trust">
@@ -180,6 +180,9 @@
       </p>
     </div>
   </div>
+
+  <!-- ============ الشريط السفلي: أربع أزرار زي الأبليكيشن ============ -->
+  <nav class="appbar hidden" id="client-appbar"></nav>
 
   <div class="welcome-sticky-cta hidden" id="welcome-sticky-cta">
     <button type="button" id="welcome-sticky-start-btn" data-t="welcome_start_btn">ابدأ تجربتك المجانية</button>
@@ -510,6 +513,11 @@
 
       <p class="health-privacy" data-t="ob_health_privacy">🔒 البيانات دي بتتحفظ عندك في حسابك، وبيشوفها فريقك المتابع معاك بس — مش بتتباع ولا بتروح لأي جهة تانية.</p>
     </div>
+
+    <!-- عرفتنا منين: الإجابة دي بتقول لنا فين نحط مجهودنا -->
+    <label class="field-label" data-t="ob_source_label">عرفت ADAM منين؟</label>
+    <div class="src-row" id="ob-source-row"></div>
+    <input id="ob-source-other" class="hidden" data-t-ph="ob_source_other_ph">
 
     <div class="ref-block" id="ob-ref-block">
       <label class="field-label" data-t="ob_ref_label">مين رشّحلك ADAM؟</label>
@@ -1352,8 +1360,10 @@
 
   <div class="card hidden" id="client-screen">
     <p class="trial-banner hidden" id="trial-banner"></p>
-    <button type="button" class="link" id="open-client-profile-btn" data-t="open_client_profile_btn">بروفايلك ›</button>
-    <div class="tabs" id="client-tabs">
+    <button type="button" class="link hidden" id="open-client-profile-btn" data-t="open_client_profile_btn">بروفايلك ›</button>
+    <!-- الشريط القديم: مخفي دلوقتي، الشريط السفلي بيناديه.
+         سايبينه في الصفحة عشان الربط القديم كله يفضل شغال -->
+    <div class="tabs hidden" id="client-tabs">
       <button type="button" class="tab active" id="ctab-training"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg><span data-t="tab_training">تمرين</span></button>
       <button type="button" class="tab" id="ctab-rehab"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line></svg><span data-t="tab_rehab">تأهيل</span></button>
       <button type="button" class="tab" id="ctab-nutrition"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path></svg><span data-t="tab_nutrition">تغذية</span></button>
@@ -1363,7 +1373,7 @@
       <button type="button" class="tab" id="ctab-store"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l1.5-4h13L20 8"></path><path d="M4 8h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"></path><path d="M9 12a3 3 0 0 0 6 0"></path></svg><span data-t="tab_store">المتجر</span></button>
     </div>
 
-    <button type="button" class="fab-toggle" id="client-fab-toggle" data-t-title="fab_toggle_title"><svg class="ui-icon fab-toggle-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle></svg><svg class="ui-icon fab-toggle-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <button type="button" class="fab-toggle hidden" id="client-fab-toggle" data-t-title="fab_toggle_title"><svg class="ui-icon fab-toggle-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle></svg><svg class="ui-icon fab-toggle-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
 
     <div class="cycle-card hidden" id="client-cycle">
       <div class="cyc-head">
@@ -1390,7 +1400,9 @@
       <button type="button" class="sb-open" id="sb-open-btn" data-t="safety_open">اعرف علامات التوقّف ›</button>
     </div>
 
-    <div class="fab-icon-row is-collapsed" id="client-fab-row">
+    <!-- الشريط العائم اتشال من الشاشة — زراره بقت مربعات في الرئيسية.
+         سايبينها في الصفحة عشان الربط القليل بتاعها يفضل شغال -->
+    <div class="fab-icon-row is-collapsed hidden" id="client-fab-row">
       <button type="button" id="report-injury-btn" class="fab-icon-btn" data-t-title="report_injury_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg></button>
       <button type="button" id="view-team-btn" class="fab-icon-btn fab-icon-btn-secondary" data-t-title="view_team_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path><circle cx="17" cy="9" r="2.4"></circle><path d="M15.5 14c2.5.3 4.5 2.3 4.5 6"></path></svg></button>
       <button type="button" id="open-medlib-btn" class="fab-icon-btn fab-icon-btn-tertiary" data-t-title="open_medlib_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"></path></svg></button>
@@ -1398,6 +1410,20 @@
       <button type="button" id="open-chat-btn" class="fab-icon-btn fab-icon-btn-quinary" data-t-title="open_chat_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10.5H9l-4 3.5v-3.5H4z"></path><line x1="8" y1="9.5" x2="16" y2="9.5"></line><line x1="8" y1="12.5" x2="13" y2="12.5"></line></svg></button>
       <button type="button" id="open-calc-btn" class="fab-icon-btn fab-icon-btn-senary" data-t-title="open_calc_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><line x1="8" y1="7.5" x2="16" y2="7.5"></line><line x1="8.5" y1="12" x2="8.5" y2="12.01"></line><line x1="12" y1="12" x2="12" y2="12.01"></line><line x1="15.5" y1="12" x2="15.5" y2="12.01"></line><line x1="8.5" y1="16" x2="8.5" y2="16.01"></line><line x1="12" y1="16" x2="12" y2="16.01"></line><line x1="15.5" y1="16" x2="15.5" y2="16.01"></line></svg></button>
       <button type="button" id="open-progress-btn" class="fab-icon-btn fab-icon-btn-septenary" data-t-title="open_progress_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 6"></polyline><polyline points="15 6 21 6 21 12"></polyline></svg></button>
+    </div>
+
+    <!-- ============ الرئيسية: ملخّص اليوم + كل الباقي كمربعات ============ -->
+    <div id="client-home">
+      <div class="home-hello" id="home-hello"></div>
+      <!-- شريط الأسبوع اتنقل من شاشة التمرين للرئيسية — ده ملخّص
+           أسبوعه، مكانه الطبيعي أول ما يفتح -->
+      <div class="week-streak" id="client-week-streak">
+        <div class="ws-dots" id="ws-dots"></div>
+        <div class="ws-note" id="ws-note"></div>
+      </div>
+
+      <div class="home-cards" id="home-cards"></div>
+      <div class="home-tiles" id="home-tiles"></div>
     </div>
 
     <div id="client-training">
@@ -1409,11 +1435,6 @@
             <div class="dc-sub" id="client-dc-sub"></div>
           </div>
         </div>
-      </div>
-
-      <div class="week-streak" id="client-week-streak">
-        <div class="ws-dots" id="ws-dots"></div>
-        <div class="ws-note" id="ws-note"></div>
       </div>
 
       <div class="sess-card" id="sess-card">

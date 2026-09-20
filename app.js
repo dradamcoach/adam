@@ -406,6 +406,28 @@ const TEXT = {
     welcome_medical_step_2: 'متخصص حقيقي في المجال يراجع حالتك',
     welcome_medical_step_3: 'بتاخد رد وخطة متابعة واضحة',
     welcome_medical_step_4: 'تكمّل متابعتك مع فريقك من داخل التطبيق',
+    nav_home: 'الرئيسية',
+    nav_profile: 'بروفايلي',
+    nav_chat: 'الشات',
+    nav_progress: 'متابعتي',
+    nav_team: 'فريقي',
+    nav_injury: 'بلّغ إصابة',
+    nav_medlib: 'المكتبة الطبية',
+    nav_calc: 'الحاسبات',
+    nav_sub: 'اشتراكي',
+    home_hello: 'أهلًا بيك',
+    home_hello_named: 'أهلًا {name}',
+    home_today_training: 'تمرين النهاردة',
+    home_today_food: 'أكل النهاردة',
+    home_today_water: 'المية',
+    home_today_rehab: 'التأهيل',
+    home_open_rehab: 'افتح برنامجك',
+    home_rest_day: 'راحة النهاردة',
+    home_sets_of: '{done} من {total} مجموعة',
+    home_minutes: 'حوالي {n} دقيقة',
+    home_kcal_of: '{done} من {total} سعر',
+    home_kcal_only: '{n} سعر',
+    home_water_of: '{done} من {total} كوب',
     tab_store: 'المتجر',
     store_empty: 'لسه مفيش منتجات في المتجر',
     store_cart_title: 'عربيتك',
@@ -531,9 +553,9 @@ const TEXT = {
     hero_slide1_sub: 'الجزء العلوي — دفع',
     hero_slide1_rows: 'إحماء عام — 8 د|بنش برس بار — 4×8|ضغط كتف — 3×10|تفتيح دمبل — 3×12|ترايسبس حبل — 3×15',
     hero_slide1_foot: '3 من 5 تمارين خلصت',
-    hero_slide2_title: 'تأهيل الركبة',
-    hero_slide2_sub: 'المرحلة 2 — استعادة القوة',
-    hero_slide2_rows: 'جسر المؤخرة — 3×15|رفع الساق — 3×12|سكوات جزئي — 3×10|توازن رجل واحدة — 3×30ث',
+    hero_slide2_title: 'تأهيل الكتف',
+    hero_slide2_sub: 'المرحلة 2 — استعادة المدى والقوة',
+    hero_slide2_rows: 'بندول الذراع — 3×10|دوران خارجي بمطاط — 3×12|رفع أمامي خفيف — 3×12|شد لوح الكتف — 3×10',
     hero_slide2_foot: 'متابَع مع أخصائي تأهيل',
     hero_slide3_title: 'خطة اليوم الغذائية',
     hero_slide3_sub: '2,400 سعر — 165 جم بروتين',
@@ -920,6 +942,18 @@ const TEXT = {
     ps_certs: 'شهادات وخبرات',
     ps_pick: 'اختاره لهذا التخصص',
     ps_remove: 'شيله من فريقي',
+    ob_source_label: 'عرفت ADAM منين؟',
+    ob_source_other_ph: 'قولنا عرفتنا منين',
+    src_instagram: 'إنستجرام',
+    src_facebook: 'فيسبوك',
+    src_tiktok: 'تيك توك',
+    src_whatsapp: 'واتساب',
+    src_youtube: 'يوتيوب',
+    src_google: 'بحث جوجل',
+    src_friend: 'صاحب قالي',
+    src_gym: 'الجيم',
+    src_other: 'حاجة تانية',
+    heard_from_label: 'عرفنا منين',
     ob_ref_label: 'مين رشّحلك ADAM؟',
     ob_ref_hint: 'لو حد من المدربين أو المتخصصين دلّك علينا، اختاره — عشان ياخد حقه.',
     ob_ref_picked: 'ترشيح من: {name}',
@@ -1609,6 +1643,28 @@ const TEXT = {
     welcome_medical_step_2: 'A real specialist reviews your case',
     welcome_medical_step_3: 'You get a reply and a clear follow-up plan',
     welcome_medical_step_4: 'You continue tracking with your team in the app',
+    nav_home: 'Home',
+    nav_profile: 'My profile',
+    nav_chat: 'Chat',
+    nav_progress: 'My progress',
+    nav_team: 'My team',
+    nav_injury: 'Report injury',
+    nav_medlib: 'Medical library',
+    nav_calc: 'Calculators',
+    nav_sub: 'My subscription',
+    home_hello: 'Welcome',
+    home_hello_named: 'Hi {name}',
+    home_today_training: "Today's training",
+    home_today_food: "Today's food",
+    home_today_water: 'Water',
+    home_today_rehab: 'Rehab',
+    home_open_rehab: 'Open your program',
+    home_rest_day: 'Rest day',
+    home_sets_of: '{done} of {total} sets',
+    home_minutes: 'about {n} min',
+    home_kcal_of: '{done} of {total} kcal',
+    home_kcal_only: '{n} kcal',
+    home_water_of: '{done} of {total} glasses',
     tab_store: 'Store',
     store_empty: 'No products in the store yet',
     store_cart_title: 'Your cart',
@@ -1734,9 +1790,9 @@ const TEXT = {
     hero_slide1_sub: 'Upper body — push',
     hero_slide1_rows: 'Warm-up — 8 min|Barbell bench press — 4×8|Overhead press — 3×10|Dumbbell flyes — 3×12|Rope triceps — 3×15',
     hero_slide1_foot: '3 of 5 exercises done',
-    hero_slide2_title: 'Knee rehab',
-    hero_slide2_sub: 'Phase 2 — rebuilding strength',
-    hero_slide2_rows: 'Glute bridge — 3×15|Straight leg raise — 3×12|Partial squat — 3×10|Single-leg balance — 3×30s',
+    hero_slide2_title: 'Shoulder rehab',
+    hero_slide2_sub: 'Phase 2 — range and strength',
+    hero_slide2_rows: 'Pendulum swings — 3×10|Band external rotation — 3×12|Light front raise — 3×12|Scapular squeeze — 3×10',
     hero_slide2_foot: 'Followed by a rehab specialist',
     hero_slide3_title: "Today's nutrition plan",
     hero_slide3_sub: '2,400 kcal — 165 g protein',
@@ -2123,6 +2179,18 @@ const TEXT = {
     ps_certs: 'Certificates and experience',
     ps_pick: 'Pick for this specialty',
     ps_remove: 'Remove from my team',
+    ob_source_label: 'How did you hear about ADAM?',
+    ob_source_other_ph: 'Tell us how you found us',
+    src_instagram: 'Instagram',
+    src_facebook: 'Facebook',
+    src_tiktok: 'TikTok',
+    src_whatsapp: 'WhatsApp',
+    src_youtube: 'YouTube',
+    src_google: 'Google search',
+    src_friend: 'A friend told me',
+    src_gym: 'At the gym',
+    src_other: 'Something else',
+    heard_from_label: 'Found us via',
     ob_ref_label: 'Who told you about ADAM?',
     ob_ref_hint: 'If a coach or specialist referred you, pick them — so they get credit.',
     ob_ref_picked: 'Referred by: {name}',
@@ -3602,6 +3670,12 @@ function showScreen(screen) {
   // الزرار الثابت تحت بيظهر بعد ما زرار الهيرو يعدّي بس — قبل كده
   // بيبقى تكرار لزرار ظاهر قدام عين الزائر أصلًا
   welcomeStickyCta.classList.add('hidden');
+  // الشريط السفلي بتاع العميل بيبان على شاشته بس.
+  // بندوّر عليه هنا مش بمتغيّر فوق، لأن showScreen بتشتغل قبل ما
+  // تعريفات عناصر شاشة العميل توصل لدورها في التحميل
+  const appbarEl = document.getElementById('client-appbar');
+  if (appbarEl) appbarEl.classList.toggle('hidden', screen !== clientScreen);
+  document.body.classList.toggle('on-client', screen === clientScreen);
   document.body.classList.toggle('on-welcome', screen === welcomeScreen);
   if (screen === welcomeScreen) updateStickyCta();
   // نقفل الاشتراك اللحظي أول ما نسيب شاشة الكلاس عشان الاستهلاك
@@ -7092,6 +7166,11 @@ const clientRehabPanel = document.getElementById('client-rehab');
 const ctabTraining = document.getElementById('ctab-training');
 const ctabRehab = document.getElementById('ctab-rehab');
 const clientTabs = document.getElementById('client-tabs');
+const clientHomePanel = document.getElementById('client-home');
+const homeHello = document.getElementById('home-hello');
+const homeCards = document.getElementById('home-cards');
+const homeTiles = document.getElementById('home-tiles');
+const clientAppbar = document.getElementById('client-appbar');
 
 const ctabConsult = document.getElementById('ctab-consult');
 const ctabConsultBadge = document.getElementById('ctab-consult-badge');
@@ -7117,6 +7196,7 @@ const resetButton = document.getElementById('reset');
 
 function setClientMode(mode) {
   clientMode = mode;
+  clientHomePanel.classList.toggle('hidden', mode !== 'home');
   clientTraining.classList.toggle('hidden', mode !== 'training');
   clientRehabPanel.classList.toggle('hidden', mode !== 'rehab');
   clientNutritionPanel.classList.toggle('hidden', mode !== 'nutrition');
@@ -7131,6 +7211,8 @@ function setClientMode(mode) {
   ctabClasses.classList.toggle('active', mode === 'classes');
   ctabStore.classList.toggle('active', mode === 'store');
   ctabConsult.classList.toggle('active', mode === 'consult');
+  if (mode === 'home') renderClientHome();
+  paintAppbar();
   window.scrollTo(0, 0);
 }
 
@@ -7167,6 +7249,263 @@ ctabConsult.addEventListener('click', function () {
   setClientMode('consult');
   loadClientConsult();
 });
+
+
+/* ============================================================
+   شاشة العميل كأبليكيشن
+   قبل كده كان فوق الشاشة سبع تابات، وتحتها شريط عايم بسبع زراير
+   تانية — أربعتاشر باب مفتوح في وش العميل في نفس اللحظة. دلوقتي
+   أربع أزرار تحت بس (الرئيسية · تمرين · تغذية · تأهيل)، والباقي
+   كله جوه الرئيسية كمربعات. الشريط القديم والعايم سايبينهم مخفيين
+   في الصفحة عشان كل الربط القديم يفضل شغال من غير ما نلمسه
+   ============================================================ */
+
+/* أيقونات مرسومة — مش إيموچي كيبورد. كل واحدة جواها مسارها بس،
+   والـsvg نفسه بيتبني في iconSvg() */
+const UI_ICONS = {
+  home:      '<path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.8V19a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V9.8"/><path d="M9.6 20v-5.2h4.8V20"/>',
+  training:  '<rect x="2" y="9" width="3" height="6" rx="1"/><rect x="19" y="9" width="3" height="6" rx="1"/><line x1="5" y1="12" x2="19" y2="12"/><rect x="6" y="7" width="2.5" height="10" rx="1"/><rect x="15.5" y="7" width="2.5" height="10" rx="1"/>',
+  nutrition: '<path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"/><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"/>',
+  rehab:     '<circle cx="8.6" cy="5.4" r="2.6"/><path d="M3.4 20.6c0-3.1 2.3-5.6 5.2-5.6s5.2 2.5 5.2 5.6"/><circle cx="16.8" cy="15" r="4.4"/><circle cx="16.8" cy="15" r="1.3"/>',
+  store:     '<path d="M4 8l1.5-4h13L20 8"/><path d="M4 8h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 12a3 3 0 0 0 6 0"/>',
+  profile:   '<circle cx="12" cy="8.2" r="3.6"/><path d="M4.8 20c0-4 3.2-7 7.2-7s7.2 3 7.2 7"/>',
+  consult:   '<path d="M4 5.5C4 4.7 4.7 4 5.5 4h9L20 9.5V18.5c0 .8-.7 1.5-1.5 1.5h-13C4.7 20 4 19.3 4 18.5z"/><path d="M13 4v4.5a1 1 0 0 0 1 1H19"/><line x1="8" y1="12.5" x2="15" y2="12.5"/><line x1="8" y1="16" x2="13" y2="16"/>',
+  activity:  '<circle cx="12" cy="15" r="4.5"/><path d="M9.5 11 7 4h3l2 6"/><path d="M14.5 11 17 4h-3l-2 6"/>',
+  classes:   '<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><line x1="3.5" y1="9.5" x2="20.5" y2="9.5"/><line x1="8" y1="3.2" x2="8" y2="6.4"/><line x1="16" y1="3.2" x2="16" y2="6.4"/><circle cx="12" cy="14.8" r="2.3"/>',
+  chat:      '<path d="M4 5.5h16v10.5H9l-4 3.5v-3.5H4z"/><line x1="8" y1="9.5" x2="16" y2="9.5"/><line x1="8" y1="12.5" x2="13" y2="12.5"/>',
+  injury:    '<circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12" y2="16.01"/>',
+  team:      '<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14c2.5.3 4.5 2.3 4.5 6"/>',
+  medlib:    '<path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"/>',
+  card:      '<rect x="3" y="5.5" width="18" height="13" rx="2"/><line x1="3" y1="9.5" x2="21" y2="9.5"/><line x1="6.5" y1="14" x2="10.5" y2="14"/>',
+  calc:      '<rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="7.5" x2="16" y2="7.5"/><line x1="8.5" y1="12" x2="8.5" y2="12.01"/><line x1="12" y1="12" x2="12" y2="12.01"/><line x1="15.5" y1="12" x2="15.5" y2="12.01"/><line x1="8.5" y1="16" x2="8.5" y2="16.01"/><line x1="12" y1="16" x2="12" y2="16.01"/><line x1="15.5" y1="16" x2="15.5" y2="16.01"/>',
+  progress:  '<polyline points="3 17 9 11 13 15 21 6"/><polyline points="15 6 21 6 21 12"/>',
+  water:     '<path d="M12 3.2c3.4 4 6 7 6 10.2a6 6 0 0 1-12 0c0-3.2 2.6-6.2 6-10.2z"/>'
+};
+
+function iconSvg(key, cls) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '1.7');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('class', cls || 'ui-icon');
+  svg.innerHTML = UI_ICONS[key] || UI_ICONS.home;
+  return svg;
+}
+
+/* ---------- الشريط السفلي ---------- */
+
+const APPBAR_ITEMS = [
+  { mode: 'home',      icon: 'home',      labelKey: 'nav_home' },
+  { mode: 'training',  icon: 'training',  labelKey: 'tab_training' },
+  { mode: 'nutrition', icon: 'nutrition', labelKey: 'tab_nutrition' },
+  { mode: 'rehab',     icon: 'rehab',     labelKey: 'tab_rehab' }
+];
+
+function goClientMode(mode) {
+  // بنعدّي على زراير الشريط القديم عشان كل التحميل المربوط بيها
+  // يشتغل زي ما هو — مفيش منطق مكرر
+  if (mode === 'home') { setClientMode('home'); return; }
+  const btn = { training: ctabTraining, nutrition: ctabNutrition, rehab: ctabRehab }[mode];
+  if (btn) btn.click();
+}
+
+function renderAppbar() {
+  if (!clientAppbar) return;
+  clientAppbar.innerHTML = '';
+  APPBAR_ITEMS.forEach(function (item) {
+    // التأهيل والتغذية بيظهروا بس لو العميل عنده برنامج منهم
+    const source = { nutrition: ctabNutrition, rehab: ctabRehab }[item.mode];
+    if (source && source.classList.contains('hidden')) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'appbar-btn';
+    btn.setAttribute('data-mode', item.mode);
+    btn.appendChild(iconSvg(item.icon, 'appbar-icon'));
+    const label = document.createElement('span');
+    label.className = 'appbar-label';
+    label.textContent = t(item.labelKey);
+    btn.appendChild(label);
+    btn.addEventListener('click', function () { goClientMode(item.mode); });
+    clientAppbar.appendChild(btn);
+  });
+  paintAppbar();
+}
+
+function paintAppbar() {
+  if (!clientAppbar) return;
+  clientAppbar.querySelectorAll('.appbar-btn').forEach(function (btn) {
+    btn.classList.toggle('on', btn.getAttribute('data-mode') === clientMode);
+  });
+}
+
+/* ---------- مربعات الرئيسية ---------- */
+
+const CLIENT_TILES = [
+  { key: 'profile',  icon: 'profile',  labelKey: 'nav_profile',   btn: 'open-client-profile-btn' },
+  { key: 'store',    icon: 'store',    labelKey: 'tab_store',     mode: 'store' },
+  { key: 'consult',  icon: 'consult',  labelKey: 'tab_consult',   mode: 'consult', badge: 'ctab-consult-badge' },
+  { key: 'chat',     icon: 'chat',     labelKey: 'nav_chat',      btn: 'open-chat-btn' },
+  { key: 'activity', icon: 'activity', labelKey: 'tab_activity',  mode: 'activity' },
+  { key: 'classes',  icon: 'classes',  labelKey: 'tab_classes',   mode: 'classes' },
+  { key: 'progress', icon: 'progress', labelKey: 'nav_progress',  btn: 'open-progress-btn' },
+  { key: 'team',     icon: 'team',     labelKey: 'nav_team',      btn: 'view-team-btn' },
+  { key: 'injury',   icon: 'injury',   labelKey: 'nav_injury',    btn: 'report-injury-btn' },
+  { key: 'medlib',   icon: 'medlib',   labelKey: 'nav_medlib',    btn: 'open-medlib-btn' },
+  { key: 'calc',     icon: 'calc',     labelKey: 'nav_calc',      btn: 'open-calc-btn' },
+  { key: 'sub',      icon: 'card',     labelKey: 'nav_sub',       btn: 'open-subscription-btn' }
+];
+
+function renderClientTiles() {
+  if (!homeTiles) return;
+  homeTiles.innerHTML = '';
+  CLIENT_TILES.forEach(function (tile) {
+    // لو الزرار الأصلي مش موجود أو متخفي لحساب العميل ده، مانعرضش مربعه
+    const origin = tile.btn ? document.getElementById(tile.btn) : null;
+    if (tile.btn && (!origin || origin.classList.contains('nav-off'))) return;
+
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'home-tile tile-' + tile.key;
+    cell.setAttribute('data-key', tile.key);
+    cell.appendChild(iconSvg(tile.icon, 'home-tile-icon'));
+    const label = document.createElement('span');
+    label.className = 'home-tile-label';
+    label.textContent = t(tile.labelKey);
+    cell.appendChild(label);
+
+    // العدّاد (زي طلبات الاستشارة المستنية) بيتنقل على المربع
+    if (tile.badge) {
+      const src = document.getElementById(tile.badge);
+      if (src && !src.classList.contains('hidden') && src.textContent.trim()) {
+        const dot = document.createElement('span');
+        dot.className = 'home-tile-badge';
+        dot.textContent = src.textContent.trim();
+        cell.appendChild(dot);
+      }
+    }
+
+    cell.addEventListener('click', function () {
+      if (tile.mode) { setClientMode(tile.mode); runModeLoader(tile.mode); return; }
+      if (origin) origin.click();
+    });
+    homeTiles.appendChild(cell);
+  });
+}
+
+/* التبويبات اللي بقت مربعات محتاجة نفس التحميل اللي كان على زرارها */
+function runModeLoader(mode) {
+  if (mode === 'store') showClientStore();
+  else if (mode === 'consult') loadClientConsult();
+  else if (mode === 'activity') showClientActivity();
+  else if (mode === 'classes') showClientClasses();
+}
+
+/* ---------- ملخّص اليوم ---------- */
+
+function homeCard(icon, title, value, note, onClick, tint) {
+  const box = document.createElement('button');
+  box.type = 'button';
+  box.className = 'home-card' + (tint ? ' hc-' + tint : '');
+  box.appendChild(iconSvg(icon, 'home-card-icon'));
+  const text = document.createElement('div');
+  text.className = 'home-card-text';
+  const t1 = document.createElement('span');
+  t1.className = 'home-card-title';
+  t1.textContent = title;
+  const t2 = document.createElement('strong');
+  t2.className = 'home-card-value';
+  t2.textContent = value;
+  text.appendChild(t1);
+  text.appendChild(t2);
+  if (note) {
+    const t3 = document.createElement('span');
+    t3.className = 'home-card-note';
+    t3.textContent = note;
+    text.appendChild(t3);
+  }
+  box.appendChild(text);
+  box.addEventListener('click', onClick);
+  return box;
+}
+
+function renderHomeSummary() {
+  if (!homeCards) return;
+
+  if (homeHello) {
+    const name = (currentClientName || '').split(' ')[0];
+    homeHello.textContent = name ? fill('home_hello_named', { name: name }) : t('home_hello');
+  }
+
+  homeCards.innerHTML = '';
+
+  /* تمرين النهاردة */
+  const day = clientWeek && clientWeek[todayIndex];
+  const sets = day ? daySetCount(day) : 0;
+  if (sets > 0) {
+    const done = Object.keys(setsDoneToday || {}).reduce(function (sum, key) {
+      return sum + (Number(setsDoneToday[key]) || 0);
+    }, 0);
+    homeCards.appendChild(homeCard(
+      'training',
+      t('home_today_training'),
+      fill('home_sets_of', { done: done, total: sets }),
+      dayMinutes(day) ? fill('home_minutes', { n: dayMinutes(day) }) : '',
+      function () { goClientMode('training'); },
+      'train'
+    ));
+  } else {
+    homeCards.appendChild(homeCard(
+      'training', t('home_today_training'), t('home_rest_day'), '',
+      function () { goClientMode('training'); }, 'train'
+    ));
+  }
+
+  /* الأكل والمية */
+  if (!ctabNutrition.classList.contains('hidden')) {
+    // eatenTotals بتاخد يوم البرنامج (اللي فيه الوجبات)، مش يوم السجل
+    const planDay = clientNutrition && clientNutrition.week && clientNutrition.week[todayIndex];
+    const totals = eatenTotals(planDay);
+    const target = Math.round((clientNutrition && clientNutrition.targets && clientNutrition.targets.kcal) || 0);
+    homeCards.appendChild(homeCard(
+      'nutrition',
+      t('home_today_food'),
+      target ? fill('home_kcal_of', { done: Math.round(totals.kcal), total: target })
+             : fill('home_kcal_only', { n: Math.round(totals.kcal) }),
+      '',
+      function () { goClientMode('nutrition'); },
+      'food'
+    ));
+
+    const goal = waterGoal();
+    const drunk = logDay().water || 0;
+    if (goal) {
+      homeCards.appendChild(homeCard(
+        'water', t('home_today_water'),
+        fill('home_water_of', { done: drunk, total: goal }), '',
+        function () { goClientMode('nutrition'); }, 'water'
+      ));
+    }
+  }
+
+  /* التأهيل */
+  if (!ctabRehab.classList.contains('hidden')) {
+    homeCards.appendChild(homeCard(
+      'rehab', t('home_today_rehab'), t('home_open_rehab'), '',
+      function () { goClientMode('rehab'); }, 'rehab'
+    ));
+  }
+}
+
+function renderClientHome() {
+  renderHomeSummary();
+  renderWeekStreak();
+  renderClientTiles();
+}
+
 
 /* ---------- استشارة: جانب العميل ---------- */
 
@@ -7432,8 +7771,9 @@ async function loadClient(email) {
     // (مالهاش علاقة بالتأهيل/التغذية) لو العميل لسه ملوش برنامج منهم.
     // التاب الوحيد اللي فعلاً لازم يتخفي هو تاب التمرين الأساسي نفسه
     // لو مفيش أي محتوى خالص (تمرين ولا تأهيل ولا تغذية)
-    clientTabs.classList.remove('hidden');
-    setClientMode('training');
+    // الشريط السفلي بيتبني بعد ما نعرف عنده تأهيل وتغذية ولا لأ
+    renderAppbar();
+    setClientMode('home');
 
     renderSafetyBanner();
     renderCycleCard();
@@ -11300,6 +11640,8 @@ function refreshAll() {
     else showCoachDay();
   }
   if (!clientScreen.classList.contains('hidden')) {
+    renderAppbar();
+    if (clientMode === 'home') renderClientHome();
     renderSafetyBanner();
     renderCycleCard();
     if (safetySheet && !safetySheet.classList.contains('hidden')) renderSafetySheet();
@@ -11345,7 +11687,7 @@ function refreshAll() {
   if (!clearanceScreen.classList.contains('hidden') && clearanceRows.length) renderClearanceList();
   if (!providersScreen.classList.contains('hidden')) { fillSpecialtySelect(); loadProviders(); }
   if (!providerHomeScreen.classList.contains('hidden') && currentProviderData) showProviderHome(currentProviderData);
-  if (!onboardingScreen.classList.contains('hidden')) { fillGenderSelect(); fillDobSelects(); fillActivitySelect(); fillSportSelect(obSport, true); fillGoalSelect(); renderGenderRows(); renderActivityTiles(); renderSportGroupDial(); renderSportRows(); renderGoalTiles(); renderFocusChips(); fillWorkNatureSelect(); renderWorkNatureRows(); fillTrainingDaysSelect(); renderTrainingDaysRows(); fillSleepQualitySelect(); fillMealsPerDaySelect(); renderMealsPerDayRows(); }
+  if (!onboardingScreen.classList.contains('hidden')) { fillGenderSelect(); fillDobSelects(); fillActivitySelect(); fillSportSelect(obSport, true); fillGoalSelect(); renderGenderRows(); renderActivityTiles(); renderSportGroupDial(); renderSportRows(); renderGoalTiles(); renderFocusChips(); fillWorkNatureSelect(); renderWorkNatureRows(); fillTrainingDaysSelect(); renderTrainingDaysRows(); renderSourceRow(); fillSleepQualitySelect(); fillMealsPerDaySelect(); renderMealsPerDayRows(); }
   if (!teamScreen.classList.contains('hidden')) loadTeamPicker(selectedTeam);
   if (!injuryScreen.classList.contains('hidden')) { refreshHotspots(); loadInjuryHistory(); }
   if (!teamViewScreen.classList.contains('hidden')) loadTeamView();
@@ -12692,7 +13034,7 @@ const HERO_SLIDES = [
     rowsKey: 'hero_slide1_rows', footKey: 'hero_slide1_foot', pct: 60
   },
   {
-    icon: '🩹', key: 'rehab', pillar: 'rehab', color: '#f97316', tagKey: 'role_rehab',
+    icon: '💪', key: 'rehab', pillar: 'rehab', color: '#f97316', tagKey: 'role_rehab',
     titleKey: 'hero_slide2_title', subKey: 'hero_slide2_sub',
     rowsKey: 'hero_slide2_rows', footKey: 'hero_slide2_foot', pct: 40
   },
@@ -12732,10 +13074,17 @@ const BAND_NODES = [
     art: '<rect x="1" y="8" width="4" height="8" rx="2"/><rect x="19" y="8" width="4" height="8" rx="2"/>'
        + '<rect x="5.5" y="5" width="4.5" height="14" rx="2.2"/><rect x="14" y="5" width="4.5" height="14" rx="2.2"/>'
        + '<rect x="9" y="10.4" width="6" height="3.2" rx="1.6"/>' },
+  /*
+   * كانت ركبة بدعامة، وفي الحجم الصغير كانت بتطلع شبه البرطمان.
+   * بقت كتف: نص جسم وعليه حلقة منوّرة على الكتف — الحلقة هي اللي
+   * بتقول "المفصل ده هو الموضوع"، وبتتقري من نص نظرة
+   */
   { key: 'rehab',     pillar: 'rehab',     color: '#f97316', labelKey: 'role_rehab',
-    art: '<path d="M9 2h6v5.2c0 1.6 1 2.6 2.2 3.6 1.7 1.4 2.8 3 2.8 5.4 0 3.2-2.6 5.8-5.8 5.8H9.8C6.6 22 4 19.4 4 16.2c0-2.4 1.1-4 2.8-5.4C8 9.8 9 8.8 9 7.2z"/>'
-       + '<rect x="6" y="11.4" width="12" height="2.6" rx="1.3" fill="#0b1220"/>'
-       + '<rect x="6" y="16" width="12" height="2.6" rx="1.3" fill="#0b1220"/>' },
+    art: '<circle cx="8.6" cy="4.8" r="3.3"/>'
+       + '<path d="M2 21.6c0-4.1 2.9-7.2 6.6-7.2s6.6 3.1 6.6 7.2z"/>'
+       + '<circle cx="16.8" cy="15.2" r="6.2" fill="#0b1220"/>'
+       + '<circle cx="16.8" cy="15.2" r="5"/>'
+       + '<circle cx="16.8" cy="15.2" r="2.4" fill="#0b1220"/>' },
   { key: 'nutrition', pillar: 'nutrition', color: '#38bdf8', labelKey: 'role_nutrition',
     art: '<path d="M12 2a10 10 0 0 1 10 10h-10z"/><path d="M22 12a10 10 0 0 1-15.3 8.5L12 12z" opacity=".72"/>'
        + '<path d="M6.7 20.5A10 10 0 0 1 12 2v10z" opacity=".45"/><circle cx="12" cy="12" r="2.6" fill="#0b1220"/>' },
@@ -14271,6 +14620,10 @@ function prefillOnboarding(data) {
   renderCycleBox();
 
   obReferrer = (data && data.referredBy) || '';
+  obSource = (data && data.heardFrom) || '';
+  const srcOther = document.getElementById('ob-source-other');
+  if (srcOther) srcOther.value = (data && data.heardFromNote) || '';
+  renderSourceRow();
   loadReferrerOptions().then(renderReferrerRow);
   obDobDay.value = (data && data.dob && data.dob.day) || '';
   obDobMonth.value = (data && data.dob && data.dob.month) || '';
@@ -14414,6 +14767,10 @@ document.getElementById('ob-next-btn').addEventListener('click', async function 
       firstMealTime: obFirstMealTime.value || '',
       lastMealTime: obLastMealTime.value || '',
       referredBy: obReferrer,
+      heardFrom: obSource,
+      heardFromNote: obSource === 'other'
+        ? ((document.getElementById('ob-source-other') || {}).value || '').trim()
+        : '',
       painFlag: obPainFlag.checked,
       painNote: obPainFlag.checked ? obPainNote.value.trim() : '',
       photo: obPickedImage
@@ -15040,6 +15397,59 @@ document.getElementById('clearance-back-btn').addEventListener('click', function
    وعشان ياخده لازم يبقى مسجّل مين جاب مين
    ============================================================ */
 
+/* ============================================================
+   عرفتنا منين
+   سؤال صغير بس بيقول لنا مجهود الإعلان بيرجع منين فعلًا. بيتخزّن
+   مع العميل وبيظهر للمدرب، وبيتجمّع في التقرير اليومي
+   ============================================================ */
+
+const SOURCE_KEYS = ['instagram', 'facebook', 'tiktok', 'whatsapp', 'youtube', 'google', 'friend', 'gym', 'other'];
+
+const SOURCE_ICONS = {
+  instagram: '📷',
+  facebook:  '👍',
+  tiktok:    '🎵',
+  whatsapp:  '💬',
+  youtube:   '▶️',
+  google:    '🔍',
+  friend:    '🤝',
+  gym:       '🏋️',
+  other:     '✨'
+};
+
+function sourceName(key) {
+  return t('src_' + key);
+}
+
+let obSource = '';
+
+function renderSourceRow() {
+  const row = document.getElementById('ob-source-row');
+  const other = document.getElementById('ob-source-other');
+  if (!row) return;
+  row.innerHTML = '';
+  SOURCE_KEYS.forEach(function (key) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'src-chip' + (obSource === key ? ' selected' : '');
+    chip.setAttribute('data-key', key);
+    const icon = document.createElement('span');
+    icon.className = 'src-chip-icon';
+    icon.textContent = SOURCE_ICONS[key] || '•';
+    const label = document.createElement('span');
+    label.textContent = sourceName(key);
+    chip.appendChild(icon);
+    chip.appendChild(label);
+    chip.addEventListener('click', function () {
+      obSource = (obSource === key) ? '' : key;
+      renderSourceRow();
+      updateObProgress();
+    });
+    row.appendChild(chip);
+  });
+  if (other) other.classList.toggle('hidden', obSource !== 'other');
+}
+
 let obReferrer = '';
 let refProviders = [];
 
@@ -15120,6 +15530,15 @@ function renderCoachBasics() {
   }
   if (data.mealsPerDay) {
     bits.push({ icon: '🍽️', label: t('cb_meals'), value: mealsPerDayName(String(data.mealsPerDay)) });
+  }
+  if (data.heardFrom) {
+    bits.push({
+      icon: SOURCE_ICONS[data.heardFrom] || '✨',
+      label: t('heard_from_label'),
+      value: data.heardFrom === 'other' && data.heardFromNote
+        ? data.heardFromNote
+        : sourceName(data.heardFrom)
+    });
   }
   if (data.sleepQuality) {
     bits.push({
