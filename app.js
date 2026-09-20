@@ -3,7 +3,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, on
 import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, deleteField, collection, getDocs, onSnapshot, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
 import { REHAB_TEMPLATES } from './rehab-templates.js';
-import { FOOD_LIBRARY, FOOD_CATEGORIES } from './food-library.js';
+import { FOOD_LIBRARY, FOOD_CATEGORIES, FOOD_UNITS, FOOD_SERVINGS, CAT_PORTIONS } from './food-library.js';
 import { SUPPLEMENT_LIBRARY, SUPPLEMENT_CATEGORIES, EVIDENCE_GRADES } from './supplement-library.js';
 import { SPORTS, SPORT_GROUPS, SPORT_METRICS, METRIC_FIELDS, SPORT_TEMPLATES } from './sports.js';
 import { SPECIALTIES, specialtyName, specialtyIcon, specialtyIconSvg, MED_CATEGORIES, MED_REVIEW, DEFAULT_RED_FLAGS, SESSION_TYPES, BOOKING_STATUS } from './providers.js';
@@ -816,6 +816,8 @@ const TEXT = {
     add_food_btn: '+ ضيف صنف للوجبة دي',
     extra_badge: 'زيادة',
     mark_eaten: 'علّم إنك أكلته',
+    by_grams: 'بالجرام',
+    approx_note: 'تقريبي',
     meal_empty: 'مفيش حاجة في الوجبة دي',
     fuel_left: 'سعر فاضل',
     fuel_over: 'سعر زيادة',
@@ -1885,6 +1887,8 @@ const TEXT = {
     add_food_btn: '+ Add food to this meal',
     extra_badge: 'extra',
     mark_eaten: 'Mark as eaten',
+    by_grams: 'By grams',
+    approx_note: 'approx.',
     meal_empty: 'Nothing in this meal',
     fuel_left: 'kcal left',
     fuel_over: 'kcal over',
@@ -9101,12 +9105,48 @@ const pickerSearch = document.getElementById('picker-search');
 const pickerChips = document.getElementById('picker-chips');
 const pickerList = document.getElementById('picker-list');
 const pickerAmount = document.getElementById('picker-amount');
-const paGrams = document.getElementById('pa-grams');
+const paQty = document.getElementById('pa-qty');
 let pickerMeal = 'breakfast';
 let pickerCat = '';
 let pickerFood = null;
 
-const QUICK_GRAMS = [50, 100, 150, 200, 250];
+/*
+ * المقادير البيتية — العميل بيفكّر بـ"كوبين رز" مش بـ"٣١٦ جرام"،
+ * ومفيش عميل عنده ميزان مطبخ. بنعرضله وحداته وهو يختار العدد،
+ * وإحنا بنحوّل للجرام في الخلفية
+ */
+let pickerUnit = null;   /* ['cup', 158] أو null يعني بالجرام */
+let pickerApprox = false;
+
+function unitName(key) {
+  const unit = FOOD_UNITS[key];
+  if (!unit) return key;
+  return unit[lang] || unit.ar || key;
+}
+
+function unitStep(key) {
+  return (FOOD_UNITS[key] && FOOD_UNITS[key].step) || 1;
+}
+
+/* مقادير الصنف: المكتوبة له، وإلا مقادير تصنيفه — وساعتها تقديرية */
+function foodServings(food) {
+  if (!food) return { list: [], approx: false };
+  const own = FOOD_SERVINGS[food.id];
+  if (own && own.length) return { list: own, approx: false };
+  const fallback = CAT_PORTIONS[food.cat] || [];
+  return { list: fallback, approx: fallback.length > 0 };
+}
+
+/* رقم نضيف: 1 مش 1.0، و1.5 تفضل 1.5 */
+function tidyNumber(value) {
+  const n = Number(value) || 0;
+  return (Math.round(n * 100) / 100).toString();
+}
+
+function pickerGrams() {
+  const qty = Number(paQty.value) || 0;
+  return pickerUnit ? (qty * pickerUnit[1]) : qty;
+}
 
 function openFoodPicker(mealKey) {
   pickerMeal = mealKey;
@@ -9191,35 +9231,80 @@ function renderPickerList() {
 function pickFood(food) {
   pickerFood = food;
   document.getElementById('pa-name').textContent = food[lang] || food.ar || food.en || '';
-  paGrams.value = 100;
-  renderQuickGrams();
+
+  /* بنفتح على أول مقدار بيتي للصنف — مش على الجرام */
+  const servings = foodServings(food);
+  pickerUnit = servings.list.length ? servings.list[0] : null;
+  paQty.value = pickerUnit ? 1 : 100;
+  paQty.step = pickerUnit ? unitStep(pickerUnit[0]) : 10;
+
+  renderUnitChips();
   renderPickerMacros();
   pickerAmount.classList.remove('hidden');
   pickerAmount.scrollIntoView({ block: 'nearest' });
 }
 
-function renderQuickGrams() {
-  const box = document.getElementById('pa-quick');
+function renderUnitChips() {
+  const box = document.getElementById('pa-units');
   box.innerHTML = '';
-  QUICK_GRAMS.forEach(function (g) {
+  const servings = foodServings(pickerFood);
+  pickerApprox = servings.approx;
+
+  servings.list.forEach(function (row) {
     const chip = document.createElement('button');
     chip.type = 'button';
-    chip.className = 'pa-chip' + (Number(paGrams.value) === g ? ' active' : '');
-    chip.textContent = g + t('fuel_g');
+    chip.className = 'pa-chip' + ((pickerUnit && pickerUnit[0] === row[0]) ? ' active' : '');
+    chip.textContent = unitName(row[0]) + ' · ' + tidyNumber(row[1]) + t('fuel_g');
     chip.addEventListener('click', function () {
-      paGrams.value = g;
-      renderQuickGrams();
+      pickerUnit = row;
+      paQty.value = 1;
+      paQty.step = unitStep(row[0]);
+      renderUnitChips();
       renderPickerMacros();
     });
     box.appendChild(chip);
   });
+
+  const gramChip = document.createElement('button');
+  gramChip.type = 'button';
+  gramChip.className = 'pa-chip' + (pickerUnit ? '' : ' active');
+  gramChip.textContent = t('by_grams');
+  gramChip.addEventListener('click', function () {
+    pickerUnit = null;
+    paQty.value = 100;
+    paQty.step = 10;
+    renderUnitChips();
+    renderPickerMacros();
+  });
+  box.appendChild(gramChip);
+
+  document.getElementById('pa-qty-unit').textContent =
+    pickerUnit ? unitName(pickerUnit[0]) : t('fuel_g');
+}
+
+function stepQty(direction) {
+  const step = pickerUnit ? unitStep(pickerUnit[0]) : 10;
+  const next = (Number(paQty.value) || 0) + (direction * step);
+  paQty.value = tidyNumber(Math.max(0, next));
+  renderPickerMacros();
 }
 
 function renderPickerMacros() {
   if (!pickerFood) return;
-  const grams = Number(paGrams.value) || 0;
+  const grams = pickerGrams();
   const item = makeFoodItem(pickerFood, grams);
   const m = itemMacros(item);
+
+  const eq = document.getElementById('pa-eq');
+  if (pickerUnit) {
+    eq.textContent = '= ' + Math.round(grams) + t('fuel_g') + (pickerApprox ? ' · ' + t('approx_note') : '');
+    eq.classList.toggle('approx', pickerApprox);
+  } else {
+    eq.textContent = '';
+    eq.classList.remove('approx');
+  }
+  document.getElementById('pa-minus').disabled = (Number(paQty.value) || 0) <= 0;
+
   document.getElementById('pa-macros').textContent =
     Math.round(m.kcal) + ' ' + t('t_kcal') + ' · ' +
     t('t_protein') + ' ' + m.protein.toFixed(1) + ' · ' +
@@ -9227,19 +9312,23 @@ function renderPickerMacros() {
     t('t_fat') + ' ' + m.fat.toFixed(1);
 }
 
-paGrams.addEventListener('input', function () {
-  renderQuickGrams();
-  renderPickerMacros();
-});
+document.getElementById('pa-plus').addEventListener('click', function () { stepQty(1); });
+document.getElementById('pa-minus').addEventListener('click', function () { stepQty(-1); });
+paQty.addEventListener('input', renderPickerMacros);
 
 pickerSearch.addEventListener('input', renderPickerList);
 document.getElementById('picker-close').addEventListener('click', closeFoodPicker);
 
 document.getElementById('pa-add').addEventListener('click', function () {
   if (!pickerFood) return;
-  const grams = Number(paGrams.value) || 0;
+  const grams = pickerGrams();
   if (grams <= 0) return;
-  const item = makeFoodItem(pickerFood, grams);
+  const item = makeFoodItem(pickerFood, Math.round(grams * 10) / 10);
+  /* بنحفظ المقدار اللي اختاره عشان يظهرله زي ما سجّله مش بالجرام */
+  if (pickerUnit) {
+    item.unit = pickerUnit[0];
+    item.qty = Number(paQty.value) || 0;
+  }
   item.meal = pickerMeal;
   logDay().extra.push(item);
   saveFoodLog();
@@ -9248,6 +9337,32 @@ document.getElementById('pa-add').addEventListener('click', function () {
 });
 
 /* ---------- وجبات العميل: يعلّم اللي أكله ويضيف اللي مكانش في الخطة ---------- */
+
+/*
+ * النص اللي بيتعرض للكمية: لو العميل سجّلها بمقدار بيتي بنعرضه
+ * بلغته ("كوبين · ٣١٦جم")، وإلا بنعرض الجرام زي ما هو
+ */
+function portionText(item) {
+  const grams = Math.round(Number(item.grams) || 0);
+  if (item && item.unit && item.qty) {
+    return tidyNumber(item.qty) + ' ' + unitName(item.unit) + ' · ' + grams + t('fuel_g');
+  }
+
+  /*
+   * وجبات الخطة المدرب بيكتبها بالجرام، والعميل مش عنده ميزان —
+   * فبنترجمهاله لأقرب مقدار بيتي: "≈ ١.٢٥ كوب · ٢٠٠جم"
+   */
+  const source = (item && item.foodId) ? foodById(item.foodId) : null;
+  const servings = foodServings(source);
+  if (servings.list.length && grams > 0) {
+    const row = servings.list[0];
+    const qty = Math.round((grams / row[1]) * 4) / 4;
+    if (qty >= 0.25 && qty <= 8) {
+      return '≈ ' + tidyNumber(qty) + ' ' + unitName(row[0]) + ' · ' + grams + t('fuel_g');
+    }
+  }
+  return grams + t('fuel_g');
+}
 
 function loggedFoodRow(item, opts) {
   const li = document.createElement('li');
@@ -9279,7 +9394,7 @@ function loggedFoodRow(item, opts) {
   const macros = document.createElement('div');
   macros.className = 'food-macros';
   macros.textContent =
-    Math.round(item.grams) + t('fuel_g') + ' · ' +
+    portionText(item) + ' · ' +
     Math.round(m.kcal) + ' ' + t('t_kcal') + ' · ' +
     t('t_protein') + ' ' + m.protein.toFixed(1) + ' · ' +
     t('t_carbs') + ' ' + m.carbs.toFixed(1) + ' · ' +

@@ -1613,11 +1613,16 @@
 
       <div class="picker-amount hidden" id="picker-amount">
         <div class="pa-name" id="pa-name"></div>
-        <div class="pa-quick" id="pa-quick"></div>
-        <div class="pa-row">
-          <input id="pa-grams" type="number" inputmode="numeric" min="1">
-          <span class="pa-unit" data-t="fuel_g">جم</span>
+        <div class="pa-units" id="pa-units"></div>
+        <div class="pa-step">
+          <button type="button" class="pa-step-btn" id="pa-minus" aria-label="-">−</button>
+          <div class="pa-qty-box">
+            <input id="pa-qty" type="number" inputmode="decimal" min="0" step="0.5">
+            <span class="pa-qty-unit" id="pa-qty-unit"></span>
+          </div>
+          <button type="button" class="pa-step-btn" id="pa-plus" aria-label="+">+</button>
         </div>
+        <div class="pa-eq" id="pa-eq"></div>
         <div class="pa-macros" id="pa-macros"></div>
         <button type="button" class="pa-add" id="pa-add" data-t="picker_add">ضيفه</button>
       </div>
