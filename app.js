@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, deleteField, collection, getDocs, onSnapshot, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { getFirestore, doc, getDoc, setDoc as fbSetDoc, addDoc as fbAddDoc, updateDoc as fbUpdateDoc, deleteDoc, deleteField, collection, getDocs, onSnapshot, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
 import { REHAB_TEMPLATES } from './rehab-templates.js';
 import { FOOD_LIBRARY, FOOD_CATEGORIES, FOOD_UNITS, FOOD_SERVINGS, CAT_PORTIONS } from './food-library.js';
@@ -11,6 +11,44 @@ import { SPECIALTIES, specialtyName, specialtyIcon, specialtyIconSvg, MED_CATEGO
 import { MED_LIBRARY_SEED } from './med-library-seed.js';
 import { EXERCISE_LIBRARY as BASE_EXERCISES } from './exercise-library.js';
 import { DRILLS_LIBRARY, DRILL_CATEGORIES, DRILL_EQUIPMENT } from './drills-library.js';
+
+/* ============================================================
+   حارس الكتابة في قاعدة البيانات
+   Firestore بيرفض أي حقل قيمته undefined ويرمي الشاشة كلها في الخطأ.
+   ده حصل فعلًا في التسجيل: حقل "مين رشحك" كان بيطلع undefined لو
+   مستند المتخصص مالوش حقل email، فالعميل ميقدرش يكمّل تسجيل خالص.
+   بدل ما نلاحق كل حقل على حدة، بنشيل أي undefined من أي بيانات
+   رايحة للداتابيز. الحقل الفاضي بيتشال، والباقي بيتكتب عادي.
+   ============================================================ */
+function dropUndefined(value) {
+  if (Array.isArray(value)) {
+    return value.filter(function (item) { return item !== undefined; }).map(dropUndefined);
+  }
+  // بنسيب التواريخ وأي كائن مش عادي زي ما هو
+  if (!value || typeof value !== 'object' || value instanceof Date) return value;
+  if (Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) return value;
+  const out = {};
+  Object.keys(value).forEach(function (key) {
+    if (value[key] === undefined) return;
+    out[key] = dropUndefined(value[key]);
+  });
+  return out;
+}
+
+function setDoc(ref, data, options) {
+  return options === undefined
+    ? fbSetDoc(ref, dropUndefined(data))
+    : fbSetDoc(ref, dropUndefined(data), options);
+}
+
+function addDoc(ref, data) {
+  return fbAddDoc(ref, dropUndefined(data));
+}
+
+function updateDoc(ref, data) {
+  return fbUpdateDoc(ref, dropUndefined(data));
+}
+
 
 /*
  * مكتبة التمارين = تمارين الحديد + الدريلات (كروس فيت/هايروكس/ملاعب/كارديو).
@@ -15010,7 +15048,10 @@ async function loadReferrerOptions() {
   try {
     const snapshot = await getDocs(collection(db, 'providers'));
     refProviders = snapshot.docs.map(function (item) {
-      return Object.assign({ id: item.id }, item.data());
+      // الـ id هو الإيميل، فلو المستند مالوش حقل email نستعمله
+      const data = Object.assign({ id: item.id }, item.data());
+      if (!data.email) data.email = item.id;
+      return data;
     });
   } catch (error) {
     refProviders = [];
@@ -15042,7 +15083,8 @@ function renderReferrerRow() {
     name.textContent = providerShortName(provider);
     pick.appendChild(name);
     pick.addEventListener('click', function () {
-      obReferrer = (obReferrer === provider.email) ? '' : provider.email;
+      const key = provider.email || provider.id || '';
+      obReferrer = (obReferrer === key) ? '' : key;
       renderReferrerRow();
     });
     row.appendChild(pick);
@@ -17390,7 +17432,9 @@ function isProviderRecentlyActive(provider) {
 }
 
 function touchProviderActivity(email) {
-  setDoc(doc(db, 'providers', email), { lastActiveAt: new Date().toISOString() }, { merge: true }).catch(function () {
+  // بنكتب الإيميل مع كل لمسة — المستند اللي بيتعمل من هنا كان بيطلع
+  // من غير حقل email، وبعدين أي حتة بتقرا provider.email تطلع undefined
+  setDoc(doc(db, 'providers', email), { email: email, lastActiveAt: new Date().toISOString() }, { merge: true }).catch(function () {
     // مش مشكلة لو فشل التحديث ده — مجرد إشارة نشاط، مش بيانات أساسية
   });
 }
