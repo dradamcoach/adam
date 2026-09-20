@@ -6913,3 +6913,219 @@ body.focus-open { overflow: hidden; }
   font-size: 15px;
   font-weight: 800;
 }
+
+/* ============================================================
+   لوحة الالتزام — قايمة صباح المدرب
+   ============================================================ */
+
+.adh-summary {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.adh-stat {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 6px;
+  background: var(--field);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.adh-stat strong {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.adh-stat span {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.adh-stat.warn strong { color: #fbbf24; }
+.adh-stat.good strong { color: var(--brand); }
+
+.adh-filters {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 12px;
+}
+
+.adh-filters::-webkit-scrollbar { display: none; }
+
+.card button.adh-chip,
+.adh-chip {
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .03);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.card button.adh-chip.active,
+.adh-chip.active {
+  background: rgba(34, 197, 94, .14);
+  border-color: rgba(34, 197, 94, .4);
+  color: var(--brand);
+}
+
+.adh-list {
+  margin: 0 !important;
+  padding: 0;
+  list-style: none;
+}
+
+.card li.adh-card {
+  list-style: none;
+  display: block;
+  padding: 14px;
+  margin-bottom: 10px;
+  background: var(--field) !important;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  border-inline-start: 3px solid var(--line);
+}
+
+.card li.adh-card.state-silent   { border-inline-start-color: #ef4444; }
+.card li.adh-card.state-slipping { border-inline-start-color: #fbbf24; }
+.card li.adh-card.state-active   { border-inline-start-color: var(--brand); }
+
+.adh-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.adh-name {
+  font-size: 15.5px;
+  font-weight: 800;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.adh-pill {
+  flex: none;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 3px 10px;
+  border: 1px solid transparent;
+}
+
+.adh-pill.silent {
+  color: #f87171;
+  background: rgba(239, 68, 68, .12);
+  border-color: rgba(239, 68, 68, .3);
+}
+
+.adh-pill.slipping {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, .12);
+  border-color: rgba(251, 191, 36, .3);
+}
+
+.adh-pill.active {
+  color: var(--brand);
+  background: rgba(34, 197, 94, .12);
+  border-color: rgba(34, 197, 94, .3);
+}
+
+.adh-sub {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.adh-waiting {
+  margin-top: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #93c5fd;
+  background: rgba(59, 130, 246, .1);
+  border: 1px solid rgba(59, 130, 246, .28);
+  border-radius: 10px;
+  padding: 7px 10px;
+}
+
+.adh-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.adh-metric-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.card li.adh-card .adh-metric-head span,
+.adh-metric-head span {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.adh-metric-head strong {
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.adh-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .055);
+  overflow: hidden;
+}
+
+.adh-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--brand);
+  transition: width .4s ease;
+}
+
+.adh-metric.food .adh-bar > span  { background: #38bdf8; }
+.adh-metric.water .adh-bar > span { background: #60a5fa; }
+
+.card button.adh-open,
+.adh-open {
+  width: 100%;
+  margin: 12px 0 0 0;
+  padding: 10px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .03);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.adh-empty {
+  list-style: none;
+  padding: 28px 12px;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--muted);
+}

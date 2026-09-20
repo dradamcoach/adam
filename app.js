@@ -807,6 +807,29 @@ const TEXT = {
     no_plan: 'مفيش برنامج لليوم ده',
     no_plan_title: 'اليوم ده لسه فاضي',
     no_rehab_title: 'مفيش برنامج تأهيل',
+    open_adherence_btn: 'لوحة الالتزام',
+    adherence_title: 'لوحة الالتزام',
+    adherence_hint: 'آخر ٧ أيام — مين ماشي معاك ومين محتاج تكلّمه',
+    adh_total: 'عميل',
+    adh_attention: 'محتاج انتباه',
+    adh_ok: 'ماشي تمام',
+    adh_filter_attention: 'محتاجين انتباه',
+    adh_filter_all: 'الكل',
+    adh_filter_active: 'ماشيين تمام',
+    adh_none_attention: 'مفيش حد محتاج انتباه النهاردة 👏',
+    adh_none: 'مفيش عملاء في القايمة دي',
+    adh_state_silent: 'ساكت',
+    adh_state_slipping: 'فاتر',
+    adh_state_active: 'نشط',
+    adh_never: 'مسجّلش أي حاجة لسه',
+    adh_today: 'سجّل النهاردة',
+    adh_since: 'آخر نشاط من {n} يوم',
+    adh_waiting: 'مستني رد منك',
+    adh_waiting_many: 'مستني رد على {n} طلبات',
+    adh_trained: 'تمرين',
+    adh_logged: 'سجّل أكله',
+    adh_water: 'مياه/يوم',
+    adh_open: 'افتح برنامجه',
     water_title: '💧 المياه',
     water_count: '{a} من {b} أكواب',
     picker_title: 'ضيف صنف',
@@ -1878,6 +1901,29 @@ const TEXT = {
     no_plan: 'No program for this day',
     no_plan_title: 'This day is still empty',
     no_rehab_title: 'No rehab program',
+    open_adherence_btn: 'Adherence board',
+    adherence_title: 'Adherence board',
+    adherence_hint: 'Last 7 days — who is on track and who needs a call',
+    adh_total: 'clients',
+    adh_attention: 'need attention',
+    adh_ok: 'on track',
+    adh_filter_attention: 'Need attention',
+    adh_filter_all: 'All',
+    adh_filter_active: 'On track',
+    adh_none_attention: 'Nobody needs attention today 👏',
+    adh_none: 'No clients in this list',
+    adh_state_silent: 'Silent',
+    adh_state_slipping: 'Slipping',
+    adh_state_active: 'Active',
+    adh_never: 'Nothing logged yet',
+    adh_today: 'Logged today',
+    adh_since: 'Last active {n} days ago',
+    adh_waiting: 'Waiting for your reply',
+    adh_waiting_many: 'Waiting on {n} requests',
+    adh_trained: 'Trained',
+    adh_logged: 'Logged food',
+    adh_water: 'Water/day',
+    adh_open: 'Open program',
     water_title: '💧 Water',
     water_count: '{a} of {b} cups',
     picker_title: 'Add food',
@@ -2731,6 +2777,7 @@ const ctabClasses = document.getElementById('ctab-classes');
 const clientStorePanel = document.getElementById('client-store');
 const ctabStore = document.getElementById('ctab-store');
 
+const adherenceScreen = document.getElementById('adherence-screen');
 const providersScreen = document.getElementById('providers-screen');
 const providersList = document.getElementById('providers-list');
 const providersMessage = document.getElementById('providers-message');
@@ -3265,7 +3312,7 @@ let clientNutrition = emptyNutrition();
 let cNutDay = todayIndex;
 
 function showScreen(screen) {
-  [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, supplementsScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen].forEach(function (s) {
+  [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, adherenceScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, supplementsScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen].forEach(function (s) {
     s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
@@ -3580,24 +3627,11 @@ async function loadClients() {
   clientsMessage.textContent = t('loading');
   try {
     const snapshot = await getDocs(collection(db, 'clients'));
-    let mine;
-    if (isFullAdminAccount()) {
-      // عضو الفريق الإداري (أو صاحب المنصة) يشوف كل العملاء من غير استثناء
-      mine = snapshot.docs;
-    } else if (isFullCoachRole()) {
-      // كل مدرب يشوف عملاءه بس — العملاء القدام من غير coachEmail بيفضلوا
-      // تابعين للحساب القديم (COACH_EMAIL) عشان مانخسرش بيانات موجودة
-      mine = snapshot.docs.filter(function (clientDoc) {
-        const ownerEmail = clientDoc.data().coachEmail || COACH_EMAIL.toLowerCase();
-        return ownerEmail === currentProviderEmail;
-      });
-    } else {
-      // المتخصصين (غير المدرب) بيشوفوا بس العملاء اللي اختاروهم في فريقهم
-      mine = snapshot.docs.filter(function (clientDoc) {
-        const team = clientDoc.data().team || {};
-        return Object.keys(team).some(function (key) { return team[key] === currentProviderEmail; });
-      });
-    }
+    /*
+     * المدرب يشوف عملاءه، المتخصص يشوف اللي اختاروه في فريقهم،
+     * والفريق الإداري يشوف الكل — نفس المنطق المستخدم في لوحة الالتزام
+     */
+    const mine = filterMyClients(snapshot.docs);
 
     // خانة البحث مالهاش لازمة لو مفيش عملاء أصلاً
     if (clientsSearch) clientsSearch.classList.toggle('hidden', !mine.length);
@@ -3641,6 +3675,348 @@ async function loadClients() {
     clientsMessage.textContent = t('problem') + error.message;
   }
 }
+
+/* ============================================================
+   لوحة الالتزام — قايمة صباح المدرب
+   ده اللي تطبيقات التتبّع الشخصي مستحيل تعمله: عندها العميل لوحده
+   مع أرقامه. هنا في مدرب، فالبيانات المفروض توصله هو، مرتّبة
+   بالأولوية: مين واقف، مين فاتر، ومين ماشي.
+   ============================================================ */
+
+/* بنفصل منطق "مين عملائي" عشان القايمة واللوحة يستخدموه الاتنين */
+function filterMyClients(docs) {
+  if (isFullAdminAccount()) return docs;
+  if (isFullCoachRole()) {
+    return docs.filter(function (clientDoc) {
+      const ownerEmail = clientDoc.data().coachEmail || COACH_EMAIL.toLowerCase();
+      return ownerEmail === currentProviderEmail;
+    });
+  }
+  return docs.filter(function (clientDoc) {
+    const team = clientDoc.data().team || {};
+    return Object.keys(team).some(function (key) { return team[key] === currentProviderEmail; });
+  });
+}
+
+const ADH_DAYS = 7;
+const ADH_SILENT_DAYS = 3;   /* ساكت أكتر من كده = محتاج تكلّمه */
+let adhRows = [];
+let adhFilter = 'attention';
+
+/* تواريخ آخر ٧ أيام (النهاردة آخرهم) */
+function lastDates(count) {
+  const out = [];
+  const base = new Date();
+  base.setHours(12, 0, 0, 0);
+  for (let i = count - 1; i >= 0; i--) {
+    const d = new Date(base);
+    d.setDate(base.getDate() - i);
+    out.push(dateStamp(d));
+  }
+  return out;
+}
+
+function daysAgo(stamp) {
+  if (!stamp) return null;
+  const parts = String(stamp).split('-');
+  if (parts.length !== 3) return null;
+  const then = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]), 12, 0, 0, 0);
+  const now = new Date();
+  now.setHours(12, 0, 0, 0);
+  return Math.round((now - then) / 86400000);
+}
+
+/*
+ * حساب التزام عميل واحد على آخر ٧ أيام.
+ * بنعتمد على اللي العميل سجّله فعلًا — مش على اللي المدرب كتبه —
+ * عشان الرقم يبقى واقع مش نية
+ */
+function adherenceFor(progressData, logData, dates) {
+  const history = (progressData && Array.isArray(progressData.history)) ? progressData.history : [];
+  const days = (logData && logData.days) ? logData.days : {};
+
+  let trained = 0;
+  let logged = 0;
+  let waterSum = 0;
+  let waterDays = 0;
+  let last = null;
+
+  dates.forEach(function (stamp) {
+    const didTrain = history.indexOf(stamp) !== -1;
+    const entry = days[stamp];
+    const didLog = !!(entry && ((entry.eaten && entry.eaten.length) || (entry.extra && entry.extra.length)));
+
+    if (didTrain) trained += 1;
+    if (didLog) logged += 1;
+    if (entry && Number(entry.water) > 0) { waterSum += Number(entry.water); waterDays += 1; }
+    if (didTrain || didLog || (entry && Number(entry.water) > 0)) last = stamp;
+  });
+
+  const silence = last ? daysAgo(last) : null;
+  const score = Math.round(((trained + logged) / (dates.length * 2)) * 100);
+
+  let state = 'active';
+  if (silence === null || silence > ADH_SILENT_DAYS) state = 'silent';
+  else if (score < 50) state = 'slipping';
+
+  return {
+    trained: trained,
+    logged: logged,
+    water: waterDays ? Math.round(waterSum / waterDays) : 0,
+    lastStamp: last,
+    silence: silence,
+    score: score,
+    state: state
+  };
+}
+
+const ADH_STATE_ORDER = { silent: 0, slipping: 1, active: 2 };
+
+async function loadAdherence() {
+  const listBox = document.getElementById('adh-list');
+  const message = document.getElementById('adherence-message');
+  listBox.innerHTML = '';
+  document.getElementById('adh-summary').innerHTML = '';
+  document.getElementById('adh-filters').innerHTML = '';
+  message.textContent = t('loading');
+
+  try {
+    const snapshot = await getDocs(collection(db, 'clients'));
+    const mine = filterMyClients(snapshot.docs);
+
+    if (!mine.length) {
+      message.textContent = t('no_clients');
+      return;
+    }
+
+    /* البلاغات والاستشارات اللي لسه مستنية رد — بنجيبهم مرة واحدة */
+    const waiting = {};
+    try {
+      const reports = await getDocs(collection(db, 'injuryReports'));
+      reports.forEach(function (docSnap) {
+        const data = docSnap.data();
+        if ((data.status || 'requested') !== 'requested') return;
+        if (!data.clientEmail) return;
+        waiting[data.clientEmail] = (waiting[data.clientEmail] || 0) + 1;
+      });
+    } catch (error) { /* مش مشكلة */ }
+    try {
+      const consults = await getDocs(collection(db, 'consultRequests'));
+      consults.forEach(function (docSnap) {
+        const data = docSnap.data();
+        if ((data.status || 'pending') === 'answered') return;
+        if (!data.clientEmail) return;
+        waiting[data.clientEmail] = (waiting[data.clientEmail] || 0) + 1;
+      });
+    } catch (error) { /* مش مشكلة */ }
+
+    const dates = lastDates(ADH_DAYS);
+    const rows = [];
+
+    for (const clientDoc of mine) {
+      const email = clientDoc.id;
+      let progressData = null;
+      let logData = null;
+      try { const d = await getDoc(doc(db, 'progress', email)); progressData = d.exists() ? d.data() : null; } catch (e) { progressData = null; }
+      try { const d = await getDoc(doc(db, 'foodlog', email)); logData = d.exists() ? d.data() : null; } catch (e) { logData = null; }
+
+      const stats = adherenceFor(progressData, logData, dates);
+      rows.push({
+        email: email,
+        name: clientDoc.data().name || email,
+        sport: clientDoc.data().sport || '',
+        waiting: waiting[email] || 0,
+        stats: stats
+      });
+    }
+
+    /* الترتيب: اللي محتاج انتباه الأول، والأطول سكوت قبل غيره */
+    rows.sort(function (a, b) {
+      const order = ADH_STATE_ORDER[a.stats.state] - ADH_STATE_ORDER[b.stats.state];
+      if (order !== 0) return order;
+      if (b.waiting !== a.waiting) return b.waiting - a.waiting;
+      const sa = a.stats.silence === null ? 999 : a.stats.silence;
+      const sb = b.stats.silence === null ? 999 : b.stats.silence;
+      if (sb !== sa) return sb - sa;
+      return a.stats.score - b.stats.score;
+    });
+
+    adhRows = rows;
+    message.textContent = '';
+    renderAdherence();
+    refreshAdherenceBadge();
+  } catch (error) {
+    message.textContent = t('problem') + error.message;
+  }
+}
+
+function adhNeedsAttention(row) {
+  return row.stats.state !== 'active' || row.waiting > 0;
+}
+
+const ADH_FILTERS = ['attention', 'all', 'active'];
+
+function renderAdherence() {
+  const summary = document.getElementById('adh-summary');
+  const filters = document.getElementById('adh-filters');
+  const listBox = document.getElementById('adh-list');
+
+  const total = adhRows.length;
+  const attention = adhRows.filter(adhNeedsAttention).length;
+  /*
+   * "ماشي تمام" = التزامه كويس. ممكن يكون كمان مستني رد، فيظهر في
+   * القايمتين — وده صح: هو ماشي، وفي نفس الوقت عليه حاجة منك
+   */
+  const onTrack = adhRows.filter(function (row) { return row.stats.state === 'active'; }).length;
+
+  summary.innerHTML = '';
+  [
+    { value: total, label: t('adh_total'), tone: '' },
+    { value: attention, label: t('adh_attention'), tone: attention ? 'warn' : 'good' },
+    { value: onTrack, label: t('adh_ok'), tone: 'good' }
+  ].forEach(function (cell) {
+    const box = document.createElement('div');
+    box.className = 'adh-stat' + (cell.tone ? ' ' + cell.tone : '');
+    const value = document.createElement('strong');
+    value.textContent = cell.value;
+    box.appendChild(value);
+    const label = document.createElement('span');
+    label.textContent = cell.label;
+    box.appendChild(label);
+    summary.appendChild(box);
+  });
+
+  filters.innerHTML = '';
+  ADH_FILTERS.forEach(function (key) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'adh-chip' + (key === adhFilter ? ' active' : '');
+    chip.textContent = t('adh_filter_' + key);
+    chip.addEventListener('click', function () {
+      adhFilter = key;
+      renderAdherence();
+    });
+    filters.appendChild(chip);
+  });
+
+  const shown = adhRows.filter(function (row) {
+    if (adhFilter === 'all') return true;
+    if (adhFilter === 'attention') return adhNeedsAttention(row);
+    return row.stats.state === 'active';
+  });
+
+  listBox.innerHTML = '';
+  if (!shown.length) {
+    const empty = document.createElement('li');
+    empty.className = 'adh-empty';
+    empty.textContent = adhFilter === 'attention' ? t('adh_none_attention') : t('adh_none');
+    listBox.appendChild(empty);
+    return;
+  }
+
+  shown.forEach(function (row) {
+    listBox.appendChild(adherenceCard(row));
+  });
+}
+
+function adhBarRow(label, value, max, tone) {
+  const box = document.createElement('div');
+  box.className = 'adh-metric' + (tone ? ' ' + tone : '');
+
+  const head = document.createElement('div');
+  head.className = 'adh-metric-head';
+  const name = document.createElement('span');
+  name.textContent = label;
+  head.appendChild(name);
+  const num = document.createElement('strong');
+  num.textContent = max ? (value + ' / ' + max) : String(value);
+  head.appendChild(num);
+  box.appendChild(head);
+
+  const bar = document.createElement('div');
+  bar.className = 'adh-bar';
+  const fillBar = document.createElement('span');
+  fillBar.style.width = Math.min(100, max ? (value / max) * 100 : 0) + '%';
+  bar.appendChild(fillBar);
+  box.appendChild(bar);
+
+  return box;
+}
+
+function adherenceCard(row) {
+  const item = document.createElement('li');
+  item.className = 'adh-card state-' + row.stats.state;
+
+  const head = document.createElement('div');
+  head.className = 'adh-head';
+
+  const name = document.createElement('div');
+  name.className = 'adh-name';
+  name.textContent = row.name;
+  head.appendChild(name);
+
+  const pill = document.createElement('span');
+  pill.className = 'adh-pill ' + row.stats.state;
+  pill.textContent = t('adh_state_' + row.stats.state);
+  head.appendChild(pill);
+  item.appendChild(head);
+
+  const sub = document.createElement('div');
+  sub.className = 'adh-sub';
+  if (row.stats.silence === null) {
+    sub.textContent = t('adh_never');
+  } else if (row.stats.silence === 0) {
+    sub.textContent = t('adh_today');
+  } else {
+    sub.textContent = fill('adh_since', { n: row.stats.silence });
+  }
+  item.appendChild(sub);
+
+  if (row.waiting) {
+    const flag = document.createElement('div');
+    flag.className = 'adh-waiting';
+    flag.textContent = row.waiting > 1
+      ? fill('adh_waiting_many', { n: row.waiting })
+      : t('adh_waiting');
+    item.appendChild(flag);
+  }
+
+  const metrics = document.createElement('div');
+  metrics.className = 'adh-metrics';
+  metrics.appendChild(adhBarRow(t('adh_trained'), row.stats.trained, ADH_DAYS, 'train'));
+  metrics.appendChild(adhBarRow(t('adh_logged'), row.stats.logged, ADH_DAYS, 'food'));
+  metrics.appendChild(adhBarRow(t('adh_water'), row.stats.water, 8, 'water'));
+  item.appendChild(metrics);
+
+  const open = document.createElement('button');
+  open.type = 'button';
+  open.className = 'adh-open';
+  open.textContent = t('adh_open');
+  open.addEventListener('click', function () {
+    openCoachScreen(row.email, row.name, row.sport);
+  });
+  item.appendChild(open);
+
+  return item;
+}
+
+/* العدّاد على الزرار بيتملي بعد أول فتح — مش بنقرا كل العملاء قبل ما يطلبها */
+function refreshAdherenceBadge() {
+  const badge = document.getElementById('adherence-badge');
+  if (!badge) return;
+  const n = adhRows.filter(adhNeedsAttention).length;
+  badge.textContent = n;
+  badge.classList.toggle('hidden', !n);
+}
+
+document.getElementById('open-adherence-btn').addEventListener('click', function () {
+  showScreen(adherenceScreen);
+  loadAdherence();
+});
+
+document.getElementById('adherence-back-btn').addEventListener('click', function () {
+  showScreen(clientsScreen);
+});
 
 async function showClientRow(email, name, sport, injuryCount) {
   const item = document.createElement('li');
@@ -10639,6 +11015,11 @@ function refreshAll() {
   renderSpecPages();
   renderAudienceDeck();
   if (!clientsScreen.classList.contains('hidden')) loadClients();
+  /*
+   * اللوحة مبنية بالجافاسكريبت، فلازم تترسم تاني مع تبديل اللغة —
+   * من الذاكرة من غير ما نقرا فايرستور تاني
+   */
+  if (!adherenceScreen.classList.contains('hidden') && adhRows.length) renderAdherence();
   if (!providersScreen.classList.contains('hidden')) { fillSpecialtySelect(); loadProviders(); }
   if (!providerHomeScreen.classList.contains('hidden') && currentProviderData) showProviderHome(currentProviderData);
   if (!onboardingScreen.classList.contains('hidden')) { fillGenderSelect(); fillDobSelects(); fillActivitySelect(); fillSportSelect(obSport, true); fillGoalSelect(); renderGenderRows(); renderActivityTiles(); renderSportGroupDial(); renderSportRows(); renderGoalTiles(); renderFocusChips(); fillWorkNatureSelect(); renderWorkNatureRows(); fillTrainingDaysSelect(); renderTrainingDaysRows(); fillMealsPerDaySelect(); renderMealsPerDayRows(); }
