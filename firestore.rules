@@ -90,6 +90,15 @@ service cloud.firestore {
       allow write: if isOwner(email);
     }
 
+    /*
+     * سجل أكل العميل — العميل هو اللي بيكتبه، والمدرب/المتخصص بيقراه
+     * عشان يتابع التزامه. محدش تاني بيقراه.
+     */
+    match /foodlog/{email} {
+      allow read:  if isCoach() || isOwner(email);
+      allow write: if isOwner(email);
+    }
+
     match /myExercises/{exerciseId} {
       allow read:  if isSignedIn();
       allow write: if isCoach();
@@ -118,11 +127,21 @@ service cloud.firestore {
       // وصول أي متخصص من لوحة التحكم، مش بس المتخصص نفسه. المتخصص
       // نفسه (isOwner) يقدر يعدّل بياناته لكن مايقدرش يمنح نفسه
       // isAdminTeam — لازم تفضل زي ما هي (أو false لو أول مرة)
+      // وكمان مايقدرش يعتمد تخصص لنفسه ولا يفتح مكتبة مقفولة عليه:
+      //  • specialties: يقدر يشيل منها بس (hasOnly = القائمة الجديدة
+      //    لازم تكون جزء من القديمة)، فالإضافة لازم تعدّي على صاحب
+      //    المنصة. طلب التخصص الجديد بيتكتب في pendingSpecialties وهي
+      //    مفتوحة له عادي
+      //  • libraryAccess: لازم تفضل زي ما هي بالظبط — فتح وقفل
+      //    المكتبات من صاحب المنصة بس
+      // المتخصص بيعدّل مستنده الموجود بس؛ إنشاء المستند من الأول
+      // بيعدّي على صاحب المنصة (الفرع الأول) زي ما هو
       allow write: if isFullAdmin()
-        || (isOwner(email) && request.resource.data.get('isAdminTeam', false) ==
-             (exists(/databases/$(database)/documents/providers/$(email))
-               ? get(/databases/$(database)/documents/providers/$(email)).data.get('isAdminTeam', false)
-               : false));
+        || (isOwner(email)
+            && exists(/databases/$(database)/documents/providers/$(email))
+            && request.resource.data.get('isAdminTeam', false) == resource.data.get('isAdminTeam', false)
+            && request.resource.data.get('specialties', []).hasOnly(resource.data.get('specialties', []))
+            && request.resource.data.get('libraryAccess', {}) == resource.data.get('libraryAccess', {}));
     }
 
     // جديد: خطط الاشتراك والأسعار — أي حد مسجّل دخول يشوفها، وصاحب
@@ -183,6 +202,15 @@ service cloud.firestore {
       allow read:   if isCoach() || resource.data.clientEmail == request.auth.token.email;
       allow create: if isSignedIn() && request.resource.data.clientEmail == request.auth.token.email;
       allow update: if isCoach();
+    }
+
+    // قوالب التمرين اللي المدربين والمتخصصين بيحفظوها بنفسهم — أي مدرب
+    // يقرأ كل القوالب (فيستفيد من شغل باقي المتخصصين)، بس مايعدّلش ولا
+    // يمسح غير القالب اللي هو صاحبه. العميل مالوش دعوة بالمجموعة دي
+    match /myTemplates/{templateId} {
+      allow read:   if isCoach();
+      allow create: if isCoach() && request.resource.data.ownerEmail == request.auth.token.email;
+      allow update, delete: if isCoach() && resource.data.ownerEmail == request.auth.token.email;
     }
 
     match /providerReviews/{reviewId} {
@@ -246,6 +274,7 @@ service cloud.firestore {
     // الفريق الإداري بس يشوفها
     match /leads/{leadId} {
       allow create: if true;
+      // صاحب المنصة بيقرا الرسايل ويعلّمها "اتواصلت" أو "اتقبل كعميل"
       allow read, update: if isFullAdmin();
     }
 
