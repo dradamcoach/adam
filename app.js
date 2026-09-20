@@ -9,7 +9,15 @@ import { SUPPLEMENT_LIBRARY, SUPPLEMENT_CATEGORIES, EVIDENCE_GRADES } from './su
 import { SPORTS, SPORT_GROUPS, SPORT_METRICS, METRIC_FIELDS, SPORT_TEMPLATES } from './sports.js';
 import { SPECIALTIES, specialtyName, specialtyIcon, specialtyIconSvg, MED_CATEGORIES, MED_REVIEW, DEFAULT_RED_FLAGS, SESSION_TYPES, BOOKING_STATUS, specialtyClears } from './providers.js';
 import { MED_LIBRARY_SEED } from './med-library-seed.js';
-import { EXERCISE_LIBRARY } from './exercise-library.js';
+import { EXERCISE_LIBRARY as BASE_EXERCISES } from './exercise-library.js';
+import { DRILLS_LIBRARY, DRILL_CATEGORIES, DRILL_EQUIPMENT } from './drills-library.js';
+
+/*
+ * مكتبة التمارين = تمارين الحديد + الدريلات (كروس فيت/هايروكس/ملاعب/كارديو).
+ * بنضمّهم في قايمة واحدة عشان البحث والفلاتر والقوالب تشتغل عليهم
+ * كلهم من غير أي مسار تاني في الكود
+ */
+const EXERCISE_LIBRARY = BASE_EXERCISES.concat(DRILLS_LIBRARY);
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -181,6 +189,15 @@ const TEXT = {
     template_loaded: 'اتحمّل القالب — راجعه وعدّله قبل الحفظ',
     all_categories: 'كل الأنواع',
     cat_strength: 'قوة',
+    cat_crossfit: 'كروس فيت',
+    cat_hyrox: 'هايروكس',
+    cat_agility: 'دريلات ملاعب',
+    cat_conditioning: 'كارديو وتكييف',
+    welcome_mail_title: 'الرسالة الترحيبية التلقائية',
+    welcome_mail_hint: 'أي حد يسيب إيميله في صفحة التعريف بيوصله شرح كامل عن البرنامج فورًا. الرابط ده بتجيبه من Google Apps Script (خطوة واحدة مكتوبة في ملف الشرح).',
+    welcome_url_ph: 'رابط Apps Script (بيبدأ بـ https://script.google.com/macros/s/...)',
+    welcome_secret_ph: 'كلمة السر اللي كتبتها في السكريبت',
+    welcome_on_label: 'فعّل الإرسال التلقائي',
     cat_stretching: 'إطالة',
     cat_cardio: 'كارديو',
     cat_plyometrics: 'بليومترك',
@@ -724,13 +741,27 @@ const TEXT = {
     ob_training_days_label: 'تحب تتمرن كام يوم في الأسبوع؟',
     pick_training_days: '— اختر عدد الأيام —',
     training_days_count: '{n} أيام',
+    training_days_one: 'يوم واحد',
+    training_days_two: 'يومين',
     ob_sleep_label: 'مواعيد نومك',
     ob_sleep_hint: 'لو شغلك ورديات ومواعيدك بتتغير، حط المواعيد الغالبة عليك دلوقتي',
     ob_sleep_time_label: 'بتنام الساعة كام',
     ob_wake_time_label: 'بتصحى الساعة كام',
+    ob_sleep_quality_label: 'نومك شكله إيه؟',
+    cb_days: 'بيتمرن',
+    cb_meals: 'بياكل',
+    cb_sleep: 'نومه',
+    pick_sleep_quality: '— اختر شكل نومك —',
+    ob_sleep_quality_hint: 'ده بيغيّر حجم البرنامج فعلًا — النوم المتقطع معناه استشفاء أقل',
+    sleep_q_solid: 'نومي متواصل',
+    sleep_q_broken: 'بصحى في النص',
+    sleep_q_short: 'ساعات قليلة',
+    sleep_q_shifts: 'ورديات — مواعيدي بتتغير',
     ob_meals_per_day_label: 'حابب تاكل كام وجبة في اليوم؟',
     pick_meals_per_day: '— اختر عدد الوجبات —',
     meals_per_day_count: '{n} وجبات',
+    meals_per_day_one: 'وجبة واحدة',
+    meals_per_day_two: 'وجبتين',
     ob_meal_times_label: 'مواعيد أكلك',
     ob_first_meal_label: 'أول وجبة',
     ob_last_meal_label: 'آخر وجبة',
@@ -1361,6 +1392,15 @@ const TEXT = {
     template_loaded: 'Template loaded — review and adapt before saving',
     all_categories: 'All types',
     cat_strength: 'Strength',
+    cat_crossfit: 'CrossFit',
+    cat_hyrox: 'HYROX',
+    cat_agility: 'Field drills',
+    cat_conditioning: 'Cardio & conditioning',
+    welcome_mail_title: 'Automatic welcome message',
+    welcome_mail_hint: 'Anyone who leaves an email on the landing page instantly receives a full explanation of the program. You get this URL from Google Apps Script (one step, written in the guide).',
+    welcome_url_ph: 'Apps Script URL (starts with https://script.google.com/macros/s/...)',
+    welcome_secret_ph: 'The secret you set inside the script',
+    welcome_on_label: 'Enable automatic sending',
     cat_stretching: 'Stretching',
     cat_cardio: 'Cardio',
     cat_plyometrics: 'Plyometrics',
@@ -1904,13 +1944,27 @@ const TEXT = {
     ob_training_days_label: 'How many days a week do you like to train?',
     pick_training_days: '— Choose number of days —',
     training_days_count: '{n} days',
+    training_days_one: '1 day',
+    training_days_two: '2 days',
     ob_sleep_label: 'Your sleep schedule',
     ob_sleep_hint: 'If your work is shifts and your times change, put whatever fits your current schedule',
     ob_sleep_time_label: 'Bedtime',
     ob_wake_time_label: 'Wake-up time',
+    ob_sleep_quality_label: 'What does your sleep look like?',
+    cb_days: 'Trains',
+    cb_meals: 'Eats',
+    cb_sleep: 'Sleep',
+    pick_sleep_quality: '— Choose your sleep pattern —',
+    ob_sleep_quality_hint: 'This really changes the size of the program — broken sleep means less recovery',
+    sleep_q_solid: 'Solid through the night',
+    sleep_q_broken: 'I wake up in the middle',
+    sleep_q_short: 'Few hours',
+    sleep_q_shifts: 'Shifts — my hours change',
     ob_meals_per_day_label: 'How many meals a day do you like?',
     pick_meals_per_day: '— Choose number of meals —',
     meals_per_day_count: '{n} meals',
+    meals_per_day_one: '1 meal',
+    meals_per_day_two: '2 meals',
     ob_meal_times_label: 'Your meal times',
     ob_first_meal_label: 'First meal',
     ob_last_meal_label: 'Last meal',
@@ -2422,6 +2476,11 @@ const EQUIPMENT = {
   'e-z curl bar':   { ar: 'بار متعرج',      en: 'EZ curl bar' },
   'other':          { ar: 'أخرى',           en: 'Other' }
 };
+/* أدوات الملاعب والصالات الوظيفية بتتضم لنفس القايمة */
+Object.keys(DRILL_EQUIPMENT).forEach(function (key) {
+  if (!EQUIPMENT[key]) EQUIPMENT[key] = DRILL_EQUIPMENT[key];
+});
+
 
 let lang = localStorage.getItem('adam-lang') || 'ar';
 
@@ -2884,7 +2943,11 @@ const CATEGORY_KEYS = {
   'plyometrics': 'cat_plyometrics',
   'powerlifting': 'cat_powerlifting',
   'strongman': 'cat_strongman',
-  'olympic weightlifting': 'cat_olympic'
+  'olympic weightlifting': 'cat_olympic',
+  'crossfit': 'cat_crossfit',
+  'hyrox': 'cat_hyrox',
+  'agility': 'cat_agility',
+  'conditioning': 'cat_conditioning'
 };
 
 function categoryName(key) {
@@ -3023,6 +3086,8 @@ const cpDobDay = document.getElementById('cp-dob-day');
 const cpDobMonth = document.getElementById('cp-dob-month');
 const cpDobYear = document.getElementById('cp-dob-year');
 const cpTrainingDays = document.getElementById('cp-training-days');
+const cpSleepQuality = document.getElementById('cp-sleep-quality');
+const coachBasics = document.getElementById('coach-basics');
 const cpSleepTime = document.getElementById('cp-sleep-time');
 const cpWakeTime = document.getElementById('cp-wake-time');
 const cpMealsPerDay = document.getElementById('cp-meals-per-day');
@@ -3053,6 +3118,7 @@ function fillClientProfileSelects() {
   fillGenericSelect(cpActivity, ACTIVITY_LEVELS, activityName, 'pick_activity');
   fillGenericSelect(cpGoal, GOAL_KEYS, goalName, 'pick_goal');
   fillGenericSelect(cpTrainingDays, TRAINING_DAYS_KEYS, trainingDaysName, 'pick_training_days');
+  fillGenericSelect(cpSleepQuality, SLEEP_QUALITY_KEYS, sleepQualityName, 'pick_sleep_quality');
   fillGenericSelect(cpMealsPerDay, MEALS_PER_DAY_KEYS, mealsPerDayName, 'pick_meals_per_day');
   fillCpDobSelects();
 }
@@ -3123,6 +3189,7 @@ async function openClientProfile() {
     cpDobYear.value = (data.dob && data.dob.year) || '';
     cpTrainingDays.value = data.trainingDaysPref || '';
     cpSleepTime.value = data.sleepTime || '';
+    cpSleepQuality.value = data.sleepQuality || '';
     cpWakeTime.value = data.wakeTime || '';
     cpMealsPerDay.value = data.mealsPerDay || '';
     cpFirstMealTime.value = data.firstMealTime || '';
@@ -3197,6 +3264,7 @@ document.getElementById('cp-save-btn').addEventListener('click', async function 
       goal: cpGoal.value || '',
       trainingDaysPref: cpTrainingDays.value || '',
       sleepTime: cpSleepTime.value || '',
+      sleepQuality: cpSleepQuality.value || '',
       wakeTime: cpWakeTime.value || '',
       mealsPerDay: cpMealsPerDay.value || '',
       firstMealTime: cpFirstMealTime.value || '',
@@ -3251,6 +3319,8 @@ const obTrainingDays = document.getElementById('ob-training-days');
 const obTrainingDaysRows = document.getElementById('ob-training-days-rows');
 const obSleepTime = document.getElementById('ob-sleep-time');
 const obWakeTime = document.getElementById('ob-wake-time');
+const obSleepQuality = document.getElementById('ob-sleep-quality');
+const obSleepQualityRows = document.getElementById('ob-sleep-quality-rows');
 const obMealsPerDay = document.getElementById('ob-meals-per-day');
 const obMealsPerDayRows = document.getElementById('ob-meals-per-day-rows');
 const obFirstMealTime = document.getElementById('ob-first-meal-time');
@@ -5125,6 +5195,8 @@ async function openCoachScreen(email, name, sport) {
   currentClientName = name;
   currentClientSport = sport || '';
   coachTitle.textContent = fill('program_of', { name: name });
+  coachBasicsData = null;
+  renderCoachBasics();
   coachMessage.textContent = t('loading');
   showScreen(coachScreen);
   const defaultMode = applyCoachScopeTabs();
@@ -5151,6 +5223,10 @@ async function openCoachScreen(email, name, sport) {
     /* الحالة الصحية قبل أي حاجة — المدرب لازم يشوفها قبل ما يكتب حرف */
     coachHealth = await loadHealthFor(email);
     renderCoachHealth();
+
+    const basicsDoc = await getDoc(doc(db, 'clients', email));
+    coachBasicsData = basicsDoc.exists() ? basicsDoc.data() : null;
+    renderCoachBasics();
 
     coachDay = todayIndex;
     nutDay = todayIndex;
@@ -11179,6 +11255,7 @@ function refreshAll() {
   if (!calculatorsScreen.classList.contains('hidden')) fillCalcSelects();
   if (!progressScreen.classList.contains('hidden')) fillCheckinSelects();
   if (!coachScreen.classList.contains('hidden')) {
+    renderCoachBasics();
     if (coachMode === 'rehab') showRehab();
     else if (coachMode === 'nutrition') showNutrition();
     else if (coachMode === 'injuries') loadCoachInjuryReports();
@@ -11230,7 +11307,7 @@ function refreshAll() {
   if (!clearanceScreen.classList.contains('hidden') && clearanceRows.length) renderClearanceList();
   if (!providersScreen.classList.contains('hidden')) { fillSpecialtySelect(); loadProviders(); }
   if (!providerHomeScreen.classList.contains('hidden') && currentProviderData) showProviderHome(currentProviderData);
-  if (!onboardingScreen.classList.contains('hidden')) { fillGenderSelect(); fillDobSelects(); fillActivitySelect(); fillSportSelect(obSport, true); fillGoalSelect(); renderGenderRows(); renderActivityTiles(); renderSportGroupDial(); renderSportRows(); renderGoalTiles(); renderFocusChips(); fillWorkNatureSelect(); renderWorkNatureRows(); fillTrainingDaysSelect(); renderTrainingDaysRows(); fillMealsPerDaySelect(); renderMealsPerDayRows(); }
+  if (!onboardingScreen.classList.contains('hidden')) { fillGenderSelect(); fillDobSelects(); fillActivitySelect(); fillSportSelect(obSport, true); fillGoalSelect(); renderGenderRows(); renderActivityTiles(); renderSportGroupDial(); renderSportRows(); renderGoalTiles(); renderFocusChips(); fillWorkNatureSelect(); renderWorkNatureRows(); fillTrainingDaysSelect(); renderTrainingDaysRows(); fillSleepQualitySelect(); fillMealsPerDaySelect(); renderMealsPerDayRows(); }
   if (!teamScreen.classList.contains('hidden')) loadTeamPicker(selectedTeam);
   if (!injuryScreen.classList.contains('hidden')) { refreshHotspots(); loadInjuryHistory(); }
   if (!teamViewScreen.classList.contains('hidden')) loadTeamView();
@@ -12432,6 +12509,13 @@ document.getElementById('lead-submit-btn').addEventListener('click', async funct
       accepted: false,
       createdAt: new Date().toISOString()
     });
+    /*
+     * الرسالة الترحيبية: بتتبعت فورًا من Google Apps Script.
+     * فشلها مايوقفش حاجة — الرسالة اتحفظت في الداتا أصلًا وهتوصلك
+     * في التقرير اليومي، فالترحيب مكسب زيادة مش شرط
+     */
+    sendWelcomeMail({ name: name, email: email, phone: phone, interest: leadInterestSelect ? leadInterestSelect.value : '' });
+
     setStatusMessage(leadMessageStatus, t('lead_submitted_msg'), 'success');
     leadNameInput.value = '';
     leadContactInput.value = '';
@@ -13439,8 +13523,12 @@ function fillWorkNatureSelect() {
   obWorkNature.value = keep;
 }
 
-const TRAINING_DAYS_KEYS = ['2', '3', '4', '5', '6'];
-const MEALS_PER_DAY_KEYS = ['3', '4', '5', '6'];
+/*
+ * من يوم واحد لسبعة: في ناس مش قادرة غير يوم، وفي ناس بتتمرن كل يوم.
+ * ومن وجبة واحدة: اللي بيعمل صيام متقطع ممكن ياكل وجبة أو اتنين بس
+ */
+const TRAINING_DAYS_KEYS = ['1', '2', '3', '4', '5', '6', '7'];
+const MEALS_PER_DAY_KEYS = ['1', '2', '3', '4', '5', '6'];
 
 function numChoiceIcon(value) {
   return '<span class="choice-num">' + value + '</span>';
@@ -13456,11 +13544,56 @@ const MEALS_PER_DAY_ICONS = MEALS_PER_DAY_KEYS.reduce(function (map, key) {
   return map;
 }, {});
 
+/*
+ * شكل النوم مش عدد ساعاته بس. النوم المتقطع (أب بيصحى لعياله،
+ * ورديات، أرق) معناه استشفاء أقل — والبرنامج المفروض يتبني على كده
+ */
+const SLEEP_QUALITY_KEYS = ['solid', 'broken', 'short', 'shifts'];
+
+const SLEEP_QUALITY_ICONS = {
+  solid:  '😴',
+  broken: '🌙',
+  short:  '⏱️',
+  shifts: '🔄'
+};
+
+function sleepQualityName(key) {
+  return t('sleep_q_' + key);
+}
+
+function renderSleepQualityRows() {
+  if (!obSleepQualityRows) return;
+  renderChoiceRows(obSleepQualityRows, SLEEP_QUALITY_KEYS, SLEEP_QUALITY_ICONS, sleepQualityName, obSleepQuality.value, function (key) {
+    obSleepQuality.value = key;
+    renderSleepQualityRows();
+    updateObProgress();
+  });
+}
+
+function fillSleepQualitySelect() {
+  if (!obSleepQuality) return;
+  const keep = obSleepQuality.value;
+  obSleepQuality.innerHTML = '';
+  SLEEP_QUALITY_KEYS.forEach(function (key) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = sleepQualityName(key);
+    obSleepQuality.appendChild(option);
+  });
+  obSleepQuality.value = keep;
+  renderSleepQualityRows();
+}
+
+/* العربي بيفرّق بين الواحد والاتنين والجمع — "1 أيام" شكلها غلط */
 function trainingDaysName(key) {
+  if (key === '1') return t('training_days_one');
+  if (key === '2') return t('training_days_two');
   return fill('training_days_count', { n: key });
 }
 
 function mealsPerDayName(key) {
+  if (key === '1') return t('meals_per_day_one');
+  if (key === '2') return t('meals_per_day_two');
   return fill('meals_per_day_count', { n: key });
 }
 
@@ -14128,6 +14261,7 @@ function prefillOnboarding(data) {
   obWorkNature.value = (data && data.workNature) || '';
   obTrainingDays.value = (data && data.trainingDaysPref) || '';
   obSleepTime.value = (data && data.sleepTime) || '';
+  if (obSleepQuality) { obSleepQuality.value = (data && data.sleepQuality) || ''; fillSleepQualitySelect(); }
   obWakeTime.value = (data && data.wakeTime) || '';
   obMealsPerDay.value = (data && data.mealsPerDay) || '';
   obFirstMealTime.value = (data && data.firstMealTime) || '';
@@ -14236,6 +14370,7 @@ document.getElementById('ob-next-btn').addEventListener('click', async function 
       workNature: obWorkNature.value || '',
       trainingDaysPref: obTrainingDays.value || '',
       sleepTime: obSleepTime.value || '',
+      sleepQuality: (obSleepQuality && obSleepQuality.value) || '',
       wakeTime: obWakeTime.value || '',
       mealsPerDay: obMealsPerDay.value || '',
       firstMealTime: obFirstMealTime.value || '',
@@ -14925,6 +15060,56 @@ if (obRefSearch) obRefSearch.addEventListener('input', renderReferrerRow);
 /* ---------- شاشة المدرب: كارت الحالة والبوابة الطبية ---------- */
 
 let coachHealth = null;
+
+/*
+ * المدرب لازم يشوف ظروف العميل قبل ما يكتب البرنامج: بيتمرن كام يوم،
+ * بياكل كام وجبة، ونومه شكله إيه. من غير السطر ده الإجابات بتتسجّل
+ * في الداتابيز ومحدش بيقراها
+ */
+let coachBasicsData = null;
+
+function renderCoachBasics() {
+  if (!coachBasics) return;
+  const data = coachBasicsData;
+  if (!data) { coachBasics.classList.add('hidden'); return; }
+  const bits = [];
+  if (data.trainingDaysPref) {
+    bits.push({ icon: '📅', label: t('cb_days'), value: trainingDaysName(String(data.trainingDaysPref)) });
+  }
+  if (data.mealsPerDay) {
+    bits.push({ icon: '🍽️', label: t('cb_meals'), value: mealsPerDayName(String(data.mealsPerDay)) });
+  }
+  if (data.sleepQuality) {
+    bits.push({
+      icon: SLEEP_QUALITY_ICONS[data.sleepQuality] || '😴',
+      label: t('cb_sleep'),
+      value: sleepQualityName(data.sleepQuality),
+      warn: data.sleepQuality !== 'solid'
+    });
+  }
+  if (!bits.length) { coachBasics.classList.add('hidden'); return; }
+  coachBasics.classList.remove('hidden');
+  coachBasics.innerHTML = '';
+  bits.forEach(function (bit) {
+    const box = document.createElement('div');
+    box.className = 'cbasic' + (bit.warn ? ' warn' : '');
+    const icon = document.createElement('span');
+    icon.className = 'cbasic-icon';
+    icon.textContent = bit.icon;
+    const text = document.createElement('div');
+    const label = document.createElement('span');
+    label.className = 'cbasic-label';
+    label.textContent = bit.label;
+    const value = document.createElement('strong');
+    value.className = 'cbasic-value';
+    value.textContent = bit.value;
+    text.appendChild(label);
+    text.appendChild(value);
+    box.appendChild(icon);
+    box.appendChild(text);
+    coachBasics.appendChild(box);
+  });
+}
 
 function renderCoachHealth() {
   const card = document.getElementById('coach-health');
@@ -16156,6 +16341,12 @@ async function loadAdminPanel() {
   settingsBank.value = (paymentSettings && paymentSettings.bankDetails) || '';
   settingsMessage.textContent = '';
 
+  await fetchWelcomeSettings();
+  document.getElementById('settings-welcome-url').value = (welcomeSettings && welcomeSettings.url) || '';
+  document.getElementById('settings-welcome-secret').value = (welcomeSettings && welcomeSettings.secret) || '';
+  document.getElementById('settings-welcome-on').checked = !!(welcomeSettings && welcomeSettings.enabled);
+  document.getElementById('welcome-mail-message').textContent = '';
+
   await renderAdminPlansList();
   await renderAdminProviderPlansList();
   await renderAdminPaymentsList();
@@ -16184,6 +16375,70 @@ document.getElementById('refresh-public-stats-btn').addEventListener('click', as
     setStatusMessage(publicStatsMessage, t('public_stats_updated'), 'success');
   } catch (error) {
     publicStatsMessage.textContent = t('problem') + error.message;
+  }
+});
+
+/* ============================================================
+   الرسالة الترحيبية التلقائية
+   العميل اللي بيسيب إيميله في صفحة التعريف بيوصله شرح كامل عن
+   البرنامج فورًا — قبل ما ترد عليه إنت بساعات
+   ============================================================ */
+
+let welcomeSettings = null;
+
+async function fetchWelcomeSettings() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'welcome'));
+    welcomeSettings = snap.exists() ? snap.data() : null;
+  } catch (error) {
+    welcomeSettings = null;
+  }
+  return welcomeSettings;
+}
+
+async function sendWelcomeMail(lead) {
+  if (!lead || !lead.email) return false;
+  const conf = welcomeSettings || await fetchWelcomeSettings();
+  if (!conf || !conf.enabled || !conf.url) return false;
+
+  try {
+    /*
+     * text/plain عشان المتصفح ما يعملش preflight — Apps Script
+     * مابيردّش على OPTIONS، فالطلب كان هيفشل بدونها
+     */
+    await fetch(conf.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        secret: conf.secret || '',
+        name: lead.name || '',
+        email: lead.email,
+        phone: lead.phone || '',
+        interest: lead.interest || '',
+        lang: lang
+      })
+    });
+    return true;
+  } catch (error) {
+    /* مفيش داعي نزعج الزائر — الرسالة محفوظة عندنا في كل الأحوال */
+    return false;
+  }
+}
+
+document.getElementById('save-welcome-btn').addEventListener('click', async function () {
+  const message = document.getElementById('welcome-mail-message');
+  message.textContent = t('saving');
+  try {
+    const payload = {
+      url: document.getElementById('settings-welcome-url').value.trim(),
+      secret: document.getElementById('settings-welcome-secret').value.trim(),
+      enabled: document.getElementById('settings-welcome-on').checked
+    };
+    await setDoc(doc(db, 'settings', 'welcome'), payload, { merge: true });
+    welcomeSettings = payload;
+    setStatusMessage(message, t('saved'), 'success');
+  } catch (error) {
+    message.textContent = t('problem') + error.message;
   }
 });
 

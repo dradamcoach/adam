@@ -269,6 +269,17 @@
     <button type="button" id="save-settings-btn" class="secondary" data-t="save_settings_btn">حفظ البيانات</button>
     <p class="message" id="settings-message"></p>
 
+    <h3 class="welcome-section-title" data-t="welcome_mail_title">الرسالة الترحيبية التلقائية</h3>
+    <p class="hint-text" data-t="welcome_mail_hint">أي حد يسيب إيميله في صفحة التعريف بيوصله شرح كامل عن البرنامج فورًا. الرابط ده بتجيبه من Google Apps Script (خطوة واحدة مكتوبة في ملف الشرح).</p>
+    <input id="settings-welcome-url" data-t-ph="welcome_url_ph">
+    <input id="settings-welcome-secret" data-t-ph="welcome_secret_ph">
+    <label class="switch-row">
+      <input type="checkbox" id="settings-welcome-on">
+      <span data-t="welcome_on_label">فعّل الإرسال التلقائي</span>
+    </label>
+    <button type="button" id="save-welcome-btn" class="secondary" data-t="save_settings_btn">حفظ البيانات</button>
+    <p class="message" id="welcome-mail-message"></p>
+
     <h3 class="welcome-section-title" data-t="public_stats_title">إحصائية الصفحة الرئيسية</h3>
     <p class="hint-text" data-t="public_stats_hint">شريط الثقة في الصفحة الرئيسية بيعرض عدد العملاء الحقيقي — دوس تحديث لما يتغيّر</p>
     <button type="button" id="refresh-public-stats-btn" class="secondary" data-t="refresh_public_stats_btn">تحديث الإحصائية</button>
@@ -564,6 +575,10 @@
       </div>
     </div>
 
+    <label class="field-label" data-t="ob_sleep_quality_label">نومك شكله إيه؟</label>
+    <p class="hint-text" data-t="ob_sleep_quality_hint">ده بيغيّر حجم البرنامج فعلًا — النوم المتقطع معناه استشفاء أقل</p>
+    <select id="ob-sleep-quality" class="visually-hidden-select"></select>
+    <div class="choice-list" id="ob-sleep-quality-rows"></div>
     <label class="field-label" data-t="ob_meals_per_day_label">حابب تاكل كام وجبة في اليوم؟</label>
     <select id="ob-meals-per-day" class="visually-hidden-select"></select>
     <div class="choice-list" id="ob-meals-per-day-rows"></div>
@@ -782,6 +797,9 @@
         <input id="cp-wake-time" type="time">
       </div>
     </div>
+
+    <label class="field-label" data-t="ob_sleep_quality_label">نومك شكله إيه؟</label>
+    <select id="cp-sleep-quality"></select>
 
     <label class="field-label" data-t="ob_meals_per_day_label">حابب تاكل كام وجبة في اليوم؟</label>
     <select id="cp-meals-per-day"></select>
@@ -1038,6 +1056,9 @@
       <div class="ch-note hidden" id="ch-note"></div>
       <button type="button" class="ch-open" id="ch-open-btn" data-t="coach_health_open">شوف الاحتياطات وعلامات التوقّف ›</button>
     </div>
+
+    <!-- ====== ظروف العميل: أيامه ووجباته ونومه في سطر واحد ====== -->
+    <div class="cbasics hidden" id="coach-basics"></div>
 
     <div class="tabs">
       <button type="button" class="tab active" id="tab-training"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg><span data-t="tab_training">تمرين</span></button>
