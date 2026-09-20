@@ -595,6 +595,17 @@ const TEXT = {
     weak_password: 'الباسورد لازم يبقى 6 حروف على الأقل',
     email_in_use: 'الإيميل ده متسجل بحساب قبل كده',
     creating_account: 'جاري إنشاء الحساب...',
+    ob_lead: 'دقيقتين بس، وفريقك هيبني برنامجك عليها',
+    ob_body_label: 'نوع جسمك',
+    ob_body_hint: 'اختار الأقرب لشكلك — ده بيغيّر طريقة بناء برنامجك وسعراتك',
+    body_ecto: 'نحيف',
+    body_ecto_note: 'بتخس بسرعة وبتتعب في زيادة الوزن',
+    body_meso: 'رياضي',
+    body_meso_note: 'بتبني عضل وبتخس بسهولة نسبيًا',
+    body_endo: 'ممتلئ',
+    body_endo_note: 'بتزيد بسهولة وبتحتاج مجهود في التنشيف',
+    ob_progress_note: 'خلّصت {done} من {total}',
+    ob_progress_done: '✓ كل البيانات تمام — تقدر تكمّل',
     onboarding_title: 'بيانات بسيطة عنك',
     choose_photo: 'اختر صورتك (اختياري)',
     ob_name_ph: 'اسمك',
@@ -791,8 +802,43 @@ const TEXT = {
     today_workout: 'تمرين اليوم',
     finish_workout: 'إنهاء التمرين',
     start_over: 'ابدأ من جديد',
-    rest_msg: 'يوم راحة 😌',
+    rest_msg: 'خد راحتك النهاردة — الجسم بيبني وهو مرتاح 😌',
+    rest_title: 'يوم راحة',
     no_plan: 'مفيش برنامج لليوم ده',
+    no_plan_title: 'اليوم ده لسه فاضي',
+    no_rehab_title: 'مفيش برنامج تأهيل',
+    water_title: '💧 المياه',
+    water_count: '{a} من {b} أكواب',
+    picker_title: 'ضيف صنف',
+    picker_search_ph: 'دوّر على صنف...',
+    picker_add: 'ضيفه',
+    no_results: 'مفيش نتيجة — جرّب اسم تاني',
+    add_food_btn: '+ ضيف صنف للوجبة دي',
+    extra_badge: 'زيادة',
+    mark_eaten: 'علّم إنك أكلته',
+    meal_empty: 'مفيش حاجة في الوجبة دي',
+    fuel_left: 'سعر فاضل',
+    fuel_over: 'سعر زيادة',
+    fuel_summary: 'أكلت {a} · الخطة {b} · الهدف {c}',
+    week_streak_note: 'خلّصت {a} من {b} أيام الأسبوع ده',
+    week_streak_empty: 'لسه مفيش أيام تمرين الأسبوع ده',
+    start_session_btn: '▶ ابدأ التمرين',
+    focus_close: 'اقفل',
+    focus_prev: '‹ السابق',
+    focus_next: 'التالي ›',
+    focus_finish: 'خلّصت ✓',
+    focus_of: 'تمرين {a} من {b}',
+    focus_sets_left: 'فاضل {n} مجموعة — دوس على الخرزة بعد كل مجموعة',
+    focus_sets_done: 'خلّصت كل المجموعات 💪',
+    fab_toggle_title: 'أدوات',
+    no_meals_title: 'اليوم ده من غير وجبات',
+    no_nutrition_title: 'لسه مفيش تغذية',
+    sess_badge_today: 'النهاردة',
+    sess_stat_ex: 'تمرين',
+    sess_stat_sets: 'مجموعة',
+    sess_stat_min: 'دقيقة',
+    fuel_of: 'من',
+    fuel_g: 'جم',
     day_plan: 'برنامج يوم {day}',
     of_exercises: '{a} من {b} تمارين',
     well_done: 'أحسنت يا بطل 💪',
@@ -800,6 +846,7 @@ const TEXT = {
 
     days: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
     days_short: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+    days_mini: ['س', 'ح', 'ن', 'ث', 'ر', 'خ', 'ج'],
 
     welcome_hero_title: 'برنامجك الرياضي والتأهيلي والغذائي، في مكان واحد',
     welcome_hero_sub: 'ADAM بيجمّعلك التمرين والتأهيل والتغذية والاستشارة الطبية مع فريق متخصصين، وكله متابع خطوة بخطوة',
@@ -1617,6 +1664,17 @@ const TEXT = {
     weak_password: 'Password must be at least 6 characters',
     email_in_use: 'That email is already registered',
     creating_account: 'Creating account...',
+    ob_lead: 'Two minutes, and your team builds your program on this',
+    ob_body_label: 'Your body type',
+    ob_body_hint: 'Pick the closest — it changes how your program and calories are built',
+    body_ecto: 'Lean',
+    body_ecto_note: 'Loses weight fast, struggles to gain',
+    body_meso: 'Athletic',
+    body_meso_note: 'Builds muscle and leans out fairly easily',
+    body_endo: 'Fuller',
+    body_endo_note: 'Gains easily, needs more work to lean out',
+    ob_progress_note: '{done} of {total} done',
+    ob_progress_done: '✓ All set — you can continue',
     onboarding_title: 'A few quick details',
     choose_photo: 'Choose your photo (optional)',
     ob_name_ph: 'Your name',
@@ -1813,8 +1871,43 @@ const TEXT = {
     today_workout: "Today's Workout",
     finish_workout: 'Finish workout',
     start_over: 'Start over',
-    rest_msg: 'Rest day 😌',
+    rest_msg: 'Take it easy today — the body builds while it rests 😌',
+    rest_title: 'Rest day',
     no_plan: 'No program for this day',
+    no_plan_title: 'This day is still empty',
+    no_rehab_title: 'No rehab program',
+    water_title: '💧 Water',
+    water_count: '{a} of {b} cups',
+    picker_title: 'Add food',
+    picker_search_ph: 'Search for a food...',
+    picker_add: 'Add it',
+    no_results: 'No match — try another name',
+    add_food_btn: '+ Add food to this meal',
+    extra_badge: 'extra',
+    mark_eaten: 'Mark as eaten',
+    meal_empty: 'Nothing in this meal',
+    fuel_left: 'kcal left',
+    fuel_over: 'kcal over',
+    fuel_summary: 'Eaten {a} · Plan {b} · Goal {c}',
+    week_streak_note: '{a} of {b} days done this week',
+    week_streak_empty: 'No training days this week yet',
+    start_session_btn: '▶ Start workout',
+    focus_close: 'Close',
+    focus_prev: '‹ Previous',
+    focus_next: 'Next ›',
+    focus_finish: 'Done ✓',
+    focus_of: 'Exercise {a} of {b}',
+    focus_sets_left: '{n} sets left — tap a bead after each set',
+    focus_sets_done: 'All sets done 💪',
+    fab_toggle_title: 'Tools',
+    no_meals_title: 'No meals for this day',
+    no_nutrition_title: 'No nutrition yet',
+    sess_badge_today: 'Today',
+    sess_stat_ex: 'exercises',
+    sess_stat_sets: 'sets',
+    sess_stat_min: 'min',
+    fuel_of: 'of',
+    fuel_g: 'g',
     day_plan: '{day} program',
     of_exercises: '{a} of {b} exercises',
     well_done: 'Well done, champ 💪',
@@ -1822,6 +1915,7 @@ const TEXT = {
 
     days: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
     days_short: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    days_mini: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
 
     welcome_hero_title: 'Your training, rehab and nutrition program — all in one place',
     welcome_hero_sub: 'ADAM brings together training, rehab, nutrition and medical consultation with a team of specialists, all tracked step by step',
@@ -2169,6 +2263,11 @@ function days() {
 
 function daysShort() {
   return TEXT[lang].days_short;
+}
+
+/* اختصار حرف/تلات حروف — لشريط الأسبوع الضيّق في شاشة العميل */
+function daysMini() {
+  return TEXT[lang].days_mini;
 }
 
 const langButton = document.getElementById('lang-btn');
@@ -3724,8 +3823,23 @@ function openPreview(exercise) {
 }
 
 function thumbSrc(exercise) {
+  if (!exercise) return '';
   if (exercise.imageUrl) return exercise.imageUrl;
   if (exercise.image) return IMAGE_BASE + exercise.image;
+
+  /*
+   * برامج قديمة (أو قوالب اتطبّقت قبل ما نخزّن الصورة) بتيجي باسم التمرين
+   * ومعرّفه بس. بندوّر على صورته في المكتبة بالمعرّف الأول، وبعدين بالاسم
+   * الإنجليزي — عشان العميل يشوف صورة الحركة زي ما المدرب بيشوفها
+   */
+  const entry = exercise.libId ? libraryEntryById(exercise.libId) : null;
+  if (entry && entry.images && entry.images.length) return IMAGE_BASE + entry.images[0];
+
+  const enName = (entry && entry.name && entry.name.en) ? entry.name.en : (exercise.en || '');
+  if (enName) {
+    const path = findLibraryImage(enName);
+    if (path) return IMAGE_BASE + path;
+  }
   return '';
 }
 
@@ -6276,6 +6390,9 @@ let clientSport = '';
 let clientName = '';
 let doneToday = [];
 let actualSetsToday = {};
+/* السبحة: كام مجموعة خلّصها العميل في كل تمرين النهاردة { 'main:0': 3 } */
+let setsDoneToday = {};
+let rehabSetsDoneToday = {};
 let rehabDoneToday = [];
 let rehabActualSetsToday = {};
 let progressHistory = [];
@@ -6599,10 +6716,22 @@ async function loadClient(email) {
     actualSetsToday = (progressDoc.exists() && progressDoc.data().date === today && progressDoc.data().actualSets)
       ? progressDoc.data().actualSets : {};
 
+    setsDoneToday = (progressDoc.exists() && progressDoc.data().date === today && progressDoc.data().setsDone)
+      ? progressDoc.data().setsDone : {};
+    rehabSetsDoneToday = (progressDoc.exists() && progressDoc.data().rehabDate === today && progressDoc.data().rehabSetsDone)
+      ? progressDoc.data().rehabSetsDone : {};
+
+    /* برامج اتسجلت قبل السبحة: التمرين المعلّم خلصان = كل مجموعاته خلصت */
+    doneToday.forEach(function (key) {
+      if (setsDoneToday[key] === undefined) setsDoneToday[key] = -1;
+    });
+
     rehabDoneToday = (progressDoc.exists() && progressDoc.data().rehabDate === today && Array.isArray(progressDoc.data().rehabDone))
       ? progressDoc.data().rehabDone : [];
     rehabActualSetsToday = (progressDoc.exists() && progressDoc.data().rehabDate === today && progressDoc.data().rehabActualSets)
       ? progressDoc.data().rehabActualSets : {};
+
+    await loadFoodLog(email);
 
     const hasRehab = rehabHasContent(clientRehab);
     const hasNutrition = nutritionHasContent(clientNutrition);
@@ -6639,11 +6768,26 @@ async function refreshClientConsultBadge() {
   }
 }
 
+/*
+ * في نص الدايرة بنكتب اسم اليوم وعدد التمارين بس — عنوان التمرين نفسه
+ * بقى في كارت الجلسة تحت، فمفيش داعي يتكرر مرتين على نفس الشاشة
+ */
+function clientDialDescribe(day, index) {
+  return {
+    hasPlan: dayHasPlan(day),
+    title: days()[index],
+    sub: day.rest ? t('rest_title')
+       : (dayCount(day) ? fill('count_ex', { n: dayCount(day) }) : t('no_plan')),
+    isRest: !!day.rest
+  };
+}
+
 function showClientDays() {
   renderDial('client-ring', 'client-dc-day', 'client-dc-sub', clientWeek, clientDay, function (index) {
     clientDay = index;
     showClientDay();
-  });
+  }, clientDialDescribe);
+  renderWeekStreak();
 }
 
 function countDone() {
@@ -6702,6 +6846,18 @@ function updateProgress() {
   weekVolumeEl.textContent = totalWeek > 0
     ? (t('week_volume') + ': ' + Math.round(totalWeek).toLocaleString() + ' ' + (lang === 'ar' ? 'كجم' : 'kg'))
     : '';
+
+  const total = totalToday();
+  setSessRing(total ? (countDone() / total) * 100 : 0);
+
+  /* علامة اليوم في شريط الأسبوع تتحرك فورًا لما يخلص آخر تمرين */
+  renderWeekStreak();
+
+  /* علامة ✓ على كل كارت خلص — الحالة محفوظة على li.done */
+  clientSections.querySelectorAll('li.exc-card').forEach(function (item) {
+    const check = item.querySelector('.exc-check');
+    if (check) check.classList.toggle('on', item.classList.contains('done'));
+  });
 }
 
 function saveProgress() {
@@ -6730,7 +6886,8 @@ function saveProgress() {
     day: clientDay,
     done: done,
     history: progressHistory,
-    actualSets: actualSetsToday
+    actualSets: actualSetsToday,
+    setsDone: setsDoneToday
   }, { merge: true });
 }
 
@@ -6773,8 +6930,602 @@ function saveRehabProgress() {
   setDoc(doc(db, 'progress', clientEmail), {
     rehabDate: today,
     rehabDone: rehabDoneToday,
-    rehabActualSets: rehabActualSetsToday
+    rehabActualSets: rehabActualSetsToday,
+    rehabSetsDone: rehabSetsDoneToday
   }, { merge: true });
+}
+
+/* ============================================================
+   شاشة العميل — الشكل الجديد: شريط الأسبوع، كارت الجلسة، كروت التمارين
+   ============================================================ */
+
+/* ألوان كل قسم — بتلوّن الكارت والصورة البديلة لما التمرين من غير صورة */
+const SECTION_TINT = {
+  warmup:     ['#f59e0b', '#f97316'],
+  main:       ['#22c55e', '#16a34a'],
+  cardio:     ['#38bdf8', '#0ea5e9'],
+  mobility:   ['#a78bfa', '#8b5cf6'],
+  flexibility:['#f472b6', '#ec4899']
+};
+
+function sectionTint(key) {
+  return SECTION_TINT[key] || SECTION_TINT.main;
+}
+
+/* صورة بديلة محترمة لما التمرين ملوش صورة: تدرّج بلون القسم + أيقونته */
+function exerciseFallbackArt(sectionKey) {
+  const c = sectionTint(sectionKey);
+  const box = document.createElement('div');
+  box.className = 'exc-fallback';
+  box.style.background = 'linear-gradient(135deg, ' + c[0] + '33, ' + c[1] + '14)';
+  box.style.color = c[0];
+  box.innerHTML = sectionIconSvg(sectionKey);
+  return box;
+}
+
+/* عدد المجموعات في التمرين — للإحصائيات فوق */
+function exerciseSetCount(exercise) {
+  if (exercise && exercise.setDetails && exercise.setDetails.length) return exercise.setDetails.length;
+  const n = parseInt(exercise && exercise.sets, 10);
+  return isNaN(n) ? 0 : n;
+}
+
+function daySetCount(day) {
+  let total = 0;
+  SECTION_KEYS.forEach(function (key) {
+    (day.sections[key] || []).forEach(function (exercise) {
+      total += exerciseSetCount(exercise);
+    });
+  });
+  return total;
+}
+
+/*
+ * تقدير زمن الجلسة بالدقايق: كل مجموعة ≈ ٤٥ ثانية شغل + الراحة المكتوبة
+ * (أو ٦٠ ثانية لو مش مكتوبة). تقدير تقريبي للعميل مش رقم محاسبي
+ */
+function dayMinutes(day) {
+  let seconds = 0;
+  SECTION_KEYS.forEach(function (key) {
+    (day.sections[key] || []).forEach(function (exercise) {
+      const sets = exerciseSetCount(exercise) || 1;
+      let rest = parseNum(exercise.rest);
+      if (!rest) rest = 60;
+      if (rest > 15) {
+        /* مكتوبة بالثواني زي "90 ث" */
+      } else {
+        rest = rest * 60; /* مكتوبة بالدقايق زي "2 د" */
+      }
+      seconds += sets * (45 + rest);
+    });
+  });
+  return Math.round(seconds / 60);
+}
+
+/*
+ * شريط إنجاز الأسبوع — مش تكرار للدايرة: بيقول العميل خلّص كام يوم من
+ * أيام برنامجه الأسبوع ده. الأيام اللي خلصت خضرا بعلامة ✓، اللي فاتت
+ * من غير تمرين رمادية، واللي لسه جاية فاضية
+ */
+function weekDates() {
+  const base = new Date();
+  base.setHours(12, 0, 0, 0);
+  base.setDate(base.getDate() - todayIndex);
+  const out = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(base);
+    d.setDate(base.getDate() + i);
+    out.push(dateStamp(d));
+  }
+  return out;
+}
+
+function renderWeekStreak() {
+  const dots = document.getElementById('ws-dots');
+  const note = document.getElementById('ws-note');
+  if (!dots || !note) return;
+  dots.innerHTML = '';
+
+  const stamps = weekDates();
+  const mini = daysMini();
+  let planned = 0;
+  let done = 0;
+
+  clientWeek.forEach(function (day, index) {
+    const hasPlan = !day.rest && dayCount(day) > 0;
+    /* اليوم الحالي بيتحسب من الشاشة نفسها عشان العلامة تتحرك فورًا */
+    const isDone = (index === todayIndex)
+      ? (totalToday() > 0 && countDone() >= totalToday())
+      : progressHistory.indexOf(stamps[index]) !== -1;
+
+    if (hasPlan) planned += 1;
+    if (hasPlan && isDone) done += 1;
+
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'ws-dot';
+    if (!hasPlan) dot.classList.add('off');
+    else if (isDone) dot.classList.add('on');
+    else if (index < todayIndex) dot.classList.add('missed');
+    if (index === todayIndex) dot.classList.add('today');
+    if (index === clientDay) dot.classList.add('sel');
+
+    const mark = document.createElement('span');
+    mark.className = 'ws-mark';
+    if (hasPlan && isDone) {
+      mark.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12.5 9.5 18 20 6.5"></polyline></svg>';
+    }
+    dot.appendChild(mark);
+
+    const label = document.createElement('span');
+    label.className = 'ws-label';
+    label.textContent = mini[index];
+    dot.appendChild(label);
+
+    dot.addEventListener('click', function () {
+      clientDay = index;
+      showClientDay();
+    });
+
+    dots.appendChild(dot);
+  });
+
+  note.textContent = planned
+    ? fill('week_streak_note', { a: done, b: planned })
+    : t('week_streak_empty');
+  note.classList.toggle('all-done', planned > 0 && done >= planned);
+}
+
+/* ---------- السبحة: خرزة لكل مجموعة ---------- */
+
+/* كام مجموعة خلصت في تمرين — -1 معناها "التمرين كله خلص" من برنامج قديم */
+function setsDoneFor(store, key, total) {
+  const value = store[key];
+  if (value === -1) return total;
+  return Math.max(0, Math.min(total, Number(value) || 0));
+}
+
+/*
+ * بنبني صف الخرز. الدوس على خرزة رقم i:
+ *  - لو لسه مخلصتش لحد i  →  بيخلّص لحد i (يعني i+1 مجموعة)
+ *  - لو هي آخر خرزة مخلّصة →  بيرجع واحدة لورا (لو دست غلط)
+ */
+function renderBeads(box, total, doneCount, onChange, big) {
+  box.innerHTML = '';
+  box.classList.toggle('beads-lg', !!big);
+  for (let i = 0; i < total; i++) {
+    const bead = document.createElement('button');
+    bead.type = 'button';
+    bead.className = 'bead';
+    if (i < doneCount) bead.classList.add('on');
+    if (i === doneCount) bead.classList.add('next');
+    bead.setAttribute('aria-label', String(i + 1));
+    const inner = document.createElement('span');
+    inner.textContent = i + 1;
+    bead.appendChild(inner);
+    bead.addEventListener('click', function (event) {
+      event.stopPropagation();
+      onChange(i + 1 === doneCount ? i : i + 1);
+    });
+    box.appendChild(bead);
+  }
+}
+
+/* إحصائيات الجلسة: عدد التمارين، المجموعات، الوقت المتوقع */
+const SESS_STAT_ICONS = {
+  ex:   '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg>',
+  sets: '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="14" y2="17"></line></svg>',
+  time: '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg>'
+};
+
+function renderSessStats(day) {
+  const box = document.getElementById('sess-stats');
+  if (!box) return;
+  box.innerHTML = '';
+  if (day.rest) return;
+
+  const total = dayCount(day);
+  if (!total) return;
+
+  const minutes = dayMinutes(day);
+  const items = [
+    { icon: SESS_STAT_ICONS.ex,   value: total,           label: t('sess_stat_ex') },
+    { icon: SESS_STAT_ICONS.sets, value: daySetCount(day), label: t('sess_stat_sets') },
+    { icon: SESS_STAT_ICONS.time, value: '~' + minutes,   label: t('sess_stat_min') }
+  ];
+
+  items.forEach(function (item) {
+    if (!item.value) return;
+    const pill = document.createElement('div');
+    pill.className = 'sess-stat';
+
+    const icon = document.createElement('span');
+    icon.className = 'inline-icon';
+    icon.innerHTML = item.icon;
+    pill.appendChild(icon);
+
+    const value = document.createElement('strong');
+    value.textContent = item.value;
+    pill.appendChild(value);
+
+    const label = document.createElement('span');
+    label.className = 'sess-stat-label';
+    label.textContent = item.label;
+    pill.appendChild(label);
+
+    box.appendChild(pill);
+  });
+}
+
+/* حلقة التقدّم في كارت الجلسة */
+const SESS_RING_LEN = 2 * Math.PI * 35;
+
+function setSessRing(pct) {
+  const fg = document.getElementById('sess-ring-fg');
+  const label = document.getElementById('sess-ring-pct');
+  const value = Math.max(0, Math.min(100, Math.round(pct || 0)));
+  if (fg) {
+    fg.style.strokeDasharray = SESS_RING_LEN.toFixed(1);
+    fg.style.strokeDashoffset = (SESS_RING_LEN * (1 - value / 100)).toFixed(1);
+    fg.classList.toggle('full', value >= 100);
+  }
+  if (label) {
+    label.textContent = value + '%';
+    label.classList.toggle('full', value >= 100);
+  }
+}
+
+/* كارت حالة (راحة / مفيش برنامج) بشكل محترم بدل سطر رمادي */
+const STATE_ART = {
+  rest: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M44 36.5A16 16 0 0 1 24.5 17 17 17 0 1 0 44 36.5z"></path><path d="M12 14l2.5 2.5M14.5 11.5L12 14"></path><circle cx="50" cy="16" r="1.6"></circle><circle cx="42" cy="9" r="1.2"></circle></svg>',
+  empty: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="10" width="36" height="44" rx="5"></rect><line x1="22" y1="22" x2="42" y2="22"></line><line x1="22" y1="31" x2="36" y2="31"></line><line x1="22" y1="40" x2="30" y2="40"></line></svg>'
+};
+
+function clientStateCard(kind, title, text) {
+  const box = document.createElement('div');
+  box.className = 'state-card state-' + kind;
+
+  const art = document.createElement('div');
+  art.className = 'state-art';
+  art.innerHTML = STATE_ART[kind] || STATE_ART.empty;
+  box.appendChild(art);
+
+  const head = document.createElement('div');
+  head.className = 'state-title';
+  head.textContent = title;
+  box.appendChild(head);
+
+  const body = document.createElement('p');
+  body.className = 'state-text';
+  body.textContent = text;
+  box.appendChild(body);
+
+  return box;
+}
+
+/* بيخلّي دايرة الـ ✓ متماشية مع حالة الكارت (خلص/لسه) */
+function syncCardCheck(item) {
+  const check = item.querySelector('.exc-check');
+  if (check) check.classList.toggle('on', item.classList.contains('done'));
+}
+
+/* كارت تمرين واحد في شاشة العميل */
+function clientExerciseCard(exercise, sectionKey, order) {
+  const row = document.createElement('div');
+  row.className = 'exc-main';
+
+  const media = document.createElement('div');
+  media.className = 'exc-media';
+
+  const src = thumbSrc(exercise);
+  if (src) {
+    const thumb = document.createElement('img');
+    thumb.className = 'exc-photo';
+    thumb.src = src;
+    thumb.alt = '';
+    thumb.loading = 'lazy';
+    thumb.addEventListener('error', function () {
+      thumb.remove();
+      media.insertBefore(exerciseFallbackArt(sectionKey), media.firstChild);
+    });
+    thumb.addEventListener('click', function (event) {
+      event.stopPropagation();
+      openPreview(exercise);
+    });
+    media.appendChild(thumb);
+  } else {
+    media.appendChild(exerciseFallbackArt(sectionKey));
+  }
+
+  const num = document.createElement('span');
+  num.className = 'exc-num';
+  num.textContent = order;
+  media.appendChild(num);
+  row.appendChild(media);
+
+  const info = document.createElement('div');
+  info.className = 'exc-info';
+
+  const name = document.createElement('div');
+  name.className = 'exc-name';
+  name.textContent = exerciseDisplayName(exercise);
+  info.appendChild(name);
+
+  const chips = document.createElement('div');
+  chips.className = 'exc-chips';
+
+  const main = document.createElement('span');
+  main.className = 'exc-chip primary';
+  main.textContent = localiseReps(setsSummaryText(exercise));
+  chips.appendChild(main);
+
+  [
+    { text: exercise.rest,  icon: EX_TAG_ICON_REST },
+    { text: exercise.load,  icon: EX_TAG_ICON_LOAD },
+    { text: exercise.rpe ? ('RPE ' + exercise.rpe) : '', icon: null },
+    { text: exercise.tempo, icon: EX_TAG_ICON_TEMPO }
+  ].forEach(function (tag) {
+    if (!tag.text) return;
+    const chip = document.createElement('span');
+    chip.className = 'exc-chip';
+    if (tag.icon) {
+      const icon = document.createElement('span');
+      icon.className = 'inline-icon';
+      icon.innerHTML = tag.icon;
+      chip.appendChild(icon);
+    }
+    const label = document.createElement('span');
+    label.textContent = localiseReps(tag.text);
+    chip.appendChild(label);
+    chips.appendChild(chip);
+  });
+
+  info.appendChild(chips);
+
+  if (!src && exerciseHasAnatomyDetail(exercise)) {
+    const detailBtn = document.createElement('button');
+    detailBtn.type = 'button';
+    detailBtn.className = 'link anatomy-detail-btn';
+    detailBtn.textContent = t('anatomy_section_title');
+    detailBtn.addEventListener('click', function (event) {
+      event.stopPropagation();
+      openPreview(exercise);
+    });
+    info.appendChild(detailBtn);
+  }
+
+  row.appendChild(info);
+
+  const check = document.createElement('span');
+  check.className = 'exc-check';
+  check.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12.5 9.5 18 20 6.5"></polyline></svg>';
+  row.appendChild(check);
+
+  return row;
+}
+
+/* ============================================================
+   وضع التمرين الحالي — تمرين واحد على الشاشة كلها
+   شاشة الموبايل صغيرة، فبدل ما التمارين تتزحم فوق بعض العميل
+   بيشتغل على واحد بس: صورة كبيرة، سبحة كبيرة، وزرار التالي
+   ============================================================ */
+
+const focusMode = document.getElementById('focus-mode');
+let focusList = [];
+let focusIndex = 0;
+
+/* بنجمع تمارين اليوم بالترتيب مع مفاتيحها عشان نتحرك بينها */
+function buildFocusList(day) {
+  const out = [];
+  SECTION_KEYS.forEach(function (key) {
+    (day.sections[key] || []).forEach(function (exercise, index) {
+      out.push({ exercise: exercise, section: key, key: key + ':' + index });
+    });
+  });
+  return out;
+}
+
+function focusEntry() {
+  return focusList[focusIndex] || null;
+}
+
+function renderFocusLogBox() {
+  const box = document.getElementById('focus-log-box');
+  const entry = focusEntry();
+  if (!box || !entry) return;
+  box.innerHTML = '';
+
+  const rows = (actualSetsToday[entry.key] && actualSetsToday[entry.key].length)
+    ? actualSetsToday[entry.key] : defaultActualSets(entry.exercise);
+
+  rows.forEach(function (set, setIndex) {
+    const row = document.createElement('div');
+    row.className = 'per-set-row';
+
+    const label = document.createElement('span');
+    label.className = 'per-set-label';
+    label.textContent = (setIndex + 1);
+    row.appendChild(label);
+
+    const weightInput = document.createElement('input');
+    weightInput.type = 'text';
+    weightInput.placeholder = t('per_set_weight');
+    weightInput.value = set.weight || '';
+    row.appendChild(weightInput);
+
+    const repsInput = document.createElement('input');
+    repsInput.type = 'text';
+    repsInput.placeholder = t('ex_reps');
+    repsInput.value = set.reps || '';
+    row.appendChild(repsInput);
+
+    function commit() {
+      if (!actualSetsToday[entry.key]) {
+        actualSetsToday[entry.key] = rows.map(function (r) { return { weight: r.weight || '', reps: r.reps || '' }; });
+      }
+      actualSetsToday[entry.key][setIndex] = { weight: weightInput.value.trim(), reps: repsInput.value.trim() };
+      saveActualSets();
+      updateProgress();
+    }
+    weightInput.addEventListener('change', commit);
+    repsInput.addEventListener('change', commit);
+
+    box.appendChild(row);
+  });
+}
+
+function renderFocus() {
+  const entry = focusEntry();
+  if (!entry) return;
+  const exercise = entry.exercise;
+  const total = focusList.length;
+  const tint = sectionTint(entry.section);
+  focusMode.style.setProperty('--sec', tint[0]);
+
+  document.getElementById('focus-count').textContent =
+    fill('focus_of', { a: focusIndex + 1, b: total });
+
+  const steps = document.getElementById('focus-steps');
+  steps.innerHTML = '';
+  focusList.forEach(function (row, index) {
+    const sets = exerciseSetCount(row.exercise) || 1;
+    const seg = document.createElement('span');
+    seg.className = 'focus-step';
+    if (setsDoneFor(setsDoneToday, row.key, sets) >= sets) seg.classList.add('on');
+    if (index === focusIndex) seg.classList.add('cur');
+    steps.appendChild(seg);
+  });
+
+  const media = document.getElementById('focus-media');
+  media.innerHTML = '';
+  const src = thumbSrc(exercise);
+  if (src) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    img.addEventListener('error', function () {
+      img.remove();
+      media.appendChild(exerciseFallbackArt(entry.section));
+    });
+    media.appendChild(img);
+  } else {
+    media.appendChild(exerciseFallbackArt(entry.section));
+  }
+
+  document.getElementById('focus-name').textContent = exerciseDisplayName(exercise);
+
+  const chips = document.getElementById('focus-chips');
+  chips.innerHTML = '';
+  const main = document.createElement('span');
+  main.className = 'exc-chip primary';
+  main.textContent = localiseReps(setsSummaryText(exercise));
+  chips.appendChild(main);
+  [exercise.rest, exercise.load, exercise.rpe ? ('RPE ' + exercise.rpe) : '', exercise.tempo].forEach(function (text) {
+    if (!text) return;
+    const chip = document.createElement('span');
+    chip.className = 'exc-chip';
+    chip.textContent = localiseReps(text);
+    chips.appendChild(chip);
+  });
+
+  const totalSets = exerciseSetCount(exercise) || 1;
+  const beads = document.getElementById('focus-beads');
+  const note = document.getElementById('focus-beads-note');
+  const doneCount = setsDoneFor(setsDoneToday, entry.key, totalSets);
+
+  renderBeads(beads, totalSets, doneCount, function (next) {
+    setsDoneToday[entry.key] = next;
+    syncFocusToList(entry.key, next >= totalSets);
+    renderFocus();
+    updateProgress();
+    saveProgress();
+  }, true);
+
+  const left = totalSets - doneCount;
+  note.textContent = left > 0 ? fill('focus_sets_left', { n: left }) : t('focus_sets_done');
+  note.classList.toggle('all-done', left === 0);
+
+  const prev = document.getElementById('focus-prev');
+  const next = document.getElementById('focus-next');
+  prev.disabled = focusIndex === 0;
+  next.textContent = (focusIndex === total - 1) ? t('focus_finish') : t('focus_next');
+  next.classList.toggle('ready', left === 0);
+
+  renderFocusLogBox();
+}
+
+/* نخلّي كارت التمرين في القايمة تحت متماشي مع اللي اتعمل في وضع التمرين */
+function syncFocusToList(exKey, isDone) {
+  const item = clientSections.querySelector('li[data-key="' + exKey + '"]');
+  if (!item) return;
+  item.classList.toggle('done', isDone);
+  if (typeof item.paintBeads === 'function') item.paintBeads();
+  else syncCardCheck(item);
+}
+
+function openFocus(startIndex) {
+  const day = clientWeek[clientDay];
+  if (!day || day.rest) return;
+  focusList = buildFocusList(day);
+  if (!focusList.length) return;
+  focusIndex = Math.max(0, Math.min(focusList.length - 1, startIndex || 0));
+  document.getElementById('focus-log-box').classList.add('hidden');
+  document.getElementById('focus-log-toggle').textContent = t('log_actual_btn');
+  focusMode.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+  renderFocus();
+}
+
+function closeFocus() {
+  focusMode.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+  showClientDay();
+}
+
+document.getElementById('focus-close').addEventListener('click', closeFocus);
+
+document.getElementById('focus-prev').addEventListener('click', function () {
+  if (focusIndex > 0) { focusIndex -= 1; renderFocus(); }
+});
+
+document.getElementById('focus-next').addEventListener('click', function () {
+  if (focusIndex < focusList.length - 1) { focusIndex += 1; renderFocus(); }
+  else closeFocus();
+});
+
+document.getElementById('focus-log-toggle').addEventListener('click', function () {
+  const box = document.getElementById('focus-log-box');
+  const open = box.classList.toggle('hidden');
+  this.textContent = open ? t('log_actual_btn') : t('hide_actual_btn');
+  if (!open) renderFocusLogBox();
+});
+
+document.getElementById('start-session-btn').addEventListener('click', function () {
+  /* بيبدأ من أول تمرين لسه مخلصش — مش من الأول دايمًا */
+  const day = clientWeek[clientDay];
+  const list = buildFocusList(day);
+  let start = 0;
+  for (let i = 0; i < list.length; i++) {
+    const sets = exerciseSetCount(list[i].exercise) || 1;
+    if (setsDoneFor(setsDoneToday, list[i].key, sets) < sets) { start = i; break; }
+  }
+  openFocus(start);
+});
+
+/* زرار النقط تحت: بيفتح ويقفل شريط الأدوات بدل ما يفضل فوق الكلام */
+const fabRow = document.getElementById('client-fab-row');
+const fabToggle = document.getElementById('client-fab-toggle');
+if (fabToggle && fabRow) {
+  fabToggle.addEventListener('click', function () {
+    const collapsed = fabRow.classList.toggle('is-collapsed');
+    fabToggle.classList.toggle('is-open', !collapsed);
+  });
+  document.addEventListener('click', function (event) {
+    if (fabRow.classList.contains('is-collapsed')) return;
+    if (fabRow.contains(event.target) || fabToggle.contains(event.target)) return;
+    fabRow.classList.add('is-collapsed');
+    fabToggle.classList.remove('is-open');
+  });
 }
 
 function showClientDay() {
@@ -6784,28 +7535,37 @@ function showClientDay() {
   dayName.textContent = day.title || (isToday ? t('today_workout') : days()[clientDay]);
   clientSections.innerHTML = '';
 
+  const badge = document.getElementById('sess-badge');
+  if (badge) {
+    badge.textContent = isToday ? t('sess_badge_today') : days()[clientDay];
+    badge.classList.toggle('muted', !isToday);
+  }
+  const sessCard = document.getElementById('sess-card');
+  if (sessCard) sessCard.classList.toggle('is-rest', !!day.rest);
+  renderSessStats(day);
+
+  const startBtn = document.getElementById('start-session-btn');
+  if (startBtn) startBtn.classList.toggle('hidden', !isToday || !!day.rest || dayCount(day) === 0);
+
   const total = dayCount(day);
   finishButton.textContent = t('finish_workout');
   finishButton.classList.toggle('hidden', !isToday || day.rest || total === 0);
   resetButton.classList.toggle('hidden', !isToday || day.rest || total === 0);
 
   if (day.rest) {
-    const rest = document.createElement('p');
-    rest.className = 'empty';
-    rest.textContent = t('rest_msg');
-    clientSections.appendChild(rest);
+    clientSections.appendChild(clientStateCard('rest', t('rest_title'), t('rest_msg')));
   } else if (total === 0) {
-    const empty = document.createElement('p');
-    empty.className = 'empty';
-    empty.textContent = t('no_plan');
-    clientSections.appendChild(empty);
+    clientSections.appendChild(clientStateCard('empty', t('no_plan_title'), t('no_plan')));
   } else {
+    let order = 0;
     SECTION_KEYS.forEach(function (key) {
       const list = day.sections[key];
       if (!list.length) return;
 
+      const tint = sectionTint(key);
       const block = document.createElement('div');
-      block.className = 'section-block';
+      block.className = 'section-block sec-' + key;
+      block.style.setProperty('--sec', tint[0]);
 
       const head = document.createElement('div');
       head.className = 'section-head';
@@ -6825,21 +7585,46 @@ function showClientDay() {
       const ul = document.createElement('ul');
       list.forEach(function (exercise, index) {
         const exKey = key + ':' + index;
+        order += 1;
         const item = document.createElement('li');
+        item.className = 'exc-card';
+        item.style.setProperty('--sec', tint[0]);
         item.dataset.key = exKey;
-        item.appendChild(exerciseRow(exercise));
-
-        const details = document.createElement('span');
-        details.textContent = setsSummaryText(exercise);
-        item.appendChild(details);
+        item.appendChild(clientExerciseCard(exercise, key, order));
 
         if (isToday && doneToday.indexOf(exKey) !== -1) {
           item.classList.add('done');
         }
 
         if (isToday) {
+          /* السبحة: خرزة لكل مجموعة — الدوس عليها بيقفل المجموعة */
+          const totalSets = exerciseSetCount(exercise) || 1;
+          const beadsBox = document.createElement('div');
+          beadsBox.className = 'beads';
+          item.appendChild(beadsBox);
+
+          function paintBeads() {
+            const n = setsDoneFor(setsDoneToday, exKey, totalSets);
+            renderBeads(beadsBox, totalSets, n, function (next) {
+              setsDoneToday[exKey] = next;
+              item.classList.toggle('done', next >= totalSets);
+              paintBeads();
+              updateProgress();
+              saveProgress();
+              finishButton.textContent = t('finish_workout');
+            }, false);
+            item.classList.toggle('done', n >= totalSets);
+            syncCardCheck(item);
+          }
+          paintBeads();
+          item.paintBeads = paintBeads;
+
+          /* الدوس على الكارت نفسه = خلّص التمرين كله أو ارجعه من الأول */
           item.addEventListener('click', function () {
-            item.classList.toggle('done');
+            const willBeDone = !item.classList.contains('done');
+            setsDoneToday[exKey] = willBeDone ? totalSets : 0;
+            item.classList.toggle('done', willBeDone);
+            paintBeads();
             updateProgress();
             saveProgress();
             finishButton.textContent = t('finish_workout');
@@ -6951,6 +7736,10 @@ finishButton.addEventListener('click', function () {
 resetButton.addEventListener('click', function () {
   clientSections.querySelectorAll('li').forEach(function (item) {
     item.classList.remove('done');
+    /* السبحة لازم تتفضى هي كمان، مش بس علامة التمرين */
+    if (item.dataset.key) setsDoneToday[item.dataset.key] = 0;
+    if (typeof item.paintBeads === 'function') item.paintBeads();
+    else syncCardCheck(item);
   });
   updateProgress();
   saveProgress();
@@ -6968,10 +7757,7 @@ function showClientRehab() {
     clientRehabTitle.textContent = '';
     clientRehabAbout.classList.add('hidden');
     clientRehabPhases.innerHTML = '';
-    const none = document.createElement('p');
-    none.className = 'rehab-none';
-    none.textContent = t('no_rehab');
-    clientRehabPhases.appendChild(none);
+    clientRehabPhases.appendChild(clientStateCard('empty', t('no_rehab_title'), t('no_rehab')));
     return;
   }
 
@@ -7024,25 +7810,53 @@ function showClientRehab() {
       phase.exercises.forEach(function (exercise, exIndex) {
         const rehabExKey = 'p' + index + ':' + exIndex;
         const item = document.createElement('li');
-        item.appendChild(exerciseRow(exercise));
-
-        const details = document.createElement('span');
-        details.textContent = setsSummaryText(exercise);
-        item.appendChild(details);
+        item.className = 'exc-card';
+        item.style.setProperty('--sec', sectionTint('mobility')[0]);
+        item.appendChild(clientExerciseCard(exercise, 'mobility', exIndex + 1));
 
         if (isCurrentPhase && rehabDoneToday.indexOf(rehabExKey) !== -1) {
           item.classList.add('done');
         }
+        syncCardCheck(item);
 
         if (isCurrentPhase) {
-          item.addEventListener('click', function () {
-            item.classList.toggle('done');
+          const totalSets = exerciseSetCount(exercise) || 1;
+          const beadsBox = document.createElement('div');
+          beadsBox.className = 'beads';
+          item.appendChild(beadsBox);
+
+          function markRehabDone(isDone) {
+            item.classList.toggle('done', isDone);
+            syncCardCheck(item);
             const pos = rehabDoneToday.indexOf(rehabExKey);
-            if (item.classList.contains('done')) {
+            if (isDone) {
               if (pos === -1) rehabDoneToday.push(rehabExKey);
             } else if (pos !== -1) {
               rehabDoneToday.splice(pos, 1);
             }
+          }
+
+          function paintRehabBeads() {
+            const n = setsDoneFor(rehabSetsDoneToday, rehabExKey, totalSets);
+            renderBeads(beadsBox, totalSets, n, function (next) {
+              rehabSetsDoneToday[rehabExKey] = next;
+              markRehabDone(next >= totalSets);
+              paintRehabBeads();
+              saveRehabProgress();
+            }, false);
+            markRehabDone(n >= totalSets);
+          }
+
+          if (rehabDoneToday.indexOf(rehabExKey) !== -1 && rehabSetsDoneToday[rehabExKey] === undefined) {
+            rehabSetsDoneToday[rehabExKey] = -1;
+          }
+          paintRehabBeads();
+
+          item.addEventListener('click', function () {
+            const willBeDone = !item.classList.contains('done');
+            rehabSetsDoneToday[rehabExKey] = willBeDone ? totalSets : 0;
+            markRehabDone(willBeDone);
+            paintRehabBeads();
             saveRehabProgress();
           });
 
@@ -7478,10 +8292,7 @@ function renderMeals(container, day, editable, onChange) {
 
   const total = nutritionDayCount(day);
   if (!total && !editable) {
-    const empty = document.createElement('p');
-    empty.className = 'empty';
-    empty.textContent = t('no_meals');
-    container.appendChild(empty);
+    container.appendChild(clientStateCard('empty', t('no_meals_title'), t('no_meals')));
     return;
   }
 
@@ -8051,6 +8862,553 @@ document.getElementById('cf-add-btn').addEventListener('click', async function (
 
 const cnutTotals = document.getElementById('cnut-totals');
 const cnutMeals = document.getElementById('cnut-meals');
+const cnutFuel = document.getElementById('cnut-fuel');
+
+/*
+ * كارت الوقود — بديل صف الأرقام الجاف: قوس سعرات كبير في النص،
+ * وتحته تلات شرايط للماكروز بلون لكل واحد. العميل يشوف في لمحة
+ * هو واصل فين من هدف اليوم
+ */
+const FUEL_MACROS = [
+  { key: 'protein', color: '#22c55e' },
+  { key: 'carbs',   color: '#38bdf8' },
+  { key: 'fat',     color: '#f59e0b' }
+];
+
+const FUEL_ARC_LEN = 2 * Math.PI * 52;
+
+function renderFuelCard(box, totals, targets, planned) {
+  if (!box) return;
+  box.innerHTML = '';
+  const tgs = targets || {};
+
+  const kcal = Math.round(totals.kcal);
+  const kcalTarget = Math.round(tgs.kcal || 0);
+  const pct = kcalTarget ? Math.min(100, (kcal / kcalTarget) * 100) : 0;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'fuel-arc-wrap';
+  /* قوس مفتوح من تحت (٢٧٠ درجة) عشان يبان مختلف عن دواير الأيام */
+  wrap.innerHTML =
+    '<svg class="fuel-arc" viewBox="0 0 120 120" aria-hidden="true">' +
+      '<circle class="fa-bg" cx="60" cy="60" r="52"></circle>' +
+      '<circle class="fa-fg" cx="60" cy="60" r="52"></circle>' +
+    '</svg>';
+  const fg = wrap.querySelector('.fa-fg');
+  fg.style.strokeDasharray = (FUEL_ARC_LEN * 0.75).toFixed(1) + ' ' + FUEL_ARC_LEN.toFixed(1);
+  fg.style.strokeDashoffset = (FUEL_ARC_LEN * 0.75 * (1 - pct / 100)).toFixed(1);
+
+  const center = document.createElement('div');
+  center.className = 'fuel-center';
+
+  /*
+   * لما العميل بيسجّل: الرقم الكبير = الباقي ليه النهاردة (زي أشهر
+   * تطبيقات التغذية)، لأن "فاضلك ٧٦٠ سعر" قرار، و"أكلت ١٨٤٠" مجرد خبر
+   */
+  const logging = planned !== undefined && planned !== null;
+  const left = kcalTarget ? (kcalTarget - kcal) : 0;
+
+  const value = document.createElement('div');
+  value.className = 'fuel-kcal';
+  if (logging && kcalTarget) {
+    value.textContent = Math.abs(Math.round(left)).toLocaleString();
+    value.classList.toggle('over', left < 0);
+  } else {
+    value.textContent = kcal.toLocaleString();
+  }
+  center.appendChild(value);
+
+  const unit = document.createElement('div');
+  unit.className = 'fuel-unit';
+  if (logging && kcalTarget) {
+    unit.textContent = left < 0 ? t('fuel_over') : t('fuel_left');
+  } else {
+    unit.textContent = kcalTarget ? (t('fuel_of') + ' ' + kcalTarget.toLocaleString() + ' ' + t('t_kcal')) : t('t_kcal');
+  }
+  center.appendChild(unit);
+
+  if (logging && kcalTarget) {
+    const line = document.createElement('div');
+    line.className = 'fuel-line';
+    line.textContent = fill('fuel_summary', {
+      a: kcal.toLocaleString(),
+      b: Math.round(planned.kcal).toLocaleString(),
+      c: kcalTarget.toLocaleString()
+    });
+    center.appendChild(line);
+  }
+
+  wrap.appendChild(center);
+  box.appendChild(wrap);
+
+  const bars = document.createElement('div');
+  bars.className = 'fuel-macros';
+
+  FUEL_MACROS.forEach(function (macro) {
+    const target = Math.round(tgs[macro.key] || 0);
+    const value2 = Math.round(totals[macro.key] || 0);
+
+    const row = document.createElement('div');
+    row.className = 'fuel-macro';
+    row.style.setProperty('--m', macro.color);
+
+    const head = document.createElement('div');
+    head.className = 'fm-head';
+
+    const label = document.createElement('span');
+    label.className = 'fm-label';
+    label.textContent = t('t_' + macro.key);
+    head.appendChild(label);
+
+    const num = document.createElement('span');
+    num.className = 'fm-num';
+    num.textContent = target ? (value2 + ' / ' + target + t('fuel_g')) : (value2 + t('fuel_g'));
+    head.appendChild(num);
+
+    row.appendChild(head);
+
+    const bar = document.createElement('div');
+    bar.className = 'fm-bar';
+    const fillBar = document.createElement('span');
+    const mpct = target ? Math.min(100, (value2 / target) * 100) : 0;
+    fillBar.style.width = mpct + '%';
+    if (target && value2 > target * 1.05) fillBar.classList.add('over');
+    bar.appendChild(fillBar);
+    row.appendChild(bar);
+
+    bars.appendChild(row);
+  });
+
+  box.appendChild(bars);
+}
+
+/* ============================================================
+   حلقة التسجيل — العميل يسجّل اللي أكله فعلًا مش يتفرّج بس
+   من غير الحلقة دي المدرب مش عارف العميل التزم ولا لأ، وعدّاد
+   السعرات بيقول "الخطة" مش "الواقع"
+   ============================================================ */
+
+/* foodlog/{email} = { days: { 'YYYY-MM-DD': { eaten:[], extra:[], water:0 } } } */
+let clientFoodLog = {};
+const WATER_GOAL_DEFAULT = 8;
+const LOG_KEEP_DAYS = 60;
+
+function blankLogDay() {
+  return { eaten: [], extra: [], water: 0 };
+}
+
+function logDay(stamp) {
+  const key = stamp || todayStamp;
+  if (!clientFoodLog[key]) clientFoodLog[key] = blankLogDay();
+  const day = clientFoodLog[key];
+  if (!Array.isArray(day.eaten)) day.eaten = [];
+  if (!Array.isArray(day.extra)) day.extra = [];
+  if (typeof day.water !== 'number') day.water = 0;
+  return day;
+}
+
+/* التسجيل بيتحفظ لليوم الحالي بس — مفيش تسجيل بأثر رجعي */
+function loggingDayStamp() {
+  return todayStamp;
+}
+
+function isLoggingDay() {
+  return cNutDay === todayIndex;
+}
+
+function saveFoodLog() {
+  /* بنقصّ الأيام القديمة عشان المستند ميكبرش على حد فايرستور */
+  const keys = Object.keys(clientFoodLog).sort();
+  while (keys.length > LOG_KEEP_DAYS) {
+    delete clientFoodLog[keys.shift()];
+  }
+  setDoc(doc(db, 'foodlog', clientEmail), { days: clientFoodLog }, { merge: true });
+}
+
+async function loadFoodLog(email) {
+  try {
+    const snap = await getDoc(doc(db, 'foodlog', email));
+    clientFoodLog = (snap.exists() && snap.data().days) ? snap.data().days : {};
+  } catch (error) {
+    clientFoodLog = {};
+  }
+}
+
+/* مجاميع اللي اتأكل فعلًا النهاردة = وجبات الخطة المعلّمة + اللي اتضاف زيادة */
+function eatenTotals(day) {
+  const log = logDay();
+  const total = { kcal: 0, protein: 0, carbs: 0, fat: 0 };
+
+  if (day) {
+    MEAL_KEYS.forEach(function (key) {
+      (day.meals[key] || []).forEach(function (item, index) {
+        if (log.eaten.indexOf(key + ':' + index) === -1) return;
+        const m = itemMacros(item);
+        total.kcal += m.kcal;
+        total.protein += m.protein;
+        total.carbs += m.carbs;
+        total.fat += m.fat;
+      });
+    });
+  }
+
+  log.extra.forEach(function (item) {
+    const m = itemMacros(item);
+    total.kcal += m.kcal;
+    total.protein += m.protein;
+    total.carbs += m.carbs;
+    total.fat += m.fat;
+  });
+
+  return total;
+}
+
+/* ---------- سبحة المياه ---------- */
+
+function waterGoal() {
+  const target = clientNutrition && clientNutrition.targets && clientNutrition.targets.water;
+  return Number(target) || WATER_GOAL_DEFAULT;
+}
+
+function renderWaterCard() {
+  const card = document.getElementById('cnut-water');
+  const beads = document.getElementById('water-beads');
+  const count = document.getElementById('water-count');
+  if (!card || !beads || !count) return;
+
+  /* المياه بتتسجل لليوم الحالي بس */
+  card.classList.toggle('hidden', !isLoggingDay());
+  if (!isLoggingDay()) return;
+
+  const goal = waterGoal();
+  const log = logDay();
+  const drunk = Math.max(0, Math.min(goal, log.water || 0));
+
+  count.textContent = fill('water_count', { a: drunk, b: goal });
+  count.classList.toggle('all-done', drunk >= goal);
+
+  renderBeads(beads, goal, drunk, function (next) {
+    logDay().water = next;
+    saveFoodLog();
+    renderWaterCard();
+  }, false);
+}
+
+/* ---------- شيت اختيار الأكل ---------- */
+
+const foodPicker = document.getElementById('food-picker');
+const pickerSearch = document.getElementById('picker-search');
+const pickerChips = document.getElementById('picker-chips');
+const pickerList = document.getElementById('picker-list');
+const pickerAmount = document.getElementById('picker-amount');
+const paGrams = document.getElementById('pa-grams');
+let pickerMeal = 'breakfast';
+let pickerCat = '';
+let pickerFood = null;
+
+const QUICK_GRAMS = [50, 100, 150, 200, 250];
+
+function openFoodPicker(mealKey) {
+  pickerMeal = mealKey;
+  pickerCat = '';
+  pickerFood = null;
+  pickerSearch.value = '';
+  pickerAmount.classList.add('hidden');
+  document.getElementById('picker-title').textContent =
+    t('picker_title') + ' — ' + mealName(mealKey);
+  renderPickerChips();
+  renderPickerList();
+  foodPicker.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+}
+
+function closeFoodPicker() {
+  foodPicker.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+}
+
+function renderPickerChips() {
+  pickerChips.innerHTML = '';
+  const cats = [''].concat(Object.keys(FOOD_CATEGORIES));
+  cats.forEach(function (key) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'picker-chip' + (key === pickerCat ? ' active' : '');
+    chip.textContent = key ? (FOOD_CATEGORIES[key][lang] || FOOD_CATEGORIES[key].ar) : t('all_foods');
+    chip.addEventListener('click', function () {
+      pickerCat = key;
+      renderPickerChips();
+      renderPickerList();
+    });
+    pickerChips.appendChild(chip);
+  });
+}
+
+function renderPickerList() {
+  const term = pickerSearch.value.trim().toLowerCase();
+  const matches = allFoods().filter(function (food) {
+    if (pickerCat && food.cat !== pickerCat) return false;
+    if (!term) return true;
+    return String(food.ar || '').toLowerCase().indexOf(term) !== -1
+        || String(food.en || '').toLowerCase().indexOf(term) !== -1;
+  });
+
+  pickerList.innerHTML = '';
+  if (!matches.length) {
+    const empty = document.createElement('li');
+    empty.className = 'picker-empty';
+    empty.textContent = t('no_results');
+    pickerList.appendChild(empty);
+    return;
+  }
+
+  matches.slice(0, 60).forEach(function (food) {
+    const li = document.createElement('li');
+    li.className = 'picker-item';
+
+    const icon = document.createElement('span');
+    icon.className = 'meal-food-icon';
+    icon.textContent = food.icon || foodCategoryIcon(food.cat);
+    li.appendChild(icon);
+
+    const info = document.createElement('div');
+    const name = document.createElement('div');
+    name.className = 'food-name';
+    name.textContent = food[lang] || food.ar || food.en || '';
+    info.appendChild(name);
+
+    const per = document.createElement('div');
+    per.className = 'food-per100';
+    per.textContent = Math.round(food.c || 0) + ' ' + t('t_kcal') + ' / 100' + t('fuel_g');
+    info.appendChild(per);
+    li.appendChild(info);
+
+    li.addEventListener('click', function () { pickFood(food); });
+    pickerList.appendChild(li);
+  });
+}
+
+function pickFood(food) {
+  pickerFood = food;
+  document.getElementById('pa-name').textContent = food[lang] || food.ar || food.en || '';
+  paGrams.value = 100;
+  renderQuickGrams();
+  renderPickerMacros();
+  pickerAmount.classList.remove('hidden');
+  pickerAmount.scrollIntoView({ block: 'nearest' });
+}
+
+function renderQuickGrams() {
+  const box = document.getElementById('pa-quick');
+  box.innerHTML = '';
+  QUICK_GRAMS.forEach(function (g) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'pa-chip' + (Number(paGrams.value) === g ? ' active' : '');
+    chip.textContent = g + t('fuel_g');
+    chip.addEventListener('click', function () {
+      paGrams.value = g;
+      renderQuickGrams();
+      renderPickerMacros();
+    });
+    box.appendChild(chip);
+  });
+}
+
+function renderPickerMacros() {
+  if (!pickerFood) return;
+  const grams = Number(paGrams.value) || 0;
+  const item = makeFoodItem(pickerFood, grams);
+  const m = itemMacros(item);
+  document.getElementById('pa-macros').textContent =
+    Math.round(m.kcal) + ' ' + t('t_kcal') + ' · ' +
+    t('t_protein') + ' ' + m.protein.toFixed(1) + ' · ' +
+    t('t_carbs') + ' ' + m.carbs.toFixed(1) + ' · ' +
+    t('t_fat') + ' ' + m.fat.toFixed(1);
+}
+
+paGrams.addEventListener('input', function () {
+  renderQuickGrams();
+  renderPickerMacros();
+});
+
+pickerSearch.addEventListener('input', renderPickerList);
+document.getElementById('picker-close').addEventListener('click', closeFoodPicker);
+
+document.getElementById('pa-add').addEventListener('click', function () {
+  if (!pickerFood) return;
+  const grams = Number(paGrams.value) || 0;
+  if (grams <= 0) return;
+  const item = makeFoodItem(pickerFood, grams);
+  item.meal = pickerMeal;
+  logDay().extra.push(item);
+  saveFoodLog();
+  closeFoodPicker();
+  showClientNutrition();
+});
+
+/* ---------- وجبات العميل: يعلّم اللي أكله ويضيف اللي مكانش في الخطة ---------- */
+
+function loggedFoodRow(item, opts) {
+  const li = document.createElement('li');
+  li.className = 'log-row';
+  if (opts.extra) li.classList.add('is-extra');
+  if (opts.eaten) li.classList.add('eaten');
+
+  const source = item.foodId ? foodById(item.foodId) : null;
+  const icon = document.createElement('span');
+  icon.className = 'meal-food-icon';
+  icon.textContent = (source && (source.icon || foodCategoryIcon(source.cat))) || '🍽';
+  li.appendChild(icon);
+
+  const info = document.createElement('div');
+  info.className = 'log-info';
+
+  const nameRow = document.createElement('div');
+  nameRow.className = 'log-name';
+  nameRow.textContent = foodDisplayName(item);
+  if (opts.extra) {
+    const badge = document.createElement('span');
+    badge.className = 'extra-badge';
+    badge.textContent = t('extra_badge');
+    nameRow.appendChild(badge);
+  }
+  info.appendChild(nameRow);
+
+  const m = itemMacros(item);
+  const macros = document.createElement('div');
+  macros.className = 'food-macros';
+  macros.textContent =
+    Math.round(item.grams) + t('fuel_g') + ' · ' +
+    Math.round(m.kcal) + ' ' + t('t_kcal') + ' · ' +
+    t('t_protein') + ' ' + m.protein.toFixed(1) + ' · ' +
+    t('t_carbs') + ' ' + m.carbs.toFixed(1) + ' · ' +
+    t('t_fat') + ' ' + m.fat.toFixed(1);
+  info.appendChild(macros);
+  li.appendChild(info);
+
+  if (opts.onToggle) {
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'log-check' + (opts.eaten ? ' on' : '');
+    check.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12.5 9.5 18 20 6.5"></polyline></svg>';
+    check.setAttribute('aria-label', t('mark_eaten'));
+    check.addEventListener('click', opts.onToggle);
+    li.appendChild(check);
+  }
+
+  if (opts.onRemove) {
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'log-remove';
+    del.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+    del.setAttribute('aria-label', t('remove'));
+    del.addEventListener('click', opts.onRemove);
+    li.appendChild(del);
+  }
+
+  return li;
+}
+
+function renderClientMeals(container, day) {
+  container.innerHTML = '';
+  const canLog = isLoggingDay();
+  const log = logDay();
+  let anything = false;
+
+  MEAL_KEYS.forEach(function (key) {
+    const planned = (day && day.meals[key]) ? day.meals[key] : [];
+    const extras = canLog ? log.extra.filter(function (item) { return item.meal === key; }) : [];
+    if (!planned.length && !extras.length && !canLog) return;
+    anything = anything || planned.length > 0 || extras.length > 0;
+
+    const block = document.createElement('div');
+    block.className = 'meal-block';
+
+    const head = document.createElement('div');
+    head.className = 'meal-head';
+
+    const title = document.createElement('div');
+    title.className = 'meal-name';
+    setIconLabel(title, mealIconSvg(key), mealName(key));
+    head.appendChild(title);
+
+    /* الرقم على اليمين: المخطط، ولو العميل بيسجّل النهاردة بنوري كمان اللي أكله */
+    const plannedKcal = Math.round(mealTotals(planned).kcal);
+    let eatenKcal = 0;
+    planned.forEach(function (item, index) {
+      if (log.eaten.indexOf(key + ':' + index) !== -1) eatenKcal += itemMacros(item).kcal;
+    });
+    extras.forEach(function (item) { eatenKcal += itemMacros(item).kcal; });
+
+    const kcal = document.createElement('div');
+    kcal.className = 'meal-kcal';
+    kcal.textContent = canLog
+      ? (Math.round(eatenKcal) + ' / ' + plannedKcal + ' ' + t('t_kcal'))
+      : (plannedKcal + ' ' + t('t_kcal'));
+    if (canLog && eatenKcal > 0) kcal.classList.add('has-log');
+    head.appendChild(kcal);
+
+    block.appendChild(head);
+
+    if (!planned.length && !extras.length) {
+      const empty = document.createElement('div');
+      empty.className = 'section-empty';
+      empty.textContent = t('meal_empty');
+      block.appendChild(empty);
+    } else {
+      const ul = document.createElement('ul');
+
+      planned.forEach(function (item, index) {
+        const itemKey = key + ':' + index;
+        const eaten = log.eaten.indexOf(itemKey) !== -1;
+        ul.appendChild(loggedFoodRow(item, {
+          eaten: canLog && eaten,
+          extra: false,
+          onToggle: canLog ? function () {
+            const day2 = logDay();
+            const pos = day2.eaten.indexOf(itemKey);
+            if (pos === -1) day2.eaten.push(itemKey);
+            else day2.eaten.splice(pos, 1);
+            saveFoodLog();
+            showClientNutrition();
+          } : null
+        }));
+      });
+
+      extras.forEach(function (item) {
+        ul.appendChild(loggedFoodRow(item, {
+          eaten: true,
+          extra: true,
+          onRemove: function () {
+            const day2 = logDay();
+            const pos = day2.extra.indexOf(item);
+            if (pos !== -1) day2.extra.splice(pos, 1);
+            saveFoodLog();
+            showClientNutrition();
+          }
+        }));
+      });
+
+      block.appendChild(ul);
+    }
+
+    if (canLog) {
+      const addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.className = 'add-food-btn';
+      addBtn.textContent = t('add_food_btn');
+      addBtn.addEventListener('click', function () { openFoodPicker(key); });
+      block.appendChild(addBtn);
+    }
+
+    container.appendChild(block);
+  });
+
+  if (!anything && !canLog) {
+    container.appendChild(clientStateCard('empty', t('no_meals_title'), t('no_meals')));
+  }
+}
 
 function showClientSupplements() {
   const box = document.getElementById('cnut-supp-box');
@@ -8067,17 +9425,22 @@ function showClientNutrition() {
 
   if (!nutritionHasContent(clientNutrition)) {
     cnutTotals.innerHTML = '';
+    if (cnutFuel) cnutFuel.innerHTML = '';
+    const waterCard = document.getElementById('cnut-water');
+    if (waterCard) waterCard.classList.add('hidden');
     cnutMeals.innerHTML = '';
-    const none = document.createElement('p');
-    none.className = 'rehab-none';
-    none.textContent = t('no_nutrition');
-    cnutMeals.appendChild(none);
+    cnutMeals.appendChild(clientStateCard('empty', t('no_nutrition_title'), t('no_nutrition')));
     return;
   }
 
   const day = clientNutrition.week[cNutDay];
-  renderTotals(cnutTotals, dayTotals(day), clientNutrition.targets);
-  renderMeals(cnutMeals, day, false, null);
+  const plannedTotals = dayTotals(day);
+  const shown = isLoggingDay() ? eatenTotals(day) : plannedTotals;
+
+  renderFuelCard(cnutFuel, shown, clientNutrition.targets, isLoggingDay() ? plannedTotals : null);
+  renderTotals(cnutTotals, shown, clientNutrition.targets);
+  renderWaterCard();
+  renderClientMeals(cnutMeals, day);
 
   renderDial('cnut-ring', 'cnut-dc-day', 'cnut-dc-sub', clientNutrition.week, cNutDay, function (index) {
     cNutDay = index;
@@ -10458,32 +11821,32 @@ fillLeadInterestSelect();
 /* شاشة الموبايل اللي في الهيرو — بتلف على ٣ أمثلة حقيقية من التطبيق */
 const HERO_SLIDES = [
   {
-    icon: '🏋️', pillar: 'training', color: '#22c55e', tagKey: 'role_coach',
+    icon: '🏋️', key: 'training', pillar: 'training', color: '#22c55e', tagKey: 'role_coach',
     titleKey: 'hero_slide1_title', subKey: 'hero_slide1_sub',
     rowsKey: 'hero_slide1_rows', footKey: 'hero_slide1_foot', pct: 60
   },
   {
-    icon: '🩹', pillar: 'rehab', color: '#f97316', tagKey: 'role_rehab',
+    icon: '🩹', key: 'rehab', pillar: 'rehab', color: '#f97316', tagKey: 'role_rehab',
     titleKey: 'hero_slide2_title', subKey: 'hero_slide2_sub',
     rowsKey: 'hero_slide2_rows', footKey: 'hero_slide2_foot', pct: 40
   },
   {
-    icon: '🍎', pillar: 'nutrition', color: '#38bdf8', tagKey: 'role_nutrition',
+    icon: '🍎', key: 'nutrition', pillar: 'nutrition', color: '#38bdf8', tagKey: 'role_nutrition',
     titleKey: 'hero_slide3_title', subKey: 'hero_slide3_sub',
     rowsKey: 'hero_slide3_rows', footKey: 'hero_slide3_foot', pct: 75
   },
   {
-    icon: '🩺', pillar: 'medical', color: '#a78bfa', tagKey: 'role_doctor',
+    icon: '🩺', key: 'medical', pillar: 'medical', color: '#a78bfa', tagKey: 'role_doctor',
     titleKey: 'hero_slide4_title', subKey: 'hero_slide4_sub',
     rowsKey: 'hero_slide4_rows', footKey: 'hero_slide4_foot', pct: 100
   },
   {
-    icon: '🧠', pillar: 'medical', color: '#f472b6', tagKey: 'role_psych',
+    icon: '🧠', key: 'psych', pillar: 'medical', color: '#f472b6', tagKey: 'role_psych',
     titleKey: 'hero_slide5_title', subKey: 'hero_slide5_sub',
     rowsKey: 'hero_slide5_rows', footKey: 'hero_slide5_foot', pct: 55
   },
   {
-    icon: '📈', pillar: 'training', color: '#fbbf24', tagKey: 'role_progress',
+    icon: '📈', key: 'progress', pillar: 'training', color: '#fbbf24', tagKey: 'role_progress',
     titleKey: 'hero_slide6_title', subKey: 'hero_slide6_sub',
     rowsKey: 'hero_slide6_rows', footKey: 'hero_slide6_foot', pct: 85
   }
@@ -10494,33 +11857,102 @@ let heroSlideTimer = null;
 
 /*
  * ============ الشريط العريض ============
- * بيمتد بعرض الشاشة كلها (بيخرج برا حدود الكارت) وبيوصّل أجزاء
- * البرنامج الأربعة بمسار واحد، وعليه نقطة بتمشي من أوله لآخره.
- * الفكرة إن الزائر يشوف من غير كلام إن ده مش أربع خدمات منفصلة —
- * ده مسار واحد متوصّل من التمرين للتأهيل للتغذية للاستشارة.
+ * ست محطات بعدد شاشات الموبايل. الأيقونات مصمتة (filled) مش خطوط
+ * رفيعة — بتبان أقوى بكتير في الحجم الصغير. ومع كل محطة فيه خلفية
+ * بطابعها: ألياف عضلية للتدريب، نبض للطب، موجات للنفسي... إلخ.
  */
 const BAND_NODES = [
-  { pillar: 'training',  color: '#22c55e', labelKey: 'role_coach',
-    art: '<rect x="-9" y="-3" width="3" height="6" rx="1.2"/><rect x="6" y="-3" width="3" height="6" rx="1.2"/>'
-       + '<rect x="-5.5" y="-5" width="3" height="10" rx="1.4"/><rect x="2.5" y="-5" width="3" height="10" rx="1.4"/>'
-       + '<rect x="-2.5" y="-1.2" width="5" height="2.4" rx="1.2"/>' },
-  { pillar: 'rehab',     color: '#f97316', labelKey: 'role_rehab',
-    art: '<path d="M0-9v6" stroke-width="2.4" fill="none"/><path d="M-4-3h8l-1 5.6a3 3 0 0 1-6 0z" fill="none" stroke-width="2"/>'
-       + '<path d="M0 2.6v6.4" stroke-width="2.4" fill="none"/><path d="M-3.4 9h6.8" stroke-width="2.4" fill="none"/>' },
-  { pillar: 'nutrition', color: '#38bdf8', labelKey: 'role_nutrition',
-    art: '<circle cx="0" cy="0" r="8" fill="none" stroke-width="2"/><path d="M0-8a8 8 0 0 1 6.9 12L0 0z"/>'
-       + '<circle cx="0" cy="0" r="2.4"/>' },
-  { pillar: 'medical',   color: '#a78bfa', labelKey: 'role_doctor',
-    art: '<path d="M-6-8v4.6a4.6 4.6 0 0 0 9.2 0V-8" fill="none" stroke-width="2.2"/>'
-       + '<path d="M-1.4 1.2v2.6a3.6 3.6 0 0 0 7.2 0V2.6" fill="none" stroke-width="2.2"/>'
-       + '<circle cx="5.8" cy="0.6" r="2.4" fill="none" stroke-width="2.2"/>' }
+  { key: 'training',  pillar: 'training',  color: '#22c55e', labelKey: 'role_coach',
+    art: '<rect x="1" y="8" width="4" height="8" rx="2"/><rect x="19" y="8" width="4" height="8" rx="2"/>'
+       + '<rect x="5.5" y="5" width="4.5" height="14" rx="2.2"/><rect x="14" y="5" width="4.5" height="14" rx="2.2"/>'
+       + '<rect x="9" y="10.4" width="6" height="3.2" rx="1.6"/>' },
+  { key: 'rehab',     pillar: 'rehab',     color: '#f97316', labelKey: 'role_rehab',
+    art: '<path d="M9 2h6v5.2c0 1.6 1 2.6 2.2 3.6 1.7 1.4 2.8 3 2.8 5.4 0 3.2-2.6 5.8-5.8 5.8H9.8C6.6 22 4 19.4 4 16.2c0-2.4 1.1-4 2.8-5.4C8 9.8 9 8.8 9 7.2z"/>'
+       + '<rect x="6" y="11.4" width="12" height="2.6" rx="1.3" fill="#0b1220"/>'
+       + '<rect x="6" y="16" width="12" height="2.6" rx="1.3" fill="#0b1220"/>' },
+  { key: 'nutrition', pillar: 'nutrition', color: '#38bdf8', labelKey: 'role_nutrition',
+    art: '<path d="M12 2a10 10 0 0 1 10 10h-10z"/><path d="M22 12a10 10 0 0 1-15.3 8.5L12 12z" opacity=".72"/>'
+       + '<path d="M6.7 20.5A10 10 0 0 1 12 2v10z" opacity=".45"/><circle cx="12" cy="12" r="2.6" fill="#0b1220"/>' },
+  { key: 'medical',   pillar: 'medical',   color: '#a78bfa', labelKey: 'role_doctor',
+    art: '<path d="M6 2v6a4.2 4.2 0 0 0 8.4 0V2h2.6v6a6.8 6.8 0 0 1-5.5 6.7v2.1a3.2 3.2 0 0 0 6.4 0v-1.3h2.6v1.3a5.8 5.8 0 0 1-11.6 0v-2.1A6.8 6.8 0 0 1 3.4 8V2z"/>'
+       + '<circle cx="19.3" cy="12.6" r="3.1"/>' },
+  { key: 'psych',     pillar: 'medical',   color: '#f472b6', labelKey: 'role_psych',
+    art: '<path d="M12 2a7.6 7.6 0 0 1 7.6 7.6c0 2.8-1.5 4.6-2.9 5.9-.9.9-1.5 1.6-1.5 2.8V20H8.8v-1.7c0-1.2-.6-1.9-1.5-2.8C5.9 14.2 4.4 12.4 4.4 9.6A7.6 7.6 0 0 1 12 2z"/>'
+       + '<rect x="9" y="21" width="6" height="2.4" rx="1.2"/>'
+       + '<path d="M8.4 9.6c1.6-2.6 3.2 2.6 4.8 0s3.2 2.6 4.8 0" stroke="#0b1220" stroke-width="1.8" fill="none"/>' },
+  { key: 'progress',  pillar: 'training',  color: '#fbbf24', labelKey: 'role_progress',
+    art: '<rect x="3" y="13" width="4.2" height="8.5" rx="1.6"/><rect x="9.9" y="9" width="4.2" height="12.5" rx="1.6"/>'
+       + '<rect x="16.8" y="4.5" width="4.2" height="17" rx="1.6"/>' }
 ];
+
+/* خلفية بطابع كل تخصص — أنماط SVG بسيطة بتتكرر ورا الهيرو كله */
+function specBackdrop(key, color) {
+  const c = color;
+  if (key === 'training') {
+    // ألياف عضلية: خيوط متموّجة متوازية
+    return '<pattern id="bgpat" width="54" height="30" patternUnits="userSpaceOnUse">'
+      + '<path d="M0 7 Q13 0 27 7 T54 7" fill="none" stroke="' + c + '" stroke-width="3.4" stroke-linecap="round"/>'
+      + '<path d="M0 16 Q13 9 27 16 T54 16" fill="none" stroke="' + c + '" stroke-width="3.4" stroke-linecap="round"/>'
+      + '<path d="M0 25 Q13 18 27 25 T54 25" fill="none" stroke="' + c + '" stroke-width="3.4" stroke-linecap="round"/>'
+      + '</pattern>';
+  }
+  if (key === 'rehab') {
+    // مفصل ودعامة: أقواس متكررة
+    return '<pattern id="bgpat" width="40" height="34" patternUnits="userSpaceOnUse">'
+      + '<path d="M6 30a14 14 0 0 1 28 0" fill="none" stroke="' + c + '" stroke-width="2.2"/>'
+      + '<path d="M12 30a8 8 0 0 1 16 0" fill="none" stroke="' + c + '" stroke-width="2.2"/>'
+      + '<circle cx="20" cy="30" r="2.4" fill="' + c + '"/>'
+      + '</pattern>';
+  }
+  if (key === 'nutrition') {
+    // حبوب وبذور
+    return '<pattern id="bgpat" width="34" height="34" patternUnits="userSpaceOnUse">'
+      + '<ellipse cx="9" cy="9" rx="5" ry="3.2" fill="' + c + '" transform="rotate(-28 9 9)"/>'
+      + '<ellipse cx="25" cy="22" rx="5" ry="3.2" fill="' + c + '" transform="rotate(22 25 22)"/>'
+      + '<circle cx="26" cy="7" r="2.4" fill="' + c + '"/><circle cx="8" cy="26" r="2.4" fill="' + c + '"/>'
+      + '</pattern>';
+  }
+  if (key === 'medical') {
+    // نبض قلب
+    return '<pattern id="bgpat" width="70" height="30" patternUnits="userSpaceOnUse">'
+      + '<path d="M0 18h14l4-11 6 22 5-13h9l4 6h28" fill="none" stroke="' + c + '" stroke-width="2.2" '
+      +   'stroke-linecap="round" stroke-linejoin="round"/>'
+      + '</pattern>';
+  }
+  if (key === 'psych') {
+    // موجات تركيز متحدة المركز
+    return '<pattern id="bgpat" width="52" height="52" patternUnits="userSpaceOnUse">'
+      + '<circle cx="26" cy="26" r="7" fill="none" stroke="' + c + '" stroke-width="2"/>'
+      + '<circle cx="26" cy="26" r="14" fill="none" stroke="' + c + '" stroke-width="1.7"/>'
+      + '<circle cx="26" cy="26" r="21" fill="none" stroke="' + c + '" stroke-width="1.4"/>'
+      + '</pattern>';
+  }
+  // progress — أعمدة صاعدة
+  return '<pattern id="bgpat" width="36" height="34" patternUnits="userSpaceOnUse">'
+    + '<rect x="3" y="20" width="6" height="12" rx="2" fill="' + c + '"/>'
+    + '<rect x="14" y="13" width="6" height="19" rx="2" fill="' + c + '"/>'
+    + '<rect x="25" y="6" width="6" height="26" rx="2" fill="' + c + '"/>'
+    + '</pattern>';
+}
+
+/* بيغيّر خلفية الهيرو حسب التخصص النشط */
+function setHeroBackdrop(key, color) {
+  const layer = document.getElementById('hero-bg');
+  if (!layer) return;
+  layer.innerHTML = '<svg width="100%" height="100%" aria-hidden="true">'
+    + '<defs>' + specBackdrop(key, color) + '</defs>'
+    + '<rect width="100%" height="100%" fill="url(#bgpat)"/>'
+    + '</svg>';
+  layer.classList.remove('hero-bg-in');
+  void layer.offsetWidth;
+  layer.classList.add('hero-bg-in');
+}
 
 function renderHeroBand() {
   const root = document.getElementById('hero-band');
   if (!root) return;
 
-  const W = 400;   // إحداثيات داخلية — الـSVG بيتمدد على عرض الشاشة
+  const W = 600;   // إحداثيات داخلية — الـSVG بيتمدد على عرض الشاشة
   const H = 118;
   const n = BAND_NODES.length;
   const step = W / n;
@@ -10554,9 +11986,10 @@ function renderHeroBand() {
   // النقط نفسها HTML عشان النص يفضل مقروء ومايتمططش مع الـSVG
   let nodes = '<div class="hero-band-nodes">';
   BAND_NODES.forEach(function (node) {
-    nodes += '<button type="button" class="band-node" data-pillar="' + node.pillar + '">'
+    nodes += '<button type="button" class="band-node" data-pillar="' + node.pillar
+      + '" data-key="' + node.key + '">'
       +   '<span class="band-dot" style="background:' + node.color + '22;border-color:' + node.color + '66">'
-      +     '<svg viewBox="-12 -12 24 24" stroke="' + node.color + '" fill="' + node.color + '" '
+      +     '<svg viewBox="0 0 24 24" fill="' + node.color + '" '
       +       'stroke-linecap="round" stroke-linejoin="round">' + node.art + '</svg>'
       +   '</span>'
       +   '<span class="band-label">' + t(node.labelKey) + '</span>'
@@ -10573,14 +12006,18 @@ function renderHeroBand() {
    */
   const current = HERO_SLIDES[heroSlideIndex % HERO_SLIDES.length];
   root.querySelectorAll('.band-node').forEach(function (node) {
-    node.classList.toggle('band-node-on', node.getAttribute('data-pillar') === current.pillar);
+    node.classList.toggle('band-node-on', node.getAttribute('data-key') === current.key);
   });
+  setHeroBackdrop(current.key, current.color);
 
   // الضغط على أي جزء بيوَدّي على صفحته تحت
   root.querySelectorAll('.band-node').forEach(function (btn) {
     btn.addEventListener('click', function () {
       const pillar = btn.getAttribute('data-pillar');
-      const slideIndex = HERO_SLIDES.map(function (s) { return s.pillar; }).indexOf(pillar);
+      const stationKey = btn.getAttribute('data-key');
+      // كل محطة ليها شاشتها بالظبط (نفس الترتيب)، فالربط بالمفتاح
+      // أدق من الربط بالعمود — التخصصات الطبية بتشترك في نفس العمود
+      const slideIndex = BAND_NODES.map(function (s) { return s.key; }).indexOf(stationKey);
       if (slideIndex !== -1) {
         heroSlideIndex = slideIndex;
         renderHeroSlide();
@@ -10635,10 +12072,11 @@ function renderHeroSlide() {
     phone.classList.add('hero-live-in');
   }
 
-  // المحطة المقابلة في الشريط بتنوّر مع اللوحة
+  // المحطة المقابلة في الشريط بتنوّر مع الشاشة، والخلفية بتتغيّر معاها
   document.querySelectorAll('.band-node').forEach(function (node) {
-    node.classList.toggle('band-node-on', node.getAttribute('data-pillar') === slide.pillar);
+    node.classList.toggle('band-node-on', node.getAttribute('data-key') === slide.key);
   });
+  setHeroBackdrop(slide.key, slide.color);
 
   rowsBox.innerHTML = '';
   t(slide.rowsKey).split('|').forEach(function (line, index) {
@@ -11745,7 +13183,142 @@ function splitStoredPhone(stored) {
   return { code: match.code, number: stored.slice(match.code.length).trim() };
 }
 
+/* ============ أنواع الجسم (Somatotypes) ============ */
+/*
+ * ده مفهوم معروف في التدريب: الناس بتختلف في استجابتها للتمرين
+ * والسعرات حسب بنيتها. المدرب بيستعمله كنقطة بداية — مش تصنيف
+ * نهائي، وبيتعدّل مع المتابعة.
+ * الأشكال مرسومة SVG، والاختيار بيتحفظ مع باقي بيانات العميل.
+ */
+const BODY_TYPES = [
+  { id: 'ecto', labelKey: 'body_ecto', noteKey: 'body_ecto_note', w: 0.72 },
+  { id: 'meso', labelKey: 'body_meso', noteKey: 'body_meso_note', w: 1 },
+  { id: 'endo', labelKey: 'body_endo', noteKey: 'body_endo_note', w: 1.3 }
+];
+
+/* شكل الجسم: نفس الرسمة بعرض مختلف لكل نوع */
+function bodyTypeArt(scale, active) {
+  const c = active ? '#22c55e' : '#64748b';
+  const s = scale;
+  const cx = 40;
+  const shoulder = 15 * s;
+  const waist = 9.5 * s;
+  const hip = 12 * s;
+  return '<svg viewBox="0 0 80 104" aria-hidden="true">'
+    + '<circle cx="' + cx + '" cy="16" r="9" fill="' + c + '"/>'
+    // الجذع: كتف عريض ← وسط ← حوض
+    + '<path d="M' + (cx - shoulder) + ' 30 '
+    +   'Q' + cx + ' 26 ' + (cx + shoulder) + ' 30 '
+    +   'L' + (cx + waist) + ' 58 '
+    +   'L' + (cx + hip) + ' 74 '
+    +   'L' + (cx - hip) + ' 74 '
+    +   'L' + (cx - waist) + ' 58 Z" fill="' + c + '"/>'
+    // الرجلين
+    + '<rect x="' + (cx - hip + 1) + '" y="74" width="' + (hip - 2.5) + '" height="26" rx="' + (hip / 3) + '" fill="' + c + '"/>'
+    + '<rect x="' + (cx + 1.5) + '" y="74" width="' + (hip - 2.5) + '" height="26" rx="' + (hip / 3) + '" fill="' + c + '"/>'
+    // الدراعين
+    + '<rect x="' + (cx - shoulder - 5.5) + '" y="31" width="5" height="30" rx="2.5" fill="' + c + '" opacity=".85"/>'
+    + '<rect x="' + (cx + shoulder + 0.5) + '" y="31" width="5" height="30" rx="2.5" fill="' + c + '" opacity=".85"/>'
+    + '</svg>';
+}
+
+function renderBodyTypes() {
+  const box = document.getElementById('ob-body-types');
+  const select = document.getElementById('ob-body');
+  if (!box || !select) return;
+
+  // القايمة المخفية هي اللي بتتحفظ — الكروت واجهة ليها
+  if (!select.options.length) {
+    BODY_TYPES.forEach(function (type) {
+      const option = document.createElement('option');
+      option.value = type.id;
+      option.textContent = t(type.labelKey);
+      select.appendChild(option);
+    });
+    select.value = '';
+  }
+
+  box.innerHTML = '';
+  BODY_TYPES.forEach(function (type) {
+    const active = select.value === type.id;
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'body-type' + (active ? ' active' : '');
+    card.innerHTML = bodyTypeArt(type.w, active)
+      + '<span class="body-type-name">' + t(type.labelKey) + '</span>'
+      + '<span class="body-type-note">' + t(type.noteKey) + '</span>';
+    card.addEventListener('click', function () {
+      select.value = type.id;
+      renderBodyTypes();
+      updateObProgress();
+    });
+    box.appendChild(card);
+  });
+}
+
+/* ============ تقدّم الاستمارة ============ */
+/*
+ * الزائر بيشوف قد إيه فضل — وده بيقلل إنه يسيب الاستمارة في نصها.
+ * الخلفية كمان بتتغيّر مع التقدّم فالشاشة بتبقى حيّة وهو بيكتب.
+ */
+const OB_FIELDS = [
+  function () { return !!obName.value.trim(); },
+  function () { return !!obPhone.value.trim(); },
+  function () { return !!obGender.value; },
+  function () { return !!(obDobDay.value && obDobMonth.value && obDobYear.value); },
+  function () { return !!obWeight.value; },
+  function () { return !!obHeight.value; },
+  function () { const s = document.getElementById('ob-body'); return !!(s && s.value); },
+  function () { return !!obActivity.value; },
+  function () { return !!obSport.value; },
+  function () { return !!obGoal.value; }
+];
+
+const OB_BG_STAGES = ['training', 'rehab', 'nutrition', 'medical', 'psych', 'progress'];
+let obBgStage = -1;
+
+function updateObProgress() {
+  const done = OB_FIELDS.filter(function (fn) {
+    try { return fn(); } catch (error) { return false; }
+  }).length;
+  const pct = Math.round((done / OB_FIELDS.length) * 100);
+
+  const fill = document.getElementById('ob-progress-fill');
+  const note = document.getElementById('ob-progress-note');
+  if (fill) fill.style.width = pct + '%';
+  if (note) {
+    note.textContent = pct >= 100
+      ? t('ob_progress_done')
+      : fill_('ob_progress_note', { done: done, total: OB_FIELDS.length });
+  }
+
+  // الخلفية بتترقّى كل ما يخلّص شوية — إحساس بالتقدّم من غير كلام
+  const stage = Math.min(OB_BG_STAGES.length - 1, Math.floor((done / OB_FIELDS.length) * OB_BG_STAGES.length));
+  if (stage !== obBgStage) {
+    obBgStage = stage;
+    const key = OB_BG_STAGES[stage];
+    const colors = { training: '#22c55e', rehab: '#f97316', nutrition: '#38bdf8',
+                     medical: '#a78bfa', psych: '#f472b6', progress: '#fbbf24' };
+    const layer = document.getElementById('ob-bg');
+    if (layer) {
+      layer.innerHTML = '<svg width="100%" height="100%" aria-hidden="true">'
+        + '<defs>' + specBackdrop(key, colors[key]) + '</defs>'
+        + '<rect width="100%" height="100%" fill="url(#bgpat)"/></svg>';
+      layer.classList.remove('ob-bg-in');
+      void layer.offsetWidth;
+      layer.classList.add('ob-bg-in');
+    }
+  }
+}
+
+/* اسم مختصر لـfill عشان ما يتلخبطش مع متغيّر محلي اسمه fill */
+function fill_(key, vars) { return fill(key, vars); }
+
 function prefillOnboarding(data) {
+  renderBodyTypes();
+  // نرسم الخلفية وشريط التقدّم من أول لحظة، مش بعد أول كتابة
+  obBgStage = -1;
+  setTimeout(updateObProgress, 0);
   fillGenderSelect();
   fillDobSelects();
   fillActivitySelect();
@@ -11758,6 +13331,9 @@ function prefillOnboarding(data) {
   obPhoneCode.value = phoneParts.code;
   obPhone.value = phoneParts.number;
   obGender.value = (data && data.gender) || '';
+  const bodySelect = document.getElementById('ob-body');
+  if (bodySelect) bodySelect.value = (data && data.bodyType) || '';
+  renderBodyTypes();
   obDobDay.value = (data && data.dob && data.dob.day) || '';
   obDobMonth.value = (data && data.dob && data.dob.month) || '';
   obDobYear.value = (data && data.dob && data.dob.year) || '';
@@ -11831,6 +13407,20 @@ document.getElementById('ob-photo-remove').addEventListener('click', function ()
   obPhoto.value = '';
 });
 
+/*
+ * أي كتابة أو اختيار في الاستمارة بيحدّث شريط التقدّم والخلفية.
+ * بنسمع على الشاشة كلها بدل ما نربط كل خانة لوحدها — أبسط وأضمن
+ * إن أي خانة تتضاف بعدين تشتغل من غير ما ننسى نوصّلها
+ */
+if (onboardingScreen) {
+  ['input', 'change', 'click'].forEach(function (evt) {
+    onboardingScreen.addEventListener(evt, function () {
+      // تأخير بسيط عشان القوايم المخفية تكون اتحدّثت
+      setTimeout(updateObProgress, 40);
+    });
+  });
+}
+
 document.getElementById('ob-next-btn').addEventListener('click', async function () {
   const name = obName.value.trim();
   const gender = obGender.value;
@@ -11866,6 +13456,7 @@ document.getElementById('ob-next-btn').addEventListener('click', async function 
     const clientPayload = {
       name: name,
       phone: obPhoneCode.value + ' ' + phoneCheck.digits,
+      bodyType: (document.getElementById('ob-body') || {}).value || '',
       gender: gender,
       dob: { day: dobDay, month: dobMonth, year: dobYear },
       age: age,
