@@ -16880,7 +16880,8 @@ async function runAiQueue() {
     const data = await res.json().catch(function () { return null; });
 
     if (!data || !data.ok || !data.reply) {
-      aiFailed((data && data.error) || ('http ' + res.status));
+      // السبب بييجي من السيرفر نفسه — بنطبعه زي ما هو عشان يبان
+      aiFailed((data && data.error) || ('http ' + res.status), data && data.build);
       return;
     }
 
@@ -16910,8 +16911,10 @@ async function runAiQueue() {
  * بس السكوت التام كان بيخلي أي مشكلة مستحيل تتشاف، فبنكتب السبب
  * في الكونسول (للمطوّر) وسطر هادي للعميل إنه هيرد عليه مدربه
  */
-function aiFailed(reason) {
-  try { console.warn('[ADAM] AI reply failed:', reason); } catch (e) { /* تجاهل */ }
+function aiFailed(reason, build) {
+  try {
+    console.warn('[ADAM] AI reply failed:', reason, build ? ('| script build: ' + build) : '| script build: (قديم — مفيش build)');
+  } catch (e) { /* تجاهل */ }
   const box = document.getElementById('chat-message');
   if (box) setStatusMessage(box, t('chat_ai_unavailable'), '');
 }
