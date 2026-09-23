@@ -1,0 +1,433 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isLegacyCoach() {
+      return isSignedIn() && request.auth.token.email == 'dra3nany@gmail.com';
+    }
+
+    function isProvider() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/providers/$(request.auth.token.email));
+    }
+
+    function isCoach() {
+      return isLegacyCoach() || isProvider();
+    }
+
+    function isOwner(email) {
+      return isSignedIn() && request.auth.token.email == email;
+    }
+
+    // جديد: فريق إداري كامل الصلاحية — صاحب المنصة (isLegacyCoach) يقدر
+    // يمنح متخصصين موجودين صلاحية إدارية زيه بالظبط عن طريق حقل
+    // isAdminTeam على مستند المتخصص نفسه. isFullAdmin() هي القاعدة
+    // المستخدمة بدل isLegacyCoach() في كل حتة كانت مخصوصة لصاحب المنصة
+    // بس، عشان عضو الفريق الإداري يقدر يعمل كل حاجة زيه بالظبط
+    function isAdminTeamMember() {
+      return isProvider() &&
+        get(/databases/$(database)/documents/providers/$(request.auth.token.email)).data.get('isAdminTeam', false) == true;
+    }
+
+    function isFullAdmin() {
+      return isLegacyCoach() || isAdminTeamMember();
+    }
+
+    // جديد: التخصصات الطبية بس (زي المحدد في providers.js) تقدر تكتب/تراجع
+    // المكتبة الطبية. بنقرأ حقل isMedical من مستند المتخصص نفسه (بيتحسب
+    // ويتحفظ تلقائي وقت ما يتضاف المتخصص من التطبيق) عشان أي تخصص طبي
+    // جديد يضاف يشتغل صح من غير ما نرجع نعدّل القاعدة دي تاني — والقائمة
+    // القديمة فضلة كـ fallback بس للمتخصصين اللي اتضافوا قبل التحديث ده
+    function isMedicalProvider() {
+      let providerDoc = get(/databases/$(database)/documents/providers/$(request.auth.token.email)).data;
+      return isProvider() &&
+        (providerDoc.get('isMedical', false) == true ||
+         providerDoc.specialty in ['rehab', 'physio', 'ortho', 'radiology', 'sports_medicine', 'pharmacist', 'psychologist']);
+    }
+
+    /*
+     * المتخصص ده متابع العميل ده فعلًا؟ (مدربه الأساسي أو في فريقه)
+     * بنستعملها في الكتابة عشان متخصص مالوش علاقة بالعميل ما يقدرش
+     * يعدّل بياناته — قبل كده أي متخصص كان يقدر يكتب على أي عميل
+     */
+    function myClient(email) {
+      return isProvider() && exists(/databases/$(database)/documents/clients/$(email))
+        && (
+          get(/databases/$(database)/documents/clients/$(email)).data.get('coachEmail', '') == request.auth.token.email
+          || get(/databases/$(database)/documents/clients/$(email)).data.get('team', {}).values().hasAny([request.auth.token.email])
+        );
+    }
+
+    /*
+     * الحقول اللي بتتحكم في الفلوس والوصول: بداية التجربة المجانية
+     * والتمديد اليدوي. العميل كان يقدر يكتبهم بنفسه — يعني يمدّد
+     * تجربته المجانية للأبد أو يفتح لنفسه اشتراك. دلوقتي لازم
+     * يفضلوا زي ما هم في أي تعديل جاي من العميل نفسه
+     */
+    function accessFieldsUnchanged() {
+      return request.resource.data.get('accessOverride', {}) == resource.data.get('accessOverride', {})
+        && request.resource.data.get('trialStartedAt', '') == resource.data.get('trialStartedAt', '');
+    }
+
+    match /clients/{email} {
+      allow read: if isCoach() || isOwner(email);
+
+      // إنشاء: الإدارة، أو متخصص بيضيف عميل لنفسه، أو العميل نفسه
+      // وهو بيسجّل (ومايقدرش يفتح لنفسه تمديد وصول من أول لحظة)
+      allow create: if isFullAdmin()
+        || (isProvider() && request.resource.data.get('coachEmail', '') == request.auth.token.email)
+        || (isOwner(email) && !request.resource.data.keys().hasAny(['accessOverride'])
+            // جديد: العميل اللي بيسجّل لنفسه لازم يكون أكّد إيميله —
+            // كده محدش يقدر يفتح حساب بإيميل مش بتاعه ولو من برّه البرنامج
+            && request.auth.token.email_verified == true);
+
+      // تعديل: الإدارة، أو المتخصص المتابع، أو العميل نفسه بشرط
+      // ما يلمسش حقول الوصول
+      allow update: if isFullAdmin()
+        || myClient(email)
+        || (isOwner(email) && accessFieldsUnchanged());
+
+      // المسح للإدارة بس — العميل كان يقدر يمسح مستنده ويعمله من
+      // جديد، وده كان بيصفّر تاريخ بداية التجربة المجانية
+      allow delete: if isFullAdmin();
+    }
+
+    /*
+     * الحالة الصحية (أمراض مزمنة / حمل) — بيانات حسّاسة، فمستند
+     * منفصل بصلاحيات أضيق من مستند العميل نفسه:
+     * مستند العميل بيقراه أي متخصص عشان قايمة البحث، أما ده فـ
+     * العميل نفسه + الفريق المتابع معاه + الإدارة بس.
+     */
+    function onClientTeam(email) {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/clients/$(email))
+        && (
+          get(/databases/$(database)/documents/clients/$(email)).data.get('coachEmail', '') == request.auth.token.email
+          || get(/databases/$(database)/documents/clients/$(email)).data.get('team', {}).values().hasAny([request.auth.token.email])
+        );
+    }
+
+    match /health/{email} {
+      allow read:  if isOwner(email) || isFullAdmin() || onClientTeam(email);
+      allow write: if isOwner(email) || isFullAdmin() || onClientTeam(email);
+    }
+
+    match /workouts/{email} {
+      allow read:  if isCoach() || isOwner(email);
+      allow write: if isCoach();
+    }
+
+    match /rehab/{email} {
+      allow read:  if isCoach() || isOwner(email);
+      allow write: if isCoach();
+    }
+
+    match /nutrition/{email} {
+      allow read:  if isCoach() || isOwner(email);
+      allow write: if isCoach();
+    }
+
+    match /activity/{email} {
+      allow read:  if isCoach() || isOwner(email);
+      allow write: if isOwner(email);
+    }
+
+    // قياسات InBody وموعد القياس الجاي — العميل أو المدرب يقدروا يضيفوا/يعدّلوا
+    match /inbody/{email} {
+      allow read:  if isCoach() || isOwner(email);
+      allow write: if isCoach() || isOwner(email);
+    }
+
+    // تقارير المتابعة الدورية (يومي/أسبوعي/شهري) من العميل لمدربه
+    match /checkins/{email} {
+      allow read:  if isCoach() || isOwner(email);
+      allow write: if isCoach() || isOwner(email);
+    }
+
+    // قبل كده أي حساب مسجّل كان يقدر يقرا تقدّم أي عميل تاني
+    match /progress/{email} {
+      allow read:  if isCoach() || isOwner(email);
+      allow write: if isOwner(email);
+    }
+
+    /*
+     * سجل أكل العميل — العميل هو اللي بيكتبه، والمدرب/المتخصص بيقراه
+     * عشان يتابع التزامه. محدش تاني بيقراه.
+     */
+    match /foodlog/{email} {
+      allow read:  if isCoach() || isOwner(email);
+      allow write: if isOwner(email);
+    }
+
+    match /myExercises/{exerciseId} {
+      allow read:  if isSignedIn();
+      allow write: if isCoach();
+    }
+
+    match /myFoods/{foodId} {
+      allow read:  if isSignedIn();
+      allow write: if isCoach();
+    }
+
+    // صور يرفعها أي مدرب/مختص لعناصر مكتبات التمارين/الأكل/التأهيل
+    // الجاهزة (exercise_<id> / food_<id> / rehab_<id>) — نفس صلاحيات
+    // myExercises/myFoods بالظبط
+    match /libraryImages/{itemId} {
+      allow read:  if isSignedIn();
+      allow write: if isCoach();
+    }
+
+    match /providers/{email} {
+      // جديد: القراءة بقت عامة (حتى من غير تسجيل دخول) عشان كروت
+      // "فريقك المتخصص" في الصفحة الرئيسية تقدر تعرض أسماء وتخصصات
+      // حقيقية قبل ما الزائر يسجّل — الحقول المعروضة (الاسم والتخصص)
+      // مش حساسة أصلًا وغرضها إنها تتعرض للعموم
+      allow read:  if true;
+      // isFullAdmin() (صاحب المنصة أو عضو فريق إداري) لازم يقدر يوقف/يمدّ
+      // وصول أي متخصص من لوحة التحكم، مش بس المتخصص نفسه. المتخصص
+      // نفسه (isOwner) يقدر يعدّل بياناته لكن مايقدرش يمنح نفسه
+      // isAdminTeam — لازم تفضل زي ما هي (أو false لو أول مرة)
+      // وكمان مايقدرش يعتمد تخصص لنفسه ولا يفتح مكتبة مقفولة عليه:
+      //  • specialties: يقدر يشيل منها بس (hasOnly = القائمة الجديدة
+      //    لازم تكون جزء من القديمة)، فالإضافة لازم تعدّي على صاحب
+      //    المنصة. طلب التخصص الجديد بيتكتب في pendingSpecialties وهي
+      //    مفتوحة له عادي
+      //  • libraryAccess: لازم تفضل زي ما هي بالظبط — فتح وقفل
+      //    المكتبات من صاحب المنصة بس
+      // المتخصص بيعدّل مستنده الموجود بس؛ إنشاء المستند من الأول
+      // بيعدّي على صاحب المنصة (الفرع الأول) زي ما هو
+      allow write: if isFullAdmin()
+        || (isOwner(email)
+            && exists(/databases/$(database)/documents/providers/$(email))
+            && request.resource.data.get('isAdminTeam', false) == resource.data.get('isAdminTeam', false)
+            && request.resource.data.get('specialties', []).hasOnly(resource.data.get('specialties', []))
+            && request.resource.data.get('libraryAccess', {}) == resource.data.get('libraryAccess', {}));
+    }
+
+    // جديد: خطط الاشتراك والأسعار — أي حد مسجّل دخول يشوفها، وصاحب
+    // المنصة أو عضو الفريق الإداري (isFullAdmin) يقدر يعدّلها أو يضيف عروض
+    match /plans/{planId} {
+      allow read:  if isSignedIn();
+      allow write: if isFullAdmin();
+    }
+
+    // جديد: بيانات استلام الدفع (فودافون كاش / إنستاباي / بنك) —
+    // صاحب المنصة أو عضو الفريق الإداري بس يعدّلها، وأي عميل مسجّل
+    // دخول يشوفها عشان يدفع
+    /*
+     * الإعدادات:
+     *  • settings/public — رابط الترحيب وتشغيل المساعد الذكي. بيتقرا
+     *    من غير تسجيل دخول لأن زائر الصفحة الرئيسية محتاجه، ومفيهوش
+     *    أي سر.
+     *  • settings/welcome — فيه كلمة السر. الإدارة بس. قبل كده كان
+     *    أي حساب مسجّل يقدر يقراها من متصفحه.
+     *  • الباقي (بيانات الدفع) — أي حساب مسجّل، عشان يعرف يدفع.
+     */
+    match /settings/{settingId} {
+      allow read:  if settingId == 'public'
+        || (isSignedIn() && settingId != 'welcome')
+        || isFullAdmin();
+      allow write: if isFullAdmin();
+    }
+
+    // جديد: الشات بين العميل وفريقه (مدرب/متخصص) والمساعد الذكي —
+    // مستند واحد لكل عميل فيه ملخص آخر رسالة، وتحته مجموعة فرعية
+    // للرسائل نفسها. أي عميل يشوف/يكتب في شاته هو بس، وأي متخصص
+    // (isCoach) يقدر يشوف ويرد على شات أي عميل
+    match /chats/{email} {
+      allow read, write: if isCoach() || isOwner(email);
+
+      match /messages/{messageId} {
+        allow read, write: if isCoach() || isOwner(email);
+      }
+    }
+
+    match /classes/{classId} {
+      allow read:  if isSignedIn();
+      allow write: if isCoach();
+    }
+
+    match /injuryReports/{reportId} {
+      allow read:   if isCoach() || resource.data.clientEmail == request.auth.token.email;
+      allow create: if isSignedIn() && request.resource.data.clientEmail == request.auth.token.email;
+      allow update: if isCoach();
+    }
+
+    // جديد: ملاحظات استشارية حرة يكتبها متخصص عن عميل معيّن (للتخصصات
+    // اللي مالهاش برنامج تدريبي/تأهيلي/غذائي بيتحرر — زي الطبيب أو
+    // الصيدلي أو الأشعة أو النفسي أو المساج). معرّف المستند
+    // "clientEmail__providerEmail" يعني كل متخصص له ملاحظاته الخاصة
+    // عن نفس العميل. أي متخصص من الفريق (isCoach) يقدر يشوفها أو
+    // يشوف ملاحظات العميل اللي هو صاحبها، لكن التعديل/الإضافة بس
+    // لصاحب الملاحظة نفسه (المتخصص اللي كتبها)
+    match /consultNotes/{noteId} {
+      allow read:   if isCoach() || resource.data.clientEmail == request.auth.token.email;
+      allow create: if isCoach() && request.resource.data.providerEmail == request.auth.token.email;
+      allow update: if isCoach() && resource.data.providerEmail == request.auth.token.email;
+    }
+
+    // جديد: طلبات استشارة يبعتها العميل لمتخصص من فريقه — العميل ينشئ
+    // طلبه هو بس ويشوف طلباته، وأي متخصص (isCoach) يشوف الطلبات ويحدّث
+    // حالتها لـ "تم الرد" لما يكتب ملاحظته. نفس منطق injuryReports بالظبط
+    match /consultRequests/{requestId} {
+      allow read:   if isCoach() || resource.data.clientEmail == request.auth.token.email;
+      allow create: if isSignedIn() && request.resource.data.clientEmail == request.auth.token.email;
+      allow update: if isCoach();
+    }
+
+    // قوالب التمرين اللي المدربين والمتخصصين بيحفظوها بنفسهم — أي مدرب
+    // يقرأ كل القوالب (فيستفيد من شغل باقي المتخصصين)، بس مايعدّلش ولا
+    // يمسح غير القالب اللي هو صاحبه. العميل مالوش دعوة بالمجموعة دي
+    match /myTemplates/{templateId} {
+      allow read:   if isCoach();
+      allow create: if isCoach() && request.resource.data.ownerEmail == request.auth.token.email;
+      allow update, delete: if isCoach() && resource.data.ownerEmail == request.auth.token.email;
+    }
+
+    /*
+     * التقييمات: الشرط القديم كان بيبص على البيانات الجديدة بس، فأي
+     * عميل كان يقدر يكتب فوق تقييم حد تاني وهو حاطط إيميله هو.
+     * دلوقتي التعديل لازم يكون على تقييم هو صاحبه أصلًا
+     */
+    match /providerReviews/{reviewId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.clientEmail == request.auth.token.email;
+      allow update: if isSignedIn()
+        && resource.data.clientEmail == request.auth.token.email
+        && request.resource.data.clientEmail == request.auth.token.email;
+    }
+
+    // المكتبة الطبية — يكتبها ويراجعها المتخصصين الطبيين بس،
+    // والعميل يشوف المقالات المعتمدة بس
+    match /medLibrary/{articleId} {
+      allow read:   if isSignedIn() && (resource.data.status == 'approved' || isMedicalProvider());
+      // isFullAdmin() مسموحله يحمّل محتوى مبدئي (مسودات) للمكتبة، لكن
+      // اللي يقدر يراجع/يعتمد المحتوى هو المتخصص الطبي بس (allow update)
+      allow create: if (isFullAdmin() || isMedicalProvider()) && request.resource.data.authorEmail == request.auth.token.email;
+      allow update: if isMedicalProvider();
+    }
+
+    // جديد: الحجوزات — العميل بيطلب حجز مع المتخصص، والمتخصص (أو الكوتش)
+    // بيتابع حالة الحجز (مؤكد / تمت / ملغي). العميل يقدر بس يشوف/يلغي حجزه هو
+    match /bookings/{bookingId} {
+      allow read:   if isCoach() || resource.data.clientEmail == request.auth.token.email;
+      allow create: if isSignedIn() && request.resource.data.clientEmail == request.auth.token.email;
+      allow update: if isCoach()
+        || (resource.data.clientEmail == request.auth.token.email
+            && request.resource.data.status == 'cancelled');
+    }
+
+    // جديد: منتجات المتجر — أي حد مسجّل دخول يشوفها، والمدرب/صاحب المنصة
+    // بس يقدر يضيف/يعدّل/يمسح
+    match /storeProducts/{productId} {
+      allow read:  if isSignedIn();
+      allow write: if isCoach();
+    }
+
+    // جديد: طلبات المتجر — العميل يشوف/ينشئ طلبه هو بس، والمدرب (isCoach)
+    // يشوف كل الطلبات ويحدّث حالتها (تأكيد / تسليم / إلغاء)
+    match /storeOrders/{orderId} {
+      allow read:   if isCoach() || resource.data.clientEmail == request.auth.token.email;
+      allow create: if isSignedIn() && request.resource.data.clientEmail == request.auth.token.email;
+      allow update: if isCoach();
+    }
+
+    // جديد: إحصائية عامة (عدد العملاء) بتتعرض في شريط الثقة بالصفحة
+    // الرئيسية — أي حد (حتى من غير تسجيل دخول) يقدر يقراها، وصاحب
+    // المنصة بس يقدر يحدّثها من لوحة التحكم
+    match /publicStats/{statId} {
+      allow read:  if true;
+      allow write: if isFullAdmin();
+    }
+
+    // جديد: خطط اشتراك المتخصصين (كوتش/أخصائي) — ممكن تختلف السعر
+    // حسب التخصص. أي متخصص مسجّل دخول يشوف الخطط عشان يختار، وصاحب
+    // المنصة أو عضو الفريق الإداري بس يقدر يضيف/يعدّل/يمسح
+    match /providerPlans/{planId} {
+      allow read:  if isSignedIn();
+      allow write: if isFullAdmin();
+    }
+
+    // جديد: رسائل تواصل من زوار الصفحة الرئيسية قبل ما يسجّلوا — أي حد
+    // (حتى من غير تسجيل دخول) يقدر يبعت رسالة، وصاحب المنصة أو عضو
+    // الفريق الإداري بس يشوفها
+    /*
+     * النماذج دي مفتوحة لأي زائر من غير تسجيل — وده لازم يفضل كده
+     * عشان الناس تقدر تتواصل. بس "مفتوح" مش معناه "أي حاجة": الحد
+     * الأقصى للحقول وللطول بيمنع حد يملا قاعدة بياناتك بمستندات
+     * ضخمة ويكلّفك فلوس. الحماية الحقيقية من الإغراق هي App Check
+     * (خطوة في ملف الأمان)
+     */
+    function smallPublicForm(maxFields) {
+      return request.resource.data.size() <= maxFields
+        && request.resource.data.get('name', '') is string
+        && request.resource.data.get('name', '').size() <= 120
+        && request.resource.data.get('email', '') is string
+        && request.resource.data.get('email', '').size() <= 160
+        && request.resource.data.get('message', '') is string
+        && request.resource.data.get('message', '').size() <= 1500;
+    }
+
+    match /leads/{leadId} {
+      allow create: if smallPublicForm(14);
+      // صاحب المنصة بيقرا الرسايل ويعلّمها "اتواصلت" أو "اتقبل كعميل"
+      allow read, update: if isFullAdmin();
+    }
+
+    // جديد: طلبات انضمام مدربين ومتخصصين من الصفحة الرئيسية — أي حد
+    // (حتى من غير تسجيل دخول) يقدر يقدّم طلب، وصاحب المنصة أو عضو
+    // الفريق الإداري بس يشوف الطلبات ويوافق/يرفض
+    match /providerApplications/{appId} {
+      allow create: if smallPublicForm(12);
+      allow read, update: if isFullAdmin();
+    }
+
+    // جديد: قصص نجاح (صور قبل/بعد) للصفحة الرئيسية — الكوتش يشوف
+    // ويدير كل القصص (حتى المخفية)، وأي زائر تاني يشوف بس القصص
+    // المفعّلة واللي اتأكد إن العميل وافق على نشرها
+    /*
+     * الإشعارات: كل واحد يقرا إشعاراته هو بس، ويعلّمها مقروءة أو
+     * يمسحها. أي حد داخل يقدر يبعت إشعار — بس باسمه هو (from لازم
+     * يبقى إيميله)، وبحقول محددة وأحجام صغيرة، ويبدأ "مش مقروء"
+     */
+    match /notifications/{notifId} {
+      allow read, delete: if isSignedIn() && resource.data.to == request.auth.token.email;
+
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasOnly(['to', 'from', 'type', 'text', 'target', 'about', 'aboutName', 'createdAt', 'read'])
+        && request.resource.data.from == request.auth.token.email
+        && request.resource.data.to is string
+        && request.resource.data.to.size() > 3
+        && request.resource.data.to.size() <= 160
+        && request.resource.data.to != request.auth.token.email
+        && request.resource.data.type is string
+        && request.resource.data.type.size() <= 40
+        && request.resource.data.text is map
+        && request.resource.data.text.keys().hasOnly(['ar', 'en'])
+        && request.resource.data.read == false;
+
+      // التعديل الوحيد المسموح: "اتقرا"
+      allow update: if isSignedIn()
+        && resource.data.to == request.auth.token.email
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+    }
+
+    /* عناوين أجهزة الإشعارات — صاحبها بس، وأقصى ٥ أجهزة */
+    match /pushTokens/{email} {
+      allow read, delete: if isOwner(email);
+      allow create, update: if isOwner(email)
+        && request.resource.data.keys().hasOnly(['tokens', 'lang', 'updatedAt'])
+        && request.resource.data.tokens is list
+        && request.resource.data.tokens.size() <= 5;
+    }
+
+    match /successStories/{storyId} {
+      allow read:  if isCoach() || (resource.data.active == true && resource.data.consentConfirmed == true);
+      allow write: if isCoach();
+    }
+  }
+}
