@@ -2,17 +2,30 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getFirestore, doc, getDoc, setDoc as fbSetDoc, addDoc as fbAddDoc, updateDoc as fbUpdateDoc, deleteDoc, deleteField, collection, getDocs, onSnapshot, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
-import { REHAB_TEMPLATES } from './rehab-templates.js';
-import { FOOD_LIBRARY, FOOD_CATEGORIES, FOOD_UNITS, FOOD_SERVINGS, CAT_PORTIONS } from './food-library.js';
-import { NUTRITION_PROGRAMS } from './nutrition-programs.js';
-import { MODALITIES, MODALITY_PROTOCOLS } from './modalities-library.js';
+import { REHAB_TEMPLATES as BASE_REHAB_TEMPLATES } from './rehab-templates.js';
+import { FOOD_LIBRARY as BASE_FOOD_LIBRARY, FOOD_CATEGORIES, FOOD_UNITS, FOOD_SERVINGS as BASE_FOOD_SERVINGS, CAT_PORTIONS } from './food-library.js';
+import { NUTRITION_PROGRAMS as BASE_NUTRITION_PROGRAMS } from './nutrition-programs.js';
+import { MODALITIES as BASE_MODALITIES, MODALITY_PROTOCOLS as BASE_MODALITY_PROTOCOLS } from './modalities-library.js';
 import { HEALTH_CONDITIONS, CONDITION_ORDER, PREGNANCY, POSTPARTUM, CYCLE_PHASES, CYCLE_ORDER, CYCLE_RED_FLAGS } from './health-conditions.js';
-import { SUPPLEMENT_LIBRARY, SUPPLEMENT_CATEGORIES, EVIDENCE_GRADES } from './supplement-library.js';
-import { SPORTS, SPORT_GROUPS, SPORT_METRICS, METRIC_FIELDS, SPORT_TEMPLATES } from './sports.js';
+import { SUPPLEMENT_LIBRARY as BASE_SUPPLEMENT_LIBRARY, SUPPLEMENT_CATEGORIES, EVIDENCE_GRADES } from './supplement-library.js';
+import { SPORTS, SPORT_GROUPS, SPORT_METRICS, METRIC_FIELDS, SPORT_TEMPLATES as BASE_SPORT_TEMPLATES } from './sports.js';
 import { SPECIALTIES, specialtyName, specialtyIconSvg, MED_CATEGORIES, MED_REVIEW, DEFAULT_RED_FLAGS, SESSION_TYPES, BOOKING_STATUS, specialtyClears } from './providers.js';
-import { MED_LIBRARY_SEED } from './med-library-seed.js';
+import { MED_LIBRARY_SEED as BASE_MED_LIBRARY_SEED } from './med-library-seed.js';
 import { EXERCISE_LIBRARY as BASE_EXERCISES } from './exercise-library.js';
 import { DRILLS_LIBRARY, DRILL_CATEGORIES, DRILL_EQUIPMENT } from './drills-library.js';
+/*
+ * الإضافات الجديدة — كل مكتبة ليها ملف "extra" جنب الأصلي، والأصلي
+ * زي ما هو من غير أي تعديل. بنجمعهم هنا مرة واحدة وباقي الكود بيشتغل
+ * على الأسماء القديمة نفسها
+ */
+import { SPORT_TEMPLATES_EXTRA } from './library/templates-extra.js';
+import { REHAB_TEMPLATES_EXTRA } from './library/rehab-extra.js';
+import { FOOD_LIBRARY_EXTRA, FOOD_SERVINGS_EXTRA } from './library/food-extra.js';
+import { NUTRITION_PROGRAMS_EXTRA } from './library/programs-extra.js';
+import { SUPPLEMENT_LIBRARY_EXTRA } from './library/supplements-extra.js';
+import { MED_LIBRARY_SEED_EXTRA } from './library/med-extra.js';
+import { MODALITIES_EXTRA, MODALITY_PROTOCOLS_EXTRA } from './library/modalities-extra.js';
+import { MODALITY_VALUES_EN } from './library/modalities-en.js';
 
 /* ============================================================
    حارس الكتابة في قاعدة البيانات
@@ -58,6 +71,16 @@ function updateDoc(ref, data) {
  * كلهم من غير أي مسار تاني في الكود
  */
 const EXERCISE_LIBRARY = BASE_EXERCISES.concat(DRILLS_LIBRARY);
+const REHAB_TEMPLATES = BASE_REHAB_TEMPLATES.concat(REHAB_TEMPLATES_EXTRA);
+const FOOD_LIBRARY = BASE_FOOD_LIBRARY.concat(FOOD_LIBRARY_EXTRA);
+const FOOD_SERVINGS = Object.assign({}, BASE_FOOD_SERVINGS, FOOD_SERVINGS_EXTRA);
+const NUTRITION_PROGRAMS = BASE_NUTRITION_PROGRAMS.concat(NUTRITION_PROGRAMS_EXTRA);
+const MODALITIES = BASE_MODALITIES.concat(MODALITIES_EXTRA);
+const MODALITY_PROTOCOLS = BASE_MODALITY_PROTOCOLS.concat(MODALITY_PROTOCOLS_EXTRA);
+const SUPPLEMENT_LIBRARY = BASE_SUPPLEMENT_LIBRARY.concat(SUPPLEMENT_LIBRARY_EXTRA);
+const SPORT_TEMPLATES = BASE_SPORT_TEMPLATES.concat(SPORT_TEMPLATES_EXTRA);
+// الإضافات بتتحط في الآخر عشان أرقام seed_0..seed_30 القديمة ما تتغيّرش
+const MED_LIBRARY_SEED = BASE_MED_LIBRARY_SEED.concat(MED_LIBRARY_SEED_EXTRA);
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -418,6 +441,57 @@ const TEXT = {
     cp_full_edit: 'عدّل كل إجاباتك ›',
     cp_full_edit_hint: 'رياضاتك وأهدافك وجدولك وحالتك الصحية وكل اللي اتسألت عنه في الأول',
     // ---- تأكيد الإيميل ----
+    // ---- المكتبة الموسّعة ----
+    cat_functional: 'وظيفي',
+    cat_mobility: 'مرونة وحركة',
+    cat_warmup: 'إحماء وتنشيط',
+    cat_core: 'بطن وثبات',
+    cat_speed: 'سرعة ورشاقة',
+    cat_tactical: 'عسكري وتكتيكي',
+    cat_athletic: 'أداء رياضي',
+    cat_testing: 'اختبارات',
+    cat_rehab: 'تأهيل',
+    lib_all_levels: 'كل المستويات',
+    level_1: 'مبتدئ',
+    level_2: 'متوسط',
+    level_3: 'متقدم',
+    lib_media_only: 'بصورة بس',
+    lib_safe_only: 'مناسب للعميل',
+    lib_credits_link: 'حقوق الصور',
+    quick_add: 'إضافة سريعة',
+    exs_close: 'إغلاق',
+    exs_loading: 'بنحمّل التفاصيل...',
+    exs_animated: 'البداية والنهاية',
+    exs_add: 'أضف للبرنامج',
+    exs_prescribe: 'الوصفة',
+    exs_howto: 'طريقة الأداء',
+    exs_cues: 'نصايح الأداء',
+    exs_mistakes: 'أخطاء شائعة',
+    exs_alternatives: 'بدائل',
+    exs_primary: 'العضلات الأساسية',
+    exs_secondary: 'مساعدة',
+    exs_caution_client: 'انتبه — العميل عنده: {list}. راجع الاحتياطات قبل ما تضيفه.',
+    exs_caution_general: 'احتياطات مع: {list}',
+    exs_media_credit: 'مصدر الرسمة وترخيصها',
+    exs_add_to: 'هيتضاف في: {target}',
+    exs_cues_for_client: 'نصايح للعميل (سطر لكل نصيحة)',
+    ex_duration: 'المدة',
+    ex_distance: 'المسافة',
+    ex_zone: 'الشدة / المنطقة',
+    ex_intensity: 'الشدة',
+    type_weight_reps: 'وزن وعدات',
+    type_reps: 'عدات',
+    type_time: 'وقت',
+    type_distance: 'مسافة',
+    type_distance_time: 'مسافة ووقت',
+    credits_title: 'حقوق الصور والرسوم',
+    credits_intro: 'رسوم التمارين دي من مصادر مفتوحة ترخيصها بيسمح بالاستخدام التجاري. شرطها إننا نذكر أصحابها ونوضّح اللي غيّرناه — ودي الصفحة دي.',
+    credits_by: 'الرسم',
+    credits_license: 'الترخيص',
+    credits_source: 'المصدر',
+    credits_changes: 'اللي غيّرناه',
+    credits_count: '{n} رسمة',
+    credits_show_list: 'اعرض القايمة كاملة',
     verify_title: 'أكّد إيميلك',
     verify_text: 'بعتنا رسالة على {email}. افتحها ودوس على اللينك اللي جواها، وبعدين ارجع هنا.',
     verify_why: 'ده عشان نتأكد إن الإيميل بتاعك فعلًا — رسايل فريقك وإشعاراتك هتوصل عليه.',
@@ -478,7 +552,7 @@ const TEXT = {
     push_vapid_ph: 'مفتاح Web Push (من Firebase ← Cloud Messaging)',
     push_settings_hint: 'المفتاح ده عام ومش سر — بتجيبه من إعدادات مشروع Firebase. الإرسال نفسه بيعدّي على نفس رابط Apps Script اللي فوق.',
     ob_sched_label: 'جدول أسبوعك',
-    ob_sched_hint: 'حدّد الرياضة ومعادها لكل يوم بتتمرن فيه. سيب اليوم فاضي لو مش بتتمرن فيه — ده بيخلي مدربك يعرف يظبط برنامجك حوالين مواعيدك.',
+    ob_sched_hint: 'حدّد الرياضة ومعادها لكل يوم بتتمرن فيه، ولو بتتمرن أكتر من مرة في اليوم (جيم الصبح وسباحة بالليل مثلًا) دوس «+ حصة تانية». سيب اليوم فاضي لو مش بتتمرن فيه — ده بيخلي مدربك يعرف يظبط برنامجك حوالين مواعيدك.',
     modality_title: 'أجهزة العلاج الطبيعي',
     modality_hint: 'مرجع للإعدادات وموانع الاستعمال. اختار جهاز تشوف بروتوكولاته، وتقدر تضيف الجلسة لخطة العميل.',
     modality_contra: 'موانع الاستعمال — اقراها قبل أي جلسة',
@@ -492,6 +566,19 @@ const TEXT = {
     sched_rest: '— مفيش —',
     goals_extra: 'وكمان:',
     sched_none: 'مفيش جدول',
+    sched_gym: 'جيم',
+    sched_add: '+ حصة تانية في نفس اليوم',
+    sched_session_n: 'حصة {n}',
+    session_n: 'الحصة {n}',
+    session_add: '+ حصة',
+    session_add_first: '+ قسّم اليوم لأكتر من حصة',
+    session_split_btn: 'قسّم زي جدوله',
+    session_client_plan: 'جدول العميل اليوم ده: {s}',
+    session_sport_ph: 'نوع الحصة',
+    session_time: 'معاد الحصة',
+    session_title_ph: 'اسم الحصة (مثلًا: سباحة — تحمّل)',
+    session_remove: 'امسح الحصة دي',
+    session_remove_confirm: 'دوس تاني عشان تمسح الحصة بتمارينها',
     pick_session_btn: 'اتمرّن التمرين ده النهاردة',
     pick_session_confirm: 'متأكد؟ اللي عملته في تمرين {day} النهاردة هيتلغي',
     sess_badge_moved: 'تمرين {day} — بتعمله النهاردة',
@@ -1777,6 +1864,57 @@ const TEXT = {
     cp_full_edit: 'Edit all your answers ›',
     cp_full_edit_hint: 'Your sports, goals, weekly schedule, health and everything you were asked at the start',
     // ---- email verification ----
+    // ---- expanded library ----
+    cat_functional: 'Functional',
+    cat_mobility: 'Mobility',
+    cat_warmup: 'Warm-up & activation',
+    cat_core: 'Core',
+    cat_speed: 'Speed & agility',
+    cat_tactical: 'Tactical',
+    cat_athletic: 'Athletic performance',
+    cat_testing: 'Testing',
+    cat_rehab: 'Rehab',
+    lib_all_levels: 'All levels',
+    level_1: 'Beginner',
+    level_2: 'Intermediate',
+    level_3: 'Advanced',
+    lib_media_only: 'With image only',
+    lib_safe_only: 'Safe for this client',
+    lib_credits_link: 'Image credits',
+    quick_add: 'Quick add',
+    exs_close: 'Close',
+    exs_loading: 'Loading details...',
+    exs_animated: 'Start and end position',
+    exs_add: 'Add to program',
+    exs_prescribe: 'Prescription',
+    exs_howto: 'How to do it',
+    exs_cues: 'Coaching cues',
+    exs_mistakes: 'Common mistakes',
+    exs_alternatives: 'Alternatives',
+    exs_primary: 'Primary muscles',
+    exs_secondary: 'Secondary',
+    exs_caution_client: 'Careful — this client has: {list}. Check the precautions before adding it.',
+    exs_caution_general: 'Precautions with: {list}',
+    exs_media_credit: 'Image source and licence',
+    exs_add_to: 'Will be added to: {target}',
+    exs_cues_for_client: 'Cues for the client (one per line)',
+    ex_duration: 'Duration',
+    ex_distance: 'Distance',
+    ex_zone: 'Intensity / zone',
+    ex_intensity: 'Intensity',
+    type_weight_reps: 'Weight & reps',
+    type_reps: 'Reps',
+    type_time: 'Time',
+    type_distance: 'Distance',
+    type_distance_time: 'Distance & time',
+    credits_title: 'Image credits',
+    credits_intro: 'These exercise drawings come from open sources whose licence allows commercial use. The condition is that we credit the authors and state what we changed — this page does that.',
+    credits_by: 'Artwork',
+    credits_license: 'Licence',
+    credits_source: 'Source',
+    credits_changes: 'What we changed',
+    credits_count: '{n} drawings',
+    credits_show_list: 'Show the full list',
     verify_title: 'Confirm your email',
     verify_text: 'We sent a message to {email}. Open it, tap the link inside, then come back here.',
     verify_why: 'This makes sure the email is really yours — your team’s messages and your notifications go there.',
@@ -1837,7 +1975,7 @@ const TEXT = {
     push_vapid_ph: 'Web Push key (Firebase → Cloud Messaging)',
     push_settings_hint: 'This key is public, not a secret — you get it from your Firebase project settings. Sending goes through the same Apps Script link above.',
     ob_sched_label: 'Your week',
-    ob_sched_hint: 'Set the sport and its time for each day you train. Leave a day empty if you do not train in it — this lets your coach build around your real schedule.',
+    ob_sched_hint: 'Set the sport and its time for each day you train. Training more than once a day (gym in the morning, swimming at night)? Tap “+ Another session”. Leave a day empty if you do not train in it — this lets your coach build around your real schedule.',
     modality_title: 'Physiotherapy devices',
     modality_hint: 'A reference for settings and contraindications. Pick a device to see its protocols, and add a session to the client plan.',
     modality_contra: 'Contraindications — read before any session',
@@ -1851,6 +1989,19 @@ const TEXT = {
     sched_rest: '— none —',
     goals_extra: 'and also:',
     sched_none: 'No schedule',
+    sched_gym: 'Gym',
+    sched_add: '+ Another session this day',
+    sched_session_n: 'Session {n}',
+    session_n: 'Session {n}',
+    session_add: '+ Session',
+    session_add_first: '+ Split the day into sessions',
+    session_split_btn: 'Split like their schedule',
+    session_client_plan: "Client's schedule this day: {s}",
+    session_sport_ph: 'Session type',
+    session_time: 'Session time',
+    session_title_ph: 'Session name (e.g. Swimming — endurance)',
+    session_remove: 'Delete this session',
+    session_remove_confirm: 'Tap again to delete the session and its exercises',
     pick_session_btn: 'Do this workout today',
     pick_session_confirm: 'Sure? What you logged for {day} today will be cleared',
     sess_badge_moved: '{day} workout — doing it today',
@@ -3046,13 +3197,23 @@ function makeExercise(data) {
     /* تفاصيل كل مجموعة لوحدها — اختياري. مصفوفة، عنصر لكل مجموعة:
        { weight, reps, rest, tempo }. لو فاضية، بيتعرض التمرين بالشكل
        التقليدي (sets × reps) عشان أي برنامج قديم يفضل شغال زي ما هو. */
-    setDetails: Array.isArray(data.setDetails) ? data.setDetails : []
+    setDetails: Array.isArray(data.setDetails) ? data.setDetails : [],
+    /* جديد — كلها اختيارية وفاضية في أي برنامج قديم:
+       نوع الوصفة (وزن وعدات / وقت / مسافة…)، المدة، المسافة،
+       RIR، منطقة الشدة للكارديو، ونصايح الأداء للعميل (سطر لكل نصيحة) */
+    exType: data.exType || '',
+    duration: data.duration || '',
+    distance: data.distance || '',
+    rir: data.rir || '',
+    zone: data.zone || '',
+    cues: data.cues || '',
+    i18n: (data.i18n && typeof data.i18n === 'object') ? data.i18n : null
   };
 }
 
 /* بترجع true لو أي حقل من حقول التفاصيل التشريحية متملي */
 function exerciseHasAnatomyDetail(exercise) {
-  return !!(exercise && (exercise.goal || exercise.primaryMuscles || exercise.secondaryMuscles || exercise.origin || exercise.insertion || exercise.injuryBenefit || exercise.howTo));
+  return !!(exercise && (exercise.goal || exercise.primaryMuscles || exercise.secondaryMuscles || exercise.origin || exercise.insertion || exercise.injuryBenefit || exercise.howTo || exercise.cues));
 }
 
 /* رقم من نص — بيرجع صفر لو مش قابل للتحويل، عشان حسابات الحمل الإجمالي متتعطلش */
@@ -3077,6 +3238,10 @@ function exerciseVolume(exercise) {
 
 /* نص وصف المجموعات — تفصيلي لو متوفر، وإلا الشكل التقليدي sets × reps */
 function setsSummaryText(exercise) {
+  return localiseReps(setsSummaryRaw(exercise));
+}
+
+function setsSummaryRaw(exercise) {
   if (exercise.setDetails && exercise.setDetails.length) {
     return exercise.setDetails.map(function (set, index) {
       const parts = [(set.reps || '?') + '×' + (set.weight || '?' ) + (lang === 'ar' ? 'كجم' : 'kg')];
@@ -3084,6 +3249,14 @@ function setsSummaryText(exercise) {
       return (index + 1) + ') ' + parts.join(' — ');
     }).join('   ');
   }
+  // الوقت والمسافة بيتكتبوا بشكلهم بدل "× عدات"
+  const type = exercise.exType || '';
+  if (type === 'distance_time') {
+    const parts = [exercise.distance, exercise.duration].filter(Boolean).join(' / ');
+    if (parts) return (Number(exercise.sets) > 1 ? exercise.sets + ' × ' : '') + parts;
+  }
+  if (type === 'time' && exercise.duration) return exercise.sets + ' × ' + exercise.duration;
+  if (type === 'distance' && exercise.distance) return exercise.sets + ' × ' + exercise.distance;
   return exercise.sets + ' × ' + exercise.reps;
 }
 
@@ -3194,6 +3367,8 @@ function matchLibraryExercise(englishName) {
 }
 
 function sportName(id) {
+  // "جيم" مش رياضة في القايمة — دي حصة برنامج المدرب نفسه في جدول العميل
+  if (id === 'gym') return t('sched_gym');
   const sport = SPORTS.filter(function (s) { return s.id === id; })[0];
   return sport ? sport[lang] : '';
 }
@@ -4026,7 +4201,60 @@ function normalizeDay(day) {
     clean.sections.main = day.exercises;
   }
 
+  /*
+   * أكتر من حصة في اليوم (جيم الصبح + سباحة بالليل):
+   * الحصة الأولى هي اليوم نفسه (title/sections) عشان البرامج القديمة
+   * تفضل شغالة زي ما هي، والحصص الزيادة في extraSessions
+   */
+  if (day && day.time) clean.time = String(day.time);
+  if (day && day.sport) clean.sport = String(day.sport);
+  if (day && Array.isArray(day.extraSessions) && day.extraSessions.length) {
+    clean.extraSessions = day.extraSessions.slice(0, MAX_DAY_SESSIONS - 1).map(normalizeSession);
+  }
+
   return clean;
+}
+
+const MAX_DAY_SESSIONS = 3;
+
+function normalizeSession(session) {
+  const clean = {
+    title: (session && session.title) || '',
+    time: (session && session.time) || '',
+    sport: (session && session.sport) || '',
+    sections: blankSections()
+  };
+  if (session && session.sections) {
+    SECTION_KEYS.forEach(function (key) {
+      if (Array.isArray(session.sections[key])) clean.sections[key] = session.sections[key];
+    });
+  }
+  return clean;
+}
+
+/*
+ * كل حصص اليوم كقايمة، كل واحدة شكلها زي يوم عادي { title, sections, time, sport }.
+ * الحصة الأولى نسخة خفيفة من اليوم (نفس مصفوفات التمارين) من غير extraSessions،
+ * عشان dayCount وأخواتها لما تتنادى على حصة واحدة تعدّ الحصة دي بس
+ */
+function daySessions(day) {
+  if (!day) return [];
+  const first = { title: day.title || '', rest: !!day.rest, sections: day.sections || {}, time: day.time || '', sport: day.sport || '' };
+  return [first].concat(Array.isArray(day.extraSessions) ? day.extraSessions : []);
+}
+
+function hasManySessions(day) {
+  return !!(day && Array.isArray(day.extraSessions) && day.extraSessions.length);
+}
+
+/* مفتاح تمرين في الحصة: الحصة الأولى زي زمان "main:0"، والباقي "s2|main:0" */
+function sessionKeyPrefix(index) {
+  return index > 0 ? ('s' + (index + 1) + '|') : '';
+}
+
+/* اسم الحصة اللي بيظهر: العنوان، ولو فاضي نوعها، ولو فاضي "الحصة ٢" */
+function sessionLabel(session, index) {
+  return (session && (tr(session.title) || (session.sport ? sportName(session.sport) : ''))) || fill('session_n', { n: index + 1 });
 }
 
 function emptyWeek() {
@@ -4048,8 +4276,9 @@ function normalizeWeek(week) {
 function dayCount(day) {
   let total = 0;
   SECTION_KEYS.forEach(function (key) {
-    total += day.sections[key].length;
+    total += (day.sections[key] || []).length;
   });
+  (day.extraSessions || []).forEach(function (session) { total += dayCount(session); });
   return total;
 }
 
@@ -5053,6 +5282,7 @@ function openPreview(exercise) {
     lightboxAnatomy.classList.remove('hidden');
     const rows = [
       ['anatomy_howto', exercise.howTo],
+      ['exs_cues', exercise.cues],
       ['anatomy_goal', exercise.goal],
       ['anatomy_primary', exercise.primaryMuscles],
       ['anatomy_secondary', exercise.secondaryMuscles],
@@ -5061,7 +5291,8 @@ function openPreview(exercise) {
       ['anatomy_injury_benefit', exercise.injuryBenefit]
     ];
     rows.forEach(function (row) {
-      const key = row[0], value = row[1];
+      const key = row[0];
+      const value = exerciseText(exercise, row[0], row[1]);
       if (!value) return;
       const line = document.createElement('p');
       line.className = 'lightbox-anatomy-row';
@@ -5121,7 +5352,9 @@ function exerciseDisplayName(exercise) {
       if (name) return name;
     }
   }
-  return (exercise && exercise.name) || '';
+  // تمرين محفوظ بلغة واحدة: نسخة اللغة التانية لو اتخزنت معاه، أو من القوالب
+  if (exercise && exercise.i18n && exercise.i18n[lang] && exercise.i18n[lang].name) return exercise.i18n[lang].name;
+  return tr((exercise && exercise.name) || '');
 }
 
 function exerciseRow(exercise) {
@@ -5177,9 +5410,11 @@ const EX_TAG_ICON_TEMPO = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" 
 function exerciseTags(exercise) {
   const items = [];
 
-  if (exercise.rest)  items.push({ icon: EX_TAG_ICON_REST,  text: exercise.rest, primary: false });
-  if (exercise.load)  items.push({ icon: EX_TAG_ICON_LOAD,  text: exercise.load, primary: false });
+  if (exercise.rest)  items.push({ icon: EX_TAG_ICON_REST,  text: localiseReps(exercise.rest), primary: false });
+  if (exercise.load)  items.push({ icon: EX_TAG_ICON_LOAD,  text: localiseReps(exercise.load), primary: false });
   if (exercise.rpe)   items.push({ icon: null,              text: 'RPE ' + exercise.rpe, primary: false });
+  if (exercise.rir)   items.push({ icon: null,              text: 'RIR ' + exercise.rir, primary: false });
+  if (exercise.zone)  items.push({ icon: null,              text: exercise.zone, primary: false });
   if (exercise.tempo) items.push({ icon: EX_TAG_ICON_TEMPO, text: exercise.tempo, primary: false });
 
   if (!items.length) return null;
@@ -5245,6 +5480,25 @@ function buildEditor(exercise, onChange) {
   row2.appendChild(field(t('ex_rpe'), 'rpe'));
   row2.appendChild(field(t('ex_tempo'), 'tempo'));
   box.appendChild(row2);
+
+  // خانات الوقت والمسافة وRIR — بتظهر للتمارين اللي نوعها محتاجها بس
+  const exType = exercise.exType || '';
+  if (exType === 'time' || exType === 'distance' || exType === 'distance_time' || exercise.duration || exercise.distance || exercise.rir) {
+    const row3 = document.createElement('div');
+    row3.className = 'row';
+    if (exType !== 'distance') row3.appendChild(field(t('ex_duration'), 'duration'));
+    if (exType === 'distance' || exType === 'distance_time' || exercise.distance) row3.appendChild(field(t('ex_distance'), 'distance'));
+    if (exType === 'distance_time' || exercise.zone) row3.appendChild(field(t('ex_zone'), 'zone'));
+    box.appendChild(row3);
+  } else if (exType === 'weight_reps') {
+    const row3 = document.createElement('div');
+    row3.className = 'row';
+    row3.appendChild(field('RIR', 'rir'));
+    box.appendChild(row3);
+  }
+  const cuesInput = field(t('exs_cues_for_client'), 'cues');
+  cuesInput.className = 'ex-cues-input';
+  box.appendChild(cuesInput);
 
   const toggleBtn = document.createElement('button');
   toggleBtn.type = 'button';
@@ -5527,6 +5781,8 @@ function coachExerciseItem(exercise, onDelete, onChange) {
 let coachWeek = emptyWeek();
 let coachRehab = emptyRehab();
 let coachDay = todayIndex;
+/* الحصة المفتوحة في اليوم: 0 = الأولى (اليوم نفسه)، 1 و 2 = extraSessions */
+let coachSession = 0;
 let currentClient = '';
 let currentClientName = '';
 let currentClientSport = '';
@@ -5852,6 +6108,7 @@ async function openCoachScreen(email, name, sport) {
     renderCoachBasics();
 
     coachDay = todayIndex;
+    coachSession = 0;
     nutDay = todayIndex;
     fillSectionPicker();
     fillBodyParts();
@@ -5887,7 +6144,7 @@ function renderDial(ringId, dayNameId, subId, week, selected, onPick, describe) 
   const info = describe || function (day, index) {
     return {
       hasPlan: dayHasPlan(day),
-      title: day.title || days()[index],
+      title: tr(day.title) || days()[index],
       sub: day.rest ? t('rest_msg')
          : (dayCount(day) ? fill('count_ex', { n: dayCount(day) }) : t('no_plan')),
       isRest: !!day.rest
@@ -5936,14 +6193,207 @@ function showCoachDays() {
   renderDial('coach-ring', 'coach-dc-day', 'coach-dc-sub', coachWeek, coachDay, function (index) {
     saveCurrentDay();
     coachDay = index;
+    coachSession = 0;
     showCoachDay();
   });
 }
 
+/* الحاجة اللي المدرب بيعدّل فيها دلوقتي: اليوم نفسه (الحصة الأولى) أو حصة زيادة */
+function coachTarget() {
+  const day = coachWeek[coachDay];
+  if (!day) return { title: '', sections: blankSections() };
+  if (coachSession > 0 && day.extraSessions && day.extraSessions[coachSession - 1]) {
+    return day.extraSessions[coachSession - 1];
+  }
+  coachSession = 0;
+  return day;
+}
+
 function saveCurrentDay() {
   if (!coachWeek[coachDay]) return;
-  coachWeek[coachDay].title = dayTitle.value.trim();
-  coachWeek[coachDay].rest = restCheckbox.checked;
+  coachTarget().title = dayTitle.value.trim();
+  if (coachSession === 0) coachWeek[coachDay].rest = restCheckbox.checked;
+}
+
+/*
+ * اسم اليوم/الحصة بيتسجّل وهو بيتكتب — قبل كده لو المدرب كتب الاسم
+ * وبعدين ضاف تمرين، الشاشة كانت بتترسم تاني والاسم يضيع
+ */
+dayTitle.addEventListener('input', function () {
+  if (coachWeek[coachDay]) coachTarget().title = dayTitle.value.trim();
+});
+restCheckbox.addEventListener('change', function () {
+  if (coachWeek[coachDay] && coachSession === 0) {
+    coachWeek[coachDay].rest = restCheckbox.checked;
+    renderCoachSessions();
+  }
+});
+
+/* حصص العميل في اليوم ده من جدوله الأسبوعي: [{ sport, time }] مترتبة بالمعاد */
+function clientScheduleForDay(data, dayIndex) {
+  const rows = (data && Array.isArray(data.sportSchedule)) ? data.sportSchedule : [];
+  return rows.filter(function (r) { return r.day === dayIndex && r.sport; })
+    .sort(function (a, b) { return String(a.time || '99').localeCompare(String(b.time || '99')); });
+}
+
+function scheduleSessionText(row) {
+  return sportName(row.sport) + (row.time ? ' ' + prettyTime(row.time) : '');
+}
+
+/*
+ * شريط الحصص فوق عنوان اليوم: الحصة ١ · الحصة ٢ · + حصة
+ * ولو العميل كاتب في جدوله إنه بيتمرن أكتر من مرة اليوم ده، بنوريله
+ * ده وزرار يقسّم اليوم زيه في دوسة واحدة
+ */
+function renderCoachSessions() {
+  const box = document.getElementById('coach-session-box');
+  if (!box) return;
+  box.innerHTML = '';
+  const day = coachWeek[coachDay];
+  if (!day) return;
+  const sessions = daySessions(day);
+  const multi = sessions.length > 1;
+  const planned = clientScheduleForDay(coachBasicsData, coachDay);
+
+  if (planned.length) {
+    const hint = document.createElement('p');
+    hint.className = 'session-plan-hint';
+    hint.textContent = fill('session_client_plan', { s: planned.map(scheduleSessionText).join('  +  ') });
+    box.appendChild(hint);
+  }
+
+  const bar = document.createElement('div');
+  bar.className = 'session-bar';
+  if (multi) {
+    sessions.forEach(function (session, index) {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'session-chip' + (index === coachSession ? ' on' : '');
+      chip.dataset.session = String(index);
+      const num = document.createElement('span');
+      num.className = 'session-num';
+      num.textContent = index + 1;
+      chip.appendChild(num);
+      const label = document.createElement('span');
+      label.textContent = sessionLabel(session, index) + (session.time ? ' · ' + prettyTime(session.time) : '');
+      chip.appendChild(label);
+      const n = dayCount({ sections: session.sections });
+      if (n) {
+        const count = document.createElement('small');
+        count.textContent = n;
+        chip.appendChild(count);
+      }
+      chip.addEventListener('click', function () {
+        saveCurrentDay();
+        coachSession = index;
+        showCoachDay();
+      });
+      bar.appendChild(chip);
+    });
+  }
+  if (sessions.length < MAX_DAY_SESSIONS && !day.rest) {
+    const add = document.createElement('button');
+    add.type = 'button';
+    add.className = 'session-chip add';
+    add.id = 'coach-session-add';
+    add.textContent = multi ? t('session_add') : t('session_add_first');
+    add.addEventListener('click', function () {
+      saveCurrentDay();
+      if (!day.extraSessions) day.extraSessions = [];
+      const index = day.extraSessions.length + 1;
+      const fromPlan = planned[index] || null;
+      day.extraSessions.push(normalizeSession(fromPlan ? { sport: fromPlan.sport, time: fromPlan.time } : null));
+      // أول مرة يقسّم: الحصة الأولى تاخد معاد ونوع أول حصة في جدول العميل
+      if (index === 1 && planned[0] && !day.sport && !day.time) {
+        day.sport = planned[0].sport;
+        day.time = planned[0].time || '';
+      }
+      coachSession = index;
+      showCoachDay();
+    });
+    bar.appendChild(add);
+  }
+  if (planned.length > 1 && sessions.length < Math.min(planned.length, MAX_DAY_SESSIONS) && !day.rest) {
+    const split = document.createElement('button');
+    split.type = 'button';
+    split.className = 'session-chip add plan';
+    split.id = 'coach-session-split';
+    split.textContent = t('session_split_btn');
+    split.addEventListener('click', function () {
+      saveCurrentDay();
+      if (!day.extraSessions) day.extraSessions = [];
+      if (!day.sport && !day.time) { day.sport = planned[0].sport; day.time = planned[0].time || ''; }
+      for (let i = sessions.length; i < Math.min(planned.length, MAX_DAY_SESSIONS); i++) {
+        day.extraSessions.push(normalizeSession({ sport: planned[i].sport, time: planned[i].time }));
+      }
+      showCoachDay();
+    });
+    bar.appendChild(split);
+  }
+  if (bar.childNodes.length) box.appendChild(bar);
+
+  if (!multi) return;
+
+  /* بيانات الحصة المفتوحة: نوعها ومعادها، وزرار مسح للحصص الزيادة */
+  const target = coachTarget();
+  const meta = document.createElement('div');
+  meta.className = 'session-meta';
+
+  const sport = document.createElement('select');
+  sport.id = 'coach-session-sport';
+  const none = document.createElement('option');
+  none.value = '';
+  none.textContent = t('session_sport_ph');
+  sport.appendChild(none);
+  const keys = ['gym'].concat((coachBasicsData && Array.isArray(coachBasicsData.sports)) ? coachBasicsData.sports : []);
+  if (target.sport && keys.indexOf(target.sport) === -1) keys.push(target.sport);
+  keys.forEach(function (key) {
+    if (!key) return;
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = sportName(key) || key;
+    sport.appendChild(opt);
+  });
+  sport.value = target.sport || '';
+  sport.addEventListener('change', function () {
+    target.sport = sport.value;
+    renderCoachSessions();
+  });
+  meta.appendChild(sport);
+
+  const time = document.createElement('input');
+  time.type = 'time';
+  time.id = 'coach-session-time';
+  time.value = target.time || '';
+  time.setAttribute('aria-label', t('session_time'));
+  time.addEventListener('change', function () {
+    target.time = time.value;
+    renderCoachSessions();
+  });
+  meta.appendChild(time);
+
+  box.appendChild(meta);
+
+  if (coachSession > 0) {
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'link danger session-del';
+    del.id = 'coach-session-del';
+    del.textContent = t('session_remove');
+    del.addEventListener('click', function () {
+      const count = dayCount({ sections: target.sections });
+      if (count && !del.classList.contains('confirming')) {
+        del.classList.add('confirming');
+        del.textContent = t('session_remove_confirm');
+        return;
+      }
+      day.extraSessions.splice(coachSession - 1, 1);
+      if (!day.extraSessions.length) delete day.extraSessions;
+      coachSession = Math.max(0, coachSession - 1);
+      showCoachDay();
+    });
+    box.appendChild(del);
+  }
 }
 
 function fillSectionPicker() {
@@ -5964,9 +6414,15 @@ function showCoachDay() {
     coachTitle.textContent = fill('program_of', { name: currentClientName });
   }
 
-  const day = coachWeek[coachDay];
+  const wholeDay = coachWeek[coachDay];
+  const day = coachTarget();
   dayTitle.value = day.title;
-  restCheckbox.checked = day.rest;
+  restCheckbox.checked = wholeDay.rest;
+  /* يوم الراحة بيخص اليوم كله، مش حصة لوحدها */
+  const restLabel = restCheckbox.closest('label');
+  if (restLabel) restLabel.classList.toggle('hidden', coachSession > 0);
+  dayTitle.placeholder = hasManySessions(wholeDay) ? t('session_title_ph') : t('day_title');
+  renderCoachSessions();
 
   coachSections.innerHTML = '';
 
@@ -6269,7 +6725,7 @@ function fillPhasePickers() {
   rehabCurrent.innerHTML = '';
 
   coachRehab.phases.forEach(function (phase, index) {
-    const label = t('phase') + ' ' + (index + 1) + (phase.name ? ' — ' + phase.name : '');
+    const label = t('phase') + ' ' + (index + 1) + (phase.name ? ' — ' + tr(phase.name) : '');
 
     const option = document.createElement('option');
     option.value = String(index);
@@ -6411,7 +6867,7 @@ function renderModalityDetail() {
       const l = document.createElement('span');
       l.textContent = row[lang] || row.ar;
       const v = document.createElement('strong');
-      v.textContent = row.value;
+      v.textContent = modalityValueText(row.value);
       cell.appendChild(l);
       cell.appendChild(v);
       grid.appendChild(cell);
@@ -6420,7 +6876,7 @@ function renderModalityDetail() {
 
     const meta = document.createElement('div');
     meta.className = 'mp-meta';
-    meta.textContent = proto.sessions + '  ·  ' + proto.frequency;
+    meta.textContent = modalityValueText(proto.sessions) + '  ·  ' + modalityValueText(proto.frequency);
     card.appendChild(meta);
 
     const add = document.createElement('button');
@@ -6490,8 +6946,8 @@ function renderModalityPlan() {
 function showRehab() {
   renderModalityBox();
   rehabBodyPart.value = coachRehab.bodyPart || '';
-  rehabInjury.value = coachRehab.injury;
-  rehabAbout.value = coachRehab.about;
+  rehabInjury.value = tr(coachRehab.injury);
+  rehabAbout.value = tr(coachRehab.about);
 
   rehabPhases.innerHTML = '';
 
@@ -6547,7 +7003,7 @@ function showRehab() {
     block.appendChild(head);
 
     const nameInput = document.createElement('input');
-    nameInput.value = phase.name;
+    nameInput.value = tr(phase.name);
     nameInput.placeholder = t('phase_name');
     nameInput.addEventListener('input', function () {
       phase.name = nameInput.value;
@@ -6555,7 +7011,7 @@ function showRehab() {
     block.appendChild(nameInput);
 
     const goalInput = document.createElement('input');
-    goalInput.value = phase.goal;
+    goalInput.value = tr(phase.goal);
     goalInput.placeholder = t('phase_goal');
     goalInput.addEventListener('input', function () {
       phase.goal = goalInput.value;
@@ -6563,7 +7019,7 @@ function showRehab() {
     block.appendChild(goalInput);
 
     const criteriaInput = document.createElement('input');
-    criteriaInput.value = phase.criteria;
+    criteriaInput.value = tr(phase.criteria);
     criteriaInput.placeholder = t('phase_criteria');
     criteriaInput.addEventListener('input', function () {
       phase.criteria = criteriaInput.value;
@@ -6664,7 +7120,7 @@ function addToTarget(exercise) {
     coachMessage.textContent = fill('added_ex', { name: exercise.name });
   } else {
     const key = targetSection.value || 'main';
-    coachWeek[coachDay].sections[key].push(exercise);
+    coachTarget().sections[key].push(exercise);
     showCoachDay();
     coachMessage.textContent = fill('added_ex', { name: exercise.name });
   }
@@ -6789,7 +7245,7 @@ function currentDayAsTemplateSections() {
   const out = {};
   let count = 0;
   SECTION_KEYS.forEach(function (key) {
-    const list = (coachWeek[coachDay] && coachWeek[coachDay].sections[key]) || [];
+    const list = (coachWeek[coachDay] && coachTarget().sections[key]) || [];
     out[key] = list.map(function (ex) {
       const entry = ex.libId ? libraryEntryById(ex.libId) : null;
       count++;
@@ -6818,7 +7274,7 @@ if (saveDayTemplateBtn) {
       return;
     }
     myTemplateForm.classList.remove('hidden');
-    myTemplateName.value = (coachWeek[coachDay] && coachWeek[coachDay].title) || '';
+    myTemplateName.value = (coachWeek[coachDay] && coachTarget().title) || '';
     myTemplateName.focus();
   });
 }
@@ -6928,10 +7384,19 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
   // نضمن إن المكتبة الكبيرة (بصورها) متحمّلة قبل المطابقة، حتى لو المدرب
   // ما فتحش شاشة المكتبة في الجلسة دي
   await ensureRemoteLibrary();
+  // قوالب كتير بقت بتشاور على تمارين الفهرس الموسّع بالمعرّف
+  await ensureExtraLibrary();
+  await ensureExerciseDetails();
 
   SECTION_KEYS.forEach(function (key) {
     const list = tpl.sections[key] || [];
     list.forEach(function (source) {
+      const fromIndex = source.libId ? libraryEntryById(source.libId) : null;
+      if (fromIndex && (fromIndex.src || fromIndex._rehab)) {
+        prepLibEntry(fromIndex);
+        coachTarget().sections[key].push(buildLibExercise(fromIndex, templateValues(source, fromIndex._type)));
+        return;
+      }
       /*
        * قالب جاهز فيه الاسم الإنجليزي بس، أما قالب المدرب نفسه فبيحفظ
        * libId — فبنجيب التمرين بالمعرف الأول وده أدق، ولو مش موجود
@@ -6940,7 +7405,7 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
       const match = (source.libId ? libraryEntryById(source.libId) : null)
         || matchLibraryExercise(source.en || source.name);
       const libPhoto = match ? libraryImageFor('exercise_' + match.id) : '';
-      coachWeek[coachDay].sections[key].push(makeExercise({
+      coachTarget().sections[key].push(makeExercise({
         libId: match ? match.id : '',
         name: match ? exerciseLibName(match) : (source.name || source.en),
         sets: source.sets,
@@ -6958,8 +7423,8 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
     });
   });
 
-  if (!coachWeek[coachDay].title) {
-    coachWeek[coachDay].title = templateTitle(tpl);
+  if (!coachTarget().title) {
+    coachTarget().title = templateTitle(tpl);
   }
 
   showCoachDay();
@@ -7111,12 +7576,12 @@ function mergeRemoteLibrary(remote) {
 
   // فهرس بالاسم الإنجليزي المبسّط عشان المطابقة تبقى سريعة
   const localByName = {};
-  EXERCISE_LIBRARY.forEach(function (exercise) {
+  baseLibrary().forEach(function (exercise) {
     const enName = (exercise.name && exercise.name.en) ? normaliseName(exercise.name.en) : '';
     if (enName) localByName[enName] = exercise;
   });
 
-  const merged = EXERCISE_LIBRARY.slice();
+  const merged = [];
 
   remote.forEach(function (item) {
     if (!item || !item.name || !item.primaryMuscles) return;
@@ -7141,7 +7606,8 @@ function mergeRemoteLibrary(remote) {
     });
   });
 
-  libraryData = merged;
+  remoteLeftovers = merged;
+  rebuildLibraryData();
 
   /*
    * مرحلة تانية: التمارين العربية اللي اسمها الإنجليزي مش مطابق حرفيًا
@@ -7292,41 +7758,53 @@ function loadLibrary() {
   ensureLibraryImagesLoaded().then(function () {
     if (!libraryScreen.classList.contains('hidden')) renderLibrary();
   });
+  // الفهرس الموسّع (+٧٠٠ تمرين بالعربي ورسومهم) — أول ما يوصل نعيد الرسم
+  ensureExtraLibrary().then(function () {
+    if (!libraryScreen.classList.contains('hidden')) {
+      rebuildLibraryFilters();
+      renderLibrary();
+    }
+  });
   // وبعدين نضم المكتبة الكبيرة بصورها فوقها
   ensureRemoteLibrary();
 }
 
 function rebuildLibraryFilters() {
   if (!libraryData) return;
+  libraryData.forEach(prepLibEntry);
 
   const keepMuscle = libMuscle.value;
   const keepEquip = libEquip.value;
+  const levelSel = document.getElementById('lib-level');
+  const keepLevel = levelSel ? levelSel.value : '';
 
   const keepCategory = activeCategory;
   const muscles = [];
   const equipment = [];
-  const categories = [];
+  const present = {};
 
   libraryData.forEach(function (exercise) {
-    exercise.primaryMuscles.forEach(function (muscle) {
+    (exercise.primaryMuscles || []).forEach(function (muscle) {
       if (muscles.indexOf(muscle) === -1) muscles.push(muscle);
     });
     if (exercise.equipment && equipment.indexOf(exercise.equipment) === -1) {
       equipment.push(exercise.equipment);
     }
-    if (exercise.category && categories.indexOf(exercise.category) === -1) {
-      categories.push(exercise.category);
-    }
+    if (exercise._g) present[exercise._g] = true;
   });
+  // ترتيب ثابت للأقسام بدل الترتيب الأبجدي — القوة الأول والتأهيل في الآخر
+  const categories = LIB_GROUP_ORDER.filter(function (g) { return present[g]; });
 
   libMuscle.innerHTML = '';
   libEquip.innerHTML = '';
 
   if (suggestedCategory && categories.indexOf(suggestedCategory) !== -1) {
     activeCategory = suggestedCategory;
+    libActiveSub = '';
     suggestedCategory = '';
   } else if (categories.indexOf(keepCategory) === -1) {
-    activeCategory = keepCategory === '' ? '' : '';
+    activeCategory = '';
+    libActiveSub = '';
   }
 
   renderCategoryChips(categories);
@@ -7354,6 +7832,25 @@ function rebuildLibraryFilters() {
     option.textContent = equipName(item);
     libEquip.appendChild(option);
   });
+
+  if (levelSel) {
+    levelSel.innerHTML = '';
+    [['', t('lib_all_levels')], ['1', t('level_1')], ['2', t('level_2')], ['3', t('level_3')]].forEach(function (o) {
+      const op = document.createElement('option');
+      op.value = o[0];
+      op.textContent = o[1];
+      levelSel.appendChild(op);
+    });
+    levelSel.value = keepLevel;
+  }
+
+  // "مناسب للعميل" بيظهر بس لو العميل عنده حالة صحية مسجّلة
+  const safeBtn = document.getElementById('lib-safe-only');
+  if (safeBtn) {
+    const has = clientCautionKeys().length > 0;
+    safeBtn.classList.toggle('hidden', !has);
+    if (!has) { libSafeOnly = false; safeBtn.classList.remove('active'); }
+  }
 
   // لو المدرب اختار عضلة مستهدفة قبل ما يفتح المكتبة، بنفلتر عليها
   if (suggestedMuscle && muscles.indexOf(suggestedMuscle) !== -1) {
@@ -7386,7 +7883,7 @@ function categoryIconSvg(key) {
 function renderCategoryChips(categories) {
   libChips.innerHTML = '';
 
-  const all = [''].concat(categories.slice().sort());
+  const all = [''].concat(categories);
 
   all.forEach(function (key) {
     const chip = document.createElement('button');
@@ -7404,11 +7901,40 @@ function renderCategoryChips(categories) {
 
     chip.addEventListener('click', function () {
       activeCategory = key;
+      libActiveSub = '';
       resetLibPage();
       renderCategoryChips(categories);
       renderLibrary();
     });
     libChips.appendChild(chip);
+  });
+  renderSubChips();
+}
+
+/* الأقسام الفرعية بتظهر تحت أول ما تختار قسم (صدر، ضهر… أو ركبة، كاحل…) */
+function renderSubChips() {
+  const box = document.getElementById('lib-subchips');
+  if (!box) return;
+  box.innerHTML = '';
+  if (!activeCategory || !libraryData) { box.classList.add('hidden'); return; }
+  const present = {};
+  libraryData.forEach(function (ex) { if (ex._g === activeCategory && ex._s) present[ex._s] = true; });
+  const subs = Object.keys(SUBCATS[activeCategory] || {}).filter(function (k) { return present[k]; });
+  if (!subs.length) { box.classList.add('hidden'); return; }
+  box.classList.remove('hidden');
+  [''].concat(subs).forEach(function (key) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip small' + (key === libActiveSub ? ' active' : '');
+    chip.setAttribute('data-sub', key);
+    chip.textContent = key ? subName(activeCategory, key) : t('all_categories');
+    chip.addEventListener('click', function () {
+      libActiveSub = key;
+      resetLibPage();
+      renderSubChips();
+      renderLibrary();
+    });
+    box.appendChild(chip);
   });
 }
 
@@ -7425,18 +7951,42 @@ function resetLibPage() { libShown = LIB_PAGE; }
 function renderLibrary() {
   if (!libraryData) return;
 
-  const term = libSearch.value.trim().toLowerCase();
+  const term = libSearch.value.trim();
   const muscle = libMuscle.value;
   const equip = libEquip.value;
   const category = activeCategory;
+  const levelSel = document.getElementById('lib-level');
+  const level = levelSel ? levelSel.value : '';
+  const tokens = term ? libQueryTokens(term) : [];
+  const avoid = libSafeOnly ? clientCautionKeys() : [];
 
-  const matches = libraryData.filter(function (exercise) {
-    if (category && exercise.category !== category) return false;
-    if (muscle && exercise.primaryMuscles.indexOf(muscle) === -1) return false;
-    if (equip && exercise.equipment !== equip) return false;
-    if (term && exerciseLibName(exercise).toLowerCase().indexOf(term) === -1) return false;
-    return true;
+  const scored = [];
+  libraryData.forEach(function (exercise, index) {
+    prepLibEntry(exercise);
+    if (category && exercise._g !== category) return;
+    if (libActiveSub && exercise._s !== libActiveSub) return;
+    if (muscle && (exercise.primaryMuscles || []).indexOf(muscle) === -1) return;
+    if (equip && exercise.equipment !== equip) return;
+    if (level && String(exercise.level || '') !== level) return;
+    if (libMediaOnly && !exercise._media && !(exercise.images && exercise.images.length) && !libraryImageFor('exercise_' + exercise.id)) return;
+    if (avoid.length && (exercise.cautions || []).some(function (k) { return avoid.indexOf(k) !== -1; })) return;
+    let score = 0;
+    if (tokens.length) {
+      // كل كلمة لازم تلاقي نفسها (أو مرادف ليها) في الاسم أو العضلة أو الأداة
+      for (let i = 0; i < tokens.length; i++) {
+        const inName = tokens[i].some(function (w) { return exercise._nameN.indexOf(w) !== -1; });
+        const inAny = inName || tokens[i].some(function (w) { return exercise._search.indexOf(w) !== -1; });
+        if (!inAny) return;
+        score += inName ? 10 : 1;
+      }
+      const q = normAr(term);
+      if (exercise._nameN.indexOf(q) === 0) score += 30;
+      else if (exercise._nameN.indexOf(q) !== -1) score += 15;
+    }
+    scored.push({ ex: exercise, score: score, index: index });
   });
+  if (tokens.length) scored.sort(function (a, b) { return (b.score - a.score) || (a.index - b.index); });
+  const matches = scored.map(function (row) { return row.ex; });
 
   libGrid.innerHTML = '';
   const shown = matches.slice(0, libShown);
@@ -7444,58 +7994,40 @@ function renderLibrary() {
   shown.forEach(function (exercise) {
     const card = document.createElement('div');
     card.className = 'ex-card';
+    card.setAttribute('data-id', exercise.id);
 
     const libImageKey = 'exercise_' + exercise.id;
     const libPhoto = libraryImageFor(libImageKey);
     const shot = document.createElement('div');
     shot.className = 'ex-shot';
+    const src = libPhoto || exercise._media || ((exercise.images && exercise.images.length) ? IMAGE_BASE + exercise.images[0] : '');
 
-    if (libPhoto) {
+    if (src) {
       const image = document.createElement('img');
-      image.src = libPhoto;
+      image.src = src;
       image.alt = '';
       image.loading = 'lazy';
       shot.appendChild(image);
-
-      const zoom = document.createElement('button');
-      zoom.type = 'button';
-      zoom.className = 'zoom-badge';
-      zoom.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="20" y2="20"></line></svg>';
-      zoom.addEventListener('click', function (event) {
-        event.stopPropagation();
-        lightboxTitle.textContent = exerciseLibName(exercise);
-        lightboxImages.innerHTML = '';
-        addShot(libPhoto, '');
-        lightbox.classList.remove('hidden');
-      });
-      shot.appendChild(zoom);
-
-      const editBadge = document.createElement('button');
-      editBadge.type = 'button';
-      editBadge.className = 'photo-edit-badge';
-      editBadge.title = t('change_photo');
-      editBadge.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2"></rect><circle cx="8.5" cy="10" r="1.7"></circle><path d="M4 17l5-5 3.5 3.5L16 12l4 5"></path></svg>';
-      editBadge.addEventListener('click', function (event) {
-        event.stopPropagation();
-        pickLibraryImage(libImageKey);
-      });
-      shot.appendChild(editBadge);
-    } else if (exercise.images && exercise.images.length) {
-      const image = document.createElement('img');
-      image.src = IMAGE_BASE + exercise.images[0];
-      image.alt = '';
-      image.loading = 'lazy';
-      shot.appendChild(image);
-
-      const zoom = document.createElement('button');
-      zoom.type = 'button';
-      zoom.className = 'zoom-badge';
-      zoom.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="20" y2="20"></line></svg>';
-      zoom.addEventListener('click', function (event) {
-        event.stopPropagation();
-        openPreview({ name: exerciseLibName(exercise), image: exercise.images[0], imageUrl: '' });
-      });
-      shot.appendChild(zoom);
+      if (!libPhoto && exercise._media) shot.classList.add('drawn');
+      if (!libPhoto && exercise._frames === 2) {
+        const badge = document.createElement('span');
+        badge.className = 'anim-badge';
+        badge.title = t('exs_animated');
+        badge.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="8 5 19 12 8 19 8 5"></polygon></svg>';
+        shot.appendChild(badge);
+      }
+      if (libraryContext !== 'class') {
+        const editBadge = document.createElement('button');
+        editBadge.type = 'button';
+        editBadge.className = 'photo-edit-badge';
+        editBadge.title = t('change_photo');
+        editBadge.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2"></rect><circle cx="8.5" cy="10" r="1.7"></circle><path d="M4 17l5-5 3.5 3.5L16 12l4 5"></path></svg>';
+        editBadge.addEventListener('click', function (event) {
+          event.stopPropagation();
+          pickLibraryImage(libImageKey);
+        });
+        shot.appendChild(editBadge);
+      }
     } else {
       shot.classList.add('no-photo');
       shot.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2"></rect><circle cx="8.5" cy="10" r="1.7"></circle><path d="M4 17l5-5 3.5 3.5L16 12l4 5"></path></svg><span>' + t('add_photo_short') + '</span>';
@@ -7516,36 +8048,38 @@ function renderLibrary() {
 
     const meta = document.createElement('div');
     meta.className = 'ex-meta';
-    meta.textContent = musclesListText(exercise.primaryMuscles) + ' · ' + equipName(exercise.equipment);
+    const muscles = musclesListText(exercise.primaryMuscles);
+    const subText = subName(exercise._g, exercise._s);
+    meta.textContent = [muscles || subText, exercise.equipment && exercise.equipment !== 'other' ? equipName(exercise.equipment) : '']
+      .filter(Boolean).join(' · ');
 
     body.appendChild(name);
     body.appendChild(meta);
 
-    if (exercise.howTo) {
-      const howTo = document.createElement('div');
-      howTo.className = 'ex-meta';
-      howTo.textContent = (typeof exercise.howTo === 'object') ? (exercise.howTo[lang] || exercise.howTo.ar || exercise.howTo.en || '') : exercise.howTo;
-      body.appendChild(howTo);
+    if (exercise.level) {
+      const lvl = document.createElement('div');
+      lvl.className = 'ex-level lvl-' + exercise.level;
+      lvl.textContent = libLevelText(exercise.level);
+      body.appendChild(lvl);
     }
 
     card.appendChild(body);
 
+    // "+" إضافة سريعة بالأرقام الافتراضية — والضغط على الكارت نفسه بيفتح التفاصيل
+    const quick = document.createElement('button');
+    quick.type = 'button';
+    quick.className = 'ex-quick-add';
+    quick.title = t('quick_add');
+    quick.setAttribute('aria-label', t('quick_add'));
+    quick.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
+    quick.addEventListener('click', function (event) {
+      event.stopPropagation();
+      quickAddLibExercise(exercise);
+    });
+    card.appendChild(quick);
+
     card.addEventListener('click', function () {
-      const built = makeExercise({
-        libId: exercise.id,
-        name: exerciseLibName(exercise),
-        primaryMuscles: musclesListText(exercise.primaryMuscles),
-        secondaryMuscles: musclesListText(exercise.secondaryMuscles),
-        howTo: (exercise.howTo && typeof exercise.howTo === 'object') ? (exercise.howTo[lang] || exercise.howTo.ar || exercise.howTo.en || '') : (exercise.howTo || ''),
-        image: (!libPhoto && exercise.images && exercise.images.length) ? exercise.images[0] : '',
-        imageUrl: libPhoto || ''
-      });
-      if (libraryContext === 'class') {
-        addExerciseToCurrentClass(built);
-        return;
-      }
-      showScreen(coachScreen);
-      addToTarget(built);
+      openExerciseSheet(exercise);
     });
 
     libGrid.appendChild(card);
@@ -7902,6 +8436,8 @@ let clientDay = todayIndex;
  * والبرنامج المفروض يمشي معاها مش العكس
  */
 let sessionDay = todayIndex;
+/* الحصة المعروضة في اليوم (لو اليوم فيه أكتر من حصة) */
+let clientSession = 0;
 let clientEmail = '';
 let clientRecord = null;
 let clientSport = '';
@@ -8579,6 +9115,7 @@ async function loadClient(email) {
       sessionDay = todayIndex;
     }
     clientDay = sessionDay;
+    clientSession = -1;
 
     doneToday = rawDone.map(function (entry) {
       return (typeof entry === 'number') ? ('main:' + entry) : String(entry);
@@ -8662,9 +9199,93 @@ function clientDialDescribe(day, index) {
 function showClientDays() {
   renderDial('client-ring', 'client-dc-day', 'client-dc-sub', clientWeek, clientDay, function (index) {
     clientDay = index;
+    clientSession = -1;
     showClientDay();
   }, clientDialDescribe);
   renderWeekStreak();
+}
+
+/* الحصة المعروضة كيوم لوحده { title, sections, time, sport } */
+function clientView() {
+  const list = daySessions(clientWeek[clientDay]);
+  if (clientSession < 0 || clientSession >= list.length) clientSession = 0;
+  return list[clientSession] || { title: '', sections: blankSections() };
+}
+
+function clientPrefix() {
+  return sessionKeyPrefix(clientSession);
+}
+
+/* الحصة خلصت كلها؟ بنحسبها من السبحة نفسها عشان تبقى صح حتى لو مش معروضة */
+function sessionIsDone(session, index) {
+  const prefix = sessionKeyPrefix(index);
+  let total = 0;
+  let done = 0;
+  SECTION_KEYS.forEach(function (key) {
+    (session.sections[key] || []).forEach(function (exercise, i) {
+      const sets = exerciseSetCount(exercise) || 1;
+      total += 1;
+      if (setsDoneFor(setsDoneToday, prefix + key + ':' + i, sets) >= sets) done += 1;
+    });
+  });
+  return total > 0 && done >= total;
+}
+
+function wholeDayDone(day) {
+  const list = daySessions(day).filter(function (session) { return dayCount({ sections: session.sections }) > 0; });
+  return list.length > 0 && daySessions(day).every(function (session, index) {
+    return dayCount({ sections: session.sections }) === 0 || sessionIsDone(session, index);
+  });
+}
+
+/* أول ما يفتح يوم: أول حصة لسه ما خلصتش (لو ده تمرين النهاردة) */
+function firstOpenSession(day, isActive) {
+  const list = daySessions(day);
+  if (!isActive) return 0;
+  for (let i = 0; i < list.length; i++) {
+    if (dayCount({ sections: list[i].sections }) > 0 && !sessionIsDone(list[i], i)) return i;
+  }
+  return 0;
+}
+
+function renderClientSessionTabs(day, isActive) {
+  const box = document.getElementById('client-session-tabs');
+  if (!box) return;
+  box.innerHTML = '';
+  const multi = hasManySessions(day) && !day.rest;
+  box.classList.toggle('hidden', !multi);
+  if (!multi) return;
+  daySessions(day).forEach(function (session, index) {
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'session-tab' + (index === clientSession ? ' on' : '');
+    tab.dataset.session = String(index);
+    if (isActive && sessionIsDone(session, index)) tab.classList.add('done');
+
+    const num = document.createElement('span');
+    num.className = 'session-num';
+    num.textContent = index + 1;
+    tab.appendChild(num);
+
+    const text = document.createElement('span');
+    text.className = 'session-tab-text';
+    const name = document.createElement('strong');
+    name.textContent = sessionLabel(session, index);
+    text.appendChild(name);
+    if (session.time) {
+      const time = document.createElement('small');
+      time.textContent = prettyTime(session.time);
+      text.appendChild(time);
+    }
+    tab.appendChild(text);
+
+    tab.addEventListener('click', function () {
+      if (clientSession === index) return;
+      clientSession = index;
+      showClientDay();
+    });
+    box.appendChild(tab);
+  });
 }
 
 function countDone() {
@@ -8672,7 +9293,7 @@ function countDone() {
 }
 
 function totalToday() {
-  return dayCount(clientWeek[clientDay]);
+  return dayCount(clientView());
 }
 
 function dayVolume(day) {
@@ -8682,14 +9303,15 @@ function dayVolume(day) {
       total += exerciseVolume(exercise);
     });
   });
+  (day.extraSessions || []).forEach(function (session) { total += dayVolume(session); });
   return total;
 }
 
-function actualDayVolume(day) {
+function actualDayVolume(day, prefix) {
   let total = 0;
   SECTION_KEYS.forEach(function (key) {
     (day.sections[key] || []).forEach(function (exercise, index) {
-      total += actualVolume(exercise, actualSetsToday[key + ':' + index]);
+      total += actualVolume(exercise, actualSetsToday[(prefix || '') + key + ':' + index]);
     });
   });
   return total;
@@ -8712,7 +9334,9 @@ function updateProgress() {
   let volumeText = volume > 0 ? (t('day_volume') + ': ' + Math.round(volume).toLocaleString() + ' ' + (lang === 'ar' ? 'كجم' : 'kg')) : '';
 
   if (clientDay === todayIndex) {
-    const actualTotal = actualDayVolume(clientWeek[clientDay]);
+    const actualTotal = daySessions(clientWeek[clientDay]).reduce(function (sum, session, index) {
+      return sum + actualDayVolume(session, sessionKeyPrefix(index));
+    }, 0);
     if (actualTotal > 0) {
       volumeText += (volumeText ? ' — ' : '') + t('actual_volume_label') + ': ' + Math.round(actualTotal).toLocaleString() + ' ' + (lang === 'ar' ? 'كجم' : 'kg');
     }
@@ -8726,6 +9350,8 @@ function updateProgress() {
 
   const total = totalToday();
   setSessRing(total ? (countDone() / total) * 100 : 0);
+  /* علامة ✓ على تبويب الحصة لما تخلص */
+  renderClientSessionTabs(clientWeek[clientDay], clientDay === sessionDay);
 
   /* علامة اليوم في شريط الأسبوع تتحرك فورًا لما يخلص آخر تمرين */
   renderWeekStreak();
@@ -8738,10 +9364,16 @@ function updateProgress() {
 }
 
 function saveProgress() {
-  const done = [];
-  clientSections.querySelectorAll('li.done').forEach(function (item) {
-    if (item.dataset.key) done.push(item.dataset.key);
+  /* الحصص التانية مش معروضة دلوقتي — علاماتها تفضل زي ما هي */
+  const shown = clientPrefix();
+  const done = doneToday.filter(function (key) {
+    const match = /^s\d+\|/.exec(key);
+    return (match ? match[0] : '') !== shown;
   });
+  clientSections.querySelectorAll('li.done').forEach(function (item) {
+    if (item.dataset.key && done.indexOf(item.dataset.key) === -1) done.push(item.dataset.key);
+  });
+  doneToday = done;
 
   /*
    * history = الأيام اللي العميل خلّص فيها تمرين، بصيغة YYYY-MM-DD.
@@ -8854,6 +9486,7 @@ function daySetCount(day) {
       total += exerciseSetCount(exercise);
     });
   });
+  (day.extraSessions || []).forEach(function (session) { total += daySetCount(session); });
   return total;
 }
 
@@ -8876,7 +9509,9 @@ function dayMinutes(day) {
       seconds += sets * (45 + rest);
     });
   });
-  return Math.round(seconds / 60);
+  let minutes = Math.round(seconds / 60);
+  (day.extraSessions || []).forEach(function (session) { minutes += dayMinutes(session); });
+  return minutes;
 }
 
 /*
@@ -8912,7 +9547,7 @@ function renderWeekStreak() {
     const hasPlan = !day.rest && dayCount(day) > 0;
     /* اليوم الحالي بيتحسب من الشاشة نفسها عشان العلامة تتحرك فورًا */
     const isDone = (index === todayIndex)
-      ? (totalToday() > 0 && countDone() >= totalToday())
+      ? wholeDayDone(clientWeek[sessionDay] || day)
       : progressHistory.indexOf(stamps[index]) !== -1;
 
     if (hasPlan) planned += 1;
@@ -8941,6 +9576,7 @@ function renderWeekStreak() {
 
     dot.addEventListener('click', function () {
       clientDay = index;
+      clientSession = -1;
       showClientDay();
     });
 
@@ -9192,11 +9828,11 @@ let focusList = [];
 let focusIndex = 0;
 
 /* بنجمع تمارين اليوم بالترتيب مع مفاتيحها عشان نتحرك بينها */
-function buildFocusList(day) {
+function buildFocusList(day, prefix) {
   const out = [];
   SECTION_KEYS.forEach(function (key) {
     (day.sections[key] || []).forEach(function (exercise, index) {
-      out.push({ exercise: exercise, section: key, key: key + ':' + index });
+      out.push({ exercise: exercise, section: key, key: (prefix || '') + key + ':' + index });
     });
   });
   return out;
@@ -9341,9 +9977,9 @@ function syncFocusToList(exKey, isDone) {
 }
 
 function openFocus(startIndex) {
-  const day = clientWeek[clientDay];
-  if (!day || day.rest) return;
-  focusList = buildFocusList(day);
+  const whole = clientWeek[clientDay];
+  if (!whole || whole.rest) return;
+  focusList = buildFocusList(clientView(), clientPrefix());
   if (!focusList.length) return;
   focusIndex = Math.max(0, Math.min(focusList.length - 1, startIndex || 0));
   document.getElementById('focus-log-box').classList.add('hidden');
@@ -9379,8 +10015,7 @@ document.getElementById('focus-log-toggle').addEventListener('click', function (
 
 document.getElementById('start-session-btn').addEventListener('click', function () {
   /* بيبدأ من أول تمرين لسه مخلصش — مش من الأول دايمًا */
-  const day = clientWeek[clientDay];
-  const list = buildFocusList(day);
+  const list = buildFocusList(clientView(), clientPrefix());
   let start = 0;
   for (let i = 0; i < list.length; i++) {
     const sets = exerciseSetCount(list[i].exercise) || 1;
@@ -9445,14 +10080,22 @@ function renderPickSessionBtn(day, isActive) {
 }
 
 function showClientDay() {
-  const day = clientWeek[clientDay];
+  const wholeDay = clientWeek[clientDay];
   /*
    * isToday بقت معناها "ده التمرين اللي بيعمله النهاردة" مش
    * "ده يوم النهاردة في التقويم" — عشان يقدر يعمل أي يوم في أي يوم
    */
   const isToday = clientDay === sessionDay;
+  if (clientSession < 0) clientSession = firstOpenSession(wholeDay, isToday);
+  /* من هنا ورايح "day" = الحصة المعروضة بس (لو اليوم فيه حصة واحدة يبقى اليوم كله) */
+  const day = Object.assign({}, clientView(), { rest: !!wholeDay.rest });
+  const keyPrefix = clientPrefix();
+  const multi = hasManySessions(wholeDay) && !wholeDay.rest;
+  renderClientSessionTabs(wholeDay, isToday);
 
-  dayName.textContent = day.title || (clientDay === todayIndex ? t('today_workout') : days()[clientDay]);
+  dayName.textContent = multi
+    ? sessionLabel(day, clientSession) + (day.time ? ' · ' + prettyTime(day.time) : '')
+    : (tr(day.title) || (clientDay === todayIndex ? t('today_workout') : days()[clientDay]));
   clientSections.innerHTML = '';
 
   const badge = document.getElementById('sess-badge');
@@ -9470,7 +10113,7 @@ function showClientDay() {
   if (startBtn) startBtn.classList.toggle('hidden', !isToday || !!day.rest || dayCount(day) === 0);
 
   const total = dayCount(day);
-  renderPickSessionBtn(day, isToday);
+  renderPickSessionBtn(wholeDay, isToday);
   finishButton.textContent = t('finish_workout');
   finishButton.classList.toggle('hidden', !isToday || day.rest || total === 0);
   resetButton.classList.toggle('hidden', !isToday || day.rest || total === 0);
@@ -9507,7 +10150,7 @@ function showClientDay() {
 
       const ul = document.createElement('ul');
       list.forEach(function (exercise, index) {
-        const exKey = key + ':' + index;
+        const exKey = keyPrefix + key + ':' + index;
         order += 1;
         const item = document.createElement('li');
         item.className = 'exc-card';
@@ -9686,11 +10329,11 @@ function showClientRehab() {
 
   const parts = [];
   if (clientRehab.bodyPart) parts.push(bodyPartName(clientRehab.bodyPart));
-  if (clientRehab.injury) parts.push(clientRehab.injury);
+  if (clientRehab.injury) parts.push(tr(clientRehab.injury));
   clientRehabTitle.textContent = parts.join(' — ') || t('tab_rehab');
 
   if (clientRehab.about) {
-    clientRehabAbout.textContent = clientRehab.about;
+    clientRehabAbout.textContent = tr(clientRehab.about);
     clientRehabAbout.classList.remove('hidden');
   } else {
     clientRehabAbout.classList.add('hidden');
@@ -9708,7 +10351,7 @@ function showClientRehab() {
 
     const num = document.createElement('div');
     num.className = 'phase-num';
-    num.textContent = t('phase') + ' ' + (index + 1) + (phase.name ? ' — ' + phase.name : '');
+    num.textContent = t('phase') + ' ' + (index + 1) + (phase.name ? ' — ' + tr(phase.name) : '');
     head.appendChild(num);
 
     if (index === clientRehab.currentPhase) {
@@ -9723,7 +10366,7 @@ function showClientRehab() {
     if (phase.goal) {
       const goal = document.createElement('div');
       goal.className = 'phase-goal';
-      goal.textContent = phase.goal;
+      goal.textContent = tr(phase.goal);
       block.appendChild(goal);
     }
 
@@ -9878,7 +10521,7 @@ function showClientRehab() {
       const criteria = document.createElement('div');
       criteria.className = 'phase-goal';
       criteria.appendChild(iconSvg('target', 'ui-icon'));
-    criteria.appendChild(document.createTextNode(' ' + phase.criteria));
+    criteria.appendChild(document.createTextNode(' ' + tr(phase.criteria)));
       block.appendChild(criteria);
     }
 
@@ -10637,8 +11280,8 @@ function renderSuppPlanInto(listEl, plan, editable) {
       const detail = document.createElement('div');
       detail.className = 'supp-plan-detail';
       const bits = [];
-      if (entry.dose) bits.push(t('supp_dose') + ': ' + entry.dose);
-      if (entry.when) bits.push(t('supp_when') + ': ' + entry.when);
+      if (entry.dose) bits.push(t('supp_dose') + ': ' + localiseReps(tr(entry.dose)));
+      if (entry.when) bits.push(t('supp_when') + ': ' + localiseReps(tr(entry.when)));
       detail.textContent = bits.join('  ·  ');
       info.appendChild(detail);
 
@@ -13447,18 +14090,26 @@ const REPS_UNITS_EN = {
   'ثانية': 's', 'ثواني': 's', 'ثوانٍ': 's', 'ث': 's',
   'دقيقة': 'min', 'دقائق': 'min', 'د': 'min',
   'متر': 'm', 'خطوة': 'steps', 'جهة': 'each side',
-  'رجل': 'leg', 'مرة': 'times', 'لكل': 'per', 'كاملة': 'full'
+  'رجل': 'leg', 'مرة': 'times', 'لكل': 'per', 'كاملة': 'full',
+  'تكرار': 'reps', 'تكرارات': 'reps', 'مجموعات': 'sets', 'جانب': 'side', 'كل جانب': 'each side',
+  'دقايق': 'min', 'ساعة': 'h', 'مرات': 'times', 'اتجاه': 'direction', 'كل اتجاه': 'each direction',
+  'يوميًا': 'daily', 'يوميا': 'daily', 'أسبوعيًا': 'weekly', 'وحدة': 'IU', 'وحدة دولية': 'IU'
 };
 
 function localiseReps(text) {
   if (lang !== 'en' || !text) return text;
   let out = String(text);
   // الأطول الأول عشان "ثواني" ماتتقسمش على "ث"
+  // كلمة كاملة بس — "د" لوحدها يعني دقيقة، لكن جوه كلمة زي "بعد" لأ
   Object.keys(REPS_UNITS_EN)
     .sort(function (a, b) { return b.length - a.length; })
     .forEach(function (word) {
-      out = out.split(word).join(REPS_UNITS_EN[word]);
+      const re = new RegExp('(^|[^\u0600-\u06FF])' + word + '(?![\u0600-\u06FF])', 'g');
+      out = out.replace(re, '$1' + REPS_UNITS_EN[word]);
     });
+  // "20 م" / "3 كم" / "10 كجم" — بس لو قبلها رقم، عشان حروف الكلام العادي ما تتغيّرش
+  out = out.replace(/(\d)\s*كجم/g, '$1 kg').replace(/(\d)\s*كم(?![\u0600-\u06FF])/g, '$1 km')
+    .replace(/(\d)\s*جم(?![\u0600-\u06FF])/g, '$1 g').replace(/(\d)\s*م(?![\u0600-\u06FF])/g, '$1 m');
   return out.replace(/\s+/g, ' ').trim();
 }
 
@@ -15422,13 +16073,17 @@ function renderSportRows() {
    بيخلي البرنامج يمشي مع حياة العميل مش العكس
    ============================================================ */
 
+/* كل حصص اليوم في الجدول بالترتيب اللي العميل ضافها بيه */
 function scheduleFor(dayIndex) {
-  return obSchedule.filter(function (r) { return r.day === dayIndex; })[0] || null;
+  return obSchedule.filter(function (r) { return r.day === dayIndex; });
 }
 
-function setSchedule(dayIndex, sport, time) {
-  obSchedule = obSchedule.filter(function (r) { return r.day !== dayIndex; });
-  if (sport) obSchedule.push({ day: dayIndex, sport: sport, time: time || '' });
+/* بنعيد كتابة حصص يوم واحد كلها مرة واحدة: [{ sport, time }] */
+function setDaySchedule(dayIndex, sessions) {
+  const others = obSchedule.filter(function (r) { return r.day !== dayIndex; });
+  const mine = sessions.filter(function (r) { return r.sport; }).slice(0, MAX_DAY_SESSIONS)
+    .map(function (r) { return { day: dayIndex, sport: r.sport, time: r.time || '' }; });
+  obSchedule = others.concat(mine);
   obSchedule.sort(function (a, b) { return a.day - b.day; });
 }
 
@@ -15439,54 +16094,86 @@ function renderScheduleRows() {
 
   // مفيش رياضة مختارة = مفيش جدول
   block.classList.toggle('hidden', !obSports.length);
-  if (!obSports.length) { obSchedule = []; return; }
+  if (!obSports.length) { obSchedule = obSchedule.filter(function (r) { return r.sport === 'gym'; }); return; }
 
   rows.innerHTML = '';
   const dayNames = days();
+  // "جيم" دايمًا موجود — عشان اللي بيلعب سباحة ويروح الجيم كمان
+  const options = obSports.indexOf('gym') === -1 ? obSports.concat(['gym']) : obSports.slice();
 
   for (let i = 0; i < 7; i++) {
-    const current = scheduleFor(i);
+    const sessions = scheduleFor(i).map(function (r) { return { sport: r.sport, time: r.time }; });
+    // يوم فاضي بيظهر بصف واحد "— مفيش —"
+    const shown = sessions.length ? sessions : [{ sport: '', time: '' }];
 
-    const row = document.createElement('div');
-    row.className = 'sched-row' + (current ? ' on' : '');
+    const dayBox = document.createElement('div');
+    dayBox.className = 'sched-day-box' + (sessions.length > 1 ? ' multi' : '');
+    dayBox.dataset.day = String(i);
 
-    const name = document.createElement('span');
-    name.className = 'sched-day';
-    name.textContent = dayNames[i];
-    row.appendChild(name);
+    shown.forEach(function (session, index) {
+      const row = document.createElement('div');
+      row.className = 'sched-row' + (session.sport ? ' on' : '') + (index ? ' extra' : '');
 
-    const pick = document.createElement('select');
-    pick.className = 'sched-sport';
-    const none = document.createElement('option');
-    none.value = '';
-    none.textContent = t('sched_rest');
-    pick.appendChild(none);
-    obSports.forEach(function (key) {
-      const opt = document.createElement('option');
-      opt.value = key;
-      opt.textContent = sportName(key);
-      pick.appendChild(opt);
+      const name = document.createElement('span');
+      name.className = 'sched-day';
+      name.textContent = index ? fill('sched_session_n', { n: index + 1 }) : dayNames[i];
+      row.appendChild(name);
+
+      const pick = document.createElement('select');
+      pick.className = 'sched-sport';
+      const none = document.createElement('option');
+      none.value = '';
+      none.textContent = t('sched_rest');
+      pick.appendChild(none);
+      options.forEach(function (key) {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = sportName(key);
+        pick.appendChild(opt);
+      });
+      pick.value = session.sport || '';
+      row.appendChild(pick);
+
+      const time = document.createElement('input');
+      time.type = 'time';
+      time.className = 'sched-time';
+      time.value = session.time || '';
+      time.disabled = !session.sport;
+      row.appendChild(time);
+
+      pick.addEventListener('change', function () {
+        // "مفيش" على حصة زيادة = امسحها
+        shown[index] = { sport: pick.value, time: time.value };
+        setDaySchedule(i, shown);
+        renderScheduleRows();
+        updateObProgress();
+      });
+      time.addEventListener('change', function () {
+        shown[index] = { sport: pick.value, time: time.value };
+        setDaySchedule(i, shown);
+      });
+
+      dayBox.appendChild(row);
     });
-    pick.value = current ? current.sport : '';
-    row.appendChild(pick);
 
-    const time = document.createElement('input');
-    time.type = 'time';
-    time.className = 'sched-time';
-    time.value = current ? (current.time || '') : '';
-    time.disabled = !current;
-    row.appendChild(time);
+    if (sessions.length && sessions.length < MAX_DAY_SESSIONS) {
+      const add = document.createElement('button');
+      add.type = 'button';
+      add.className = 'sched-add';
+      add.textContent = t('sched_add');
+      add.addEventListener('click', function () {
+        // الحصة الجديدة بتبدأ برياضة مختلفة عن اللي قبلها لو فيه
+        const now = scheduleFor(i).map(function (r) { return { sport: r.sport, time: r.time }; });
+        const used = now.map(function (r) { return r.sport; });
+        const fresh = options.filter(function (k) { return used.indexOf(k) === -1; })[0] || options[0];
+        setDaySchedule(i, now.concat([{ sport: fresh, time: '' }]));
+        renderScheduleRows();
+        updateObProgress();
+      });
+      dayBox.appendChild(add);
+    }
 
-    pick.addEventListener('change', function () {
-      setSchedule(i, pick.value, time.value);
-      renderScheduleRows();
-      updateObProgress();
-    });
-    time.addEventListener('change', function () {
-      setSchedule(i, pick.value, time.value);
-    });
-
-    rows.appendChild(row);
+    rows.appendChild(dayBox);
   }
 }
 
@@ -16993,12 +17680,13 @@ function scheduleLine(data) {
   const rows = (data && Array.isArray(data.sportSchedule)) ? data.sportSchedule : [];
   if (!rows.length) return '';
   const dayNames = days();
-  return rows.slice().sort(function (a, b) { return a.day - b.day; })
-    .map(function (r) {
-      const name = dayNames[r.day] || '';
-      const sport = r.sport ? sportName(r.sport) : '';
-      return name + ' ' + sport + (r.time ? ' ' + prettyTime(r.time) : '');
-    }).join('  ·  ');
+  const out = [];
+  for (let d = 0; d < 7; d++) {
+    const mine = clientScheduleForDay(data, d);
+    if (!mine.length) continue;
+    out.push((dayNames[d] || '') + ' ' + mine.map(scheduleSessionText).join(' + '));
+  }
+  return out.join('  ·  ');
 }
 
 /* 18:30 → ٦:٣٠ م */
@@ -19385,13 +20073,13 @@ function medStatusOptionsMarkup(currentStatus) {
 function medItemTitle(item) {
   if (!item) return '';
   if (lang === 'en' && item.titleEn) return item.titleEn;
-  return item.title || item.titleEn || '';
+  return tr(item.title || item.titleEn || '');
 }
 
 function medItemBody(item) {
   if (!item) return '';
   if (lang === 'en' && item.bodyEn) return item.bodyEn;
-  return item.body || item.bodyEn || '';
+  return tr(item.body || item.bodyEn || '');
 }
 
 function renderMedLibraryList() {
@@ -19536,6 +20224,8 @@ document.getElementById('seed-medlib-btn').addEventListener('click', async funct
         specialty: seedItem.specialty,
         title: seedItem.title,
         body: seedItem.body,
+        titleEn: seedItem.titleEn || '',
+        bodyEn: seedItem.bodyEn || '',
         image: '',
         authorEmail: currentProviderEmail,
         authorName: t('seed_author_label'),
@@ -23316,3 +24006,740 @@ document.getElementById('lang-btn').addEventListener('click', function () {
   if (!me || !pushIsOnHere()) return;
   setDoc(doc(db, 'pushTokens', me), { lang: lang }, { merge: true }).catch(function () {});
 });
+
+/* ============================================================
+   مكتبة التمارين الموسّعة
+   ------------------------------------------------------------
+   المكتبة بقت ٣ طبقات فوق بعض:
+     ١) exercise-library.js + drills-library.js (زي ما هم)
+     ٢) library/exercises-index.js — +٧٠٠ تمرين جديد بحقول كاملة
+        (قسم فرعي، مستوى، نوع الوصفة، احتياطات) ورسوم مرخّصة
+     ٣) تمارين قوالب التأهيل نفسها بقت تظهر في البحث
+   الفهرس بيتحمّل أول ما المدرب يفتح المكتبة بس — العميل اللي بيفتح
+   برنامجه مش بينزّله خالص. والتفاصيل (الخطوات والنصايح) ملف لوحده
+   بيتحمّل أول ما تمرين يتفتح
+   ============================================================ */
+
+var extraLib = null;
+var extraLocalMedia = {};
+var extraLibPromise = null;
+var extraDetails = null;
+var extraDetailsPromise = null;
+var remoteLeftovers = [];
+var rehabLibCache = null;
+var libActiveSub = '';
+var libMediaOnly = false;
+var libSafeOnly = false;
+
+var LIB_GROUP_ORDER = ['strength', 'functional', 'conditioning', 'mobility', 'warmup', 'core', 'plyometrics', 'speed', 'tactical', 'athletic', 'testing', 'rehab'];
+
+var LEGACY_GROUP = {
+  cardio: 'conditioning', stretching: 'mobility', crossfit: 'conditioning', hyrox: 'conditioning',
+  agility: 'speed', powerlifting: 'strength', 'olympic weightlifting': 'athletic', strongman: 'functional'
+};
+
+var MUSCLE_TO_SUB = {
+  chest: 'chest', lats: 'back', 'middle back': 'back', 'lower back': 'back', traps: 'back',
+  shoulders: 'shoulders', biceps: 'biceps', triceps: 'triceps', quadriceps: 'quads',
+  hamstrings: 'hamstrings', glutes: 'glutes', adductors: 'glutes', abductors: 'glutes',
+  calves: 'calves', forearms: 'forearms', neck: 'neck'
+};
+
+var SUBCATS = {
+  strength: { chest: ['صدر', 'Chest'], back: ['ضهر', 'Back'], shoulders: ['كتف', 'Shoulders'], biceps: ['باي', 'Biceps'], triceps: ['تراي', 'Triceps'], quads: ['فخذ أمامي', 'Quads'], hamstrings: ['خلفية', 'Hamstrings'], glutes: ['مؤخرة', 'Glutes'], calves: ['سمانة', 'Calves'], forearms: ['ساعد', 'Forearms'], neck: ['رقبة', 'Neck'] },
+  functional: { push: ['دفع', 'Push'], pull: ['سحب', 'Pull'], squat: ['سكوات', 'Squat'], hinge: ['هينج', 'Hinge'], lunge: ['لانج', 'Lunge'], carry: ['حمل ومشي', 'Carry'], rotation: ['لف', 'Rotation'] },
+  conditioning: { running: ['جري', 'Running'], rowing: ['تجديف', 'Rowing'], skierg: ['SkiErg', 'SkiErg'], bike: ['عجلة', 'Bike'], sled: ['سلِد', 'Sled'], carries: ['حمل', 'Carries'], ropes: ['حبال', 'Ropes'], jump_rope: ['نط الحبل', 'Jump rope'], circuit: ['دواير', 'Circuits'], swim: ['سباحة', 'Swim'], walk: ['مشي', 'Walk'], crossfit: ['كروس فيت', 'CrossFit'], hyrox: ['هايروكس', 'HYROX'] },
+  mobility: { neck: ['رقبة', 'Neck'], thoracic: ['ضهر علوي', 'Thoracic'], shoulder: ['كتف', 'Shoulder'], hip: ['حوض', 'Hip'], ankle: ['كاحل', 'Ankle'], spine: ['عمود فقري', 'Spine'], stretching: ['إطالة', 'Stretching'] },
+  warmup: { general: ['عام', 'General'], activation: ['تنشيط', 'Activation'], dynamic: ['ديناميكي', 'Dynamic'] },
+  core: { anti_extension: ['ضد الانحناء لورا', 'Anti-extension'], anti_rotation: ['ضد اللف', 'Anti-rotation'], anti_lateral: ['ضد الميل', 'Anti-lateral'], flexion: ['ثني', 'Flexion'], rotation: ['لف', 'Rotation'], stability: ['ثبات', 'Stability'] },
+  plyometrics: { jumps: ['نط', 'Jumps'], bounds: ['وثبات', 'Bounds'], hops: ['حجلات', 'Hops'], throws: ['رمي', 'Throws'], upper_body: ['جزء علوي', 'Upper body'] },
+  speed: { acceleration: ['تسارع', 'Acceleration'], max_speed: ['سرعة قصوى', 'Max speed'], change_of_direction: ['تغيير اتجاه', 'Change of direction'], ladder: ['سلم رشاقة', 'Ladder'], reaction: ['رد فعل', 'Reaction'] },
+  tactical: { load_carriage: ['حمل وزن', 'Load carriage'], obstacle: ['موانع', 'Obstacles'], drag: ['سحب', 'Drags'], crawl: ['زحف', 'Crawls'], test_prep: ['تجهيز اختبارات', 'Test prep'] },
+  athletic: { power: ['قدرة', 'Power'], olympic: ['أولمبي', 'Olympic'], contrast: ['تباين', 'Contrast'], sport_specific: ['خاص بالرياضة', 'Sport-specific'] },
+  testing: { strength: ['قوة', 'Strength'], endurance: ['تحمّل', 'Endurance'], speed: ['سرعة', 'Speed'], power: ['قدرة', 'Power'], mobility: ['مرونة', 'Mobility'], balance: ['اتزان', 'Balance'], body_composition: ['تكوين الجسم', 'Body composition'] },
+  rehab: { shoulder: ['كتف', 'Shoulder'], elbow: ['كوع', 'Elbow'], wrist: ['رسغ', 'Wrist'], neck: ['رقبة', 'Neck'], spine: ['ضهر', 'Spine'], hip: ['حوض', 'Hip'], knee: ['ركبة', 'Knee'], ankle: ['كاحل', 'Ankle'], achilles: ['أخيلس', 'Achilles'], foot: ['قدم', 'Foot'], balance: ['اتزان', 'Balance'], general: ['عام', 'General'] }
+};
+
+var REHAB_PART_TO_SUB = { shoulder: 'shoulder', neck: 'neck', back: 'spine', lower_back: 'spine', elbow: 'elbow', wrist: 'wrist', hip: 'hip', knee: 'knee', ankle: 'ankle', foot: 'foot', other: 'general' };
+
+// أدوات جديدة — بنضيفها على نفس الخريطة عشان equipName تشتغل زي ما هي.
+// اللي ليه اسم قبل كده (زي أدوات الدريلات) بيفضل باسمه القديم
+addMissingKeys(EQUIPMENT, {
+  'bench': { ar: 'بنش', en: 'Bench' }, 'pullup bar': { ar: 'عقلة', en: 'Pull-up bar' },
+  'smith machine': { ar: 'سميث', en: 'Smith machine' }, 'box': { ar: 'بوكس', en: 'Box' },
+  'sled': { ar: 'سلِد', en: 'Sled' }, 'rower': { ar: 'جهاز تجديف', en: 'Rower' },
+  'bike': { ar: 'عجلة', en: 'Bike' }, 'skierg': { ar: 'SkiErg', en: 'SkiErg' },
+  'treadmill': { ar: 'مشاية', en: 'Treadmill' }, 'jump rope': { ar: 'حبل نط', en: 'Jump rope' },
+  'battle rope': { ar: 'حبال باتل', en: 'Battle rope' }, 'sandbag': { ar: 'ساند باج', en: 'Sandbag' },
+  'suspension': { ar: 'TRX', en: 'Suspension trainer' }, 'plate': { ar: 'طارة', en: 'Plate' },
+  'mini band': { ar: 'أستك صغير', en: 'Mini band' }, 'cones': { ar: 'أقماع', en: 'Cones' },
+  'ladder': { ar: 'سلم رشاقة', en: 'Agility ladder' }, 'hurdles': { ar: 'حواجز', en: 'Hurdles' },
+  'weight vest': { ar: 'سترة أوزان', en: 'Weight vest' }, 'landmine': { ar: 'لاند ماين', en: 'Landmine' },
+  'wall': { ar: 'حيطة', en: 'Wall' }, 'step': { ar: 'استيب', en: 'Step' },
+  'bosu': { ar: 'بوسو', en: 'BOSU' }, 'balance board': { ar: 'لوح اتزان', en: 'Balance board' }
+});
+
+function addMissingKeys(target, extra) {
+  Object.keys(extra).forEach(function (key) { if (!target[key]) target[key] = extra[key]; });
+}
+
+Object.assign(CATEGORY_KEYS, {
+  functional: 'cat_functional', mobility: 'cat_mobility', warmup: 'cat_warmup', core: 'cat_core',
+  speed: 'cat_speed', tactical: 'cat_tactical', athletic: 'cat_athletic', testing: 'cat_testing', rehab: 'cat_rehab'
+});
+
+Object.assign(CATEGORY_ICON_PATHS, {
+  functional: '<circle cx="12" cy="4.5" r="2"></circle><path d="M6 21l3-7 3 2 3-2 3 7"></path><path d="M7 10l5-2 5 2"></path>',
+  conditioning: '<path d="M3 12h4l2-5 4 10 2-5h6"></path>',
+  mobility: '<circle cx="12" cy="4.5" r="2"></circle><line x1="12" y1="6.5" x2="12" y2="13"></line><line x1="12" y1="8.5" x2="6" y2="6"></line><line x1="12" y1="8.5" x2="18" y2="6"></line><line x1="12" y1="13" x2="7" y2="20"></line><line x1="12" y1="13" x2="17" y2="20"></line>',
+  warmup: '<path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 1.7 1.2 2.7 2.3 3C11 8 11.2 5.3 12 3z"></path>',
+  core: '<rect x="7" y="4" width="10" height="16" rx="3"></rect><line x1="12" y1="4" x2="12" y2="20"></line><line x1="7" y1="10" x2="17" y2="10"></line><line x1="7" y1="15" x2="17" y2="15"></line>',
+  speed: '<path d="M4 16h7"></path><path d="M2 12h7"></path><path d="M5 8h6"></path><path d="M13 6l7 6-7 6"></path>',
+  tactical: '<path d="M12 3l8 3v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"></path><path d="M9 12l2 2 4-4"></path>',
+  athletic: '<circle cx="12" cy="9" r="5"></circle><path d="M9 13.5 7.5 21 12 18.5 16.5 21 15 13.5"></path>',
+  testing: '<rect x="5" y="3.5" width="14" height="17" rx="2"></rect><line x1="9" y1="8" x2="15" y2="8"></line><line x1="9" y1="12" x2="15" y2="12"></line><polyline points="9 16 10.5 17.5 13.5 14.5"></polyline>',
+  rehab: '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"></path><line x1="12" y1="10" x2="12" y2="15"></line><line x1="9.5" y1="12.5" x2="14.5" y2="12.5"></line>'
+});
+
+// المكتبة من قسم في البرنامج بتفتح على النوع اللي يناسبه
+Object.assign(SECTION_DEFAULT_CATEGORY, { warmup: 'warmup', cardio: 'conditioning', mobility: 'mobility', flexibility: 'mobility' });
+
+function subName(group, sub) {
+  const row = SUBCATS[group] && SUBCATS[group][sub];
+  return row ? (lang === 'ar' ? row[0] : row[1]) : '';
+}
+
+function cautionName(key) {
+  if (key === 'pregnancy') return PREGNANCY[lang] || PREGNANCY.ar || key;
+  const c = HEALTH_CONDITIONS[key];
+  return c ? (c[lang] || c.ar || key) : key;
+}
+
+/* ---------- البحث العربي ---------- */
+
+// الهمزات والتاء المربوطة والتشكيل — عشان "ركبة" تلاقي "ركبه" و"اطالة" تلاقي "إطالة"
+function normAr(text) {
+  return String(text || '').toLowerCase()
+    .replace(/[ً-ٰٟـ]/g, '')
+    .replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي')
+    .replace(/[-_/(),.]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+// الكلام اللي المدربين بيقولوه فعلًا — أي كلمة منهم بتلاقي الباقي
+var LIB_SYNONYMS = [
+  ['بنش', 'ضغط صدر', 'bench', 'chest press'], ['سكوات', 'قرفصاء', 'سكوت', 'squat'],
+  ['ديدلفت', 'رفعه ميته', 'ديد لفت', 'deadlift'], ['عقله', 'pull up', 'pullup', 'chin up', 'شد لفوق'],
+  ['ضغط', 'بوش اب', 'push up', 'pushup'], ['بطن', 'كرانش', 'crunch', 'abs', 'core'],
+  ['كتف', 'shoulder', 'دلتا', 'ديلت'], ['باي', 'بايسبس', 'biceps', 'curl', 'كيرل'],
+  ['تراي', 'ترايسبس', 'triceps'], ['رجل', 'legs', 'فخد', 'quad'], ['سمانه', 'calf', 'calves'],
+  ['مؤخره', 'الويه', 'glute', 'hip thrust', 'هيب ثرست'], ['ضهر', 'ظهر', 'back', 'row'],
+  ['بلانك', 'plank'], ['جري', 'run', 'running', 'sprint'], ['تجديف', 'rowing', 'rower'],
+  ['عجله', 'دراجه', 'bike', 'cycling'], ['اطاله', 'stretch', 'استرتش'], ['احماء', 'warm up', 'warmup'],
+  ['ركبه', 'knee'], ['كاحل', 'ankle'], ['رقبه', 'neck'], ['اخيلس', 'achilles'], ['حوض', 'hip'],
+  ['لانج', 'طعن', 'lunge'], ['دمبل', 'dumbbell'], ['بار', 'barbell'], ['كيتل', 'kettlebell'],
+  ['اختبار', 'تست', 'test'], ['نط', 'قفز', 'jump'], ['حبل', 'rope']
+];
+
+function libQueryTokens(term) {
+  return normAr(term).split(' ').filter(Boolean).map(function (token) {
+    const group = LIB_SYNONYMS.filter(function (g) {
+      return g.some(function (w) { const n = normAr(w); return n === token || (token.length >= 3 && n.indexOf(token) === 0); });
+    })[0];
+    return group ? [token].concat(group.map(normAr)) : [token];
+  });
+}
+
+/* ---------- تجهيز كل تمرين (مرة واحدة) ---------- */
+
+function libMediaUrl(ex) {
+  if (!ex) return '';
+  if (ex._media !== undefined) return ex._media;
+  let path = ex.m || '';
+  if (!path && extraLocalMedia[ex.id]) path = extraLocalMedia[ex.id][0];
+  ex._frames = ex.f || (extraLocalMedia[ex.id] ? extraLocalMedia[ex.id][1] : 0);
+  ex._media = path ? ('media/' + path + '.svg') : '';
+  return ex._media;
+}
+
+function prepLibEntry(ex) {
+  if (!ex || ex._prepped) return ex;
+  const cat = ex.category || '';
+  let group = LIB_GROUP_ORDER.indexOf(cat) !== -1 ? cat : (LEGACY_GROUP[cat] || cat || 'strength');
+  const primary = ex.primaryMuscles || [];
+  let sub = ex.subcategory || '';
+  if (!ex.subcategory) {
+    if (group === 'strength' && primary.indexOf('abdominals') !== -1) { group = 'core'; sub = 'stability'; }
+    else if (group === 'strength') sub = MUSCLE_TO_SUB[primary[0]] || '';
+    else if (cat === 'crossfit' || cat === 'hyrox') sub = cat;
+    else if (group === 'mobility') sub = 'stretching';
+    else if (cat === 'agility') sub = 'change_of_direction';
+    else if (cat === 'olympic weightlifting') sub = 'olympic';
+    else if (cat === 'strongman') sub = 'carry';
+  }
+  ex._g = group;
+  ex._s = sub;
+  if (!ex.type) {
+    const en = String((ex.name && (ex.name.en || ex.name)) || '').toLowerCase();
+    ex._type = group === 'conditioning' && cat !== 'crossfit' ? 'distance_time'
+      : (group === 'mobility' || /plank|hold|wall sit|hang/.test(en)) ? 'time'
+      : (ex.equipment === 'body only' ? 'reps' : 'weight_reps');
+  } else {
+    ex._type = ex.type;
+  }
+  libMediaUrl(ex);
+  const nm = (typeof ex.name === 'object') ? ex.name : { ar: '', en: ex.name || '' };
+  ex._nameN = normAr((nm.ar || '') + ' ' + (nm.en || ''));
+  const words = [nm.ar, nm.en, ex.equipment, (EQUIPMENT[ex.equipment] || {}).ar, (EQUIPMENT[ex.equipment] || {}).en]
+    .concat(primary.map(function (m) { return (MUSCLES[m] || {}).ar + ' ' + m; }))
+    .concat((ex.secondaryMuscles || []).map(function (m) { return (MUSCLES[m] || {}).ar + ' ' + m; }))
+    .concat(SUBCATS[group] && SUBCATS[group][sub] ? SUBCATS[group][sub] : [])
+    .concat(ex.tags || []);
+  ex._search = normAr(words.join(' '));
+  ex._prepped = true;
+  return ex;
+}
+
+/* الفهرس الموسّع: من الشكل المختصر للشكل اللي باقي الكود بيفهمه */
+function expandIndexRow(r) {
+  return {
+    id: r.id, name: r.n, category: r.c, subcategory: r.s,
+    primaryMuscles: r.pm || [], secondaryMuscles: r.sm || [], equipment: r.e,
+    level: r.l, type: r.t, pattern: r.p, cautions: r.ca || [], tags: r.tg || [],
+    src: r.src, m: r.m || '', f: r.f || 0
+  };
+}
+
+/* تمارين قوالب التأهيل — كل اسم مرة واحدة، والتفاصيل من القالب نفسه */
+function rehabLibEntries() {
+  if (rehabLibCache) return rehabLibCache;
+  const seen = {};
+  const out = [];
+  REHAB_TEMPLATES.forEach(function (tpl) {
+    (tpl.phases || []).forEach(function (phase) {
+      (phase.exercises || []).forEach(function (item) {
+        const en = item.name && item.name.en;
+        if (!en) return;
+        const key = normaliseName(en);
+        if (seen[key]) return;
+        seen[key] = true;
+        const reps = String(item.reps || '');
+        out.push({
+          id: 'rt_' + key.replace(/ /g, '_'),
+          name: { ar: item.name.ar || en, en: en },
+          category: 'rehab',
+          subcategory: REHAB_PART_TO_SUB[tpl.bodyPart] || 'general',
+          primaryMuscles: [], secondaryMuscles: [], equipment: 'other',
+          type: /ثاني|sec|\bs\b|دقيق|min/i.test(reps) ? 'time' : 'reps',
+          cautions: [], tags: [], src: 'rehab',
+          _rehab: { goal: item.goal, benefit: item.injuryBenefit, muscles: item.primaryMuscles, sets: item.sets, reps: item.reps, template: tpl }
+        });
+      });
+    });
+  });
+  rehabLibCache = out;
+  return out;
+}
+
+function baseLibrary() {
+  return EXERCISE_LIBRARY.concat(extraLib || [], rehabLibEntries());
+}
+
+function rebuildLibraryData() {
+  const base = baseLibrary();
+  const names = {};
+  base.forEach(function (ex) {
+    const en = (ex.name && typeof ex.name === 'object') ? ex.name.en : ex.name;
+    if (en) names[normaliseName(en)] = true;
+  });
+  const leftovers = remoteLeftovers.filter(function (ex) {
+    return !names[normaliseName(typeof ex.name === 'object' ? ex.name.en : ex.name)];
+  });
+  libraryData = base.concat(leftovers);
+  libraryData.forEach(prepLibEntry);
+}
+
+function ensureExtraLibrary() {
+  if (extraLibPromise) return extraLibPromise;
+  extraLibPromise = import('./library/exercises-index.js').then(function (mod) {
+    extraLocalMedia = mod.LOCAL_MEDIA || {};
+    extraLib = (mod.EXERCISE_INDEX || []).map(expandIndexRow);
+    // التمارين القديمة ممكن تكون اتجهّزت قبل ما رسومها توصل
+    EXERCISE_LIBRARY.forEach(function (ex) { delete ex._media; delete ex._prepped; });
+    rebuildLibraryData();
+    return extraLib;
+  }).catch(function () {
+    // النت فصل — المكتبة الأصلية بتفضل شغالة، ونحاول تاني المرة الجاية
+    extraLibPromise = null;
+    return [];
+  });
+  return extraLibPromise;
+}
+
+function ensureExerciseDetails() {
+  if (extraDetails) return Promise.resolve(extraDetails);
+  if (extraDetailsPromise) return extraDetailsPromise;
+  extraDetailsPromise = import('./library/exercises-details.js').then(function (mod) {
+    extraDetails = mod.EXERCISE_DETAILS || {};
+    return extraDetails;
+  }).catch(function () {
+    extraDetailsPromise = null;
+    return {};
+  });
+  return extraDetailsPromise;
+}
+
+/* الخطوات والنصايح والأخطاء بلغة الواجهة — من أي طبقة جه التمرين */
+function libDetailsOf(ex) {
+  const pick = function (v) { return (v && typeof v === 'object') ? (v[lang] || v.ar || v.en || '') : (v || ''); };
+  const d = extraDetails && extraDetails[ex.id];
+  if (d) {
+    const ar = lang === 'ar';
+    return { howTo: ar ? d[0] : d[1], cues: (ar ? d[2] : d[3]) || [], mistakes: (ar ? d[4] : d[5]) || [], benefit: '' };
+  }
+  if (ex._rehab) return { howTo: pick(ex._rehab.goal), cues: [], mistakes: [], benefit: pick(ex._rehab.benefit) };
+  return { howTo: pick(ex.howTo), cues: [], mistakes: [], benefit: '' };
+}
+
+/* ---------- الوصفة حسب نوع التمرين ---------- */
+
+var PRESCRIPTION_DEFAULTS = {
+  weight_reps: { sets: 3, reps: '10', rest: '90s' },
+  reps: { sets: 3, reps: '12', rest: '60s' },
+  time: { sets: 3, duration: '30s', rest: '30s' },
+  distance: { sets: 3, distance: '20m', rest: '90s' },
+  distance_time: { sets: 1, duration: '20min', distance: '' }
+};
+
+var PRESCRIPTION_FIELDS = {
+  weight_reps: ['sets', 'reps', 'load', 'rest', 'tempo', 'intensity'],
+  reps: ['sets', 'reps', 'rest', 'tempo'],
+  time: ['sets', 'duration', 'rest'],
+  distance: ['sets', 'distance', 'load', 'rest'],
+  distance_time: ['sets', 'distance', 'duration', 'zone', 'rest']
+};
+
+function buildLibExercise(ex, values) {
+  const det = libDetailsOf(ex);
+  // نسخة باللغتين — عشان العميل اللي بيقلب اللغة يشوف كل حاجة بلغته
+  const i18n = {};
+  ['ar', 'en'].forEach(function (L) {
+    i18n[L] = withLang(L, function () {
+      const d = libDetailsOf(ex);
+      return {
+        name: exerciseLibName(ex),
+        howTo: d.howTo,
+        cues: d.cues.join('\n'),
+        benefit: d.benefit,
+        primaryMuscles: ex._rehab ? ((ex._rehab.muscles || {})[L] || '') : musclesListText(ex.primaryMuscles),
+        secondaryMuscles: musclesListText(ex.secondaryMuscles)
+      };
+    });
+  });
+  const libPhoto = libraryImageFor('exercise_' + ex.id);
+  const type = ex._type || ex.type || 'weight_reps';
+  const v = Object.assign({}, PRESCRIPTION_DEFAULTS[type] || PRESCRIPTION_DEFAULTS.weight_reps, values || {});
+  if (ex._rehab && !values) { v.sets = ex._rehab.sets || v.sets; if (ex._rehab.reps) { if (type === 'time') v.duration = String(ex._rehab.reps); else v.reps = String(ex._rehab.reps); } }
+  const isTimeLike = type === 'time' || type === 'distance' || type === 'distance_time';
+  return makeExercise({
+    libId: ex.id,
+    name: exerciseLibName(ex),
+    sets: Number(v.sets) || 1,
+    // الأنواع اللي مالهاش عدات بنكتب فيها المدة/المسافة — عشان أي شاشة قديمة تعرضها صح
+    reps: isTimeLike ? String(v.duration || v.distance || '') : String(v.reps || ''),
+    rest: v.rest || '', load: v.load || '', tempo: v.tempo || '',
+    rpe: v.intensityKind === 'rir' ? '' : (v.intensity || ''),
+    rir: v.intensityKind === 'rir' ? (v.intensity || '') : '',
+    duration: v.duration || '', distance: v.distance || '', zone: v.zone || '',
+    cues: (v.cues !== undefined ? v.cues : det.cues.join('\n')),
+    exType: type,
+    primaryMuscles: ex._rehab ? (lang === 'ar' ? (ex._rehab.muscles || {}).ar : (ex._rehab.muscles || {}).en) || '' : musclesListText(ex.primaryMuscles),
+    secondaryMuscles: musclesListText(ex.secondaryMuscles),
+    howTo: det.howTo,
+    injuryBenefit: det.benefit,
+    image: (!libPhoto && !libMediaUrl(ex) && ex.images && ex.images.length) ? ex.images[0] : '',
+    imageUrl: libPhoto || libMediaUrl(ex) || '',
+    i18n: i18n
+  });
+}
+
+function deliverLibExercise(built) {
+  closeExSheet();
+  if (libraryContext === 'class') {
+    addExerciseToCurrentClass(built);
+    return;
+  }
+  showScreen(coachScreen);
+  addToTarget(built);
+}
+
+async function quickAddLibExercise(ex) {
+  await ensureExerciseDetails();
+  deliverLibExercise(buildLibExercise(ex));
+}
+
+/* ---------- الشيت: تفاصيل التمرين ---------- */
+
+function exSheetEls() {
+  return { wrap: document.getElementById('ex-sheet'), body: document.getElementById('ex-sheet-body') };
+}
+
+function closeExSheet() {
+  const els = exSheetEls();
+  if (els.wrap) els.wrap.classList.add('hidden');
+  document.body.classList.remove('sheet-open');
+}
+
+function openExSheetShell() {
+  const els = exSheetEls();
+  els.body.innerHTML = '';
+  els.wrap.classList.remove('hidden');
+  document.body.classList.add('sheet-open');
+  els.wrap.querySelector('.ex-sheet').scrollTop = 0;
+  return els.body;
+}
+
+function el(tag, cls, text) {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text !== undefined && text !== null) node.textContent = text;
+  return node;
+}
+
+function clientCautionKeys() {
+  if (libraryContext !== 'coach' || !currentClient || !coachHealth) return [];
+  try { return activeHealthItems(coachHealth).map(function (item) { return item.key; }); } catch (e) { return []; }
+}
+
+function libAlternatives(ex) {
+  const muscles = ex.primaryMuscles || [];
+  return (libraryData || []).filter(function (other) {
+    if (other === ex || other.id === ex.id || other._g !== ex._g) return false;
+    if (ex._s && other._s !== ex._s) return false;
+    if (!muscles.length) return true;
+    return (other.primaryMuscles || []).some(function (m) { return muscles.indexOf(m) !== -1; });
+  }).sort(function (a, b) { return (b._media ? 1 : 0) - (a._media ? 1 : 0); }).slice(0, 6);
+}
+
+function libLevelText(level) {
+  return level ? t('level_' + level) : '';
+}
+
+async function openExerciseSheet(ex) {
+  prepLibEntry(ex);
+  const body = openExSheetShell();
+  body.appendChild(el('p', 'hint-text', t('exs_loading')));
+  await ensureExerciseDetails();
+  const det = libDetailsOf(ex);
+  body.innerHTML = '';
+  body.setAttribute('data-id', ex.id);
+
+  const media = libraryImageFor('exercise_' + ex.id) || libMediaUrl(ex) || ((ex.images && ex.images.length) ? IMAGE_BASE + ex.images[0] : '');
+  if (media) {
+    const box = el('div', 'exs-media');
+    const img = el('img');
+    img.src = media;
+    img.alt = exerciseLibName(ex);
+    box.appendChild(img);
+    if (ex._frames === 2) box.appendChild(el('span', 'exs-media-hint', t('exs_animated')));
+    body.appendChild(box);
+  }
+
+  body.appendChild(el('h3', 'exs-title', exerciseLibName(ex)));
+  const other = (typeof ex.name === 'object' && lang === 'ar') ? ex.name.en : '';
+  if (other) body.appendChild(el('p', 'exs-subtitle', other));
+
+  const chips = el('div', 'exs-chips');
+  [categoryName(ex._g) + (ex._s && subName(ex._g, ex._s) ? ' · ' + subName(ex._g, ex._s) : ''),
+   libLevelText(ex.level), ex.equipment ? equipName(ex.equipment) : '', t('type_' + ex._type)]
+    .filter(Boolean).forEach(function (txt) { chips.appendChild(el('span', 'exs-chip', txt)); });
+  body.appendChild(chips);
+
+  // الاحتياطات أول حاجة — قبل الخطوات، زي أجهزة العلاج الطبيعي
+  const cautions = ex.cautions || [];
+  const clientKeys = clientCautionKeys();
+  const hits = cautions.filter(function (k) { return clientKeys.indexOf(k) !== -1; });
+  if (hits.length) {
+    body.appendChild(el('div', 'exs-caution danger', fill('exs_caution_client', { list: hits.map(cautionName).join('، ') })));
+  } else if (cautions.length) {
+    body.appendChild(el('div', 'exs-caution', fill('exs_caution_general', { list: cautions.map(cautionName).join('، ') })));
+  }
+
+  if ((ex.primaryMuscles || []).length || (ex._rehab && ex._rehab.muscles)) {
+    const p = el('p', 'exs-line');
+    p.appendChild(el('strong', '', t('exs_primary') + ': '));
+    p.appendChild(document.createTextNode(ex._rehab ? ((ex._rehab.muscles || {})[lang] || '') : musclesListText(ex.primaryMuscles)));
+    if ((ex.secondaryMuscles || []).length) {
+      p.appendChild(el('span', 'exs-muted', ' · ' + t('exs_secondary') + ': ' + musclesListText(ex.secondaryMuscles)));
+    }
+    body.appendChild(p);
+  }
+
+  function section(titleKey, content) {
+    if (!content || (Array.isArray(content) && !content.length)) return;
+    body.appendChild(el('h4', 'exs-h', t(titleKey)));
+    if (Array.isArray(content)) {
+      const ul = el('ul', 'exs-list');
+      content.forEach(function (line) { ul.appendChild(el('li', '', line)); });
+      body.appendChild(ul);
+    } else {
+      body.appendChild(el('p', 'exs-text', content));
+    }
+  }
+  section('exs_howto', det.howTo);
+  section('exs_cues', det.cues);
+  section('exs_mistakes', det.mistakes);
+  section('anatomy_injury_benefit', det.benefit);
+
+  const alts = libAlternatives(ex);
+  if (alts.length) {
+    body.appendChild(el('h4', 'exs-h', t('exs_alternatives')));
+    const row = el('div', 'exs-alts');
+    alts.forEach(function (alt) {
+      const b = el('button', 'exs-alt', exerciseLibName(alt));
+      b.type = 'button';
+      b.addEventListener('click', function () { openExerciseSheet(alt); });
+      row.appendChild(b);
+    });
+    body.appendChild(row);
+  }
+
+  if (ex.src === 'ek' || ex.src === 'wg' || (libMediaUrl(ex) && !ex.src)) {
+    const credit = el('button', 'link exs-credit', t('exs_media_credit'));
+    credit.type = 'button';
+    credit.addEventListener('click', openMediaCredits);
+    body.appendChild(credit);
+  }
+
+  const actions = el('div', 'exs-actions');
+  const addBtn = el('button', '', t('exs_add'));
+  addBtn.type = 'button';
+  addBtn.id = 'exs-add-btn';
+  addBtn.addEventListener('click', function () {
+    if (libraryContext === 'class') { deliverLibExercise(buildLibExercise(ex)); return; }
+    openPrescription(ex);
+  });
+  actions.appendChild(addBtn);
+  body.appendChild(actions);
+}
+
+/* ---------- الشيت: الوصفة ---------- */
+
+function openPrescription(ex) {
+  const body = openExSheetShell();
+  const type = ex._type || 'weight_reps';
+  const defaults = Object.assign({}, PRESCRIPTION_DEFAULTS[type]);
+  if (ex._rehab) { defaults.sets = ex._rehab.sets || defaults.sets; if (type === 'time') defaults.duration = String(ex._rehab.reps || defaults.duration); else defaults.reps = String(ex._rehab.reps || defaults.reps); }
+  const det = libDetailsOf(ex);
+
+  body.appendChild(el('h3', 'exs-title', exerciseLibName(ex)));
+  body.appendChild(el('p', 'exs-subtitle', t('exs_prescribe') + ' · ' + t('type_' + type)));
+
+  const inputs = {};
+  const grid = el('div', 'exs-form');
+  const labels = { sets: 'ex_sets', reps: 'ex_reps', load: 'ex_load', rest: 'ex_rest', tempo: 'ex_tempo', duration: 'ex_duration', distance: 'ex_distance', zone: 'ex_zone' };
+  (PRESCRIPTION_FIELDS[type] || PRESCRIPTION_FIELDS.weight_reps).forEach(function (key) {
+    const wrap = el('label', 'exs-field');
+    if (key === 'intensity') {
+      wrap.appendChild(el('span', '', t('ex_intensity')));
+      const row = el('div', 'exs-intensity');
+      const kind = el('select');
+      kind.id = 'exs-f-intensity-kind';
+      [['rpe', 'RPE'], ['rir', 'RIR']].forEach(function (o) { const op = el('option', '', o[1]); op.value = o[0]; kind.appendChild(op); });
+      const val = el('input');
+      val.id = 'exs-f-intensity';
+      val.inputMode = 'decimal';
+      row.appendChild(kind);
+      row.appendChild(val);
+      wrap.appendChild(row);
+      inputs.intensityKind = kind;
+      inputs.intensity = val;
+    } else {
+      wrap.appendChild(el('span', '', t(labels[key])));
+      const input = el('input');
+      input.id = 'exs-f-' + key;
+      input.value = defaults[key] !== undefined ? defaults[key] : '';
+      if (key === 'sets') { input.type = 'number'; input.min = '1'; }
+      wrap.appendChild(input);
+      inputs[key] = input;
+    }
+    grid.appendChild(wrap);
+  });
+  body.appendChild(grid);
+
+  const cuesWrap = el('label', 'exs-field wide');
+  cuesWrap.appendChild(el('span', '', t('exs_cues_for_client')));
+  const cues = el('textarea');
+  cues.id = 'exs-f-cues';
+  cues.rows = 3;
+  cues.value = det.cues.join('\n');
+  cuesWrap.appendChild(cues);
+  body.appendChild(cuesWrap);
+
+  const where = (coachMode === 'rehab')
+    ? ((targetPhase && targetPhase.selectedOptions[0]) ? targetPhase.selectedOptions[0].textContent : '')
+    : ((targetSection && targetSection.selectedOptions[0]) ? targetSection.selectedOptions[0].textContent : '');
+  if (where) body.appendChild(el('p', 'hint-text', fill('exs_add_to', { target: where })));
+
+  const actions = el('div', 'exs-actions');
+  const back = el('button', 'secondary', t('back_generic'));
+  back.type = 'button';
+  back.addEventListener('click', function () { openExerciseSheet(ex); });
+  const ok = el('button', '', t('exs_add'));
+  ok.type = 'button';
+  ok.id = 'exs-confirm-btn';
+  ok.addEventListener('click', function () {
+    const values = {};
+    Object.keys(inputs).forEach(function (k) { values[k] = inputs[k].value; });
+    values.cues = cues.value.trim();
+    deliverLibExercise(buildLibExercise(ex, values));
+  });
+  actions.appendChild(back);
+  actions.appendChild(ok);
+  body.appendChild(actions);
+}
+
+/* ---------- حقوق الصور ---------- */
+
+async function openMediaCredits() {
+  const body = openExSheetShell();
+  body.appendChild(el('p', 'hint-text', t('exs_loading')));
+  let mod;
+  try { mod = await import('./library/credits.js'); } catch (e) { body.innerHTML = ''; body.appendChild(el('p', 'message', t('problem'))); return; }
+  body.innerHTML = '';
+  body.appendChild(el('h3', 'exs-title', t('credits_title')));
+  body.appendChild(el('p', 'exs-text', t('credits_intro')));
+  Object.keys(mod.MEDIA_SOURCES).forEach(function (key) {
+    const s = mod.MEDIA_SOURCES[key];
+    const items = mod.MEDIA_CREDITS.filter(function (c) { return c.src === key; });
+    const card = el('div', 'credit-card');
+    card.appendChild(el('h4', 'exs-h', s.name + ' — ' + fill('credits_count', { n: items.length })));
+    const who = el('p', 'exs-line');
+    who.appendChild(el('strong', '', t('credits_by') + ': '));
+    who.appendChild(document.createTextNode(s.by));
+    card.appendChild(who);
+    const lic = el('p', 'exs-line');
+    lic.appendChild(el('strong', '', t('credits_license') + ': '));
+    const a = el('a', '', s.license);
+    a.href = s.licenseUrl; a.target = '_blank'; a.rel = 'noopener';
+    lic.appendChild(a);
+    lic.appendChild(document.createTextNode(' · '));
+    const src = el('a', '', t('credits_source'));
+    src.href = s.url; src.target = '_blank'; src.rel = 'noopener';
+    lic.appendChild(src);
+    card.appendChild(lic);
+    const ch = el('p', 'exs-line');
+    ch.appendChild(el('strong', '', t('credits_changes') + ': '));
+    ch.appendChild(document.createTextNode(s.changes[lang] || s.changes.ar));
+    card.appendChild(ch);
+    const det = el('details', 'credit-list');
+    det.appendChild(el('summary', '', t('credits_show_list')));
+    const ul = el('ul', 'exs-list');
+    items.forEach(function (c) {
+      const li = el('li');
+      const link = el('a', '', c.title);
+      link.href = c.url; link.target = '_blank'; link.rel = 'noopener';
+      li.appendChild(link);
+      ul.appendChild(li);
+    });
+    det.appendChild(ul);
+    card.appendChild(det);
+    body.appendChild(card);
+  });
+}
+
+document.getElementById('ex-sheet-close').addEventListener('click', closeExSheet);
+document.getElementById('ex-sheet').addEventListener('click', function (event) {
+  if (event.target.id === 'ex-sheet') closeExSheet();
+});
+document.getElementById('lib-credits-btn').addEventListener('click', openMediaCredits);
+document.getElementById('lib-level').addEventListener('change', function () { resetLibPage(); renderLibrary(); });
+document.getElementById('lib-media-only').addEventListener('click', function () {
+  libMediaOnly = !libMediaOnly;
+  this.classList.toggle('active', libMediaOnly);
+  resetLibPage(); renderLibrary();
+});
+document.getElementById('lib-safe-only').addEventListener('click', function () {
+  libSafeOnly = !libSafeOnly;
+  this.classList.toggle('active', libSafeOnly);
+  resetLibPage(); renderLibrary();
+});
+
+
+/* أرقام القالب → خانات الوصفة: "30s" مدة، "400m" مسافة، "20min" مدة… */
+function templateValues(source, type) {
+  const reps = String(source.reps || '');
+  const v = { sets: source.sets, rest: source.rest || '', load: source.load || '', tempo: source.tempo || '', intensity: source.rpe || '' };
+  const isDistance = /\d\s*(m|km|م|كم)\b/i.test(reps) && !/min/i.test(reps);
+  if (type === 'time') v.duration = reps;
+  else if (type === 'distance') v.distance = reps;
+  else if (type === 'distance_time') { if (isDistance) v.distance = reps; else v.duration = reps; }
+  else v.reps = reps;
+  return v;
+}
+
+
+/* ============================================================
+   الترجمة للنصوص المحفوظة
+   ------------------------------------------------------------
+   القوالب والمكملات والأجهزة بتتنسخ جوه برنامج العميل بلغة المدرب
+   وقت ما اتضافت. فلو العميل قلب اللغة كان بيلاقي عربي. بنعمل قاموس
+   من كل نص موجود باللغتين في المكتبات، وأي نص محفوظ مطابق لنص فيه
+   بيتعرض باللغة الحالية. النص اللي المدرب كتبه بإيده بيفضل زي ما هو
+   — ده كلامه هو مش ترجمة. وده بيصلّح البرامج القديمة المحفوظة كمان
+   ============================================================ */
+
+var trDict = null;
+
+function trKey(text) {
+  return String(text).trim().replace(/\s+/g, ' ');
+}
+
+function buildTrDict() {
+  const d = { ar: {}, en: {} };
+  const add = function (ar, en) {
+    if (typeof ar !== 'string' || typeof en !== 'string' || !ar.trim() || !en.trim() || ar === en) return;
+    const ka = trKey(ar), ke = trKey(en);
+    if (!d.ar[ka]) d.ar[ka] = en;
+    if (!d.en[ke]) d.en[ke] = ar;
+  };
+  const walk = function (node, depth) {
+    if (!node || typeof node !== 'object' || depth > 8) return;
+    if (Array.isArray(node)) { node.forEach(function (x) { walk(x, depth + 1); }); return; }
+    if (typeof node.ar === 'string' && typeof node.en === 'string') add(node.ar, node.en);
+    if (typeof node.title === 'string' && typeof node.titleEn === 'string') add(node.title, node.titleEn);
+    if (typeof node.body === 'string' && typeof node.bodyEn === 'string') add(node.body, node.bodyEn);
+    Object.keys(node).forEach(function (k) { if (node[k] && typeof node[k] === 'object') walk(node[k], depth + 1); });
+  };
+  [REHAB_TEMPLATES, SUPPLEMENT_LIBRARY, MODALITIES, MODALITY_PROTOCOLS, SPORT_TEMPLATES, NUTRITION_PROGRAMS, MED_LIBRARY_SEED, EXERCISE_LIBRARY]
+    .forEach(function (lib) { walk(lib, 0); });
+  // مراحل التأهيل: "اسم التمرين — ٣ × ١٠" وغيره بيتكتب من الحقول دي بالظبط
+  Object.keys(MODALITY_VALUES_EN).forEach(function (ar) { add(ar, MODALITY_VALUES_EN[ar]); });
+  trDict = d;
+}
+
+function tr(text) {
+  if (!text || typeof text !== 'string') return text;
+  if (!trDict) buildTrDict();
+  const key = trKey(text);
+  if (lang === 'en') return trDict.ar[key] || text;
+  return trDict.en[key] || text;
+}
+
+function modalityValueText(value) {
+  if (lang !== 'en' || !value) return value;
+  return MODALITY_VALUES_EN[value] || MODALITY_VALUES_EN[trKey(value)] || value;
+}
+
+/* نص من تفاصيل التمرين (الشرح، النصايح، الفايدة…) بلغة الواجهة */
+function exerciseText(exercise, key, value) {
+  if (!value) return value;
+  const map = { anatomy_howto: 'howTo', exs_cues: 'cues', anatomy_injury_benefit: 'benefit', anatomy_primary: 'primaryMuscles', anatomy_secondary: 'secondaryMuscles' };
+  const field = map[key];
+  const i18n = exercise && exercise.i18n;
+  if (field && i18n && i18n[lang] && i18n[lang][field] !== undefined) {
+    // لو المدرب عدّل النص بإيده، بنعرض كلامه هو
+    const other = lang === 'ar' ? 'en' : 'ar';
+    if (value === (i18n[other] || {})[field] || value === i18n[lang][field]) return i18n[lang][field];
+  }
+  return tr(value);
+}

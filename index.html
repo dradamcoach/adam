@@ -1248,6 +1248,8 @@
         </div>
       </div>
 
+      <!-- حصص اليوم: جيم الصبح + سباحة بالليل مثلًا -->
+      <div class="session-box" id="coach-session-box"></div>
       <input id="day-title" data-t-ph="day_title">
       <label class="rest">
         <input type="checkbox" id="rest-day"> <span data-t="rest_day">يوم راحة</span>
@@ -1456,9 +1458,16 @@
     <h2 data-t="library_title">مكتبة التمارين</h2>
     <input id="lib-search" data-t-ph="search_ex">
     <div class="chips" id="lib-chips"></div>
-    <div class="filters">
+    <div class="chips lib-subchips hidden" id="lib-subchips"></div>
+    <div class="filters three">
       <select id="lib-muscle"></select>
       <select id="lib-equip"></select>
+      <select id="lib-level"></select>
+    </div>
+    <div class="lib-toggles">
+      <button type="button" class="chip small" id="lib-media-only"><span data-t="lib_media_only">بصورة بس</span></button>
+      <button type="button" class="chip small hidden" id="lib-safe-only"><span data-t="lib_safe_only">مناسب للعميل</span></button>
+      <button type="button" class="link" id="lib-credits-btn" data-t="lib_credits_link">حقوق الصور</button>
     </div>
     <p class="message" id="lib-message"></p>
     <div class="grid" id="lib-grid"></div>
@@ -1591,6 +1600,9 @@
       <!-- اتمرّن أي يوم في أي يوم: الزرار ده بيخلي اليوم المعروض
            هو تمرين النهاردة -->
       <button type="button" class="pick-session hidden" id="pick-session-btn"></button>
+
+      <!-- لو اليوم فيه أكتر من حصة: تبويب لكل حصة -->
+      <div class="session-tabs hidden" id="client-session-tabs"></div>
 
       <div class="sess-card" id="sess-card">
         <div class="sess-top">
@@ -1921,6 +1933,14 @@
   </div>
 
   <button id="logout-btn" class="link hidden" data-t="logout">تسجيل الخروج</button>
+
+  <!-- تفاصيل التمرين والوصفة وحقوق الصور — شيت واحد بيتملي من الجافاسكريبت -->
+  <div class="ex-sheet-overlay hidden" id="ex-sheet">
+    <div class="ex-sheet" role="dialog" aria-modal="true">
+      <button type="button" class="ex-sheet-close" id="ex-sheet-close" data-t-title="exs_close" title="إغلاق" aria-label="إغلاق"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg></button>
+      <div id="ex-sheet-body"></div>
+    </div>
+  </div>
 
   <!-- ===== بروفايل المتخصص: بيتفتح بالدوس على صورته ===== -->
   <div class="picker hidden" id="provider-sheet">
