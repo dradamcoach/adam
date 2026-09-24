@@ -1114,6 +1114,72 @@ const TEXT = {
     wr_max_hr: 'أقصى {v}',
     wr_kcal: '{v} سعر',
     wr_zones: 'وقت المناطق',
+    tour_replay: "🧭 جولة سريعة في البرنامج",
+    tour_start: "يلا نبدأ",
+    tour_next: "التالي",
+    tour_back: "رجوع",
+    tour_finish: "تمام 💪",
+    tour_skip: "تخطّي",
+    tour_c_hi_e: "👋",
+    tour_c_hi_t: "أهلًا بيك في ADAM",
+    tour_c_hi_b: "جولة سريعة ٣٠ ثانية تعرف فيها كل حاجة. تقدر تتخطاها في أي وقت.",
+    tour_c_rings_e: "🎯",
+    tour_c_rings_t: "حلقاتك اليومية",
+    tour_c_rings_b: "كل يوم قفّل ٣ حلقات: تمرين وأكل ومية. كل يوم بتقفلهم بيزود سلسلتك ونقطك ومستواك.",
+    tour_c_train_e: "🏋️",
+    tour_c_train_t: "تمرينك",
+    tour_c_train_b: "برنامجك يوم بيوم. افتح التمرين، اتفرّج على الفيديو، وعلّم اللي خلّصته.",
+    tour_c_food_e: "🥗",
+    tour_c_food_t: "أكلك",
+    tour_c_food_b: "خطة أكلك من الأخصائي، وبتسجّل فيها وجباتك وكوبايات المية.",
+    tour_c_friends_e: "🤝",
+    tour_c_friends_t: "صحابك",
+    tour_c_friends_b: "ضيف صحابك بكود، شجّعوا بعض، ونزّل ستوري بإنجازك.",
+    tour_c_chal_e: "🏆",
+    tour_c_chal_t: "المسابقات والنقط",
+    tour_c_chal_b: "ادخل مسابقات الأسبوع، واجمع نقط تبدّلها بجوايز.",
+    tour_c_tiles_e: "🧩",
+    tour_c_tiles_t: "كل حاجة تانية هنا",
+    tour_c_tiles_b: "فريقك، المحادثة مع مدربك، تقدّمك والإنبودي، الاستشارة، والإبلاغ عن إصابة.",
+    tour_c_bell_e: "🔔",
+    tour_c_bell_t: "الإشعارات",
+    tour_c_bell_b: "أي تعديل في برنامجك أو رسالة من فريقك بتوصلك هنا.",
+    tour_c_done_e: "💪",
+    tour_c_done_t: "إنت جاهز!",
+    tour_c_done_b: "ابدأ بتمرين النهارده. ولو احتجت الجولة تاني هتلاقيها تحت في الرئيسية.",
+    tour_p_hi_e: "👋",
+    tour_p_hi_t: "أهلًا يا كابتن",
+    tour_p_hi_b: "جولة سريعة في لوحة شغلك — أقل من دقيقة.",
+    tour_p_tiles_e: "🧭",
+    tour_p_tiles_t: "لوحتك",
+    tour_p_tiles_b: "من هنا توصل لكل حاجة: عملائك، الالتزام، المحادثات، والحجوزات.",
+    tour_p_profile_e: "✨",
+    tour_p_profile_t: "بروفايلك",
+    tour_p_profile_b: "حط صورتك وشهاداتك ومكان شغلك على الخريطة — العملاء بيختاروا باللي بيشوفوه.",
+    tour_p_search_e: "🔎",
+    tour_p_search_t: "دوّر على عميل",
+    tour_p_search_b: "اكتب اسمه وافتح برنامجه على طول.",
+    tour_p_list_e: "👥",
+    tour_p_list_t: "عملائك",
+    tour_p_list_b: "دوس على أي عميل تفتح برنامجه. العلامة الحمرا معناها إن عنده حاجة مستنياك.",
+    tour_p_bell_e: "🔔",
+    tour_p_bell_t: "الإشعارات",
+    tour_p_bell_b: "إصابة جديدة، رسالة، أو تحليل إنبودي — كله بيوصلك هنا.",
+    tour_p_done_e: "💪",
+    tour_p_done_t: "يلا نشتغل",
+    tour_p_done_b: "الجولة موجودة تحت اللوحة لو احتجتها تاني.",
+    tour_g_tabs_e: "🗂️",
+    tour_g_tabs_t: "تبويبات البرنامج",
+    tour_g_tabs_b: "كل تخصص ليه تبويب: تمرين، تأهيل، علاج طبيعي، تغذية... وبيظهرلك اللي يخص تخصصك.",
+    tour_g_health_e: "⚠️",
+    tour_g_health_t: "حالته الصحية",
+    tour_g_health_b: "اقرا دي الأول: الأمراض والاحتياطات وإذن الطبيب قبل ما تكتب أي حاجة.",
+    tour_g_advisor_e: "🤖",
+    tour_g_advisor_t: "المستشار",
+    tour_g_advisor_b: "اسأله يقترحلك برنامج أو يراجع اللي كتبته — والقرار في الآخر ليك.",
+    tour_g_injuries_e: "🩹",
+    tour_g_injuries_t: "الإصابات",
+    tour_g_injuries_b: "لو عميلك بلّغ عن إصابة هتلاقيها هنا بعلامة حمرا.",
     tab_physio: "علاج طبيعي",
     notif_t_physio: "العلاج الطبيعي اتحدّث",
     notif_b_physio: "أخصائي العلاج الطبيعي حدّث خطتك — افتحها وشوف الجديد.",
@@ -3225,6 +3291,72 @@ const TEXT = {
     wr_max_hr: 'max {v}',
     wr_kcal: '{v} kcal',
     wr_zones: 'Time in zones',
+    tour_replay: "🧭 Quick tour of the app",
+    tour_start: "Let’s go",
+    tour_next: "Next",
+    tour_back: "Back",
+    tour_finish: "Got it 💪",
+    tour_skip: "Skip",
+    tour_c_hi_e: "👋",
+    tour_c_hi_t: "Welcome to ADAM",
+    tour_c_hi_b: "A 30-second tour so you know where everything is. Skip anytime.",
+    tour_c_rings_e: "🎯",
+    tour_c_rings_t: "Your daily rings",
+    tour_c_rings_b: "Close 3 rings every day: training, food and water. Each day you do grows your streak, points and level.",
+    tour_c_train_e: "🏋️",
+    tour_c_train_t: "Your training",
+    tour_c_train_b: "Your program day by day. Open a workout, watch the video, tick what you finish.",
+    tour_c_food_e: "🥗",
+    tour_c_food_t: "Your food",
+    tour_c_food_b: "Your meal plan from your specialist — log your meals and glasses of water here.",
+    tour_c_friends_e: "🤝",
+    tour_c_friends_t: "Your friends",
+    tour_c_friends_b: "Add friends with a code, cheer each other on, and share a story of your win.",
+    tour_c_chal_e: "🏆",
+    tour_c_chal_t: "Challenges & points",
+    tour_c_chal_b: "Join the weekly challenges and collect points you can swap for rewards.",
+    tour_c_tiles_e: "🧩",
+    tour_c_tiles_t: "Everything else",
+    tour_c_tiles_b: "Your team, chat with your coach, progress and InBody, consultations, and injury reports.",
+    tour_c_bell_e: "🔔",
+    tour_c_bell_t: "Notifications",
+    tour_c_bell_b: "Any change to your program or message from your team lands here.",
+    tour_c_done_e: "💪",
+    tour_c_done_t: "You’re all set!",
+    tour_c_done_b: "Start with today’s workout. Need the tour again? It’s at the bottom of Home.",
+    tour_p_hi_e: "👋",
+    tour_p_hi_t: "Welcome, coach",
+    tour_p_hi_b: "A quick tour of your workspace — under a minute.",
+    tour_p_tiles_e: "🧭",
+    tour_p_tiles_t: "Your dashboard",
+    tour_p_tiles_b: "Everything starts here: clients, adherence, chats and bookings.",
+    tour_p_profile_e: "✨",
+    tour_p_profile_t: "Your profile",
+    tour_p_profile_b: "Add your photo, certificates and workplace on the map — clients choose by what they see.",
+    tour_p_search_e: "🔎",
+    tour_p_search_t: "Find a client",
+    tour_p_search_b: "Type a name and open their program right away.",
+    tour_p_list_e: "👥",
+    tour_p_list_t: "Your clients",
+    tour_p_list_b: "Tap any client to open their program. A red badge means something is waiting for you.",
+    tour_p_bell_e: "🔔",
+    tour_p_bell_t: "Notifications",
+    tour_p_bell_b: "New injuries, messages or InBody analyses — they all land here.",
+    tour_p_done_e: "💪",
+    tour_p_done_t: "Let’s get to work",
+    tour_p_done_b: "The tour lives under your dashboard if you need it again.",
+    tour_g_tabs_e: "🗂️",
+    tour_g_tabs_t: "Program tabs",
+    tour_g_tabs_b: "Each specialty has a tab: training, rehab, physio, nutrition... you see the ones for your specialty.",
+    tour_g_health_e: "⚠️",
+    tour_g_health_t: "Health status",
+    tour_g_health_b: "Read this first: conditions, precautions and doctor clearance before you write anything.",
+    tour_g_advisor_e: "🤖",
+    tour_g_advisor_t: "The advisor",
+    tour_g_advisor_b: "Ask it to suggest a program or review yours — the final call is always yours.",
+    tour_g_injuries_e: "🩹",
+    tour_g_injuries_t: "Injuries",
+    tour_g_injuries_b: "If your client reports an injury, it shows up here with a red badge.",
     tab_physio: "Physio",
     notif_t_physio: "Your physiotherapy plan was updated",
     notif_b_physio: "Your physiotherapist updated your plan — open it to see what’s new.",
@@ -5965,6 +6097,7 @@ async function loadClients() {
   if (isFullAdminAccount()) { refreshLeadsBadge(); refreshPendingSpecsBadge(); }
 
   renderCoachTiles();
+  setTimeout(function () { tourMaybe('provider'); }, 1400);
 
   clientsList.innerHTML = '';
   clientsMessage.textContent = t('loading');
@@ -7567,6 +7700,7 @@ async function openCoachScreen(email, name, sport) {
     refreshInjuryBadge(email);
     refreshConsultBadge(email);
     coachMessage.textContent = '';
+    setTimeout(function () { tourMaybe('program'); }, 900);
   } catch (error) {
     coachMessage.textContent = t('problem') + error.message;
   }
@@ -10618,6 +10752,7 @@ async function loadClient(email) {
     // الشريط السفلي بيتبني بعد ما نعرف عنده تأهيل وتغذية ولا لأ
     renderAppbar();
     setClientMode('home');
+    setTimeout(function () { tourMaybe('client'); }, 1200);
 
     renderSafetyBanner();
     renderCycleCard();
@@ -32669,3 +32804,213 @@ function providerMapRow(provider, href) {
     }, function () { msg.textContent = t('near_fail'); }, { timeout: 15000, maximumAge: 300000 });
   });
 })();
+
+
+/* ============================================================
+   الجولة التعريفية — «ADAM في ٣٠ ثانية»
+   ------------------------------------------------------------
+   أول مرة العميل يفتح الرئيسية، أو المتخصص يفتح لوحته، أو يفتح
+   برنامج عميل: بنسلّط ضوء على كل جزء مهم ونشرحه في سطرين.
+   الخطوة اللي عنصرها مش ظاهر للحساب ده بتتخطّى لوحدها.
+   بتتحفظ «شافها» على الجهاز، وزرار «جولة سريعة» بيعيدها في أي وقت.
+   ============================================================ */
+
+const TOUR_KEY = 'adam-tour-';
+const TOURS = {
+  client: [
+    { key: 'c_hi' },
+    { key: 'c_rings', sel: '#eng-card' },
+    { key: 'c_train', sel: '.appbar-btn[data-mode="training"]' },
+    { key: 'c_food', sel: '.appbar-btn[data-mode="nutrition"]' },
+    { key: 'c_friends', sel: '#soc-bar' },
+    { key: 'c_chal', sel: '#chal-row' },
+    { key: 'c_tiles', sel: '#home-tiles' },
+    { key: 'c_bell', sel: '#notif-bell' },
+    { key: 'c_done' }
+  ],
+  provider: [
+    { key: 'p_hi' },
+    { key: 'p_tiles', sel: '#coach-tiles' },
+    { key: 'p_profile', sel: '#coach-tiles .home-tile[data-key="myprofile"]' },
+    { key: 'p_search', sel: '#clients-search' },
+    { key: 'p_list', sel: '#clients-list' },
+    { key: 'p_bell', sel: '#notif-bell' },
+    { key: 'p_done' }
+  ],
+  program: [
+    { key: 'g_tabs', sel: '#coach-screen .tabs' },
+    { key: 'g_health', sel: '#coach-health' },
+    { key: 'g_advisor', sel: '#advisor-open-btn' },
+    { key: 'g_injuries', sel: '#tab-injuries' }
+  ]
+};
+
+let tourState = null;
+
+function tourSeen(name) {
+  try { return localStorage.getItem(TOUR_KEY + name + '-v1') === '1'; } catch (error) { return true; }
+}
+
+function tourMark(name) {
+  try { localStorage.setItem(TOUR_KEY + name + '-v1', '1'); } catch (error) { /* وضع خاص — عادي */ }
+}
+
+function tourVisible(el) {
+  if (!el || el.closest('.hidden')) return false;
+  const r = el.getBoundingClientRect();
+  return r.width > 4 && r.height > 4;
+}
+
+/* الشاشة اللي الجولة تخصها لسه مفتوحة؟ */
+function tourContextOk(name) {
+  if (name === 'client') return !!document.getElementById('client-home') && tourVisible(document.getElementById('client-home'));
+  if (name === 'provider') return tourVisible(document.getElementById('coach-tiles'));
+  if (name === 'program') return tourVisible(document.getElementById('coach-screen'));
+  return false;
+}
+
+function tourMaybe(name) {
+  if (tourState || tourSeen(name)) return;
+  if (window.__QA_NO_TOUR__ && !window.__QA_FORCE_TOUR__) return;
+  if (!tourContextOk(name)) return;
+  /* لو فيه نافذة/شيت مفتوح دلوقتي مانقاطعهوش */
+  if (document.querySelector('.picker:not(.hidden), .ex-sheet-overlay:not(.hidden), .focus:not(.hidden), .lightbox:not(.hidden)')) return;
+  tourStart(name);
+}
+
+function tourStart(name) {
+  const steps = (TOURS[name] || []).filter(function (s) { return !s.sel || tourVisible(document.querySelector(s.sel)); });
+  if (!steps.length) return;
+  tourState = { name: name, steps: steps, i: 0 };
+  tourMark(name);
+  let root = document.querySelector('div#tour');
+  if (!root) {
+    root = document.createElement('div');
+    root.id = 'tour';
+    root.className = 'tour';
+    root.setAttribute('role', 'dialog');
+    root.setAttribute('aria-modal', 'true');
+    root.innerHTML = '<div class="tour-hole"></div><div class="tour-pop" aria-live="polite">'
+      + '<div class="tour-emoji"></div><div class="tour-title"></div><p class="tour-body"></p>'
+      + '<div class="tour-dots"></div><div class="tour-actions">'
+      + '<button type="button" class="tour-skip"></button><span class="tour-sp"></span>'
+      + '<button type="button" class="tour-back"></button><button type="button" class="tour-next"></button>'
+      + '</div></div>';
+    document.body.appendChild(root);
+    root.querySelector('.tour-next').addEventListener('click', function () { tourGo(1); });
+    root.querySelector('.tour-back').addEventListener('click', function () { tourGo(-1); });
+    root.querySelector('.tour-skip').addEventListener('click', tourEnd);
+    /* اللمس برّه الفقاعة = التالي (زي البرامج التانية) */
+    root.addEventListener('click', function (event) { if (event.target === root || event.target.classList.contains('tour-hole')) tourGo(1); });
+    window.addEventListener('resize', function () { if (tourState) tourPlace(); });
+    document.addEventListener('keydown', function (event) {
+      if (!tourState) return;
+      if (event.key === 'Escape') tourEnd();
+      if (event.key === 'ArrowLeft') tourGo(lang === 'ar' ? 1 : -1);
+      if (event.key === 'ArrowRight') tourGo(lang === 'ar' ? -1 : 1);
+    });
+  }
+  root.classList.remove('hidden');
+  document.body.classList.add('tour-open');
+  tourRender();
+}
+
+function tourGo(delta) {
+  if (!tourState) return;
+  const next = tourState.i + delta;
+  if (next < 0) return;
+  if (next >= tourState.steps.length) { tourEnd(); return; }
+  tourState.i = next;
+  tourRender();
+}
+
+function tourEnd() {
+  tourState = null;
+  const root = document.querySelector('div#tour');
+  if (root) root.classList.add('hidden');
+  document.body.classList.remove('tour-open');
+}
+
+function tourRender() {
+  const root = document.querySelector('div#tour');
+  const st = tourState;
+  const step = st.steps[st.i];
+  const pop = root.querySelector('.tour-pop');
+  const k = 'tour_' + step.key;
+  root.querySelector('.tour-emoji').textContent = t(k + '_e');
+  root.querySelector('.tour-title').textContent = t(k + '_t');
+  root.querySelector('.tour-body').textContent = t(k + '_b');
+  const dots = root.querySelector('.tour-dots');
+  dots.innerHTML = '';
+  st.steps.forEach(function (s, i) {
+    const d = document.createElement('span');
+    d.className = 'tour-dot' + (i === st.i ? ' on' : i < st.i ? ' done' : '');
+    dots.appendChild(d);
+  });
+  const last = st.i === st.steps.length - 1;
+  root.querySelector('.tour-next').textContent = st.i === 0 && !step.sel ? t('tour_start') : (last ? t('tour_finish') : t('tour_next'));
+  const back = root.querySelector('.tour-back');
+  back.textContent = t('tour_back');
+  back.classList.toggle('hidden', st.i === 0);
+  const skip = root.querySelector('.tour-skip');
+  skip.textContent = t('tour_skip');
+  skip.classList.toggle('hidden', last);
+  pop.classList.remove('in');
+  void pop.offsetWidth;
+  pop.classList.add('in');
+
+  const el = step.sel ? document.querySelector(step.sel) : null;
+  if (el && tourVisible(el)) {
+    const r = el.getBoundingClientRect();
+    const fixed = getComputedStyle(el).position === 'fixed' || !!el.closest('.appbar');
+    if (!fixed && (r.top < 90 || r.bottom > window.innerHeight - 200)) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(tourPlace, 420);
+    } else tourPlace();
+  } else tourPlace();
+  setTimeout(function () { const n = root.querySelector('.tour-next'); if (n) n.focus({ preventScroll: true }); }, 60);
+}
+
+/* بنرسم «الفتحة» حوالين العنصر ونحط الفقاعة فوقه أو تحته حسب المساحة */
+function tourPlace() {
+  if (!tourState) return;
+  const root = document.querySelector('div#tour');
+  const hole = root.querySelector('.tour-hole');
+  const pop = root.querySelector('.tour-pop');
+  const step = tourState.steps[tourState.i];
+  const el = step.sel ? document.querySelector(step.sel) : null;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const pw = Math.min(340, vw - 24);
+  pop.style.width = pw + 'px';
+  if (!el || !tourVisible(el)) {
+    root.classList.add('centered');
+    hole.style.cssText = 'top:' + (vh / 2) + 'px;left:' + (vw / 2) + 'px;width:0;height:0;';
+    pop.style.left = Math.round((vw - pw) / 2) + 'px';
+    pop.style.top = Math.max(16, Math.round(vh / 2 - pop.offsetHeight / 2)) + 'px';
+    return;
+  }
+  root.classList.remove('centered');
+  const r = el.getBoundingClientRect();
+  const pad = 8;
+  const top = Math.max(6, r.top - pad), left = Math.max(6, r.left - pad);
+  const w = Math.min(vw - 12, r.width + pad * 2), h = Math.min(vh - 12, r.height + pad * 2);
+  const radius = Math.min(26, Math.max(14, parseFloat(getComputedStyle(el).borderRadius) || 16) + 6);
+  hole.style.cssText = 'top:' + top + 'px;left:' + left + 'px;width:' + w + 'px;height:' + h + 'px;border-radius:' + radius + 'px;';
+  const ph = pop.offsetHeight;
+  const below = top + h + 14;
+  const above = top - ph - 14;
+  let y = below + ph <= vh - 10 ? below : (above >= 10 ? above : Math.max(10, vh - ph - 10));
+  let x = r.left + r.width / 2 - pw / 2;
+  x = Math.max(12, Math.min(vw - pw - 12, x));
+  pop.style.left = Math.round(x) + 'px';
+  pop.style.top = Math.round(y) + 'px';
+}
+
+['tour-replay-client', 'tour-replay-provider'].forEach(function (id) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    window.scrollTo(0, 0);
+    tourStart(id === 'tour-replay-client' ? 'client' : 'provider');
+  });
+});

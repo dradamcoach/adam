@@ -1,0 +1,501 @@
+/* =====================================================================
+   ADAM — Liquid Glass
+   ---------------------------------------------------------------------
+   طبقة شكل فوق style.css (بتتحمّل بعده). مابتغيّرش أي وظيفة — شكل بس:
+   • خلفية فيها بقع لون هادية بتتحرك ببطء (الزجاج محتاج حاجة وراه يبان عليها)
+   • أسطح زجاج شفافة بحواف منوّرة ولمعة من فوق
+   • زراير «سايلة» لامعة، شريط سفلي عايم زي كبسولة، شيتات بتغبّش اللي وراها
+   • احترام «قلّل الحركة» و«قلّل الشفافية» في إعدادات الموبايل
+   التغبيش (backdrop-filter) تقيل على الموبايلات الضعيفة، فبنحطه على الأسطح
+   الكبيرة بس (الكارت الرئيسي، الشريط، الشيتات، كروت الرئيسية)
+   ===================================================================== */
+
+:root {
+  --bg: #060b17;
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface-2: rgba(255, 255, 255, 0.085);
+  --field: rgba(255, 255, 255, 0.045);
+  --line: rgba(255, 255, 255, 0.11);
+  --ink: #f2f6fb;
+  --muted: #93a5bd;
+  --brand: #2ee07a;
+  --brand-dark: #16a34a;
+
+  --glass: rgba(255, 255, 255, 0.065);
+  --glass-strong: rgba(255, 255, 255, 0.1);
+  --glass-edge: rgba(255, 255, 255, 0.14);
+  --glass-hi: rgba(255, 255, 255, 0.22);
+  --glass-solid: rgba(14, 21, 38, 0.78);
+  --glass-blur: blur(22px) saturate(170%);
+  --glass-shadow: 0 1px 0 0 var(--glass-hi) inset, 0 0 0 1px rgba(255, 255, 255, 0.02) inset, 0 24px 50px -28px rgba(0, 0, 0, 0.85);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 15px;
+}
+
+/* ---------- الخلفية الحيّة ---------- */
+
+html { background: var(--bg); }
+
+body {
+  background: var(--bg);
+  background-attachment: initial;
+  position: relative;
+  isolation: isolate;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+/* بقعة أخضر فوق + بقعة سماوي تحت + بنفسجي خفيف — بيتحركوا بهدوء */
+body::before {
+  width: 70vmax;
+  height: 70vmax;
+  top: -30vmax;
+  inset-inline-start: -20vmax;
+  background:
+    radial-gradient(closest-side, rgba(46, 224, 122, 0.55), transparent 70%),
+    radial-gradient(closest-side at 80% 70%, rgba(139, 92, 246, 0.35), transparent 70%);
+  animation: glassDriftA 26s ease-in-out infinite alternate;
+}
+
+body::after {
+  width: 65vmax;
+  height: 65vmax;
+  bottom: -32vmax;
+  inset-inline-end: -22vmax;
+  background:
+    radial-gradient(closest-side, rgba(14, 165, 233, 0.45), transparent 70%),
+    radial-gradient(closest-side at 25% 30%, rgba(46, 224, 122, 0.25), transparent 70%);
+  animation: glassDriftB 32s ease-in-out infinite alternate;
+}
+
+@keyframes glassDriftA {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(8vmax, 6vmax, 0) scale(1.12); }
+}
+@keyframes glassDriftB {
+  from { transform: translate3d(0, 0, 0) scale(1.05); }
+  to   { transform: translate3d(-7vmax, -8vmax, 0) scale(0.95); }
+}
+
+/* ---------- الهيدر ---------- */
+
+h1 {
+  font-size: 40px;
+  letter-spacing: 9px;
+  margin: 4px 0 2px;
+  background: linear-gradient(100deg, #eafff3 0%, #5ef59c 38%, #2ee07a 55%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 6px 22px rgba(46, 224, 122, 0.28));
+}
+
+body > p {
+  font-size: 13.5px;
+  letter-spacing: .3px;
+  opacity: .9;
+}
+
+/* ---------- الكارت الرئيسي: لوح زجاج ---------- */
+
+.card {
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.085) 0%, rgba(255, 255, 255, 0.035) 45%, rgba(255, 255, 255, 0.05) 100%);
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--radius-xl);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  margin: 20px auto;
+}
+
+/* الشاشة بتدخل بنعومة لما تتفتح */
+.card:not(.hidden) {
+  animation: glassIn .38s cubic-bezier(.2, .8, .2, 1);
+}
+@keyframes glassIn {
+  from { opacity: 0; transform: translateY(10px) scale(.992); }
+  to   { opacity: 1; transform: none; }
+}
+
+.card h2 { letter-spacing: .2px; }
+
+/* ---------- عناصر القوايم والصناديق ---------- */
+
+.card li {
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.06) inset;
+}
+
+.card li:hover { border-color: rgba(255, 255, 255, 0.12); }
+
+.add-box,
+.about-box,
+.template-box,
+.review-card {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.07) inset;
+}
+
+/* ---------- الزراير: «سايلة» ولامعة ---------- */
+
+/* الزرار الأساسي بس (من غير كلاس، أو icon-btn) — باقي الأنواع ليها شكلها */
+.card button:not([class]),
+.card button.icon-btn:not(.secondary):not(.link),
+.card button.primary {
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.06) 46%, rgba(255, 255, 255, 0) 52%),
+    linear-gradient(180deg, #46ec8e 0%, #1fbf5f 60%, #15a34f 100%);
+  color: #04200e;
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.55) inset,
+    0 -2px 8px 0 rgba(0, 0, 0, 0.12) inset,
+    0 12px 26px -12px rgba(46, 224, 122, 0.75);
+  transition: transform .14s cubic-bezier(.2, .8, .2, 1), filter .15s, box-shadow .2s;
+}
+
+.card button:not([class]):hover,
+.card button.icon-btn:not(.secondary):not(.link):hover { filter: brightness(1.06); }
+.card button:not([class]):disabled { filter: saturate(.4) brightness(.8); box-shadow: none; }
+
+.card button.secondary {
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%);
+  color: var(--ink);
+  border: 1px solid var(--glass-edge);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.16) inset, 0 10px 22px -16px rgba(0, 0, 0, 0.8);
+}
+
+/* ---------- الخانات ---------- */
+
+.card input,
+.card select,
+.card textarea {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.04) inset;
+}
+
+.card input:focus,
+.card select:focus,
+.card textarea:focus {
+  border-color: rgba(46, 224, 122, 0.75);
+  background-color: rgba(255, 255, 255, 0.075);
+  box-shadow: 0 0 0 4px rgba(46, 224, 122, 0.14);
+}
+
+.card input::placeholder,
+.card textarea::placeholder { color: #6f8199; }
+
+select option,
+select optgroup {
+  background: #111a2d;
+  color: var(--ink);
+}
+
+.card input[type="checkbox"],
+.card input[type="radio"],
+.card input[type="range"] {
+  box-shadow: none;
+  accent-color: var(--brand);
+}
+
+/* ---------- التبويبات: شريط زجاج وفقاعة للي مختار ---------- */
+
+.tabs {
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 5px;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset;
+}
+
+.card .tab {
+  border-radius: 15px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted);
+  transition: background .25s cubic-bezier(.2, .8, .2, 1), color .2s, box-shadow .25s;
+}
+
+.card .tab.active {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%);
+  color: #ffffff;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.35) inset, 0 8px 18px -10px rgba(0, 0, 0, 0.8);
+}
+
+.card .tab.active .ui-icon { color: var(--brand); }
+
+/* ---------- الأزرار العايمة فوق (اللغة والجرس) ---------- */
+
+.lang-toggle,
+.notif-bell {
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-edge);
+  box-shadow: 0 1px 0 0 var(--glass-hi) inset, 0 10px 24px -14px rgba(0, 0, 0, 0.9);
+}
+
+/* ---------- الشريط السفلي: كبسولة زجاج عايمة ---------- */
+
+.appbar {
+  inset-inline: 12px;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  padding: 6px;
+  border-radius: 28px;
+  background: rgba(16, 24, 42, 0.55);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  backdrop-filter: blur(26px) saturate(180%);
+  border: 1px solid var(--glass-edge);
+  border-top: 1px solid var(--glass-edge);
+  box-shadow: 0 1px 0 0 var(--glass-hi) inset, 0 20px 40px -12px rgba(0, 0, 0, 0.75);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.appbar-btn {
+  border-radius: 22px;
+  padding: 8px 2px 7px;
+  transition: color .2s, background .3s cubic-bezier(.2, .8, .2, 1), transform .15s;
+}
+
+.appbar-btn.on {
+  color: #ffffff;
+  background: linear-gradient(180deg, rgba(46, 224, 122, 0.3) 0%, rgba(46, 224, 122, 0.14) 100%);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.28) inset, 0 6px 16px -8px rgba(46, 224, 122, 0.7);
+}
+
+.appbar-btn.on .appbar-icon { color: #7dffb2; }
+
+body.on-client { padding-bottom: 104px; }
+
+/* ---------- كروت ومربعات الرئيسية ---------- */
+
+.card button.home-card,
+.card button.home-tile {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.035) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  color: var(--ink);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.16) inset, 0 14px 28px -20px rgba(0, 0, 0, 0.9);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+}
+
+.card button.home-card:hover,
+.card button.home-tile:hover { border-color: rgba(255, 255, 255, 0.2); filter: none; }
+
+.home-card-icon,
+.home-tile-icon {
+  filter: drop-shadow(0 4px 10px currentColor);
+}
+
+/* ---------- الشيتات والنوافذ: زجاج بيغبّش اللي وراه ---------- */
+
+.picker,
+.ex-sheet-overlay,
+.soc-menu {
+  background: rgba(3, 7, 16, 0.45);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.picker-sheet,
+.ex-sheet,
+.lightbox-sheet,
+.soc-menu-box,
+.eng-cel-box {
+  background: linear-gradient(170deg, rgba(30, 42, 66, 0.78) 0%, rgba(14, 21, 38, 0.86) 100%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: 0 1px 0 0 var(--glass-hi) inset, 0 -20px 50px -20px rgba(0, 0, 0, 0.8);
+}
+
+.picker-sheet {
+  border-start-start-radius: 30px;
+  border-start-end-radius: 30px;
+  border-bottom: 0;
+  animation: glassSheetUp .32s cubic-bezier(.2, .9, .25, 1);
+}
+
+@keyframes glassSheetUp {
+  from { transform: translateY(40px); opacity: .4; }
+  to   { transform: none; opacity: 1; }
+}
+
+/* المقبض الصغير فوق الشيت — بيقول «اسحبني/دي نافذة» من غير كلام */
+.picker-sheet::before {
+  content: '';
+  display: block;
+  width: 42px;
+  height: 5px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.22);
+  margin: -4px auto 8px;
+  flex: none;
+}
+
+.lightbox { background: rgba(3, 7, 16, 0.6); }
+
+.focus {
+  background:
+    radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--sec, #2ee07a) 20%, transparent), transparent 70%),
+    linear-gradient(180deg, #0a1224, #060b17);
+}
+
+/* ---------- لمسات صغيرة ---------- */
+
+::selection { background: rgba(46, 224, 122, 0.35); }
+
+.card hr { border-color: rgba(255, 255, 255, 0.08); }
+
+/* الموبايل: الكارت ياخد العرض كله تقريبًا وحوافه أنعم */
+@media (max-width: 480px) {
+  body { padding-inline: 10px; }
+  .card { margin: 16px auto; padding: 20px 16px; border-radius: 26px; }
+  h1 { font-size: 36px; }
+}
+
+/* ---------- إمكانية الوصول والأداء ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after { animation: none; }
+  .card:not(.hidden), .picker-sheet { animation: none; }
+}
+
+/* اللي مفعّل «قلّل الشفافية» أو متصفحه قديم: أسطح مصمتة بنفس الألوان */
+@media (prefers-reduced-transparency: reduce) {
+  body::before, body::after { display: none; }
+  .card, .appbar, .picker-sheet, .ex-sheet, .lightbox-sheet, .soc-menu-box,
+  .card button.home-card, .card button.home-tile, .lang-toggle, .notif-bell {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: #121c30;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card { background: rgba(18, 27, 46, 0.94); }
+  .appbar { background: rgba(14, 21, 38, 0.96); }
+  .picker-sheet, .ex-sheet, .lightbox-sheet, .soc-menu-box { background: #121c30; }
+  .card button.home-card, .card button.home-tile { background: rgba(255, 255, 255, 0.06); }
+}
+
+/* =====================================================================
+   الجولة التعريفية
+   ===================================================================== */
+
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  font-family: 'Cairo', sans-serif;
+}
+
+/* الفتحة: مربع شفاف وظله الضخم هو اللي بيعتّم باقي الشاشة */
+.tour-hole {
+  position: fixed;
+  border-radius: 18px;
+  box-shadow: 0 0 0 9999px rgba(3, 7, 16, 0.68), 0 0 0 2px rgba(46, 224, 122, 0.85), 0 0 28px 4px rgba(46, 224, 122, 0.35);
+  transition: top .38s cubic-bezier(.2, .9, .25, 1), left .38s cubic-bezier(.2, .9, .25, 1), width .38s cubic-bezier(.2, .9, .25, 1), height .38s cubic-bezier(.2, .9, .25, 1), border-radius .3s;
+  pointer-events: auto;
+}
+
+.tour.centered .tour-hole { box-shadow: 0 0 0 9999px rgba(3, 7, 16, 0.72); }
+
+.tour-pop {
+  position: fixed;
+  box-sizing: border-box;
+  padding: 16px 16px 12px;
+  border-radius: 24px;
+  text-align: start;
+  color: var(--ink);
+  background: linear-gradient(165deg, rgba(40, 54, 82, 0.82) 0%, rgba(16, 24, 42, 0.9) 100%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: 0 1px 0 0 var(--glass-hi) inset, 0 24px 60px -18px rgba(0, 0, 0, 0.9);
+  transition: top .38s cubic-bezier(.2, .9, .25, 1), left .38s cubic-bezier(.2, .9, .25, 1);
+}
+
+.tour-pop.in { animation: tourPop .34s cubic-bezier(.2, 1.3, .4, 1); }
+@keyframes tourPop { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+
+.tour.centered .tour-pop { text-align: center; padding: 22px 18px 14px; }
+.tour-emoji { font-size: 30px; line-height: 1.1; margin-bottom: 4px; }
+.tour.centered .tour-emoji { font-size: 46px; }
+.tour-title { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+.tour-body { margin: 0; font-size: 14px; line-height: 1.8; color: #c9d5e4; }
+
+.tour-dots { display: flex; gap: 5px; justify-content: center; margin: 12px 0 10px; }
+.tour-dot { width: 6px; height: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.22); transition: width .3s, background .3s; }
+.tour-dot.done { background: rgba(46, 224, 122, 0.55); }
+.tour-dot.on { width: 20px; background: var(--brand); }
+
+.tour-actions { display: flex; align-items: center; gap: 8px; }
+.tour-sp { flex: 1; }
+.tour-actions button {
+  appearance: none;
+  font: 700 14px 'Cairo', sans-serif;
+  border-radius: 14px;
+  padding: 9px 16px;
+  cursor: pointer;
+  border: 0;
+  transition: transform .12s;
+}
+.tour-actions button:active { transform: scale(.96); }
+.tour-next {
+  color: #04200e;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0) 52%),
+    linear-gradient(180deg, #46ec8e 0%, #1fbf5f 100%);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.5) inset, 0 10px 22px -12px rgba(46, 224, 122, 0.8);
+}
+.tour-back {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-edge) !important;
+}
+.tour-skip { background: none; color: var(--muted); padding-inline: 4px !important; }
+
+body.tour-open { overflow: hidden; }
+
+.card button.tour-replay {
+  display: block;
+  margin: 18px auto 4px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* جوه البرنامج الهيدر بيصغر عشان المساحة تروح للمحتوى */
+body.on-client > h1 { font-size: 30px; letter-spacing: 7px; margin-top: 2px; }
+body.on-client > p { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-hole, .tour-pop { transition: none; }
+  .tour-pop.in { animation: none; }
+}
+.tour-actions button:focus { outline: none; }
+.tour-actions button:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.7); outline-offset: 2px; }
