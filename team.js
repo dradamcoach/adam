@@ -28,6 +28,7 @@ let busy = false;
 const ICONS = {
   analyst: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>',
   success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11.5l2 2 4-4"/></svg>',
+  rd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
   advisor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg>',
   mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
   content: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg>'
@@ -86,6 +87,7 @@ function renderStaff() {
     { key: 'success', name: 'مساعد نجاح العملاء', job: 'كل يوم: رسالة لكل عميل ساكت — ماتتبعتش غير بموافقتك.', chip: !state.success ? ['soon', 'محتاج تحديث'] : (state.success.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'mail', name: 'ساعي البريد', job: 'إيميل واحد في اليوم للعميل اللي فاتته رسايل أو تحديثات أكتر من ساعتين.', chip: !state.mail ? ['soon', 'محتاج تحديث'] : (state.mail.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'advisor', name: 'مستشار البرامج', job: 'جوه صفحة العميل: بيقترح برنامج تمرين من المكتبة، وإنت أو المتخصص تراجعوا وتحفظوا.', chip: !state.advisor ? ['soon', 'محتاج تحديث'] : (state.advisor.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
+    { key: 'rd', name: 'موظف التطوير', job: 'كل أحد: أفكار جديدة بمصادرها — منافسين وأبحاث وأدوات وتسويق. إنت اللي بتختار.', chip: !state.rd ? ['soon', 'محتاج تحديث'] : (state.rd.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'content', name: 'صانع المحتوى', job: 'بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.', chip: !state.content ? ['soon', 'محتاج تحديث'] : (state.content.on ? ['on', 'شغّال'] : ['off', 'موقوف']) }
   ];
   $('staff').innerHTML = '';
@@ -238,7 +240,7 @@ function renderLog() {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
     const who = e.by === 'schedule' ? 'تلقائي' : (e.by === 'client' ? 'العميل' : 'يدوي');
-    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج' }[e.agent] || 'المحلّل';
+    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير' }[e.agent] || 'المحلّل';
     li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms >= 1000 ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });
@@ -780,8 +782,178 @@ $('av-toggle-btn').addEventListener('click', async () => {
   }
 });
 
+/* ---------- موظف التطوير ---------- */
+
+const RD_AREA = { competitors: 'المنافسين', research: 'أبحاث', tech: 'أدوات وتقنية', growth: 'تسويق ونمو' };
+const RD_EFFORT = { small: ['on', 'سهلة — ساعات'], medium: ['warn', 'متوسطة — أيام'], large: ['danger', 'كبيرة — أسابيع'] };
+let rdBusy = false;
+
+function rdMsg(text, kind) {
+  $('rd-msg').textContent = text || '';
+  $('rd-msg').className = 'msg' + (kind ? ' ' + kind : '');
+}
+
+async function rdMark(id, status, note) {
+  try {
+    state = await call('team_rd_mark', { id, status, note: note || '' });
+    renderRd();
+  } catch (err) {
+    rdMsg(err.message, 'err');
+  }
+}
+
+function rdIdeaCard(idea, mode) {
+  const box = document.createElement('div');
+  box.className = 'draft rd-idea';
+  box.dataset.id = idea.id;
+  const top = document.createElement('div');
+  top.className = 'draft-top';
+  const title = document.createElement('span');
+  title.className = 'draft-name';
+  title.textContent = idea.title;
+  const area = document.createElement('span');
+  area.className = 'chip soon';
+  area.textContent = RD_AREA[idea.area] || idea.area;
+  const eff = RD_EFFORT[idea.effort] || RD_EFFORT.medium;
+  const effort = document.createElement('span');
+  effort.className = 'chip ' + eff[0];
+  effort.textContent = eff[1];
+  top.append(title, area, effort);
+  if (idea.status === 'later') {
+    const later = document.createElement('span');
+    later.className = 'chip soon';
+    later.textContent = 'بعدين';
+    top.appendChild(later);
+  }
+  box.appendChild(top);
+  const what = document.createElement('p');
+  what.className = 'rd-what';
+  what.textContent = idea.what;
+  const why = document.createElement('p');
+  why.className = 'draft-meta';
+  why.textContent = 'ليه: ' + idea.why;
+  box.append(what, why);
+  if (idea.sources && idea.sources.length) {
+    const src = document.createElement('div');
+    src.className = 'rd-sources';
+    src.appendChild(document.createTextNode('المصادر: '));
+    idea.sources.forEach((s, i) => {
+      const a = document.createElement('a');
+      a.href = s.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = s.title || ('مصدر ' + (i + 1));
+      src.appendChild(a);
+    });
+    box.appendChild(src);
+  } else {
+    const none = document.createElement('p');
+    none.className = 'draft-meta';
+    none.textContent = 'مفيش مصدر — دي فكرة من عنده، اتأكد منها.';
+    box.appendChild(none);
+  }
+  if (idea.note) {
+    const note = document.createElement('p');
+    note.className = 'draft-meta';
+    note.textContent = 'ملاحظتك: ' + idea.note;
+    box.appendChild(note);
+  }
+  const row = document.createElement('div');
+  row.className = 'row';
+  const btn = (label, cls, fn) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = label;
+    if (cls) b.className = cls;
+    b.addEventListener('click', fn);
+    row.appendChild(b);
+    return b;
+  };
+  if (mode === 'new') {
+    const note = document.createElement('input');
+    note.className = 'rd-note';
+    note.placeholder = 'ملاحظة ليك أو لـ Claude (اختياري)';
+    box.appendChild(note);
+    btn('عاوزها', 'rd-want', () => rdMark(idea.id, 'want', note.value.trim()));
+    if (idea.status !== 'later') btn('بعدين', 'ghost rd-later', () => rdMark(idea.id, 'later', note.value.trim()));
+    btn('لأ', 'ghost rd-no', () => rdMark(idea.id, 'no', note.value.trim()));
+  } else if (mode === 'want') {
+    btn('اتنفّذت', 'rd-done', () => rdMark(idea.id, 'done', idea.note));
+    btn('رجّعها للأفكار', 'ghost rd-back', () => rdMark(idea.id, 'new', idea.note));
+  }
+  if (row.children.length) box.appendChild(row);
+  return box;
+}
+
+function rdCopyText() {
+  const list = (state.rd && state.rd.wanted) || [];
+  return 'أفكار وافقت عليها من موظف التطوير — نفّذها واحدة واحدة:\n\n' + list.map((i, n) =>
+    (n + 1) + '. ' + i.title + '\n' + i.what + (i.note ? '\nملاحظتي: ' + i.note : '')
+    + (i.sources && i.sources.length ? '\nمصادر: ' + i.sources.map(s => s.url).join(' ') : '')
+  ).join('\n\n');
+}
+
+function renderRd() {
+  const rd = state.rd;
+  $('rd-card').classList.toggle('hidden', !rd);
+  if (!rd) return;
+  $('rd-toggle-btn').textContent = rd.on ? 'أوقفه' : 'شغّله تاني';
+  $('rd-toggle-btn').className = rd.on ? 'danger' : '';
+  $('rd-run-btn').disabled = rdBusy || !rd.on || rd.runsLeft <= 0;
+  $('rd-run-btn').textContent = 'دوّر دلوقتي' + (rd.on ? ' (' + rd.runsLeft + ' فاضلين النهارده)' : '');
+  $('rd-list').innerHTML = '';
+  rd.ideas.forEach(i => $('rd-list').appendChild(rdIdeaCard(i, 'new')));
+  $('rd-empty').classList.toggle('hidden', rd.ideas.length > 0);
+  $('rd-wanted-box').classList.toggle('hidden', !rd.wanted.length);
+  $('rd-wanted').innerHTML = '';
+  rd.wanted.forEach(i => $('rd-wanted').appendChild(rdIdeaCard(i, 'want')));
+  $('rd-done-box').classList.toggle('hidden', !rd.done.length);
+  $('rd-done').innerHTML = '';
+  rd.done.forEach(i => {
+    const li = document.createElement('li');
+    li.textContent = (i.status === 'done' ? 'اتنفّذت · ' : 'لأ · ') + i.title;
+    $('rd-done').appendChild(li);
+  });
+  renderStaff();
+}
+
+$('rd-run-btn').addEventListener('click', async () => {
+  rdBusy = true;
+  renderRd();
+  rdMsg('بيدوّر في جوجل ويرتّب الأفكار… ممكن ياخد دقيقة أو اتنين');
+  try {
+    state = await call('team_rd_run');
+    rdMsg(state.rdFound ? ('لقى ' + state.rdFound + ' أفكار جديدة') : (state.rdNote || 'مالقاش حاجة جديدة'), state.rdFound ? 'ok' : 'err');
+    renderLog();
+  } catch (err) {
+    rdMsg(err.message, 'err');
+  }
+  rdBusy = false;
+  renderRd();
+});
+
+$('rd-toggle-btn').addEventListener('click', async () => {
+  try {
+    state = await call('team_rd_toggle', { on: !state.rd.on });
+    renderRd();
+    renderLog();
+  } catch (err) {
+    rdMsg(err.message, 'err');
+  }
+});
+
+$('rd-copy-btn').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(rdCopyText());
+    $('rd-copy-btn').textContent = 'اتنسخت — ابعتها لـ Claude';
+  } catch (err) {
+    rdMsg('النسخ مااشتغلش — علّم على الأفكار وانسخها بإيدك', 'err');
+  }
+});
+
 function renderAll(keepShown) {
   renderStaff();
+  renderRd();
   renderAdvisor();
   renderMail();
   renderSuccess();

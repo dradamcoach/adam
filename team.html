@@ -47,6 +47,11 @@
     input { font: inherit; width: 100%; padding: 10px 12px; margin: 0 0 8px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
 
     /* الموظفين */
+    .rd-what { margin: 8px 0 2px; font-size: 14.5px; line-height: 1.8; }
+    .rd-sources { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 2px 0 6px; }
+    .rd-sources a { color: var(--brand); overflow-wrap: anywhere; }
+    .rd-note { width: 100%; font: inherit; font-size: 13.5px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--field); color: var(--ink); margin-top: 6px; }
+    #rd-copy-btn { margin: 4px 0 2px; }
     .ml-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 12px; }
     .ml-stat { border: 1px solid var(--line, #e5e7eb); border-radius: 10px; padding: 10px; text-align: center; }
     .ml-stat b { display: block; font-size: 22px; }
@@ -234,6 +239,32 @@
         <details id="cs-done-box" class="hidden">
           <summary>اللي اتعمل قبل كده</summary>
           <ul class="log" id="cs-done"></ul>
+        </details>
+      </div>
+
+      <!-- موظف التطوير -->
+      <div class="card hidden" id="rd-card">
+        <div class="report-head">
+          <div>
+            <h2>موظف التطوير</h2>
+            <p class="muted">كل أحد بيدوّر في جوجل على الجديد: مميزات عند المنافسين، أبحاث في التدريب والتأهيل والتغذية، مكتبات وأدوات، وأفكار تسويق ونمو. كل فكرة معاها مصادرها. إنت بتختار، واللي توافق عليه تبعته لـ Claude ينفّذه.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="rd-run-btn">دوّر دلوقتي</button>
+            <button type="button" class="ghost" id="rd-toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="rd-msg"></p>
+        <p class="muted hidden" id="rd-empty">مفيش أفكار مستنياك. هيدوّر لوحده يوم الأحد الساعة ١١ الصبح، أو دوس «دوّر دلوقتي».</p>
+        <div id="rd-list"></div>
+        <div class="hidden" id="rd-wanted-box">
+          <h3 style="margin:16px 0 4px;font-size:15px">اللي وافقت عليه</h3>
+          <button type="button" id="rd-copy-btn">انسخ القايمة وابعتها لـ Claude</button>
+          <div id="rd-wanted"></div>
+        </div>
+        <details id="rd-done-box" class="hidden">
+          <summary>اللي اتعمل أو اترفض</summary>
+          <ul class="log" id="rd-done"></ul>
         </details>
       </div>
 
