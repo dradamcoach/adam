@@ -920,7 +920,7 @@ function renderRd() {
 $('rd-run-btn').addEventListener('click', async () => {
   rdBusy = true;
   renderRd();
-  rdMsg('بيدوّر في جوجل ويرتّب الأفكار… ممكن ياخد دقيقة أو اتنين');
+  rdMsg('بيلم الجديد ويرتّب الأفكار… ممكن ياخد دقيقة');
   try {
     state = await call('team_rd_run');
     rdMsg(state.rdFound ? ('لقى ' + state.rdFound + ' أفكار جديدة') : (state.rdNote || 'مالقاش حاجة جديدة'), state.rdFound ? 'ok' : 'err');
