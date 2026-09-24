@@ -417,6 +417,12 @@
 
     </div>
 
+    <div class="adm-section hidden" data-sec="social_admin_title">
+    <h3 class="welcome-section-title" data-t="social_admin_title">الصحاب والستوري</h3>
+    <p class="hint-text" data-t="social_admin_hint">الصحاب بين العملاء بيضيفوا بعض بكود. هنا بتوافق على الطلبات، وبتشوف البلاغات والستوري وتمسح أي حاجة.</p>
+    <div id="social-admin-body"></div>
+    </div>
+
     <div class="adm-section hidden" data-sec="stories_admin_title">
     <h3 class="welcome-section-title" data-t="stories_admin_title">قصص نجاح (قبل وبعد)</h3>
     <p class="hint-text" data-t="stories_admin_hint">بتتعرض في الصفحة الرئيسية — تضيف بس صور عميل وافق كتابيًا على النشر، وتقدر تخفيها في أي وقت</p>
@@ -1602,6 +1608,8 @@
       <p class="message" id="cyc-message"></p>
     </div>
 
+    <!-- تأكيد الإيميل من غير ما نقفل عليه — ٣ أيام سماح -->
+    <div class="verify-banner hidden" id="verify-banner" role="status"></div>
     <div class="safety-banner hidden" id="client-safety-banner">
       <div class="sb-head">
         <span class="sb-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.9-7 9-4.1-1.1-7-4.8-7-9V6z"></path><polyline points="9 12 11 14 15 9.5"></polyline></svg></span>
@@ -1631,6 +1639,8 @@
       <!-- حلقات ADAM: تمرين · أكل · ماية + السلسلة والمستوى -->
       <div class="eng-card hidden" id="eng-card"></div>
       <div class="eng-recap hidden" id="eng-recap"></div>
+      <!-- الصحاب والستوري -->
+      <div class="soc-bar hidden" id="soc-bar"></div>
       <div class="heat-banner hidden" id="heat-banner-home"></div>
       <!-- شريط الأسبوع اتنقل من شاشة التمرين للرئيسية — ده ملخّص
            أسبوعه، مكانه الطبيعي أول ما يفتح -->
@@ -2114,6 +2124,26 @@
     </div>
   </div>
   <div class="eng-toast hidden" id="eng-toast" role="status" aria-live="polite"></div>
+  <!-- ===== الصحاب + كتابة ستوري + عرض الستوري ===== -->
+  <div class="picker hidden" id="soc-sheet">
+    <div class="picker-sheet eng-sheet">
+      <div class="picker-head">
+        <div class="picker-title" data-t="soc_sheet_title">صحابي</div>
+        <button type="button" class="picker-close" id="soc-close" data-t-title="focus_close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="eng-body" id="soc-body"></div>
+    </div>
+  </div>
+  <div class="picker hidden" id="story-sheet">
+    <div class="picker-sheet eng-sheet">
+      <div class="picker-head">
+        <div class="picker-title" data-t="soc_story_title">ستوري جديدة</div>
+        <button type="button" class="picker-close" id="story-close" data-t-title="focus_close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="eng-body" id="story-body"></div>
+    </div>
+  </div>
+  <div class="story-view hidden" id="story-view" role="dialog" aria-modal="true"></div>
 
   <!-- ===== شيت اختيار الأكل: العميل يسجّل اللي أكله ===== -->
   <div class="picker hidden" id="food-picker">

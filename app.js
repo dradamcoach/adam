@@ -504,6 +504,10 @@ const TEXT = {
     verify_too_many: 'اتبعت رسايل كتير ورا بعض — استنى شوية وجرّب تاني',
     verify_checking: 'بنتأكد...',
     verify_wrong_btn: 'الإيميل ده غلط — عايز أسجّل بإيميل تاني',
+    vb_title: "📩 أكّد إيميلك — فاضلك {n} {w}",
+    vb_text: "بعتنالك رسالة على {email}. دوس على اللينك اللي فيها. مش لاقيها؟ بص في الـ Spam أو «غير المرغوب فيه»، ولو لقيتها هناك دوس «مش سبام» عشان رسايلنا الجاية توصلك على طول.",
+    vb_done: "أكّدت خلاص",
+    vb_ok: "تمام — إيميلك اتأكد ✓",
     // ---- الإشعارات ----
     notif_title: 'الإشعارات',
     notif_empty: 'مفيش إشعارات لسه — أول ما فريقك يبعتلك أو يعدّل برنامجك هتلاقيها هنا',
@@ -1110,6 +1114,111 @@ const TEXT = {
     wr_max_hr: 'أقصى {v}',
     wr_kcal: '{v} سعر',
     wr_zones: 'وقت المناطق',
+    soc_sheet_title: "صحابي",
+    soc_story_title: "ستوري جديدة",
+    soc_tab_friends: "صحابي",
+    soc_tab_rank: "الترتيب",
+    soc_tab_add: "ضيف صاحب",
+    soc_add_story: "ستوري",
+    soc_my_story: "ستوريك",
+    soc_friends_n: "صحابي ({n})",
+    soc_you: "إنت",
+    soc_ago_min: "من {n} دقيقة",
+    soc_ago_h: "من {n} ساعة",
+    soc_accept: "قبول",
+    soc_decline: "لأ",
+    soc_cancel: "إلغاء",
+    soc_incoming: "طلبات صداقة جديدة",
+    soc_my_friends: "صحابك ({n})",
+    soc_empty: "لسه ماعندكش صحاب هنا. ضيف صحابك اللي بيتمرنوا معاك وتشجعوا بعض كل يوم 💪",
+    soc_no_pub: "لسه مافتحش البرنامج من ساعة ما بقيتوا صحاب",
+    soc_options: "اختيارات",
+    soc_remove: "شيله من صحابي",
+    soc_remove_confirm: "متأكد؟ مش هتشوفوا نجوم وستوري بعض تاني",
+    soc_report: "بلّغ",
+    soc_report_ask: "إيه المشكلة؟ البلاغ بيوصل لإدارة ADAM بس",
+    soc_reason_bother: "مضايقني / بيعاكس",
+    soc_reason_photo: "صورة مش مناسبة",
+    soc_reason_fake: "حساب مش حقيقي",
+    soc_reason_other: "حاجة تانية",
+    soc_reported: "البلاغ وصل للإدارة — شكرًا إنك قلت",
+    soc_cheer_strong: "كمّل يا بطل",
+    soc_cheer_fire: "نار",
+    soc_cheer_clap: "برافو",
+    soc_cheer_star: "نجم",
+    soc_cheer_heart: "فخور بيك",
+    soc_cheer_toast: "{e} {name} بيشجعك!",
+    soc_cheered_today: "شجعوك النهارده:",
+    soc_waiting: "مستنيين",
+    soc_st_pending: "مستني يقبل",
+    soc_st_review: "مستني موافقة ADAM",
+    soc_rank_title: "ترتيب صحابك الأسبوع ده",
+    soc_rank_hint: "بالنجوم ⭐ من السبت — ولو اتعادلوا بالسلسلة 🔥",
+    soc_rank_empty: "ضيف صحابك عشان تتنافسوا مع بعض",
+    soc_my_code: "كودك — ابعته لصاحبك",
+    soc_send_wa: "ابعته على واتساب",
+    soc_copy: "انسخ اللينك",
+    soc_copied: "اتنسخ ✓",
+    soc_invite_text: "تعالى نتمرن مع بعض على ADAM 💪 كودي: {code}",
+    soc_add_title: "عندك كود صاحبك؟",
+    soc_code_ph: "اكتب الكود هنا",
+    soc_add_btn: "ابعت طلب صداقة",
+    soc_code_bad: "الكود ده مش صح — اتأكد منه",
+    soc_code_self: "ده كودك إنت 😄",
+    soc_too_many: "وصلت لأقصى عدد صحاب",
+    soc_already: "إنتوا صحاب أو في طلب بينكم بالفعل",
+    soc_sending: "بنبعت...",
+    soc_sent: "الطلب اتبعت لـ{name} ✓",
+    soc_wait_review: "تمام — مستني موافقة إدارة ADAM وبعدها تبقوا صحاب",
+    soc_safe_note: "🔒 صحابك بس بيشوفوا نجومك والستوري بتاعتك. مفيش شات بين العملاء — تشجيع بس. وأي حاجة مضايقاك دوس «بلّغ».",
+    soc_safe_note_review: "🔒 كل طلب صداقة بيعدّي على إدارة ADAM الأول. صحابك بس بيشوفوا نجومك والستوري بتاعتك، ومفيش شات بين العملاء — تشجيع بس.",
+    soc_story_no_friends: "الستوري بتظهر لصحابك بس — ضيف صحابك الأول",
+    soc_pick_photo: "اختار صورة (جيم، تراك، أكلك…)",
+    soc_pick_tag: "ضيف إنجاز على الصورة",
+    soc_tag_streak: "🔥 {n} يوم ورا بعض",
+    soc_tag_star: "⭐ نجمة النهارده",
+    soc_tag_trained: "🏋️ خلّصت تمرين النهارده",
+    soc_tag_water: "💧 قفلت الماية",
+    soc_tag_gym: "📍 في الجيم",
+    soc_tag_track: "🏃 في التراك",
+    soc_tag_home: "🏠 تمرين في البيت",
+    soc_tag_meal: "🥗 أكل صحي",
+    soc_caption_ph: "اكتب كلمتين (اختياري)",
+    soc_audience: "مين يشوفها؟",
+    soc_post: "انشر الستوري (٢٤ ساعة)",
+    soc_posting: "بننشر...",
+    soc_posted: "الستوري اتنشرت ✓",
+    soc_pick_someone: "اختار صاحب واحد على الأقل",
+    soc_story_for: "ظاهرة لـ{n} من صحابك",
+    soc_delete_story: "امسح",
+    social_admin_title: "الصحاب والستوري",
+    adm_tab_social: "الصحاب",
+    social_admin_hint: "الصحاب بين العملاء بيضيفوا بعض بكود. هنا بتوافق على الطلبات، وبتشوف البلاغات والستوري وتمسح أي حاجة.",
+    soc_admin_approval: "طلبات الصداقة تستنى موافقتي الأول",
+    soc_admin_saved: "اتحفظ",
+    soc_admin_review: "طلبات مستنية موافقتك ({n})",
+    soc_admin_none: "مفيش حاجة",
+    soc_admin_ok: "موافق",
+    soc_admin_no: "رفض",
+    soc_admin_reports: "البلاغات ({n})",
+    soc_admin_on_story: "على ستوري",
+    soc_admin_cut: "افصلهم وامسح",
+    soc_admin_dismiss: "مفيش مشكلة",
+    soc_admin_stories: "ستوري شغالة ({n}) · صداقات ({f})",
+    notif_t_friend_req: "طلب صداقة 👋",
+    notif_b_friend_req: "{name} عايز يبقى صاحبك على ADAM",
+    notif_t_friend_ok: "بقيتوا صحاب 🤝",
+    notif_b_friend_ok: "{name} قبل طلبك — شجعوا بعض",
+    notif_t_friend_ok_admin: "بقيتوا صحاب 🤝",
+    notif_b_friend_ok_admin: "طلب الصداقة اتوافق عليه — افتح صحابك",
+    notif_t_friend_review: "طلب صداقة مستني موافقتك",
+    notif_b_friend_review: "{a} و{b}",
+    notif_t_soc_report: "بلاغ جديد",
+    notif_b_soc_report: "عميل بلّغ عن حاجة — افتح «الصحاب» في لوحة التحكم",
+    notif_t_cheer: "{e} {name} بيشجعك",
+    notif_b_cheer: "افتح ADAM وقفّل حلقاتك النهارده",
+    notif_t_story_react: "{e} {name} عجبته الستوري بتاعتك",
+    notif_b_story_react: "كمّل كده 💪",
     google_btn: "كمّل بحساب جوجل",
     google_hint: "أسرع طريقة — من غير باسورد ومن غير رسالة تأكيد",
     or_email: "أو بالإيميل والباسورد",
@@ -2202,6 +2311,10 @@ const TEXT = {
     verify_too_many: 'Too many messages in a row — wait a little and try again',
     verify_checking: 'Checking...',
     verify_wrong_btn: 'That email is wrong — sign up with another one',
+    vb_title: "📩 Confirm your email — {n} {w} left",
+    vb_text: "We sent a message to {email}. Tap the link inside. Can't find it? Check Spam or Junk, and if it's there mark it “Not spam” so our next messages reach you.",
+    vb_done: "I've confirmed",
+    vb_ok: "Done — your email is confirmed ✓",
     // ---- notifications ----
     notif_title: 'Notifications',
     notif_empty: 'No notifications yet — when your team messages you or updates your program, you’ll find it here',
@@ -2808,6 +2921,111 @@ const TEXT = {
     wr_max_hr: 'max {v}',
     wr_kcal: '{v} kcal',
     wr_zones: 'Time in zones',
+    soc_sheet_title: "My friends",
+    soc_story_title: "New story",
+    soc_tab_friends: "Friends",
+    soc_tab_rank: "Ranking",
+    soc_tab_add: "Add a friend",
+    soc_add_story: "Story",
+    soc_my_story: "Your story",
+    soc_friends_n: "Friends ({n})",
+    soc_you: "You",
+    soc_ago_min: "{n} min ago",
+    soc_ago_h: "{n} h ago",
+    soc_accept: "Accept",
+    soc_decline: "No",
+    soc_cancel: "Cancel",
+    soc_incoming: "New friend requests",
+    soc_my_friends: "Your friends ({n})",
+    soc_empty: "No friends here yet. Add the friends who train with you and cheer each other on every day 💪",
+    soc_no_pub: "Hasn't opened the app since you became friends",
+    soc_options: "Options",
+    soc_remove: "Remove friend",
+    soc_remove_confirm: "Sure? You won't see each other's stars and stories any more",
+    soc_report: "Report",
+    soc_report_ask: "What's wrong? Reports go to the ADAM team only",
+    soc_reason_bother: "Bothering / harassing me",
+    soc_reason_photo: "Inappropriate photo",
+    soc_reason_fake: "Fake account",
+    soc_reason_other: "Something else",
+    soc_reported: "Report sent to the team — thanks for telling us",
+    soc_cheer_strong: "Keep going",
+    soc_cheer_fire: "On fire",
+    soc_cheer_clap: "Bravo",
+    soc_cheer_star: "Star",
+    soc_cheer_heart: "Proud of you",
+    soc_cheer_toast: "{e} {name} is cheering you on!",
+    soc_cheered_today: "Cheered you today:",
+    soc_waiting: "Waiting",
+    soc_st_pending: "Waiting for them",
+    soc_st_review: "Waiting for ADAM approval",
+    soc_rank_title: "Your friends this week",
+    soc_rank_hint: "By stars ⭐ since Saturday — ties go to the streak 🔥",
+    soc_rank_empty: "Add friends to compete with each other",
+    soc_my_code: "Your code — send it to a friend",
+    soc_send_wa: "Send on WhatsApp",
+    soc_copy: "Copy link",
+    soc_copied: "Copied ✓",
+    soc_invite_text: "Let's train together on ADAM 💪 My code: {code}",
+    soc_add_title: "Got a friend's code?",
+    soc_code_ph: "Type the code here",
+    soc_add_btn: "Send friend request",
+    soc_code_bad: "That code isn't right — check it",
+    soc_code_self: "That's your own code 😄",
+    soc_too_many: "You've reached the friend limit",
+    soc_already: "You're already friends or there's a request between you",
+    soc_sending: "Sending...",
+    soc_sent: "Request sent to {name} ✓",
+    soc_wait_review: "Done — waiting for ADAM approval, then you're friends",
+    soc_safe_note: "🔒 Only your friends see your stars and stories. There's no chat between clients — cheers only. Anything bothering you? Tap “Report”.",
+    soc_safe_note_review: "🔒 Every friend request is checked by the ADAM team first. Only your friends see your stars and stories, and there's no chat between clients — cheers only.",
+    soc_story_no_friends: "Stories are for your friends only — add friends first",
+    soc_pick_photo: "Pick a photo (gym, track, your meal…)",
+    soc_pick_tag: "Add an achievement to the photo",
+    soc_tag_streak: "🔥 {n} days in a row",
+    soc_tag_star: "⭐ Today's star",
+    soc_tag_trained: "🏋️ Workout done today",
+    soc_tag_water: "💧 Water ring closed",
+    soc_tag_gym: "📍 At the gym",
+    soc_tag_track: "🏃 On the track",
+    soc_tag_home: "🏠 Home workout",
+    soc_tag_meal: "🥗 Clean meal",
+    soc_caption_ph: "Say something (optional)",
+    soc_audience: "Who can see it?",
+    soc_post: "Post story (24 hours)",
+    soc_posting: "Posting...",
+    soc_posted: "Story posted ✓",
+    soc_pick_someone: "Pick at least one friend",
+    soc_story_for: "Visible to {n} of your friends",
+    soc_delete_story: "Delete",
+    social_admin_title: "Friends and stories",
+    adm_tab_social: "Friends",
+    social_admin_hint: "Clients add each other with a code. Here you approve requests, see reports and stories, and delete anything.",
+    soc_admin_approval: "Friend requests wait for my approval first",
+    soc_admin_saved: "Saved",
+    soc_admin_review: "Requests waiting for you ({n})",
+    soc_admin_none: "Nothing here",
+    soc_admin_ok: "Approve",
+    soc_admin_no: "Reject",
+    soc_admin_reports: "Reports ({n})",
+    soc_admin_on_story: "on a story",
+    soc_admin_cut: "Unfriend and delete",
+    soc_admin_dismiss: "No problem",
+    soc_admin_stories: "Live stories ({n}) · friendships ({f})",
+    notif_t_friend_req: "Friend request 👋",
+    notif_b_friend_req: "{name} wants to be your friend on ADAM",
+    notif_t_friend_ok: "You're friends now 🤝",
+    notif_b_friend_ok: "{name} accepted — cheer each other on",
+    notif_t_friend_ok_admin: "You're friends now 🤝",
+    notif_b_friend_ok_admin: "Your friend request was approved — open your friends",
+    notif_t_friend_review: "A friend request needs your approval",
+    notif_b_friend_review: "{a} and {b}",
+    notif_t_soc_report: "New report",
+    notif_b_soc_report: "A client reported something — open “Friends” in the admin panel",
+    notif_t_cheer: "{e} {name} is cheering you on",
+    notif_b_cheer: "Open ADAM and close your rings today",
+    notif_t_story_react: "{e} {name} liked your story",
+    notif_b_story_react: "Keep it up 💪",
     google_btn: "Continue with Google",
     google_hint: "Fastest way — no password and no confirmation email",
     or_email: "or with email and password",
@@ -5044,6 +5262,8 @@ async function routeUser(user) {
       showVerifyScreen(user);
       return;
     }
+    if (verifyPending(user, clientData)) verifySoftStart(user);
+    else renderVerifyBanner(null);
 
     if (!clientData || !clientData.onboarded) {
       onboardingEmail = email;
@@ -5579,6 +5799,7 @@ const ADMIN_SECTION_ICONS = {
   store_admin_title:         'store',
   store_orders_title:        'box',
   stories_admin_title:       'star',
+  social_admin_title:        'team',
   admin_leads_title:         'chat',
   admin_provider_apps_title: 'clients',
   admin_access_title:        'lock'
@@ -5652,6 +5873,7 @@ const ADMIN_TAB_SHORT = {
   store_admin_title:         'adm_tab_store',
   store_orders_title:        'adm_tab_orders',
   stories_admin_title:       'adm_tab_stories',
+  social_admin_title:        'adm_tab_social',
   admin_leads_title:         'adm_tab_leads',
   admin_provider_apps_title: 'adm_tab_apps',
   admin_access_title:        'adm_tab_access'
@@ -9461,6 +9683,7 @@ function renderHomeSummary() {
 
 function renderClientHome() {
   renderEngCard();
+  renderSocBar();
   renderHomeSummary();
   renderWeekStreak();
   renderClientTiles();
@@ -9742,8 +9965,9 @@ async function loadClient(email) {
 
     await loadFoodLog(email);
     await loadClientHealth(email);
-    /* حلقات ADAM — بتحمّل لوحدها ومابتأخرش الشاشة */
+    /* حلقات ADAM + الصحاب — بيحمّلوا لوحدهم ومابيأخروش الشاشة */
     engInit(email);
+    socInit();
     // إعدادات المساعد الذكي — العميل محتاجها عشان يعرف مفعّل ولا لأ
     fetchWelcomeSettings().catch(function () {});
 
@@ -13900,6 +14124,7 @@ function refreshAll() {
   }
   if (!clientScreen.classList.contains('hidden')) {
     renderAppbar();
+    renderVerifyBanner(auth.currentUser);
     if (clientMode === 'home') renderClientHome();
     renderSafetyBanner();
     renderCycleCard();
@@ -19799,6 +20024,7 @@ if (document.getElementById('daily-report-range-btn')) {
 
 async function loadAdminPanel() {
   loadDailyReport();
+  loadSocialAdmin();
   await fetchPaymentSettings();
   const settingsVodafone = document.getElementById('settings-vodafone');
   const settingsInstapay = document.getElementById('settings-instapay');
@@ -24028,11 +24254,97 @@ function accountIsNew(user) {
   return !isNaN(time) && time >= Date.parse(VERIFY_SINCE);
 }
 
-function needsEmailVerify(user, clientData) {
+/* لسه محتاج يأكد؟ (مش معناها إننا نقفل عليه) */
+function verifyPending(user, clientData) {
   if (!user || user.emailVerified !== false) return false;
   if (accountIsNew(user)) return true;
   // حساب قديم بس لسه ما كمّلش بياناته = لسه ما بدأش فعلًا
   return !(clientData && clientData.onboarded);
+}
+
+/*
+ * العميل الجديد بيدخل على طول من غير ما يستنى الرسالة (كانت بتروح
+ * الـ Spam ويتوه). عنده ٣ أيام يأكد وفي شريط صغير بيفكّره. بعد الـ٣
+ * أيام بس بتظهر شاشة التأكيد — عشان الحسابات بإيميلات وهمية ماتفضلش
+ */
+var VERIFY_GRACE_DAYS = 3;
+
+function verifyDaysLeft(user) {
+  const created = Date.parse((user && user.metadata && user.metadata.creationTime) || '');
+  if (isNaN(created)) return 0;
+  return Math.max(0, Math.ceil((created + VERIFY_GRACE_DAYS * 86400000 - Date.now()) / 86400000));
+}
+
+function needsEmailVerify(user, clientData) {
+  return verifyPending(user, clientData) && verifyDaysLeft(user) <= 0;
+}
+
+/* أول مرة في الجهاز ده: نبعت الرسالة لوحدها */
+function verifySoftStart(user) {
+  const email = (user.email || '').toLowerCase();
+  let sent = '';
+  try { sent = localStorage.getItem('adam-verify-sent:' + email) || ''; } catch (e) { sent = ''; }
+  if (!sent && verifySentFor !== email) {
+    verifySentFor = email;
+    try { localStorage.setItem('adam-verify-sent:' + email, new Date().toISOString()); } catch (e) { /* عادي */ }
+    sendVerifyMail(user, null);
+  }
+  renderVerifyBanner(user);
+}
+
+function renderVerifyBanner(user) {
+  const box = document.getElementById('verify-banner');
+  if (!box) return;
+  const show = !!(user && user.emailVerified === false && verifyDaysLeft(user) > 0);
+  box.classList.toggle('hidden', !show);
+  if (!show) return;
+  const n = verifyDaysLeft(user);
+  box.innerHTML = '';
+  const title = document.createElement('strong');
+  title.textContent = fill('vb_title', { n: n, w: lang === 'ar' ? (n >= 3 && n <= 10 ? 'أيام' : 'يوم') : (n === 1 ? 'day' : 'days') });
+  const text = document.createElement('p');
+  const parts = t('vb_text').split('{email}');
+  text.appendChild(document.createTextNode(parts[0] || ''));
+  const mail = document.createElement('bdi');
+  mail.setAttribute('dir', 'ltr');
+  mail.textContent = user.email || '';
+  text.appendChild(mail);
+  text.appendChild(document.createTextNode(parts.slice(1).join('')));
+  const row = document.createElement('div');
+  row.className = 'vb-row';
+  const done = document.createElement('button');
+  done.type = 'button';
+  done.className = 'vb-done';
+  done.textContent = t('vb_done');
+  const again = document.createElement('button');
+  again.type = 'button';
+  again.className = 'vb-again';
+  again.textContent = t('verify_resend_btn');
+  const msg = document.createElement('p');
+  msg.className = 'message vb-msg';
+  done.addEventListener('click', async function () {
+    msg.textContent = t('verify_checking');
+    try {
+      const u = auth.currentUser;
+      if (u && typeof u.reload === 'function') await u.reload();
+      const fresh = auth.currentUser || u;
+      if (fresh && fresh.emailVerified) {
+        try { await fresh.getIdToken(true); } catch (e) { /* هيتجدد لوحده */ }
+        box.innerHTML = '';
+        const okMsg = document.createElement('strong');
+        okMsg.textContent = t('vb_ok');
+        box.appendChild(okMsg);
+        setTimeout(function () { box.classList.add('hidden'); }, 2500);
+        return;
+      }
+      msg.textContent = t('verify_not_yet');
+    } catch (error) {
+      msg.textContent = t('problem') + ((error && error.message) || '');
+    }
+  });
+  again.addEventListener('click', function () { sendVerifyMail(auth.currentUser, msg); });
+  row.append(done, again);
+  box.append(title, text, row, msg);
 }
 
 function verifyContinueUrl() {
@@ -24086,6 +24398,12 @@ function paintVerifyText() {
 }
 
 function paintVerifyCooldown() {
+  const soft = document.querySelector('#verify-banner .vb-again');
+  if (soft) {
+    const wait = Math.ceil((verifyCooldownUntil - Date.now()) / 1000);
+    soft.disabled = wait > 0;
+    soft.textContent = wait > 0 ? fill('verify_resend_wait', { n: wait }) : t('verify_resend_btn');
+  }
   const btn = document.getElementById('verify-resend-btn');
   if (!btn) return;
   const left = Math.ceil((verifyCooldownUntil - Date.now()) / 1000);
@@ -24502,6 +24820,7 @@ function goToNotifTarget(item) {
     if (currentProviderEmail) {
       if (target === 'chat' && item.about) { openChatThread(item.about, chatInboxScreen); return; }
       if (target === 'bookings') { document.getElementById('open-bookings-btn').click(); return; }
+      if (target === 'social_admin' && isFullAdminAccount()) { document.getElementById('open-admin-panel-btn').click(); showAdminSection('social_admin_title'); loadSocialAdmin(); return; }
       if (item.about) { openCoachScreen(item.about, item.aboutName || clientNameOf(item.about), ''); return; }
       showScreen(clientsScreen);
       loadClients();
@@ -24513,6 +24832,7 @@ function goToNotifTarget(item) {
     if (target === 'consult') { setClientMode('consult'); return; }
     if (target === 'training' || target === 'nutrition' || target === 'rehab') { goClientMode(target); return; }
     goClientMode('home');
+    if (target === 'friends') { socTab = 'friends'; socLoad().then(openSocSheet); }
   } catch (error) {
     showScreen(currentProviderEmail ? clientsScreen : clientScreen);
   }
@@ -27661,6 +27981,7 @@ async function engSave() {
   try {
     await setDoc(doc(db, 'engage', clientEmail), payload);
     engLastSaved = sig;
+    socSyncPub();
   } catch (error) { /* المرة الجاية */ }
 }
 
@@ -28275,4 +28596,1238 @@ async function engShare(kind) {
   a.remove();
   setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
   engToast(t('eng_share_saved'));
+}
+
+
+/* ============================================================
+   صحاب ADAM + الستوري
+   ------------------------------------------------------------
+   الأمان أولًا (مفيش معاكسات):
+   - الإضافة بكود الصاحب بس — مفيش بحث بالأسماء ولا قايمة بكل العملاء
+   - الطرفين لازم يوافقوا، وبعدين صاحب المنصة (لو الموافقة مفعّلة)
+   - مفيش شات بين العملاء خالص — تشجيع جاهز بس (💪 🔥 👏 ⭐ ❤️)
+   - الستوري ٢٤ ساعة، ولصحابه بس (أو صحاب هو بيختارهم)
+   - زرار بلاغ في كل حتة، وصاحب المنصة يشوف ويمسح أي حاجة
+   المجموعات:
+   friendCodes/{code}   = { email, name }
+   friendships/{a__b}   = { members:[a,b], a, b, from, to, fromName, toName, status, createdAt, updatedAt }
+                          status: pending → review (مستني صاحب المنصة) → active
+   pub/{email}          = ملخّص يشوفه الصحاب بس (viewers)
+   cheers/{from__to__day__type__story}
+   stories/{id}         = { owner, name, photo, caption, tag, allow:[...], createdAt, expiresAt }
+   reports/{id}         = بلاغات لصاحب المنصة
+   appConfig/social     = { approval: true/false }
+   ============================================================ */
+
+const SOC_CHEERS = [
+  { type: 'strong', emoji: '💪' },
+  { type: 'fire',   emoji: '🔥' },
+  { type: 'clap',   emoji: '👏' },
+  { type: 'star',   emoji: '⭐' },
+  { type: 'heart',  emoji: '❤️' }
+];
+const SOC_MAX_FRIENDS = 40;
+const SOC_STORY_HOURS = 24;
+const SOC_CODE_ABC = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+
+let socFriendships = [];
+let socPubs = {};
+let socStories = [];
+let socMyStories = [];
+let socCheersIn = [];
+let socCheersOut = {};
+let socMyCode = '';
+let socApproval = true;
+let socLoaded = false;
+let socLoading = null;
+let socSeenStories = {};
+let socTab = 'friends';
+let socFlash = '';   /* رسالة نجاح بتفضل ظاهرة بعد ما الشيت يترسم تاني */
+
+function socMe() { return String(clientEmail || '').toLowerCase(); }
+function socPair(a, b) { a = String(a).toLowerCase(); b = String(b).toLowerCase(); return a < b ? a + '__' + b : b + '__' + a; }
+function socShortName(full) {
+  const parts = String(full || '').trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return '';
+  return parts[0] + (parts[1] ? ' ' + parts[1].charAt(0) + '.' : '');
+}
+function socOther(f) { return f.a === socMe() ? f.b : f.a; }
+function socOtherName(f) { return f.from === socMe() ? (f.toName || '') : (f.fromName || ''); }
+function socActive() { return socFriendships.filter(function (f) { return f.status === 'active'; }); }
+function socActiveEmails() { return socActive().map(socOther); }
+function socAgo(iso) {
+  const min = Math.max(1, Math.round((Date.now() - Date.parse(iso || '')) / 60000));
+  if (min < 60) return fill('soc_ago_min', { n: min });
+  return fill('soc_ago_h', { n: Math.round(min / 60) });
+}
+function socSeenLoad() {
+  try { socSeenStories = JSON.parse(localStorage.getItem('adam-soc-seen:' + socMe()) || '{}') || {}; } catch (e) { socSeenStories = {}; }
+}
+function socSeenSave() {
+  try {
+    const keep = {};
+    Object.keys(socSeenStories).forEach(function (id) { if (Date.now() - socSeenStories[id] < 2 * 86400000) keep[id] = socSeenStories[id]; });
+    localStorage.setItem('adam-soc-seen:' + socMe(), JSON.stringify(keep));
+  } catch (e) { /* عادي */ }
+}
+
+/* ---------- التحميل ---------- */
+
+async function socInit() {
+  if (!engIsSelf()) { socLoaded = false; renderSocBar(); return; }
+  socSeenLoad();
+  socLoading = socLoad();
+  await socLoading;
+  socPendingCodeFromLink();
+}
+
+async function socLoad() {
+  const me = socMe();
+  try {
+    const cfg = await getDoc(doc(db, 'appConfig', 'social'));
+    socApproval = !(cfg.exists() && cfg.data().approval === false);
+  } catch (e) { socApproval = true; }
+  try {
+    const snap = await getDocs(query(collection(db, 'friendships'), where('members', 'array-contains', me)));
+    socFriendships = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
+  } catch (e) { socFriendships = []; }
+
+  /* ملخّصات الصحاب — لو صاحبك لسه مافتحش بعد ما بقيتوا صحاب مش هنقدر نقراه، عادي */
+  socPubs = {};
+  let myPub = null;
+  await Promise.all([me].concat(socActiveEmails()).map(async function (email) {
+    try {
+      const snap = await getDoc(doc(db, 'pub', email));
+      if (snap.exists()) {
+        if (email === me) myPub = snap.data();
+        else socPubs[email] = snap.data();
+      }
+    } catch (e) { /* مش مسموح لسه */ }
+  }));
+  socMyCode = (myPub && myPub.code) || '';
+  if (!socMyCode) socMyCode = await socMakeCode();
+
+  await socLoadStories();
+  await socLoadCheers();
+  socLoaded = true;
+  socSyncPub(myPub);
+  renderSocBar();
+  if (socSheet && !socSheet.classList.contains('hidden')) renderSocSheet();
+}
+
+async function socMakeCode() {
+  for (let tries = 0; tries < 5; tries++) {
+    let code = '';
+    const bytes = new Uint8Array(7);
+    (window.crypto || {}).getRandomValues ? window.crypto.getRandomValues(bytes) : bytes.forEach(function (_, i) { bytes[i] = Math.floor(Math.random() * 255); });
+    bytes.forEach(function (b) { code += SOC_CODE_ABC.charAt(b % SOC_CODE_ABC.length); });
+    try {
+      const ref = doc(db, 'friendCodes', code);
+      const existing = await getDoc(ref);
+      if (existing.exists()) continue;
+      await setDoc(ref, { email: socMe(), name: socShortName(clientName), createdAt: new Date().toISOString() });
+      return code;
+    } catch (e) { /* نجرّب كود تاني */ }
+  }
+  return '';
+}
+
+/* ملخّصي اللي صحابي بيشوفوه — بيتكتب مع حفظ الحلقات ولما الصحاب يتغيروا */
+function socPubPayload() {
+  const s = engStats;
+  return {
+    name: socShortName(clientName),
+    code: socMyCode || '',
+    level: s ? s.level : 0,
+    xp: s ? s.xp : 0,
+    streak: s ? s.streak : 0,
+    best: s ? s.best : 0,
+    stars: s ? s.stars : 0,
+    weekStars: s ? s.weekStars : 0,
+    weekStart: engShift(todayStamp, -todayIndex),
+    day: todayStamp,
+    todayMask: s && s.today ? s.today.m : 0,
+    todayAvail: s && s.today ? s.today.a : 0,
+    viewers: socActiveEmails().slice(0, SOC_MAX_FRIENDS)
+  };
+}
+
+let socLastPub = '';
+async function socSyncPub() {
+  if (!engIsSelf() || !socLoaded) return;
+  const payload = socPubPayload();
+  const sig = JSON.stringify(payload);
+  if (sig === socLastPub) return;
+  try {
+    await setDoc(doc(db, 'pub', socMe()), Object.assign({}, payload, { updatedAt: new Date().toISOString() }));
+    socLastPub = sig;
+  } catch (e) { /* المرة الجاية */ }
+}
+
+async function socLoadStories() {
+  const me = socMe();
+  const now = new Date().toISOString();
+  socStories = [];
+  socMyStories = [];
+  try {
+    const snap = await getDocs(query(collection(db, 'stories'), where('allow', 'array-contains', me)));
+    socStories = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
+      .filter(function (s) { return s.expiresAt > now && s.owner !== me && socActiveEmails().indexOf(s.owner) !== -1; });
+  } catch (e) { socStories = []; }
+  try {
+    const snap = await getDocs(query(collection(db, 'stories'), where('owner', '==', me)));
+    snap.docs.forEach(function (d) {
+      const s = Object.assign({ id: d.id }, d.data());
+      if (s.expiresAt > now) socMyStories.push(s);
+      else deleteDoc(doc(db, 'stories', d.id)).catch(function () {});   /* القديم بيتمسح */
+    });
+  } catch (e) { socMyStories = []; }
+  const byTime = function (a, b) { return String(a.createdAt).localeCompare(String(b.createdAt)); };
+  socStories.sort(byTime);
+  socMyStories.sort(byTime);
+}
+
+async function socLoadCheers() {
+  const me = socMe();
+  const today = todayStamp;
+  socCheersIn = [];
+  socCheersOut = {};
+  try {
+    const snap = await getDocs(query(collection(db, 'cheers'), where('to', '==', me)));
+    snap.docs.forEach(function (d) {
+      const c = Object.assign({ id: d.id }, d.data());
+      if (c.day >= engShift(today, -1)) socCheersIn.push(c);
+      else if (c.day < engShift(today, -7)) deleteDoc(doc(db, 'cheers', d.id)).catch(function () {});
+    });
+  } catch (e) { socCheersIn = []; }
+  try {
+    const snap = await getDocs(query(collection(db, 'cheers'), where('from', '==', me)));
+    snap.docs.forEach(function (d) {
+      const c = d.data();
+      if (c.day === today) socCheersOut[c.to + '|' + c.type + '|' + (c.story || '')] = true;
+      else if (c.day < engShift(today, -7)) deleteDoc(doc(db, 'cheers', d.id)).catch(function () {});
+    });
+  } catch (e) { /* عادي */ }
+  socCheersIn.sort(function (a, b) { return String(b.createdAt).localeCompare(String(a.createdAt)); });
+  /* تشجيع جديد من آخر مرة فتح */
+  let last = '';
+  try { last = localStorage.getItem('adam-soc-cheer-seen:' + me) || ''; } catch (e) { last = ''; }
+  const fresh = socCheersIn.filter(function (c) { return String(c.createdAt) > last && !c.story; });
+  if (fresh.length) {
+    const c = fresh[0];
+    const cheer = SOC_CHEERS.filter(function (x) { return x.type === c.type; })[0];
+    engToast(fill('soc_cheer_toast', { name: c.fromName || '', e: cheer ? cheer.emoji : '💪' }) + (fresh.length > 1 ? ' +' + (fresh.length - 1) : ''));
+    try { localStorage.setItem('adam-soc-cheer-seen:' + me, String(socCheersIn[0].createdAt)); } catch (e) { /* عادي */ }
+  }
+}
+
+/* ---------- لينك صاحبك: ?friend=CODE ---------- */
+
+(function () {
+  try {
+    const params = new URLSearchParams(location.search);
+    const code = (params.get('friend') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
+    if (code) localStorage.setItem('adam-friend-code', code);
+  } catch (e) { /* عادي */ }
+})();
+
+function socPendingCodeFromLink() {
+  let code = '';
+  try { code = localStorage.getItem('adam-friend-code') || ''; } catch (e) { code = ''; }
+  if (!code || code === socMyCode) return;
+  try { localStorage.removeItem('adam-friend-code'); } catch (e) { /* عادي */ }
+  socTab = 'add';
+  openSocSheet();
+  const input = document.querySelector('#soc-body .soc-code-input');
+  if (input) input.value = code;
+}
+
+/* ---------- الإضافة والموافقة ---------- */
+
+async function socAddByCode(raw, msgEl) {
+  const code = String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (code.length < 5) { msgEl.textContent = t('soc_code_bad'); return; }
+  if (code === socMyCode) { msgEl.textContent = t('soc_code_self'); return; }
+  if (socFriendships.length >= SOC_MAX_FRIENDS) { msgEl.textContent = t('soc_too_many'); return; }
+  msgEl.textContent = t('soc_sending');
+  let target = null;
+  try {
+    const snap = await getDoc(doc(db, 'friendCodes', code));
+    target = snap.exists() ? snap.data() : null;
+  } catch (e) { target = null; }
+  if (!target || !target.email) { msgEl.textContent = t('soc_code_bad'); return; }
+  const other = String(target.email).toLowerCase();
+  const me = socMe();
+  if (other === me) { msgEl.textContent = t('soc_code_self'); return; }
+  const id = socPair(me, other);
+  const existing = socFriendships.filter(function (f) { return f.id === id; })[0];
+  if (existing) {
+    /* هو كان باعتلي — يبقى الإضافة دي موافقة */
+    if (existing.status === 'pending' && existing.to === me) { await socAccept(existing, msgEl); return; }
+    msgEl.textContent = t('soc_already');
+    return;
+  }
+  const pair = [me, other].sort();
+  const now = new Date().toISOString();
+  const data = { members: pair, a: pair[0], b: pair[1], from: me, to: other, fromName: socShortName(clientName), toName: target.name || '', status: 'pending', createdAt: now, updatedAt: now };
+  try {
+    await setDoc(doc(db, 'friendships', id), data);
+    socFriendships.push(Object.assign({ id: id }, data));
+    notify(other, 'friend_req', { target: 'friends', params: function () { return { name: data.fromName }; } });
+    socFlash = fill('soc_sent', { name: target.name || '' });
+    renderSocSheet();
+  } catch (e) {
+    msgEl.textContent = t('problem') + ((e && e.message) || '');
+  }
+}
+
+async function socAccept(f, msgEl) {
+  const next = socApproval ? 'review' : 'active';
+  try {
+    await updateDoc(doc(db, 'friendships', f.id), { status: next, updatedAt: new Date().toISOString(), toName: socShortName(clientName) });
+    f.status = next;
+    if (next === 'active') {
+      notify(f.from, 'friend_ok', { target: 'friends', params: function () { return { name: socShortName(clientName) }; } });
+      await socLoad();
+    } else {
+      notify(COACH_EMAIL, 'friend_review', { target: 'social_admin', params: function () { return { a: f.fromName || '', b: socShortName(clientName) }; } });
+      socFlash = t('soc_wait_review');
+      renderSocSheet();
+    }
+  } catch (e) {
+    if (msgEl) msgEl.textContent = t('problem') + ((e && e.message) || '');
+  }
+}
+
+/* قايمة اختيارات صغيرة بدل confirm/prompt بتوع المتصفح */
+function socMenu(title, options) {
+  const old = document.querySelector('.soc-menu');
+  if (old) old.remove();
+  const wrap = document.createElement('div');
+  wrap.className = 'soc-menu';
+  const box = document.createElement('div');
+  box.className = 'soc-menu-box';
+  const h = document.createElement('strong');
+  h.textContent = title;
+  box.appendChild(h);
+  options.concat([{ label: t('soc_cancel'), cancel: true }]).forEach(function (o) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'soc-menu-btn' + (o.danger ? ' danger' : '') + (o.cancel ? ' cancel' : '');
+    b.textContent = o.label;
+    b.addEventListener('click', function () { wrap.remove(); if (o.run) o.run(); });
+    box.appendChild(b);
+  });
+  wrap.addEventListener('click', function (e) { if (e.target === wrap) wrap.remove(); });
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+}
+
+function socConfirmRemove(f) {
+  socMenu(t('soc_remove_confirm'), [{ label: t('soc_remove'), danger: true, run: function () { socRemove(f); } }]);
+}
+
+async function socRemove(f) {
+  try {
+    await deleteDoc(doc(db, 'friendships', f.id));
+    socFriendships = socFriendships.filter(function (x) { return x.id !== f.id; });
+    delete socPubs[socOther(f)];
+    socSyncPub();
+    renderSocSheet();
+    renderSocBar();
+  } catch (e) { /* عادي */ }
+}
+
+async function socReport(about, story, reason) {
+  try {
+    await addDoc(collection(db, 'reports'), {
+      from: socMe(), about: about, story: story || '', reason: reason || 'other',
+      aboutName: (socPubs[about] && socPubs[about].name) || '', createdAt: new Date().toISOString()
+    });
+    notify(COACH_EMAIL, 'soc_report', { target: 'social_admin', params: function () { return {}; } });
+    engToast(t('soc_reported'));
+  } catch (e) { engToast(t('problem')); }
+}
+
+function socAskReport(about, story) {
+  socMenu(t('soc_report_ask'), ['bother', 'photo', 'fake', 'other'].map(function (r) {
+    return { label: t('soc_reason_' + r), run: function () { socReport(about, story, r); } };
+  }));
+}
+
+async function socCheer(to, type, story, btn) {
+  const me = socMe();
+  const key = to + '|' + type + '|' + (story || '');
+  if (socCheersOut[key]) return;
+  const day = todayStamp;
+  const id = me + '__' + to + '__' + day + '__' + type + '__' + (story || '');
+  socCheersOut[key] = true;
+  if (btn) btn.classList.add('sent');
+  try {
+    await setDoc(doc(db, 'cheers', id), { from: me, to: to, pair: socPair(me, to), type: type, story: story || '', day: day, fromName: socShortName(clientName), createdAt: new Date().toISOString() });
+    const cheer = SOC_CHEERS.filter(function (c) { return c.type === type; })[0];
+    notify(to, story ? 'story_react' : 'cheer', { target: 'friends', params: function () { return { name: socShortName(clientName), e: cheer ? cheer.emoji : '' }; } });
+  } catch (e) {
+    socCheersOut[key] = false;
+    if (btn) btn.classList.remove('sent');
+  }
+}
+
+/* ---------- شريط الستوري في الرئيسية ---------- */
+
+function socStoryOwners() {
+  const owners = [];
+  socStories.forEach(function (s) { if (owners.indexOf(s.owner) === -1) owners.push(s.owner); });
+  /* اللي لسه ماتشافش الأول */
+  owners.sort(function (a, b) {
+    const ua = socStories.some(function (s) { return s.owner === a && !socSeenStories[s.id]; }) ? 0 : 1;
+    const ub = socStories.some(function (s) { return s.owner === b && !socSeenStories[s.id]; }) ? 0 : 1;
+    return ua - ub;
+  });
+  return owners;
+}
+
+function socAvatar(name, cls) {
+  const el = document.createElement('span');
+  el.className = 'soc-av' + (cls ? ' ' + cls : '');
+  el.textContent = (String(name || '?').trim().charAt(0) || '?').toUpperCase();
+  return el;
+}
+
+function renderSocBar() {
+  const bar = document.getElementById('soc-bar');
+  if (!bar) return;
+  if (!socLoaded || !engIsSelf()) { bar.classList.add('hidden'); return; }
+  bar.classList.remove('hidden');
+  bar.innerHTML = '';
+  const row = document.createElement('div');
+  row.className = 'soc-row';
+
+  /* أنا */
+  const mine = document.createElement('button');
+  mine.type = 'button';
+  mine.className = 'soc-item me' + (socMyStories.length ? ' has' : '');
+  const myAv = socAvatar(clientName, socMyStories.length ? 'ring seen' : '');
+  if (!socMyStories.length) {
+    const plus = document.createElement('i');
+    plus.className = 'soc-plus';
+    plus.textContent = '+';
+    myAv.appendChild(plus);
+  }
+  const myLbl = document.createElement('small');
+  myLbl.textContent = socMyStories.length ? t('soc_my_story') : t('soc_add_story');
+  mine.append(myAv, myLbl);
+  mine.addEventListener('click', function () {
+    if (socMyStories.length) openStoryViewer([socMe()], 0);
+    else openStoryComposer();
+  });
+  row.appendChild(mine);
+  if (socMyStories.length) {
+    const more = document.createElement('button');
+    more.type = 'button';
+    more.className = 'soc-item add-more';
+    const av = socAvatar('+', 'plus-only');
+    const lbl = document.createElement('small');
+    lbl.textContent = t('soc_add_story');
+    more.append(av, lbl);
+    more.addEventListener('click', openStoryComposer);
+    row.appendChild(more);
+  }
+
+  const owners = socStoryOwners();
+  owners.forEach(function (email, idx) {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'soc-item';
+    const unseen = socStories.some(function (s) { return s.owner === email && !socSeenStories[s.id]; });
+    const name = (socStories.filter(function (s) { return s.owner === email; })[0] || {}).name || (socPubs[email] || {}).name || '';
+    const av = socAvatar(name, 'ring' + (unseen ? '' : ' seen'));
+    const lbl = document.createElement('small');
+    lbl.textContent = String(name).split(' ')[0];
+    item.append(av, lbl);
+    item.addEventListener('click', function () { openStoryViewer(owners, idx); });
+    row.appendChild(item);
+  });
+
+  /* زرار الصحاب */
+  const pendingIn = socFriendships.filter(function (f) { return f.status === 'pending' && f.to === socMe(); }).length;
+  const friendsBtn = document.createElement('button');
+  friendsBtn.type = 'button';
+  friendsBtn.className = 'soc-item friends';
+  const fAv = socAvatar('👥', 'friends-ic');
+  if (pendingIn) {
+    const dot = document.createElement('b');
+    dot.className = 'soc-dot';
+    dot.textContent = pendingIn;
+    fAv.appendChild(dot);
+  }
+  const fLbl = document.createElement('small');
+  fLbl.textContent = fill('soc_friends_n', { n: socActive().length });
+  friendsBtn.append(fAv, fLbl);
+  friendsBtn.addEventListener('click', function () { socTab = pendingIn ? 'friends' : socTab; openSocSheet(); });
+  row.appendChild(friendsBtn);
+  bar.appendChild(row);
+}
+
+/* ---------- شيت الصحاب ---------- */
+
+const socSheet = document.getElementById('soc-sheet');
+
+function openSocSheet() {
+  if (!socSheet) return;
+  renderSocSheet();
+  socSheet.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+}
+function closeSocSheet() {
+  if (!socSheet) return;
+  socSheet.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+}
+(function () {
+  const close = document.getElementById('soc-close');
+  if (close) close.addEventListener('click', closeSocSheet);
+  if (socSheet) socSheet.addEventListener('click', function (e) { if (e.target === socSheet) closeSocSheet(); });
+})();
+
+function socMiniRings(pub) {
+  const wrap = document.createElement('span');
+  wrap.className = 'soc-mini';
+  const fresh = pub && pub.day === todayStamp;
+  ENG_RINGS.forEach(function (ring) {
+    if (!pub || !(pub.todayAvail & ring.bit)) return;
+    const d = document.createElement('i');
+    d.style.setProperty('--c', ring.color);
+    if (fresh && (pub.todayMask & ring.bit)) d.className = 'on';
+    wrap.appendChild(d);
+  });
+  return wrap;
+}
+
+function renderSocSheet() {
+  const body = document.getElementById('soc-body');
+  if (!body) return;
+  body.innerHTML = '';
+  const tabs = document.createElement('div');
+  tabs.className = 'soc-tabs';
+  [['friends', 'soc_tab_friends'], ['rank', 'soc_tab_rank'], ['add', 'soc_tab_add']].forEach(function (tb) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'soc-tab' + (socTab === tb[0] ? ' on' : '');
+    b.textContent = t(tb[1]);
+    b.addEventListener('click', function () { socTab = tb[0]; renderSocSheet(); });
+    tabs.appendChild(b);
+  });
+  body.appendChild(tabs);
+  const msg = document.createElement('p');
+  msg.className = 'message soc-msg';
+  msg.id = 'soc-msg';
+
+  if (socTab === 'add') renderSocAdd(body, msg);
+  else if (socTab === 'rank') renderSocRank(body);
+  else renderSocFriends(body, msg);
+  body.appendChild(msg);
+  if (socFlash) { setStatusMessage(msg, socFlash, 'success'); socFlash = ''; }
+
+  const safe = document.createElement('p');
+  safe.className = 'soc-safe';
+  safe.textContent = socApproval ? t('soc_safe_note_review') : t('soc_safe_note');
+  body.appendChild(safe);
+}
+
+function renderSocFriends(body, msg) {
+  const me = socMe();
+  /* تشجيع وصلني */
+  const todayIn = socCheersIn.filter(function (c) { return c.day === todayStamp; });
+  if (todayIn.length) {
+    const box = document.createElement('div');
+    box.className = 'soc-cheered';
+    box.textContent = t('soc_cheered_today') + ' ' + todayIn.slice(0, 8).map(function (c) {
+      const cheer = SOC_CHEERS.filter(function (x) { return x.type === c.type; })[0];
+      return (cheer ? cheer.emoji : '') + ' ' + (c.fromName || '');
+    }).join(' · ');
+    body.appendChild(box);
+  }
+
+  const incoming = socFriendships.filter(function (f) { return f.status === 'pending' && f.to === me; });
+  if (incoming.length) {
+    const h = document.createElement('h3');
+    h.textContent = t('soc_incoming');
+    body.appendChild(h);
+    incoming.forEach(function (f) {
+      const row = document.createElement('div');
+      row.className = 'soc-req';
+      row.append(socAvatar(f.fromName), Object.assign(document.createElement('span'), { className: 'soc-name', textContent: f.fromName || '' }));
+      const yes = document.createElement('button');
+      yes.type = 'button';
+      yes.className = 'soc-yes';
+      yes.textContent = t('soc_accept');
+      yes.addEventListener('click', function () { socAccept(f, msg); });
+      const no = document.createElement('button');
+      no.type = 'button';
+      no.className = 'soc-no';
+      no.textContent = t('soc_decline');
+      no.addEventListener('click', async function () {
+        try { await deleteDoc(doc(db, 'friendships', f.id)); } catch (e) { /* عادي */ }
+        socFriendships = socFriendships.filter(function (x) { return x.id !== f.id; });
+        renderSocSheet(); renderSocBar();
+      });
+      row.append(yes, no);
+      body.appendChild(row);
+    });
+  }
+
+  const friends = socActive();
+  const h2 = document.createElement('h3');
+  h2.textContent = fill('soc_my_friends', { n: friends.length });
+  body.appendChild(h2);
+  if (!friends.length) {
+    const empty = document.createElement('p');
+    empty.className = 'soc-empty';
+    empty.textContent = t('soc_empty');
+    const go = document.createElement('button');
+    go.type = 'button';
+    go.className = 'soc-yes';
+    go.textContent = t('soc_tab_add');
+    go.addEventListener('click', function () { socTab = 'add'; renderSocSheet(); });
+    body.append(empty, go);
+  }
+  friends.forEach(function (f) {
+    const email = socOther(f);
+    const pub = socPubs[email];
+    const name = (pub && pub.name) || socOtherName(f);
+    const row = document.createElement('div');
+    row.className = 'soc-friend';
+    const top = document.createElement('div');
+    top.className = 'soc-friend-top';
+    const info = document.createElement('div');
+    info.className = 'soc-info';
+    const nm = document.createElement('strong');
+    nm.textContent = name;
+    const meta = document.createElement('small');
+    if (pub) {
+      const lv = ENG_LEVELS[pub.level || 0] || ENG_LEVELS[0];
+      meta.textContent = lv.icon + ' ' + t('eng_lv_' + lv.id) + ' · 🔥 ' + (pub.streak || 0) + ' · ⭐ ' + (pub.weekStart === engShift(todayStamp, -todayIndex) ? (pub.weekStars || 0) : 0) + '/7';
+    } else {
+      meta.textContent = t('soc_no_pub');
+    }
+    info.append(nm, meta);
+    const more = document.createElement('button');
+    more.type = 'button';
+    more.className = 'soc-more';
+    more.textContent = '⋯';
+    more.setAttribute('aria-label', t('soc_options'));
+    more.addEventListener('click', function () {
+      socMenu(name, [
+        { label: t('soc_remove'), danger: true, run: function () { socConfirmRemove(f); } },
+        { label: t('soc_report'), run: function () { socAskReport(email, ''); } }
+      ]);
+    });
+    top.append(socAvatar(name), info, socMiniRings(pub), more);
+    const cheers = document.createElement('div');
+    cheers.className = 'soc-cheers';
+    SOC_CHEERS.forEach(function (c) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'soc-cheer' + (socCheersOut[email + '|' + c.type + '|'] ? ' sent' : '');
+      b.textContent = c.emoji;
+      b.setAttribute('aria-label', t('soc_cheer_' + c.type));
+      b.title = t('soc_cheer_' + c.type);
+      b.addEventListener('click', function () { socCheer(email, c.type, '', b); });
+      cheers.appendChild(b);
+    });
+    row.append(top, cheers);
+    body.appendChild(row);
+  });
+
+  const waiting = socFriendships.filter(function (f) { return (f.status === 'pending' && f.from === me) || f.status === 'review'; });
+  if (waiting.length) {
+    const h3 = document.createElement('h3');
+    h3.textContent = t('soc_waiting');
+    body.appendChild(h3);
+    waiting.forEach(function (f) {
+      const row = document.createElement('div');
+      row.className = 'soc-req waiting';
+      const nm = document.createElement('span');
+      nm.className = 'soc-name';
+      nm.textContent = socOtherName(f);
+      const st = document.createElement('small');
+      st.textContent = f.status === 'review' ? t('soc_st_review') : t('soc_st_pending');
+      row.append(socAvatar(socOtherName(f)), nm, st);
+      if (f.from === me) {
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.className = 'soc-no';
+        cancel.textContent = t('soc_cancel');
+        cancel.addEventListener('click', async function () {
+          try { await deleteDoc(doc(db, 'friendships', f.id)); } catch (e) { /* عادي */ }
+          socFriendships = socFriendships.filter(function (x) { return x.id !== f.id; });
+          renderSocSheet();
+        });
+        row.appendChild(cancel);
+      }
+      body.appendChild(row);
+    });
+  }
+}
+
+function renderSocRank(body) {
+  const weekStart = engShift(todayStamp, -todayIndex);
+  const rows = [{ email: socMe(), name: t('soc_you'), pub: socPubPayload(), me: true }];
+  socActive().forEach(function (f) {
+    const email = socOther(f);
+    if (socPubs[email]) rows.push({ email: email, name: socPubs[email].name || socOtherName(f), pub: socPubs[email] });
+  });
+  const stars = function (r) { return r.pub.weekStart === weekStart ? (r.pub.weekStars || 0) : 0; };
+  rows.sort(function (a, b) { return stars(b) - stars(a) || (b.pub.streak || 0) - (a.pub.streak || 0) || (b.pub.xp || 0) - (a.pub.xp || 0); });
+  const h = document.createElement('h3');
+  h.textContent = t('soc_rank_title');
+  body.appendChild(h);
+  const hint = document.createElement('p');
+  hint.className = 'soc-hint';
+  hint.textContent = t('soc_rank_hint');
+  body.appendChild(hint);
+  rows.forEach(function (r, i) {
+    const row = document.createElement('div');
+    row.className = 'soc-rank' + (r.me ? ' me' : '');
+    const pos = document.createElement('b');
+    pos.className = 'soc-pos';
+    pos.textContent = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : String(i + 1);
+    const nm = document.createElement('span');
+    nm.className = 'soc-name';
+    nm.textContent = r.name;
+    const val = document.createElement('span');
+    val.className = 'soc-val';
+    val.textContent = '⭐ ' + stars(r) + '  🔥 ' + (r.pub.streak || 0);
+    row.append(pos, nm, val);
+    body.appendChild(row);
+  });
+  if (rows.length === 1) {
+    const p = document.createElement('p');
+    p.className = 'soc-empty';
+    p.textContent = t('soc_rank_empty');
+    body.appendChild(p);
+  }
+}
+
+function socInviteLink() {
+  return 'https://dradamcoach.github.io/adam/?friend=' + encodeURIComponent(socMyCode);
+}
+
+function renderSocAdd(body, msg) {
+  const mine = document.createElement('div');
+  mine.className = 'soc-code-box';
+  const lbl = document.createElement('small');
+  lbl.textContent = t('soc_my_code');
+  const code = document.createElement('strong');
+  code.className = 'soc-code';
+  code.setAttribute('dir', 'ltr');
+  code.textContent = socMyCode || '—';
+  const row = document.createElement('div');
+  row.className = 'soc-code-actions';
+  const wa = document.createElement('a');
+  wa.className = 'soc-wa';
+  wa.target = '_blank';
+  wa.rel = 'noopener';
+  wa.href = 'https://wa.me/?text=' + encodeURIComponent(fill('soc_invite_text', { code: socMyCode }) + ' ' + socInviteLink());
+  wa.textContent = t('soc_send_wa');
+  const copy = document.createElement('button');
+  copy.type = 'button';
+  copy.className = 'soc-copy';
+  copy.textContent = t('soc_copy');
+  copy.addEventListener('click', function () {
+    try { navigator.clipboard.writeText(socInviteLink()); engToast(t('soc_copied')); } catch (e) { /* عادي */ }
+  });
+  row.append(wa, copy);
+  mine.append(lbl, code, row);
+  body.appendChild(mine);
+
+  const h = document.createElement('h3');
+  h.textContent = t('soc_add_title');
+  body.appendChild(h);
+  const input = document.createElement('input');
+  input.className = 'soc-code-input';
+  input.setAttribute('dir', 'ltr');
+  input.autocapitalize = 'characters';
+  input.placeholder = t('soc_code_ph');
+  input.maxLength = 10;
+  const add = document.createElement('button');
+  add.type = 'button';
+  add.className = 'soc-yes soc-add-btn';
+  add.textContent = t('soc_add_btn');
+  add.addEventListener('click', function () { socAddByCode(input.value, msg); });
+  body.append(input, add);
+}
+
+/* ---------- كتابة ستوري ---------- */
+
+const storySheet = document.getElementById('story-sheet');
+let storyPhoto = '';
+let storyTag = '';
+
+function socStoryTags() {
+  const s = engStats;
+  const tags = [];
+  if (s && s.streak >= 2) tags.push(fill('soc_tag_streak', { n: s.streak }));
+  if (s && s.todayStar) tags.push(t('soc_tag_star'));
+  if (s && s.today && (s.today.m & 1) && !(s.today.m & ENG_REST)) tags.push(t('soc_tag_trained'));
+  if (s && s.today && (s.today.m & 4)) tags.push(t('soc_tag_water'));
+  if (s) tags.push(ENG_LEVELS[s.level].icon + ' ' + t('eng_lv_' + ENG_LEVELS[s.level].id));
+  ['soc_tag_gym', 'soc_tag_track', 'soc_tag_home', 'soc_tag_meal'].forEach(function (k) { tags.push(t(k)); });
+  return tags;
+}
+
+function openStoryComposer() {
+  if (!storySheet) return;
+  storyPhoto = '';
+  storyTag = '';
+  renderStoryComposer();
+  storySheet.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+}
+function closeStoryComposer() {
+  if (!storySheet) return;
+  storySheet.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+}
+(function () {
+  const close = document.getElementById('story-close');
+  if (close) close.addEventListener('click', closeStoryComposer);
+})();
+
+/* الصورة بتتصغّر على الموبايل نفسه (٨٠٠ بكسل) — كده الستوري خفيفة وسريعة */
+function socShrinkPhoto(file) {
+  return new Promise(function (resolve, reject) {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = function () {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = function () {
+        const max = 800;
+        const ratio = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * ratio);
+        c.height = Math.round(img.height * ratio);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        let q = 0.78;
+        let out = c.toDataURL('image/jpeg', q);
+        while (out.length > 280000 && q > 0.4) { q -= 0.1; out = c.toDataURL('image/jpeg', q); }
+        resolve(out);
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderStoryComposer() {
+  const body = document.getElementById('story-body');
+  if (!body) return;
+  body.innerHTML = '';
+  const friends = socActive();
+  if (!friends.length) {
+    const p = document.createElement('p');
+    p.className = 'soc-empty';
+    p.textContent = t('soc_story_no_friends');
+    body.appendChild(p);
+  }
+  const pick = document.createElement('label');
+  pick.className = 'story-pick' + (storyPhoto ? ' has' : '');
+  const file = document.createElement('input');
+  file.type = 'file';
+  file.accept = 'image/*';
+  const preview = document.createElement('div');
+  preview.className = 'story-preview';
+  if (storyPhoto) {
+    const img = document.createElement('img');
+    img.src = storyPhoto;
+    img.alt = '';
+    preview.appendChild(img);
+    if (storyTag) {
+      const chip = document.createElement('span');
+      chip.className = 'story-tag';
+      chip.textContent = storyTag;
+      preview.appendChild(chip);
+    }
+  } else {
+    preview.textContent = '📸 ' + t('soc_pick_photo');
+  }
+  file.addEventListener('change', async function () {
+    const f = file.files && file.files[0];
+    if (!f) return;
+    try { storyPhoto = await socShrinkPhoto(f); } catch (e) { storyPhoto = ''; }
+    renderStoryComposer();
+  });
+  pick.append(preview, file);
+  body.appendChild(pick);
+
+  const tagsTitle = document.createElement('h3');
+  tagsTitle.textContent = t('soc_pick_tag');
+  body.appendChild(tagsTitle);
+  const tags = document.createElement('div');
+  tags.className = 'story-tags';
+  socStoryTags().forEach(function (tg) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'story-tag-btn' + (storyTag === tg ? ' on' : '');
+    b.textContent = tg;
+    b.addEventListener('click', function () { storyTag = storyTag === tg ? '' : tg; renderStoryComposer(); });
+    tags.appendChild(b);
+  });
+  body.appendChild(tags);
+
+  const cap = document.createElement('input');
+  cap.className = 'story-cap-input';
+  cap.maxLength = 80;
+  cap.placeholder = t('soc_caption_ph');
+  body.appendChild(cap);
+
+  const audTitle = document.createElement('h3');
+  audTitle.textContent = t('soc_audience');
+  body.appendChild(audTitle);
+  const aud = document.createElement('div');
+  aud.className = 'story-aud';
+  friends.forEach(function (f) {
+    const email = socOther(f);
+    const l = document.createElement('label');
+    const c = document.createElement('input');
+    c.type = 'checkbox';
+    c.checked = true;
+    c.value = email;
+    const s = document.createElement('span');
+    s.textContent = (socPubs[email] && socPubs[email].name) || socOtherName(f);
+    l.append(c, s);
+    aud.appendChild(l);
+  });
+  body.appendChild(aud);
+
+  const post = document.createElement('button');
+  post.type = 'button';
+  post.className = 'eng-share-main story-post';
+  post.textContent = t('soc_post');
+  post.disabled = !storyPhoto || !friends.length;
+  const msg = document.createElement('p');
+  msg.className = 'message';
+  post.addEventListener('click', async function () {
+    const allow = Array.prototype.slice.call(aud.querySelectorAll('input:checked')).map(function (c) { return c.value; });
+    if (!allow.length) { msg.textContent = t('soc_pick_someone'); return; }
+    post.disabled = true;
+    msg.textContent = t('soc_posting');
+    const now = new Date();
+    const story = {
+      owner: socMe(), name: socShortName(clientName), photo: storyPhoto,
+      caption: String(cap.value || '').trim().slice(0, 80), tag: storyTag.slice(0, 60),
+      allow: allow.slice(0, SOC_MAX_FRIENDS), createdAt: now.toISOString(),
+      expiresAt: new Date(now.getTime() + SOC_STORY_HOURS * 3600000).toISOString()
+    };
+    try {
+      const ref = await addDoc(collection(db, 'stories'), story);
+      socMyStories.push(Object.assign({ id: ref.id }, story));
+      closeStoryComposer();
+      renderSocBar();
+      engToast(t('soc_posted'));
+    } catch (e) {
+      post.disabled = false;
+      msg.textContent = t('problem') + ((e && e.message) || '');
+    }
+  });
+  body.append(post, msg);
+}
+
+/* ---------- عرض الستوري ---------- */
+
+const storyView = document.getElementById('story-view');
+let svOwners = [];
+let svOwnerIdx = 0;
+let svIdx = 0;
+let svTimer = null;
+
+function svList() {
+  const owner = svOwners[svOwnerIdx];
+  return owner === socMe() ? socMyStories : socStories.filter(function (s) { return s.owner === owner; });
+}
+
+function openStoryViewer(owners, idx) {
+  if (!storyView) return;
+  svOwners = owners;
+  svOwnerIdx = idx;
+  const list = svList();
+  svIdx = Math.max(0, list.findIndex(function (s) { return !socSeenStories[s.id]; }));
+  storyView.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+  renderStoryView();
+}
+
+function closeStoryViewer() {
+  clearTimeout(svTimer);
+  if (!storyView) return;
+  storyView.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+  renderSocBar();
+}
+
+function svNext(step) {
+  const list = svList();
+  svIdx += step;
+  if (svIdx >= list.length) { svOwnerIdx += 1; svIdx = 0; }
+  if (svIdx < 0) {
+    if (svOwnerIdx > 0) { svOwnerIdx -= 1; svIdx = Math.max(0, svList().length - 1); } else svIdx = 0;
+  }
+  if (svOwnerIdx >= svOwners.length || !svList().length) { closeStoryViewer(); return; }
+  renderStoryView();
+}
+
+function renderStoryView() {
+  clearTimeout(svTimer);
+  const list = svList();
+  const s = list[svIdx];
+  if (!s) { closeStoryViewer(); return; }
+  socSeenStories[s.id] = Date.now();
+  socSeenSave();
+  const mine = s.owner === socMe();
+  storyView.innerHTML = '';
+  const bars = document.createElement('div');
+  bars.className = 'sv-bars';
+  list.forEach(function (_, i) {
+    const b = document.createElement('i');
+    if (i < svIdx) b.className = 'done';
+    if (i === svIdx) b.className = 'now';
+    bars.appendChild(b);
+  });
+  const head = document.createElement('div');
+  head.className = 'sv-head';
+  const nm = document.createElement('strong');
+  nm.textContent = mine ? t('soc_you') : (s.name || '');
+  const ago = document.createElement('small');
+  ago.textContent = socAgo(s.createdAt);
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'sv-close';
+  close.textContent = '✕';
+  close.setAttribute('aria-label', t('focus_close'));
+  close.addEventListener('click', closeStoryViewer);
+  head.append(socAvatar(s.name), nm, ago, close);
+
+  const stage = document.createElement('div');
+  stage.className = 'sv-stage';
+  if (String(s.photo || '').indexOf('data:image/jpeg;base64,') === 0) {
+    const img = document.createElement('img');
+    img.src = s.photo;
+    img.alt = '';
+    stage.appendChild(img);
+  }
+  if (s.tag) {
+    const chip = document.createElement('span');
+    chip.className = 'story-tag';
+    chip.textContent = s.tag;
+    stage.appendChild(chip);
+  }
+  if (s.caption) {
+    const cap = document.createElement('p');
+    cap.className = 'sv-caption';
+    cap.textContent = s.caption;
+    stage.appendChild(cap);
+  }
+  const left = document.createElement('button');
+  left.type = 'button';
+  left.className = 'sv-tap prev';
+  left.setAttribute('aria-label', '‹');
+  left.addEventListener('click', function () { svNext(lang === 'ar' ? 1 : -1); });
+  const right = document.createElement('button');
+  right.type = 'button';
+  right.className = 'sv-tap next';
+  right.setAttribute('aria-label', '›');
+  right.addEventListener('click', function () { svNext(lang === 'ar' ? -1 : 1); });
+  stage.append(left, right);
+
+  const foot = document.createElement('div');
+  foot.className = 'sv-foot';
+  if (mine) {
+    const seenBy = document.createElement('small');
+    seenBy.textContent = fill('soc_story_for', { n: (s.allow || []).length });
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'sv-del';
+    del.textContent = t('soc_delete_story');
+    del.addEventListener('click', async function () {
+      try { await deleteDoc(doc(db, 'stories', s.id)); } catch (e) { /* عادي */ }
+      socMyStories = socMyStories.filter(function (x) { return x.id !== s.id; });
+      if (!socMyStories.length) closeStoryViewer(); else { svIdx = Math.min(svIdx, socMyStories.length - 1); renderStoryView(); }
+    });
+    foot.append(seenBy, del);
+  } else {
+    SOC_CHEERS.forEach(function (c) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'soc-cheer' + (socCheersOut[s.owner + '|' + c.type + '|' + s.id] ? ' sent' : '');
+      b.textContent = c.emoji;
+      b.addEventListener('click', function () { socCheer(s.owner, c.type, s.id, b); });
+      foot.appendChild(b);
+    });
+    const rep = document.createElement('button');
+    rep.type = 'button';
+    rep.className = 'sv-report';
+    rep.textContent = t('soc_report');
+    rep.addEventListener('click', function () { clearTimeout(svTimer); socAskReport(s.owner, s.id); });
+    foot.appendChild(rep);
+  }
+  storyView.append(bars, head, stage, foot);
+  svTimer = setTimeout(function () { svNext(1); }, 6000);
+}
+
+/* ---------- لوحة صاحب المنصة ---------- */
+
+async function loadSocialAdmin() {
+  const box = document.getElementById('social-admin-body');
+  if (!box) return;
+  box.innerHTML = '';
+  const msg = document.createElement('p');
+  msg.className = 'message';
+  let approval = true;
+  try {
+    const cfg = await getDoc(doc(db, 'appConfig', 'social'));
+    approval = !(cfg.exists() && cfg.data().approval === false);
+  } catch (e) { approval = true; }
+
+  const toggle = document.createElement('label');
+  toggle.className = 'eng-nudge-toggle';
+  const cb = document.createElement('input');
+  cb.type = 'checkbox';
+  cb.checked = approval;
+  cb.id = 'soc-admin-approval';
+  cb.addEventListener('change', async function () {
+    try {
+      await setDoc(doc(db, 'appConfig', 'social'), { approval: cb.checked, updatedAt: new Date().toISOString() });
+      setStatusMessage(msg, t('soc_admin_saved'), 'success');
+    } catch (e) { msg.textContent = t('problem') + ((e && e.message) || ''); }
+  });
+  const tl = document.createElement('span');
+  tl.textContent = t('soc_admin_approval');
+  toggle.append(cb, tl);
+  box.append(toggle, msg);
+
+  let all = [];
+  try {
+    const snap = await getDocs(collection(db, 'friendships'));
+    all = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
+  } catch (e) { all = []; }
+
+  const review = all.filter(function (f) { return f.status === 'review'; });
+  const h1 = document.createElement('h4');
+  h1.textContent = fill('soc_admin_review', { n: review.length });
+  box.appendChild(h1);
+  if (!review.length) box.appendChild(Object.assign(document.createElement('p'), { className: 'hint-text', textContent: t('soc_admin_none') }));
+  review.forEach(function (f) {
+    const row = document.createElement('div');
+    row.className = 'soc-admin-row';
+    const txt = document.createElement('span');
+    txt.textContent = (f.fromName || f.from) + ' ⇄ ' + (f.toName || f.to);
+    const small = document.createElement('small');
+    small.setAttribute('dir', 'ltr');
+    small.textContent = f.from + ' ⇄ ' + f.to;
+    const ok = document.createElement('button');
+    ok.type = 'button';
+    ok.className = 'soc-yes';
+    ok.textContent = t('soc_admin_ok');
+    ok.addEventListener('click', async function () {
+      try {
+        await updateDoc(doc(db, 'friendships', f.id), { status: 'active', updatedAt: new Date().toISOString() });
+        notify([f.from, f.to], 'friend_ok_admin', { target: 'friends', params: function () { return {}; } });
+        loadSocialAdmin();
+      } catch (e) { msg.textContent = t('problem') + ((e && e.message) || ''); }
+    });
+    const no = document.createElement('button');
+    no.type = 'button';
+    no.className = 'soc-no';
+    no.textContent = t('soc_admin_no');
+    no.addEventListener('click', async function () {
+      try { await deleteDoc(doc(db, 'friendships', f.id)); loadSocialAdmin(); } catch (e) { msg.textContent = t('problem'); }
+    });
+    const info = document.createElement('div');
+    info.className = 'soc-admin-info';
+    info.append(txt, small);
+    row.append(info, ok, no);
+    box.appendChild(row);
+  });
+
+  /* البلاغات */
+  let reports = [];
+  try {
+    const snap = await getDocs(collection(db, 'reports'));
+    reports = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
+      .sort(function (a, b) { return String(b.createdAt).localeCompare(String(a.createdAt)); });
+  } catch (e) { reports = []; }
+  const h2 = document.createElement('h4');
+  h2.textContent = fill('soc_admin_reports', { n: reports.length });
+  box.appendChild(h2);
+  if (!reports.length) box.appendChild(Object.assign(document.createElement('p'), { className: 'hint-text', textContent: t('soc_admin_none') }));
+  reports.forEach(function (r) {
+    const row = document.createElement('div');
+    row.className = 'soc-admin-row report';
+    const info = document.createElement('div');
+    info.className = 'soc-admin-info';
+    const a = document.createElement('span');
+    a.textContent = t('soc_reason_' + (r.reason || 'other')) + (r.story ? ' · ' + t('soc_admin_on_story') : '');
+    const b = document.createElement('small');
+    b.setAttribute('dir', 'ltr');
+    b.textContent = r.from + ' → ' + r.about + ' · ' + String(r.createdAt || '').slice(0, 16).replace('T', ' ');
+    info.append(a, b);
+    row.appendChild(info);
+    const pair = socPair(r.from, r.about);
+    const cut = document.createElement('button');
+    cut.type = 'button';
+    cut.className = 'soc-no';
+    cut.textContent = t('soc_admin_cut');
+    cut.addEventListener('click', async function () {
+      try { await deleteDoc(doc(db, 'friendships', pair)); } catch (e) { /* ممكن تكون اتمسحت */ }
+      try { if (r.story) await deleteDoc(doc(db, 'stories', r.story)); } catch (e) { /* عادي */ }
+      try { await deleteDoc(doc(db, 'reports', r.id)); } catch (e) { /* عادي */ }
+      loadSocialAdmin();
+    });
+    const done = document.createElement('button');
+    done.type = 'button';
+    done.className = 'soc-yes';
+    done.textContent = t('soc_admin_dismiss');
+    done.addEventListener('click', async function () {
+      try { await deleteDoc(doc(db, 'reports', r.id)); loadSocialAdmin(); } catch (e) { /* عادي */ }
+    });
+    row.append(cut, done);
+    box.appendChild(row);
+  });
+
+  /* ستوري النهارده */
+  let stories = [];
+  try {
+    const snap = await getDocs(collection(db, 'stories'));
+    const now = new Date().toISOString();
+    stories = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); }).filter(function (s) { return s.expiresAt > now; });
+  } catch (e) { stories = []; }
+  const h3 = document.createElement('h4');
+  h3.textContent = fill('soc_admin_stories', { n: stories.length, f: all.filter(function (f) { return f.status === 'active'; }).length });
+  box.appendChild(h3);
+  const grid = document.createElement('div');
+  grid.className = 'soc-admin-stories';
+  stories.forEach(function (s) {
+    const cell = document.createElement('div');
+    cell.className = 'soc-admin-story';
+    if (String(s.photo || '').indexOf('data:image/jpeg;base64,') === 0) {
+      const img = document.createElement('img');
+      img.src = s.photo;
+      img.alt = '';
+      cell.appendChild(img);
+    }
+    const cap = document.createElement('small');
+    cap.textContent = (s.name || s.owner) + (s.caption ? ' — ' + s.caption : '');
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'soc-no';
+    del.textContent = t('soc_delete_story');
+    del.addEventListener('click', async function () {
+      try { await deleteDoc(doc(db, 'stories', s.id)); loadSocialAdmin(); } catch (e) { /* عادي */ }
+    });
+    cell.append(cap, del);
+    grid.appendChild(cell);
+  });
+  box.appendChild(grid);
 }
