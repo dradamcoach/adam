@@ -35,6 +35,7 @@ const ICONS = {
   content: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg>',
   socm: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
   chal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 4h8.8v4.6c0 2.6-2 4.6-4.4 4.6S7.6 11.2 7.6 8.6z"/><path d="M12 13.2V17"/><path d="M8.4 20h7.2"/></svg>',
+  inbody: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg>',
   rings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="2"/></svg>'
 };
 
@@ -98,6 +99,7 @@ function renderStaff() {
     { key: 'content', name: 'صانع المحتوى', job: 'بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.', chip: !state.content ? ['soon', 'محتاج تحديث'] : (state.content.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'socm', name: 'مدير السوشيال ميديا', job: 'كل سبت: التريند في مصر + جدول ٧ بوستات بميعادها وكلامها وصورتها — والصور بلوجو ADAM.', chip: !state.socm ? ['soon', 'محتاج تحديث'] : (state.socm.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'chal', name: 'موظف المسابقات', job: 'كل جمعة: ٣ أفكار مسابقات للأسبوع الجاي — بتنشرها من لوحة التحكم ← المسابقات.', chip: state.socm ? ['on', 'شغّال'] : ['soon', 'محتاج تحديث'] },
+    { key: 'inbody', name: 'فريق الإنبودي', job: 'العميل أو الأخصائي يصوّر ورقة الإنبودي: الأرقام بتتقري لوحدها، وبعد الحفظ تحليل بيوصل للعميل ولأخصائي التغذية والمدرب.', chip: state.socm ? ['on', 'شغّال'] : ['soon', 'محتاج تحديث'] },
     { key: 'rings', name: 'تذكير الحلقات', job: 'كل يوم ٨ بالليل: إشعار للعميل اللي سلسلته في خطر — مرة واحدة بالكتير.', chip: state.socm ? ['on', 'شغّال'] : ['soon', 'محتاج تحديث'] }
   ];
   $('staff').innerHTML = '';
@@ -250,7 +252,7 @@ function renderLog() {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
     const who = e.by === 'schedule' ? 'تلقائي' : (e.by === 'client' ? 'العميل' : 'يدوي');
-    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير', sup: 'مدير المتابعة', rings: 'تذكير الحلقات', chal: 'موظف المسابقات', socm: 'مدير السوشيال' }[e.agent] || 'المحلّل';
+    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير', sup: 'مدير المتابعة', rings: 'تذكير الحلقات', chal: 'موظف المسابقات', socm: 'مدير السوشيال', inbody: 'فريق الإنبودي' }[e.agent] || 'المحلّل';
     li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms >= 1000 ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });

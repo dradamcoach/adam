@@ -743,6 +743,12 @@
       </div>
     </div>
 
+    <label class="field-label" data-t="ob_food_likes_label">أكلات بتحبها ونفسك تكون في نظامك</label>
+    <p class="hint-text" data-t="ob_food_hint">اكتب اسم الأكلة واختار من القايمة، أو اكتبها زي ما هي ودوس «ضيف»</p>
+    <div class="food-pref" id="ob-food-likes"></div>
+    <label class="field-label" data-t="ob_food_dislikes_label">أكلات مابتحبهاش أو مابتاكلهاش</label>
+    <div class="food-pref" id="ob-food-dislikes"></div>
+
     <label class="rest">
       <input type="checkbox" id="ob-pain-flag"> <span data-t="ob_pain_question">عندك أي ألم أو مشكلة صحية بتمنعك من التمرين دلوقتي؟</span>
     </label>
@@ -1441,6 +1447,8 @@
     </div>
 
     <div id="nutrition-panel" class="hidden">
+      <!-- ذوق العميل في الأكل (من بياناته) -->
+      <div class="fp-box hidden" id="nut-food-prefs"></div>
       <!-- مكتبة برامج التغذية: تطبّق برنامج كامل على الأسبوع بدوسة -->
       <div class="add-box" id="nut-lib-box">
         <h3 data-t="nut_lib_title">مكتبة برامج التغذية</h3>
@@ -2034,6 +2042,10 @@
     <div id="progress-inbody">
       <div class="add-box">
         <h3 data-t="ib_add_title">تسجيل قياس جديد</h3>
+        <button type="button" class="ib-ai-btn" id="ib-ai-btn" data-t="ib_ai_btn">📸 صوّر ورقة الإنبودي — الأرقام هتتملى لوحدها</button>
+        <input type="file" id="ib-ai-file" accept="image/*" class="hidden">
+        <p class="hint-text" data-t="ib_ai_hint">بعد الحفظ فريق الإنبودي بيحلّل القياس ويبعته لأخصائي التغذية ومدربك</p>
+        <div class="ib-ai-extra hidden" id="ib-ai-extra"></div>
         <div class="row">
           <input id="ib-date" type="date">
           <input id="ib-weight" type="number" data-t-ph="calc_weight_kg">

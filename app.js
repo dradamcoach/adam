@@ -1114,6 +1114,42 @@ const TEXT = {
     wr_max_hr: 'أقصى {v}',
     wr_kcal: '{v} سعر',
     wr_zones: 'وقت المناطق',
+    ib_ai_btn: "📸 صوّر ورقة الإنبودي — الأرقام هتتملى لوحدها",
+    ib_ai_hint: "بعد الحفظ فريق الإنبودي بيحلّل القياس ويبعته لأخصائي التغذية ومدربك",
+    ib_ai_reading: "بنقرا الأرقام من الصورة…",
+    ib_ai_not_sheet: "الصورة دي مش باينة ورقة إنبودي — صوّر الورقة كلها في نور كويس",
+    ib_ai_done: "اتقرت ✓ — راجع الأرقام ودوس حفظ",
+    ib_ai_failed: "مقدرناش نقرا الصورة — اكتب الأرقام بإيدك أو جرّب صورة أوضح.",
+    ib_ai_analyzing: "فريق الإنبودي بيحلّل القياس…",
+    ib_ai_retry: "حلّل تاني",
+    ib_ai_analyze_btn: "🔍 حلّل القياس ده",
+    ib_ai_failed_analyze: "التحليل ماتمش — جرّب تاني بعد شوية",
+    ib_ai_title: "تحليل القياس",
+    ib_ai_changes: "إيه اللي اتغير",
+    ib_ai_flags: "خلي بالك من",
+    ib_ai_sugg: "اقتراحات لأخصائي التغذية",
+    ib_ai_next: "القياس الجاي: {w}",
+    ib_ai_note: "ده تحليل مبدئي — أخصائي التغذية ومدربك هما اللي بيقرروا أي تعديل.",
+    ib_x_bmr: "الحرق الأساسي",
+    ib_x_fatmass: "كتلة الدهون",
+    ib_x_bmi: "مؤشر الكتلة",
+    ib_x_score: "سكور الإنبودي",
+    ib_x_whr: "نسبة الوسط للأرداف",
+    ib_x_water_l: "مية الجسم",
+    ib_x_protein: "البروتين",
+    ib_x_mineral: "المعادن",
+    ob_food_likes_label: "أكلات بتحبها ونفسك تكون في نظامك",
+    ob_food_dislikes_label: "أكلات مابتحبهاش أو مابتاكلهاش",
+    ob_food_hint: "اكتب اسم الأكلة واختار من القايمة، أو اكتبها زي ما هي ودوس «ضيف»",
+    fp_ph: "مثلًا: فول، رز بلبن، سمك…",
+    fp_add: "ضيف",
+    fp_box_title: "ذوق العميل في الأكل",
+    fp_likes_short: "بيحب",
+    fp_dislikes_short: "مابيحبش",
+    fp_tag_like: "بيحبها",
+    fp_tag_dislike: "مابيحبهاش",
+    notif_t_ib_analysis: "🔍 تحليل إنبودي جديد",
+    notif_b_ib_analysis: "{name}: {h}",
     chal_sheet_title: "المسابقات",
     pts_sheet_title: "متجر النقط",
     chal_btn: "المسابقات",
@@ -3083,6 +3119,42 @@ const TEXT = {
     wr_max_hr: 'max {v}',
     wr_kcal: '{v} kcal',
     wr_zones: 'Time in zones',
+    ib_ai_btn: "📸 Snap your InBody sheet — the numbers fill in by themselves",
+    ib_ai_hint: "After saving, the InBody team analyzes it and sends it to your nutrition specialist and coach",
+    ib_ai_reading: "Reading the numbers from the photo…",
+    ib_ai_not_sheet: "This doesn't look like an InBody sheet — photograph the whole sheet in good light",
+    ib_ai_done: "Read ✓ — check the numbers and tap save",
+    ib_ai_failed: "We couldn't read the photo — type the numbers or try a clearer photo.",
+    ib_ai_analyzing: "The InBody team is analyzing this test…",
+    ib_ai_retry: "Analyze again",
+    ib_ai_analyze_btn: "🔍 Analyze this test",
+    ib_ai_failed_analyze: "The analysis didn't finish — try again in a bit",
+    ib_ai_title: "Test analysis",
+    ib_ai_changes: "What changed",
+    ib_ai_flags: "Keep an eye on",
+    ib_ai_sugg: "Ideas for the nutrition specialist",
+    ib_ai_next: "Next test: {w}",
+    ib_ai_note: "This is an initial analysis — your nutrition specialist and coach decide any change.",
+    ib_x_bmr: "BMR",
+    ib_x_fatmass: "Fat mass",
+    ib_x_bmi: "BMI",
+    ib_x_score: "InBody score",
+    ib_x_whr: "Waist-hip ratio",
+    ib_x_water_l: "Body water",
+    ib_x_protein: "Protein",
+    ib_x_mineral: "Minerals",
+    ob_food_likes_label: "Foods you love and want in your plan",
+    ob_food_dislikes_label: "Foods you don't like or don't eat",
+    ob_food_hint: "Type a food and pick from the list, or type it as is and tap “Add”",
+    fp_ph: "e.g. foul, rice pudding, fish…",
+    fp_add: "Add",
+    fp_box_title: "Client's food taste",
+    fp_likes_short: "Loves",
+    fp_dislikes_short: "Doesn't eat",
+    fp_tag_like: "loves it",
+    fp_tag_dislike: "doesn't eat it",
+    notif_t_ib_analysis: "🔍 New InBody analysis",
+    notif_b_ib_analysis: "{name}: {h}",
     chal_sheet_title: "Challenges",
     pts_sheet_title: "Points store",
     chal_btn: "Challenges",
@@ -12164,6 +12236,7 @@ function renderNutProgramLibrary() {
 }
 
 function showNutrition() {
+  renderNutFoodPrefs();
   tgKcal.value = coachNutrition.targets.kcal || '';
   tgProtein.value = coachNutrition.targets.protein || '';
   tgCarbs.value = coachNutrition.targets.carbs || '';
@@ -12631,6 +12704,7 @@ function renderFoodList() {
     info.appendChild(per);
 
     li.appendChild(info);
+    foodPrefDecorate(li, food);
 
     li.addEventListener('click', function () {
       const key = targetMeal.value || 'breakfast';
@@ -13055,6 +13129,7 @@ function renderPickerList() {
     per.textContent = Math.round(food.c || 0) + ' ' + t('t_kcal') + ' / 100' + t('fuel_g');
     info.appendChild(per);
     li.appendChild(info);
+    foodPrefDecorate(li, food);
 
     li.addEventListener('click', function () { pickFood(food); });
     pickerList.appendChild(li);
@@ -17921,6 +17996,9 @@ function prefillOnboarding(data) {
   renderSleepBlocksRows();
   obWakeTime.value = (data && data.wakeTime) || '';
   obMealsPerDay.value = (data && data.mealsPerDay) || '';
+  obFoodLikes = cleanFoodPrefs(data && data.foodLikes);
+  obFoodDislikes = cleanFoodPrefs(data && data.foodDislikes);
+  renderObFoodPrefs();
   obFirstMealTime.value = (data && data.firstMealTime) || '';
   obLastMealTime.value = (data && data.lastMealTime) || '';
   renderWorkNatureRows();
@@ -18063,6 +18141,8 @@ document.getElementById('ob-next-btn').addEventListener('click', async function 
       sleepBlocks: (obSleepBlocks && obSleepBlocks.value) || '',
       wakeTime: obWakeTime.value || '',
       mealsPerDay: obMealsPerDay.value || '',
+      foodLikes: cleanFoodPrefs(obFoodLikes),
+      foodDislikes: cleanFoodPrefs(obFoodDislikes),
       firstMealTime: obFirstMealTime.value || '',
       lastMealTime: obLastMealTime.value || '',
       referredBy: obReferrer,
@@ -23220,6 +23300,8 @@ document.getElementById('ib-add-btn').addEventListener('click', async function (
     notes: ibNotesInput.value.trim(),
     imageUrl: ibPickedImage
   };
+  /* أرقام زيادة قراها فريق الإنبودي من الصورة (BMR، كتلة الدهون، ...) */
+  if (ibAiExtra) { entry.extra = ibAiExtra; entry.source = 'photo'; }
 
   inbodyEntries.push(entry);
 
@@ -23233,9 +23315,12 @@ document.getElementById('ib-add-btn').addEventListener('click', async function (
     ibWaterInput.value = '';
     ibNotesInput.value = '';
     clearIbPickedImage();
+    ibClearAi();
     ibDateInput.value = dateStamp(new Date());
     renderInbodyList();
     setStatusMessage(ibMessage, t('ib_saved_msg'), 'success');
+    /* المحلّل بيشتغل لوحده بعد الحفظ */
+    ibAnalyzeEntry(entry.id);
   } catch (error) {
     inbodyEntries.pop();
     ibMessage.textContent = t('problem') + error.message;
@@ -23329,12 +23414,16 @@ function renderInbodyList() {
     if (waterLine) details.appendChild(waterLine);
     item.appendChild(details);
 
+    if (entry.extra) item.appendChild(ibExtraChips(entry.extra));
+
     if (entry.notes) {
       const notes = document.createElement('div');
       notes.className = 'my-ex-notes';
       notes.textContent = entry.notes;
       item.appendChild(notes);
     }
+
+    item.appendChild(ibAnalysisBlock(entry));
 
     ibList.appendChild(item);
   });
@@ -25172,6 +25261,7 @@ function goToNotifTarget(item) {
     if (target === 'training' || target === 'nutrition' || target === 'rehab') { goClientMode(target); return; }
     goClientMode('home');
     if (target === 'friends') { socTab = 'friends'; socLoad().then(openSocSheet); }
+    if (target === 'inbody') { openProgress(clientEmail, clientScreen, false); return; }
     if (target === 'challenges') { chalInit().then(openChalSheet); }
     if (target === 'rewards') { chalInit().then(openPtsSheet); }
   } catch (error) {
@@ -26227,6 +26317,8 @@ function advisorProfile() {
     mealsPerDay: b.mealsPerDay || undefined,
     firstMealTime: b.firstMealTime || undefined,
     lastMealTime: b.lastMealTime || undefined,
+    foodLikes: cleanFoodPrefs(b.foodLikes).map(foodPrefName).filter(Boolean),
+    foodDislikes: cleanFoodPrefs(b.foodDislikes).map(foodPrefName).filter(Boolean),
     sleepHours: b.sleepHours || undefined,
     sleepQuality: b.sleepQuality || undefined,
     pain: b.painFlag ? (String(b.painNote || '').slice(0, 300) || 'yes') : undefined,
@@ -31127,4 +31219,298 @@ async function loadRewardsAdmin() {
     box.appendChild(row);
   });
   box.appendChild(msg);
+}
+
+/* ============================================================
+   فريق الإنبودي: صوّر الورقة ← الأرقام تتملى ← بعد الحفظ تحليل
+   بيوصل للعميل ولأخصائي التغذية والمدرب
+   ============================================================ */
+
+let ibAiExtra = null;
+const ibAnalyzing = {};
+
+function ibClearAi() {
+  ibAiExtra = null;
+  const box = document.getElementById('ib-ai-extra');
+  if (box) { box.innerHTML = ''; box.classList.add('hidden'); }
+}
+
+const IB_EXTRA_KEYS = [
+  ['bmr', 'ib_x_bmr', 'kcal'], ['fatMass', 'ib_x_fatmass', 'kg'], ['bmi', 'ib_x_bmi', ''],
+  ['score', 'ib_x_score', ''], ['whr', 'ib_x_whr', ''], ['bodyWaterL', 'ib_x_water_l', 'L'],
+  ['protein', 'ib_x_protein', 'kg'], ['mineral', 'ib_x_mineral', 'kg']
+];
+
+function ibExtraChips(extra) {
+  const wrap = document.createElement('div');
+  wrap.className = 'ib-extra';
+  IB_EXTRA_KEYS.forEach(function (k) {
+    const v = extra && extra[k[0]];
+    if (v === null || v === undefined || v === '') return;
+    const chip = document.createElement('span');
+    chip.className = 'ib-chip';
+    const unit = k[2] === 'kg' ? t('calc_kg') : (k[2] === 'kcal' ? t('t_kcal') : k[2]);
+    chip.textContent = t(k[1]) + ': ' + v + (unit ? ' ' + unit : '');
+    wrap.appendChild(chip);
+  });
+  return wrap;
+}
+
+(function () {
+  const btn = document.getElementById('ib-ai-btn');
+  const input = document.getElementById('ib-ai-file');
+  if (!btn || !input) return;
+  btn.addEventListener('click', function () { input.value = ''; input.click(); });
+  input.addEventListener('change', async function () {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    if (file.size > MAX_SOURCE_BYTES) { ibMessage.textContent = t('image_too_big'); return; }
+    btn.disabled = true;
+    ibMessage.textContent = t('ib_ai_reading');
+    try {
+      /* نسخة صغيرة تتحفظ مع القياس، ونسخة أوضح للقراية بس */
+      ibPickedImage = await compressImage(file, IMAGE_MAX_SIDE, 0.7);
+      ibPreview.src = ibPickedImage;
+      ibPreviewBox.classList.remove('hidden');
+      const big = await compressImage(file, 1600, 0.85);
+      const res = await scriptCall('ib_read', { email: progressTargetEmail, image: String(big).split(',')[1] || '', mime: 'image/jpeg' });
+      if (!res || !res.ok) throw new Error((res && res.error) || '—');
+      const v = res.values || {};
+      if (!v.isInbody) {
+        setStatusMessage(ibMessage, t('ib_ai_not_sheet') + (v.notes ? ' — ' + v.notes : ''), 'warning');
+      } else {
+        const put = function (el, val) { if (val !== null && val !== undefined && val !== '') el.value = val; };
+        if (v.date) ibDateInput.value = v.date;
+        put(ibWeightInput, v.weight);
+        put(ibBodyfatInput, v.bodyFat);
+        put(ibMuscleInput, v.muscleMass);
+        put(ibVisceralInput, v.visceralFat);
+        put(ibWaterInput, v.bodyWater);
+        ibAiExtra = {};
+        IB_EXTRA_KEYS.forEach(function (k) { if (v[k[0]] !== null && v[k[0]] !== undefined) ibAiExtra[k[0]] = v[k[0]]; });
+        if (!Object.keys(ibAiExtra).length) ibAiExtra = null;
+        const box = document.getElementById('ib-ai-extra');
+        box.innerHTML = '';
+        if (ibAiExtra) { box.appendChild(ibExtraChips(ibAiExtra)); box.classList.remove('hidden'); }
+        setStatusMessage(ibMessage, t('ib_ai_done') + (v.notes ? ' — ' + v.notes : ''), 'success');
+      }
+    } catch (error) {
+      ibMessage.textContent = t('ib_ai_failed') + ' ' + ((error && error.message) || '');
+    }
+    btn.disabled = false;
+  });
+})();
+
+async function ibAnalyzeEntry(entryId) {
+  const target = progressTargetEmail;
+  if (!target || ibAnalyzing[entryId]) return;
+  ibAnalyzing[entryId] = 'busy';
+  renderInbodyList();
+  try {
+    const res = await scriptCall('ib_analyze', { email: target, entryId: entryId, lang: lang });
+    if (!res || !res.ok || !res.analysis) throw new Error((res && res.error) || '—');
+    if (target !== progressTargetEmail) return;
+    const entry = inbodyEntries.filter(function (e) { return e.id === entryId; })[0];
+    if (!entry) return;
+    entry.analysis = res.analysis;
+    await saveInbodyDoc();
+    delete ibAnalyzing[entryId];
+    renderInbodyList();
+    ibNotifyTeam(target, res.analysis);
+  } catch (error) {
+    ibAnalyzing[entryId] = 'failed';
+    renderInbodyList();
+  }
+}
+
+/* التحليل بيوصل لأخصائي التغذية والمدرب — وللعميل لو حد من الفريق هو اللي رفع */
+async function ibNotifyTeam(target, analysis) {
+  try {
+    const snap = await getDoc(doc(db, 'clients', target));
+    const c = snap.exists() ? snap.data() : {};
+    const team = c.team || {};
+    const to = [c.coachEmail || COACH_EMAIL, team.nutritionist, team.nutrition, target].filter(Boolean);
+    notify(to, 'ib_analysis', {
+      target: 'inbody', about: target, aboutName: c.name || '',
+      params: function () { return { name: String(c.name || '').split(' ')[0], h: analysis.headline || '' }; }
+    });
+  } catch (error) { /* الإشعار مش أساسي */ }
+}
+
+function ibAnalysisBlock(entry) {
+  const box = document.createElement('div');
+  box.className = 'ib-analysis';
+  const state = ibAnalyzing[entry.id];
+  const a = entry.analysis;
+  if (!a) {
+    if (state === 'busy') {
+      box.classList.add('busy');
+      box.textContent = '🔍 ' + t('ib_ai_analyzing');
+      return box;
+    }
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'secondary ib-analyze-btn';
+    btn.textContent = state === 'failed' ? t('ib_ai_retry') : t('ib_ai_analyze_btn');
+    btn.addEventListener('click', function () { delete ibAnalyzing[entry.id]; ibAnalyzeEntry(entry.id); });
+    box.classList.add('empty');
+    if (state === 'failed') box.appendChild(Object.assign(document.createElement('p'), { className: 'hint-text', textContent: t('ib_ai_failed_analyze') }));
+    box.appendChild(btn);
+    return box;
+  }
+  const title = document.createElement('div');
+  title.className = 'ib-an-title';
+  title.textContent = '🔍 ' + t('ib_ai_title');
+  const head = document.createElement('strong');
+  head.className = 'ib-an-head';
+  head.textContent = a.headline || '';
+  const sum = document.createElement('p');
+  sum.className = 'ib-an-sum';
+  sum.textContent = a.summary || '';
+  box.append(title, head, sum);
+  const list = function (items, cls, label) {
+    if (!Array.isArray(items) || !items.length) return;
+    const h = document.createElement('div');
+    h.className = 'ib-an-label';
+    h.textContent = label;
+    const ul = document.createElement('ul');
+    ul.className = 'ib-an-list ' + cls;
+    items.forEach(function (x) { const li = document.createElement('li'); li.textContent = x; ul.appendChild(li); });
+    box.append(h, ul);
+  };
+  list(a.changes, 'changes', t('ib_ai_changes'));
+  list(a.flags, 'flags', '⚠️ ' + t('ib_ai_flags'));
+  list(a.suggestions, 'sugg', '🥗 ' + t('ib_ai_sugg'));
+  if (a.nextCheck) box.appendChild(Object.assign(document.createElement('p'), { className: 'ib-an-next', textContent: '📅 ' + fill('ib_ai_next', { w: a.nextCheck }) }));
+  box.appendChild(Object.assign(document.createElement('p'), { className: 'ib-an-note', textContent: t('ib_ai_note') }));
+  return box;
+}
+
+/* ============================================================
+   الأكل اللي العميل بيحبه ومابيحبهوش
+   clients.foodLikes / foodDislikes = [{ id, name }]  (id فاضي = أكلة مكتوبة بإيده)
+   بيظهر لأخصائي التغذية، وبيتعلّم في قايمة الأكل، والمستشار بيبني عليه
+   ============================================================ */
+
+let obFoodLikes = [];
+let obFoodDislikes = [];
+
+function foodPrefName(item) {
+  if (!item) return '';
+  if (item.id) {
+    const f = allFoods().filter(function (x) { return x.id === item.id; })[0];
+    if (f) return f[lang] || f.ar || f.en || item.name || '';
+  }
+  return item.name || '';
+}
+
+function foodPrefWidget(boxId, getList, setList) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  box.innerHTML = '';
+  const chips = document.createElement('div');
+  chips.className = 'fp-chips';
+  getList().forEach(function (item, i) {
+    const chip = document.createElement('span');
+    chip.className = 'fp-chip';
+    chip.textContent = foodPrefName(item) + ' ';
+    const x = document.createElement('button');
+    x.type = 'button';
+    x.className = 'fp-x';
+    x.textContent = '×';
+    x.setAttribute('aria-label', t('delete'));
+    x.addEventListener('click', function () {
+      const list = getList().slice();
+      list.splice(i, 1);
+      setList(list);
+      foodPrefWidget(boxId, getList, setList);
+    });
+    chip.appendChild(x);
+    chips.appendChild(chip);
+  });
+  const row = document.createElement('div');
+  row.className = 'fp-row';
+  const input = document.createElement('input');
+  input.className = 'fp-input';
+  input.placeholder = t('fp_ph');
+  input.setAttribute('list', 'fp-foods');
+  input.maxLength = 40;
+  const add = document.createElement('button');
+  input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add.click(); } });
+  add.type = 'button';
+  add.className = 'secondary fp-add';
+  add.textContent = t('fp_add');
+  add.addEventListener('click', function () {
+    const text = input.value.trim();
+    if (!text) return;
+    const list = getList().slice();
+    if (list.length >= 25) return;
+    const food = allFoods().filter(function (f) { return f.ar === text || f.en === text; })[0];
+    const item = food ? { id: food.id, name: food.ar || food.en } : { id: '', name: text.slice(0, 40) };
+    if (!list.some(function (x) { return (item.id && x.id === item.id) || (!item.id && x.name === item.name); })) list.push(item);
+    setList(list);
+    foodPrefWidget(boxId, getList, setList);
+    const again = document.querySelector('#' + boxId + ' .fp-input');
+    if (again) again.focus();
+  });
+  row.append(input, add);
+  box.append(chips, row);
+  /* قايمة اقتراحات من مكتبة الأكل (مرة واحدة للصفحة) */
+  if (!document.querySelector('datalist#fp-foods')) {
+    const dl = document.createElement('datalist');
+    dl.id = 'fp-foods';
+    allFoods().slice(0, 400).forEach(function (f) { const o = document.createElement('option'); o.value = f[lang] || f.ar || f.en || ''; dl.appendChild(o); });
+    document.body.appendChild(dl);
+  }
+}
+
+function renderObFoodPrefs() {
+  foodPrefWidget('ob-food-likes', function () { return obFoodLikes; }, function (l) { obFoodLikes = l; });
+  foodPrefWidget('ob-food-dislikes', function () { return obFoodDislikes; }, function (l) { obFoodDislikes = l; });
+}
+
+function cleanFoodPrefs(list) {
+  return (Array.isArray(list) ? list : []).filter(function (x) { return x && (x.id || x.name); })
+    .slice(0, 25).map(function (x) { return { id: String(x.id || '').slice(0, 60), name: String(x.name || '').slice(0, 40) }; });
+}
+
+/* بيتعلّم الأكل في قايمة الاختيار: ❤️ بيحبه · 🚫 مابيحبهوش */
+function foodPrefMark(food) {
+  const src = currentProviderEmail ? coachBasicsData : clientRecord;
+  if (!src) return '';
+  const hit = function (list) {
+    return (Array.isArray(list) ? list : []).some(function (x) {
+      return (x.id && x.id === food.id) || (!x.id && x.name && (x.name === food.ar || x.name === food.en));
+    });
+  };
+  if (hit(src.foodDislikes)) return 'dislike';
+  if (hit(src.foodLikes)) return 'like';
+  return '';
+}
+
+/* بيعلّم الصنف في أي قايمة أكل (مكتبة المدرب أو اختيار العميل) لو العميل بيحبه أو مابيحبهوش */
+function foodPrefDecorate(li, food) {
+  const mark = foodPrefMark(food);
+  if (!mark) return;
+  li.classList.add('fp-' + mark);
+  const tag = document.createElement('span');
+  tag.className = 'fp-tag';
+  tag.textContent = mark === 'like' ? '❤️ ' + t('fp_tag_like') : '🚫 ' + t('fp_tag_dislike');
+  li.appendChild(tag);
+}
+
+function renderNutFoodPrefs() {
+  const box = document.getElementById('nut-food-prefs');
+  if (!box) return;
+  const b = coachBasicsData || {};
+  const likes = cleanFoodPrefs(b.foodLikes), dislikes = cleanFoodPrefs(b.foodDislikes);
+  box.classList.toggle('hidden', !likes.length && !dislikes.length);
+  box.innerHTML = '';
+  if (!likes.length && !dislikes.length) return;
+  const title = document.createElement('div');
+  title.className = 'fp-box-title';
+  title.textContent = t('fp_box_title');
+  box.appendChild(title);
+  if (likes.length) box.appendChild(Object.assign(document.createElement('p'), { className: 'fp-line like', textContent: '❤️ ' + t('fp_likes_short') + ': ' + likes.map(foodPrefName).join('، ') }));
+  if (dislikes.length) box.appendChild(Object.assign(document.createElement('p'), { className: 'fp-line dislike', textContent: '🚫 ' + t('fp_dislikes_short') + ': ' + dislikes.map(foodPrefName).join('، ') }));
 }
