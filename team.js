@@ -32,7 +32,10 @@ const ICONS = {
   rd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
   advisor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg>',
   mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
-  content: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg>'
+  content: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg>',
+  socm: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
+  chal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 4h8.8v4.6c0 2.6-2 4.6-4.4 4.6S7.6 11.2 7.6 8.6z"/><path d="M12 13.2V17"/><path d="M8.4 20h7.2"/></svg>',
+  rings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="2"/></svg>'
 };
 
 /* ---------- الشاشات ---------- */
@@ -92,7 +95,10 @@ function renderStaff() {
     { key: 'advisor', name: 'مستشار البرامج', job: 'جوه صفحة العميل: بيقترح برنامج تمرين من المكتبة، وإنت أو المتخصص تراجعوا وتحفظوا.', chip: !state.advisor ? ['soon', 'محتاج تحديث'] : (state.advisor.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'sup', name: 'مدير المتابعة', job: 'كل يوم: بريف لكل مدرب وأخصائي بحالاته ومستواه، وكل سبت ترتيبه وسط زمايله — وليك البونص.', chip: !state.sup ? ['soon', 'محتاج تحديث'] : (state.sup.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'rd', name: 'موظف التطوير', job: 'كل أحد: أفكار جديدة بمصادرها — منافسين وأبحاث وأدوات وتسويق. إنت اللي بتختار.', chip: !state.rd ? ['soon', 'محتاج تحديث'] : (state.rd.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
-    { key: 'content', name: 'صانع المحتوى', job: 'بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.', chip: !state.content ? ['soon', 'محتاج تحديث'] : (state.content.on ? ['on', 'شغّال'] : ['off', 'موقوف']) }
+    { key: 'content', name: 'صانع المحتوى', job: 'بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.', chip: !state.content ? ['soon', 'محتاج تحديث'] : (state.content.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
+    { key: 'socm', name: 'مدير السوشيال ميديا', job: 'كل سبت: التريند في مصر + جدول ٧ بوستات بميعادها وكلامها وصورتها — والصور بلوجو ADAM.', chip: !state.socm ? ['soon', 'محتاج تحديث'] : (state.socm.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
+    { key: 'chal', name: 'موظف المسابقات', job: 'كل جمعة: ٣ أفكار مسابقات للأسبوع الجاي — بتنشرها من لوحة التحكم ← المسابقات.', chip: state.socm ? ['on', 'شغّال'] : ['soon', 'محتاج تحديث'] },
+    { key: 'rings', name: 'تذكير الحلقات', job: 'كل يوم ٨ بالليل: إشعار للعميل اللي سلسلته في خطر — مرة واحدة بالكتير.', chip: state.socm ? ['on', 'شغّال'] : ['soon', 'محتاج تحديث'] }
   ];
   $('staff').innerHTML = '';
   staff.forEach(s => {
@@ -244,7 +250,7 @@ function renderLog() {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
     const who = e.by === 'schedule' ? 'تلقائي' : (e.by === 'client' ? 'العميل' : 'يدوي');
-    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير', sup: 'مدير المتابعة', rings: 'تذكير الحلقات', chal: 'موظف المسابقات' }[e.agent] || 'المحلّل';
+    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير', sup: 'مدير المتابعة', rings: 'تذكير الحلقات', chal: 'موظف المسابقات', socm: 'مدير السوشيال' }[e.agent] || 'المحلّل';
     li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms >= 1000 ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });
@@ -1086,6 +1092,7 @@ function renderAll(keepShown) {
   renderSup();
   renderStaff();
   renderRd();
+  renderSocm();
   renderAdvisor();
   renderMail();
   renderSuccess();
@@ -1205,3 +1212,299 @@ onAuthStateChanged(auth, async user => {
     else blocked('حصلت مشكلة', err.message);
   }
 });
+
+/* ---------- مدير السوشيال ميديا + استوديو الصور ---------- */
+
+const SOCM_DAYS = ['السبت', 'الحد', 'الاتنين', 'التلات', 'الأربع', 'الخميس', 'الجمعة'];
+const SOCM_PLATFORM = { instagram: 'إنستجرام', tiktok: 'تيك توك', facebook: 'فيسبوك' };
+const SOCM_FORMAT = { reel: 'ريل', post: 'بوست', carousel: 'كاروسيل', story: 'ستوري' };
+const SOCM_VISUAL = {
+  photo_you: 'صورة ليك أو لعميل (بموافقته) — وحط عليها اللوجو من الاستوديو',
+  video_you: 'فيديو تصوّره بموبايلك',
+  template_tip: 'قالب نصيحة جاهز — دوس «اعمل الصورة»',
+  template_quote: 'قالب جملة جاهز — دوس «اعمل الصورة»',
+  template_stat: 'قالب رقم من ADAM — دوس «اعمل الصورة»',
+  template_champion: 'قالب بطل الأسبوع — دوس «اعمل الصورة»',
+  ai_image: 'صورة من Gemini: انسخ الوصف، افتح Gemini واطلب الصورة، وبعدين ارفعها في الاستوديو عشان اللوجو'
+};
+let socmBusy = false;
+
+function socmMsg(text, kind) {
+  $('socm-msg').textContent = text || '';
+  $('socm-msg').className = 'msg' + (kind ? ' ' + kind : '');
+}
+
+function socmCopy(text, okText) {
+  try { navigator.clipboard.writeText(text); socmMsg(okText || 'اتنسخ ✓', 'ok'); } catch (err) { socmMsg('مقدرتش أنسخ — علّم الكلام وانسخه بإيدك', 'err'); }
+}
+
+function socmPostCard(p, todayIdx) {
+  const box = document.createElement('div');
+  box.className = 'socm-post' + (p.status === 'posted' ? ' posted' : '') + (p.status === 'skip' ? ' skip' : '') + (p.day === todayIdx && p.status === 'new' ? ' today' : '');
+  const top = document.createElement('div');
+  top.className = 'draft-top';
+  const when = document.createElement('span');
+  when.className = 'chip ' + (p.day === todayIdx ? 'warn' : 'soon');
+  when.textContent = SOCM_DAYS[p.day] + ' ' + p.time + (p.day === todayIdx ? ' · النهارده' : '');
+  const where = document.createElement('span');
+  where.className = 'chip on';
+  where.textContent = (SOCM_PLATFORM[p.platform] || p.platform) + ' · ' + (SOCM_FORMAT[p.format] || p.format);
+  top.append(when, where);
+  if (p.trend) {
+    const tr = document.createElement('span');
+    tr.className = 'chip danger';
+    tr.textContent = '🔥 ' + p.trend;
+    top.appendChild(tr);
+  }
+  if (p.status === 'posted') top.appendChild(Object.assign(document.createElement('span'), { className: 'chip on', textContent: 'اتنشر ✓' }));
+  const hook = document.createElement('div');
+  hook.className = 'socm-hook';
+  hook.textContent = p.hookAr;
+  const cap = document.createElement('p');
+  cap.className = 'socm-cap';
+  cap.textContent = p.captionAr;
+  const tags = document.createElement('div');
+  tags.className = 'socm-tags';
+  tags.textContent = (p.hashtags || []).join(' ');
+  const vis = document.createElement('div');
+  vis.className = 'socm-visual';
+  vis.textContent = '🎨 ' + (SOCM_VISUAL[p.visual] || '');
+  if (p.visual === 'ai_image' && p.imagePrompt) {
+    const pr = document.createElement('p');
+    pr.className = 'socm-prompt';
+    pr.textContent = p.imagePrompt;
+    vis.appendChild(pr);
+  }
+  if ((p.visual === 'video_you' || p.format === 'reel') && (p.shots || []).length) {
+    const ol = document.createElement('ol');
+    p.shots.forEach(sh => { const li = document.createElement('li'); li.textContent = sh; ol.appendChild(li); });
+    vis.appendChild(ol);
+  }
+  const why = document.createElement('p');
+  why.className = 'socm-why';
+  why.textContent = '💡 ' + (p.why || '');
+  const actions = document.createElement('div');
+  actions.className = 'socm-actions';
+  const copyText = document.createElement('button');
+  copyText.type = 'button';
+  copyText.textContent = 'انسخ الكلام';
+  copyText.addEventListener('click', () => socmCopy(p.hookAr + '\n' + p.captionAr + '\n\n' + (p.hashtags || []).join(' '), 'الكلام اتنسخ — الصقه في البوست'));
+  actions.appendChild(copyText);
+  if (p.visual === 'ai_image' && p.imagePrompt) {
+    const cp = document.createElement('button');
+    cp.type = 'button';
+    cp.className = 'ghost';
+    cp.textContent = 'انسخ وصف الصورة';
+    cp.addEventListener('click', () => socmCopy(p.imagePrompt, 'الوصف اتنسخ — الصقه في Gemini'));
+    actions.appendChild(cp);
+  }
+  if (/^template_/.test(p.visual) || p.visual === 'ai_image' || p.visual === 'photo_you') {
+    const mk = document.createElement('button');
+    mk.type = 'button';
+    mk.className = 'ghost';
+    mk.textContent = p.visual.indexOf('template_') === 0 ? 'اعمل الصورة' : 'حط اللوجو على صورتك';
+    mk.addEventListener('click', () => studioFrom(p));
+    actions.appendChild(mk);
+  }
+  const done = document.createElement('button');
+  done.type = 'button';
+  done.className = p.status === 'posted' ? 'ghost' : '';
+  done.textContent = p.status === 'posted' ? 'رجّعها' : 'نشرته ✓';
+  done.addEventListener('click', () => socmMark(p.i, p.status === 'posted' ? 'new' : 'posted'));
+  const skip = document.createElement('button');
+  skip.type = 'button';
+  skip.className = 'ghost';
+  skip.textContent = p.status === 'skip' ? 'رجّعها' : 'اتخطّاها';
+  skip.addEventListener('click', () => socmMark(p.i, p.status === 'skip' ? 'new' : 'skip'));
+  actions.append(done, skip);
+  box.append(top, hook, cap, tags, vis, why, actions);
+  return box;
+}
+
+async function socmMark(i, status) {
+  try { state = await call('team_socm_mark', { i, status }); renderSocm(); } catch (err) { socmMsg(err.message, 'err'); }
+}
+
+function renderSocm() {
+  const sm = state.socm;
+  $('socm-card').classList.toggle('hidden', !sm);
+  if (!sm) return;
+  $('socm-toggle-btn').textContent = sm.on ? 'أوقفه' : 'شغّله تاني';
+  $('socm-toggle-btn').className = sm.on ? 'danger' : '';
+  $('socm-run-btn').disabled = socmBusy || sm.runsLeft <= 0;
+  $('socm-run-btn').textContent = socmBusy ? 'بيشتغل… (دقيقة)' : 'اعمل جدول دلوقتي (' + sm.runsLeft + ' فاضلين النهارده)';
+  if (document.activeElement !== $('socm-times')) $('socm-times').value = sm.times || '';
+  $('socm-trends').innerHTML = '';
+  if (!(sm.trends || []).length) $('socm-trends').appendChild(Object.assign(document.createElement('span'), { className: 'muted', textContent: 'لسه مفيش — بيتجاب مع الجدول' }));
+  (sm.trends || []).forEach(t => {
+    const a = document.createElement(t.url ? 'a' : 'span');
+    a.className = 'socm-trend';
+    if (t.url) { a.href = t.url; a.target = '_blank'; a.rel = 'noopener'; }
+    a.textContent = t.title + ' ';
+    if (t.traffic) a.appendChild(Object.assign(document.createElement('small'), { textContent: t.traffic }));
+    $('socm-trends').appendChild(a);
+  });
+  const todayIdx = (new Date().getDay() + 1) % 7;
+  $('socm-list').innerHTML = '';
+  (sm.posts || []).forEach(p => $('socm-list').appendChild(socmPostCard(p, todayIdx)));
+  $('socm-empty').classList.toggle('hidden', (sm.posts || []).length > 0);
+  if (sm.error && !(sm.posts || []).length) socmMsg(sm.error, 'err');
+}
+
+$('socm-run-btn').addEventListener('click', async () => {
+  socmBusy = true; renderSocm(); socmMsg('بيشوف التريند ويكتب الجدول…');
+  try {
+    state = await call('team_socm_run');
+    socmMsg(state.socmNote ? 'مقدرش يعمل جدول: ' + state.socmNote : 'الجدول جاهز ✓', state.socmNote ? 'err' : 'ok');
+  } catch (err) { socmMsg(err.message, 'err'); }
+  socmBusy = false; renderSocm(); renderLog(); renderInbox();
+});
+$('socm-toggle-btn').addEventListener('click', async () => {
+  try { state = await call('team_socm_toggle', { on: !state.socm.on }); renderSocm(); renderStaff(); renderLog(); } catch (err) { socmMsg(err.message, 'err'); }
+});
+$('socm-times-btn').addEventListener('click', async () => {
+  try { state = await call('team_socm_times', { times: $('socm-times').value }); renderSocm(); socmMsg('المواعيد اتحفظت — الجدول الجاي هيمشي عليها', 'ok'); } catch (err) { socmMsg(err.message, 'err'); }
+});
+
+/* الاستوديو: كل الرسم على الموبايل/الكمبيوتر نفسه — مفيش رفع لأي حتة */
+const STUDIO_SIZES = { post: [1080, 1350], story: [1080, 1920], square: [1080, 1080] };
+let studioPhoto = null;
+let studioLogo = null;
+
+function studioLoadLogo() {
+  return new Promise(resolve => {
+    if (studioLogo) { resolve(studioLogo); return; }
+    const img = new Image();
+    img.onload = () => { studioLogo = img; resolve(img); };
+    img.onerror = () => resolve(null);
+    img.src = 'icon-512.png';
+  });
+}
+
+function studioWrap(ctx, text, x, y, maxW, lh, maxLines) {
+  const words = String(text || '').split(/\s+/);
+  let line = '', row = 0;
+  for (let i = 0; i < words.length; i++) {
+    const test = line ? line + ' ' + words[i] : words[i];
+    if (ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line, x, y + row * lh);
+      line = words[i]; row++;
+      if (maxLines && row >= maxLines) return row;
+    } else line = test;
+  }
+  if (line) { ctx.fillText(line, x, y + row * lh); row++; }
+  return row;
+}
+
+async function studioDraw() {
+  const c = $('st-canvas');
+  const kind = $('st-kind').value;
+  const size = STUDIO_SIZES[$('st-size').value] || STUDIO_SIZES.post;
+  c.width = size[0]; c.height = size[1];
+  const W = c.width, H = c.height;
+  const ctx = c.getContext('2d');
+  try { await document.fonts.load('700 80px Cairo'); await document.fonts.load('400 40px Cairo'); } catch (err) { /* خط احتياطي */ }
+  const logo = await studioLoadLogo();
+  ctx.direction = 'rtl';
+  ctx.textAlign = 'center';
+  const title = $('st-title').value.trim();
+  const body = $('st-body').value.trim();
+
+  if (kind === 'photo' && studioPhoto) {
+    const r = Math.max(W / studioPhoto.width, H / studioPhoto.height);
+    const w = studioPhoto.width * r, h = studioPhoto.height * r;
+    ctx.drawImage(studioPhoto, (W - w) / 2, (H - h) / 2, w, h);
+    if (title || body) {
+      const g = ctx.createLinearGradient(0, H * 0.6, 0, H);
+      g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.78)');
+      ctx.fillStyle = g; ctx.fillRect(0, H * 0.55, W, H * 0.45);
+      ctx.fillStyle = '#fff'; ctx.font = '700 70px Cairo, sans-serif';
+      const rows = title ? studioWrap(ctx, title, W / 2, H - 250, W - 140, 84, 2) : 0;
+      ctx.font = '400 42px Cairo, sans-serif'; ctx.fillStyle = '#e2e8f0';
+      if (body) studioWrap(ctx, body, W / 2, H - 250 + rows * 84 + 10, W - 140, 56, 2);
+    }
+    if (logo) {
+      ctx.save();
+      ctx.globalAlpha = 0.95;
+      ctx.drawImage(logo, W - 190, 40, 150, 150);
+      ctx.restore();
+    }
+    return;
+  }
+
+  /* القوالب */
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  const pal = { tip: ['#0b1220', '#0f2a24'], quote: ['#1a1033', '#0b1220'], stat: ['#0b1220', '#102a43'], champion: ['#2a1d05', '#0b1220'], photo: ['#0b1220', '#0f2a24'] }[kind];
+  bg.addColorStop(0, pal[0]); bg.addColorStop(1, pal[1]);
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  const glow = ctx.createRadialGradient(W * 0.2, H * 0.2, 0, W * 0.2, H * 0.2, W * 0.7);
+  glow.addColorStop(0, kind === 'champion' ? 'rgba(250,204,21,.18)' : 'rgba(34,197,94,.16)'); glow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+  if (logo) ctx.drawImage(logo, W / 2 - 80, 70, 160, 160);
+  ctx.fillStyle = '#eef3f9'; ctx.font = '700 44px Cairo, sans-serif';
+  ctx.fillText('ADAM', W / 2, 290);
+  const mid = H / 2;
+  const badge = { tip: '💡 نصيحة', quote: '💬', stat: '📊 مجتمع ADAM', champion: '🏆 بطل الأسبوع', photo: '' }[kind];
+  ctx.font = '700 46px Cairo, sans-serif'; ctx.fillStyle = kind === 'champion' ? '#facc15' : '#22c55e';
+  if (badge) ctx.fillText(badge, W / 2, mid - 190);
+  if (kind === 'stat' || kind === 'champion') {
+    ctx.fillStyle = '#ffffff'; ctx.font = '700 150px Cairo, sans-serif';
+    studioWrap(ctx, title || '—', W / 2, mid, W - 120, 160, 2);
+    ctx.fillStyle = '#9fb3c8'; ctx.font = '400 50px Cairo, sans-serif';
+    studioWrap(ctx, body, W / 2, mid + 170, W - 160, 66, 4);
+  } else {
+    ctx.fillStyle = '#ffffff'; ctx.font = (kind === 'quote' ? '700 78px' : '700 72px') + ' Cairo, sans-serif';
+    const rows = studioWrap(ctx, kind === 'quote' ? '«' + (title || '') + '»' : title, W / 2, mid - 60, W - 140, 96, 4);
+    ctx.fillStyle = '#cbd5e1'; ctx.font = '400 46px Cairo, sans-serif';
+    studioWrap(ctx, body, W / 2, mid - 40 + rows * 96 + 30, W - 160, 64, 6);
+  }
+  /* الفوتر */
+  ctx.fillStyle = '#22c55e';
+  const fy = H - 170;
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(W / 2 - 330, fy, 660, 100, 50); else ctx.rect(W / 2 - 330, fy, 660, 100);
+  ctx.fill();
+  ctx.fillStyle = '#06210f'; ctx.font = '700 40px Cairo, sans-serif';
+  ctx.fillText('ابدأ مع ADAM — اللينك في البايو', W / 2, fy + 64);
+}
+
+function studioSync() {
+  const kind = $('st-kind').value;
+  $('st-file-wrap').classList.toggle('hidden', kind !== 'photo');
+  $('st-champ-note').classList.toggle('hidden', kind !== 'champion');
+  $('st-title').placeholder = kind === 'stat' ? 'الرقم (مثلًا: 120 نجمة)' : kind === 'champion' ? 'الاسم (بموافقته)' : 'العنوان';
+  studioDraw();
+}
+
+function studioFrom(p) {
+  const map = { template_tip: 'tip', template_quote: 'quote', template_stat: 'stat', template_champion: 'champion' };
+  $('st-kind').value = map[p.visual] || 'photo';
+  $('st-size').value = p.format === 'reel' || p.format === 'story' ? 'story' : 'post';
+  $('st-title').value = p.templateTitle || (map[p.visual] ? p.hookAr : '');
+  $('st-body').value = p.templateBody || '';
+  studioSync();
+  $('studio-head').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+['st-kind', 'st-size'].forEach(id => $(id).addEventListener('change', studioSync));
+['st-title', 'st-body'].forEach(id => $(id).addEventListener('input', () => studioDraw()));
+$('st-file').addEventListener('change', () => {
+  const f = $('st-file').files && $('st-file').files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => { const img = new Image(); img.onload = () => { studioPhoto = img; studioDraw(); }; img.src = reader.result; };
+  reader.readAsDataURL(f);
+});
+$('st-download').addEventListener('click', async () => {
+  await studioDraw();
+  $('st-canvas').toBlob(blob => {
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'adam-' + $('st-kind').value + '-' + Date.now() + '.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }, 'image/png');
+});
+$('st-gemini').addEventListener('click', () => window.open('https://gemini.google.com/app', '_blank', 'noopener'));
+studioSync();

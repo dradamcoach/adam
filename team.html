@@ -143,6 +143,33 @@
     .post-credit { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
     details summary { cursor: pointer; color: var(--muted); font-size: 13px; margin-top: 10px; }
     @media (max-width: 420px) { td, th { padding: 6px 3px; } table { font-size: 12.5px; } }
+
+    .socm-times { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin: 6px 0 4px; }
+    .socm-times input { width: 150px; }
+    .socm-trends { display: flex; flex-wrap: wrap; gap: 6px; }
+    .socm-trend { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+    .socm-trend small { color: var(--warn); font-size: 11px; }
+    .socm-post { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin: 10px 0 0; }
+    .socm-post.posted { opacity: .6; border-color: rgba(34,197,94,.5); }
+    .socm-post.skip { opacity: .45; }
+    .socm-post.today { border-color: var(--warn); }
+    .socm-hook { font-weight: 700; font-size: 15px; margin: 6px 0 4px; }
+    .socm-cap { white-space: pre-line; font-size: 13.5px; line-height: 1.8; margin: 0 0 6px; }
+    .socm-tags { color: var(--info); font-size: 13px; direction: ltr; text-align: right; }
+    .socm-visual { background: var(--field); border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; font-size: 13px; margin: 8px 0; }
+    .socm-visual ol { margin: 4px 0 0; padding-inline-start: 20px; }
+    .socm-prompt { direction: ltr; text-align: left; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); margin: 4px 0; }
+    .socm-why { color: var(--muted); font-size: 12.5px; }
+    .socm-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .studio { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .studio-controls { display: flex; flex-direction: column; gap: 8px; }
+    .studio-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .studio-row > * { flex: 1; }
+    .studio-file { font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+    .studio select, .studio textarea { font: inherit; width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
+    .studio input { margin: 0; }
+    #st-canvas { width: 100%; max-width: 360px; height: auto; border-radius: 12px; border: 1px solid var(--line); justify-self: center; background: #000; }
+    @media (min-width: 700px) { .studio { grid-template-columns: 1fr 300px; } }
   </style>
 </head>
 <body>
@@ -370,6 +397,60 @@
         <button type="button" class="ghost" id="ml-preview-btn">مين هيوصله إيميل دلوقتي؟</button>
         <p class="msg" id="ml-msg"></p>
         <ul class="log hidden" id="ml-preview"></ul>
+      </div>
+
+      <!-- مدير السوشيال ميديا -->
+      <div class="card hidden" id="socm-card">
+        <div class="report-head">
+          <div>
+            <h2>مدير السوشيال ميديا</h2>
+            <p class="muted">كل سبت الساعة ٩ الصبح: بيشوف التريند في مصر وأخبار الرياضة، ويعملك جدول الأسبوع — ٧ بوستات بميعادها ومكانها، أول جملة، الكلام، الهاشتاجات، والصورة أو الفيديو يتعمل إزاي. والصور بتطلع بلوجو ADAM من الاستوديو تحت.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="socm-run-btn">اعمل جدول دلوقتي</button>
+            <button type="button" class="ghost" id="socm-toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="socm-msg"></p>
+        <div class="socm-times">
+          <label for="socm-times">أحسن مواعيد للنشر عندك (من Instagram ← Insights): </label>
+          <input id="socm-times" dir="ltr" placeholder="20:30, 21:30">
+          <button type="button" class="ghost" id="socm-times-btn">احفظ</button>
+        </div>
+        <h3>التريند في مصر دلوقتي</h3>
+        <div class="socm-trends" id="socm-trends"></div>
+        <h3>جدول الأسبوع</h3>
+        <p class="muted hidden" id="socm-empty">لسه مفيش جدول — دوس «اعمل جدول دلوقتي» أو استنى السبت الساعة ٩.</p>
+        <div id="socm-list"></div>
+
+        <h3 id="studio-head">استوديو الصور بلوجو ADAM</h3>
+        <div class="studio">
+          <div class="studio-controls">
+            <div class="studio-row">
+              <select id="st-kind">
+                <option value="tip">نصيحة</option>
+                <option value="quote">جملة تحفيزية</option>
+                <option value="stat">رقم من ADAM</option>
+                <option value="champion">بطل الأسبوع</option>
+                <option value="photo">صورتك + اللوجو</option>
+              </select>
+              <select id="st-size">
+                <option value="post">بوست ١٠٨٠×١٣٥٠</option>
+                <option value="story">ستوري/ريل ١٠٨٠×١٩٢٠</option>
+                <option value="square">مربع ١٠٨٠×١٠٨٠</option>
+              </select>
+            </div>
+            <input id="st-title" placeholder="العنوان">
+            <textarea id="st-body" rows="3" placeholder="الكلام"></textarea>
+            <label class="studio-file" id="st-file-wrap">صورة (من موبايلك أو من Gemini) <input type="file" id="st-file" accept="image/*"></label>
+            <p class="muted" id="st-champ-note">بطل الأسبوع: اكتب الاسم بس لو العميل موافق ينزل اسمه.</p>
+            <div class="studio-row">
+              <button type="button" id="st-download">نزّل الصورة</button>
+              <button type="button" class="ghost" id="st-gemini">افتح Gemini</button>
+            </div>
+          </div>
+          <canvas id="st-canvas" width="1080" height="1350"></canvas>
+        </div>
       </div>
 
       <!-- صانع المحتوى -->
