@@ -52,6 +52,16 @@
     .rd-sources a { color: var(--brand); overflow-wrap: anywhere; }
     .rd-note { width: 100%; font: inherit; font-size: 13.5px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--field); color: var(--ink); margin-top: 6px; }
     #rd-copy-btn { margin: 4px 0 2px; }
+    .inbox { list-style: none; margin: 0; padding: 0; }
+    .inbox li { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(42,59,87,.5); }
+    .inbox li b { min-width: 28px; height: 28px; border-radius: 999px; background: rgba(34,197,94,.16); color: var(--brand); display: grid; place-items: center; font-size: 13.5px; }
+    .inbox li.bad b { background: rgba(248,113,113,.16); color: var(--danger); }
+    .inbox li span { flex: 1; font-size: 14px; }
+    .inbox li button { padding: 6px 12px; font-size: 13px; }
+    .inbox .clear { color: var(--brand); font-size: 14px; border: 0; }
+    .flow { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+    .flow summary { cursor: pointer; color: var(--ink); }
+    .flow ul { margin: 6px 0 0; padding-inline-start: 18px; line-height: 1.9; }
     .ml-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 12px; }
     .ml-stat { border: 1px solid var(--line, #e5e7eb); border-radius: 10px; padding: 10px; text-align: center; }
     .ml-stat b { display: block; font-size: 22px; }
@@ -163,10 +173,28 @@
     </div>
 
     <div id="main" class="hidden">
+      <!-- مستني منك: كل اللي محتاج قرارك من كل الموظفين -->
+      <div class="card" id="inbox-card">
+        <h2>مستني منك</h2>
+        <ul class="inbox" id="inbox"></ul>
+        <p class="muted" id="outputs"></p>
+      </div>
+
       <!-- الموظفين -->
       <div class="card">
         <h2>الموظفين</h2>
         <p class="muted">كل موظف بيقرا بس — مفيش حد فيهم بيكتب في بيانات العملاء أو بيبعت لحد من غير موافقتك.</p>
+        <details class="flow">
+          <summary>الموظفين شغالين مع بعض إزاي؟</summary>
+          <ul>
+            <li>كل يوم ٧ الصبح: مساعد نجاح العملاء بيدوّر على الساكتين. السبت ٧: المحلّل. الأحد ٧: موظف التطوير.</li>
+            <li>الساعة ٨: تقرير الإيميل اليومي فيه «فريق الذكاء الاصطناعي» — كل اللي مستنيك من الكل في مكان واحد (نفس قايمة «مستني منك» هنا).</li>
+            <li>المحلّل بيشوف شغل الفريق: كام عميل ساكت رجع، كام بوست اتنشر، كام مسودة برنامج اتستخدمت.</li>
+            <li>موظف التطوير بيقرا آخر تقرير للمحلّل، فبيقترح أفكار للأرقام اللي نازلة.</li>
+            <li>رسايل نجاح العملاء بتتبعت في الشات، ولو العميل ماشافهاش بعد ساعتين ساعي البريد بيبعتهاله إيميل.</li>
+            <li>مستشار البرامج جوه صفحة العميل، والمسودات اللي بتستخدمها بتتعد في تقرير المحلّل.</li>
+          </ul>
+        </details>
         <div class="staff" id="staff"></div>
       </div>
 
@@ -358,7 +386,7 @@
       </div>
 
       <!-- سجل التشغيل -->
-      <div class="card">
+      <div class="card" id="log-card">
         <h2>سجل التشغيل</h2>
         <ul class="log" id="log"></ul>
       </div>

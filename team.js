@@ -62,6 +62,8 @@ async function call(action, extra) {
   // نسخة Apps Script قديمة (قبل ملف analyst) — بتفهم الطلب غلط
   if (!data.teamApi) throw new Error('ملف analyst مش متضاف');
   if (!data.ok) throw new Error(data.error || 'حصلت مشكلة');
+  /* أي رد فيه القايمة بيحدّث «مستني منك» — بعد ما اللي نادى يحفظ الحالة */
+  if (data.pending) setTimeout(renderInbox, 0);
   return data;
 }
 
@@ -951,7 +953,41 @@ $('rd-copy-btn').addEventListener('click', async () => {
   }
 });
 
+/* ---------- مستني منك ---------- */
+
+function renderInbox() {
+  const list = state.pending || [];
+  $('inbox').innerHTML = '';
+  if (!list.length) {
+    $('inbox').innerHTML = '<li class="clear">مفيش حاجة مستنياك دلوقتي.</li>';
+  }
+  list.forEach(item => {
+    const li = document.createElement('li');
+    if (item.key === 'failed') li.className = 'bad';
+    li.dataset.key = item.key;
+    const n = document.createElement('b');
+    n.textContent = item.n;
+    const label = document.createElement('span');
+    label.textContent = item.label;
+    const go = document.createElement('button');
+    go.type = 'button';
+    go.className = 'ghost';
+    go.textContent = 'افتح';
+    go.addEventListener('click', () => {
+      const card = $(item.card);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    li.append(n, label, go);
+    $('inbox').appendChild(li);
+  });
+  const o = state.outputs;
+  $('outputs').textContent = o ? ('آخر ٧ أيام: ' + o.silentClientsMessaged + ' رسالة لعملاء ساكتين (رجع ' + o.silentClientsReturned + ') · '
+    + o.postsPublished + ' بوست · ' + o.programDraftsUsed + ' مسودة برنامج · ' + o.reminderEmailsSent + ' إيميل تذكير') : '';
+  $('inbox-card').classList.toggle('hidden', !state.pending);
+}
+
 function renderAll(keepShown) {
+  renderInbox();
   renderStaff();
   renderRd();
   renderAdvisor();
