@@ -9664,3 +9664,30 @@ body.sheet-open { overflow: hidden; }
 .pp-compare .drv-files { display: grid; grid-template-columns: 1fr; gap: 8px; }
 .pp-compare .drv-item { width: 100%; }
 .card .pp-compare button.drv-thumb { width: 100%; height: auto; aspect-ratio: 3 / 4; }
+
+/* ============ تنبيه الحر ============ */
+.heat-banner { border-radius: 14px; padding: 12px 14px; margin: 10px 0; font-size: 14px; line-height: 1.7; }
+.heat-banner.hot { background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.4); }
+.heat-banner.extreme { background: rgba(248, 113, 113, 0.13); border: 1px solid rgba(248, 113, 113, 0.45); }
+.heat-banner.optin { background: var(--surface-2); border: 1px dashed var(--line); }
+.heat-banner strong { display: block; margin-bottom: 4px; }
+.heat-banner.hot strong { color: var(--warn); }
+.heat-banner.extreme strong { color: var(--danger); }
+.heat-banner ul { margin: 4px 0 0; padding-inline-start: 18px; }
+.heat-banner p { margin: 4px 0 8px; color: var(--muted); }
+.heat-banner .row button { width: auto; margin: 0; padding: 8px 14px; }
+.card button.heat-off, .heat-banner button.heat-off { width: auto; margin: 6px 0 0; padding: 0; font-size: 12.5px; }
+.heat-note { font-size: 12.5px; }
+.card .heat-banner li { display: list-item; padding: 1px 0; margin: 0 0 2px; background: none; border: 0; border-radius: 0; cursor: default; transform: none; }
+.card .heat-banner li:active { transform: none; }
+
+/* ============ مكان شغل المتخصص ============ */
+.pw-box { border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin: 12px 0; }
+.pw-box h3 { margin: 0 0 6px; font-size: 14.5px; }
+.pw-days { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.pw-day { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--field); font-size: 13px; cursor: pointer; }
+.pw-day input { width: auto; margin: 0; }
+.pw-info { margin: 6px 0; display: flex; flex-direction: column; gap: 3px; }
+.pw-line { display: flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--muted); }
+.pw-line .ui-icon { width: 16px; height: 16px; flex: 0 0 auto; color: var(--brand); }
+.prov-seen.idle { color: var(--danger); }

@@ -47,6 +47,8 @@
     input { font: inherit; width: 100%; padding: 10px 12px; margin: 0 0 8px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
 
     /* الموظفين */
+    .table-wrap { overflow-x: auto; }
+    #sup-amount, #sup-preview-pick { font: inherit; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
     .rd-what { margin: 8px 0 2px; font-size: 14.5px; line-height: 1.8; }
     .rd-sources { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 2px 0 6px; }
     .rd-sources a { color: var(--brand); overflow-wrap: anywhere; }
@@ -268,6 +270,46 @@
           <summary>اللي اتعمل قبل كده</summary>
           <ul class="log" id="cs-done"></ul>
         </details>
+      </div>
+
+      <!-- مدير المتابعة -->
+      <div class="card hidden" id="sup-card">
+        <div class="report-head">
+          <div>
+            <h2>مدير المتابعة</h2>
+            <p class="muted">كل يوم ٧ الصبح بيبعت لكل مدرب وأخصائي عنده عملاء إيميل بحالاته: مين ساكت، مين متأخر، مين مالوش برنامج، والاستشارات والإصابات المستنياه، ومستواه. وكل سبت ترتيبه بالأسامي وسط زمايله في نفس التخصص. وإنت بيوصلك كل سبت تقرير بالكل.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="sup-run-btn">احسب دلوقتي</button>
+            <button type="button" class="ghost" id="sup-toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="sup-msg"></p>
+        <p class="muted" id="sup-when"></p>
+        <p class="muted hidden" id="sup-empty">لسه ماتحسبش. دوس «احسب دلوقتي» — مابيبعتش إيميلات، بيحسب بس.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>الاسم</th><th>التخصص</th><th class="n">عملاء (نشط)</th><th class="n">النقط</th><th>المستوى</th><th class="n">الترتيب</th><th>آخر دخول</th></tr></thead>
+            <tbody id="sup-table"></tbody>
+          </table>
+        </div>
+        <div class="row hidden" id="sup-preview-row" style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <select id="sup-preview-pick"></select>
+          <button type="button" class="ghost" id="sup-preview-btn">ابعتلي نسخة من الإيميل بتاعه</button>
+        </div>
+        <h3 style="margin:18px 0 6px;font-size:15px">البونص — <span id="sup-month"></span></h3>
+        <p class="muted">اكتب مبلغ البونص للشهر، والموظف بيقسّمه على نقط كل واحد في الشهر (غير النشط مالوش). ده اقتراح — الدفع إنت اللي بتعمله.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <input id="sup-amount" type="number" min="0" placeholder="المبلغ بالجنيه" style="max-width:180px">
+          <button type="button" class="ghost" id="sup-amount-btn">احفظ المبلغ</button>
+        </div>
+        <table style="margin-top:8px">
+          <thead><tr><th>الاسم</th><th class="n">النقط</th><th class="n">نصيبه</th></tr></thead>
+          <tbody id="sup-bonus-rows"></tbody>
+        </table>
+        <p class="muted hidden" id="sup-bonus-empty">لسه مفيش نقط الشهر ده — بتتجمع كل يوم الساعة ٧.</p>
+        <button type="button" id="sup-approve-btn" style="margin-top:8px">اعتمد التوزيع</button>
+        <p class="muted" id="sup-approved"></p>
       </div>
 
       <!-- موظف التطوير -->

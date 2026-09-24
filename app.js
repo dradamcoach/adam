@@ -1075,6 +1075,47 @@ const TEXT = {
     med_saved: 'اتحفظ',
     seed_medlib_btn: 'تحميل محتوى مبدئي للمكتبة الطبية',
     team_link: 'فريق الذكاء الاصطناعي',
+    pw_title: 'مكان شغلك ومواعيدك (اختياري — بيزوّد ثقة العملاء فيك)',
+    pw_gov: 'المحافظة',
+    pw_gov_none: '— اختار المحافظة —',
+    pw_type: 'بتشتغل فين',
+    pw_type_none: '— اختار —',
+    pw_type_gym: 'جيم',
+    pw_type_center: 'مركز',
+    pw_type_club: 'نادي',
+    pw_type_clinic: 'عيادة',
+    pw_type_hospital: 'مستشفى',
+    pw_type_online: 'أونلاين بس',
+    pw_type_other: 'تاني',
+    pw_place: 'اسم المكان',
+    pw_place_ph: 'مثلًا: جولدز جيم المعادي / مستشفى ...',
+    pw_days: 'أيام تواجدك',
+    pw_from: 'من',
+    pw_to: 'لحد',
+    pw_line_where: '{type}{place} — {gov}',
+    pw_line_when: 'موجود: {days}{hours}',
+    prov_last_seen: 'آخر دخول: {when}',
+    prov_seen_today: 'النهارده',
+    prov_seen_days: 'من {n} يوم',
+    prov_seen_never: 'مادخلش لسه',
+    prov_state_active: 'شغّال',
+    prov_state_idle: 'مش نشط',
+    heat_optin_title: 'تنبيه الحر',
+    heat_optin_text: 'نقولك لو النهارده الجو حر شديد، ونقترحلك أحسن وقت تتمرن فيه. موقعك بيفضل على جهازك بس.',
+    heat_optin_yes: 'شغّل التنبيه',
+    heat_optin_no: 'لأ شكرًا',
+    heat_hot_title: 'النهارده حر — الإحساس بالحرارة {t}°',
+    heat_extreme_title: 'النهارده حر شديد — الإحساس بالحرارة {t}°',
+    heat_tip_easy: 'خفّف الشدة شوية، وزوّد الراحة بين المجموعات.',
+    heat_tip_water: 'اشرب مية قبل التمرين وأثناءه وبعده — ولو بتعرق كتير خد معاها شوية ملح.',
+    heat_tip_time: 'أحسن وقت تتمرن فيه: {times}.',
+    heat_tip_morning: 'قبل الساعة {h} الصبح',
+    heat_tip_evening: 'بعد الساعة {h} بالليل',
+    heat_tip_outdoor: 'تمرين النهارده برّه ({sport}) — لو تقدر خليه بدري أو اتمرن جوه في مكان متكيّف.',
+    heat_tip_extreme: 'التمرين برّه في الحر ده مش مستاهل — جوه في مكان متكيّف أحسن.',
+    heat_tip_stop: 'لو حسيت بدوخة أو صداع أو غثيان أو قشعريرة: وقّف فورًا، واقعد في مكان بارد، واشرب مية.',
+    heat_off: 'وقّف التنبيه',
+    heat_where_fallback: 'مش عارفين مكانك — بنستخدم جو القاهرة',
     drv_attach: 'ارفع ملف',
     drv_uploading: 'بيرفع {name}…',
     drv_too_big: 'الملف أكبر من ١٥ ميجا',
@@ -2585,6 +2626,47 @@ const TEXT = {
     med_saved: 'Saved',
     seed_medlib_btn: 'Load starter content for the medical library',
     team_link: 'AI team',
+    pw_title: 'Where you work and when (optional — builds client trust)',
+    pw_gov: 'Governorate',
+    pw_gov_none: '— Choose governorate —',
+    pw_type: 'Where you work',
+    pw_type_none: '— Choose —',
+    pw_type_gym: 'Gym',
+    pw_type_center: 'Center',
+    pw_type_club: 'Club',
+    pw_type_clinic: 'Clinic',
+    pw_type_hospital: 'Hospital',
+    pw_type_online: 'Online only',
+    pw_type_other: 'Other',
+    pw_place: 'Place name',
+    pw_place_ph: 'e.g. Gold\'s Gym Maadi / ... Hospital',
+    pw_days: 'Days you are available',
+    pw_from: 'From',
+    pw_to: 'To',
+    pw_line_where: '{type}{place} — {gov}',
+    pw_line_when: 'Available: {days}{hours}',
+    prov_last_seen: 'Last seen: {when}',
+    prov_seen_today: 'today',
+    prov_seen_days: '{n} days ago',
+    prov_seen_never: 'never',
+    prov_state_active: 'active',
+    prov_state_idle: 'inactive',
+    heat_optin_title: 'Heat alert',
+    heat_optin_text: 'We will tell you when today is very hot and suggest the best time to train. Your location stays on your device.',
+    heat_optin_yes: 'Turn it on',
+    heat_optin_no: 'No thanks',
+    heat_hot_title: 'Hot today — feels like {t}°',
+    heat_extreme_title: 'Extreme heat today — feels like {t}°',
+    heat_tip_easy: 'Ease the intensity a little and rest longer between sets.',
+    heat_tip_water: 'Drink water before, during and after training — add a little salt if you sweat a lot.',
+    heat_tip_time: 'Best time to train: {times}.',
+    heat_tip_morning: 'before {h} am',
+    heat_tip_evening: 'after {h} pm',
+    heat_tip_outdoor: 'Today\'s session is outdoors ({sport}) — go early if you can, or train indoors with air conditioning.',
+    heat_tip_extreme: 'Training outdoors in this heat is not worth it — indoors with air conditioning is better.',
+    heat_tip_stop: 'If you feel dizzy, get a headache, nausea or chills: stop right away, cool down and drink water.',
+    heat_off: 'Turn off the alert',
+    heat_where_fallback: 'Location unknown — using Cairo weather',
     drv_attach: 'Attach a file',
     drv_uploading: 'Uploading {name}…',
     drv_too_big: 'The file is larger than 15 MB',
@@ -9045,6 +9127,7 @@ function renderClientHome() {
   renderHomeSummary();
   renderWeekStreak();
   renderClientTiles();
+  heatCheck();
 }
 
 
@@ -13574,6 +13657,7 @@ function showProviderHome(data) {
 
   phBio.value = data.bio || '';
   phCerts.value = data.certifications || '';
+  pwFill(data);
   phPickedImage = data.photo || '';
 
   if (data.photo) {
@@ -13825,6 +13909,17 @@ async function loadProviders() {
         statsRow.appendChild(box);
       });
       item.appendChild(statsRow);
+
+      /* شغّال ولا لأ: آخر دخول — ومكان شغله لو كاتبه */
+      const seen = document.createElement('div');
+      seen.className = 'ex-meta prov-seen';
+      const seenDays = provider.lastActiveAt ? Math.floor((Date.now() - new Date(provider.lastActiveAt).getTime()) / 86400000) : null;
+      const seenWhen = seenDays === null ? t('prov_seen_never') : (seenDays <= 0 ? t('prov_seen_today') : fill('prov_seen_days', { n: seenDays }));
+      seen.textContent = fill('prov_last_seen', { when: seenWhen }) + ' · ' + t(seenDays !== null && seenDays <= 7 ? 'prov_state_active' : 'prov_state_idle');
+      seen.classList.toggle('idle', !(seenDays !== null && seenDays <= 7));
+      item.appendChild(seen);
+      const workAdmin = providerWorkEl(provider);
+      if (workAdmin) item.appendChild(workAdmin);
 
       const profileBtn = document.createElement('button');
       profileBtn.type = 'button';
@@ -14181,6 +14276,7 @@ document.getElementById('ph-save-btn').addEventListener('click', async function 
     certifications: phCerts.value.trim(),
     photo: phPickedImage
   };
+  Object.assign(updated, pwRead());
 
   // مهم: صاحب المنصة (الحساب القديم) مفيهوش مستند providers أصلاً —
   // أول مرة يحفظ بروفايله هينشئ المستند ده لأول مرة، فلازم نحط فيه
@@ -20809,6 +20905,8 @@ function openProviderSheet(provider, specialty) {
     bio.textContent = provider.bio;
     body.appendChild(bio);
   }
+  const workSheet = providerWorkEl(provider);
+  if (workSheet) body.appendChild(workSheet);
 
   if (provider.certs) {
     const certs = document.createElement('div');
@@ -21411,6 +21509,8 @@ async function loadTeamView() {
         certs.textContent = provider.certifications;
         card.appendChild(certs);
       }
+      const workTeam = providerWorkEl(provider);
+      if (workTeam) card.appendChild(workTeam);
 
       const stats = ratingStatsFor(providerEmail);
       const statsRow = document.createElement('div');
@@ -26027,3 +26127,243 @@ function renderProgressPhotos() {
   const dateInput = document.getElementById('pp-date');
   if (dateInput && !dateInput.value) dateInput.value = dateStamp(new Date());
 })();
+
+
+/* ============================================================
+   تنبيه الحر — من فكرة موظف التطوير (Runna بتعمل كده)
+   ------------------------------------------------------------
+   لو الإحساس بالحرارة النهارده ٣٥° أو أكتر، العميل بيشوف تنبيه فيه
+   نصايح وأحسن وقت يتمرن فيه. الجو من Open-Meteo (مجاني ومن غير مفتاح).
+   • التنبيه بيشتغل بس لو العميل وافق.
+   • الموقع بيتقرّب لـ ١٠ كيلو تقريبًا وبيفضل على جهازه بس — مابيتحفظش
+     في الداتابيز ومابيوصلش لحد غير Open-Meteo عشان يجيب الجو.
+   ============================================================ */
+
+const HEAT_HOT = 35;
+const HEAT_EXTREME = 40;
+const HEAT_COOL = 32;          /* الساعات اللي الإحساس فيها أقل من كده = وقت كويس */
+const HEAT_INDOOR = ['general', 'swimming', 'water_polo', 'diving', 'bodybuilding', 'powerlifting', 'weightlifting', 'crossfit', 'yoga', 'pilates', 'dance', 'gymnastics', 'ice_skating', 'calisthenics', 'strongman', 'boxing', 'kickboxing', 'mma', 'judo', 'karate', 'taekwondo', 'wrestling', 'fencing', 'table_tennis', 'squash', 'badminton', 'climbing', 'cheerleading', 'gym'];
+
+function heatPrefs() {
+  try { return JSON.parse(localStorage.getItem('adam-heat') || '{}') || {}; } catch (e) { return {}; }
+}
+function heatSavePrefs(p) {
+  try { localStorage.setItem('adam-heat', JSON.stringify(p)); } catch (e) { /* مش مهم */ }
+}
+
+function heatBoxes() {
+  return ['heat-banner-home', 'heat-banner-training'].map(function (id) { return document.getElementById(id); }).filter(Boolean);
+}
+
+function heatHide() { heatBoxes().forEach(function (b) { b.classList.add('hidden'); b.innerHTML = ''; }); }
+
+function heatOptIn() {
+  const box = document.getElementById('heat-banner-home');
+  if (!box) return;
+  box.className = 'heat-banner optin';
+  box.innerHTML = '';
+  const h = document.createElement('strong');
+  h.textContent = t('heat_optin_title');
+  const p = document.createElement('p');
+  p.textContent = t('heat_optin_text');
+  const row = document.createElement('div');
+  row.className = 'row';
+  const yes = document.createElement('button');
+  yes.type = 'button';
+  yes.className = 'heat-yes';
+  yes.textContent = t('heat_optin_yes');
+  const no = document.createElement('button');
+  no.type = 'button';
+  no.className = 'secondary heat-no';
+  no.textContent = t('heat_optin_no');
+  row.append(yes, no);
+  box.append(h, p, row);
+  no.addEventListener('click', function () { heatSavePrefs({ on: false }); heatHide(); });
+  yes.addEventListener('click', function () {
+    const done = function (lat, lon, fallback) {
+      heatSavePrefs({ on: true, lat: lat, lon: lon, fallback: !!fallback });
+      heatCheck();
+    };
+    if (!navigator.geolocation) { done(30.04, 31.24, true); return; }
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      /* بنقرّب لرقم عشري واحد (~١٠ كم) — كفاية للجو ومش بيحدد مكان حد */
+      done(Math.round(pos.coords.latitude * 10) / 10, Math.round(pos.coords.longitude * 10) / 10, false);
+    }, function () { done(30.04, 31.24, true); }, { timeout: 10000, maximumAge: 6 * 3600 * 1000 });
+  });
+}
+
+async function heatWeather(prefs) {
+  const today = dateStamp(new Date());
+  try {
+    const cached = JSON.parse(localStorage.getItem('adam-heat-wx') || 'null');
+    if (cached && cached.date === today && cached.lat === prefs.lat && cached.lon === prefs.lon) return cached.data;
+  } catch (e) { /* نجيبه من الأول */ }
+  const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + prefs.lat + '&longitude=' + prefs.lon
+    + '&daily=apparent_temperature_max&hourly=apparent_temperature&timezone=auto&forecast_days=1';
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('weather ' + res.status);
+  const data = await res.json();
+  try { localStorage.setItem('adam-heat-wx', JSON.stringify({ date: today, lat: prefs.lat, lon: prefs.lon, data: data })); } catch (e) { /* مش مهم */ }
+  return data;
+}
+
+/* أحسن وقت: آخر ساعة الصبح والجو لسه لطيف، وأول ساعة بالليل الجو بيلطف فيها */
+function heatTimes(data) {
+  const times = (data.hourly && data.hourly.time) || [];
+  const feels = (data.hourly && data.hourly.apparent_temperature) || [];
+  let morning = null, evening = null;
+  times.forEach(function (tm, i) {
+    const hour = Number(String(tm).slice(11, 13));
+    if (feels[i] == null) return;
+    if (hour >= 5 && hour <= 11 && feels[i] < HEAT_COOL) morning = hour + 1;
+    if (hour >= 16 && hour <= 22 && feels[i] < HEAT_COOL && evening === null) evening = hour;
+  });
+  return { morning: morning, evening: evening };
+}
+
+function heatTodaySport() {
+  const data = clientRecord || {};
+  const rows = Array.isArray(data.sportSchedule) ? data.sportSchedule.filter(function (r) { return Number(r.day) === todayIndex; }) : [];
+  const outdoor = rows.map(function (r) { return r.sport; }).filter(function (sp) { return sp && HEAT_INDOOR.indexOf(sp) === -1; });
+  return outdoor[0] || '';
+}
+
+async function heatCheck() {
+  const boxes = heatBoxes();
+  if (!boxes.length || !clientEmail) return;
+  const prefs = heatPrefs();
+  if (prefs.on === false) { heatHide(); return; }
+  if (prefs.on !== true) { heatOptIn(); return; }
+  let data;
+  try { data = await heatWeather(prefs); } catch (e) { heatHide(); return; }
+  const feels = Math.round(((data.daily && data.daily.apparent_temperature_max) || [])[0]);
+  if (!(feels >= HEAT_HOT)) { heatHide(); return; }
+  const extreme = feels >= HEAT_EXTREME;
+  const when = heatTimes(data);
+  const tips = [t('heat_tip_easy'), t('heat_tip_water')];
+  const slots = [];
+  if (when.morning) slots.push(fill('heat_tip_morning', { h: when.morning }));
+  if (when.evening) slots.push(fill('heat_tip_evening', { h: when.evening > 12 ? when.evening - 12 : when.evening }));
+  if (slots.length) tips.push(fill('heat_tip_time', { times: slots.join(lang === 'ar' ? ' أو ' : ' or ') }));
+  const sport = heatTodaySport();
+  if (sport) tips.push(fill('heat_tip_outdoor', { sport: sportName(sport) }));
+  if (extreme) tips.push(t('heat_tip_extreme'));
+  tips.push(t('heat_tip_stop'));
+  boxes.forEach(function (box) {
+    box.className = 'heat-banner ' + (extreme ? 'extreme' : 'hot');
+    box.innerHTML = '';
+    const h = document.createElement('strong');
+    h.textContent = fill(extreme ? 'heat_extreme_title' : 'heat_hot_title', { t: feels });
+    const ul = document.createElement('ul');
+    tips.forEach(function (tip) { const li = document.createElement('li'); li.textContent = tip; ul.appendChild(li); });
+    box.append(h, ul);
+    if (prefs.fallback) {
+      const f = document.createElement('p');
+      f.className = 'heat-note';
+      f.textContent = t('heat_where_fallback');
+      box.appendChild(f);
+    }
+    const off = document.createElement('button');
+    off.type = 'button';
+    off.className = 'link heat-off';
+    off.textContent = t('heat_off');
+    off.addEventListener('click', function () { heatSavePrefs({ on: false }); heatHide(); });
+    box.appendChild(off);
+  });
+}
+
+
+/* ============================================================
+   مكان شغل المتخصص ومواعيده — اختياري، وبيبان للعملاء
+   ============================================================ */
+
+const EG_GOVS = [
+  ['cairo', 'القاهرة', 'Cairo'], ['giza', 'الجيزة', 'Giza'], ['alex', 'الإسكندرية', 'Alexandria'], ['qalyubia', 'القليوبية', 'Qalyubia'],
+  ['sharqia', 'الشرقية', 'Sharqia'], ['dakahlia', 'الدقهلية', 'Dakahlia'], ['gharbia', 'الغربية', 'Gharbia'], ['monufia', 'المنوفية', 'Monufia'],
+  ['beheira', 'البحيرة', 'Beheira'], ['kafr', 'كفر الشيخ', 'Kafr El Sheikh'], ['damietta', 'دمياط', 'Damietta'], ['portsaid', 'بورسعيد', 'Port Said'],
+  ['ismailia', 'الإسماعيلية', 'Ismailia'], ['suez', 'السويس', 'Suez'], ['fayoum', 'الفيوم', 'Fayoum'], ['benisuef', 'بني سويف', 'Beni Suef'],
+  ['minya', 'المنيا', 'Minya'], ['assiut', 'أسيوط', 'Assiut'], ['sohag', 'سوهاج', 'Sohag'], ['qena', 'قنا', 'Qena'], ['luxor', 'الأقصر', 'Luxor'],
+  ['aswan', 'أسوان', 'Aswan'], ['redsea', 'البحر الأحمر', 'Red Sea'], ['newvalley', 'الوادي الجديد', 'New Valley'], ['matrouh', 'مطروح', 'Matrouh'],
+  ['northsinai', 'شمال سيناء', 'North Sinai'], ['southsinai', 'جنوب سيناء', 'South Sinai'], ['abroad', 'برّه مصر', 'Outside Egypt']
+];
+const PW_TYPES = ['gym', 'center', 'club', 'clinic', 'hospital', 'online', 'other'];
+
+function govName(key) {
+  const g = EG_GOVS.filter(function (x) { return x[0] === key; })[0];
+  return g ? (lang === 'ar' ? g[1] : g[2]) : '';
+}
+
+function pwFill(data) {
+  const gov = document.getElementById('pw-gov');
+  if (!gov) return;
+  gov.innerHTML = '<option value="">' + t('pw_gov_none') + '</option>' + EG_GOVS.map(function (g) {
+    return '<option value="' + g[0] + '">' + (lang === 'ar' ? g[1] : g[2]) + '</option>';
+  }).join('');
+  gov.value = data.governorate || '';
+  const type = document.getElementById('pw-type');
+  type.innerHTML = '<option value="">' + t('pw_type_none') + '</option>' + PW_TYPES.map(function (k) {
+    return '<option value="' + k + '">' + t('pw_type_' + k) + '</option>';
+  }).join('');
+  type.value = data.workType || '';
+  document.getElementById('pw-place').value = data.workPlace || '';
+  const daysBox = document.getElementById('pw-days');
+  daysBox.innerHTML = '';
+  const picked = Array.isArray(data.availDays) ? data.availDays : [];
+  days().forEach(function (name, i) {
+    const label = document.createElement('label');
+    label.className = 'pw-day';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = String(i);
+    cb.checked = picked.indexOf(i) !== -1;
+    label.append(cb, document.createTextNode(' ' + name));
+    daysBox.appendChild(label);
+  });
+  document.getElementById('pw-from').value = data.availFrom || '';
+  document.getElementById('pw-to').value = data.availTo || '';
+}
+
+function pwRead() {
+  if (!document.getElementById('pw-gov')) return {};
+  const clip = function (v, n) { return String(v || '').trim().slice(0, n); };
+  return {
+    governorate: document.getElementById('pw-gov').value,
+    workType: document.getElementById('pw-type').value,
+    workPlace: clip(document.getElementById('pw-place').value, 80),
+    availDays: Array.prototype.slice.call(document.querySelectorAll('#pw-days input:checked')).map(function (cb) { return Number(cb.value); }),
+    availFrom: clip(document.getElementById('pw-from').value, 5),
+    availTo: clip(document.getElementById('pw-to').value, 5)
+  };
+}
+
+/* سطرين: فين بيشتغل، وإمتى موجود — أو null لو مش كاتب حاجة */
+function providerWorkEl(provider) {
+  if (!provider) return null;
+  const lines = [];
+  const place = String(provider.workPlace || '').trim();
+  let typeName = provider.workType && PW_TYPES.indexOf(provider.workType) !== -1 ? t('pw_type_' + provider.workType) : '';
+  /* «مستشفى مستشفى السلام» — لو الاسم فيه النوع أصلًا مانكررهوش */
+  if (typeName && place && place.indexOf(typeName) !== -1) typeName = '';
+  const gov = govName(provider.governorate);
+  if (typeName || place || gov) {
+    lines.push({ icon: 'M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z', text: [typeName + (place ? (typeName ? ' ' : '') + place : ''), gov].filter(Boolean).join(' — ') });
+  }
+  const dayList = Array.isArray(provider.availDays) ? provider.availDays.filter(function (d) { return d >= 0 && d <= 6; }).sort() : [];
+  const hours = provider.availFrom && provider.availTo ? ' · ' + prettyTime(provider.availFrom) + ' – ' + prettyTime(provider.availTo) : '';
+  if (dayList.length || hours) {
+    lines.push({ icon: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', text: fill('pw_line_when', { days: dayList.length === 7 ? (lang === 'ar' ? 'كل يوم' : 'every day') : dayList.map(function (d) { return days()[d]; }).join(lang === 'ar' ? '، ' : ', '), hours: hours }) });
+  }
+  if (!lines.length) return null;
+  const box = document.createElement('div');
+  box.className = 'pw-info';
+  lines.forEach(function (l) {
+    const row = document.createElement('div');
+    row.className = 'pw-line';
+    row.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="' + l.icon + '"></path></svg>';
+    const span = document.createElement('span');
+    span.textContent = l.text;
+    row.appendChild(span);
+    box.appendChild(row);
+  });
+  return box;
+}

@@ -28,6 +28,7 @@ let busy = false;
 const ICONS = {
   analyst: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>',
   success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11.5l2 2 4-4"/></svg>',
+  sup: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5a5.5 5.5 0 0 1 11 0"/><path d="M16 11.5l2 2 3.5-3.5"/></svg>',
   rd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
   advisor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg>',
   mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
@@ -89,6 +90,7 @@ function renderStaff() {
     { key: 'success', name: 'مساعد نجاح العملاء', job: 'كل يوم: رسالة لكل عميل ساكت — ماتتبعتش غير بموافقتك.', chip: !state.success ? ['soon', 'محتاج تحديث'] : (state.success.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'mail', name: 'ساعي البريد', job: 'إيميل واحد في اليوم للعميل اللي فاتته رسايل أو تحديثات أكتر من ساعتين.', chip: !state.mail ? ['soon', 'محتاج تحديث'] : (state.mail.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'advisor', name: 'مستشار البرامج', job: 'جوه صفحة العميل: بيقترح برنامج تمرين من المكتبة، وإنت أو المتخصص تراجعوا وتحفظوا.', chip: !state.advisor ? ['soon', 'محتاج تحديث'] : (state.advisor.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
+    { key: 'sup', name: 'مدير المتابعة', job: 'كل يوم: بريف لكل مدرب وأخصائي بحالاته ومستواه، وكل سبت ترتيبه وسط زمايله — وليك البونص.', chip: !state.sup ? ['soon', 'محتاج تحديث'] : (state.sup.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'rd', name: 'موظف التطوير', job: 'كل أحد: أفكار جديدة بمصادرها — منافسين وأبحاث وأدوات وتسويق. إنت اللي بتختار.', chip: !state.rd ? ['soon', 'محتاج تحديث'] : (state.rd.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'content', name: 'صانع المحتوى', job: 'بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.', chip: !state.content ? ['soon', 'محتاج تحديث'] : (state.content.on ? ['on', 'شغّال'] : ['off', 'موقوف']) }
   ];
@@ -242,7 +244,7 @@ function renderLog() {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
     const who = e.by === 'schedule' ? 'تلقائي' : (e.by === 'client' ? 'العميل' : 'يدوي');
-    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير' }[e.agent] || 'المحلّل';
+    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير', sup: 'مدير المتابعة' }[e.agent] || 'المحلّل';
     li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms >= 1000 ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });
@@ -986,8 +988,102 @@ function renderInbox() {
   $('inbox-card').classList.toggle('hidden', !state.pending);
 }
 
+/* ---------- مدير المتابعة ---------- */
+
+const SUP_LEVEL = { top: ['on', 'متميز'], ok: ['soon', 'كويس'], low: ['warn', 'محتاج يتحسن'], idle: ['danger', 'غير نشط'], none: ['soon', 'مالوش عملاء'] };
+
+function supMsg(text, kind) {
+  $('sup-msg').textContent = text || '';
+  $('sup-msg').className = 'msg' + (kind ? ' ' + kind : '');
+}
+
+function renderSup() {
+  const sp = state.sup;
+  $('sup-card').classList.toggle('hidden', !sp);
+  if (!sp) return;
+  $('sup-toggle-btn').textContent = sp.on ? 'أوقفه' : 'شغّله تاني';
+  $('sup-toggle-btn').className = sp.on ? 'danger' : '';
+  const body = $('sup-table');
+  body.innerHTML = '';
+  const list = (sp.last && sp.last.providers) || [];
+  $('sup-empty').classList.toggle('hidden', list.length > 0);
+  $('sup-when').textContent = sp.last ? ('آخر حساب: ' + fmtDate(sp.last.at)) : '';
+  const pick = $('sup-preview-pick');
+  const keep = pick.value;
+  pick.innerHTML = '';
+  list.forEach(p => {
+    const tr = document.createElement('tr');
+    const lv = SUP_LEVEL[p.level] || SUP_LEVEL.none;
+    const cells = [p.name, p.specialty, p.clients + ' (' + p.active + ')', p.clients ? p.score : '—', '', p.rank ? p.rank + '/' + p.groupSize : '—',
+      p.lastSeenDays === null ? 'ماخلش' : (p.lastSeenDays === 0 ? 'النهارده' : 'من ' + p.lastSeenDays + ' يوم')];
+    cells.forEach((c, i) => {
+      const td = document.createElement('td');
+      if (i === 4) {
+        const chip = document.createElement('span');
+        chip.className = 'chip ' + lv[0];
+        chip.textContent = lv[1];
+        td.appendChild(chip);
+      } else td.textContent = c;
+      if (i === 2 || i === 3 || i === 5) td.className = 'n';
+      tr.appendChild(td);
+    });
+    if (p.counts && (p.counts.silent || p.counts.overdue || p.counts.noPlan)) {
+      tr.title = [p.counts.silent ? p.counts.silent + ' عميل ساكت' : '', p.counts.overdue ? p.counts.overdue + ' استشارة متأخرة' : '', p.counts.noPlan ? p.counts.noPlan + ' من غير برنامج' : ''].filter(Boolean).join(' · ');
+    }
+    body.appendChild(tr);
+    if (!p.isOwner && p.clients) {
+      const o = document.createElement('option');
+      o.value = p.email;
+      o.textContent = p.name;
+      pick.appendChild(o);
+    }
+  });
+  if (keep) pick.value = keep;
+  $('sup-preview-row').classList.toggle('hidden', !pick.options.length);
+
+  const b = sp.bonus || { rows: [] };
+  $('sup-month').textContent = b.month || '';
+  if (document.activeElement !== $('sup-amount')) $('sup-amount').value = b.amount || '';
+  const rows = $('sup-bonus-rows');
+  rows.innerHTML = '';
+  b.rows.forEach(r => {
+    const tr = document.createElement('tr');
+    [r.name, r.points, b.amount ? r.share + ' جنيه' : '—'].forEach((c, i) => {
+      const td = document.createElement('td');
+      td.textContent = c;
+      if (i) td.className = 'n';
+      tr.appendChild(td);
+    });
+    rows.appendChild(tr);
+  });
+  $('sup-bonus-empty').classList.toggle('hidden', b.rows.length > 0);
+  $('sup-approve-btn').disabled = !b.amount || !b.rows.length;
+  $('sup-approved').textContent = b.approved ? ('اعتمدت توزيع الشهر ده (' + b.approved.amount + ' جنيه) — ' + fmtDate(b.approved.at)) : '';
+}
+
+$('sup-run-btn').addEventListener('click', async () => {
+  $('sup-run-btn').disabled = true;
+  supMsg('بيحسب…');
+  try { state = await call('team_sup_run'); renderSup(); renderLog(); supMsg('اتحسب — مفيش إيميلات اتبعتت', 'ok'); } catch (err) { supMsg(err.message, 'err'); }
+  $('sup-run-btn').disabled = false;
+});
+$('sup-preview-btn').addEventListener('click', async () => {
+  supMsg('بيبعت نسخة ليك…');
+  try { state = await call('team_sup_preview', { provider: $('sup-preview-pick').value }); renderSup(); supMsg(state.supNote || 'اتبعتت', 'ok'); } catch (err) { supMsg(err.message, 'err'); }
+});
+$('sup-amount-btn').addEventListener('click', async () => {
+  try { state = await call('team_sup_bonus', { month: state.sup.bonus.month, amount: Number($('sup-amount').value) || 0 }); renderSup(); supMsg('اتحفظ مبلغ البونص', 'ok'); } catch (err) { supMsg(err.message, 'err'); }
+});
+$('sup-approve-btn').addEventListener('click', async () => {
+  try { state = await call('team_sup_approve'); renderSup(); renderLog(); supMsg('اتعتمد — الدفع عليك إنت', 'ok'); } catch (err) { supMsg(err.message, 'err'); }
+});
+$('sup-toggle-btn').addEventListener('click', async () => {
+  try { state = await call('team_sup_toggle', { on: !state.sup.on }); renderSup(); renderStaff(); renderLog(); } catch (err) { supMsg(err.message, 'err'); }
+});
+
 function renderAll(keepShown) {
   renderInbox();
+  renderSup();
   renderStaff();
   renderRd();
   renderAdvisor();

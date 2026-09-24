@@ -1121,6 +1121,22 @@
     <label class="field-label" data-t="provider_certs_label">شهاداتك وإنجازاتك</label>
     <textarea id="ph-certs" rows="3" data-t-ph="provider_certs_ph"></textarea>
 
+    <div class="pw-box">
+      <h3 data-t="pw_title">مكان شغلك ومواعيدك</h3>
+      <div class="row">
+        <div style="flex:1"><label class="field-label" data-t="pw_gov">المحافظة</label><select id="pw-gov"></select></div>
+        <div style="flex:1"><label class="field-label" data-t="pw_type">بتشتغل فين</label><select id="pw-type"></select></div>
+      </div>
+      <label class="field-label" data-t="pw_place">اسم المكان</label>
+      <input id="pw-place" maxlength="80" data-t-ph="pw_place_ph">
+      <label class="field-label" data-t="pw_days">أيام تواجدك</label>
+      <div class="pw-days" id="pw-days"></div>
+      <div class="row">
+        <div style="flex:1"><label class="field-label" data-t="pw_from">من</label><input id="pw-from" type="time"></div>
+        <div style="flex:1"><label class="field-label" data-t="pw_to">لحد</label><input id="pw-to" type="time"></div>
+      </div>
+    </div>
+
     <button id="ph-save-btn" data-t="save_profile">حفظ البروفايل</button>
     <p class="message" id="provider-home-message"></p>
 
@@ -1607,6 +1623,7 @@
     <!-- ============ الرئيسية: ملخّص اليوم + كل الباقي كمربعات ============ -->
     <div id="client-home">
       <div class="home-hello" id="home-hello"></div>
+      <div class="heat-banner hidden" id="heat-banner-home"></div>
       <!-- شريط الأسبوع اتنقل من شاشة التمرين للرئيسية — ده ملخّص
            أسبوعه، مكانه الطبيعي أول ما يفتح -->
       <div class="week-streak" id="client-week-streak">
@@ -1633,6 +1650,7 @@
            هو تمرين النهاردة -->
       <button type="button" class="pick-session hidden" id="pick-session-btn"></button>
 
+      <div class="heat-banner hidden" id="heat-banner-training"></div>
       <!-- لو اليوم فيه أكتر من حصة: تبويب لكل حصة -->
       <div class="session-tabs hidden" id="client-session-tabs"></div>
 
