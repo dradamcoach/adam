@@ -19028,6 +19028,16 @@ function countNewer(docs, since, field) {
   }).length;
 }
 
+/*
+ * مستند العميل مفيهوش createdAt — فـ"عملاء جداد" كان دايمًا صفر.
+ * تاريخ التسجيل الحقيقي trialStartedAt (يوم بس من غير ساعة)، فبنعتبره
+ * آخر اليوم عشان العميل يتحسب مرة واحدة في تقرير اليوم اللي بعده
+ */
+function clientJoinedIso(item) {
+  if (item.createdAt) return item.createdAt;
+  return item.trialStartedAt ? String(item.trialStartedAt).slice(0, 10) + 'T23:59:59Z' : '';
+}
+
 async function collectionDocs(name) {
   try {
     const snapshot = await getDocs(collection(db, name));
@@ -19078,7 +19088,7 @@ async function loadDailyReport() {
     return item.pendingPayment && item.pendingPayment.status === 'submitted';
   });
 
-  grid.appendChild(reportTile(countNewer(clients, since), t('report_new_clients')));
+  grid.appendChild(reportTile(clients.filter(function (c) { const j = clientJoinedIso(c); return j && j >= since; }).length, t('report_new_clients')));
   grid.appendChild(reportTile(countNewer(leads, since), t('report_new_leads')));
   grid.appendChild(reportTile(countNewer(injuries, since), t('report_new_injuries')));
   grid.appendChild(reportTile(countNewer(consults, since), t('report_new_consults')));

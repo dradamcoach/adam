@@ -256,9 +256,11 @@ function sportLabel(key) {
 }
 
 function reasonChip(d) {
+  const since = d.days ? (' من ' + d.days + ' يوم') : '';
   if (d.kind === 'care') return ['danger', d.care === 'clearance' ? 'مستني إذن طبي' : 'بلاغ إصابة مفتوح'];
-  if (d.kind === 'never') return ['warn', 'ما بدأش من ' + d.days + ' يوم'];
-  return ['warn', 'ساكت من ' + d.days + ' يوم'];
+  if (d.kind === 'noplan') return ['danger', 'مالوش برنامج لسه'];
+  if (d.kind === 'never') return ['warn', 'ما بدأش' + since];
+  return ['warn', 'ساكت' + since];
 }
 
 function draftText(d) {
@@ -296,7 +298,7 @@ function renderSuccess() {
     const meta = [];
     if (sportLabel(d.sport)) meta.push(sportLabel(d.sport));
     if (d.coachEmail && d.coachEmail !== String(COACH_EMAIL).toLowerCase()) meta.push('مدربه: ' + d.coachEmail);
-    if (d.kind !== 'care' && !d.fromAi) meta.push('رسالة جاهزة — الذكاء الاصطناعي ما ردّش المرة دي');
+    if (d.kind !== 'care' && d.kind !== 'noplan' && !d.fromAi) meta.push('رسالة جاهزة — الذكاء الاصطناعي ما ردّش المرة دي');
     if (meta.length) {
       const m = document.createElement('div');
       m.className = 'draft-meta';
@@ -306,15 +308,17 @@ function renderSuccess() {
 
     const row = document.createElement('div');
     row.className = 'row';
-    if (d.kind === 'care') {
+    if (d.kind === 'care' || d.kind === 'noplan') {
       const note = document.createElement('p');
       note.className = 'care-note';
-      note.textContent = 'مفيش رسالة جاهزة للعميل ده عن قصد — عنده حاجة صحية مفتوحة، فالأحسن تكلّمه إنت بنفسك من الشات.';
+      note.textContent = d.kind === 'noplan'
+        ? 'مفيش رسالة عن قصد — العميل ده مالوش برنامج تمرين ولا تغذية ولا تأهيل لسه، فمش هنقوله "ابدأ". اكتبله برنامج الأول (أو قول لمدربه).'
+        : 'مفيش رسالة جاهزة للعميل ده عن قصد — عنده حاجة صحية مفتوحة، فالأحسن تكلّمه إنت بنفسك من الشات.';
       box.appendChild(note);
       const okBtn = document.createElement('button');
       okBtn.type = 'button';
       okBtn.className = 'ghost cs-skip';
-      okBtn.textContent = 'تمام، هكلّمه بنفسي';
+      okBtn.textContent = d.kind === 'noplan' ? 'تمام، هظبطله برنامج' : 'تمام، هكلّمه بنفسي';
       okBtn.addEventListener('click', () => markDraft(d, 'skipped', '', box));
       row.appendChild(okBtn);
     } else {
