@@ -1075,6 +1075,55 @@ const TEXT = {
     med_saved: 'اتحفظ',
     seed_medlib_btn: 'تحميل محتوى مبدئي للمكتبة الطبية',
     team_link: 'فريق الذكاء الاصطناعي',
+    adv_title: 'مستشار البرامج',
+    adv_sub: 'بيقترح برنامج من مكتبة التمارين على حسب بيانات العميل — من غير اسمه. إنت اللي بتراجع وتعدّل وتحفظ.',
+    adv_open: 'اسأل المستشار',
+    adv_close: 'اقفل',
+    adv_ph: 'اكتب طلبك… مثلًا: ٤ أيام، جيم، هدفه نزول وزن',
+    adv_send: 'ابعت',
+    adv_q_week: 'اقترح برنامج أسبوع كامل',
+    adv_q_review: 'راجع البرنامج الحالي',
+    adv_q_easier: 'خليه أسهل شوية',
+    adv_thinking: 'المستشار بيفكّر… ممكن ياخد لحد دقيقة',
+    adv_apply: 'حطه في المحرر',
+    adv_applied: 'المسودة في المحرر — راجع كل يوم وعدّل، وبعدين دوس «حفظ برنامج التمرين». لحد ما تحفظ، العميل مش شايف أي حاجة.',
+    adv_undo: 'رجّع البرنامج اللي كان',
+    adv_undone: 'البرنامج رجع زي ما كان.',
+    adv_watch: 'خلي بالك',
+    adv_rest: 'راحة',
+    adv_you: 'إنت',
+    adv_left: 'فاضل {n} رسالة النهارده',
+    adv_err: 'المستشار ما ردّش: ',
+    adv_privacy: 'اللي بيتبعت: السن والنوع والوزن والطول والأهداف والجدول والحالات الصحية والإصابات والبرنامج الحالي — من غير اسم ولا إيميل ولا تليفون ولا صورة. التمارين اللي فيها احتياطات تتعارض مع حالته مابتتبعتش أصلًا.',
+    adv_confirm: 'ده هيستبدل أيام الأسبوع اللي في المحرر بالاقتراح (الحصص الزيادة بتفضل زي ما هي). مفيش حاجة بتتحفظ للعميل غير لما تدوس حفظ. تكمل؟',
+    adv_items: '{n} تمرين',
+    adv_dropped: 'اتشال {n} اقتراح مش من المكتبة',
+    adv_loading_lib: 'بجهّز مكتبة التمارين…',
+    adv_chip: 'مستشار البرامج',
+    adv_sub_rehab: 'بيقترح مراحل تأهيل على حسب الإصابة وحالة العميل — من غير اسمه. إنت اللي بتراجع وتعدّل وتحفظ.',
+    adv_sub_nutrition: 'بيحسب الاحتياج ويقترح أيام أكل ومكملات من المكتبة — من غير اسم العميل. إنت اللي بتراجع وتعدّل وتحفظ.',
+    adv_sub_case: 'بيلخّص الحالة والإصابات والبرامج الحالية، ويطلّع نقط الخطر اللي محتاجة تبص عليها.',
+    adv_q_rehab_new: 'اقترح مراحل تأهيل للإصابة',
+    adv_q_rehab_review: 'راجع برنامج التأهيل الحالي',
+    adv_q_rehab_next: 'إمتى ينتقل للمرحلة الجاية؟',
+    adv_q_nut_new: 'احسب احتياجه واقترح نظام أكل',
+    adv_q_nut_review: 'راجع النظام الحالي',
+    adv_q_nut_supp: 'محتاج مكملات؟',
+    adv_q_case_sum: 'لخّص الحالة',
+    adv_q_case_flags: 'إيه نقط الخطر؟',
+    adv_q_case_conflict: 'في حاجة في البرامج تتعارض مع حالته؟',
+    adv_flags: 'نقط الخطر',
+    adv_custom: 'من برّه المكتبة — راجعه',
+    adv_add_mylib: 'ضيفه لمكتبتي',
+    adv_added_mylib: 'اتضاف لمكتبتك',
+    adv_confirm_rehab: 'ده هيستبدل مراحل التأهيل اللي في المحرر بالاقتراح (بيانات الإصابة والأجهزة بتفضل زي ما هي). مفيش حاجة بتتحفظ للعميل غير لما تدوس حفظ. تكمل؟',
+    adv_confirm_nut: 'ده هيستبدل الاحتياج وأكل الأيام اللي في الاقتراح والمكملات. مفيش حاجة بتتحفظ للعميل غير لما تدوس حفظ. تكمل؟',
+    adv_targets: 'الاحتياج اليومي',
+    adv_supps: 'مكملات',
+    adv_days_all: 'كل الأيام',
+    adv_kcal_line: '{kcal} سعر · بروتين {p} · كارب {c} · دهون {f}',
+    adv_granted_msg: 'اتفتح مستشار البرامج لـ {name}',
+    adv_revoked_msg: 'اتقفل مستشار البرامج على {name}',
     seeding_library: 'جاري التحميل...',
     seed_done: 'اتحمل {n} مقال جديد كمسودة — محتاجين مراجعة متخصص قبل ما يشوفهم العميل',
     seed_author_label: 'محتوى مبدئي — محتاج مراجعة متخصص',
@@ -1115,7 +1164,7 @@ const TEXT = {
     ob_health_hint: 'اختار اللي ينطبق عليك. ده بيغيّر برنامجك فعلًا — ومحدش هيشوفه غير فريقك المتابع معاك.',
     ob_health_note_label: 'حاجة تانية تحب تقولها لفريقك؟',
     ob_health_note_ph: 'مثلًا: بعمل غسيل كلوي يومين في الأسبوع',
-    ob_health_privacy: 'البيانات دي بتتحفظ عندك في حسابك، وبيشوفها فريقك المتابع معاك بس — مش بتتباع ولا بتروح لأي جهة تانية.',
+    ob_health_privacy: 'البيانات دي بتتحفظ عندك في حسابك، وبيشوفها فريقك المتابع معاك بس — ومش بتتباع لأي جهة.',
     ob_preg_label: 'حامل',
     ob_preg_week_label: 'في الأسبوع كام؟',
     ob_postpartum_label: 'ولدت من فترة قريبة',
@@ -2499,6 +2548,55 @@ const TEXT = {
     med_saved: 'Saved',
     seed_medlib_btn: 'Load starter content for the medical library',
     team_link: 'AI team',
+    adv_title: 'Program advisor',
+    adv_sub: 'Suggests a program from the exercise library based on the client\'s data — without their name. You review, edit and save.',
+    adv_open: 'Ask the advisor',
+    adv_close: 'Close',
+    adv_ph: 'Type your request… e.g. 4 days, gym, fat loss',
+    adv_send: 'Send',
+    adv_q_week: 'Suggest a full week',
+    adv_q_review: 'Review the current program',
+    adv_q_easier: 'Make it a bit easier',
+    adv_thinking: 'The advisor is thinking… this can take up to a minute',
+    adv_apply: 'Put it in the editor',
+    adv_applied: 'The draft is in the editor — review and edit each day, then tap "Save training program". The client sees nothing until you save.',
+    adv_undo: 'Restore the previous program',
+    adv_undone: 'The program is back as it was.',
+    adv_watch: 'Watch out',
+    adv_rest: 'Rest',
+    adv_you: 'You',
+    adv_left: '{n} messages left today',
+    adv_err: 'The advisor did not answer: ',
+    adv_privacy: 'What is sent: age, sex, weight, height, goals, schedule, health conditions, injuries and the current program — no name, email, phone or photo. Exercises whose precautions conflict with their conditions are never sent.',
+    adv_confirm: 'This replaces the week in the editor with the suggestion (extra sessions stay as they are). Nothing is saved for the client until you tap save. Continue?',
+    adv_items: '{n} exercises',
+    adv_dropped: '{n} suggestions not in the library were removed',
+    adv_loading_lib: 'Preparing the exercise library…',
+    adv_chip: 'Program advisor',
+    adv_sub_rehab: 'Suggests rehab phases from the injury and the client\'s condition — without their name. You review, edit and save.',
+    adv_sub_nutrition: 'Estimates needs and suggests meal days and supplements from the library — without the client\'s name. You review, edit and save.',
+    adv_sub_case: 'Summarizes the case, injuries and current plans, and lists the risk points worth checking.',
+    adv_q_rehab_new: 'Suggest rehab phases for the injury',
+    adv_q_rehab_review: 'Review the current rehab program',
+    adv_q_rehab_next: 'When should they move to the next phase?',
+    adv_q_nut_new: 'Estimate needs and suggest a meal plan',
+    adv_q_nut_review: 'Review the current plan',
+    adv_q_nut_supp: 'Do they need supplements?',
+    adv_q_case_sum: 'Summarize the case',
+    adv_q_case_flags: 'What are the risk points?',
+    adv_q_case_conflict: 'Does anything in the plans conflict with their conditions?',
+    adv_flags: 'Risk points',
+    adv_custom: 'Not in the library — review it',
+    adv_add_mylib: 'Add to my library',
+    adv_added_mylib: 'Added to your library',
+    adv_confirm_rehab: 'This replaces the rehab phases in the editor with the suggestion (injury details and modalities stay). Nothing is saved for the client until you tap save. Continue?',
+    adv_confirm_nut: 'This replaces the targets, the food on the suggested days and the supplements. Nothing is saved for the client until you tap save. Continue?',
+    adv_targets: 'Daily targets',
+    adv_supps: 'Supplements',
+    adv_days_all: 'Every day',
+    adv_kcal_line: '{kcal} kcal · protein {p} · carbs {c} · fat {f}',
+    adv_granted_msg: 'Program advisor enabled for {name}',
+    adv_revoked_msg: 'Program advisor disabled for {name}',
     seeding_library: 'Loading...',
     seed_done: '{n} new draft articles loaded — need a specialist’s review before clients can see them',
     seed_author_label: 'Starter content — needs specialist review',
@@ -2539,7 +2637,7 @@ const TEXT = {
     ob_health_hint: 'Pick whatever applies. It really does change your program — and only your own team can see it.',
     ob_health_note_label: 'Anything else you want to tell your team?',
     ob_health_note_ph: 'e.g. I have dialysis twice a week',
-    ob_health_privacy: 'This is stored on your own account and seen only by the team following you — never sold, never sent anywhere else.',
+    ob_health_privacy: 'This is stored on your own account and seen only by the team following you — and it is never sold.',
     ob_preg_label: 'Pregnant',
     ob_preg_week_label: 'Which week?',
     ob_postpartum_label: 'Recently gave birth',
@@ -5854,6 +5952,7 @@ function setCoachMode(mode) {
   tabInjuries.classList.toggle('active', mode === 'injuries');
   tabConsult.classList.toggle('active', mode === 'consult');
   coachMessage.textContent = '';
+  advisorPlace(mode);
   window.scrollTo(0, 0);
 }
 
@@ -6125,6 +6224,7 @@ async function openCoachScreen(email, name, sport) {
     showCoachDay();
     showRehab();
     showNutrition();
+    advisorOnClientOpen();
     refreshInjuryBadge(email);
     refreshConsultBadge(email);
     coachMessage.textContent = '';
@@ -13757,6 +13857,31 @@ async function loadProviders() {
           });
           libRow.appendChild(chip);
         });
+
+        /* مستشار البرامج: إنت اللي بتفتحه وتقفله لكل متخصص */
+        const advChip = document.createElement('button');
+        advChip.type = 'button';
+        const paintAdvChip = function () {
+          const on = provider.aiAdvisor === true;
+          advChip.className = 'secondary lib-chip adv-chip' + (on ? ' lib-chip-on' : ' lib-chip-off');
+          advChip.innerHTML = '';
+          advChip.appendChild(iconSvg(on ? 'check' : 'lock', 'ui-icon'));
+          advChip.appendChild(document.createTextNode(' ' + t('adv_chip')));
+        };
+        paintAdvChip();
+        advChip.addEventListener('click', async function () {
+          const next = provider.aiAdvisor !== true;
+          rowMsg.textContent = t('saving');
+          try {
+            await setDoc(doc(db, 'providers', provider.email), { aiAdvisor: next }, { merge: true });
+            provider.aiAdvisor = next;
+            paintAdvChip();
+            setStatusMessage(rowMsg, fill(next ? 'adv_granted_msg' : 'adv_revoked_msg', { name: provider.name || provider.email }), 'success');
+          } catch (error) {
+            rowMsg.textContent = t('problem') + error.message;
+          }
+        });
+        libRow.appendChild(advChip);
 
         libBox.appendChild(libRow);
         item.appendChild(libBox);
@@ -24755,3 +24880,627 @@ function exerciseText(exercise, key, value) {
   }
   return tr(value);
 }
+
+
+/* ============================================================
+   مستشار البرامج — في كل أجزاء البرنامج
+   ------------------------------------------------------------
+   صندوق واحد بيتنقل لأول التبويب المفتوح في صفحة العميل:
+     تمرين → برنامج أسبوع · تأهيل → مراحل · تغذية → احتياج وأكل ومكملات
+     استشارة/إصابات → ملخص الحالة ونقط الخطر (للطبيب)
+   للمدرب، ولأي متخصص المدرب فتحله الميزة من لوحة التحكم (aiAdvisor).
+   • بنبعت بيانات العميل من غير اسم ولا إيميل ولا تليفون ولا صورة ولا
+     تاريخ ميلاد (السن بس).
+   • تمارين المكتبة اللي احتياطاتها تتعارض مع حالته مابتتبعتش.
+   • الأولوية للمكتبة؛ واللي من برّه بيتعلّم ويتضاف لمكتبتك بدوسة.
+   • الرد بيتحط في المحرر كمسودة لما المتخصص يدوس — مفيش حفظ للعميل
+     غير بزرار الحفظ العادي. وفيه زرار يرجّع اللي كان.
+   ============================================================ */
+
+const ADV_MODE_DOMAIN = { training: 'training', rehab: 'rehab', nutrition: 'nutrition', consult: 'case', injuries: 'case' };
+const ADV_QUICK = {
+  training: ['adv_q_week', 'adv_q_review', 'adv_q_easier'],
+  rehab: ['adv_q_rehab_new', 'adv_q_rehab_review', 'adv_q_rehab_next'],
+  nutrition: ['adv_q_nut_new', 'adv_q_nut_review', 'adv_q_nut_supp'],
+  case: ['adv_q_case_sum', 'adv_q_case_flags', 'adv_q_case_conflict']
+};
+const ADV_PANEL = { training: 'training-panel', rehab: 'rehab-panel', nutrition: 'nutrition-panel', consult: 'consult-panel', injuries: 'injuries-panel' };
+
+let advisorAllowed = null;          /* null = لسه ماسألناش السيرفر */
+let advisorAccessPromise = null;
+let advisorDomain = 'training';
+let advisorThreads = { training: [], rehab: [], nutrition: [], case: [] };
+let advisorBackups = {};
+let advisorBusy = false;
+let advisorClient = '';
+let advisorInjuries = null;         /* بلاغات الإصابة للعميل المفتوح — بتتقرا مرة */
+
+function advEl(id) { return document.getElementById(id); }
+
+async function advisorCall(action, extra) {
+  if (!welcomeSettings) await fetchWelcomeSettings();
+  if (!welcomeSettings || !welcomeSettings.url) throw new Error('Apps Script');
+  const user = auth.currentUser;
+  if (!user) throw new Error('auth');
+  const idToken = await user.getIdToken();
+  const res = await fetch(welcomeSettings.url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(Object.assign({ action: action, idToken: idToken }, extra || {}))
+  });
+  return res.json();
+}
+
+function advisorCheckAccess() {
+  if (advisorAccessPromise) return advisorAccessPromise;
+  advisorAccessPromise = advisorCall('adv_access').then(function (data) {
+    /* سكريبت قديم (قبل المستشار) مابيعرفش الطلب — بنعتبره مقفول */
+    advisorAllowed = !!(data && data.advApi && data.allowed);
+    return advisorAllowed;
+  }).catch(function () {
+    advisorAccessPromise = null;   /* النت فصل — نسأل تاني المرة الجاية */
+    advisorAllowed = false;
+    return false;
+  });
+  return advisorAccessPromise;
+}
+
+/* الصندوق بيتنقل لأول التبويب المفتوح، والشات بتاع المجال ده بيظهر */
+function advisorPlace(mode) {
+  const box = advEl('advisor-box');
+  if (!box) return;
+  const panel = advEl(ADV_PANEL[mode] || '');
+  const domain = ADV_MODE_DOMAIN[mode];
+  if (!panel || !domain) { box.classList.add('hidden'); return; }
+  if (box.parentNode !== panel) panel.insertBefore(box, panel.firstChild);
+  if (domain !== advisorDomain) {
+    advisorDomain = domain;
+    advEl('advisor-panel').classList.add('hidden');
+    advEl('advisor-open-btn').classList.remove('hidden');
+    advEl('advisor-msg').textContent = '';
+  }
+  advEl('advisor-sub').textContent = t(domain === 'training' ? 'adv_sub' : 'adv_sub_' + domain);
+  const quick = advEl('advisor-quick');
+  quick.innerHTML = '';
+  ADV_QUICK[domain].forEach(function (key) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'secondary';
+    b.dataset.q = key;
+    b.textContent = t(key);
+    b.addEventListener('click', function () { advisorSend(t(key)); });
+    quick.appendChild(b);
+  });
+  box.classList.toggle('hidden', advisorAllowed !== true);
+  advisorRender();
+}
+
+async function advisorOnClientOpen() {
+  const box = advEl('advisor-box');
+  if (!box) return;
+  if (advisorClient !== currentClient) {
+    advisorClient = currentClient;
+    advisorThreads = { training: [], rehab: [], nutrition: [], case: [] };
+    advisorBackups = {};
+    advisorInjuries = null;
+    advEl('advisor-panel').classList.add('hidden');
+    advEl('advisor-open-btn').classList.remove('hidden');
+    advEl('advisor-msg').textContent = '';
+  }
+  box.classList.add('hidden');
+  await advisorCheckAccess();
+  advisorPlace(coachMode);
+}
+
+/* ---------- اللي بيتبعت ---------- */
+
+function advisorConditionKeys() {
+  const h = coachHealth || blankHealth();
+  const keys = (h.conditions || []).slice();
+  if ((h.pregnancy && h.pregnancy.active) || h.postpartum) keys.push('pregnancy');
+  return keys;
+}
+
+function advisorProfile() {
+  const b = coachBasicsData || {};
+  const h = coachHealth || blankHealth();
+  const num = function (v) { const n = Number(v); return isFinite(n) && n > 0 ? n : undefined; };
+  const profile = {
+    gender: b.gender || undefined,
+    age: num(b.age),
+    weightKg: num(b.weight),
+    heightCm: num(b.height),
+    activity: b.activity || undefined,
+    sports: [].concat(Array.isArray(b.sports) ? b.sports : [], b.sport || [], currentClientSport || [])
+      .filter(function (x, i, all) { return x && all.indexOf(x) === i; }),
+    goals: Array.isArray(b.goals) && b.goals.length ? b.goals : (b.goal ? [b.goal] : []),
+    focus: Array.isArray(b.focus) ? b.focus : [],
+    workNature: b.workNature || undefined,
+    trainingDaysPerWeek: b.trainingDaysPref || undefined,
+    sportSchedule: Array.isArray(b.sportSchedule) ? b.sportSchedule.map(function (r) { return { day: r.day, sport: r.sport, time: r.time }; }) : [],
+    mealsPerDay: b.mealsPerDay || undefined,
+    firstMealTime: b.firstMealTime || undefined,
+    lastMealTime: b.lastMealTime || undefined,
+    sleepHours: b.sleepHours || undefined,
+    sleepQuality: b.sleepQuality || undefined,
+    pain: b.painFlag ? (String(b.painNote || '').slice(0, 300) || 'yes') : undefined,
+    conditions: (h.conditions || []).map(function (key) {
+      const c = HEALTH_CONDITIONS[key] || {};
+      return { key: key, name: c.en || key, needsClearance: !!c.clearance, care: (c.care && c.care.en) || [], stop: (c.stop && c.stop.en) || [] };
+    }),
+    pregnancyWeek: h.pregnancy && h.pregnancy.active ? (h.pregnancy.week || 'yes') : undefined,
+    postpartum: h.postpartum || undefined,
+    clearance: h.clearance ? h.clearance.status : 'none',
+    doctorNote: (h.clearance && h.clearance.note) ? String(h.clearance.note).slice(0, 300) : undefined
+  };
+  Object.keys(profile).forEach(function (k) { if (profile[k] === undefined) delete profile[k]; });
+  return profile;
+}
+
+async function advisorLoadInjuries() {
+  if (advisorInjuries) return advisorInjuries;
+  try {
+    const reports = await fetchClientInjuryReports(currentClient);
+    advisorInjuries = reports.slice(0, 5).map(function (r) {
+      return { bodyParts: r.bodyParts || [], description: String(r.description || '').slice(0, 400), status: r.status || '', reported: String(r.createdAt || '').slice(0, 7) };
+    });
+  } catch (error) {
+    advisorInjuries = [];
+  }
+  return advisorInjuries;
+}
+
+function advisorEntryAllowed(ex, bad, domain) {
+  if (!ex || !ex.id) return false;
+  if (ex._rehab && domain !== 'rehab') return false;
+  if (domain === 'rehab' && !ex._rehab && Number(ex.level) > 2) return false;
+  const cautions = Array.isArray(ex.cautions) ? ex.cautions : [];
+  return !cautions.some(function (c) { return bad.indexOf(c) !== -1; });
+}
+
+function advEnName(x) {
+  if (!x) return '';
+  if (x.name && typeof x.name === 'object') return x.name.en || x.name.ar || '';
+  return x.en || x.name || x.ar || '';
+}
+
+function advisorExerciseCatalog(domain) {
+  const bad = advisorConditionKeys();
+  const seen = {};
+  const lines = [];
+  (libraryData || EXERCISE_LIBRARY).forEach(function (ex) {
+    if (!advisorEntryAllowed(ex, bad, domain) || seen[ex.id]) return;
+    seen[ex.id] = true;
+    lines.push([ex.id, advEnName(ex), ex._rehab ? 'rehab' : (ex.category || ''), (ex.primaryMuscles || []).join(','), ex.equipment || '', ex.level || '', ex.type || ex._type || ''].join(' | '));
+  });
+  /* تمارين التأهيل الأول عشان تبان للنموذج قبل الباقي */
+  if (domain === 'rehab') lines.sort(function (a, b) { return (b.indexOf('rt_') === 0) - (a.indexOf('rt_') === 0); });
+  return lines;
+}
+
+function advisorFoodCatalog() {
+  return allFoods().map(function (f) {
+    return [f.id, f.en || f.ar || f.name || '', f.cat || '', [f.c, f.p, f.cb, f.f].map(function (n) { return Number(n) || 0; }).join('/')].join(' | ');
+  });
+}
+
+function advisorSupplementCatalog() {
+  return SUPPLEMENT_LIBRARY.map(function (sp) {
+    return [sp.id, sp.en || sp.ar, sp.grade || '', (sp.dose && sp.dose.en) || '', (sp.care && sp.care.en) || ''].join(' | ');
+  });
+}
+
+function advisorTrainingSummary() {
+  return coachWeek.map(function (day, index) {
+    const items = [];
+    SECTION_KEYS.forEach(function (key) {
+      (day.sections[key] || []).forEach(function (ex) {
+        items.push({ section: key, id: ex.libId || '', name: withLang('en', function () { return exerciseDisplayName(ex); }), sets: ex.sets, reps: ex.reps });
+      });
+    });
+    return { day: index, rest: !!day.rest, title: day.title || '', items: items };
+  }).filter(function (d) { return d.rest || d.items.length; });
+}
+
+function advisorRehabSummary() {
+  if (!coachRehab) return null;
+  return {
+    bodyPart: coachRehab.bodyPart || '', injury: tr(coachRehab.injury || ''), about: String(tr(coachRehab.about || '')).slice(0, 500),
+    currentPhase: coachRehab.currentPhase || 0,
+    phases: (coachRehab.phases || []).map(function (ph) {
+      return { name: tr(ph.name), goal: tr(ph.goal), criteria: tr(ph.criteria), items: (ph.exercises || []).map(function (ex) {
+        return { id: ex.libId || '', name: withLang('en', function () { return exerciseDisplayName(ex); }), sets: ex.sets, reps: ex.reps };
+      }) };
+    })
+  };
+}
+
+function advisorNutritionSummary() {
+  if (!coachNutrition) return null;
+  return {
+    targets: coachNutrition.targets,
+    days: coachNutrition.week.map(function (day, index) {
+      const meals = {};
+      MEAL_KEYS.forEach(function (key) {
+        const list = (day.meals[key] || []).map(function (it) { return { id: it.foodId || '', name: withLang('en', function () { return foodDisplayName(it); }), grams: it.grams }; });
+        if (list.length) meals[key] = list;
+      });
+      return { day: index, meals: meals };
+    }).filter(function (d) { return Object.keys(d.meals).length; }),
+    supplements: (coachNutrition.supplements || []).map(function (sp) { return { id: sp.supId || '', name: sp.name, dose: sp.dose, when: sp.when }; })
+  };
+}
+
+async function advisorPayload(domain) {
+  if (domain === 'training' || domain === 'rehab') await ensureExtraLibrary();
+  if (domain === 'rehab') readRehabFields();
+  if (domain === 'nutrition') readTargets();
+  const injuries = await advisorLoadInjuries();
+  const out = { domain: domain, lang: lang, days: TEXT.en.days, profile: advisorProfile() };
+  if (domain === 'training') {
+    out.current = advisorTrainingSummary();
+    out.catalog = advisorExerciseCatalog('training');
+    if (injuries.length) out.extra = { injuries: injuries };
+  } else if (domain === 'rehab') {
+    out.current = advisorRehabSummary();
+    out.catalog = advisorExerciseCatalog('rehab');
+    out.extra = { injuries: injuries };
+  } else if (domain === 'nutrition') {
+    out.current = advisorNutritionSummary();
+    out.catalog = advisorFoodCatalog();
+    out.supplements = advisorSupplementCatalog();
+  } else {
+    out.current = [];
+    out.extra = { injuries: injuries, training: advisorTrainingSummary(), rehab: advisorRehabSummary(), nutrition: advisorNutritionSummary() };
+  }
+  return out;
+}
+
+/* ---------- الشات ---------- */
+
+async function advisorSend(text) {
+  text = String(text || '').trim();
+  if (!text || advisorBusy) return;
+  const domain = advisorDomain;
+  const thread = advisorThreads[domain];
+  const input = advEl('advisor-input');
+  const msg = advEl('advisor-msg');
+  advisorBusy = true;
+  const forClient = currentClient;
+  thread.push({ from: 'specialist', text: text });
+  input.value = '';
+  advisorRender();
+  msg.className = 'message';
+  msg.textContent = t('adv_loading_lib');
+  try {
+    const payload = await advisorPayload(domain);
+    msg.textContent = t('adv_thinking');
+    payload.messages = thread.map(function (m) { return { from: m.from, text: m.text }; });
+    const data = await advisorCall('adv_chat', payload);
+    if (forClient !== currentClient) return;    /* المتخصص فتح عميل تاني وهو مستني */
+    if (!data || !data.ok) throw new Error((data && data.error) || '—');
+    thread.push({ from: 'advisor', text: data.reply, week: data.week || null, phases: data.phases || null, nutrition: data.nutrition || null,
+      flags: data.flags || [], watch: data.watch || [], dropped: data.dropped || 0 });
+    msg.textContent = typeof data.left === 'number' ? fill('adv_left', { n: data.left }) : '';
+  } catch (error) {
+    if (forClient !== currentClient) return;
+    thread.pop();                              /* السؤال يرجع للخانة عشان تبعته تاني */
+    input.value = text;
+    msg.className = 'message error';
+    msg.textContent = t('adv_err') + error.message;
+  } finally {
+    advisorBusy = false;
+    if (forClient === currentClient) advisorRender();
+  }
+}
+
+function advisorExName(it) {
+  if (it.custom) return it.name;
+  const ex = libraryEntryById(it.id);
+  return ex ? exerciseLibName(ex) : it.id;
+}
+
+function advisorFoodName(it) {
+  if (it.custom) return it.name;
+  const f = foodById(it.id);
+  return f ? (f[lang] || f.ar || f.en) : it.id;
+}
+
+/* تمرين/أكلة من برّه المكتبة: علامة + زرار "ضيفه لمكتبتي" */
+function advisorCustomTag(li, it, kind) {
+  li.classList.add('adv-custom');
+  const tag = document.createElement('span');
+  tag.className = 'adv-custom-tag';
+  tag.textContent = t('adv_custom');
+  li.appendChild(tag);
+  if (it.howTo) {
+    const how = document.createElement('div');
+    how.className = 'adv-how';
+    how.textContent = it.howTo;
+    li.appendChild(how);
+  }
+  const add = document.createElement('button');
+  add.type = 'button';
+  add.className = 'secondary adv-mylib';
+  add.textContent = t('adv_add_mylib');
+  add.addEventListener('click', async function () {
+    add.disabled = true;
+    try {
+      if (kind === 'food') {
+        await setDoc(doc(db, 'myFoods', 'food_' + Date.now()), { ar: it.name, en: it.name, cat: 'protein', c: it.kcal100, p: it.p100 || 0, cb: it.cb100 || 0, f: it.f100 || 0 });
+        await loadMyFoods();
+      } else {
+        await setDoc(doc(db, 'myExercises', 'ex_' + Date.now()), { name: it.name, muscle: '', equipment: '', notes: '', howTo: it.howTo || '', goal: '', primaryMuscles: '', secondaryMuscles: '', origin: '', insertion: '', imageUrl: '' });
+      }
+      add.textContent = t('adv_added_mylib');
+    } catch (error) {
+      add.disabled = false;
+      add.textContent = t('problem') + error.message;
+    }
+  });
+  li.appendChild(add);
+}
+
+function advisorExerciseLi(it) {
+  const li = document.createElement('li');
+  const line = document.createElement('span');
+  line.textContent = advisorExName(it) + ' — ';
+  /* الأرقام في bdi لوحدها عشان "10-12" ماتتقلبش "12-10" في العربي */
+  const nums = document.createElement('bdi');
+  nums.dir = 'ltr';
+  nums.textContent = it.sets + ' × ' + it.reps + (it.rest ? ' · ' + it.rest : '') + (it.rpe ? ' · RPE ' + it.rpe : '');
+  line.appendChild(nums);
+  if (it.note) line.appendChild(document.createTextNode(' · ' + it.note));
+  li.appendChild(line);
+  if (it.custom) advisorCustomTag(li, it, 'exercise');
+  return li;
+}
+
+function advisorDetails(summary, list) {
+  const row = document.createElement('details');
+  row.className = 'adv-day';
+  const sum = document.createElement('summary');
+  sum.textContent = summary;
+  row.appendChild(sum);
+  if (list) row.appendChild(list);
+  /* اللي فيه حاجة من برّه المكتبة بيتفتح لوحده عشان تاخد بالك منها */
+  if (list && list.querySelector('.adv-custom')) row.open = true;
+  return row;
+}
+
+function advisorDraftCard(msg) {
+  const card = document.createElement('div');
+  card.className = 'adv-draft';
+  const dayNames = days();
+  if (msg.week) {
+    msg.week.forEach(function (d) {
+      if (d.rest) {
+        const row = advisorDetails((dayNames[d.day] || '') + ' — ' + t('adv_rest'));
+        row.classList.add('rest');
+        card.appendChild(row);
+        return;
+      }
+      const ul = document.createElement('ul');
+      d.items.forEach(function (it) { ul.appendChild(advisorExerciseLi(it)); });
+      card.appendChild(advisorDetails((dayNames[d.day] || '') + ' — ' + (d.title ? d.title + ' · ' : '') + fill('adv_items', { n: d.items.length }), ul));
+    });
+  }
+  if (msg.phases) {
+    msg.phases.forEach(function (ph, i) {
+      const ul = document.createElement('ul');
+      if (ph.goal || ph.criteria) {
+        const info = document.createElement('li');
+        info.className = 'adv-phase-info';
+        info.textContent = [ph.goal, ph.criteria].filter(Boolean).join(' · ');
+        ul.appendChild(info);
+      }
+      ph.items.forEach(function (it) { ul.appendChild(advisorExerciseLi(it)); });
+      card.appendChild(advisorDetails(t('phase') + ' ' + (i + 1) + ' — ' + (ph.name ? ph.name + ' · ' : '') + fill('adv_items', { n: ph.items.length }), ul));
+    });
+  }
+  if (msg.nutrition) {
+    const n = msg.nutrition;
+    if (n.targets && n.targets.kcal) {
+      const p = document.createElement('p');
+      p.className = 'adv-targets';
+      p.textContent = t('adv_targets') + ': ' + fill('adv_kcal_line', { kcal: n.targets.kcal, p: n.targets.protein, c: n.targets.carbs, f: n.targets.fat });
+      card.appendChild(p);
+    }
+    n.dayPlans.forEach(function (dp) {
+      const ul = document.createElement('ul');
+      MEAL_KEYS.forEach(function (key) {
+        (dp.meals[key] || []).forEach(function (it) {
+          const li = document.createElement('li');
+          const line = document.createElement('span');
+          line.textContent = mealName(key) + ': ' + advisorFoodName(it) + ' — ' + it.grams + (lang === 'ar' ? ' جم' : ' g');
+          li.appendChild(line);
+          if (it.custom) advisorCustomTag(li, it, 'food');
+          ul.appendChild(li);
+        });
+      });
+      const label = dp.days.length === 7 ? t('adv_days_all') : dp.days.map(function (d) { return dayNames[d]; }).join('، ');
+      card.appendChild(advisorDetails(label, ul));
+    });
+    if (n.supplements.length) {
+      const ul = document.createElement('ul');
+      n.supplements.forEach(function (sp) {
+        const src = supplementById(sp.id);
+        const li = document.createElement('li');
+        li.textContent = (src ? (src[lang] || src.ar) : sp.id) + (sp.dose ? ' — ' + sp.dose : '') + (sp.when ? ' · ' + sp.when : '');
+        ul.appendChild(li);
+      });
+      card.appendChild(advisorDetails(t('adv_supps') + ' · ' + n.supplements.length, ul));
+    }
+  }
+  if (msg.dropped) {
+    const p = document.createElement('p');
+    p.className = 'hint-text';
+    p.textContent = fill('adv_dropped', { n: msg.dropped });
+    card.appendChild(p);
+  }
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'adv-apply';
+  btn.textContent = t('adv_apply');
+  btn.addEventListener('click', function () { advisorApply(msg); });
+  card.appendChild(btn);
+  return card;
+}
+
+function advisorList(cls, title, lines) {
+  const w = document.createElement('div');
+  w.className = cls;
+  const strong = document.createElement('strong');
+  strong.textContent = title;
+  w.appendChild(strong);
+  const ul = document.createElement('ul');
+  lines.forEach(function (line) { const li = document.createElement('li'); li.textContent = line; ul.appendChild(li); });
+  w.appendChild(ul);
+  return w;
+}
+
+function advisorRender() {
+  const log = advEl('advisor-log');
+  if (!log) return;
+  log.innerHTML = '';
+  advisorThreads[advisorDomain].forEach(function (m) {
+    const box = document.createElement('div');
+    box.className = 'adv-msg ' + (m.from === 'advisor' ? 'from-adv' : 'from-me');
+    const who = document.createElement('div');
+    who.className = 'adv-who';
+    who.textContent = m.from === 'advisor' ? t('adv_title') : t('adv_you');
+    const body = document.createElement('div');
+    body.className = 'adv-text';
+    body.textContent = m.text;
+    box.appendChild(who);
+    box.appendChild(body);
+    if (m.flags && m.flags.length) box.appendChild(advisorList('adv-flags', t('adv_flags'), m.flags));
+    if (m.watch && m.watch.length) box.appendChild(advisorList('adv-watch', t('adv_watch'), m.watch));
+    if (m.week || m.phases || m.nutrition) box.appendChild(advisorDraftCard(m));
+    log.appendChild(box);
+  });
+  if (advisorBusy) {
+    const typing = document.createElement('div');
+    typing.className = 'adv-msg from-adv adv-typing';
+    typing.textContent = '…';
+    log.appendChild(typing);
+  }
+  advEl('advisor-send-btn').disabled = advisorBusy;
+  document.querySelectorAll('#advisor-quick button').forEach(function (b) { b.disabled = advisorBusy; });
+  advEl('advisor-undo-btn').classList.toggle('hidden', !advisorBackups[advisorDomain]);
+  log.scrollTop = log.scrollHeight;
+}
+
+/* ---------- المسودة في المحرر ---------- */
+
+function advisorBuildExercise(it, bad, domain) {
+  if (it.custom) {
+    return makeExercise({ name: it.name, sets: it.sets, reps: it.reps, rest: it.rest, rpe: it.rpe, howTo: it.howTo || '' });
+  }
+  const ex = libraryEntryById(it.id);
+  /* تأكيد تاني هنا: لو تمرين اتسرّب وفيه احتياط يتعارض مع حالته، مابيتحطش */
+  if (!advisorEntryAllowed(ex, bad, domain)) return null;
+  prepLibEntry(ex);
+  return buildLibExercise(ex, templateValues({ sets: it.sets, reps: it.reps, rest: it.rest, rpe: it.rpe }, ex._type));
+}
+
+async function advisorApply(msg) {
+  const domain = msg.week ? 'training' : (msg.phases ? 'rehab' : 'nutrition');
+  if (!confirm(t(domain === 'training' ? 'adv_confirm' : (domain === 'rehab' ? 'adv_confirm_rehab' : 'adv_confirm_nut')))) return;
+  const bad = advisorConditionKeys();
+  if (domain !== 'nutrition') {
+    await ensureLibraryImagesLoaded();
+    await ensureExtraLibrary();
+    await ensureExerciseDetails();
+  }
+  if (domain === 'training') {
+    saveCurrentDay();
+    advisorBackups.training = JSON.parse(JSON.stringify(coachWeek));
+    msg.week.forEach(function (d) {
+      const target = coachWeek[d.day];
+      if (!target) return;
+      target.rest = !!d.rest;
+      target.title = d.rest ? '' : (d.title || '');
+      target.sections = blankSections();
+      if (d.rest) return;
+      d.items.forEach(function (it) {
+        if (!target.sections[it.section]) return;
+        const built = advisorBuildExercise(it, bad, 'training');
+        if (built) target.sections[it.section].push(built);
+      });
+    });
+    coachSession = 0;
+    showCoachDay();
+  } else if (domain === 'rehab') {
+    readRehabFields();
+    advisorBackups.rehab = JSON.parse(JSON.stringify(coachRehab));
+    coachRehab.phases = msg.phases.map(function (ph) {
+      return { name: ph.name, goal: ph.goal, criteria: ph.criteria, exercises: ph.items.map(function (it) { return advisorBuildExercise(it, bad, 'rehab'); }).filter(Boolean) };
+    });
+    coachRehab.currentPhase = 0;
+    showRehab();
+  } else {
+    readTargets();
+    advisorBackups.nutrition = JSON.parse(JSON.stringify(coachNutrition));
+    const n = msg.nutrition;
+    if (n.targets && n.targets.kcal) coachNutrition.targets = { kcal: n.targets.kcal, protein: n.targets.protein, carbs: n.targets.carbs, fat: n.targets.fat };
+    n.dayPlans.forEach(function (dp) {
+      dp.days.forEach(function (d) {
+        const day = { meals: blankMeals() };
+        MEAL_KEYS.forEach(function (key) {
+          (dp.meals[key] || []).forEach(function (it) {
+            if (it.custom) {
+              day.meals[key].push({ name: it.name, foodId: '', grams: it.grams, c100: it.kcal100, p100: it.p100 || 0, cb100: it.cb100 || 0, f100: it.f100 || 0 });
+              return;
+            }
+            const food = foodById(it.id);
+            if (food) day.meals[key].push(makeFoodItem(food, it.grams));
+          });
+        });
+        coachNutrition.week[d] = day;
+      });
+    });
+    if (n.supplements.length) {
+      coachNutrition.supplements = n.supplements.map(function (sp) {
+        const src = supplementById(sp.id);
+        return src ? { supId: src.id, name: src[lang] || src.ar, dose: sp.dose || suppText(src.dose), when: sp.when || suppText(src.when), note: sp.note || '' } : null;
+      }).filter(Boolean);
+    }
+    showNutrition();
+  }
+  const m = advEl('advisor-msg');
+  m.className = 'message success';
+  m.textContent = t('adv_applied');
+  advisorRender();
+  advisorCall('adv_applied').catch(function () {});
+}
+
+(function () {
+  if (!advEl('advisor-box')) return;
+  advEl('advisor-open-btn').addEventListener('click', function () {
+    advEl('advisor-panel').classList.remove('hidden');
+    advEl('advisor-open-btn').classList.add('hidden');
+    advisorRender();
+    advEl('advisor-input').focus();
+  });
+  advEl('advisor-close-btn').addEventListener('click', function () {
+    advEl('advisor-panel').classList.add('hidden');
+    advEl('advisor-open-btn').classList.remove('hidden');
+  });
+  advEl('advisor-send-btn').addEventListener('click', function () { advisorSend(advEl('advisor-input').value); });
+  advEl('advisor-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); advisorSend(advEl('advisor-input').value); }
+  });
+  advEl('advisor-undo-btn').addEventListener('click', function () {
+    const backup = advisorBackups[advisorDomain];
+    if (!backup) return;
+    if (advisorDomain === 'training') { coachWeek = backup; coachSession = 0; showCoachDay(); }
+    else if (advisorDomain === 'rehab') { coachRehab = backup; showRehab(); }
+    else if (advisorDomain === 'nutrition') { coachNutrition = backup; showNutrition(); }
+    delete advisorBackups[advisorDomain];
+    const m = advEl('advisor-msg');
+    m.className = 'message';
+    m.textContent = t('adv_undone');
+    advisorRender();
+  });
+})();

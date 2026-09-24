@@ -9588,3 +9588,52 @@ body.sheet-open { overflow: hidden; }
 }
 .team-link .ui-icon { width: 20px; height: 20px; color: var(--brand); flex: none; }
 .team-link-arrow { margin-inline-start: auto; color: var(--brand); }
+
+/* ============ مستشار البرامج ============ */
+.advisor-box { border: 1px solid var(--brand); border-radius: 16px; padding: 14px; margin: 0 0 14px; background: rgba(34, 197, 94, 0.06); }
+.advisor-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
+.advisor-head .hint-text { margin: 2px 0 0; }
+.advisor-icon { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: rgba(34, 197, 94, 0.15); color: var(--brand); }
+.advisor-icon .ui-icon { width: 20px; height: 20px; }
+.advisor-panel { margin-top: 6px; }
+.advisor-quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.card .advisor-quick button, .advisor-quick button { width: auto; margin: 0; padding: 7px 12px; font-size: 13px; border-radius: 999px; }
+.advisor-log { max-height: 460px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+.advisor-log:not(:empty) { border: 1px solid var(--line); border-radius: 12px; padding: 8px; background: var(--field); }
+.adv-msg { border-radius: 12px; padding: 9px 12px; font-size: 14px; line-height: 1.7; }
+.adv-msg.from-me { background: rgba(148, 163, 184, 0.14); align-self: flex-start; max-width: 92%; }
+.adv-msg.from-adv { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25); }
+.adv-who { font-size: 12px; opacity: 0.7; margin-bottom: 2px; }
+.adv-text { white-space: pre-wrap; }
+.adv-typing { opacity: 0.7; letter-spacing: 3px; }
+.adv-watch { margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(245, 158, 11, 0.12); font-size: 13px; }
+.adv-watch ul { margin: 4px 0 0; padding-inline-start: 18px; }
+.adv-draft { margin-top: 8px; }
+.adv-day { border-top: 1px solid rgba(148, 163, 184, 0.2); padding: 6px 0; }
+.adv-day summary { cursor: pointer; font-weight: 600; font-size: 13.5px; }
+.adv-day.rest summary { opacity: 0.6; font-weight: 400; cursor: default; }
+.adv-day ul { margin: 4px 0 0; padding-inline-start: 18px; font-size: 13px; }
+.card button.adv-apply, button.adv-apply { margin-top: 8px; }
+.advisor-send { display: flex; gap: 6px; align-items: flex-end; }
+.advisor-send textarea { flex: 1; margin: 0; resize: vertical; min-height: 44px; }
+.card .advisor-send button, .advisor-send button { width: auto; margin: 0; padding: 10px 16px; }
+.advisor-box .row button { width: auto; }
+.adv-custom-tag { display: inline-block; margin-inline-start: 6px; font-size: 11.5px; padding: 1px 8px; border-radius: 999px; background: rgba(251, 191, 36, 0.15); color: var(--warn); white-space: nowrap; }
+.adv-how { font-size: 12.5px; opacity: 0.8; margin-top: 3px; }
+.card button.adv-mylib, button.adv-mylib { display: block; width: auto; margin: 6px 0 0; padding: 5px 12px; font-size: 12.5px; }
+.adv-flags { margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(248, 113, 113, 0.12); font-size: 13px; }
+.adv-flags ul { margin: 4px 0 0; padding-inline-start: 18px; }
+.adv-targets { font-weight: 600; font-size: 13.5px; margin: 4px 0 6px; }
+.adv-phase-info { list-style: none; opacity: 0.75; font-size: 12.5px; margin-inline-start: -18px; }
+/* القوايم جوه المستشار نص عادي — مش كروت زي باقي .card li */
+.card .advisor-box li {
+  display: list-item; padding: 2px 0; margin: 0 0 3px; background: none; border: 0; border-radius: 0;
+  cursor: default; transform: none; white-space: normal; overflow-wrap: anywhere; line-height: 1.6;
+}
+.card .advisor-box li:active { transform: none; }
+.card .advisor-box li span { color: inherit; font-weight: inherit; font-size: inherit; white-space: normal; display: inline; }
+.card .advisor-box li span.adv-custom-tag { display: inline-block; white-space: nowrap; font-size: 11.5px; }
+.card .advisor-box li.adv-custom { display: block; padding: 8px 10px; border: 1px dashed var(--warn); border-radius: 10px; margin: 6px 0; }
+.card .advisor-box li .adv-custom-tag { color: var(--warn); }
+.card .advisor-box .adv-day ul { padding-inline-start: 20px; }
+.card .advisor-box li.adv-phase-info { list-style: none; margin-inline-start: -20px; }

@@ -28,6 +28,7 @@ let busy = false;
 const ICONS = {
   analyst: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>',
   success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11.5l2 2 4-4"/></svg>',
+  advisor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg>',
   mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
   content: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg>'
 };
@@ -84,6 +85,7 @@ function renderStaff() {
     { key: 'analyst', name: 'محلّل الأعمال', job: 'كل سبت: أرقام الأسبوع قدّام اللي قبله، و٥ أسطر تعمل إيه.', chip: a.on ? ['on', 'شغّال'] : ['off', 'موقوف'] },
     { key: 'success', name: 'مساعد نجاح العملاء', job: 'كل يوم: رسالة لكل عميل ساكت — ماتتبعتش غير بموافقتك.', chip: !state.success ? ['soon', 'محتاج تحديث'] : (state.success.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'mail', name: 'ساعي البريد', job: 'إيميل واحد في اليوم للعميل اللي فاتته رسايل أو تحديثات أكتر من ساعتين.', chip: !state.mail ? ['soon', 'محتاج تحديث'] : (state.mail.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
+    { key: 'advisor', name: 'مستشار البرامج', job: 'جوه صفحة العميل: بيقترح برنامج تمرين من المكتبة، وإنت أو المتخصص تراجعوا وتحفظوا.', chip: !state.advisor ? ['soon', 'محتاج تحديث'] : (state.advisor.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'content', name: 'صانع المحتوى', job: 'بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.', chip: !state.content ? ['soon', 'محتاج تحديث'] : (state.content.on ? ['on', 'شغّال'] : ['off', 'موقوف']) }
   ];
   $('staff').innerHTML = '';
@@ -236,7 +238,7 @@ function renderLog() {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
     const who = e.by === 'schedule' ? 'تلقائي' : (e.by === 'client' ? 'العميل' : 'يدوي');
-    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد' }[e.agent] || 'المحلّل';
+    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج' }[e.agent] || 'المحلّل';
     li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms >= 1000 ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });
@@ -746,8 +748,41 @@ $('ml-preview-btn').addEventListener('click', async () => {
   $('ml-preview-btn').disabled = false;
 });
 
+/* ---------- مستشار البرامج ---------- */
+
+function renderAdvisor() {
+  const av = state.advisor;
+  $('advisor-card').classList.toggle('hidden', !av);
+  if (!av) return;
+  $('av-toggle-btn').textContent = av.on ? 'أوقفه' : 'شغّله تاني';
+  $('av-toggle-btn').className = av.on ? 'danger' : '';
+  $('av-stats').innerHTML = '';
+  [['أسئلة', av.week.asked], ['اقترح برنامج', av.week.drafts], ['اتحط في المحرر', av.week.applied]].forEach(([label, n]) => {
+    const box = document.createElement('div');
+    box.className = 'ml-stat';
+    box.innerHTML = '<b></b><span></span>';
+    box.querySelector('b').textContent = n;
+    box.querySelector('span').textContent = label;
+    $('av-stats').appendChild(box);
+  });
+}
+
+$('av-toggle-btn').addEventListener('click', async () => {
+  const turnOn = !state.advisor.on;
+  try {
+    state = await call('team_adv_toggle', { on: turnOn });
+    renderAdvisor();
+    renderStaff();
+    renderLog();
+  } catch (err) {
+    $('av-msg').textContent = err.message;
+    $('av-msg').className = 'msg err';
+  }
+});
+
 function renderAll(keepShown) {
   renderStaff();
+  renderAdvisor();
   renderMail();
   renderSuccess();
   renderContent();

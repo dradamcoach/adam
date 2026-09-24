@@ -1213,6 +1213,32 @@
 
     <!-- ============ برنامج التمرين ============ -->
     <div id="training-panel">
+      <!-- مستشار البرامج: بيظهر للمدرب وللي المدرب فتحله الميزة بس -->
+      <div class="advisor-box hidden" id="advisor-box">
+        <div class="advisor-head">
+          <span class="advisor-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"></path><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"></path></svg></span>
+          <div>
+            <strong data-t="adv_title">مستشار البرامج</strong>
+            <p class="hint-text" id="advisor-sub">بيقترح برنامج من مكتبة التمارين على حسب بيانات العميل — من غير اسمه. إنت اللي بتراجع وتعدّل وتحفظ.</p>
+          </div>
+        </div>
+        <button type="button" class="secondary" id="advisor-open-btn" data-t="adv_open">اسأل المستشار</button>
+        <div class="advisor-panel hidden" id="advisor-panel">
+          <div class="advisor-quick" id="advisor-quick"></div>
+          <div class="advisor-log" id="advisor-log"></div>
+          <div class="advisor-send">
+            <textarea id="advisor-input" rows="2" data-t-ph="adv_ph"></textarea>
+            <button type="button" id="advisor-send-btn" data-t="adv_send">ابعت</button>
+          </div>
+          <p class="message" id="advisor-msg"></p>
+          <div class="row">
+            <button type="button" class="secondary hidden" id="advisor-undo-btn" data-t="adv_undo">رجّع البرنامج اللي كان</button>
+            <button type="button" class="secondary" id="advisor-close-btn" data-t="adv_close">اقفل</button>
+          </div>
+          <p class="hint-text" data-t="adv_privacy"></p>
+        </div>
+      </div>
+
       <div class="template-box">
         <label class="field-label" data-t="client_sport">رياضة العميل</label>
         <select id="coach-sport"></select>
