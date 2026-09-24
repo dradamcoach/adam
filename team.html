@@ -111,6 +111,14 @@
     .draft .row button { flex: 1; }
     .draft .care-note { font-size: 13.5px; color: var(--warn); margin: 4px 0 8px; }
     .draft.sending { opacity: .6; pointer-events: none; }
+    .ct-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 10px 0; }
+    .ct-controls label { font-size: 12.5px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+    select { font: inherit; font-size: 14px; padding: 9px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
+    #ct-write-btn { width: 100%; }
+    .post-img { display: block; width: 120px; height: 120px; object-fit: contain; background: #fff; border-radius: 12px; margin: 6px 0 8px; }
+    .post-tags { font-size: 13px; color: var(--info); margin: 6px 0 0; text-align: start; }
+    .post-tags bdi { unicode-bidi: isolate; display: inline-block; }
+    .post-credit { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
     details summary { cursor: pointer; color: var(--muted); font-size: 13px; margin-top: 10px; }
     @media (max-width: 420px) { td, th { padding: 6px 3px; } table { font-size: 12.5px; } }
   </style>
@@ -221,6 +229,55 @@
         <details id="cs-done-box" class="hidden">
           <summary>اللي اتعمل قبل كده</summary>
           <ul class="log" id="cs-done"></ul>
+        </details>
+      </div>
+
+      <!-- صانع المحتوى -->
+      <div class="card" id="content-card">
+        <div class="report-head">
+          <div>
+            <h2>صانع المحتوى</h2>
+            <p class="muted">بيكتب بوستات وسكريبتات ريلز من مكتبات ADAM نفسها. إنت اللي بتراجع وتنسخ وتنشر.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" class="ghost" id="ct-toggle-btn"></button>
+          </div>
+        </div>
+        <div class="ct-controls">
+          <label>عن إيه
+            <select id="ct-kind">
+              <option value="mix">مزيج</option>
+              <option value="exercise">تمرين وطريقته</option>
+              <option value="mistake">غلطات شائعة في تمرين</option>
+              <option value="food">معلومة أكل</option>
+              <option value="supplement">مكمل: الحقيقة والدليل</option>
+            </select>
+          </label>
+          <label>الشكل
+            <select id="ct-format">
+              <option value="post">بوست (إنستجرام/فيسبوك)</option>
+              <option value="reel">سكريبت ريلز/تيك توك</option>
+            </select>
+          </label>
+          <label>اللغة
+            <select id="ct-lang">
+              <option value="ar">مصري</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+          <label>العدد
+            <select id="ct-count">
+              <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
+            </select>
+          </label>
+        </div>
+        <button type="button" id="ct-write-btn">اكتب مسودات</button>
+        <p class="msg" id="ct-msg"></p>
+        <div id="ct-list"></div>
+        <p class="score" id="ct-score"></p>
+        <details id="ct-done-box" class="hidden">
+          <summary>اللي اتعمل قبل كده</summary>
+          <ul class="log" id="ct-done"></ul>
         </details>
       </div>
 

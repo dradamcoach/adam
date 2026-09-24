@@ -82,7 +82,7 @@ function renderStaff() {
   const staff = [
     { key: 'analyst', name: 'محلّل الأعمال', job: 'كل سبت: أرقام الأسبوع قدّام اللي قبله، و٥ أسطر تعمل إيه.', chip: a.on ? ['on', 'شغّال'] : ['off', 'موقوف'] },
     { key: 'success', name: 'مساعد نجاح العملاء', job: 'كل يوم: رسالة لكل عميل ساكت — ماتتبعتش غير بموافقتك.', chip: !state.success ? ['soon', 'محتاج تحديث'] : (state.success.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
-    { key: 'content', name: 'صانع المحتوى', job: 'بوستات من مكتبات التمارين والأكل والتأهيل.', chip: ['soon', 'بعدين'], soon: true }
+    { key: 'content', name: 'صانع المحتوى', job: 'بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.', chip: !state.content ? ['soon', 'محتاج تحديث'] : (state.content.on ? ['on', 'شغّال'] : ['off', 'موقوف']) }
   ];
   $('staff').innerHTML = '';
   staff.forEach(s => {
@@ -234,7 +234,7 @@ function renderLog() {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
     const who = e.by === 'schedule' ? 'تلقائي' : 'يدوي';
-    const agent = e.agent === 'success' ? 'نجاح العملاء' : 'المحلّل';
+    const agent = e.agent === 'success' ? 'نجاح العملاء' : (e.agent === 'content' ? 'صانع المحتوى' : 'المحلّل');
     li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });
@@ -440,9 +440,245 @@ $('cs-toggle-btn').addEventListener('click', async () => {
   }
 });
 
+/* ---------- صانع المحتوى ---------- */
+
+let libs = null;
+let ctBusy = false;
+
+/* المكتبات بتتحمّل أول ما تدوس "اكتب" بس — تقيلة ومش لازمة غير هنا */
+async function loadLibs() {
+  if (libs) return libs;
+  const [idx, det, food, foodX, sup, supX, cred] = await Promise.all([
+    import('./library/exercises-index.js'), import('./library/exercises-details.js'),
+    import('./food-library.js'), import('./library/food-extra.js'),
+    import('./supplement-library.js'), import('./library/supplements-extra.js'),
+    import('./library/credits.js')
+  ]);
+  libs = {
+    exercises: idx.EXERCISE_INDEX, details: det.EXERCISE_DETAILS,
+    foods: food.FOOD_LIBRARY.concat(foodX.FOOD_LIBRARY_EXTRA),
+    supps: sup.SUPPLEMENT_LIBRARY.concat(supX.SUPPLEMENT_LIBRARY_EXTRA),
+    grades: sup.EVIDENCE_GRADES, sources: cred.MEDIA_SOURCES
+  };
+  return libs;
+}
+
+const pickRandom = list => list[Math.floor(Math.random() * list.length)];
+const tx = (obj, l) => (obj && typeof obj === 'object') ? (obj[l] || obj.ar || '') : (obj || '');
+
+/* بنبني "معلومات" كل حاجة من المكتبة بس — مفيش أي بيانات عملاء */
+function buildItem(kind, L, lang, used) {
+  const en = lang === 'en';
+  const skip = id => used.indexOf(id) !== -1;
+  if (kind === 'exercise' || kind === 'mistake') {
+    const pool = L.exercises.filter(x => {
+      const d = L.details[x.id];
+      return d && x.m && !skip(x.id + ':' + kind) && (kind !== 'mistake' || (Array.isArray(d[4]) && d[4].length));
+    });
+    if (!pool.length) return null;
+    const x = pickRandom(pool);
+    const d = L.details[x.id];
+    const src = L.sources[x.src];
+    return {
+      id: x.id + ':' + kind, kind,
+      title: (kind === 'mistake' ? 'غلطات: ' : 'تمرين: ') + x.n.ar,
+      image: 'media/' + x.m + '.svg',
+      credit: src ? (en ? 'Illustration & exercise notes: ' + src.name + ' — ' + src.license : 'الرسم وخطوات التمرين: ' + src.name + ' — ' + src.license) : '',
+      facts: {
+        name: en ? x.n.en : x.n.ar, muscles: x.pm, equipment: x.e, level: x.l,
+        how: en ? d[1] : d[0], cues: en ? d[3] : d[2], mistakes: en ? d[5] : d[4]
+      }
+    };
+  }
+  if (kind === 'food') {
+    const pool = L.foods.filter(f => f.c && !skip('food:' + f.id));
+    if (!pool.length) return null;
+    const f = pickRandom(pool);
+    return {
+      id: 'food:' + f.id, kind, title: 'أكل: ' + f.ar, image: '', credit: '',
+      facts: { name: en ? f.en : f.ar, per100g: { kcal: f.c, protein_g: f.p, carbs_g: f.cb, fat_g: f.f } }
+    };
+  }
+  if (kind === 'supplement') {
+    const pool = L.supps.filter(x => !skip('sup:' + x.id));
+    if (!pool.length) return null;
+    const x = pickRandom(pool);
+    return {
+      id: 'sup:' + x.id, kind, title: 'مكمل: ' + x.ar, image: '', credit: '',
+      facts: {
+        name: en ? x.en : x.ar, evidence: tx(L.grades[x.grade], lang),
+        use: tx(x.use, lang), dose: tx(x.dose, lang), when: tx(x.when, lang), caution: tx(x.care, lang)
+      }
+    };
+  }
+  return null;
+}
+
+/* النص اللي بيتنسخ: البوست + الهاشتاجات + سطر الحقوق (لازم يفضل) */
+function fullPost(d, text) {
+  return [text.trim(), (d.hashtags || []).join(' '), d.credit].filter(Boolean).join('\n\n');
+}
+
+function renderContent() {
+  const ct = state.content;
+  $('content-card').classList.toggle('hidden', !ct);
+  if (!ct) return;
+  $('ct-toggle-btn').textContent = ct.on ? 'أوقفه' : 'شغّله تاني';
+  $('ct-toggle-btn').className = ct.on ? 'danger' : '';
+  $('ct-write-btn').disabled = ctBusy || !ct.on || ct.writesLeft <= 0;
+  $('ct-write-btn').textContent = 'اكتب مسودات' + (ct.on ? ' (' + ct.writesLeft + ' فاضلين النهارده)' : '');
+
+  const list = $('ct-list');
+  list.innerHTML = '';
+  ct.pending.forEach(d => {
+    const box = document.createElement('div');
+    box.className = 'draft';
+    box.dataset.id = d.id;
+    const top = document.createElement('div');
+    top.className = 'draft-top';
+    const name = document.createElement('span');
+    name.className = 'draft-name';
+    name.textContent = d.title;
+    const chip = document.createElement('span');
+    chip.className = 'chip on';
+    chip.textContent = (d.format === 'reel' ? 'ريلز' : 'بوست') + (d.lang === 'en' ? ' · EN' : '');
+    top.append(name, chip);
+    box.appendChild(top);
+    if (d.image) {
+      const img = document.createElement('img');
+      img.className = 'post-img';
+      img.src = d.image;
+      img.alt = '';
+      box.appendChild(img);
+    }
+    const area = document.createElement('textarea');
+    area.value = d.text;
+    area.dir = d.lang === 'en' ? 'ltr' : 'rtl';
+    area.style.minHeight = '150px';
+    box.appendChild(area);
+    if (d.hashtags && d.hashtags.length) {
+      const tags = document.createElement('p');
+      tags.className = 'post-tags';
+      tags.dir = d.lang === 'en' ? 'ltr' : 'rtl';
+      /* كل هاشتاج معزول لوحده — من غير كده العلامة # بتتقلب في العربي */
+      d.hashtags.forEach(h => {
+        const one = document.createElement('bdi');
+        one.dir = 'auto';
+        one.textContent = h;
+        tags.append(one, ' ');
+      });
+      box.appendChild(tags);
+    }
+    if (d.credit) {
+      const cr = document.createElement('p');
+      cr.className = 'post-credit';
+      cr.textContent = d.credit + ' — السطر ده بيتنسخ مع البوست ولازم يفضل (شرط رخصة الرسم)';
+      box.appendChild(cr);
+    }
+    const row = document.createElement('div');
+    row.className = 'row';
+    const copy = document.createElement('button');
+    copy.type = 'button';
+    copy.className = 'ghost ct-copy';
+    copy.textContent = 'انسخ';
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(fullPost(d, area.value));
+        ctMsg('اتنسخ — الصقه في البوست', 'ok');
+      } catch (e) {
+        area.select();
+        ctMsg('علّم على النص وانسخه بإيدك (Cmd+C)', '');
+      }
+    });
+    const done = document.createElement('button');
+    done.type = 'button';
+    done.className = 'ct-posted';
+    done.textContent = 'نشرته ✓';
+    done.addEventListener('click', () => markPost(d, 'posted', area.value, box));
+    const skip = document.createElement('button');
+    skip.type = 'button';
+    skip.className = 'ghost ct-skip';
+    skip.textContent = 'تخطّي';
+    skip.addEventListener('click', () => markPost(d, 'skipped', '', box));
+    row.append(copy, done, skip);
+    box.appendChild(row);
+    list.appendChild(box);
+  });
+
+  $('ct-score').textContent = ct.posted
+    ? ('اتنشر ' + ct.posted + ' بوست · ' + ct.unedited + ' منهم من غير تعديل')
+    : 'بعد ما تنشر، دوس «نشرته» — كده نعرف كام بوست بيطلع صالح من أول مرة.';
+  const doneList = ct.done || [];
+  $('ct-done-box').classList.toggle('hidden', !doneList.length);
+  $('ct-done').innerHTML = '';
+  doneList.forEach(d => {
+    const li = document.createElement('li');
+    li.textContent = d.title + ' · ' + (d.status === 'posted' ? ('اتنشر' + (d.edited ? ' بعد تعديل' : '')) : 'اتخطّى') + ' · ' + fmtDate(d.doneAt);
+    $('ct-done').appendChild(li);
+  });
+}
+
+function ctMsg(text, kind) {
+  $('ct-msg').textContent = text || '';
+  $('ct-msg').className = 'msg' + (kind ? ' ' + kind : '');
+}
+
+async function markPost(d, status, finalText, box) {
+  box.classList.add('sending');
+  try {
+    state = await call('team_ct_mark', { id: d.id, status, finalText });
+    renderContent();
+    ctMsg(status === 'posted' ? 'اتسجّل إنه اتنشر ✓' : 'اتشال من القايمة', 'ok');
+  } catch (err) {
+    box.classList.remove('sending');
+    ctMsg(err.message, 'err');
+  }
+}
+
+$('ct-write-btn').addEventListener('click', async () => {
+  if (ctBusy) return;
+  ctBusy = true;
+  renderContent();
+  $('ct-msg').innerHTML = '<span class="spin"></span> بيختار من المكتبة ويكتب… ممكن ياخد دقيقة';
+  try {
+    const L = await loadLibs();
+    const kindSel = $('ct-kind').value;
+    const lang = $('ct-lang').value;
+    const count = Number($('ct-count').value) || 3;
+    const kinds = kindSel === 'mix' ? ['exercise', 'food', 'mistake', 'supplement', 'exercise'] : [kindSel];
+    const used = (state.content.used || []).slice();
+    const items = [];
+    for (let i = 0; i < count; i++) {
+      const it = buildItem(kinds[i % kinds.length], L, lang, used);
+      if (it) { items.push(it); used.push(it.id); }
+    }
+    if (!items.length) throw new Error('خلصت الحاجات الجديدة في النوع ده — جرّب نوع تاني');
+    state = await call('team_ct_write', { items, format: $('ct-format').value, lang });
+    ctMsg(state.written ? ('اتكتب ' + state.written + ' مسودة' + (state.writeNote ? ' · ' + state.writeNote : '')) : (state.writeNote || 'ما اتكتبش حاجة'), state.written ? 'ok' : 'err');
+  } catch (err) {
+    ctMsg(err.message, 'err');
+  }
+  ctBusy = false;
+  renderContent();
+  renderLog();
+});
+
+$('ct-toggle-btn').addEventListener('click', async () => {
+  const turnOn = !state.content.on;
+  try {
+    state = await call('team_ct_toggle', { on: turnOn });
+    renderContent();
+    renderStaff();
+    renderLog();
+  } catch (err) {
+    ctMsg(err.message, 'err');
+  }
+});
+
 function renderAll(keepShown) {
   renderStaff();
   renderSuccess();
+  renderContent();
   renderControls();
   renderScore();
   renderHistory();
