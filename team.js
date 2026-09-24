@@ -1,14 +1,19 @@
 /*
  * صفحة فريق ADAM الذكي — لصاحب المنصة بس
  * ------------------------------------------------------------
- * الصفحة دي مابتقراش أي بيانات عملاء خالص. كل اللي بتعمله إنها
- * بتكلّم Apps Script بتوكن دخولك، وهو بيتأكد إنك إنت، ويرجّع
- * التقارير. حتى لو حد فتح الصفحة، من غير حسابك مش هيشوف حاجة.
+ * الصفحة بتكلّم Apps Script بتوكن دخولك، وهو بيتأكد إنك إنت
+ * ويرجّع التقارير والمسودات. حتى لو حد فتح الصفحة، من غير حسابك
+ * مش هيشوف حاجة.
+ *
+ * الحاجة الوحيدة اللي الصفحة بتكتبها في الداتابيز: رسالة الشات
+ * اللي إنت وافقت عليها بدوستك — بحسابك إنت، زي ما تكون كتبتها
+ * من شاشة الشات بالظبط. الموظف نفسه عمره ما بيبعت حاجة.
  */
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { firebaseConfig } from './firebase-config.js';
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
+import { SPORTS } from './sports.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -76,7 +81,7 @@ function renderStaff() {
   const a = state.analyst;
   const staff = [
     { key: 'analyst', name: 'محلّل الأعمال', job: 'كل سبت: أرقام الأسبوع قدّام اللي قبله، و٥ أسطر تعمل إيه.', chip: a.on ? ['on', 'شغّال'] : ['off', 'موقوف'] },
-    { key: 'success', name: 'مساعد نجاح العملاء', job: 'يكتب رسالة للعميل الساكت — ماتتبعتش غير بموافقتك.', chip: ['soon', 'الجاي'], soon: true },
+    { key: 'success', name: 'مساعد نجاح العملاء', job: 'كل يوم: رسالة لكل عميل ساكت — ماتتبعتش غير بموافقتك.', chip: !state.success ? ['soon', 'محتاج تحديث'] : (state.success.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'content', name: 'صانع المحتوى', job: 'بوستات من مكتبات التمارين والأكل والتأهيل.', chip: ['soon', 'بعدين'], soon: true }
   ];
   $('staff').innerHTML = '';
@@ -229,7 +234,8 @@ function renderLog() {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
     const who = e.by === 'schedule' ? 'تلقائي' : 'يدوي';
-    li.textContent = fmtDate(e.at) + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
+    const agent = e.agent === 'success' ? 'نجاح العملاء' : 'المحلّل';
+    li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });
 }
@@ -242,8 +248,197 @@ function renderControls() {
   $('run-btn').textContent = 'شغّله دلوقتي' + (a.on ? ' (' + a.runsLeft + ' فاضلين النهارده)' : '');
 }
 
+/* ---------- مساعد نجاح العملاء ---------- */
+
+function sportLabel(key) {
+  const hit = SPORTS.find(x => x.id === key);
+  return hit ? hit.ar : '';
+}
+
+function reasonChip(d) {
+  if (d.kind === 'care') return ['danger', d.care === 'clearance' ? 'مستني إذن طبي' : 'بلاغ إصابة مفتوح'];
+  if (d.kind === 'never') return ['warn', 'ما بدأش من ' + d.days + ' يوم'];
+  return ['warn', 'ساكت من ' + d.days + ' يوم'];
+}
+
+function draftText(d) {
+  return String(d.text || '').split('{name}').join(d.firstName || '');
+}
+
+function renderSuccess() {
+  const cs = state.success;
+  $('success-card').classList.toggle('hidden', !cs);
+  if (!cs) return;
+  $('cs-toggle-btn').textContent = cs.on ? 'أوقفه' : 'شغّله تاني';
+  $('cs-toggle-btn').className = cs.on ? 'danger' : '';
+  $('cs-scan-btn').disabled = csBusy || !cs.on || cs.scansLeft <= 0;
+  $('cs-scan-btn').textContent = 'دوّر دلوقتي' + (cs.on ? ' (' + cs.scansLeft + ')' : '');
+  $('cs-empty').classList.toggle('hidden', cs.pending.length > 0);
+
+  const list = $('cs-list');
+  list.innerHTML = '';
+  cs.pending.forEach(d => {
+    const box = document.createElement('div');
+    box.className = 'draft';
+    box.dataset.id = d.id;
+    const top = document.createElement('div');
+    top.className = 'draft-top';
+    const name = document.createElement('span');
+    name.className = 'draft-name';
+    name.textContent = d.name || d.firstName;
+    const chip = document.createElement('span');
+    const rc = reasonChip(d);
+    chip.className = 'chip ' + rc[0];
+    chip.textContent = rc[1];
+    top.append(name, chip);
+    box.appendChild(top);
+
+    const meta = [];
+    if (sportLabel(d.sport)) meta.push(sportLabel(d.sport));
+    if (d.coachEmail && d.coachEmail !== String(COACH_EMAIL).toLowerCase()) meta.push('مدربه: ' + d.coachEmail);
+    if (d.kind !== 'care' && !d.fromAi) meta.push('رسالة جاهزة — الذكاء الاصطناعي ما ردّش المرة دي');
+    if (meta.length) {
+      const m = document.createElement('div');
+      m.className = 'draft-meta';
+      m.textContent = meta.join(' · ');
+      box.appendChild(m);
+    }
+
+    const row = document.createElement('div');
+    row.className = 'row';
+    if (d.kind === 'care') {
+      const note = document.createElement('p');
+      note.className = 'care-note';
+      note.textContent = 'مفيش رسالة جاهزة للعميل ده عن قصد — عنده حاجة صحية مفتوحة، فالأحسن تكلّمه إنت بنفسك من الشات.';
+      box.appendChild(note);
+      const okBtn = document.createElement('button');
+      okBtn.type = 'button';
+      okBtn.className = 'ghost cs-skip';
+      okBtn.textContent = 'تمام، هكلّمه بنفسي';
+      okBtn.addEventListener('click', () => markDraft(d, 'skipped', '', box));
+      row.appendChild(okBtn);
+    } else {
+      const area = document.createElement('textarea');
+      area.value = draftText(d);
+      area.setAttribute('aria-label', 'نص الرسالة');
+      box.appendChild(area);
+      const send = document.createElement('button');
+      send.type = 'button';
+      send.className = 'cs-send';
+      send.textContent = 'وافق وابعت';
+      send.addEventListener('click', () => sendDraft(d, area.value.trim(), box));
+      const skip = document.createElement('button');
+      skip.type = 'button';
+      skip.className = 'ghost cs-skip';
+      skip.textContent = 'تخطّي';
+      skip.addEventListener('click', () => markDraft(d, 'skipped', '', box));
+      row.append(send, skip);
+    }
+    box.appendChild(row);
+    list.appendChild(box);
+  });
+
+  $('cs-score').textContent = cs.sent
+    ? ('اتبعت ' + cs.sent + ' رسالة · ' + cs.returned + ' منهم رجعوا يتمرنوا أو يسجّلوا · ' + cs.unedited + ' اتبعتت من غير تعديل')
+    : 'أول ما تبعت رسايل، هنا هتعرف كام عميل رجع بسببها.';
+
+  const done = cs.done || [];
+  $('cs-done-box').classList.toggle('hidden', !done.length);
+  $('cs-done').innerHTML = '';
+  done.forEach(d => {
+    const li = document.createElement('li');
+    const what = d.status === 'sent' ? ('اتبعتت' + (d.returned ? ' · رجع ✓' : '')) : 'اتخطّت';
+    li.textContent = (d.name || d.firstName) + ' · ' + what + ' · ' + fmtDate(d.doneAt);
+    $('cs-done').appendChild(li);
+  });
+}
+
+function csMsg(text, kind) {
+  $('cs-msg').textContent = text || '';
+  $('cs-msg').className = 'msg' + (kind ? ' ' + kind : '');
+}
+
+let csBusy = false;
+
+async function markDraft(d, status, finalText, box) {
+  box.classList.add('sending');
+  try {
+    state = await call('team_cs_mark', { id: d.id, status, finalText });
+    renderSuccess();
+    renderLog();
+    renderStaff();
+    csMsg(status === 'sent' ? ('اتبعتت لـ ' + (d.firstName || d.name) + ' في الشات ✓') : 'اتشالت من القايمة', 'ok');
+  } catch (err) {
+    box.classList.remove('sending');
+    csMsg(err.message, 'err');
+  }
+}
+
+/*
+ * الإرسال: نفس اللي بيحصل لما تكتب في شاشة الشات بالظبط —
+ * رسالة باسم المدرب، وإشعار في جرس العميل وعلى موبايله
+ */
+async function sendDraft(d, text, box) {
+  if (!text) { csMsg('الرسالة فاضية', 'err'); return; }
+  box.classList.add('sending');
+  const me = String(auth.currentUser.email || '').toLowerCase();
+  const now = new Date().toISOString();
+  try {
+    await addDoc(collection(db, 'chats', d.email, 'messages'), { sender: 'coach', text, createdAt: now });
+    await setDoc(doc(db, 'chats', d.email), { clientEmail: d.email, lastMessage: text, lastMessageAt: now, lastSender: 'coach' }, { merge: true });
+  } catch (err) {
+    box.classList.remove('sending');
+    csMsg('الرسالة ما اتبعتتش: ' + err.message, 'err');
+    return;
+  }
+  /* الإشعار إضافة — لو فشل، الرسالة وصلت الشات في كل الأحوال */
+  try {
+    const clip = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+    const ref = await addDoc(collection(db, 'notifications'), {
+      to: d.email, from: me, type: 'chat_client',
+      text: { ar: { t: 'رسالة جديدة من فريقك', b: clip(text, 160) }, en: { t: 'New message from your team', b: clip(text, 160) } },
+      target: 'chat', about: '', aboutName: '', createdAt: now, read: false
+    });
+    const idToken = await auth.currentUser.getIdToken();
+    fetch(scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'push', idToken, id: ref.id }) }).catch(() => {});
+  } catch (err) { /* الجرس اختياري */ }
+  await markDraft(d, 'sent', text, box);
+}
+
+$('cs-scan-btn').addEventListener('click', async () => {
+  if (csBusy) return;
+  csBusy = true;
+  renderSuccess();
+  $('cs-msg').innerHTML = '<span class="spin"></span> بيدوّر على العملاء الساكتين ويكتب الرسايل… ممكن ياخد دقيقة';
+  try {
+    const before = state.success.pending.length;
+    state = await call('team_cs_scan');
+    const added = state.success.pending.length - before;
+    csMsg(added > 0 ? ('اتكتب ' + added + ' رسالة جديدة — راجعهم تحت') : 'مفيش حد ساكت جديد محتاج رسالة', 'ok');
+  } catch (err) {
+    csMsg(err.message, 'err');
+  }
+  csBusy = false;
+  renderSuccess();
+  renderLog();
+});
+
+$('cs-toggle-btn').addEventListener('click', async () => {
+  const turnOn = !state.success.on;
+  try {
+    state = await call('team_cs_toggle', { on: turnOn });
+    renderSuccess();
+    renderStaff();
+    renderLog();
+    csMsg(turnOn ? 'المساعد رجع يشتغل' : 'المساعد اتوقف — مش هيكتب رسايل جديدة لحد ما تشغّله', turnOn ? 'ok' : '');
+  } catch (err) {
+    csMsg(err.message, 'err');
+  }
+});
+
 function renderAll(keepShown) {
   renderStaff();
+  renderSuccess();
   renderControls();
   renderScore();
   renderHistory();

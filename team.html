@@ -99,6 +99,19 @@
     .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: var(--brand); border-radius: 50%; animation: sp 1s linear infinite; vertical-align: -2px; }
     @keyframes sp { to { transform: rotate(360deg); } }
     @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+    /* مسودات الرسايل */
+    .draft { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin: 10px 0 0; }
+    .draft-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .draft-name { font-weight: 700; font-size: 15px; }
+    .chip.warn { background: rgba(251,191,36,.14); color: var(--warn); }
+    .chip.danger { background: rgba(248,113,113,.14); color: var(--danger); }
+    .draft-meta { font-size: 12.5px; color: var(--muted); margin: 4px 0 8px; }
+    .draft textarea { font: inherit; font-size: 14.5px; width: 100%; min-height: 96px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); resize: vertical; line-height: 1.7; }
+    .draft .row { display: flex; gap: 8px; margin-top: 8px; }
+    .draft .row button { flex: 1; }
+    .draft .care-note { font-size: 13.5px; color: var(--warn); margin: 4px 0 8px; }
+    .draft.sending { opacity: .6; pointer-events: none; }
+    details summary { cursor: pointer; color: var(--muted); font-size: 13px; margin-top: 10px; }
     @media (max-width: 420px) { td, th { padding: 6px 3px; } table { font-size: 12.5px; } }
   </style>
 </head>
@@ -187,6 +200,28 @@
           </div>
           <p class="score" id="score"></p>
         </div>
+      </div>
+
+      <!-- مساعد نجاح العملاء -->
+      <div class="card" id="success-card">
+        <div class="report-head">
+          <div>
+            <h2>مساعد نجاح العملاء</h2>
+            <p class="muted">بيكتب رسالة لكل عميل ساكت. ولا رسالة بتتبعت غير لما تدوس «وافق وابعت» — وتقدر تعدّلها قبلها.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="cs-scan-btn">دوّر دلوقتي</button>
+            <button type="button" class="ghost" id="cs-toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="cs-msg"></p>
+        <p class="muted hidden" id="cs-empty">مفيش رسايل مستنياك. المساعد بيدوّر لوحده كل يوم الساعة ١٠ الصبح، والعميل مابيتكتبلوش أكتر من مرة في الأسبوع.</p>
+        <div id="cs-list"></div>
+        <p class="score" id="cs-score"></p>
+        <details id="cs-done-box" class="hidden">
+          <summary>اللي اتعمل قبل كده</summary>
+          <ul class="log" id="cs-done"></ul>
+        </details>
       </div>
 
       <!-- التقارير القديمة -->
