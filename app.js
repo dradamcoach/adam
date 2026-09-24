@@ -1114,6 +1114,168 @@ const TEXT = {
     wr_max_hr: 'أقصى {v}',
     wr_kcal: '{v} سعر',
     wr_zones: 'وقت المناطق',
+    chal_sheet_title: "المسابقات",
+    pts_sheet_title: "متجر النقط",
+    chal_btn: "المسابقات",
+    chal_btn_n: "المسابقات ({n})",
+    pts_btn: "نقطي: {n}",
+    chal_live: "شغالة دلوقتي",
+    chal_upcoming: "جاية قريب",
+    chal_recent: "خلصت",
+    chal_none: "مفيش مسابقات شغالة دلوقتي — أول ما تنزل مسابقة جديدة هيوصلك إشعار 🏆",
+    chal_ended: "خلصت",
+    chal_starts: "بتبدأ يوم {d}",
+    chal_left: "فاضل {n} {w}",
+    chal_target: "الهدف: {n} {unit}",
+    chal_target_sport: "الهدف: {n} مرة {sport}",
+    chal_progress: "إنت عند {v} من {n} {unit}",
+    chal_done_me: "خلّصت الهدف 🎉 ({v}) — كمّل عشان الترتيب",
+    chal_my_team: "فريقك: {t}",
+    chal_pick_team: "اختار فريقك",
+    chal_join: "اشترك",
+    chal_joined: "اشتركت في «{t}» — يلا بينا 💪",
+    chal_board: "الترتيب",
+    chal_board_failed: "مقدرناش نجيب الترتيب دلوقتي — جرّب تاني",
+    chal_board_empty: "لسه محدش اشترك — كن الأول!",
+    chal_my_rank: "ترتيبك {r} من {n}",
+    chal_team_avg: "متوسط {v}",
+    chal_note: "الترتيب بيتحسب من حلقاتك في البرنامج نفسه، وبيظهر فيه اسمك الأول بس. الجوايز بيأكدها فريق ADAM بعد ما المسابقة تخلص.",
+    chal_team_a: "🦅 الصقور",
+    chal_team_b: "🐯 النمور",
+    chal_unit_stars: "نجمة",
+    chal_unit_train_days: "يوم تمرين",
+    chal_unit_active_days: "يوم متحسب",
+    chal_unit_water_days: "يوم ماية",
+    chal_unit_food_days: "يوم أكل",
+    chal_unit_km: "كم",
+    chal_unit_xp: "نقطة",
+    chal_unit_sport: "مرة",
+    chal_metric_stars: "النجوم ⭐",
+    chal_metric_train_days: "أيام التمرين 🏋️",
+    chal_metric_active_days: "الأيام المتحسبة 🔥",
+    chal_metric_water_days: "أيام الماية 💧",
+    chal_metric_food_days: "أيام الأكل 🥗",
+    chal_metric_km: "الكيلومترات 🏃",
+    chal_metric_xp: "النقط ⚡",
+    chal_metric_sport: "مرات رياضة معيّنة ⚽",
+    chal_tpl_stars_week: "أسبوع النجوم",
+    chal_tpld_stars_week: "اجمع ٥ نجوم الأسبوع ده — كل نجمة يعني قفّلت كل حلقاتك في يوم.",
+    chal_tpl_perfect_week: "الأسبوع الكامل",
+    chal_tpld_perfect_week: "٧ نجوم في ٧ أيام. الأصعب — والجايزة على قده.",
+    chal_tpl_water_week: "تحدي الماية",
+    chal_tpld_water_week: "قفّل حلقة الماية كل يوم لمدة أسبوع.",
+    chal_tpl_train_week: "ولا يوم يفوت",
+    chal_tpld_train_week: "٤ أيام تمرين على الأقل الأسبوع ده.",
+    chal_tpl_food_week: "أكل نضيف",
+    chal_tpld_food_week: "قفّل حلقة الأكل ٦ أيام من ٧.",
+    chal_tpl_xp_race: "سباق النقط",
+    chal_tpld_xp_race: "مين يجمع أكتر نقط في أسبوع؟ كل حلقة بتفرق.",
+    chal_tpl_km_week: "١٠ كم الأسبوع ده",
+    chal_tpld_km_week: "جري أو مشي أو عجلة — سجّلها من الساعة أو من «نشاطي».",
+    chal_tpl_km_month: "٥٠ كم في الشهر",
+    chal_tpld_km_month: "خمسين كيلو في ٣٠ يوم — خطوة خطوة.",
+    chal_tpl_fire_month: "شهر النار",
+    chal_tpld_fire_month: "٢٥ يوم متحسب في السلسلة من ٣٠.",
+    chal_tpl_teams_week: "الصقور ضد النمور",
+    chal_tpld_teams_week: "اختار فريقك — الفريق اللي متوسط نجومه أعلى يكسب.",
+    chal_tpl_sport_month: "تحدي رياضتك",
+    chal_tpld_sport_month: "٨ مرات من رياضتك في الشهر — سجّلها في «نشاطي».",
+    chal_tpl_ramadan: "تحدي رمضان",
+    chal_tpld_ramadan: "خلّي رمضان شهر التزام: ٢٥ يوم متحسب — والتمرين بعد الفطار.",
+    chal_tpl_summer: "تحدي الصيف",
+    chal_tpld_summer: "١٦ يوم تمرين في شهر — ومع تنبيه الحر اختار الوقت الصح.",
+    chal_tpl_fresh_start: "بداية جديدة",
+    chal_tpld_fresh_start: "٢٠ نجمة في ٣٠ يوم — لأي حد عايز يبدأ صح.",
+    pts_balance: "رصيد نقطك",
+    pts_balance_note: "كسبت {all} · صرفت {spent}",
+    pts_rewards: "الجوايز",
+    pts_no_rewards: "الجوايز لسه بتتجهز — نقطك محفوظة لحد ما تنزل 🎁",
+    pts_cost: "{n} نقطة",
+    pts_out: "خلصت",
+    pts_get: "اطلبها",
+    pts_need: "فاضلك {n}",
+    pts_confirm: "تطلب «{t}» بـ{n} نقطة؟",
+    pts_requested: "الطلب وصل لفريق ADAM ✓",
+    pts_my_requests: "طلباتك",
+    pts_st_pending: "مستني الموافقة",
+    pts_st_approved: "اتوافق عليه ✓",
+    pts_st_rejected: "اترفض — النقط رجعتلك",
+    pts_how: "النقط بتيجي من حلقاتك كل يوم، والنجوم، وصناديق المفاجآت، والمسابقات، ولما تدعي صاحب يشترك.",
+    chal_admin_title: "المسابقات",
+    adm_tab_chal: "المسابقات",
+    chal_admin_hint: "اختار مسابقة جاهزة أو فكرة من موظف المسابقات، عدّلها لو حبيت، وانشرها. العملاء بيشتركوا بدوسة والترتيب بيتحسب لوحده.",
+    chal_admin_templates: "مسابقات جاهزة (دوس عشان تملى الفورم)",
+    chal_admin_ideas: "أفكار موظف المسابقات 🤖",
+    chal_admin_ideas_btn: "هات أفكار الأسبوع",
+    chal_admin_ideas_more: "هات أفكار جديدة",
+    chal_admin_ideas_wait: "الموظف بيفكّر...",
+    chal_admin_ideas_none: "مفيش أفكار دلوقتي — جرّب تاني بعد شوية",
+    chal_admin_list: "المسابقات ({n})",
+    chal_admin_finish: "أنهيها وكرّم",
+    chal_admin_finishing: "بنحسب الترتيب ونكرّم...",
+    chal_admin_finished: "خلصت — {n} فايزين و{f} خلّصوا الهدف خدوا نقطهم",
+    chal_admin_del_q: "تمسح المسابقة دي؟",
+    chal_admin_created: "المسابقة اتنشرت ✓",
+    chal_admin_need_title: "اكتب اسم المسابقة",
+    chal_admin_need_sport: "اختار الرياضة",
+    chal_st_live: "شغالة",
+    chal_st_soon: "جاية",
+    chal_st_over: "خلص وقتها — دوس أنهيها",
+    chal_st_ended: "خلصت",
+    chal_f_emoji: "إيموجي",
+    chal_f_title_ar: "اسم المسابقة (عربي)",
+    chal_f_title_en: "اسم المسابقة (English)",
+    chal_f_desc_ar: "الوصف (عربي)",
+    chal_f_desc_en: "الوصف (English)",
+    chal_f_metric: "بتتحسب بإيه",
+    chal_f_target: "الهدف (رقم)",
+    chal_f_start: "بتبدأ يوم",
+    chal_f_days: "المدة بالأيام",
+    chal_f_sport: "الرياضة",
+    chal_f_teams: "فرق (اختياري) — افصل بفاصلة: 🦅 الصقور، 🐯 النمور",
+    chal_f_prize_ar: "الجايزة (عربي) — زي: أسبوع مجاني للأول",
+    chal_f_prize_en: "الجايزة (English)",
+    chal_f_bonus: "نقط لكل اللي يخلّص الهدف",
+    chal_f_create: "انشر المسابقة",
+    rewards_admin_title: "الجوايز والنقط",
+    adm_tab_rewards: "الجوايز",
+    rewards_admin_hint: "العملاء بيبدّلوا نقطهم بجوايز — إنت اللي بتوافق. وتقدر تدّي نقط هدية وتكافئ اللي دعوا صحابهم.",
+    rw_admin_pending: "طلبات جوايز مستنياك ({n})",
+    rw_admin_bal: "نقطه {xp} · صرف قبل كده {spent}",
+    rw_admin_list: "الجوايز ({n})",
+    rw_admin_seed: "ضيف جوايز مقترحة (تعدّلها بعدين)",
+    rw_admin_hidden: "مخفية",
+    rw_admin_hide: "إخفاء",
+    rw_admin_show: "إظهار",
+    rw_admin_cost: "النقط",
+    rw_admin_name_ph: "اسم الجايزة",
+    rw_admin_name_en_ph: "Reward name (English)",
+    rw_admin_add: "ضيف جايزة",
+    rw_admin_need: "كمّل البيانات",
+    rw_admin_gift: "نقط هدية لعميل",
+    rw_admin_gift_xp: "عدد النقط",
+    rw_admin_gift_why: "السبب (بيظهر له)",
+    rw_admin_gift_btn: "ابعت النقط",
+    rw_admin_gift_done: "النقط وصلت ✓",
+    rw_admin_invites: "الدعوات ({n})",
+    rw_admin_invites_hint: "عملاء جم من لينك صاحبهم. أول ما الجديد يشترك فعلًا، كافئ الاتنين (٢٠٠ نقطة لكل واحد) — وتقدر تدّيهم أسبوع مجاني من «التحكم في الوصول».",
+    rw_admin_reward_both: "كافئ الاتنين",
+    rw_admin_rewarded: "اتكافئوا",
+    rw_invite_reason: "دعوة صاحب",
+    notif_t_chal_win: "🏆 المركز {r} في «{t}»",
+    notif_b_chal_win: "مبروك! الجايزة: {p}",
+    notif_t_chal_done: "🎉 خلّصت «{t}»",
+    notif_b_chal_done: "كسبت +{x} نقطة — شوف متجر النقط",
+    notif_t_redeem_req: "طلب جايزة 🎁",
+    notif_b_redeem_req: "{name} عايز «{t}»",
+    notif_t_redeem_ok: "جايزتك اتوافق عليها 🎁",
+    notif_b_redeem_ok: "«{t}» — فريق ADAM هيتواصل معاك",
+    notif_t_redeem_no: "طلب الجايزة ماتمش",
+    notif_b_redeem_no: "«{t}» — النقط رجعت لرصيدك",
+    notif_t_bonus_gift: "🎁 نقط هدية",
+    notif_b_bonus_gift: "+{n} نقطة من فريق ADAM",
+    notif_t_invite_reward: "🤝 مكافأة الدعوة",
+    notif_b_invite_reward: "+{n} نقطة ليك ولصاحبك",
     soc_sheet_title: "صحابي",
     soc_story_title: "ستوري جديدة",
     soc_tab_friends: "صحابي",
@@ -2921,6 +3083,168 @@ const TEXT = {
     wr_max_hr: 'max {v}',
     wr_kcal: '{v} kcal',
     wr_zones: 'Time in zones',
+    chal_sheet_title: "Challenges",
+    pts_sheet_title: "Points store",
+    chal_btn: "Challenges",
+    chal_btn_n: "Challenges ({n})",
+    pts_btn: "My points: {n}",
+    chal_live: "Live now",
+    chal_upcoming: "Coming soon",
+    chal_recent: "Finished",
+    chal_none: "No live challenges right now — you'll get a notification when a new one starts 🏆",
+    chal_ended: "Finished",
+    chal_starts: "Starts on {d}",
+    chal_left: "{n} {w} left",
+    chal_target: "Goal: {n} {unit}",
+    chal_target_sport: "Goal: {n} × {sport}",
+    chal_progress: "You're at {v} of {n} {unit}",
+    chal_done_me: "Goal reached 🎉 ({v}) — keep going for the ranking",
+    chal_my_team: "Your team: {t}",
+    chal_pick_team: "Pick your team",
+    chal_join: "Join",
+    chal_joined: "You joined “{t}” — let's go 💪",
+    chal_board: "Ranking",
+    chal_board_failed: "Couldn't load the ranking right now — try again",
+    chal_board_empty: "Nobody joined yet — be the first!",
+    chal_my_rank: "You're #{r} of {n}",
+    chal_team_avg: "avg {v}",
+    chal_note: "The ranking is counted from your rings in the app, and only your first name shows. The ADAM team confirms prizes after the challenge ends.",
+    chal_team_a: "🦅 Falcons",
+    chal_team_b: "🐯 Tigers",
+    chal_unit_stars: "stars",
+    chal_unit_train_days: "training days",
+    chal_unit_active_days: "counted days",
+    chal_unit_water_days: "water days",
+    chal_unit_food_days: "food days",
+    chal_unit_km: "km",
+    chal_unit_xp: "pts",
+    chal_unit_sport: "times",
+    chal_metric_stars: "Stars ⭐",
+    chal_metric_train_days: "Training days 🏋️",
+    chal_metric_active_days: "Counted days 🔥",
+    chal_metric_water_days: "Water days 💧",
+    chal_metric_food_days: "Food days 🥗",
+    chal_metric_km: "Kilometres 🏃",
+    chal_metric_xp: "Points ⚡",
+    chal_metric_sport: "Sessions of one sport ⚽",
+    chal_tpl_stars_week: "Star week",
+    chal_tpld_stars_week: "Collect 5 stars this week — a star means you closed all your rings in a day.",
+    chal_tpl_perfect_week: "Perfect week",
+    chal_tpld_perfect_week: "7 stars in 7 days. The hardest one — with a prize to match.",
+    chal_tpl_water_week: "Water challenge",
+    chal_tpld_water_week: "Close the water ring every day for a week.",
+    chal_tpl_train_week: "No day missed",
+    chal_tpld_train_week: "At least 4 training days this week.",
+    chal_tpl_food_week: "Clean eating",
+    chal_tpld_food_week: "Close the food ring on 6 of 7 days.",
+    chal_tpl_xp_race: "Points race",
+    chal_tpld_xp_race: "Who collects the most points in a week? Every ring counts.",
+    chal_tpl_km_week: "10 km this week",
+    chal_tpld_km_week: "Run, walk or ride — log it from your watch or “My activity”.",
+    chal_tpl_km_month: "50 km in a month",
+    chal_tpld_km_month: "Fifty kilometres in 30 days — step by step.",
+    chal_tpl_fire_month: "Month on fire",
+    chal_tpld_fire_month: "25 counted streak days out of 30.",
+    chal_tpl_teams_week: "Falcons vs Tigers",
+    chal_tpld_teams_week: "Pick your team — the team with the higher average stars wins.",
+    chal_tpl_sport_month: "Your sport challenge",
+    chal_tpld_sport_month: "8 sessions of your sport in a month — log them in “My activity”.",
+    chal_tpl_ramadan: "Ramadan challenge",
+    chal_tpld_ramadan: "Make Ramadan a month of commitment: 25 counted days — train after iftar.",
+    chal_tpl_summer: "Summer challenge",
+    chal_tpld_summer: "16 training days in a month — and use the heat alert to pick the right time.",
+    chal_tpl_fresh_start: "Fresh start",
+    chal_tpld_fresh_start: "20 stars in 30 days — for anyone who wants to start right.",
+    pts_balance: "Your points",
+    pts_balance_note: "earned {all} · spent {spent}",
+    pts_rewards: "Rewards",
+    pts_no_rewards: "Rewards are being prepared — your points are saved until they arrive 🎁",
+    pts_cost: "{n} pts",
+    pts_out: "out of stock",
+    pts_get: "Get it",
+    pts_need: "{n} to go",
+    pts_confirm: "Get “{t}” for {n} points?",
+    pts_requested: "Request sent to the ADAM team ✓",
+    pts_my_requests: "Your requests",
+    pts_st_pending: "Waiting for approval",
+    pts_st_approved: "Approved ✓",
+    pts_st_rejected: "Declined — points returned",
+    pts_how: "Points come from your daily rings, stars, mystery chests, challenges, and inviting a friend who joins.",
+    chal_admin_title: "Challenges",
+    adm_tab_chal: "Challenges",
+    chal_admin_hint: "Pick a ready challenge or an idea from the challenges employee, edit it if you like, and publish. Clients join with one tap and the ranking is counted automatically.",
+    chal_admin_templates: "Ready challenges (tap to fill the form)",
+    chal_admin_ideas: "Challenges employee ideas 🤖",
+    chal_admin_ideas_btn: "Get this week's ideas",
+    chal_admin_ideas_more: "Get new ideas",
+    chal_admin_ideas_wait: "Thinking...",
+    chal_admin_ideas_none: "No ideas right now — try again later",
+    chal_admin_list: "Challenges ({n})",
+    chal_admin_finish: "End and reward",
+    chal_admin_finishing: "Counting the ranking and rewarding...",
+    chal_admin_finished: "Done — {n} winners, and {f} who hit the goal got their points",
+    chal_admin_del_q: "Delete this challenge?",
+    chal_admin_created: "Challenge published ✓",
+    chal_admin_need_title: "Write the challenge name",
+    chal_admin_need_sport: "Pick the sport",
+    chal_st_live: "live",
+    chal_st_soon: "upcoming",
+    chal_st_over: "time's up — tap End",
+    chal_st_ended: "ended",
+    chal_f_emoji: "Emoji",
+    chal_f_title_ar: "Challenge name (Arabic)",
+    chal_f_title_en: "Challenge name (English)",
+    chal_f_desc_ar: "Description (Arabic)",
+    chal_f_desc_en: "Description (English)",
+    chal_f_metric: "Counted by",
+    chal_f_target: "Goal (number)",
+    chal_f_start: "Starts on",
+    chal_f_days: "Length in days",
+    chal_f_sport: "Sport",
+    chal_f_teams: "Teams (optional) — separate with commas: 🦅 Falcons, 🐯 Tigers",
+    chal_f_prize_ar: "Prize (Arabic) — e.g. a free week for 1st place",
+    chal_f_prize_en: "Prize (English)",
+    chal_f_bonus: "Points for everyone who hits the goal",
+    chal_f_create: "Publish challenge",
+    rewards_admin_title: "Rewards and points",
+    adm_tab_rewards: "Rewards",
+    rewards_admin_hint: "Clients swap points for rewards — you approve. You can also give gift points and reward clients who invite friends.",
+    rw_admin_pending: "Reward requests waiting ({n})",
+    rw_admin_bal: "points {xp} · already spent {spent}",
+    rw_admin_list: "Rewards ({n})",
+    rw_admin_seed: "Add suggested rewards (edit them later)",
+    rw_admin_hidden: "hidden",
+    rw_admin_hide: "Hide",
+    rw_admin_show: "Show",
+    rw_admin_cost: "Points",
+    rw_admin_name_ph: "اسم الجايزة (عربي)",
+    rw_admin_name_en_ph: "Reward name (English)",
+    rw_admin_add: "Add reward",
+    rw_admin_need: "Fill in the details",
+    rw_admin_gift: "Gift points to a client",
+    rw_admin_gift_xp: "Points",
+    rw_admin_gift_why: "Reason (shown to them)",
+    rw_admin_gift_btn: "Send points",
+    rw_admin_gift_done: "Points sent ✓",
+    rw_admin_invites: "Invites ({n})",
+    rw_admin_invites_hint: "Clients who came from a friend's link. Once the new one actually subscribes, reward both (200 points each) — and you can give them a free week from “Access control”.",
+    rw_admin_reward_both: "Reward both",
+    rw_admin_rewarded: "rewarded",
+    rw_invite_reason: "Invited a friend",
+    notif_t_chal_win: "🏆 Place {r} in “{t}”",
+    notif_b_chal_win: "Congratulations! Prize: {p}",
+    notif_t_chal_done: "🎉 You finished “{t}”",
+    notif_b_chal_done: "You earned +{x} points — check the points store",
+    notif_t_redeem_req: "Reward request 🎁",
+    notif_b_redeem_req: "{name} wants “{t}”",
+    notif_t_redeem_ok: "Your reward is approved 🎁",
+    notif_b_redeem_ok: "“{t}” — the ADAM team will contact you",
+    notif_t_redeem_no: "Reward request declined",
+    notif_b_redeem_no: "“{t}” — the points are back in your balance",
+    notif_t_bonus_gift: "🎁 Gift points",
+    notif_b_bonus_gift: "+{n} points from the ADAM team",
+    notif_t_invite_reward: "🤝 Invite reward",
+    notif_b_invite_reward: "+{n} points for you and your friend",
     soc_sheet_title: "My friends",
     soc_story_title: "New story",
     soc_tab_friends: "Friends",
@@ -5800,6 +6124,8 @@ const ADMIN_SECTION_ICONS = {
   store_orders_title:        'box',
   stories_admin_title:       'star',
   social_admin_title:        'team',
+  chal_admin_title:          'trophy',
+  rewards_admin_title:       'gift',
   admin_leads_title:         'chat',
   admin_provider_apps_title: 'clients',
   admin_access_title:        'lock'
@@ -5874,6 +6200,8 @@ const ADMIN_TAB_SHORT = {
   store_orders_title:        'adm_tab_orders',
   stories_admin_title:       'adm_tab_stories',
   social_admin_title:        'adm_tab_social',
+  chal_admin_title:          'adm_tab_chal',
+  rewards_admin_title:       'adm_tab_rewards',
   admin_leads_title:         'adm_tab_leads',
   admin_provider_apps_title: 'adm_tab_apps',
   admin_access_title:        'adm_tab_access'
@@ -9684,6 +10012,7 @@ function renderHomeSummary() {
 function renderClientHome() {
   renderEngCard();
   renderSocBar();
+  renderChalRow();
   renderHomeSummary();
   renderWeekStreak();
   renderClientTiles();
@@ -9968,6 +10297,7 @@ async function loadClient(email) {
     /* حلقات ADAM + الصحاب — بيحمّلوا لوحدهم ومابيأخروش الشاشة */
     engInit(email);
     socInit();
+    chalInit();
     // إعدادات المساعد الذكي — العميل محتاجها عشان يعرف مفعّل ولا لأ
     fetchWelcomeSettings().catch(function () {});
 
@@ -17747,6 +18077,12 @@ document.getElementById('ob-next-btn').addEventListener('click', async function 
     // تجربة مجانية 30 يوم — بس لحساب اتعمل لوحده من صفحة التعريف
     if (onboardingIsNewSignup) {
       clientPayload.trialStartedAt = new Date().toISOString().slice(0, 10);
+      /* جه من لينك صاحبه؟ بنسجّل مين دعاه عشان صاحب المنصة يكافئ الاتنين */
+      const inviter = await socInviterFromLink();
+      if (inviter && inviter.email !== onboardingEmail) {
+        clientPayload.invitedBy = inviter.email;
+        clientPayload.invitedByName = inviter.name;
+      }
     }
     await setDoc(doc(db, 'clients', onboardingEmail), clientPayload, { merge: true });
 
@@ -20025,6 +20361,8 @@ if (document.getElementById('daily-report-range-btn')) {
 async function loadAdminPanel() {
   loadDailyReport();
   loadSocialAdmin();
+  loadChalAdmin();
+  loadRewardsAdmin();
   await fetchPaymentSettings();
   const settingsVodafone = document.getElementById('settings-vodafone');
   const settingsInstapay = document.getElementById('settings-instapay');
@@ -24820,6 +25158,7 @@ function goToNotifTarget(item) {
     if (currentProviderEmail) {
       if (target === 'chat' && item.about) { openChatThread(item.about, chatInboxScreen); return; }
       if (target === 'bookings') { document.getElementById('open-bookings-btn').click(); return; }
+      if (target === 'rewards_admin' && isFullAdminAccount()) { document.getElementById('open-admin-panel-btn').click(); showAdminSection('rewards_admin_title'); return; }
       if (target === 'social_admin' && isFullAdminAccount()) { document.getElementById('open-admin-panel-btn').click(); showAdminSection('social_admin_title'); loadSocialAdmin(); return; }
       if (item.about) { openCoachScreen(item.about, item.aboutName || clientNameOf(item.about), ''); return; }
       showScreen(clientsScreen);
@@ -24833,6 +25172,8 @@ function goToNotifTarget(item) {
     if (target === 'training' || target === 'nutrition' || target === 'rehab') { goClientMode(target); return; }
     goClientMode('home');
     if (target === 'friends') { socTab = 'friends'; socLoad().then(openSocSheet); }
+    if (target === 'challenges') { chalInit().then(openChalSheet); }
+    if (target === 'rewards') { chalInit().then(openPtsSheet); }
   } catch (error) {
     showScreen(currentProviderEmail ? clientsScreen : clientScreen);
   }
@@ -27848,6 +28189,14 @@ function engCompute() {
   s.perfectWeeks = Object.keys(weekStars).filter(function (k) { return weekStars[k] >= 7; }).length;
   s.shieldReady = (i - 1) - lastShield >= 7;
   s.shieldBack = Math.max(0, 7 - ((i - 1) - lastShield));
+  /* نقط هدية من صاحب المنصة (مسابقات، دعوات، مكافآت) */
+  s.bonusXp = 0;
+  (engBonus || []).forEach(function (b) {
+    const xp = Number(b && b.xp) || 0;
+    s.bonusXp += xp;
+    if (b.day >= weekStart) s.weekXp += xp;
+  });
+  s.xp += s.bonusXp;
   s.level = engLevelIndex(s.xp);
   s.chestToday = s.chests.filter(function (c) { return c.day === todayStamp; })[0] || null;
 
@@ -27885,6 +28234,10 @@ async function engInit(email) {
     const sessions = snap.exists() && Array.isArray(snap.data().sessions) ? snap.data().sessions : [];
     engSetWear(sessions);
   } catch (error) { /* من غير الساعة عادي */ }
+  try {
+    const snap = await getDoc(doc(db, 'bonus', email));
+    engBonus = snap.exists() && Array.isArray(snap.data().items) ? snap.data().items : [];
+  } catch (error) { engBonus = []; }
   if (token !== engLoadToken) return;
   engDoc = data;
   engFirstRun = !data;
@@ -27964,6 +28317,7 @@ function engRefresh() {
   if (engDoc.nudge === undefined) engDoc.nudge = true;
   renderEngCard();
   if (engSheet && !engSheet.classList.contains('hidden')) renderEngSheet();
+  if (typeof chalLoaded !== 'undefined' && chalLoaded) renderChalRow();
   engSaveSoon();
   return prev;
 }
@@ -29830,4 +30184,947 @@ async function loadSocialAdmin() {
     grid.appendChild(cell);
   });
   box.appendChild(grid);
+}
+
+
+/* ============================================================
+   المسابقات + متجر النقط + الدعوات
+   ------------------------------------------------------------
+   challenges/{id}   = { emoji, title{ar,en}, desc{ar,en}, metric, target, start, end,
+                         kind, sport, teams[], prize{ar,en}, bonusXp, status, winners[] }
+   entries/{id__email} = { challenge, email, name, team, joinedAt }   (خاص — مش بيبان لحد)
+   الترتيب بيتحسب على السيرفر (Apps Script) من حلقات كل مشترك، وبيرجع
+   أسماء مختصرة وأرقام بس — من غير إيميلات.
+   rewards/{id}      = { emoji, title{ar,en}, cost, stock, active }
+   redemptions/{id}  = { email, name, reward, title, cost, status, createdAt }
+   bonus/{email}     = { items: [{ id, xp, reason, day }] }   نقط هدية من صاحب المنصة
+   الرصيد = كل النقط اللي كسبها − اللي صرفه في المتجر
+   ============================================================ */
+
+const CHAL_METRICS = ['stars', 'train_days', 'active_days', 'water_days', 'food_days', 'km', 'xp', 'sport'];
+
+/* مسابقات جاهزة — صاحب المنصة بيختار واحدة وبيعدّل لو حب */
+const CHAL_TEMPLATES = [
+  { id: 'stars_week',   emoji: '⭐', metric: 'stars',       target: 5,  days: 7,  bonusXp: 100 },
+  { id: 'perfect_week', emoji: '🏆', metric: 'stars',       target: 7,  days: 7,  bonusXp: 200 },
+  { id: 'water_week',   emoji: '💧', metric: 'water_days',  target: 7,  days: 7,  bonusXp: 70 },
+  { id: 'train_week',   emoji: '🏋️', metric: 'train_days',  target: 4,  days: 7,  bonusXp: 80 },
+  { id: 'food_week',    emoji: '🥗', metric: 'food_days',   target: 6,  days: 7,  bonusXp: 80 },
+  { id: 'xp_race',      emoji: '⚡', metric: 'xp',          target: 250, days: 7, bonusXp: 100 },
+  { id: 'km_week',      emoji: '👟', metric: 'km',          target: 10, days: 7,  bonusXp: 80 },
+  { id: 'km_month',     emoji: '🏃', metric: 'km',          target: 50, days: 30, bonusXp: 250 },
+  { id: 'fire_month',   emoji: '🔥', metric: 'active_days', target: 25, days: 30, bonusXp: 400 },
+  { id: 'teams_week',   emoji: '⚔️', metric: 'stars',       target: 5,  days: 7,  bonusXp: 120, teams: true },
+  { id: 'sport_month',  emoji: '⚽', metric: 'sport',       target: 8,  days: 30, bonusXp: 200 },
+  { id: 'ramadan',      emoji: '🌙', metric: 'active_days', target: 25, days: 30, bonusXp: 500 },
+  { id: 'summer',       emoji: '☀️', metric: 'train_days',  target: 16, days: 30, bonusXp: 300 },
+  { id: 'fresh_start',  emoji: '🎯', metric: 'stars',       target: 20, days: 30, bonusXp: 300 }
+];
+
+/* جوايز مقترحة للمتجر — صاحب المنصة بيعدّلها */
+const REWARD_SEEDS = [
+  { emoji: '📅', cost: 600,  ar: 'أسبوع اشتراك مجاني',            en: 'A free subscription week' },
+  { emoji: '🏷️', cost: 900,  ar: 'خصم ٢٠٪ على التجديد',            en: '20% off your renewal' },
+  { emoji: '🥗', cost: 1200, ar: 'استشارة تغذية مجانية',           en: 'A free nutrition consultation' },
+  { emoji: '🎯', cost: 1500, ar: 'جلسة تقييم مع الكوتش',           en: 'An assessment session with the coach' },
+  { emoji: '🧴', cost: 1000, ar: 'زجاجة ماية ADAM',                en: 'An ADAM water bottle' },
+  { emoji: '👕', cost: 2000, ar: 'تي شيرت ADAM',                   en: 'An ADAM T-shirt' },
+  { emoji: '🌟', cost: 2500, ar: 'بطل الشهر على صفحة ADAM',        en: 'Champion of the month on ADAM\'s page' }
+];
+
+let chalList = [];
+let chalJoined = {};
+let chalBoards = {};
+let rewardsList = [];
+let myRedemptions = [];
+let engBonus = [];
+let chalLoaded = false;
+
+function chalL(obj) { return (obj && (obj[lang] || obj.ar || obj.en)) || ''; }
+function chalMetricUnit(metric) { return t('chal_unit_' + metric); }
+function chalLive(ch) { return ch.status !== 'ended' && ch.start <= todayStamp && ch.end >= todayStamp; }
+function chalUpcoming(ch) { return ch.status !== 'ended' && ch.start > todayStamp; }
+function chalDaysLeft(ch) { return Math.max(0, engDaysBetween(todayStamp, ch.end)) + 1; }
+
+/* قيمتي في المسابقة من الحلقات اللي على الموبايل — نفس حساب السيرفر */
+function chalMyValue(ch) {
+  if (!engStats) return 0;
+  const days = engStats.days || {};
+  let v = 0;
+  Object.keys(days).forEach(function (s) {
+    if (s < ch.start || s > ch.end) return;
+    const d = days[s];
+    const m = d[0], a = d[1] & 7;
+    const rest = !!(m & ENG_REST);
+    const real = (m & 7) & ~(rest ? 1 : 0);
+    const availN = engBits(a);
+    const star = availN > 0 && real > 0 && (m & a) === a;
+    const neutral = availN === 0 || (rest && availN === 1);
+    const counts = !neutral && real > 0 && engBits(m & 7) >= Math.min(2, availN);
+    if (ch.metric === 'stars' && star) v += 1;
+    else if (ch.metric === 'train_days' && (m & 1) && !rest) v += 1;
+    else if (ch.metric === 'active_days' && counts) v += 1;
+    else if (ch.metric === 'water_days' && (m & 4)) v += 1;
+    else if (ch.metric === 'food_days' && (m & 2)) v += 1;
+    else if (ch.metric === 'km') v += Number(d[2]) || 0;
+    else if (ch.metric === 'xp') v += (((m & 1) && !rest) ? 10 : 0) + ((m & 2) ? 5 : 0) + ((m & 4) ? 5 : 0) + (star ? 10 : 0);
+  });
+  if (ch.metric === 'sport') {
+    v = clientActivity.filter(function (e) { return e && e.sportId === ch.sport && e.date >= ch.start && e.date <= ch.end; }).length;
+  }
+  return Math.round(v * 10) / 10;
+}
+
+async function chalInit() {
+  chalLoaded = false;
+  if (!engIsSelf()) { renderChalRow(); return; }
+  const me = socMe();
+  try {
+    const snap = await getDocs(collection(db, 'challenges'));
+    const cutoff = engShift(todayStamp, -14);
+    chalList = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
+      .filter(function (c) { return c.status !== 'draft' && c.end >= cutoff; })
+      .sort(function (a, b) { return String(a.end).localeCompare(String(b.end)); });
+  } catch (e) { chalList = []; }
+  chalJoined = {};
+  try {
+    const snap = await getDocs(query(collection(db, 'entries'), where('email', '==', me)));
+    snap.docs.forEach(function (d) { const e = d.data(); chalJoined[e.challenge] = e; });
+  } catch (e) { /* عادي */ }
+  try {
+    const snap = await getDocs(query(collection(db, 'rewards'), where('active', '==', true)));
+    rewardsList = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
+      .sort(function (a, b) { return (a.cost || 0) - (b.cost || 0); });
+  } catch (e) { rewardsList = []; }
+  try {
+    const snap = await getDocs(query(collection(db, 'redemptions'), where('email', '==', me)));
+    myRedemptions = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
+      .sort(function (a, b) { return String(b.createdAt).localeCompare(String(a.createdAt)); });
+  } catch (e) { myRedemptions = []; }
+  chalLoaded = true;
+  renderChalRow();
+}
+
+function ptsSpent() {
+  return myRedemptions.filter(function (r) { return r.status !== 'rejected'; }).reduce(function (s, r) { return s + (Number(r.cost) || 0); }, 0);
+}
+function ptsBalance() { return Math.max(0, (engStats ? engStats.xp : 0) - ptsSpent()); }
+
+function renderChalRow() {
+  const row = document.getElementById('chal-row');
+  if (!row) return;
+  if (!chalLoaded || !engIsSelf()) { row.classList.add('hidden'); return; }
+  row.classList.remove('hidden');
+  row.innerHTML = '';
+  const live = chalList.filter(chalLive);
+  const notJoined = live.filter(function (c) { return !chalJoined[c.id]; }).length;
+  const a = document.createElement('button');
+  a.type = 'button';
+  a.className = 'chal-btn';
+  a.innerHTML = '<span class="chal-btn-ic">🏆</span>';
+  const at = document.createElement('span');
+  at.textContent = live.length ? fill('chal_btn_n', { n: live.length }) : t('chal_btn');
+  a.appendChild(at);
+  if (notJoined) {
+    const dot = document.createElement('b');
+    dot.className = 'soc-dot';
+    dot.textContent = notJoined;
+    a.appendChild(dot);
+  }
+  a.addEventListener('click', openChalSheet);
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'chal-btn pts';
+  b.innerHTML = '<span class="chal-btn-ic">🎁</span>';
+  const bt = document.createElement('span');
+  bt.textContent = fill('pts_btn', { n: ptsBalance() });
+  b.appendChild(bt);
+  b.addEventListener('click', openPtsSheet);
+  row.append(a, b);
+}
+
+/* ---------- شيت المسابقات ---------- */
+
+const chalSheet = document.getElementById('chal-sheet');
+function openChalSheet() {
+  if (!chalSheet) return;
+  renderChalSheet();
+  chalSheet.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+}
+function closeChalSheet() {
+  chalSheet.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+}
+
+function chalTargetText(ch) {
+  if (ch.metric === 'sport') {
+    const sp = sportById(ch.sport);
+    return fill('chal_target_sport', { n: ch.target, sport: sp ? (sp[lang] || sp.ar) : '' });
+  }
+  return fill('chal_target', { n: ch.target, unit: chalMetricUnit(ch.metric) });
+}
+
+function chalCard(ch) {
+  const joined = chalJoined[ch.id];
+  const live = chalLive(ch);
+  const card = document.createElement('div');
+  card.className = 'chal-card' + (joined ? ' joined' : '') + (live ? '' : ' off');
+  const head = document.createElement('div');
+  head.className = 'chal-head';
+  const em = document.createElement('span');
+  em.className = 'chal-emoji';
+  em.textContent = ch.emoji || '🏆';
+  const ttl = document.createElement('div');
+  ttl.className = 'chal-titles';
+  const name = document.createElement('strong');
+  name.textContent = chalL(ch.title);
+  const when = document.createElement('small');
+  if (ch.status === 'ended' || ch.end < todayStamp) when.textContent = t('chal_ended');
+  else if (chalUpcoming(ch)) when.textContent = fill('chal_starts', { d: engWeekdayName(ch.start) });
+  else when.textContent = fill('chal_left', { n: chalDaysLeft(ch), w: engDaysWord(chalDaysLeft(ch)) });
+  ttl.append(name, when);
+  head.append(em, ttl);
+  card.appendChild(head);
+  if (chalL(ch.desc)) {
+    const d = document.createElement('p');
+    d.className = 'chal-desc';
+    d.textContent = chalL(ch.desc);
+    card.appendChild(d);
+  }
+  const meta = document.createElement('div');
+  meta.className = 'chal-meta';
+  meta.textContent = '🎯 ' + chalTargetText(ch) + (chalL(ch.prize) ? '  ·  🎁 ' + chalL(ch.prize) : '') + (ch.bonusXp ? '  ·  +' + ch.bonusXp + ' ' + t('chal_unit_xp') : '');
+  card.appendChild(meta);
+
+  if (joined && ch.status !== 'ended') {
+    const v = chalMyValue(ch);
+    const prog = document.createElement('div');
+    prog.className = 'chal-prog';
+    const bar = document.createElement('div');
+    bar.className = 'eng-bar';
+    const f = document.createElement('i');
+    f.style.width = Math.min(100, Math.round((v / (ch.target || 1)) * 100)) + '%';
+    f.style.background = v >= ch.target ? '#facc15' : 'var(--brand)';
+    bar.appendChild(f);
+    const txt = document.createElement('small');
+    txt.textContent = v >= ch.target ? fill('chal_done_me', { v: v }) : fill('chal_progress', { v: v, n: ch.target, unit: chalMetricUnit(ch.metric) });
+    prog.append(bar, txt);
+    if (joined.team) {
+      const tm = document.createElement('small');
+      tm.className = 'chal-team';
+      tm.textContent = fill('chal_my_team', { t: joined.team });
+      prog.appendChild(tm);
+    }
+    card.appendChild(prog);
+  }
+
+  if (ch.status === 'ended' && Array.isArray(ch.winners) && ch.winners.length) {
+    const w = document.createElement('p');
+    w.className = 'chal-winners';
+    w.textContent = '🏅 ' + ch.winners.slice(0, 3).map(function (x, i) { return ['🥇', '🥈', '🥉'][i] + ' ' + x.name; }).join('  ');
+    card.appendChild(w);
+  }
+
+  const actions = document.createElement('div');
+  actions.className = 'chal-actions';
+  const msg = document.createElement('p');
+  msg.className = 'message chal-msg';
+  if (!joined && (live || chalUpcoming(ch))) {
+    const teams = Array.isArray(ch.teams) ? ch.teams.filter(Boolean) : [];
+    let teamSel = null;
+    if (teams.length) {
+      teamSel = document.createElement('select');
+      teamSel.className = 'chal-team-sel';
+      const none = document.createElement('option');
+      none.value = '';
+      none.textContent = t('chal_pick_team');
+      teamSel.appendChild(none);
+      teams.forEach(function (tm) { const o = document.createElement('option'); o.value = tm; o.textContent = tm; teamSel.appendChild(o); });
+      actions.appendChild(teamSel);
+    }
+    const join = document.createElement('button');
+    join.type = 'button';
+    join.className = 'soc-yes chal-join';
+    join.textContent = t('chal_join');
+    join.addEventListener('click', async function () {
+      const team = teamSel ? teamSel.value : '';
+      if (teamSel && !team) { msg.textContent = t('chal_pick_team'); return; }
+      const entry = { challenge: ch.id, email: socMe(), name: socShortName(clientName), team: team, joinedAt: new Date().toISOString() };
+      try {
+        await setDoc(doc(db, 'entries', ch.id + '__' + socMe()), entry);
+        chalJoined[ch.id] = entry;
+        renderChalSheet();
+        renderChalRow();
+        engToast(fill('chal_joined', { t: chalL(ch.title) }));
+      } catch (e) { msg.textContent = t('problem') + ((e && e.message) || ''); }
+    });
+    actions.appendChild(join);
+  }
+  if (live || ch.status === 'ended' || ch.end < todayStamp) {
+    const boardBtn = document.createElement('button');
+    boardBtn.type = 'button';
+    boardBtn.className = 'soc-no chal-board-btn';
+    boardBtn.textContent = t('chal_board');
+    boardBtn.addEventListener('click', function () { chalShowBoard(ch, card, boardBtn); });
+    actions.appendChild(boardBtn);
+  }
+  card.append(actions, msg);
+  if (chalBoards[ch.id]) chalPaintBoard(ch, card, chalBoards[ch.id]);
+  return card;
+}
+
+async function chalShowBoard(ch, card, btn) {
+  btn.disabled = true;
+  const old = card.querySelector('.chal-board');
+  if (old) old.remove();
+  const box = document.createElement('div');
+  box.className = 'chal-board';
+  box.textContent = t('loading');
+  card.appendChild(box);
+  try {
+    const res = await scriptCall('chal_board', { id: ch.id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '—');
+    chalBoards[ch.id] = res;
+    box.remove();
+    chalPaintBoard(ch, card, res);
+  } catch (e) {
+    box.textContent = t('chal_board_failed');
+  }
+  btn.disabled = false;
+}
+
+function chalPaintBoard(ch, card, res) {
+  const old = card.querySelector('.chal-board');
+  if (old) old.remove();
+  const box = document.createElement('div');
+  box.className = 'chal-board';
+  if (Array.isArray(res.teams) && res.teams.length) {
+    const tt = document.createElement('div');
+    tt.className = 'chal-teams';
+    res.teams.forEach(function (tm, i) {
+      const r = document.createElement('div');
+      r.className = 'soc-rank';
+      r.innerHTML = '';
+      const pos = document.createElement('b'); pos.className = 'soc-pos'; pos.textContent = i === 0 ? '👑' : String(i + 1);
+      const nm = document.createElement('span'); nm.className = 'soc-name'; nm.textContent = tm.team + ' (' + tm.count + ')';
+      const val = document.createElement('span'); val.className = 'soc-val'; val.textContent = fill('chal_team_avg', { v: tm.avg });
+      r.append(pos, nm, val);
+      tt.appendChild(r);
+    });
+    box.appendChild(tt);
+  }
+  const rows = res.board || [];
+  if (!rows.length) {
+    const p = document.createElement('p');
+    p.className = 'soc-empty';
+    p.textContent = t('chal_board_empty');
+    box.appendChild(p);
+  }
+  rows.slice(0, 20).forEach(function (r, i) {
+    const row = document.createElement('div');
+    row.className = 'soc-rank' + (r.me ? ' me' : '') + (r.v >= ch.target ? ' hit' : '');
+    const pos = document.createElement('b');
+    pos.className = 'soc-pos';
+    pos.textContent = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : String(i + 1);
+    const nm = document.createElement('span');
+    nm.className = 'soc-name';
+    const lv = ENG_LEVELS[r.l || 0] || ENG_LEVELS[0];
+    nm.textContent = (r.me ? t('soc_you') : r.n) + ' ' + lv.icon + (r.t ? ' · ' + r.t : '');
+    const val = document.createElement('span');
+    val.className = 'soc-val';
+    val.textContent = r.v + ' ' + chalMetricUnit(ch.metric) + (r.v >= ch.target ? ' ✓' : '');
+    row.append(pos, nm, val);
+    box.appendChild(row);
+  });
+  if (res.me && res.me.rank > 20) {
+    const mine = document.createElement('p');
+    mine.className = 'soc-hint';
+    mine.textContent = fill('chal_my_rank', { r: res.me.rank, n: res.total || rows.length });
+    box.appendChild(mine);
+  }
+  card.appendChild(box);
+}
+
+function renderChalSheet() {
+  const body = document.getElementById('chal-body');
+  if (!body) return;
+  body.innerHTML = '';
+  const live = chalList.filter(chalLive);
+  const up = chalList.filter(chalUpcoming);
+  const ended = chalList.filter(function (c) { return c.status === 'ended' || c.end < todayStamp; });
+  if (!live.length && !up.length) {
+    const p = document.createElement('p');
+    p.className = 'soc-empty';
+    p.textContent = t('chal_none');
+    body.appendChild(p);
+  }
+  live.sort(function (a, b) { return (chalJoined[b.id] ? 1 : 0) - (chalJoined[a.id] ? 1 : 0); });
+  if (live.length) { const h = document.createElement('h3'); h.textContent = t('chal_live'); body.appendChild(h); }
+  live.forEach(function (c) { body.appendChild(chalCard(c)); });
+  if (up.length) { const h = document.createElement('h3'); h.textContent = t('chal_upcoming'); body.appendChild(h); }
+  up.forEach(function (c) { body.appendChild(chalCard(c)); });
+  if (ended.length) { const h = document.createElement('h3'); h.textContent = t('chal_recent'); body.appendChild(h); }
+  ended.forEach(function (c) { body.appendChild(chalCard(c)); });
+  const note = document.createElement('p');
+  note.className = 'soc-safe';
+  note.textContent = t('chal_note');
+  body.appendChild(note);
+}
+
+(function () {
+  const c1 = document.getElementById('chal-close');
+  if (c1) c1.addEventListener('click', closeChalSheet);
+  const c2 = document.getElementById('pts-close');
+  if (c2) c2.addEventListener('click', closePtsSheet);
+})();
+
+/* ---------- متجر النقط ---------- */
+
+const ptsSheet = document.getElementById('pts-sheet');
+function openPtsSheet() {
+  if (!ptsSheet) return;
+  renderPtsSheet();
+  ptsSheet.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+}
+function closePtsSheet() {
+  ptsSheet.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+}
+
+function renderPtsSheet() {
+  const body = document.getElementById('pts-body');
+  if (!body) return;
+  body.innerHTML = '';
+  const bal = document.createElement('div');
+  bal.className = 'pts-balance';
+  const big = document.createElement('strong');
+  big.textContent = ptsBalance();
+  const lbl = document.createElement('small');
+  lbl.textContent = fill('pts_balance_note', { all: engStats ? engStats.xp : 0, spent: ptsSpent() });
+  bal.append(Object.assign(document.createElement('span'), { textContent: t('pts_balance') }), big, lbl);
+  body.appendChild(bal);
+
+  const h = document.createElement('h3');
+  h.textContent = t('pts_rewards');
+  body.appendChild(h);
+  if (!rewardsList.length) {
+    body.appendChild(Object.assign(document.createElement('p'), { className: 'soc-empty', textContent: t('pts_no_rewards') }));
+  }
+  const msg = document.createElement('p');
+  msg.className = 'message';
+  rewardsList.forEach(function (r) {
+    const row = document.createElement('div');
+    row.className = 'pts-reward';
+    const em = document.createElement('span');
+    em.className = 'pts-emoji';
+    em.textContent = r.emoji || '🎁';
+    const info = document.createElement('div');
+    info.className = 'soc-info';
+    const nm = document.createElement('strong');
+    nm.textContent = chalL(r.title);
+    const cost = document.createElement('small');
+    /* stock = -1 يعني مفتوحة، ٠ يعني خلصت */
+    const out = typeof r.stock === 'number' && r.stock === 0;
+    cost.textContent = fill('pts_cost', { n: r.cost }) + (out ? ' · ' + t('pts_out') : '');
+    info.append(nm, cost);
+    const get = document.createElement('button');
+    get.type = 'button';
+    get.className = 'soc-yes';
+    const can = !out && ptsBalance() >= r.cost;
+    get.disabled = !can;
+    get.textContent = can ? t('pts_get') : fill('pts_need', { n: Math.max(0, r.cost - ptsBalance()) });
+    get.addEventListener('click', function () {
+      socMenu(fill('pts_confirm', { t: chalL(r.title), n: r.cost }), [{ label: t('pts_get'), run: async function () {
+        const red = { email: socMe(), name: socShortName(clientName), reward: r.id, title: chalL(r.title), cost: r.cost, status: 'pending', createdAt: new Date().toISOString() };
+        try {
+          const ref = await addDoc(collection(db, 'redemptions'), red);
+          myRedemptions.unshift(Object.assign({ id: ref.id }, red));
+          notify(COACH_EMAIL, 'redeem_req', { target: 'rewards_admin', params: function () { return { name: red.name, t: red.title }; } });
+          renderPtsSheet();
+          renderChalRow();
+          engToast(t('pts_requested'));
+        } catch (e) { msg.textContent = t('problem') + ((e && e.message) || ''); }
+      } }]);
+    });
+    row.append(em, info, get);
+    body.appendChild(row);
+  });
+  body.appendChild(msg);
+
+  if (myRedemptions.length) {
+    const h2 = document.createElement('h3');
+    h2.textContent = t('pts_my_requests');
+    body.appendChild(h2);
+    myRedemptions.slice(0, 10).forEach(function (r) {
+      const row = document.createElement('div');
+      row.className = 'soc-req';
+      const nm = document.createElement('span');
+      nm.className = 'soc-name';
+      nm.textContent = r.title + ' (' + r.cost + ')';
+      const st = document.createElement('small');
+      st.textContent = t('pts_st_' + (r.status || 'pending'));
+      st.className = 'pts-st ' + (r.status || 'pending');
+      row.append(nm, st);
+      body.appendChild(row);
+    });
+  }
+  const how = document.createElement('p');
+  how.className = 'soc-safe';
+  how.textContent = t('pts_how');
+  body.appendChild(how);
+}
+
+/* ---------- الدعوات: العميل الجديد اللي جه من لينك صاحبه ---------- */
+
+async function socInviterFromLink() {
+  let code = '';
+  try { code = localStorage.getItem('adam-friend-code') || ''; } catch (e) { code = ''; }
+  if (!code) return null;
+  try {
+    const snap = await getDoc(doc(db, 'friendCodes', code));
+    if (!snap.exists()) return null;
+    const d = snap.data();
+    return d && d.email ? { email: String(d.email).toLowerCase(), name: d.name || '' } : null;
+  } catch (e) { return null; }
+}
+
+/* ---------- لوحة صاحب المنصة: المسابقات ---------- */
+
+function chalTplTitle(tpl, L) { return withLang(L, function () { return t('chal_tpl_' + tpl.id); }); }
+function chalTplDesc(tpl, L) { return withLang(L, function () { return t('chal_tpld_' + tpl.id); }); }
+
+function chalFormFill(src) {
+  const f = function (id) { return document.getElementById(id); };
+  f('ch-emoji').value = src.emoji || '🏆';
+  f('ch-title-ar').value = src.titleAr || '';
+  f('ch-title-en').value = src.titleEn || '';
+  f('ch-desc-ar').value = src.descAr || '';
+  f('ch-desc-en').value = src.descEn || '';
+  f('ch-metric').value = src.metric || 'stars';
+  f('ch-target').value = src.target || 5;
+  f('ch-days').value = src.days || 7;
+  f('ch-teams').value = (src.teams || []).join('، ');
+  f('ch-prize-ar').value = src.prizeAr || '';
+  f('ch-prize-en').value = src.prizeEn || '';
+  f('ch-bonus').value = src.bonusXp || 0;
+  f('ch-sport-wrap').classList.toggle('hidden', f('ch-metric').value !== 'sport');
+  if (src.sport) f('ch-sport').value = src.sport;
+  f('ch-start').value = src.start || todayStamp;
+  f('chal-admin-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function loadChalAdmin() {
+  const box = document.getElementById('chal-admin-body');
+  if (!box) return;
+  box.innerHTML = '';
+  const msg = document.getElementById('chal-admin-message');
+  if (msg) msg.textContent = '';
+
+  /* القوالب الجاهزة */
+  const tplH = document.createElement('h4');
+  tplH.textContent = t('chal_admin_templates');
+  box.appendChild(tplH);
+  const grid = document.createElement('div');
+  grid.className = 'chal-tpls';
+  CHAL_TEMPLATES.forEach(function (tpl) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chal-tpl';
+    b.textContent = tpl.emoji + ' ' + chalTplTitle(tpl, lang);
+    b.addEventListener('click', function () {
+      chalFormFill({
+        emoji: tpl.emoji, metric: tpl.metric, target: tpl.target, days: tpl.days, bonusXp: tpl.bonusXp,
+        titleAr: chalTplTitle(tpl, 'ar'), titleEn: chalTplTitle(tpl, 'en'),
+        descAr: chalTplDesc(tpl, 'ar'), descEn: chalTplDesc(tpl, 'en'),
+        teams: tpl.teams ? [t('chal_team_a'), t('chal_team_b')] : []
+      });
+    });
+    grid.appendChild(b);
+  });
+  box.appendChild(grid);
+
+  /* أفكار الموظف */
+  const ideasH = document.createElement('h4');
+  ideasH.textContent = t('chal_admin_ideas');
+  const ideasBox = document.createElement('div');
+  ideasBox.className = 'chal-ideas';
+  const ideasBtn = document.createElement('button');
+  ideasBtn.type = 'button';
+  ideasBtn.className = 'secondary';
+  ideasBtn.textContent = t('chal_admin_ideas_btn');
+  ideasBtn.addEventListener('click', async function () {
+    ideasBtn.disabled = true;
+    ideasBox.textContent = t('chal_admin_ideas_wait');
+    try {
+      const res = await scriptCall('chal_ideas', { refresh: !!ideasBox.dataset.loaded });
+      ideasBox.textContent = '';
+      ideasBox.dataset.loaded = '1';
+      if (!res || !res.ok) throw new Error((res && res.error) || '—');
+      (res.ideas || []).forEach(function (idea) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'chal-tpl idea';
+        const tt = document.createElement('strong');
+        tt.textContent = (idea.emoji || '🏆') + ' ' + (lang === 'en' ? idea.titleEn : idea.titleAr);
+        const why = document.createElement('small');
+        why.textContent = idea.why || '';
+        b.append(tt, why);
+        b.addEventListener('click', function () { chalFormFill(idea); });
+        ideasBox.appendChild(b);
+      });
+      if (!(res.ideas || []).length) ideasBox.textContent = t('chal_admin_ideas_none');
+      ideasBtn.textContent = t('chal_admin_ideas_more');
+    } catch (e) {
+      ideasBox.textContent = t('problem') + ((e && e.message) || '');
+    }
+    ideasBtn.disabled = false;
+  });
+  box.append(ideasH, ideasBtn, ideasBox);
+
+  /* المسابقات الحالية */
+  let list = [];
+  try {
+    const snap = await getDocs(collection(db, 'challenges'));
+    list = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
+      .sort(function (a, b) { return String(b.start).localeCompare(String(a.start)); });
+  } catch (e) { list = []; }
+  const h = document.createElement('h4');
+  h.textContent = fill('chal_admin_list', { n: list.length });
+  box.appendChild(h);
+  list.slice(0, 20).forEach(function (ch) {
+    const row = document.createElement('div');
+    row.className = 'soc-admin-row chal-admin-row';
+    const info = document.createElement('div');
+    info.className = 'soc-admin-info';
+    const a = document.createElement('span');
+    a.textContent = (ch.emoji || '🏆') + ' ' + chalL(ch.title);
+    const b = document.createElement('small');
+    b.textContent = ch.start + ' → ' + ch.end + ' · ' + chalTargetText(ch) + ' · ' + t('chal_st_' + (ch.status === 'ended' ? 'ended' : (ch.end < todayStamp ? 'over' : (ch.start > todayStamp ? 'soon' : 'live'))));
+    info.append(a, b);
+    row.appendChild(info);
+    if (ch.status !== 'ended') {
+      const end = document.createElement('button');
+      end.type = 'button';
+      end.className = 'soc-yes';
+      end.textContent = t('chal_admin_finish');
+      end.addEventListener('click', function () { chalFinish(ch, end); });
+      row.appendChild(end);
+    }
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'soc-no';
+    del.textContent = t('soc_delete_story');
+    del.addEventListener('click', function () {
+      socMenu(t('chal_admin_del_q'), [{ label: t('soc_delete_story'), danger: true, run: async function () {
+        try { await deleteDoc(doc(db, 'challenges', ch.id)); loadChalAdmin(); } catch (e) { /* عادي */ }
+      } }]);
+    });
+    row.appendChild(del);
+    box.appendChild(row);
+  });
+}
+
+function chalFormRead() {
+  const v = function (id) { return (document.getElementById(id).value || '').trim(); };
+  const days = Math.max(1, Math.min(90, parseInt(v('ch-days'), 10) || 7));
+  const start = v('ch-start') || todayStamp;
+  const metric = CHAL_METRICS.indexOf(v('ch-metric')) !== -1 ? v('ch-metric') : 'stars';
+  return {
+    emoji: v('ch-emoji').slice(0, 4) || '🏆',
+    title: { ar: v('ch-title-ar').slice(0, 60), en: v('ch-title-en').slice(0, 60) },
+    desc: { ar: v('ch-desc-ar').slice(0, 240), en: v('ch-desc-en').slice(0, 240) },
+    metric: metric,
+    sport: metric === 'sport' ? v('ch-sport') : '',
+    target: Math.max(1, parseFloat(v('ch-target')) || 1),
+    start: start,
+    end: engShift(start, days - 1),
+    kind: days <= 7 ? 'week' : 'month',
+    teams: v('ch-teams') ? v('ch-teams').split(/[،,]/).map(function (s) { return s.trim(); }).filter(Boolean).slice(0, 4) : [],
+    prize: { ar: v('ch-prize-ar').slice(0, 80), en: v('ch-prize-en').slice(0, 80) },
+    bonusXp: Math.max(0, Math.min(2000, parseInt(v('ch-bonus'), 10) || 0)),
+    status: 'live',
+    winners: [],
+    createdAt: new Date().toISOString()
+  };
+}
+
+async function chalCreate() {
+  const msg = document.getElementById('chal-admin-message');
+  const ch = chalFormRead();
+  if (!ch.title.ar) { msg.textContent = t('chal_admin_need_title'); return; }
+  if (ch.metric === 'sport' && !ch.sport) { msg.textContent = t('chal_admin_need_sport'); return; }
+  if (!ch.title.en) ch.title.en = ch.title.ar;
+  if (!ch.desc.en) ch.desc.en = ch.desc.ar;
+  if (!ch.prize.en) ch.prize.en = ch.prize.ar;
+  try {
+    await addDoc(collection(db, 'challenges'), ch);
+    setStatusMessage(msg, t('chal_admin_created'), 'success');
+    loadChalAdmin();
+  } catch (e) { msg.textContent = t('problem') + ((e && e.message) || ''); }
+}
+
+/* نقط هدية: بنضيفها لمستند bonus/{email} — الحلقات بتجمعها مع نقطه */
+async function giveBonus(email, xp, reason) {
+  email = String(email || '').toLowerCase();
+  if (!email || !xp) return false;
+  const ref = doc(db, 'bonus', email);
+  let items = [];
+  try { const snap = await getDoc(ref); items = snap.exists() && Array.isArray(snap.data().items) ? snap.data().items : []; } catch (e) { items = []; }
+  items.push({ id: 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), xp: Math.round(xp), reason: String(reason || '').slice(0, 80), day: todayStamp });
+  await setDoc(ref, { items: items.slice(-200), updatedAt: new Date().toISOString() });
+  return true;
+}
+
+async function chalFinish(ch, btn) {
+  const msg = document.getElementById('chal-admin-message');
+  btn.disabled = true;
+  msg.textContent = t('chal_admin_finishing');
+  try {
+    const res = await scriptCall('chal_board', { id: ch.id, fresh: true });
+    if (!res || !res.ok) throw new Error((res && res.error) || '—');
+    const rows = res.board || [];
+    const extra = [100, 60, 30];
+    const winners = [];
+    for (let i = 0; i < rows.length; i++) {
+      const r = rows[i];
+      if (!r.e) continue;
+      const hit = r.v >= ch.target;
+      const rank = i + 1;
+      let xp = hit ? (ch.bonusXp || 0) : 0;
+      if (rank <= 3 && r.v > 0) xp += extra[rank - 1];
+      if (xp) await giveBonus(r.e, xp, chalL(ch.title));
+      if (rank <= 3 && r.v > 0) {
+        winners.push({ name: r.n, rank: rank, value: r.v });
+        notify(r.e, 'chal_win', { target: 'challenges', params: function () { return { r: rank, t: chalL(ch.title), p: chalL(ch.prize) || ('+' + xp) }; } });
+      } else if (hit) {
+        notify(r.e, 'chal_done', { target: 'challenges', params: function () { return { t: chalL(ch.title), x: xp }; } });
+      }
+    }
+    await updateDoc(doc(db, 'challenges', ch.id), { status: 'ended', winners: winners, endedAt: new Date().toISOString() });
+    setStatusMessage(msg, fill('chal_admin_finished', { n: winners.length, f: rows.filter(function (r) { return r.v >= ch.target; }).length }), 'success');
+    loadChalAdmin();
+  } catch (e) {
+    msg.textContent = t('problem') + ((e && e.message) || '');
+    btn.disabled = false;
+  }
+}
+
+(function () {
+  const btn = document.getElementById('ch-create-btn');
+  if (btn) btn.addEventListener('click', chalCreate);
+  const metric = document.getElementById('ch-metric');
+  if (metric) {
+    CHAL_METRICS.forEach(function (m) { const o = document.createElement('option'); o.value = m; o.setAttribute('data-t', 'chal_metric_' + m); o.textContent = t('chal_metric_' + m); metric.appendChild(o); });
+    metric.addEventListener('change', function () { document.getElementById('ch-sport-wrap').classList.toggle('hidden', metric.value !== 'sport'); });
+  }
+  const sport = document.getElementById('ch-sport');
+  if (sport) fillSportSelect(sport, true);
+})();
+
+/* ---------- لوحة صاحب المنصة: الجوايز والنقط والدعوات ---------- */
+
+async function loadRewardsAdmin() {
+  const box = document.getElementById('rewards-admin-body');
+  if (!box) return;
+  box.innerHTML = '';
+  const msg = document.createElement('p');
+  msg.className = 'message';
+
+  /* طلبات الجوايز */
+  let reds = [];
+  try {
+    const snap = await getDocs(collection(db, 'redemptions'));
+    reds = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
+      .sort(function (a, b) { return String(b.createdAt).localeCompare(String(a.createdAt)); });
+  } catch (e) { reds = []; }
+  const pending = reds.filter(function (r) { return r.status === 'pending'; });
+  const h1 = document.createElement('h4');
+  h1.textContent = fill('rw_admin_pending', { n: pending.length });
+  box.appendChild(h1);
+  if (!pending.length) box.appendChild(Object.assign(document.createElement('p'), { className: 'hint-text', textContent: t('soc_admin_none') }));
+  for (const r of pending) {
+    const row = document.createElement('div');
+    row.className = 'soc-admin-row';
+    const info = document.createElement('div');
+    info.className = 'soc-admin-info';
+    const a = document.createElement('span');
+    a.textContent = (r.name || '') + ' — ' + r.title + ' (' + r.cost + ')';
+    const b = document.createElement('small');
+    b.setAttribute('dir', 'ltr');
+    let xp = '';
+    try { const e = await getDoc(doc(db, 'engage', r.email)); xp = e.exists() ? (e.data().xp || 0) : 0; } catch (e) { xp = '?'; }
+    const spent = reds.filter(function (x) { return x.email === r.email && x.status === 'approved'; }).reduce(function (s, x) { return s + (x.cost || 0); }, 0);
+    b.textContent = r.email + ' · ' + fill('rw_admin_bal', { xp: xp, spent: spent });
+    info.append(a, b);
+    const ok = document.createElement('button');
+    ok.type = 'button';
+    ok.className = 'soc-yes';
+    ok.textContent = t('soc_admin_ok');
+    ok.addEventListener('click', async function () {
+      try {
+        await updateDoc(doc(db, 'redemptions', r.id), { status: 'approved', decidedAt: new Date().toISOString() });
+        const rw = await getDoc(doc(db, 'rewards', r.reward));
+        if (rw.exists() && typeof rw.data().stock === 'number' && rw.data().stock > 0) await updateDoc(doc(db, 'rewards', r.reward), { stock: rw.data().stock - 1 });
+        notify(r.email, 'redeem_ok', { target: 'rewards', params: function () { return { t: r.title }; } });
+        loadRewardsAdmin();
+      } catch (e) { msg.textContent = t('problem') + ((e && e.message) || ''); }
+    });
+    const no = document.createElement('button');
+    no.type = 'button';
+    no.className = 'soc-no';
+    no.textContent = t('soc_admin_no');
+    no.addEventListener('click', async function () {
+      try {
+        await updateDoc(doc(db, 'redemptions', r.id), { status: 'rejected', decidedAt: new Date().toISOString() });
+        notify(r.email, 'redeem_no', { target: 'rewards', params: function () { return { t: r.title }; } });
+        loadRewardsAdmin();
+      } catch (e) { msg.textContent = t('problem'); }
+    });
+    row.append(info, ok, no);
+    box.appendChild(row);
+  }
+
+  /* الجوايز */
+  let rewards = [];
+  try {
+    const snap = await getDocs(collection(db, 'rewards'));
+    rewards = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); }).sort(function (a, b) { return (a.cost || 0) - (b.cost || 0); });
+  } catch (e) { rewards = []; }
+  const h2 = document.createElement('h4');
+  h2.textContent = fill('rw_admin_list', { n: rewards.length });
+  box.appendChild(h2);
+  if (!rewards.length) {
+    const seed = document.createElement('button');
+    seed.type = 'button';
+    seed.className = 'secondary';
+    seed.textContent = t('rw_admin_seed');
+    seed.addEventListener('click', async function () {
+      for (const s of REWARD_SEEDS) {
+        await addDoc(collection(db, 'rewards'), { emoji: s.emoji, title: { ar: s.ar, en: s.en }, cost: s.cost, stock: -1, active: true, createdAt: new Date().toISOString() });
+      }
+      loadRewardsAdmin();
+    });
+    box.appendChild(seed);
+  }
+  rewards.forEach(function (r) {
+    const row = document.createElement('div');
+    row.className = 'soc-admin-row';
+    const info = document.createElement('div');
+    info.className = 'soc-admin-info';
+    const a = document.createElement('span');
+    a.textContent = (r.emoji || '🎁') + ' ' + chalL(r.title) + (r.active ? '' : ' · ' + t('rw_admin_hidden'));
+    const costIn = document.createElement('input');
+    costIn.type = 'number';
+    costIn.className = 'rw-cost';
+    costIn.value = r.cost;
+    costIn.setAttribute('aria-label', t('rw_admin_cost'));
+    costIn.addEventListener('change', function () { updateDoc(doc(db, 'rewards', r.id), { cost: Math.max(1, parseInt(costIn.value, 10) || r.cost) }).catch(function () {}); });
+    info.append(a, costIn);
+    const tog = document.createElement('button');
+    tog.type = 'button';
+    tog.className = 'soc-no';
+    tog.textContent = r.active ? t('rw_admin_hide') : t('rw_admin_show');
+    tog.addEventListener('click', async function () { await updateDoc(doc(db, 'rewards', r.id), { active: !r.active }); loadRewardsAdmin(); });
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'soc-no';
+    del.textContent = t('soc_delete_story');
+    del.addEventListener('click', async function () { await deleteDoc(doc(db, 'rewards', r.id)); loadRewardsAdmin(); });
+    row.append(info, tog, del);
+    box.appendChild(row);
+  });
+  const add = document.createElement('div');
+  add.className = 'add-box rw-add';
+  add.innerHTML = '';
+  const e1 = Object.assign(document.createElement('input'), { placeholder: '🎁', maxLength: 4, className: 'rw-emoji' });
+  const n1 = Object.assign(document.createElement('input'), { placeholder: t('rw_admin_name_ph') });
+  const n2 = Object.assign(document.createElement('input'), { placeholder: t('rw_admin_name_en_ph') });
+  const c1 = Object.assign(document.createElement('input'), { placeholder: t('rw_admin_cost'), type: 'number' });
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.className = 'secondary';
+  addBtn.textContent = t('rw_admin_add');
+  addBtn.addEventListener('click', async function () {
+    if (!n1.value.trim() || !(parseInt(c1.value, 10) > 0)) { msg.textContent = t('rw_admin_need'); return; }
+    await addDoc(collection(db, 'rewards'), { emoji: e1.value.trim() || '🎁', title: { ar: n1.value.trim().slice(0, 60), en: (n2.value.trim() || n1.value.trim()).slice(0, 60) }, cost: parseInt(c1.value, 10), stock: -1, active: true, createdAt: new Date().toISOString() });
+    loadRewardsAdmin();
+  });
+  add.append(e1, n1, n2, c1, addBtn);
+  box.appendChild(add);
+
+  /* نقط هدية */
+  const h3 = document.createElement('h4');
+  h3.textContent = t('rw_admin_gift');
+  box.appendChild(h3);
+  const gEmail = Object.assign(document.createElement('input'), { placeholder: t('email'), type: 'email' });
+  gEmail.setAttribute('dir', 'ltr');
+  const gXp = Object.assign(document.createElement('input'), { placeholder: t('rw_admin_gift_xp'), type: 'number' });
+  const gWhy = Object.assign(document.createElement('input'), { placeholder: t('rw_admin_gift_why') });
+  const gBtn = document.createElement('button');
+  gBtn.type = 'button';
+  gBtn.className = 'secondary';
+  gBtn.textContent = t('rw_admin_gift_btn');
+  gBtn.addEventListener('click', async function () {
+    const xp = parseInt(gXp.value, 10);
+    if (!gEmail.value.trim() || !xp) { msg.textContent = t('rw_admin_need'); return; }
+    try {
+      await giveBonus(gEmail.value.trim(), xp, gWhy.value.trim());
+      notify(gEmail.value.trim().toLowerCase(), 'bonus_gift', { target: 'rewards', params: function () { return { n: xp }; } });
+      setStatusMessage(msg, t('rw_admin_gift_done'), 'success');
+      gXp.value = ''; gWhy.value = '';
+    } catch (e) { msg.textContent = t('problem') + ((e && e.message) || ''); }
+  });
+  const gift = document.createElement('div');
+  gift.className = 'add-box';
+  gift.append(gEmail, gXp, gWhy, gBtn);
+  box.appendChild(gift);
+
+  /* الدعوات */
+  let invited = [];
+  try {
+    const snap = await getDocs(collection(db, 'clients'));
+    invited = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); }).filter(function (c) { return c.invitedBy; });
+  } catch (e) { invited = []; }
+  const h4 = document.createElement('h4');
+  h4.textContent = fill('rw_admin_invites', { n: invited.length });
+  box.appendChild(h4);
+  const hint = document.createElement('p');
+  hint.className = 'hint-text';
+  hint.textContent = t('rw_admin_invites_hint');
+  box.appendChild(hint);
+  invited.forEach(function (c) {
+    const row = document.createElement('div');
+    row.className = 'soc-admin-row';
+    const info = document.createElement('div');
+    info.className = 'soc-admin-info';
+    const a = document.createElement('span');
+    a.textContent = (c.name || c.id) + ' ← ' + (c.invitedByName || c.invitedBy);
+    const b = document.createElement('small');
+    b.setAttribute('dir', 'ltr');
+    b.textContent = c.id + ' ← ' + c.invitedBy;
+    info.append(a, b);
+    row.appendChild(info);
+    if (c.inviteRewarded) {
+      row.appendChild(Object.assign(document.createElement('small'), { textContent: '✓ ' + t('rw_admin_rewarded') }));
+    } else {
+      const give = document.createElement('button');
+      give.type = 'button';
+      give.className = 'soc-yes';
+      give.textContent = t('rw_admin_reward_both');
+      give.addEventListener('click', async function () {
+        try {
+          await giveBonus(c.id, 200, t('rw_invite_reason'));
+          await giveBonus(c.invitedBy, 200, t('rw_invite_reason'));
+          await updateDoc(doc(db, 'clients', c.id), { inviteRewarded: true });
+          notify([c.id, c.invitedBy], 'invite_reward', { target: 'rewards', params: function () { return { n: 200 }; } });
+          loadRewardsAdmin();
+        } catch (e) { msg.textContent = t('problem') + ((e && e.message) || ''); }
+      });
+      row.appendChild(give);
+    }
+    box.appendChild(row);
+  });
+  box.appendChild(msg);
 }

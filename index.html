@@ -417,6 +417,40 @@
 
     </div>
 
+    <div class="adm-section hidden" data-sec="chal_admin_title">
+    <h3 class="welcome-section-title" data-t="chal_admin_title">المسابقات</h3>
+    <p class="hint-text" data-t="chal_admin_hint">اختار مسابقة جاهزة أو فكرة من موظف المسابقات، عدّلها لو حبيت، وانشرها.</p>
+    <div id="chal-admin-body"></div>
+    <div class="add-box chal-form" id="chal-admin-form">
+      <div class="row">
+        <input id="ch-emoji" class="rw-emoji" maxlength="4" data-t-ph="chal_f_emoji" placeholder="🏆">
+        <input id="ch-title-ar" data-t-ph="chal_f_title_ar">
+      </div>
+      <input id="ch-title-en" data-t-ph="chal_f_title_en">
+      <textarea id="ch-desc-ar" rows="2" data-t-ph="chal_f_desc_ar"></textarea>
+      <textarea id="ch-desc-en" rows="2" data-t-ph="chal_f_desc_en"></textarea>
+      <label class="chal-lbl"><span data-t="chal_f_metric">بتتحسب بإيه</span><select id="ch-metric"></select></label>
+      <label class="chal-lbl hidden" id="ch-sport-wrap"><span data-t="chal_f_sport">الرياضة</span><select id="ch-sport"></select></label>
+      <div class="row">
+        <label class="chal-lbl"><span data-t="chal_f_target">الهدف (رقم)</span><input id="ch-target" type="number" inputmode="decimal" value="5"></label>
+        <label class="chal-lbl"><span data-t="chal_f_days">المدة بالأيام</span><input id="ch-days" type="number" inputmode="numeric" value="7"></label>
+      </div>
+      <label class="chal-lbl"><span data-t="chal_f_start">بتبدأ يوم</span><input id="ch-start" type="date"></label>
+      <input id="ch-teams" data-t-ph="chal_f_teams">
+      <input id="ch-prize-ar" data-t-ph="chal_f_prize_ar">
+      <input id="ch-prize-en" data-t-ph="chal_f_prize_en">
+      <label class="chal-lbl"><span data-t="chal_f_bonus">نقط لكل اللي يخلّص الهدف</span><input id="ch-bonus" type="number" inputmode="numeric" value="100"></label>
+      <button type="button" id="ch-create-btn" class="secondary" data-t="chal_f_create">انشر المسابقة</button>
+    </div>
+    <p class="message" id="chal-admin-message"></p>
+    </div>
+
+    <div class="adm-section hidden" data-sec="rewards_admin_title">
+    <h3 class="welcome-section-title" data-t="rewards_admin_title">الجوايز والنقط</h3>
+    <p class="hint-text" data-t="rewards_admin_hint">العملاء بيبدّلوا نقطهم بجوايز — إنت اللي بتوافق.</p>
+    <div id="rewards-admin-body"></div>
+    </div>
+
     <div class="adm-section hidden" data-sec="social_admin_title">
     <h3 class="welcome-section-title" data-t="social_admin_title">الصحاب والستوري</h3>
     <p class="hint-text" data-t="social_admin_hint">الصحاب بين العملاء بيضيفوا بعض بكود. هنا بتوافق على الطلبات، وبتشوف البلاغات والستوري وتمسح أي حاجة.</p>
@@ -1641,6 +1675,8 @@
       <div class="eng-recap hidden" id="eng-recap"></div>
       <!-- الصحاب والستوري -->
       <div class="soc-bar hidden" id="soc-bar"></div>
+      <!-- المسابقات + متجر النقط -->
+      <div class="chal-row hidden" id="chal-row"></div>
       <div class="heat-banner hidden" id="heat-banner-home"></div>
       <!-- شريط الأسبوع اتنقل من شاشة التمرين للرئيسية — ده ملخّص
            أسبوعه، مكانه الطبيعي أول ما يفتح -->
@@ -2144,6 +2180,24 @@
     </div>
   </div>
   <div class="story-view hidden" id="story-view" role="dialog" aria-modal="true"></div>
+  <div class="picker hidden" id="chal-sheet">
+    <div class="picker-sheet eng-sheet">
+      <div class="picker-head">
+        <div class="picker-title" data-t="chal_sheet_title">المسابقات</div>
+        <button type="button" class="picker-close" id="chal-close" data-t-title="focus_close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="eng-body" id="chal-body"></div>
+    </div>
+  </div>
+  <div class="picker hidden" id="pts-sheet">
+    <div class="picker-sheet eng-sheet">
+      <div class="picker-head">
+        <div class="picker-title" data-t="pts_sheet_title">متجر النقط</div>
+        <button type="button" class="picker-close" id="pts-close" data-t-title="focus_close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="eng-body" id="pts-body"></div>
+    </div>
+  </div>
 
   <!-- ===== شيت اختيار الأكل: العميل يسجّل اللي أكله ===== -->
   <div class="picker hidden" id="food-picker">

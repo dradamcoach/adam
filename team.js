@@ -244,7 +244,7 @@ function renderLog() {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
     const who = e.by === 'schedule' ? 'تلقائي' : (e.by === 'client' ? 'العميل' : 'يدوي');
-    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير', sup: 'مدير المتابعة' }[e.agent] || 'المحلّل';
+    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير', sup: 'مدير المتابعة', rings: 'تذكير الحلقات', chal: 'موظف المسابقات' }[e.agent] || 'المحلّل';
     li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms >= 1000 ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });
