@@ -10073,3 +10073,61 @@ body.sheet-open { overflow: hidden; }
 .fp-like .fp-tag { color: #22c55e; }
 .fp-dislike .fp-tag { color: #f87171; }
 #food-list li .fp-tag { flex-shrink: 0; }
+
+/* ============ العلاج الطبيعي ============ */
+.ph-ro-note { background: rgba(251,191,36,.10); border: 1px solid rgba(251,191,36,.4); color: var(--warn); border-radius: 12px; padding: 9px 12px; font-size: 12.5px; text-align: start; }
+#physio-panel.ro .ph-edit, #physio-panel.ro .ph-del, #physio-panel.ro .mp-add, #physio-panel.ro .mod-del { display: none !important; }
+#physio-panel .add-box { text-align: start; }
+.ph-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 7px; padding: 7px; border: 1px solid var(--line); border-radius: 12px; background: var(--field); }
+.ph-row > input, .ph-row > select { flex: 1 1 120px; min-width: 0; margin: 0; }
+.ph-row > input.ph-deg { flex: 0 0 74px; }
+.ph-norm { font-size: 11.5px; color: var(--muted); flex: 1 1 100%; }
+.ph-norm.ok { color: var(--brand); } .ph-norm.mid { color: var(--warn); } .ph-norm.low { color: var(--danger); }
+.card button.ph-add { width: auto; margin: 0 0 6px; padding: 4px 0; font-size: 12.5px; }
+.ph-pain { margin: 6px 0; }
+.ph-pain-val { color: var(--brand); }
+.ph-range { width: 100%; accent-color: var(--brand); }
+.ph-hist { border: 1px solid var(--line); border-radius: 12px; padding: 8px 11px; margin-bottom: 7px; font-size: 12.5px; }
+.ph-hist-diff { color: var(--muted); font-size: 12px; margin-top: 3px; line-height: 1.7; }
+.ph-prog { margin-top: 8px; }
+.ph-prog-line { font-weight: 800; font-size: 14px; }
+.ph-prog-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.ph-bar { height: 8px; border-radius: 99px; background: var(--field); border: 1px solid var(--line); overflow: hidden; margin-top: 6px; }
+.ph-bar span { display: block; height: 100%; background: var(--brand); border-radius: 99px; }
+.ph-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px; }
+#ph-session-form { border: 1px dashed var(--brand); border-radius: 14px; padding: 10px; margin: 8px 0 12px; }
+.ph-sess { border: 1px solid var(--line); border-radius: 12px; padding: 8px 11px; margin-top: 7px; background: var(--field); }
+.ph-sess-head { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.ph-sess-head .ph-del { margin-inline-start: auto !important; }
+.ph-pain-chip { font-size: 11.5px; padding: 2px 8px; border-radius: 99px; background: rgba(34,197,94,.12); color: var(--brand); white-space: nowrap; }
+.ph-sess-items { font-size: 12px; color: var(--ink); margin-top: 4px; line-height: 1.7; }
+.ph-sess-notes { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.7; }
+.ph-home-row { display: flex; align-items: flex-start; gap: 9px; border: 1px solid var(--line); border-radius: 12px; padding: 9px 11px; margin-bottom: 7px; text-align: start; background: var(--field); }
+.ph-home-text { flex: 1; min-width: 0; }
+.ph-home-icon { width: 20px; height: 20px; color: #38bdf8; flex: 0 0 auto; margin-top: 2px; }
+.ph-home-add { margin-top: 8px; }
+.ph-card { border: 1px solid var(--line); background: var(--surface-2); border-radius: 16px; padding: 12px 14px; margin: 10px 0; text-align: start; }
+.ph-diag { display: block; margin-bottom: 4px; }
+.ph-bars { display: flex; align-items: flex-end; gap: 6px; height: 90px; margin-top: 6px; }
+.ph-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 3px; }
+.ph-bar-col small { font-size: 10.5px; color: var(--muted); }
+.ph-bar-v { width: 100%; max-width: 26px; border-radius: 6px 6px 3px 3px; background: var(--brand); }
+.ph-bar-v.mid { background: var(--warn); } .ph-bar-v.low { background: var(--danger); }
+#client-physio { text-align: start; }
+#client-physio h2, #client-physio h3 { text-align: center; }
+.card button.home-card.hc-physio { border-color: rgba(56,189,248,.34); }
+.card button.home-card.hc-physio .home-card-icon { color: #38bdf8; }
+
+/* ============ مكان الشغل على الخريطة + الأقرب ============ */
+.pw-map-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
+.card .pw-map-row button { width: auto; margin: 0; }
+.pw-map-ok { color: var(--brand) !important; }
+.pw-map-warn { color: var(--warn) !important; }
+.pw-map-line { gap: 10px; flex-wrap: wrap; }
+.pw-map-link { color: #38bdf8; font-weight: 700; text-decoration: none; }
+.pw-map-link:hover { text-decoration: underline; }
+.pw-dist { font-size: 12px; color: var(--brand); font-weight: 700; }
+.team-near-row { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 4px 0 10px; }
+.card .team-near-row button { width: auto; margin: 0; padding: 8px 14px; font-size: 13px; }
+.card .team-near-row button.on { border-color: var(--brand); color: var(--brand); }
+.ap-dist { font-size: 10px; font-weight: 700; color: #38bdf8; line-height: 1; }

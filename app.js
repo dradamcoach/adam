@@ -563,7 +563,7 @@ const TEXT = {
     modality_indications: 'بيتستعمل في',
     modality_protocols: 'البروتوكولات',
     modality_add: '+ ضيفه لخطة العميل',
-    modality_added: 'اتضاف للخطة — احفظ التأهيل عشان يتسجّل',
+    modality_added: 'اتضاف للخطة — احفظ العلاج الطبيعي عشان يتسجّل',
     modality_already: 'البروتوكول ده موجود في الخطة بالفعل',
     modality_plan_title: 'جلسات الأجهزة في خطة العميل',
     show_more_n: 'اعرض {n} كمان',
@@ -1114,6 +1114,112 @@ const TEXT = {
     wr_max_hr: 'أقصى {v}',
     wr_kcal: '{v} سعر',
     wr_zones: 'وقت المناطق',
+    tab_physio: "علاج طبيعي",
+    notif_t_physio: "العلاج الطبيعي اتحدّث",
+    notif_b_physio: "أخصائي العلاج الطبيعي حدّث خطتك — افتحها وشوف الجديد.",
+    ph_ro_note: "إنت شايف العلاج الطبيعي للمتابعة بس — التعديل لأخصائي العلاج الطبيعي أو الطبيب.",
+    ph_plan_title: "خطة العلاج",
+    ph_diagnosis: "التشخيص الوظيفي",
+    ph_diagnosis_ph: "مثلًا: التهاب وتر فوق الشوكة — كتف يمين",
+    ph_goals: "أهداف العلاج (يقراها العميل)",
+    ph_goals_ph: "مثلًا: يرفع دراعه فوق راسه من غير ألم خلال ٤ أسابيع",
+    ph_total: "عدد الجلسات",
+    ph_per_week: "جلسات في الأسبوع",
+    ph_session_of: "الجلسة {n} من {total}",
+    ph_sessions_done: "{n} جلسة لحد دلوقتي",
+    ph_left_weeks: "فاضل {n} جلسة — حوالي {w} أسبوع",
+    ph_plan_done: "الخطة خلصت 👏",
+    ph_assess_title: "التقييم",
+    ph_assess_start: "+ ابدأ التقييم",
+    ph_reassess: "+ إعادة تقييم (تقييم جديد)",
+    ph_assess_empty: "لسه مفيش تقييم — ابدأ بتقييم أول جلسة.",
+    ph_date: "التاريخ",
+    ph_area: "مكان الألم",
+    ph_area_ph: "مثلًا: الكتف اليمين من قدام",
+    ph_pain_now: "الألم دلوقتي",
+    ph_pain_worst: "أسوأ ألم",
+    ph_rom_title: "مدى الحركة (ROM)",
+    ph_rom_pick: "— الحركة —",
+    ph_rom_add: "+ مدى حركة",
+    ph_of_normal: "الطبيعي {n}°",
+    ph_mmt_title: "قوة العضلات (MMT من ٥)",
+    ph_muscle_ph: "العضلة أو المجموعة",
+    ph_grade: "الدرجة",
+    ph_mmt_add: "+ قوة عضلة",
+    ph_tests_title: "الاختبارات الخاصة",
+    ph_test_ph: "اسم الاختبار",
+    ph_result: "النتيجة",
+    ph_pos: "+ إيجابي",
+    ph_neg: "− سلبي",
+    ph_test_add: "+ اختبار",
+    ph_functional: "التقييم الوظيفي",
+    ph_functional_ph: "إيه اللي مش قادر يعمله؟ السلم، الجري، رفع الدراع، النوم على الجنب...",
+    ph_assess_history: "التقييمات اللي فاتت",
+    ph_pain_short: "ألم {n}/10",
+    ph_pain_change: "الألم: {a} ← {b}",
+    ph_side_none: "الناحية",
+    ph_side_r: "يمين",
+    ph_side_l: "شمال",
+    ph_sessions_title: "سجل الجلسات",
+    ph_session_add: "+ سجّل جلسة",
+    ph_sessions_empty: "لسه مفيش جلسات متسجّلة.",
+    ph_session_n: "جلسة {n}",
+    ph_pain_ba: "ألم {a} ← {b}",
+    ph_devices_used: "الأجهزة اللي اشتغلت",
+    ph_manual_title: "العلاج اليدوي",
+    ph_manual_massage: "تدليك علاجي",
+    ph_manual_mobilization: "تحريك مفاصل",
+    ph_manual_stretching: "إطالات",
+    ph_manual_mfr: "تحرير لفافي",
+    ph_manual_neural: "تحريك أعصاب",
+    ph_manual_dry_needling: "إبر جافة",
+    ph_manual_taping: "شريط كينزيو",
+    ph_manual_cupping: "حجامة",
+    ph_manual_exercise: "تمارين علاجية",
+    ph_pain_before: "الألم قبل الجلسة",
+    ph_pain_after: "الألم بعد الجلسة",
+    ph_session_notes_ph: "ملاحظات الجلسة (اختياري)",
+    ph_session_save: "سجّل الجلسة",
+    ph_cancel: "إلغاء",
+    ph_home_title: "تمارين للبيت",
+    ph_home_hint: "تمارين بسيطة يعملها العميل بين الجلسات — بتظهر عنده في تبويب العلاج الطبيعي.",
+    ph_home_name_ph: "اسم التمرين (اكتب أو اختار من المكتبة)",
+    ph_hold_ph: "ثبات (ث)",
+    ph_times_ph: "مرات/يوم",
+    ph_home_note_ph: "ملاحظة للعميل (اختياري)",
+    ph_home_empty: "لسه مفيش تمارين للبيت.",
+    ph_home_need_name: "اكتب اسم التمرين الأول",
+    ph_hold_n: "ثبات {n} ث",
+    ph_times_n: "{n} مرات في اليوم",
+    ph_home_count: "{n} تمرين للبيت",
+    ph_save: "حفظ العلاج الطبيعي",
+    ph_saved: "العلاج الطبيعي اتحفظ ✓",
+    ph_open: "افتح خطتك",
+    ph_client_title: "العلاج الطبيعي",
+    ph_client_empty_title: "لسه مفيش خطة علاج طبيعي",
+    ph_client_empty: "لما أخصائي العلاج الطبيعي يكتبلك خطة هتلاقيها هنا.",
+    ph_last_session: "آخر جلسة: {d}",
+    ph_pain_trend: "ألمك بعد الجلسات (من ١٠)",
+    ph_pain_better: "ألمك نزل من {a} لـ {b} — كمّل 👏",
+    ph_pain_same: "ألمك كان {a} ودلوقتي {b} — قول لأخصائيك لو في حاجة مضايقاك",
+    pw_map: "مكان الشغل على الخريطة",
+    pw_map_ph: "الزق لينك جوجل ماب هنا",
+    pw_locate: "📍 حدد مكاني دلوقتي",
+    pw_map_clear: "شيل المكان",
+    pw_map_hint: "الزق لينك جوجل ماب لمكان الشغل، أو دوس «حدد مكاني» وإنت في الجيم/العيادة. حط مكان الشغل مش البيت — المكان بيظهر للعملاء.",
+    pw_map_ok: "تمام ✓ المكان متحدد — العملاء هيشوفوا «افتح على الخريطة» والمسافة. متنساش تحفظ.",
+    pw_map_short: "اللينك اتحفظ، بس اللينك المختصر مابيحددش المسافة. عشان العملاء القريبين يلاقوك، دوس «حدد مكاني» وإنت في مكان الشغل.",
+    pw_map_bad: "ده مش لينك خريطة — الزق لينك من جوجل ماب (أو اكتب الإحداثيات).",
+    pw_locating: "بنحدد المكان...",
+    pw_locate_fail: "مقدرناش نحدد المكان — اسمح للموقع يعرف مكانك من إعدادات المتصفح، أو الزق لينك جوجل ماب.",
+    pw_open_map: "افتح على الخريطة",
+    near_btn: "📍 رتّب بالأقرب ليا",
+    near_btn_off: "✕ الترتيب العادي",
+    near_on: "مرتّبين بالأقرب ليك — مكانك مابيتحفظش.",
+    near_none: "لسه ولا متخصص حاطط مكانه على الخريطة.",
+    near_fail: "مقدرناش نعرف مكانك — اسمح للموقع يعرف مكانك من إعدادات المتصفح.",
+    near_km: "{n} كم",
+    near_away: "على بُعد {d} منك",
     ib_ai_btn: "📸 صوّر ورقة الإنبودي — الأرقام هتتملى لوحدها",
     ib_ai_hint: "بعد الحفظ فريق الإنبودي بيحلّل القياس ويبعته لأخصائي التغذية ومدربك",
     ib_ai_reading: "بنقرا الأرقام من الصورة…",
@@ -2568,7 +2674,7 @@ const TEXT = {
     modality_indications: 'Used for',
     modality_protocols: 'Protocols',
     modality_add: '+ Add to client plan',
-    modality_added: 'Added to the plan — save the rehab program to store it',
+    modality_added: 'Added to the plan — save physiotherapy to store it',
     modality_already: 'That protocol is already in the plan',
     modality_plan_title: 'Device sessions in the client plan',
     show_more_n: 'Show {n} more',
@@ -3119,6 +3225,112 @@ const TEXT = {
     wr_max_hr: 'max {v}',
     wr_kcal: '{v} kcal',
     wr_zones: 'Time in zones',
+    tab_physio: "Physio",
+    notif_t_physio: "Your physiotherapy plan was updated",
+    notif_b_physio: "Your physiotherapist updated your plan — open it to see what’s new.",
+    ph_ro_note: "You can view physiotherapy for follow-up only — editing is for the physiotherapist or doctor.",
+    ph_plan_title: "Treatment plan",
+    ph_diagnosis: "Functional diagnosis",
+    ph_diagnosis_ph: "e.g. Supraspinatus tendinopathy — right shoulder",
+    ph_goals: "Treatment goals (the client reads this)",
+    ph_goals_ph: "e.g. Raise the arm overhead pain-free within 4 weeks",
+    ph_total: "Number of sessions",
+    ph_per_week: "Sessions per week",
+    ph_session_of: "Session {n} of {total}",
+    ph_sessions_done: "{n} sessions so far",
+    ph_left_weeks: "{n} sessions left — about {w} weeks",
+    ph_plan_done: "Plan complete 👏",
+    ph_assess_title: "Assessment",
+    ph_assess_start: "+ Start assessment",
+    ph_reassess: "+ Re-assess (new assessment)",
+    ph_assess_empty: "No assessment yet — start with the first-session assessment.",
+    ph_date: "Date",
+    ph_area: "Pain location",
+    ph_area_ph: "e.g. Front of the right shoulder",
+    ph_pain_now: "Pain now",
+    ph_pain_worst: "Worst pain",
+    ph_rom_title: "Range of motion (ROM)",
+    ph_rom_pick: "— Movement —",
+    ph_rom_add: "+ ROM",
+    ph_of_normal: "normal {n}°",
+    ph_mmt_title: "Muscle strength (MMT out of 5)",
+    ph_muscle_ph: "Muscle or group",
+    ph_grade: "Grade",
+    ph_mmt_add: "+ Strength",
+    ph_tests_title: "Special tests",
+    ph_test_ph: "Test name",
+    ph_result: "Result",
+    ph_pos: "+ Positive",
+    ph_neg: "− Negative",
+    ph_test_add: "+ Test",
+    ph_functional: "Functional assessment",
+    ph_functional_ph: "What can’t they do? Stairs, running, lifting the arm, sleeping on the side...",
+    ph_assess_history: "Previous assessments",
+    ph_pain_short: "pain {n}/10",
+    ph_pain_change: "Pain: {a} → {b}",
+    ph_side_none: "Side",
+    ph_side_r: "Right",
+    ph_side_l: "Left",
+    ph_sessions_title: "Session log",
+    ph_session_add: "+ Log a session",
+    ph_sessions_empty: "No sessions logged yet.",
+    ph_session_n: "Session {n}",
+    ph_pain_ba: "pain {a} → {b}",
+    ph_devices_used: "Devices used",
+    ph_manual_title: "Manual therapy",
+    ph_manual_massage: "Therapeutic massage",
+    ph_manual_mobilization: "Joint mobilization",
+    ph_manual_stretching: "Stretching",
+    ph_manual_mfr: "Myofascial release",
+    ph_manual_neural: "Neural mobilization",
+    ph_manual_dry_needling: "Dry needling",
+    ph_manual_taping: "Kinesio taping",
+    ph_manual_cupping: "Cupping",
+    ph_manual_exercise: "Therapeutic exercise",
+    ph_pain_before: "Pain before",
+    ph_pain_after: "Pain after",
+    ph_session_notes_ph: "Session notes (optional)",
+    ph_session_save: "Log session",
+    ph_cancel: "Cancel",
+    ph_home_title: "Home exercises",
+    ph_home_hint: "Simple exercises the client does between sessions — shown in their Physio tab.",
+    ph_home_name_ph: "Exercise name (type or pick from the library)",
+    ph_hold_ph: "Hold (s)",
+    ph_times_ph: "Times/day",
+    ph_home_note_ph: "Note for the client (optional)",
+    ph_home_empty: "No home exercises yet.",
+    ph_home_need_name: "Type the exercise name first",
+    ph_hold_n: "hold {n}s",
+    ph_times_n: "{n}× a day",
+    ph_home_count: "{n} home exercises",
+    ph_save: "Save physiotherapy",
+    ph_saved: "Physiotherapy saved ✓",
+    ph_open: "Open your plan",
+    ph_client_title: "Physiotherapy",
+    ph_client_empty_title: "No physiotherapy plan yet",
+    ph_client_empty: "When your physiotherapist writes your plan, you’ll find it here.",
+    ph_last_session: "Last session: {d}",
+    ph_pain_trend: "Your pain after sessions (out of 10)",
+    ph_pain_better: "Your pain dropped from {a} to {b} — keep going 👏",
+    ph_pain_same: "Your pain was {a} and is now {b} — tell your physio if something bothers you",
+    pw_map: "Workplace on the map",
+    pw_map_ph: "Paste a Google Maps link here",
+    pw_locate: "📍 Use my current location",
+    pw_map_clear: "Remove location",
+    pw_map_hint: "Paste a Google Maps link to your workplace, or tap “Use my location” while at the gym/clinic. Use your workplace, not your home — clients can see it.",
+    pw_map_ok: "Done ✓ Location set — clients will see “Open in maps” and the distance. Don’t forget to save.",
+    pw_map_short: "Link saved, but short links don’t give a distance. So nearby clients find you, tap “Use my location” while at your workplace.",
+    pw_map_bad: "That’s not a map link — paste a Google Maps link (or type the coordinates).",
+    pw_locating: "Finding the location...",
+    pw_locate_fail: "Couldn’t get the location — allow location access in your browser settings, or paste a Google Maps link.",
+    pw_open_map: "Open in maps",
+    near_btn: "📍 Sort by nearest",
+    near_btn_off: "✕ Normal order",
+    near_on: "Sorted by nearest to you — your location isn’t saved.",
+    near_none: "No specialist has added their location yet.",
+    near_fail: "Couldn’t get your location — allow location access in your browser settings.",
+    near_km: "{n} km",
+    near_away: "{d} away",
     ib_ai_btn: "📸 Snap your InBody sheet — the numbers fill in by themselves",
     ib_ai_hint: "After saving, the InBody team analyzes it and sends it to your nutrition specialist and coach",
     ib_ai_reading: "Reading the numbers from the photo…",
@@ -5126,7 +5338,7 @@ function providerPendingSpecialties(data) {
  * مدرب → تمرين، أخصائي تغذية → تغذية، أخصائي تأهيل → تأهيل وتمرين...
  * صاحب المنصة والفريق الإداري بيشوفوا كل حاجة من غير أي قيد.
  */
-const ALL_SCOPES = ['training', 'rehab', 'nutrition', 'consult'];
+const ALL_SCOPES = ['training', 'rehab', 'physio', 'nutrition', 'consult'];
 
 function approvedScopes() {
   if (isFullAdminAccount()) return ALL_SCOPES.slice();
@@ -7060,6 +7272,10 @@ function setCoachMode(mode) {
   nutritionPanel.classList.toggle('hidden', mode !== 'nutrition');
   injuriesPanel.classList.toggle('hidden', mode !== 'injuries');
   consultPanel.classList.toggle('hidden', mode !== 'consult');
+  const physioPanelEl = document.getElementById('physio-panel');
+  if (physioPanelEl) physioPanelEl.classList.toggle('hidden', mode !== 'physio');
+  const tabPhysioEl = document.getElementById('tab-physio');
+  if (tabPhysioEl) tabPhysioEl.classList.toggle('active', mode === 'physio');
   tabTraining.classList.toggle('active', mode === 'training');
   tabRehab.classList.toggle('active', mode === 'rehab');
   tabNutrition.classList.toggle('active', mode === 'nutrition');
@@ -7271,9 +7487,12 @@ function applyCoachScopeTabs() {
   tabRehab.classList.toggle('hidden', scopes.indexOf('rehab') === -1);
   tabNutrition.classList.toggle('hidden', scopes.indexOf('nutrition') === -1);
   tabConsult.classList.toggle('hidden', scopes.indexOf('consult') === -1);
+  const tabPhysioEl = document.getElementById('tab-physio');
+  if (tabPhysioEl) tabPhysioEl.classList.toggle('hidden', scopes.indexOf('physio') === -1 && scopes.indexOf('physio_view') === -1);
 
   if (scopes.indexOf('training') !== -1) return 'training';
   if (scopes.indexOf('rehab') !== -1) return 'rehab';
+  if (scopes.indexOf('physio') !== -1) return 'physio';
   if (scopes.indexOf('nutrition') !== -1) return 'nutrition';
   if (scopes.indexOf('consult') !== -1) return 'consult';
   // تخصص ملوش أقسام برنامج (زي المساج) — بيفتح على الإصابات
@@ -7302,6 +7521,7 @@ async function openCoachScreen(email, name, sport) {
   applyLibraryLock(document.getElementById('open-supplements-btn'), 'supplements');
   applyLibraryLock(document.getElementById('apply-template-btn'), 'rehab');
   setCoachMode(defaultMode);
+  physioReset();
   if (defaultMode === 'injuries') loadCoachInjuryReports();
   if (defaultMode === 'consult') loadCoachConsultNotes();
 
@@ -7314,6 +7534,9 @@ async function openCoachScreen(email, name, sport) {
 
     const nutritionDoc = await getDoc(doc(db, 'nutrition', email));
     coachNutrition = normalizeNutrition(nutritionDoc.exists() ? nutritionDoc.data() : null);
+
+    /* العلاج الطبيعي — لو القواعد لسه ماتنشرتش بيرجع فاضي ومابيوقفش الشاشة */
+    await physioLoadCoach(email);
 
     /* الحالة الصحية قبل أي حاجة — المدرب لازم يشوفها قبل ما يكتب حرف */
     coachHealth = await loadHealthFor(email);
@@ -7339,6 +7562,7 @@ async function openCoachScreen(email, name, sport) {
     showCoachDay();
     showRehab();
     showNutrition();
+    if (coachMode === 'physio') physioShow();
     advisorOnClientOpen();
     refreshInjuryBadge(email);
     refreshConsultBadge(email);
@@ -7973,10 +8197,7 @@ let activeModality = '';
 
 /* الأجهزة لأخصائي العلاج الطبيعي والتأهيل وصاحب المنصة بس */
 function canUseModalities() {
-  if (isFullAdminAccount()) return true;
-  const specs = providerSpecialties(currentProviderData || {});
-  return specs.indexOf('physio') !== -1 || specs.indexOf('rehab') !== -1
-    || specs.indexOf('sports_medicine') !== -1;
+  return physioCanEdit() || physioCanView();
 }
 
 function modalityName(item) { return item[lang] || item.ar || item.id; }
@@ -8108,13 +8329,13 @@ function renderModalityDetail() {
 }
 
 function addModalityToPlan(proto) {
-  if (!coachRehab.modalities) coachRehab.modalities = [];
-  const exists = coachRehab.modalities.some(function (m) { return m.protocolId === proto.id; });
+  if (!coachPhysio.modalities) coachPhysio.modalities = [];
+  const exists = coachPhysio.modalities.some(function (m) { return m.protocolId === proto.id; });
   if (exists) {
     setStatusMessage(document.getElementById('modality-message'), t('modality_already'), '');
     return;
   }
-  coachRehab.modalities.push({
+  coachPhysio.modalities.push({
     protocolId: proto.id,
     modality: proto.modality,
     addedAt: new Date().toISOString()
@@ -8127,7 +8348,7 @@ function renderModalityPlan() {
   const box = document.getElementById('modality-plan');
   if (!box) return;
   box.innerHTML = '';
-  const list = (coachRehab && coachRehab.modalities) || [];
+  const list = (coachPhysio && coachPhysio.modalities) || [];
   if (!list.length) return;
 
   const title = document.createElement('div');
@@ -8151,7 +8372,7 @@ function renderModalityPlan() {
     del.className = 'mod-del';
     del.appendChild(iconSvg('close', 'ui-icon'));
     del.addEventListener('click', function () {
-      coachRehab.modalities.splice(index, 1);
+      coachPhysio.modalities.splice(index, 1);
       renderModalityPlan();
     });
     item.appendChild(del);
@@ -8161,7 +8382,6 @@ function renderModalityPlan() {
 }
 
 function showRehab() {
-  renderModalityBox();
   rehabBodyPart.value = coachRehab.bodyPart || '';
   rehabInjury.value = tr(coachRehab.injury);
   rehabAbout.value = tr(coachRehab.about);
@@ -9712,6 +9932,10 @@ function setClientMode(mode) {
   clientClassesPanel.classList.toggle('hidden', mode !== 'classes');
   clientStorePanel.classList.toggle('hidden', mode !== 'store');
   clientConsultPanel.classList.toggle('hidden', mode !== 'consult');
+  const clientPhysioEl = document.getElementById('client-physio');
+  if (clientPhysioEl) clientPhysioEl.classList.toggle('hidden', mode !== 'physio');
+  const ctabPhysioEl = document.getElementById('ctab-physio');
+  if (ctabPhysioEl) ctabPhysioEl.classList.toggle('active', mode === 'physio');
   ctabTraining.classList.toggle('active', mode === 'training');
   ctabRehab.classList.toggle('active', mode === 'rehab');
   ctabNutrition.classList.toggle('active', mode === 'nutrition');
@@ -9883,13 +10107,15 @@ const APPBAR_ITEMS = [
   { mode: 'home',      icon: 'home',      labelKey: 'nav_home' },
   { mode: 'training',  icon: 'training',  labelKey: 'tab_training' },
   { mode: 'nutrition', icon: 'nutrition', labelKey: 'tab_nutrition' },
-  { mode: 'rehab',     icon: 'rehab',     labelKey: 'tab_rehab' }
+  { mode: 'rehab',     icon: 'rehab',     labelKey: 'tab_rehab' },
+  { mode: 'physio',    icon: 'physio',    labelKey: 'tab_physio' }
 ];
 
 function goClientMode(mode) {
   // بنعدّي على زراير الشريط القديم عشان كل التحميل المربوط بيها
   // يشتغل زي ما هو — مفيش منطق مكرر
   if (mode === 'home') { setClientMode('home'); return; }
+  if (mode === 'physio') { setClientMode('physio'); showClientPhysio(); return; }
   const btn = { training: ctabTraining, nutrition: ctabNutrition, rehab: ctabRehab }[mode];
   if (btn) btn.click();
 }
@@ -9899,7 +10125,7 @@ function renderAppbar() {
   clientAppbar.innerHTML = '';
   APPBAR_ITEMS.forEach(function (item) {
     // التأهيل والتغذية بيظهروا بس لو العميل عنده برنامج منهم
-    const source = { nutrition: ctabNutrition, rehab: ctabRehab }[item.mode];
+    const source = { nutrition: ctabNutrition, rehab: ctabRehab, physio: document.getElementById('ctab-physio') }[item.mode];
     if (source && source.classList.contains('hidden')) return;
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -10079,6 +10305,10 @@ function renderHomeSummary() {
       function () { goClientMode('rehab'); }, 'rehab'
     ));
   }
+
+  /* العلاج الطبيعي */
+  const physioCard = physioHomeCard();
+  if (physioCard) homeCards.appendChild(physioCard);
 }
 
 function renderClientHome() {
@@ -10322,6 +10552,7 @@ async function loadClient(email) {
     clientWeek = normalizeWeek(workoutDoc.exists() ? workoutDoc.data().week : null);
     clientRehab = normalizeRehab(rehabDoc.exists() ? rehabDoc.data() : null);
     clientNutrition = normalizeNutrition(nutritionDoc.exists() ? nutritionDoc.data() : null);
+    await physioLoadClient(email);
 
     // العلامات القديمة كانت أرقام تخص القائمة الواحدة؛ بنحولها لقسم "التمرين الأساسي"
     const rawDone = (progressDoc.exists() && progressDoc.data().date === today)
@@ -10377,6 +10608,8 @@ async function loadClient(email) {
     const hasNutrition = nutritionHasContent(clientNutrition);
     ctabRehab.classList.toggle('hidden', !hasRehab);
     ctabNutrition.classList.toggle('hidden', !hasNutrition);
+    const ctabPhysioEl = document.getElementById('ctab-physio');
+    if (ctabPhysioEl) ctabPhysioEl.classList.toggle('hidden', !physioHasContent(clientPhysio));
     // شريط التابات نفسه كان بيتخفي بالكامل لو مفيش تأهيل أو تغذية —
     // ده كان بيمنع الوصول لتابات "نشاطي" و"الكلاس" و"المتجر" كمان
     // (مالهاش علاقة بالتأهيل/التغذية) لو العميل لسه ملوش برنامج منهم.
@@ -21714,7 +21947,18 @@ function renderTeamPicker() {
     });
   });
   Object.keys(bySpecialty).forEach(function (specialty) {
-    bySpecialty[specialty].sort(function (a, b) { return providerScore(b) - providerScore(a); });
+    bySpecialty[specialty].sort(function (a, b) {
+      /* «الأقرب ليا»: اللي عنده مكان على الخريطة بالمسافة، والباقي بعدهم بالترتيب العادي */
+      if (teamNear) {
+        const da = providerDistanceKm(a), db2 = providerDistanceKm(b);
+        if (da !== null || db2 !== null) {
+          if (da === null) return 1;
+          if (db2 === null) return -1;
+          if (da !== db2) return da - db2;
+        }
+      }
+      return providerScore(b) - providerScore(a);
+    });
   });
 
   let shown = 0;
@@ -21751,7 +21995,7 @@ function renderTeamPicker() {
 
       pick.appendChild(providerAvatar(provider));
 
-      if (index === 0 && !teamSearchTerm) {
+      if (index === 0 && !teamSearchTerm && !teamNear) {
         const badge = document.createElement('span');
         badge.className = 'ap-badge';
         badge.textContent = t('recommended_short');
@@ -21767,6 +22011,13 @@ function renderTeamPicker() {
       name.className = 'ap-name';
       name.textContent = providerShortName(provider);
       pick.appendChild(name);
+      const km = teamNear ? providerDistanceKm(provider) : null;
+      if (km !== null) {
+        const dist = document.createElement('span');
+        dist.className = 'ap-dist';
+        dist.textContent = kmText(km);
+        pick.appendChild(dist);
+      }
 
       const stats = ratingStatsFor(provider.email);
       if (stats.count) {
@@ -25258,7 +25509,7 @@ function goToNotifTarget(item) {
     if (target === 'chat') { openChatThread(clientEmail, clientScreen); return; }
     if (target === 'injury') { document.getElementById('report-injury-btn').click(); return; }
     if (target === 'consult') { setClientMode('consult'); return; }
-    if (target === 'training' || target === 'nutrition' || target === 'rehab') { goClientMode(target); return; }
+    if (target === 'training' || target === 'nutrition' || target === 'rehab' || target === 'physio') { goClientMode(target); return; }
     goClientMode('home');
     if (target === 'friends') { socTab = 'friends'; socLoad().then(openSocSheet); }
     if (target === 'inbody') { openProgress(clientEmail, clientScreen, false); return; }
@@ -27430,6 +27681,7 @@ function pwFill(data) {
   });
   document.getElementById('pw-from').value = data.availFrom || '';
   document.getElementById('pw-to').value = data.availTo || '';
+  pwMapFill(data);
 }
 
 function pwRead() {
@@ -27441,7 +27693,10 @@ function pwRead() {
     workPlace: clip(document.getElementById('pw-place').value, 80),
     availDays: Array.prototype.slice.call(document.querySelectorAll('#pw-days input:checked')).map(function (cb) { return Number(cb.value); }),
     availFrom: clip(document.getElementById('pw-from').value, 5),
-    availTo: clip(document.getElementById('pw-to').value, 5)
+    availTo: clip(document.getElementById('pw-to').value, 5),
+    workMapUrl: pwMapState.url,
+    workLat: pwMapState.lat,
+    workLng: pwMapState.lng
   };
 }
 
@@ -27462,7 +27717,8 @@ function providerWorkEl(provider) {
   if (dayList.length || hours) {
     lines.push({ icon: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', text: fill('pw_line_when', { days: dayList.length === 7 ? (lang === 'ar' ? 'كل يوم' : 'every day') : dayList.map(function (d) { return days()[d]; }).join(lang === 'ar' ? '، ' : ', '), hours: hours }) });
   }
-  if (!lines.length) return null;
+  const mapHref = providerMapHref(provider);
+  if (!lines.length && !mapHref) return null;
   const box = document.createElement('div');
   box.className = 'pw-info';
   lines.forEach(function (l) {
@@ -27474,6 +27730,7 @@ function providerWorkEl(provider) {
     row.appendChild(span);
     box.appendChild(row);
   });
+  if (mapHref) box.appendChild(providerMapRow(provider, mapHref));
   return box;
 }
 
@@ -31514,3 +31771,901 @@ function renderNutFoodPrefs() {
   if (likes.length) box.appendChild(Object.assign(document.createElement('p'), { className: 'fp-line like', textContent: '❤️ ' + t('fp_likes_short') + ': ' + likes.map(foodPrefName).join('، ') }));
   if (dislikes.length) box.appendChild(Object.assign(document.createElement('p'), { className: 'fp-line dislike', textContent: '🚫 ' + t('fp_dislikes_short') + ': ' + dislikes.map(foodPrefName).join('، ') }));
 }
+
+
+/* ============================================================
+   العلاج الطبيعي — تخصص لوحده (منفصل عن تأهيل الإصابات)
+   ------------------------------------------------------------
+   مستند physio/{email}: خطة (تشخيص وظيفي، أهداف، عدد الجلسات)،
+   تقييمات (ألم، مدى حركة، قوة، اختبارات خاصة)، أجهزة الخطة،
+   سجل الجلسات، وتمارين للبيت.
+   • أخصائي العلاج الطبيعي + طبيب العظام + طبيب الطب الرياضي
+     + صاحب المنصة: بيعدّلوا.
+   • أخصائي التأهيل: بيشوف بس (physio_view).
+   • العميل: بيشوف الأهداف وعدد الجلسات وألمه بعد الجلسات وتمارين البيت
+     — التقييم الإكلينيكي نفسه للفريق بس.
+   ============================================================ */
+
+UI_ICONS.physio = '<path d="M9 12V5.5a1.3 1.3 0 0 1 2.6 0V11"/><path d="M11.6 11V4.8a1.3 1.3 0 0 1 2.6 0V11"/><path d="M14.2 11V6a1.3 1.3 0 0 1 2.6 0v7.5"/><path d="M16.8 12.5V8.3a1.3 1.3 0 0 1 2.6 0V15c0 3.9-2.4 6.5-6 6.5-2.5 0-4-1-5.4-3l-2.7-4.3c-.5-.8-.2-1.7.5-2.1.7-.4 1.6-.2 2.1.5L9 15"/>';
+
+/* المدى الطبيعي التقريبي (AAOS) — مرجع للمقارنة بس */
+const PH_ROM = [
+  ['sh_flex', 'الكتف — ثني', 'Shoulder flexion', 180], ['sh_ext', 'الكتف — مد', 'Shoulder extension', 60],
+  ['sh_abd', 'الكتف — تبعيد', 'Shoulder abduction', 180], ['sh_er', 'الكتف — دوران خارجي', 'Shoulder external rotation', 90],
+  ['sh_ir', 'الكتف — دوران داخلي', 'Shoulder internal rotation', 70], ['el_flex', 'الكوع — ثني', 'Elbow flexion', 150],
+  ['wr_flex', 'الرسغ — ثني', 'Wrist flexion', 80], ['wr_ext', 'الرسغ — مد', 'Wrist extension', 70],
+  ['hip_flex', 'الحوض — ثني', 'Hip flexion', 120], ['hip_ext', 'الحوض — مد', 'Hip extension', 30],
+  ['hip_abd', 'الحوض — تبعيد', 'Hip abduction', 45], ['hip_ir', 'الحوض — دوران داخلي', 'Hip internal rotation', 45],
+  ['hip_er', 'الحوض — دوران خارجي', 'Hip external rotation', 45], ['kn_flex', 'الركبة — ثني', 'Knee flexion', 135],
+  ['kn_ext', 'الركبة — نقص المد (°)', 'Knee extension lag (°)', 0], ['an_df', 'الكاحل — ثني لفوق', 'Ankle dorsiflexion', 20],
+  ['an_pf', 'الكاحل — ثني لتحت', 'Ankle plantarflexion', 50], ['cx_flex', 'الرقبة — ثني', 'Cervical flexion', 50],
+  ['cx_ext', 'الرقبة — مد', 'Cervical extension', 60], ['cx_rot', 'الرقبة — لفّ', 'Cervical rotation', 80],
+  ['lx_flex', 'أسفل الظهر — ثني', 'Lumbar flexion', 60], ['lx_ext', 'أسفل الظهر — مد', 'Lumbar extension', 25]
+];
+const PH_TESTS = ['Lachman', 'Anterior drawer', 'Posterior drawer', 'McMurray', 'Apley', 'Thessaly', 'Valgus stress', 'Varus stress',
+  'Clarke (patellar grind)', 'Neer', 'Hawkins-Kennedy', 'Empty can (Jobe)', 'Drop arm', 'Speed', 'Yergason', 'Apprehension',
+  'O’Brien', 'Spurling', 'Distraction (cervical)', 'SLR', 'Slump', 'FABER', 'FADIR', 'Thomas', 'Ober', 'Trendelenburg',
+  'Thompson', 'Anterior drawer (ankle)', 'Talar tilt', 'Phalen', 'Tinel', 'Finkelstein', 'Cozen', 'Mill'];
+const PH_MANUAL = ['massage', 'mobilization', 'stretching', 'mfr', 'neural', 'dry_needling', 'taping', 'cupping', 'exercise'];
+
+let coachPhysio = physioBlank();
+let clientPhysio = physioBlank();
+let phSessionDraft = null;
+
+function physioBlank() {
+  return { diagnosis: '', goals: '', totalSessions: 0, perWeek: 0, assessments: [], modalities: [], sessions: [], homeEx: [] };
+}
+
+function phNum(v, min, max) {
+  const n = Number(v);
+  if (!isFinite(n)) return 0;
+  return Math.max(min, Math.min(max, Math.round(n)));
+}
+
+function phClip(v, n) { return String(v == null ? '' : v).trim().slice(0, n); }
+
+function normalizePhysio(d) {
+  const out = physioBlank();
+  if (!d || typeof d !== 'object') return out;
+  out.diagnosis = phClip(d.diagnosis, 200);
+  out.goals = phClip(d.goals, 600);
+  out.totalSessions = phNum(d.totalSessions, 0, 200);
+  out.perWeek = phNum(d.perWeek, 0, 14);
+  out.assessments = (Array.isArray(d.assessments) ? d.assessments : []).slice(0, 20).map(function (a) {
+    return {
+      id: phClip(a.id, 30) || ('a' + Date.now()), date: phClip(a.date, 10),
+      painNow: phNum(a.painNow, 0, 10), painWorst: phNum(a.painWorst, 0, 10), area: phClip(a.area, 120),
+      rom: (Array.isArray(a.rom) ? a.rom : []).slice(0, 30).map(function (r) { return { mv: phClip(r.mv, 20), side: phClip(r.side, 2), deg: r.deg === '' || r.deg == null ? '' : phNum(r.deg, -30, 200) }; }),
+      strength: (Array.isArray(a.strength) ? a.strength : []).slice(0, 30).map(function (r) { return { muscle: phClip(r.muscle, 60), side: phClip(r.side, 2), grade: phClip(r.grade, 2) }; }),
+      tests: (Array.isArray(a.tests) ? a.tests : []).slice(0, 30).map(function (r) { return { name: phClip(r.name, 60), side: phClip(r.side, 2), result: r.result === 'pos' || r.result === 'neg' ? r.result : '' }; }),
+      functional: phClip(a.functional, 600)
+    };
+  });
+  out.modalities = Array.isArray(d.modalities) ? d.modalities.slice(0, 20) : [];
+  out.sessions = (Array.isArray(d.sessions) ? d.sessions : []).slice(0, 200).map(function (x) {
+    return {
+      id: phClip(x.id, 30), date: phClip(x.date, 10),
+      modalities: (Array.isArray(x.modalities) ? x.modalities : []).slice(0, 10).map(function (m) { return phClip(m, 60); }),
+      manual: (Array.isArray(x.manual) ? x.manual : []).filter(function (k) { return PH_MANUAL.indexOf(k) !== -1; }),
+      painBefore: x.painBefore === '' || x.painBefore == null ? '' : phNum(x.painBefore, 0, 10),
+      painAfter: x.painAfter === '' || x.painAfter == null ? '' : phNum(x.painAfter, 0, 10),
+      notes: phClip(x.notes, 400), by: phClip(x.by, 160)
+    };
+  });
+  out.homeEx = (Array.isArray(d.homeEx) ? d.homeEx : []).slice(0, 20).map(function (x) {
+    return { id: phClip(x.id, 30), name: phClip(x.name, 80), sets: phNum(x.sets, 0, 20), reps: phClip(x.reps, 12), hold: phNum(x.hold, 0, 600), times: phNum(x.times, 0, 10), note: phClip(x.note, 160) };
+  });
+  return out;
+}
+
+function physioHasContent(p) {
+  return !!(p && (p.homeEx.length || p.sessions.length || p.totalSessions || p.goals || p.diagnosis));
+}
+
+function physioCanEdit() {
+  if (isFullAdminAccount()) return true;
+  return approvedScopes().indexOf('physio') !== -1;
+}
+
+function physioCanView() {
+  return approvedScopes().indexOf('physio_view') !== -1;
+}
+
+function phToday() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function phDateText(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T12:00:00');
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'short' });
+}
+
+function phRomDef(key) { return PH_ROM.filter(function (r) { return r[0] === key; })[0] || null; }
+function phRomName(key) { const r = phRomDef(key); return r ? (lang === 'ar' ? r[1] : r[2]) : key; }
+function phSideText(side) { return side === 'R' ? t('ph_side_r') : side === 'L' ? t('ph_side_l') : ''; }
+function phProtoName(id) {
+  const proto = MODALITY_PROTOCOLS.filter(function (p) { return p.id === id; })[0];
+  if (!proto) return id;
+  const device = modalityById(proto.modality);
+  return (device ? modalityName(device) + ' — ' : '') + (proto[lang] || proto.ar);
+}
+
+function physioReset() {
+  coachPhysio = physioBlank();
+  phSessionDraft = null;
+}
+
+async function physioLoadCoach(email) {
+  physioReset();
+  try {
+    const snap = await getDoc(doc(db, 'physio', email));
+    coachPhysio = normalizePhysio(snap.exists() ? snap.data() : null);
+  } catch (error) {
+    coachPhysio = physioBlank();
+  }
+  /* الأجهزة كانت بتتحفظ جوه التأهيل قبل الفصل — بننقلها أول مرة */
+  if (!coachPhysio.modalities.length && coachRehab && Array.isArray(coachRehab.modalities) && coachRehab.modalities.length) {
+    coachPhysio.modalities = coachRehab.modalities.slice();
+  }
+}
+
+async function physioLoadClient(email) {
+  try {
+    const snap = await getDoc(doc(db, 'physio', email));
+    clientPhysio = normalizePhysio(snap.exists() ? snap.data() : null);
+  } catch (error) {
+    clientPhysio = physioBlank();
+  }
+}
+
+function phEl(tag, cls, text) {
+  const el = document.createElement(tag);
+  if (cls) el.className = cls;
+  if (text != null) el.textContent = text;
+  return el;
+}
+
+function phSelect(options, value, onChange) {
+  const sel = document.createElement('select');
+  options.forEach(function (o) {
+    const opt = document.createElement('option');
+    opt.value = o[0];
+    opt.textContent = o[1];
+    sel.appendChild(opt);
+  });
+  sel.value = value == null ? '' : String(value);
+  sel.addEventListener('change', function () { onChange(sel.value); });
+  return sel;
+}
+
+function phSideSelect(value, onChange) {
+  return phSelect([['', t('ph_side_none')], ['R', t('ph_side_r')], ['L', t('ph_side_l')]], value, onChange);
+}
+
+function phPainOptions() {
+  const out = [['', '—']];
+  for (let i = 0; i <= 10; i++) out.push([String(i), String(i)]);
+  return out;
+}
+
+function phDelBtn(onClick) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'mod-del ph-del';
+  b.appendChild(iconSvg('close', 'ui-icon'));
+  b.addEventListener('click', onClick);
+  return b;
+}
+
+function phEnsureDatalists() {
+  if (!document.querySelector('datalist#ph-ex-names')) {
+    const dl = document.createElement('datalist');
+    dl.id = 'ph-ex-names';
+    const seen = {};
+    EXERCISE_LIBRARY.forEach(function (ex) {
+      const name = ex.name && (ex.name[lang] || ex.name.ar);
+      if (!name || seen[name]) return;
+      seen[name] = 1;
+      const opt = document.createElement('option');
+      opt.value = name;
+      dl.appendChild(opt);
+    });
+    document.body.appendChild(dl);
+  }
+  if (!document.querySelector('datalist#ph-tests')) {
+    const dl = document.createElement('datalist');
+    dl.id = 'ph-tests';
+    PH_TESTS.forEach(function (name) {
+      const opt = document.createElement('option');
+      opt.value = name;
+      dl.appendChild(opt);
+    });
+    document.body.appendChild(dl);
+  }
+}
+
+/* ---------- الشاشة عند الأخصائي ---------- */
+
+function physioShow() {
+  const panel = document.getElementById('physio-panel');
+  if (!panel) return;
+  phEnsureDatalists();
+  const p = coachPhysio;
+  const bind = function (id, key, num) {
+    const el = document.getElementById(id);
+    el.value = p[key] ? p[key] : (num ? '' : '');
+    el.oninput = function () {
+      p[key] = num ? phNum(el.value, 0, key === 'perWeek' ? 14 : 200) : el.value;
+      if (num) renderPhProgress();
+    };
+  };
+  bind('ph-diagnosis', 'diagnosis');
+  bind('ph-goals', 'goals');
+  bind('ph-total', 'totalSessions', true);
+  bind('ph-per-week', 'perWeek', true);
+  renderPhProgress();
+  renderPhAssess();
+  renderModalityBox();
+  renderPhSessions();
+  renderPhHome();
+  physioApplyAccess();
+}
+
+function physioApplyAccess() {
+  const panel = document.getElementById('physio-panel');
+  if (!panel) return;
+  const ro = !physioCanEdit();
+  panel.classList.toggle('ro', ro);
+  document.getElementById('ph-ro-note').classList.toggle('hidden', !ro);
+  panel.querySelectorAll('input, textarea, select').forEach(function (el) {
+    if (el.closest('#modality-box')) return;
+    el.disabled = ro;
+  });
+}
+
+function renderPhProgress() {
+  const box = document.getElementById('ph-progress');
+  if (!box) return;
+  box.innerHTML = '';
+  const p = coachPhysio;
+  const done = p.sessions.length;
+  if (!p.totalSessions && !done) return;
+  box.appendChild(phProgressEl(p));
+}
+
+/* شريط «الجلسة X من Y» — نفسه عند الأخصائي والعميل */
+function phProgressEl(p) {
+  const wrap = phEl('div', 'ph-prog');
+  const done = p.sessions.length;
+  const total = p.totalSessions;
+  const line = phEl('div', 'ph-prog-line', total ? fill('ph_session_of', { n: Math.min(done, total), total: total }) : fill('ph_sessions_done', { n: done }));
+  wrap.appendChild(line);
+  if (total) {
+    const bar = phEl('div', 'ph-bar');
+    const fillEl = phEl('span');
+    fillEl.style.width = Math.min(100, Math.round(done / total * 100)) + '%';
+    bar.appendChild(fillEl);
+    wrap.appendChild(bar);
+    const left = Math.max(0, total - done);
+    if (left && p.perWeek) wrap.appendChild(phEl('div', 'ph-prog-sub', fill('ph_left_weeks', { n: left, w: Math.ceil(left / p.perWeek) })));
+    else if (!left) wrap.appendChild(phEl('div', 'ph-prog-sub', t('ph_plan_done')));
+  }
+  return wrap;
+}
+
+function renderPhAssess() {
+  const box = document.getElementById('ph-assess');
+  const hist = document.getElementById('ph-assess-history');
+  const btn = document.getElementById('ph-reassess-btn');
+  if (!box) return;
+  box.innerHTML = '';
+  hist.innerHTML = '';
+  const list = coachPhysio.assessments;
+  btn.textContent = list.length ? t('ph_reassess') : t('ph_assess_start');
+  if (!list.length) {
+    box.appendChild(phEl('p', 'section-empty', t('ph_assess_empty')));
+    return;
+  }
+  const a = list[0];
+
+  const top = phEl('div', 'row');
+  const dateWrap = phEl('div');
+  dateWrap.appendChild(phEl('label', 'field-label', t('ph_date')));
+  const date = document.createElement('input');
+  date.type = 'date';
+  date.value = a.date;
+  date.oninput = function () { a.date = date.value; };
+  dateWrap.appendChild(date);
+  top.appendChild(dateWrap);
+  const areaWrap = phEl('div');
+  areaWrap.appendChild(phEl('label', 'field-label', t('ph_area')));
+  const area = document.createElement('input');
+  area.maxLength = 120;
+  area.placeholder = t('ph_area_ph');
+  area.value = a.area;
+  area.oninput = function () { a.area = area.value; };
+  areaWrap.appendChild(area);
+  top.appendChild(areaWrap);
+  box.appendChild(top);
+
+  /* الألم من ١٠ */
+  [['painNow', 'ph_pain_now'], ['painWorst', 'ph_pain_worst']].forEach(function (pair) {
+    const row = phEl('div', 'ph-pain');
+    const label = phEl('label', 'field-label', t(pair[1]));
+    const val = phEl('strong', 'ph-pain-val', a[pair[0]] + '/10');
+    label.appendChild(document.createTextNode(' '));
+    label.appendChild(val);
+    row.appendChild(label);
+    const range = document.createElement('input');
+    range.type = 'range';
+    range.min = '0';
+    range.max = '10';
+    range.value = String(a[pair[0]]);
+    range.className = 'ph-range';
+    range.oninput = function () { a[pair[0]] = phNum(range.value, 0, 10); val.textContent = a[pair[0]] + '/10'; };
+    row.appendChild(range);
+    box.appendChild(row);
+  });
+
+  /* مدى الحركة */
+  box.appendChild(phEl('div', 'mod-sub', t('ph_rom_title')));
+  a.rom.forEach(function (r, i) {
+    const row = phEl('div', 'ph-row');
+    const def = phRomDef(r.mv);
+    row.appendChild(phSelect([['', t('ph_rom_pick')]].concat(PH_ROM.map(function (x) { return [x[0], lang === 'ar' ? x[1] : x[2]]; })), r.mv, function (v) { r.mv = v; renderPhAssess(); }));
+    row.appendChild(phSideSelect(r.side, function (v) { r.side = v; }));
+    const deg = document.createElement('input');
+    deg.type = 'number';
+    deg.className = 'ph-deg';
+    deg.placeholder = '°';
+    deg.value = r.deg === '' ? '' : r.deg;
+    const pct = phEl('span', 'ph-norm');
+    const paint = function () {
+      if (def && def[3] && r.deg !== '') {
+        const ratio = Math.round(Number(r.deg) / def[3] * 100);
+        pct.textContent = fill('ph_of_normal', { n: def[3] }) + ' · ' + ratio + '%';
+        pct.className = 'ph-norm ' + (ratio >= 90 ? 'ok' : ratio >= 70 ? 'mid' : 'low');
+      } else pct.textContent = def ? fill('ph_of_normal', { n: def[3] }) : '';
+    };
+    deg.oninput = function () { r.deg = deg.value === '' ? '' : phNum(deg.value, -30, 200); paint(); };
+    paint();
+    row.appendChild(deg);
+    row.appendChild(pct);
+    row.appendChild(phDelBtn(function () { a.rom.splice(i, 1); renderPhAssess(); }));
+    box.appendChild(row);
+  });
+  box.appendChild(phAddLink('ph_rom_add', function () { a.rom.push({ mv: '', side: '', deg: '' }); renderPhAssess(); }));
+
+  /* القوة (MMT من ٥) */
+  box.appendChild(phEl('div', 'mod-sub', t('ph_mmt_title')));
+  a.strength.forEach(function (r, i) {
+    const row = phEl('div', 'ph-row');
+    const m = document.createElement('input');
+    m.maxLength = 60;
+    m.placeholder = t('ph_muscle_ph');
+    m.value = r.muscle;
+    m.oninput = function () { r.muscle = m.value; };
+    row.appendChild(m);
+    row.appendChild(phSideSelect(r.side, function (v) { r.side = v; }));
+    row.appendChild(phSelect([['', t('ph_grade')], ['0', '0/5'], ['1', '1/5'], ['2', '2/5'], ['3', '3/5'], ['4', '4/5'], ['5', '5/5']], r.grade, function (v) { r.grade = v; }));
+    row.appendChild(phDelBtn(function () { a.strength.splice(i, 1); renderPhAssess(); }));
+    box.appendChild(row);
+  });
+  box.appendChild(phAddLink('ph_mmt_add', function () { a.strength.push({ muscle: '', side: '', grade: '' }); renderPhAssess(); }));
+
+  /* الاختبارات الخاصة */
+  box.appendChild(phEl('div', 'mod-sub', t('ph_tests_title')));
+  a.tests.forEach(function (r, i) {
+    const row = phEl('div', 'ph-row');
+    const n = document.createElement('input');
+    n.maxLength = 60;
+    n.setAttribute('list', 'ph-tests');
+    n.placeholder = t('ph_test_ph');
+    n.value = r.name;
+    n.oninput = function () { r.name = n.value; };
+    row.appendChild(n);
+    row.appendChild(phSideSelect(r.side, function (v) { r.side = v; }));
+    row.appendChild(phSelect([['', t('ph_result')], ['pos', t('ph_pos')], ['neg', t('ph_neg')]], r.result, function (v) { r.result = v; }));
+    row.appendChild(phDelBtn(function () { a.tests.splice(i, 1); renderPhAssess(); }));
+    box.appendChild(row);
+  });
+  box.appendChild(phAddLink('ph_test_add', function () { a.tests.push({ name: '', side: '', result: '' }); renderPhAssess(); }));
+
+  box.appendChild(phEl('label', 'field-label', t('ph_functional')));
+  const fn = document.createElement('textarea');
+  fn.rows = 3;
+  fn.maxLength = 600;
+  fn.placeholder = t('ph_functional_ph');
+  fn.value = a.functional;
+  fn.oninput = function () { a.functional = fn.value; };
+  box.appendChild(fn);
+
+  /* التقييمات اللي فاتت + المقارنة بالحالي */
+  if (list.length > 1) {
+    hist.appendChild(phEl('div', 'mod-sub', t('ph_assess_history')));
+    list.slice(1).forEach(function (old) {
+      const card = phEl('div', 'ph-hist');
+      card.appendChild(phEl('strong', '', phDateText(old.date) + ' · ' + fill('ph_pain_short', { n: old.painNow })));
+      const diffs = [];
+      a.rom.forEach(function (r) {
+        const prev = old.rom.filter(function (o) { return o.mv === r.mv && o.side === r.side && o.deg !== ''; })[0];
+        if (prev && r.mv && r.deg !== '' && prev.deg !== r.deg) diffs.push(phRomName(r.mv) + (r.side ? ' (' + phSideText(r.side) + ')' : '') + ': ' + prev.deg + '° → ' + r.deg + '°');
+      });
+      if (old.painNow !== a.painNow) diffs.unshift(fill('ph_pain_change', { a: old.painNow, b: a.painNow }));
+      if (diffs.length) card.appendChild(phEl('div', 'ph-hist-diff', diffs.join(' · ')));
+      hist.appendChild(card);
+    });
+  }
+  physioApplyAccess();
+}
+
+function phAddLink(key, onClick) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'link ph-edit ph-add';
+  b.textContent = t(key);
+  b.addEventListener('click', onClick);
+  return b;
+}
+
+document.getElementById('ph-reassess-btn').addEventListener('click', function () {
+  if (!physioCanEdit()) return;
+  const prev = coachPhysio.assessments[0];
+  /* إعادة التقييم بتبدأ من نفس البنود عشان المقارنة تبقى سهلة */
+  const next = prev ? JSON.parse(JSON.stringify(prev)) : { painNow: 0, painWorst: 0, area: '', rom: [], strength: [], tests: [], functional: '' };
+  next.id = 'a' + Date.now();
+  next.date = phToday();
+  coachPhysio.assessments.unshift(next);
+  coachPhysio.assessments = coachPhysio.assessments.slice(0, 20);
+  renderPhAssess();
+});
+
+/* ---------- سجل الجلسات ---------- */
+
+function renderPhSessions() {
+  const box = document.getElementById('ph-sessions');
+  if (!box) return;
+  box.innerHTML = '';
+  renderPhSessionForm();
+  const list = coachPhysio.sessions;
+  if (!list.length) {
+    box.appendChild(phEl('p', 'section-empty', t('ph_sessions_empty')));
+    return;
+  }
+  list.forEach(function (s, i) {
+    const card = phEl('div', 'ph-sess');
+    const head = phEl('div', 'ph-sess-head');
+    head.appendChild(phEl('strong', '', fill('ph_session_n', { n: list.length - i }) + ' · ' + phDateText(s.date)));
+    if (s.painBefore !== '' || s.painAfter !== '') {
+      head.appendChild(phEl('span', 'ph-pain-chip', fill('ph_pain_ba', { a: s.painBefore === '' ? '—' : s.painBefore, b: s.painAfter === '' ? '—' : s.painAfter })));
+    }
+    head.appendChild(phDelBtn(async function () {
+      if (!physioCanEdit()) return;
+      coachPhysio.sessions.splice(i, 1);
+      renderPhSessions();
+      renderPhProgress();
+      await physioPersist(false);
+    }));
+    card.appendChild(head);
+    const items = s.modalities.map(phProtoName).concat(s.manual.map(function (k) { return t('ph_manual_' + k); }));
+    if (items.length) card.appendChild(phEl('div', 'ph-sess-items', items.join(' · ')));
+    if (s.notes) card.appendChild(phEl('div', 'ph-sess-notes', s.notes));
+    box.appendChild(card);
+  });
+}
+
+function renderPhSessionForm() {
+  const form = document.getElementById('ph-session-form');
+  if (!form) return;
+  form.innerHTML = '';
+  form.classList.toggle('hidden', !phSessionDraft);
+  if (!phSessionDraft) return;
+  const d = phSessionDraft;
+
+  const date = document.createElement('input');
+  date.type = 'date';
+  date.value = d.date;
+  date.oninput = function () { d.date = date.value; };
+  form.appendChild(phEl('label', 'field-label', t('ph_date')));
+  form.appendChild(date);
+
+  if (coachPhysio.modalities.length) {
+    form.appendChild(phEl('label', 'field-label', t('ph_devices_used')));
+    const wrap = phEl('div', 'ph-chips');
+    coachPhysio.modalities.forEach(function (m) {
+      const chip = phEl('button', 'mod-chip' + (d.modalities.indexOf(m.protocolId) !== -1 ? ' on' : ''), phProtoName(m.protocolId));
+      chip.type = 'button';
+      chip.addEventListener('click', function () {
+        const at = d.modalities.indexOf(m.protocolId);
+        if (at === -1) d.modalities.push(m.protocolId); else d.modalities.splice(at, 1);
+        chip.classList.toggle('on', at === -1);
+      });
+      wrap.appendChild(chip);
+    });
+    form.appendChild(wrap);
+  }
+
+  form.appendChild(phEl('label', 'field-label', t('ph_manual_title')));
+  const manual = phEl('div', 'ph-chips');
+  PH_MANUAL.forEach(function (k) {
+    const chip = phEl('button', 'mod-chip' + (d.manual.indexOf(k) !== -1 ? ' on' : ''), t('ph_manual_' + k));
+    chip.type = 'button';
+    chip.addEventListener('click', function () {
+      const at = d.manual.indexOf(k);
+      if (at === -1) d.manual.push(k); else d.manual.splice(at, 1);
+      chip.classList.toggle('on', at === -1);
+    });
+    manual.appendChild(chip);
+  });
+  form.appendChild(manual);
+
+  const pains = phEl('div', 'row');
+  [['painBefore', 'ph_pain_before'], ['painAfter', 'ph_pain_after']].forEach(function (pair) {
+    const w = phEl('div');
+    w.appendChild(phEl('label', 'field-label', t(pair[1])));
+    w.appendChild(phSelect(phPainOptions(), d[pair[0]], function (v) { d[pair[0]] = v === '' ? '' : phNum(v, 0, 10); }));
+    pains.appendChild(w);
+  });
+  form.appendChild(pains);
+
+  const notes = document.createElement('textarea');
+  notes.rows = 2;
+  notes.maxLength = 400;
+  notes.placeholder = t('ph_session_notes_ph');
+  notes.value = d.notes;
+  notes.oninput = function () { d.notes = notes.value; };
+  form.appendChild(notes);
+
+  const actions = phEl('div', 'row');
+  const save = phEl('button', '', t('ph_session_save'));
+  save.type = 'button';
+  save.id = 'ph-session-save';
+  save.addEventListener('click', async function () {
+    if (!physioCanEdit()) return;
+    if (!d.date) d.date = phToday();
+    d.id = 's' + Date.now();
+    d.by = currentProviderEmail || '';
+    coachPhysio.sessions.unshift(d);
+    coachPhysio.sessions.sort(function (x, y) { return String(y.date).localeCompare(String(x.date)); });
+    phSessionDraft = null;
+    renderPhSessions();
+    renderPhProgress();
+    await physioPersist(true);
+  });
+  const cancel = phEl('button', 'secondary', t('ph_cancel'));
+  cancel.type = 'button';
+  cancel.addEventListener('click', function () { phSessionDraft = null; renderPhSessionForm(); });
+  actions.appendChild(save);
+  actions.appendChild(cancel);
+  form.appendChild(actions);
+}
+
+document.getElementById('ph-session-add').addEventListener('click', function () {
+  if (!physioCanEdit()) return;
+  phSessionDraft = { id: '', date: phToday(), modalities: [], manual: [], painBefore: '', painAfter: '', notes: '', by: '' };
+  renderPhSessionForm();
+});
+
+/* ---------- تمارين البيت ---------- */
+
+function phHomeLine(x) {
+  const parts = [];
+  if (x.sets || x.reps) parts.push((x.sets || '') + (x.sets && x.reps ? ' × ' : '') + (x.reps || ''));
+  if (x.hold) parts.push(fill('ph_hold_n', { n: x.hold }));
+  if (x.times) parts.push(fill('ph_times_n', { n: x.times }));
+  return parts.join(' · ');
+}
+
+function renderPhHome() {
+  const box = document.getElementById('ph-home-list');
+  if (!box) return;
+  box.innerHTML = '';
+  const list = coachPhysio.homeEx;
+  if (!list.length) {
+    box.appendChild(phEl('p', 'section-empty', t('ph_home_empty')));
+    return;
+  }
+  list.forEach(function (x, i) {
+    const row = phEl('div', 'ph-home-row');
+    const text = phEl('div', 'ph-home-text');
+    text.appendChild(phEl('strong', '', x.name));
+    const line = phHomeLine(x);
+    if (line) text.appendChild(phEl('div', 'ex-meta', line));
+    if (x.note) text.appendChild(phEl('div', 'ph-sess-notes', x.note));
+    row.appendChild(text);
+    row.appendChild(phDelBtn(function () { coachPhysio.homeEx.splice(i, 1); renderPhHome(); }));
+    box.appendChild(row);
+  });
+}
+
+document.getElementById('ph-home-add-btn').addEventListener('click', function () {
+  if (!physioCanEdit()) return;
+  const v = function (id) { return document.getElementById(id).value; };
+  const name = phClip(v('ph-home-name'), 80);
+  if (!name) { setStatusMessage(coachMessage, t('ph_home_need_name'), ''); return; }
+  if (coachPhysio.homeEx.length >= 20) return;
+  coachPhysio.homeEx.push({ id: 'h' + Date.now(), name: name, sets: phNum(v('ph-home-sets'), 0, 20), reps: phClip(v('ph-home-reps'), 12), hold: phNum(v('ph-home-hold'), 0, 600), times: phNum(v('ph-home-times'), 0, 10), note: phClip(v('ph-home-note'), 160) });
+  ['ph-home-name', 'ph-home-sets', 'ph-home-reps', 'ph-home-hold', 'ph-home-times', 'ph-home-note'].forEach(function (id) { document.getElementById(id).value = ''; });
+  renderPhHome();
+});
+
+/* ---------- الحفظ ---------- */
+
+async function physioPersist(notifyClient) {
+  if (!currentClient || !physioCanEdit()) return false;
+  const data = normalizePhysio(coachPhysio);
+  data.updatedAt = new Date().toISOString();
+  data.updatedBy = currentProviderEmail || '';
+  if (docTooBig(data, coachMessage)) return false;
+  coachMessage.textContent = t('saving');
+  try {
+    await setDoc(doc(db, 'physio', currentClient), data);
+    setStatusMessage(coachMessage, t('ph_saved'), 'success');
+    if (notifyClient) notifyProgramChange('physio', 'physio');
+    return true;
+  } catch (error) {
+    coachMessage.textContent = t('problem') + error.message;
+    return false;
+  }
+}
+
+document.getElementById('save-physio-btn').addEventListener('click', function () { physioPersist(true); });
+
+document.getElementById('tab-physio').addEventListener('click', function () {
+  saveCurrentDay();
+  if (coachMode === 'rehab') readRehabFields();
+  setCoachMode('physio');
+  physioShow();
+});
+
+/* ---------- جانب العميل ---------- */
+
+function physioHomeCard() {
+  if (!physioHasContent(clientPhysio)) return null;
+  const p = clientPhysio;
+  const value = p.totalSessions ? fill('ph_session_of', { n: Math.min(p.sessions.length, p.totalSessions), total: p.totalSessions })
+    : (p.homeEx.length ? fill('ph_home_count', { n: p.homeEx.length }) : t('ph_open'));
+  const note = p.totalSessions && p.homeEx.length ? fill('ph_home_count', { n: p.homeEx.length }) : '';
+  return homeCard('physio', t('tab_physio'), value, note, function () { goClientMode('physio'); }, 'physio');
+}
+
+function showClientPhysio() {
+  const box = document.getElementById('client-physio');
+  if (!box) return;
+  box.innerHTML = '';
+  const p = clientPhysio;
+  box.appendChild(phEl('h2', '', t('ph_client_title')));
+  if (!physioHasContent(p)) {
+    box.appendChild(clientStateCard('empty', t('ph_client_empty_title'), t('ph_client_empty')));
+    return;
+  }
+  if (p.diagnosis || p.goals) {
+    const about = phEl('div', 'about-box');
+    if (p.diagnosis) about.appendChild(phEl('strong', 'ph-diag', p.diagnosis));
+    if (p.goals) about.appendChild(phEl('p', '', p.goals));
+    box.appendChild(about);
+  }
+  if (p.totalSessions || p.sessions.length) {
+    const card = phEl('div', 'ph-card');
+    card.appendChild(phProgressEl(p));
+    const last = p.sessions[0];
+    if (last) card.appendChild(phEl('div', 'ph-prog-sub', fill('ph_last_session', { d: phDateText(last.date) })));
+    box.appendChild(card);
+  }
+  /* ألمك بعد الجلسات — من الأقدم للأحدث */
+  const pains = p.sessions.filter(function (s) { return s.painAfter !== ''; }).slice(0, 10).reverse();
+  if (pains.length >= 2) {
+    const card = phEl('div', 'ph-card');
+    card.appendChild(phEl('div', 'mod-sub', t('ph_pain_trend')));
+    const bars = phEl('div', 'ph-bars');
+    pains.forEach(function (s) {
+      const col = phEl('div', 'ph-bar-col');
+      const b = phEl('span', 'ph-bar-v');
+      b.style.height = Math.max(6, s.painAfter * 10) + '%';
+      b.classList.add(s.painAfter <= 3 ? 'ok' : s.painAfter <= 6 ? 'mid' : 'low');
+      col.appendChild(b);
+      col.appendChild(phEl('small', '', String(s.painAfter)));
+      bars.appendChild(col);
+    });
+    card.appendChild(bars);
+    const first = pains[0].painAfter, lastPain = pains[pains.length - 1].painAfter;
+    card.appendChild(phEl('div', 'ph-prog-sub', lastPain < first ? fill('ph_pain_better', { a: first, b: lastPain }) : fill('ph_pain_same', { a: first, b: lastPain })));
+    box.appendChild(card);
+  }
+  if (p.homeEx.length) {
+    box.appendChild(phEl('h3', '', t('ph_home_title')));
+    p.homeEx.forEach(function (x) {
+      const row = phEl('div', 'ph-home-row client');
+      row.appendChild(iconSvg('physio', 'ui-icon ph-home-icon'));
+      const text = phEl('div', 'ph-home-text');
+      text.appendChild(phEl('strong', '', x.name));
+      const line = phHomeLine(x);
+      if (line) text.appendChild(phEl('div', 'ex-meta', line));
+      if (x.note) text.appendChild(phEl('div', 'ph-sess-notes', x.note));
+      row.appendChild(text);
+      box.appendChild(row);
+    });
+  }
+}
+
+document.getElementById('ctab-physio').addEventListener('click', function () {
+  setClientMode('physio');
+  showClientPhysio();
+});
+
+
+/* ============================================================
+   مكان الشغل على الخريطة + «الأقرب ليا»
+   ------------------------------------------------------------
+   المتخصص بيلزق لينك جوجل ماب أو يدوس «حدد مكاني» وهو في الجيم
+   أو العيادة. بنحفظ اللينك (لو من جوجل/أبل ماب بس) والإحداثيات.
+   العميل بيشوف «افتح على الخريطة» والمسافة، ويقدر يرتّب المتخصصين
+   بالأقرب ليه — مكانه بيفضل على جهازه، مابيتحفظش ولا بيتبعت.
+   ============================================================ */
+
+let pwMapState = { url: '', lat: null, lng: null };
+let teamNear = null;
+
+const PW_MAP_HOSTS = /^https:\/\/((www\.)?google\.[a-z.]{2,8}\/maps|maps\.google\.[a-z.]{2,8}\/|maps\.app\.goo\.gl\/|goo\.gl\/maps\/|maps\.apple\.com\/)/i;
+
+function pwValidCoords(lat, lng) {
+  return isFinite(lat) && isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180 && !(lat === 0 && lng === 0);
+}
+
+/* بيطلّع الإحداثيات من لينك الخريطة أو من «30.04, 31.23» مكتوبة */
+function pwParseMap(raw) {
+  const text = String(raw || '').trim();
+  if (!text) return { url: '', lat: null, lng: null, ok: true };
+  const plain = text.match(/^(-?\d{1,2}(?:\.\d+)?)\s*[,،]\s*(-?\d{1,3}(?:\.\d+)?)$/);
+  if (plain) {
+    const la = Number(plain[1]), ln = Number(plain[2]);
+    return pwValidCoords(la, ln) ? { url: '', lat: la, lng: ln, ok: true } : { ok: false };
+  }
+  if (!PW_MAP_HOSTS.test(text) || text.length > 400 || /[\s<>"']/.test(text)) return { ok: false };
+  let decoded = text;
+  try { decoded = decodeURIComponent(text); } catch (error) { decoded = text; }
+  const pats = [/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/, /@(-?\d+\.\d+),(-?\d+\.\d+)/, /[?&](?:q|query|ll|destination|daddr|center)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/];
+  for (let i = 0; i < pats.length; i++) {
+    const m = decoded.match(pats[i]);
+    if (m && pwValidCoords(Number(m[1]), Number(m[2]))) return { url: text, lat: Number(m[1]), lng: Number(m[2]), ok: true };
+  }
+  return { url: text, lat: null, lng: null, ok: true };
+}
+
+function pwMapStatus(key, kind) {
+  const el = document.getElementById('pw-map-status');
+  if (!el) return;
+  el.textContent = t(key);
+  el.className = 'hint-text' + (kind ? ' pw-map-' + kind : '');
+}
+
+function pwMapPaint() {
+  const clear = document.getElementById('pw-map-clear');
+  const has = !!(pwMapState.url || pwMapState.lat !== null);
+  if (clear) clear.classList.toggle('hidden', !has);
+  if (!has) pwMapStatus('pw_map_hint', '');
+  else if (pwMapState.lat !== null) pwMapStatus('pw_map_ok', 'ok');
+  else pwMapStatus('pw_map_short', 'warn');
+}
+
+function pwMapFill(data) {
+  const input = document.getElementById('pw-map');
+  if (!input) return;
+  const lat = data.workLat === null || data.workLat === undefined ? null : Number(data.workLat);
+  const lng = data.workLng === null || data.workLng === undefined ? null : Number(data.workLng);
+  const okCoords = lat !== null && lng !== null && pwValidCoords(lat, lng);
+  pwMapState = { url: typeof data.workMapUrl === 'string' ? data.workMapUrl : '', lat: okCoords ? lat : null, lng: okCoords ? lng : null };
+  input.value = pwMapState.url || (okCoords ? lat.toFixed(5) + ', ' + lng.toFixed(5) : '');
+  pwMapPaint();
+}
+
+(function wirePwMap() {
+  const input = document.getElementById('pw-map');
+  if (!input) return;
+  input.addEventListener('input', function () {
+    const parsed = pwParseMap(input.value);
+    if (!parsed.ok) {
+      pwMapState = { url: '', lat: null, lng: null };
+      pwMapStatus('pw_map_bad', 'warn');
+      document.getElementById('pw-map-clear').classList.remove('hidden');
+      return;
+    }
+    pwMapState = { url: parsed.url, lat: parsed.lat, lng: parsed.lng };
+    pwMapPaint();
+  });
+  document.getElementById('pw-locate-btn').addEventListener('click', function () {
+    if (!navigator.geolocation) { pwMapStatus('pw_locate_fail', 'warn'); return; }
+    pwMapStatus('pw_locating', '');
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      const la = Math.round(pos.coords.latitude * 1e5) / 1e5, ln = Math.round(pos.coords.longitude * 1e5) / 1e5;
+      pwMapState = { url: '', lat: la, lng: ln };
+      input.value = la.toFixed(5) + ', ' + ln.toFixed(5);
+      pwMapPaint();
+    }, function () { pwMapStatus('pw_locate_fail', 'warn'); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+  });
+  document.getElementById('pw-map-clear').addEventListener('click', function () {
+    pwMapState = { url: '', lat: null, lng: null };
+    input.value = '';
+    pwMapPaint();
+  });
+})();
+
+function providerCoords(provider) {
+  if (!provider) return null;
+  const lat = Number(provider.workLat), lng = Number(provider.workLng);
+  if (provider.workLat === null || provider.workLat === undefined || provider.workLat === '') return null;
+  return pwValidCoords(lat, lng) ? { lat: lat, lng: lng } : null;
+}
+
+function providerMapHref(provider) {
+  if (!provider) return '';
+  if (typeof provider.workMapUrl === 'string' && PW_MAP_HOSTS.test(provider.workMapUrl) && !/[\s<>"']/.test(provider.workMapUrl)) return provider.workMapUrl;
+  const c = providerCoords(provider);
+  return c ? 'https://www.google.com/maps/search/?api=1&query=' + c.lat + ',' + c.lng : '';
+}
+
+function distanceKm(a, b) {
+  const R = 6371, toR = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * toR, dLng = (b.lng - a.lng) * toR;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * toR) * Math.cos(b.lat * toR) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+function providerDistanceKm(provider) {
+  if (!teamNear) return null;
+  const c = providerCoords(provider);
+  return c ? distanceKm(teamNear, c) : null;
+}
+
+function kmText(km) {
+  return fill('near_km', { n: km < 10 ? km.toFixed(1) : String(Math.round(km)) });
+}
+
+function providerMapRow(provider, href) {
+  const row = document.createElement('div');
+  row.className = 'pw-line pw-map-line';
+  const a = document.createElement('a');
+  a.className = 'pw-map-link';
+  a.href = href;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.textContent = '📍 ' + t('pw_open_map');
+  row.appendChild(a);
+  const km = providerDistanceKm(provider);
+  if (km !== null) {
+    const d = document.createElement('span');
+    d.className = 'pw-dist';
+    d.textContent = fill('near_away', { d: kmText(km) });
+    row.appendChild(d);
+  }
+  return row;
+}
+
+(function wireTeamNear() {
+  const btn = document.getElementById('team-near-btn');
+  if (!btn) return;
+  const msg = document.getElementById('team-near-msg');
+  btn.addEventListener('click', function () {
+    if (teamNear) {
+      teamNear = null;
+      btn.textContent = t('near_btn');
+      btn.classList.remove('on');
+      msg.textContent = '';
+      renderTeamPicker();
+      return;
+    }
+    if (!navigator.geolocation) { msg.textContent = t('near_fail'); return; }
+    msg.textContent = t('pw_locating');
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      teamNear = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      btn.textContent = t('near_btn_off');
+      btn.classList.add('on');
+      const withMap = teamProviders.filter(function (p) { return !!providerCoords(p); }).length;
+      msg.textContent = withMap ? t('near_on') : t('near_none');
+      renderTeamPicker();
+    }, function () { msg.textContent = t('near_fail'); }, { timeout: 15000, maximumAge: 300000 });
+  });
+})();

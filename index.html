@@ -764,6 +764,7 @@
     <p class="or" data-t="team_hint">دوس على أي متخصص تحب تشتغل معاه — تقدر تغيّر اختيارك في أي وقت بعدين</p>
 
     <input id="team-search" type="search" data-t-ph="team_search_ph">
+    <div class="team-near-row"><button type="button" class="secondary" id="team-near-btn" data-t="near_btn">📍 رتّب بالأقرب ليا</button><span class="hint-text" id="team-near-msg"></span></div>
     <p class="team-empty hidden" id="team-empty" data-t="team_no_match">مفيش متخصص بالاسم ده</p>
 
     <div id="team-list"></div>
@@ -1180,6 +1181,13 @@
       </div>
       <label class="field-label" data-t="pw_place">اسم المكان</label>
       <input id="pw-place" maxlength="80" data-t-ph="pw_place_ph">
+      <label class="field-label" data-t="pw_map">مكان الشغل على الخريطة</label>
+      <input id="pw-map" type="url" maxlength="400" inputmode="url" data-t-ph="pw_map_ph">
+      <div class="pw-map-row">
+        <button type="button" class="secondary" id="pw-locate-btn" data-t="pw_locate">📍 حدد مكاني دلوقتي</button>
+        <button type="button" class="link hidden" id="pw-map-clear" data-t="pw_map_clear">شيل المكان</button>
+      </div>
+      <p class="hint-text" id="pw-map-status" data-t="pw_map_hint">الزق لينك جوجل ماب لمكان الشغل، أو دوس «حدد مكاني» وإنت في الجيم/العيادة. حط مكان الشغل مش البيت — المكان بيظهر للعملاء.</p>
       <label class="field-label" data-t="pw_days">أيام تواجدك</label>
       <div class="pw-days" id="pw-days"></div>
       <div class="row">
@@ -1277,6 +1285,7 @@
     <div class="tabs">
       <button type="button" class="tab active" id="tab-training"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg><span data-t="tab_training">تمرين</span></button>
       <button type="button" class="tab" id="tab-rehab"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line></svg><span data-t="tab_rehab">تأهيل</span></button>
+      <button type="button" class="tab hidden" id="tab-physio"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12V5.5a1.3 1.3 0 0 1 2.6 0V11"></path><path d="M11.6 11V4.8a1.3 1.3 0 0 1 2.6 0V11"></path><path d="M14.2 11V6a1.3 1.3 0 0 1 2.6 0v7.5"></path><path d="M16.8 12.5V8.3a1.3 1.3 0 0 1 2.6 0V15c0 3.9-2.4 6.5-6 6.5-2.5 0-4-1-5.4-3l-2.7-4.3c-.5-.8-.2-1.7.5-2.1.7-.4 1.6-.2 2.1.5L9 15"></path></svg><span data-t="tab_physio">علاج طبيعي</span></button>
       <button type="button" class="tab" id="tab-nutrition"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path></svg><span data-t="tab_nutrition">تغذية</span></button>
       <button type="button" class="tab" id="tab-consult"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4h9L20 9.5V18.5c0 .8-.7 1.5-1.5 1.5h-13C4.7 20 4 19.3 4 18.5z"></path><path d="M13 4v4.5a1 1 0 0 0 1 1H19"></path><line x1="8" y1="12.5" x2="15" y2="12.5"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg><span data-t="tab_consult">استشارة</span><span class="tab-badge hidden" id="tab-consult-badge"></span></button>
       <button type="button" class="tab" id="tab-injuries"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg><span data-t="tab_injuries">إصابات</span><span class="tab-badge hidden" id="tab-injuries-badge"></span></button>
@@ -1383,16 +1392,6 @@
 
     <!-- ============ برنامج التأهيل ============ -->
     <div id="rehab-panel" class="hidden">
-      <!-- أجهزة العلاج الطبيعي: بتظهر لأخصائي العلاج الطبيعي والتأهيل بس -->
-      <div class="add-box hidden" id="modality-box">
-        <h3 data-t="modality_title">أجهزة العلاج الطبيعي</h3>
-        <p class="hint-text" data-t="modality_hint">مرجع للإعدادات وموانع الاستعمال. اختار جهاز تشوف بروتوكولاته، وتقدر تضيف الجلسة لخطة العميل.</p>
-        <div class="mod-chips" id="modality-chips"></div>
-        <div id="modality-detail"></div>
-        <div id="modality-plan"></div>
-        <p class="message" id="modality-message"></p>
-      </div>
-
       <div class="template-box">
         <label class="field-label" data-t="use_template">استخدم قالب جاهز</label>
         <select id="template-pick"></select>
@@ -1444,6 +1443,68 @@
       </div>
 
       <button id="save-rehab-btn" data-t="save_rehab">حفظ برنامج التأهيل</button>
+    </div>
+
+    <!-- ============ العلاج الطبيعي (تخصص لوحده) ============ -->
+    <div id="physio-panel" class="hidden">
+      <p class="ph-ro-note hidden" id="ph-ro-note" data-t="ph_ro_note">إنت شايف العلاج الطبيعي للمتابعة بس — التعديل لأخصائي العلاج الطبيعي أو الطبيب.</p>
+
+      <div class="add-box">
+        <h3 data-t="ph_plan_title">خطة العلاج</h3>
+        <label class="field-label" data-t="ph_diagnosis">التشخيص الوظيفي</label>
+        <input id="ph-diagnosis" maxlength="200" data-t-ph="ph_diagnosis_ph">
+        <label class="field-label" data-t="ph_goals">أهداف العلاج (يقراها العميل)</label>
+        <textarea id="ph-goals" rows="3" maxlength="600" data-t-ph="ph_goals_ph"></textarea>
+        <div class="row">
+          <div><label class="field-label" data-t="ph_total">عدد الجلسات</label><input id="ph-total" type="number" min="0" max="200"></div>
+          <div><label class="field-label" data-t="ph_per_week">جلسات في الأسبوع</label><input id="ph-per-week" type="number" min="0" max="14"></div>
+        </div>
+        <div class="ph-progress" id="ph-progress"></div>
+      </div>
+
+      <div class="add-box">
+        <h3 data-t="ph_assess_title">التقييم</h3>
+        <div id="ph-assess"></div>
+        <button type="button" class="secondary ph-edit" id="ph-reassess-btn" data-t="ph_reassess">+ إعادة تقييم (تقييم جديد)</button>
+        <div id="ph-assess-history"></div>
+      </div>
+
+      <!-- أجهزة العلاج الطبيعي: جوه تبويب العلاج الطبيعي -->
+      <div class="add-box hidden" id="modality-box">
+        <h3 data-t="modality_title">أجهزة العلاج الطبيعي</h3>
+        <p class="hint-text" data-t="modality_hint">مرجع للإعدادات وموانع الاستعمال. اختار جهاز تشوف بروتوكولاته، وتقدر تضيف الجلسة لخطة العميل.</p>
+        <div class="mod-chips" id="modality-chips"></div>
+        <div id="modality-detail"></div>
+        <div id="modality-plan"></div>
+        <p class="message" id="modality-message"></p>
+      </div>
+
+
+      <div class="add-box">
+        <h3 data-t="ph_sessions_title">سجل الجلسات</h3>
+        <button type="button" class="secondary ph-edit" id="ph-session-add" data-t="ph_session_add">+ سجّل جلسة</button>
+        <div id="ph-session-form" class="hidden"></div>
+        <div id="ph-sessions"></div>
+      </div>
+
+      <div class="add-box">
+        <h3 data-t="ph_home_title">تمارين للبيت</h3>
+        <p class="hint-text" data-t="ph_home_hint">تمارين بسيطة يعملها العميل بين الجلسات — بتظهر عنده في تبويب العلاج الطبيعي.</p>
+        <div id="ph-home-list"></div>
+        <div class="ph-edit ph-home-add">
+          <input id="ph-home-name" list="ph-ex-names" maxlength="80" data-t-ph="ph_home_name_ph">
+          <div class="row four">
+            <input id="ph-home-sets" type="number" min="0" max="20" data-t-ph="ex_sets">
+            <input id="ph-home-reps" maxlength="12" data-t-ph="ex_reps">
+            <input id="ph-home-hold" type="number" min="0" max="600" data-t-ph="ph_hold_ph">
+            <input id="ph-home-times" type="number" min="0" max="10" data-t-ph="ph_times_ph">
+          </div>
+          <input id="ph-home-note" maxlength="160" data-t-ph="ph_home_note_ph">
+          <button type="button" class="secondary" id="ph-home-add-btn" data-t="add_ex">+ إضافة تمرين</button>
+        </div>
+      </div>
+
+      <button id="save-physio-btn" class="ph-edit" data-t="ph_save">حفظ العلاج الطبيعي</button>
     </div>
 
     <div id="nutrition-panel" class="hidden">
@@ -1627,6 +1688,7 @@
     <div class="tabs hidden" id="client-tabs">
       <button type="button" class="tab active" id="ctab-training"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"></rect><rect x="19" y="9" width="3" height="6" rx="1"></rect><line x1="5" y1="12" x2="19" y2="12"></line><rect x="6" y="7" width="2.5" height="10" rx="1"></rect><rect x="15.5" y="7" width="2.5" height="10" rx="1"></rect></svg><span data-t="tab_training">تمرين</span></button>
       <button type="button" class="tab" id="ctab-rehab"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"></rect><line x1="10" y1="9" x2="10" y2="15"></line><line x1="14" y1="9" x2="14" y2="15"></line></svg><span data-t="tab_rehab">تأهيل</span></button>
+      <button type="button" class="tab hidden" id="ctab-physio"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12V5.5a1.3 1.3 0 0 1 2.6 0V11"></path><path d="M11.6 11V4.8a1.3 1.3 0 0 1 2.6 0V11"></path><path d="M14.2 11V6a1.3 1.3 0 0 1 2.6 0v7.5"></path><path d="M16.8 12.5V8.3a1.3 1.3 0 0 1 2.6 0V15c0 3.9-2.4 6.5-6 6.5-2.5 0-4-1-5.4-3l-2.7-4.3c-.5-.8-.2-1.7.5-2.1.7-.4 1.6-.2 2.1.5L9 15"></path></svg><span data-t="tab_physio">علاج طبيعي</span></button>
       <button type="button" class="tab" id="ctab-nutrition"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5c-2.8 0-5 2.3-5 5.8 0 3 2.1 5.7 4 5.7.8 0 1.2-.4 1.9-.4.7 0 1.1.4 1.9.4 1.7 0 3.7-2.4 3.9-5.1.2-2.7-1.5-4.6-3.4-5"></path><path d="M12 8.5V6.3c0-.9.7-1.8 2-2"></path></svg><span data-t="tab_nutrition">تغذية</span></button>
       <button type="button" class="tab" id="ctab-consult"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4h9L20 9.5V18.5c0 .8-.7 1.5-1.5 1.5h-13C4.7 20 4 19.3 4 18.5z"></path><path d="M13 4v4.5a1 1 0 0 0 1 1H19"></path><line x1="8" y1="12.5" x2="15" y2="12.5"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg><span data-t="tab_consult">استشارة</span><span class="tab-badge hidden" id="ctab-consult-badge"></span></button>
       <button type="button" class="tab" id="ctab-activity"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="4.5"></circle><path d="M9.5 11 7 4h3l2 6"></path><path d="M14.5 11 17 4h-3l-2 6"></path></svg><span data-t="tab_activity">نشاطي</span></button>
@@ -1795,6 +1857,9 @@
       <h2 data-t="activity_history">سجل النشاط</h2>
       <ul id="act-list"></ul>
     </div>
+
+    <!-- ============ العلاج الطبيعي: جانب العميل ============ -->
+    <div id="client-physio" class="hidden"></div>
 
     <div id="client-rehab" class="hidden">
       <h2 id="client-rehab-title"></h2>

@@ -29,19 +29,22 @@ export const SPECIALTIES = {
   rehab: {
     ar: 'أخصائي تأهيل', en: 'Rehabilitation specialist',
     icon: '🩹',
-    scopes: ['rehab', 'training'],
+    /* بيشوف العلاج الطبيعي بس (physio_view) — مابيعدّلش فيه */
+    scopes: ['rehab', 'training', 'physio_view'],
     books: true, medical: true
   },
   physio: {
     ar: 'أخصائي علاج طبيعي', en: 'Physiotherapist',
     icon: '🖐️',
-    scopes: ['rehab'],
+    /* العلاج الطبيعي تخصص لوحده (تقييم، أجهزة، جلسات، تمارين للبيت) —
+       لو الأخصائي بيعمل تأهيل كمان بيضيف تخصص «أخصائي تأهيل» جنبه */
+    scopes: ['physio'],
     books: true, medical: true
   },
   ortho: {
     ar: 'طبيب عظام', en: 'Orthopaedic doctor',
     icon: '🦴',
-    scopes: ['rehab', 'consult'],
+    scopes: ['rehab', 'consult', 'physio'],
     books: true, medical: true, clears: true
   },
   radiology: {
@@ -53,7 +56,7 @@ export const SPECIALTIES = {
   sports_medicine: {
     ar: 'طبيب طب رياضي', en: 'Sports medicine doctor',
     icon: '🫀',
-    scopes: ['rehab', 'consult'],
+    scopes: ['rehab', 'consult', 'physio'],
     books: true, medical: true, clears: true
   },
   pharmacist: {
