@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فريق ADAM الذكي</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <meta name="theme-color" content="#0b1220">
+  <style>
+    :root {
+      --bg: #0b1220; --surface: #151f33; --surface-2: #1c2942; --field: #0e1729;
+      --line: #2a3b57; --ink: #eef3f9; --muted: #8fa3bd;
+      --brand: #22c55e; --brand-dark: #16a34a; --danger: #f87171; --warn: #fbbf24; --info: #38bdf8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 22px 16px 60px;
+      background: radial-gradient(1100px 500px at 50% -220px, #1a2b45 0%, transparent 70%), var(--bg);
+      background-attachment: fixed;
+      color: var(--ink); font-family: 'Cairo', sans-serif; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; }
+    .hidden { display: none !important; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 18px; }
+    header h1 { margin: 0; font-size: 22px; color: var(--brand); letter-spacing: .5px; }
+    header .sub { margin: 0; font-size: 12.5px; color: var(--muted); }
+    a { color: var(--info); }
+    .back { font-size: 13px; text-decoration: none; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); white-space: nowrap; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin: 0 0 14px; box-shadow: 0 18px 40px -26px rgba(0,0,0,.9); }
+    .card h2 { margin: 0 0 4px; font-size: 17px; }
+    .card h3 { margin: 16px 0 8px; font-size: 14px; color: var(--muted); font-weight: 600; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .msg { font-size: 13.5px; margin: 8px 0 0; min-height: 1em; }
+    .msg.err { color: var(--danger); }
+    .msg.ok { color: var(--brand); }
+    button, .btn {
+      font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; border: none; border-radius: 12px;
+      padding: 10px 16px; color: #06210f; background: linear-gradient(180deg, var(--brand), var(--brand-dark));
+    }
+    button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); font-weight: 600; }
+    button.danger { background: transparent; color: var(--danger); border: 1px solid rgba(248,113,113,.5); }
+    button:disabled { opacity: .5; cursor: default; }
+    input { font: inherit; width: 100%; padding: 10px 12px; margin: 0 0 8px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
+
+    /* الموظفين */
+    .staff { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+    .agent { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+    .agent.soon { opacity: .6; }
+    .agent-top { display: flex; align-items: center; gap: 10px; }
+    .agent-icon { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: rgba(34,197,94,.12); color: var(--brand); flex: none; }
+    .agent.soon .agent-icon { background: rgba(143,163,189,.12); color: var(--muted); }
+    .agent-icon svg { width: 20px; height: 20px; }
+    .agent-name { font-weight: 700; font-size: 14.5px; }
+    .agent-job { font-size: 12.5px; color: var(--muted); }
+    .chip { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .chip.on { background: rgba(34,197,94,.16); color: var(--brand); }
+    .chip.off { background: rgba(248,113,113,.14); color: var(--danger); }
+    .chip.soon { background: rgba(143,163,189,.15); color: var(--muted); }
+
+    /* التقرير */
+    .report-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+    .lines { margin: 12px 0 0; padding: 0; list-style: none; counter-reset: ln; }
+    .lines li { counter-increment: ln; position: relative; padding: 9px 38px 9px 10px; margin: 0 0 6px; background: var(--field); border: 1px solid var(--line); border-radius: 12px; font-size: 14.5px; }
+    .lines li::before { content: counter(ln); position: absolute; right: 9px; top: 10px; width: 21px; height: 21px; border-radius: 50%; background: var(--brand); color: #06210f; font-size: 12px; font-weight: 800; display: grid; place-items: center; }
+    .warn-box { margin-top: 10px; padding: 9px 12px; border-radius: 12px; background: rgba(251,191,36,.1); color: var(--warn); font-size: 13px; }
+    .movers { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .mover { font-size: 12.5px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
+    .mover.good { border-color: rgba(34,197,94,.5); color: var(--brand); }
+    .mover.bad { border-color: rgba(248,113,113,.5); color: var(--danger); }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; text-align: start; padding: 6px 6px; border-bottom: 1px solid var(--line); }
+    td { padding: 7px 6px; border-bottom: 1px solid rgba(42,59,87,.5); }
+    td.n { text-align: center; font-variant-numeric: tabular-nums; }
+    th.n { text-align: center; }
+    .d-good { color: var(--brand); font-weight: 700; }
+    .d-bad { color: var(--danger); font-weight: 700; }
+    .d-flat { color: var(--muted); }
+    .todo { margin: 0; padding: 0; list-style: none; }
+    .todo li { padding: 6px 0; font-size: 13.5px; border-bottom: 1px dashed rgba(42,59,87,.7); }
+    .todo li b { color: var(--warn); margin-inline-end: 4px; }
+    .feedback { margin-top: 14px; padding: 12px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+    .feedback .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .feedback .row button { flex: 1 1 140px; }
+    .fb-done { font-size: 13.5px; }
+    .score { font-size: 13px; color: var(--muted); margin-top: 8px; }
+    .history { margin: 0; padding: 0; list-style: none; }
+    .history li { display: flex; gap: 10px; align-items: center; padding: 9px 4px; border-bottom: 1px solid rgba(42,59,87,.6); cursor: pointer; font-size: 13.5px; }
+    .history li:hover, .history li.sel { background: rgba(56,189,248,.06); }
+    .history .h-date { color: var(--muted); font-size: 12px; white-space: nowrap; min-width: 86px; }
+    .history .h-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .log { margin: 0; padding: 0; list-style: none; font-size: 12.5px; }
+    .log li { padding: 5px 0; border-bottom: 1px solid rgba(42,59,87,.5); color: var(--muted); }
+    .log .bad { color: var(--danger); }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: var(--brand); border-radius: 50%; animation: sp 1s linear infinite; vertical-align: -2px; }
+    @keyframes sp { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+    @media (max-width: 420px) { td, th { padding: 6px 3px; } table { font-size: 12.5px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>فريق ADAM الذكي</h1>
+        <p class="sub" id="who"></p>
+      </div>
+      <a class="back" href="./">← البرنامج</a>
+    </header>
+
+    <!-- جاري التحميل -->
+    <div class="card" id="loading-box"><span class="spin"></span> <span class="muted">بيحمّل…</span></div>
+
+    <!-- مش داخل -->
+    <div class="card hidden" id="login-box">
+      <h2>ادخل بحسابك</h2>
+      <p class="muted">الصفحة دي لصاحب المنصة بس. نفس الإيميل والباسورد بتوع البرنامج.</p>
+      <input id="login-email" type="email" placeholder="الإيميل" dir="ltr" autocomplete="username">
+      <input id="login-pass" type="password" placeholder="الباسورد" dir="ltr" autocomplete="current-password">
+      <button type="button" id="login-btn">دخول</button>
+      <p class="msg err" id="login-msg"></p>
+    </div>
+
+    <!-- مش مسموح / مش متظبط -->
+    <div class="card hidden" id="blocked-box">
+      <h2 id="blocked-title"></h2>
+      <p class="muted" id="blocked-text"></p>
+    </div>
+
+    <div id="main" class="hidden">
+      <!-- الموظفين -->
+      <div class="card">
+        <h2>الموظفين</h2>
+        <p class="muted">كل موظف بيقرا بس — مفيش حد فيهم بيكتب في بيانات العملاء أو بيبعت لحد من غير موافقتك.</p>
+        <div class="staff" id="staff"></div>
+      </div>
+
+      <!-- محلّل الأعمال -->
+      <div class="card" id="analyst-card">
+        <div class="report-head">
+          <div>
+            <h2>محلّل الأعمال</h2>
+            <p class="muted" id="report-period"></p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="run-btn">شغّله دلوقتي</button>
+            <button type="button" class="ghost" id="toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="run-msg"></p>
+
+        <div id="report-empty" class="hidden">
+          <p class="muted">لسه مفيش تقارير. دوس «شغّله دلوقتي» عشان يعمل أول تقرير، وبعد كده هيشتغل لوحده كل سبت الصبح.</p>
+        </div>
+
+        <div id="report-body" class="hidden">
+          <ol class="lines" id="report-lines"></ol>
+          <div class="warn-box hidden" id="report-ai-err"></div>
+          <div class="movers" id="report-movers"></div>
+
+          <h3>الأرقام: الأسبوع ده قدّام اللي قبله</h3>
+          <table>
+            <thead><tr><th>الرقم</th><th class="n">الأسبوع ده</th><th class="n">اللي قبله</th><th class="n">الفرق</th></tr></thead>
+            <tbody id="report-table"></tbody>
+          </table>
+
+          <div id="todo-wrap">
+            <h3>مستني منك دلوقتي</h3>
+            <ul class="todo" id="report-todo"></ul>
+          </div>
+
+          <div class="feedback" id="feedback">
+            <strong>خدت قرار بسبب التقرير ده؟</strong>
+            <p class="muted" style="margin:2px 0 0">ده الرقم الوحيد اللي بيقول الموظف ده نافع ولا لأ.</p>
+            <div id="fb-ask">
+              <input id="fb-note" placeholder="القرار كان إيه؟ (اختياري)">
+              <div class="row">
+                <button type="button" id="fb-yes">أيوه، خدت قرار</button>
+                <button type="button" class="ghost" id="fb-no">لأ، مفيدش</button>
+              </div>
+            </div>
+            <p class="fb-done hidden" id="fb-done"></p>
+          </div>
+          <p class="score" id="score"></p>
+        </div>
+      </div>
+
+      <!-- التقارير القديمة -->
+      <div class="card hidden" id="history-card">
+        <h2>التقارير اللي فاتت</h2>
+        <ul class="history" id="history"></ul>
+      </div>
+
+      <!-- سجل التشغيل -->
+      <div class="card">
+        <h2>سجل التشغيل</h2>
+        <ul class="log" id="log"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="team.js"></script>
+</body>
+</html>
