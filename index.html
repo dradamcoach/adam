@@ -1910,6 +1910,43 @@
       <button type="button" class="tab" id="pgtab-checkins" data-t="pgtab_checkins">تقارير المتابعة</button>
       <button type="button" class="tab" id="pgtab-appt" data-t="pgtab_appt">المواعيد</button>
       <button type="button" class="tab" id="pgtab-photos" data-t="pgtab_photos">صور التقدم</button>
+      <button type="button" class="tab" id="pgtab-watch" data-t="pgtab_watch">الساعة</button>
+    </div>
+
+    <div id="progress-watch" class="hidden">
+      <div class="add-box">
+        <h3 data-t="wr_title">تمارين الساعة</h3>
+        <label class="file-pick">
+          <span data-t="wr_upload">ارفع ملف تمرين من ساعتك</span>
+          <input type="file" id="wr-file" accept=".gpx,.tcx,.fit,application/gpx+xml,application/octet-stream" multiple>
+        </label>
+        <details class="wr-help">
+          <summary data-t="wr_help_title">أجيب الملف إزاي؟</summary>
+          <p data-t="wr_help"></p>
+        </details>
+        <div class="wr-strava hidden" id="wr-strava-box">
+          <h4 data-t="wr_strava_title">ربط Strava</h4>
+          <p class="hint-text" data-t="wr_strava_hint"></p>
+          <button type="button" class="strava-btn" id="wr-strava-connect" data-t="wr_strava_connect">اربط Strava</button>
+          <div class="hidden" id="wr-strava-on">
+            <p class="wr-strava-ok" data-t="wr_strava_connected">Strava مربوط ✓</p>
+            <div class="row">
+              <button type="button" class="secondary" id="wr-strava-sync" data-t="wr_strava_sync">زامن دلوقتي</button>
+              <button type="button" class="secondary" id="wr-strava-off" data-t="wr_strava_disconnect">افصل Strava</button>
+            </div>
+          </div>
+          <p class="wr-powered" data-t="wr_powered">Powered by Strava</p>
+        </div>
+        <div class="wr-ble hidden" id="wr-ble-box">
+          <h4 data-t="wr_ble_title">نبض مباشر</h4>
+          <p class="hint-text" data-t="wr_ble_hint"></p>
+          <button type="button" class="secondary" id="wr-ble-btn" data-t="wr_ble_connect">وصّل النبض</button>
+          <div class="wr-live hidden" id="wr-ble-live"></div>
+        </div>
+        <p class="message" id="wr-message"></p>
+      </div>
+      <p class="hint-text" id="wr-empty" data-t="wr_empty"></p>
+      <div id="wr-list"></div>
     </div>
 
     <div id="progress-photos" class="hidden">

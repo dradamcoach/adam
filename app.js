@@ -1075,6 +1075,42 @@ const TEXT = {
     med_saved: 'اتحفظ',
     seed_medlib_btn: 'تحميل محتوى مبدئي للمكتبة الطبية',
     team_link: 'فريق الذكاء الاصطناعي',
+    wr_strava_title: 'ربط Strava',
+    wr_strava_hint: 'لو ساعتك بتزامن مع Strava (Garmin وCOROS وPolar وSuunto وApple وSamsung وHuawei كلهم بيعملوا كده)، اربطه مرة واحدة وتمارينك هتوصل لوحدها.',
+    wr_strava_connect: 'اربط Strava',
+    wr_strava_sync: 'زامن دلوقتي',
+    wr_strava_disconnect: 'افصل Strava',
+    wr_strava_connected: 'Strava مربوط ✓',
+    wr_strava_synced: 'وصل {n} تمرين جديد من Strava',
+    wr_strava_none: 'مفيش تمارين جديدة على Strava',
+    wr_strava_failed: 'Strava: ',
+    wr_powered: 'Powered by Strava',
+    pgtab_watch: 'الساعة',
+    wr_title: 'تمارين الساعة',
+    wr_upload: 'ارفع ملف تمرين من ساعتك (GPX أو TCX أو FIT)',
+    wr_help_title: 'أجيب الملف إزاي؟',
+    wr_help: 'Garmin Connect: افتح التمرين ← ⚙️ ← Export Original (FIT) أو Export to TCX.\nStrava: افتح التمرين ← … ← Export GPX أو Export Original.\nCOROS / Polar / Suunto: من التطبيق أو الموقع ← Export ← FIT أو GPX.\nApple Watch: تطبيق زي HealthFit أو RunGap بيصدّر التمرين FIT أو GPX.\nSamsung / Huawei: صدّر لـ Strava الأول، وبعدين نزّل الملف من Strava.',
+    wr_saved: 'اتسجل التمرين: {sport} — {dur}',
+    wr_dup: 'التمرين ده متسجل قبل كده',
+    wr_bad: 'الملف ده مش مفهوم — ارفع GPX أو TCX أو FIT',
+    wr_empty: 'لسه مفيش تمارين من الساعة.',
+    wr_counted: 'واتحسب يوم تمرين في التزامك',
+    wr_ble_title: 'نبض مباشر',
+    wr_ble_hint: 'وصّل حزام صدر أو ساعة بتبث النبض بالبلوتوث (Garmin/Polar/Coros/Wahoo — من إعدادات الساعة: Broadcast Heart Rate). بيشتغل على أندرويد والكمبيوتر، مش على الآيفون.',
+    wr_ble_connect: 'وصّل النبض',
+    wr_ble_stop: 'وقّف واحفظ',
+    wr_ble_unsupported: 'المتصفح ده مابيدعمش البلوتوث — جرّب Chrome على أندرويد أو الكمبيوتر.',
+    wr_ble_failed: 'مااتوصلش: ',
+    wr_ble_live: '{bpm} نبضة/دقيقة · {zone} · {time}',
+    wr_ble_session: 'تمرين بحساس النبض',
+    wr_zone: 'منطقة {n}',
+    wr_dur: '{m} دقيقة',
+    wr_km: '{km} كم',
+    wr_avg_hr: 'متوسط النبض {v}',
+    wr_max_hr: 'أقصى {v}',
+    wr_kcal: '{v} سعر',
+    wr_zones: 'وقت المناطق',
+    wr_sport_run: 'جري', wr_sport_ride: 'عجلة', wr_sport_swim: 'سباحة', wr_sport_walk: 'مشي', wr_sport_strength: 'حديد', wr_sport_hike: 'هايكنج', wr_sport_other: 'تمرين',
     pw_title: 'مكان شغلك ومواعيدك (اختياري — بيزوّد ثقة العملاء فيك)',
     pw_gov: 'المحافظة',
     pw_gov_none: '— اختار المحافظة —',
@@ -2626,6 +2662,42 @@ const TEXT = {
     med_saved: 'Saved',
     seed_medlib_btn: 'Load starter content for the medical library',
     team_link: 'AI team',
+    wr_strava_title: 'Connect Strava',
+    wr_strava_hint: 'If your watch syncs to Strava (Garmin, COROS, Polar, Suunto, Apple, Samsung and Huawei all can), connect it once and your workouts arrive on their own.',
+    wr_strava_connect: 'Connect Strava',
+    wr_strava_sync: 'Sync now',
+    wr_strava_disconnect: 'Disconnect Strava',
+    wr_strava_connected: 'Strava connected ✓',
+    wr_strava_synced: '{n} new workouts from Strava',
+    wr_strava_none: 'No new workouts on Strava',
+    wr_strava_failed: 'Strava: ',
+    wr_powered: 'Powered by Strava',
+    pgtab_watch: 'Watch',
+    wr_title: 'Watch workouts',
+    wr_upload: 'Upload a workout file from your watch (GPX, TCX or FIT)',
+    wr_help_title: 'How do I get the file?',
+    wr_help: 'Garmin Connect: open the activity ← ⚙️ ← Export Original (FIT) or Export to TCX.\nStrava: open the activity ← … ← Export GPX or Export Original.\nCOROS / Polar / Suunto: in the app or website ← Export ← FIT or GPX.\nApple Watch: an app like HealthFit or RunGap exports FIT or GPX.\nSamsung / Huawei: sync to Strava first, then download the file from Strava.',
+    wr_saved: 'Workout saved: {sport} — {dur}',
+    wr_dup: 'This workout is already saved',
+    wr_bad: 'Could not read this file — upload GPX, TCX or FIT',
+    wr_empty: 'No watch workouts yet.',
+    wr_counted: 'and it counts as a training day',
+    wr_ble_title: 'Live heart rate',
+    wr_ble_hint: 'Connect a chest strap or a watch that broadcasts heart rate over Bluetooth (Garmin/Polar/Coros/Wahoo — in watch settings: Broadcast Heart Rate). Works on Android and computers, not iPhone.',
+    wr_ble_connect: 'Connect heart rate',
+    wr_ble_stop: 'Stop and save',
+    wr_ble_unsupported: 'This browser has no Bluetooth support — try Chrome on Android or a computer.',
+    wr_ble_failed: 'Could not connect: ',
+    wr_ble_live: '{bpm} bpm · {zone} · {time}',
+    wr_ble_session: 'Heart-rate sensor workout',
+    wr_zone: 'Zone {n}',
+    wr_dur: '{m} min',
+    wr_km: '{km} km',
+    wr_avg_hr: 'avg HR {v}',
+    wr_max_hr: 'max {v}',
+    wr_kcal: '{v} kcal',
+    wr_zones: 'Time in zones',
+    wr_sport_run: 'Run', wr_sport_ride: 'Ride', wr_sport_swim: 'Swim', wr_sport_walk: 'Walk', wr_sport_strength: 'Strength', wr_sport_hike: 'Hike', wr_sport_other: 'Workout',
     pw_title: 'Where you work and when (optional — builds client trust)',
     pw_gov: 'Governorate',
     pw_gov_none: '— Choose governorate —',
@@ -22089,13 +22161,15 @@ const PROGRESS_PANELS = {
   inbody: document.getElementById('progress-inbody'),
   checkins: document.getElementById('progress-checkins'),
   appt: document.getElementById('progress-appt'),
-  photos: document.getElementById('progress-photos')
+  photos: document.getElementById('progress-photos'),
+  watch: document.getElementById('progress-watch')
 };
 const PROGRESS_TABS = {
   inbody: document.getElementById('pgtab-inbody'),
   checkins: document.getElementById('pgtab-checkins'),
   appt: document.getElementById('pgtab-appt'),
-  photos: document.getElementById('pgtab-photos')
+  photos: document.getElementById('pgtab-photos'),
+  watch: document.getElementById('pgtab-watch')
 };
 
 function showProgressTab(key) {
@@ -22240,6 +22314,7 @@ async function loadProgressData() {
   }
   renderCheckinList();
   loadProgressPhotos();
+  loadWearables();
 }
 
 async function saveInbodyDoc() {
@@ -26367,3 +26442,526 @@ function providerWorkEl(provider) {
   });
   return box;
 }
+
+
+/* ============================================================
+   الساعات الذكية — ملف التمرين + نبض مباشر بالبلوتوث
+   ------------------------------------------------------------
+   • ملف: GPX / TCX / FIT (أي ساعة تقريبًا بتصدّر واحد منهم).
+     بنقرا الملف على جهاز العميل نفسه، وبنحفظ الملخص بس (المدة، المسافة،
+     النبض، السعرات، مناطق النبض، ٦٠ نقطة نبض للرسمة) — مش المسار.
+   • بلوتوث: خدمة heart_rate القياسية — حزام صدر أو ساعة بتبث النبض.
+   • التمرين بيتحسب يوم تمرين في التزام العميل (progress.history).
+   ============================================================ */
+
+let wearSessions = [];
+const WEAR_KEEP = 60;
+
+function wearSportKey(raw) {
+  const s = String(raw || '').toLowerCase();
+  if (/run|jog|جري/.test(s)) return 'run';
+  if (/cycl|bik|ride/.test(s)) return 'ride';
+  if (/swim/.test(s)) return 'swim';
+  if (/hik/.test(s)) return 'hike';
+  if (/walk/.test(s)) return 'walk';
+  if (/strength|weight|training/.test(s)) return 'strength';
+  return 'other';
+}
+
+function wearHaversine(a, b) {
+  const R = 6371000, toR = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * toR, dLon = (b.lon - a.lon) * toR;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * toR) * Math.cos(b.lat * toR) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+function wearMaxHr() {
+  const age = Number((clientRecord && clientRecord.age) || (coachBasicsData && coachBasicsData.age)) || 30;
+  return 220 - age;
+}
+
+/* ملخص موحّد من نقط { t (ms), hr, lat, lon, ele } + أرقام جاهزة لو الملف فيه */
+function wearSummarize(points, extra) {
+  extra = extra || {};
+  points = points.filter(function (p) { return p && isFinite(p.t); }).sort(function (a, b) { return a.t - b.t; });
+  if (!points.length && !extra.durationSec) return null;
+  const start = extra.start || (points.length ? points[0].t : Date.now());
+  const duration = extra.durationSec || (points.length > 1 ? (points[points.length - 1].t - points[0].t) / 1000 : 0);
+  let distance = extra.distanceM;
+  let ascent = 0;
+  if (distance == null) {
+    distance = 0;
+    for (let i = 1; i < points.length; i++) {
+      if (points[i].lat != null && points[i - 1].lat != null) distance += wearHaversine(points[i - 1], points[i]);
+    }
+  }
+  for (let i = 1; i < points.length; i++) {
+    if (points[i].ele != null && points[i - 1].ele != null && points[i].ele > points[i - 1].ele) ascent += points[i].ele - points[i - 1].ele;
+  }
+  const hrPts = points.filter(function (p) { return p.hr > 30 && p.hr < 240; });
+  const hrs = hrPts.map(function (p) { return p.hr; });
+  const avgHr = extra.avgHr || (hrs.length ? Math.round(hrs.reduce(function (a, b) { return a + b; }, 0) / hrs.length) : 0);
+  const maxHr = extra.maxHr || (hrs.length ? Math.max.apply(null, hrs) : 0);
+  /* الوقت في كل منطقة (٪ من أقصى نبض متوقع) */
+  const zones = [0, 0, 0, 0, 0];
+  const hrMax = Math.max(wearMaxHr(), maxHr || 0);
+  for (let i = 1; i < hrPts.length; i++) {
+    const dt = Math.min(30, (hrPts[i].t - hrPts[i - 1].t) / 1000);
+    const pct = hrPts[i].hr / hrMax;
+    const z = pct < 0.6 ? 0 : pct < 0.7 ? 1 : pct < 0.8 ? 2 : pct < 0.9 ? 3 : 4;
+    zones[z] += dt;
+  }
+  const sample = [];
+  const step = Math.max(1, Math.ceil(hrs.length / 60));   /* ceil عشان آخر التمرين مايتقصّش */
+  for (let i = 0; i < hrs.length; i += step) sample.push(hrs[i]);
+  return {
+    id: 'w' + Math.round(start / 1000),
+    start: new Date(start).toISOString(),
+    sport: wearSportKey(extra.sport),
+    durationSec: Math.round(duration),
+    distanceM: Math.round(distance || 0),
+    ascentM: Math.round(extra.ascentM != null ? extra.ascentM : ascent),
+    avgHr: avgHr || 0,
+    maxHr: maxHr || 0,
+    calories: Math.round(extra.calories || 0),
+    zones: zones.map(Math.round),
+    hr: sample.slice(0, 60),
+    source: extra.source || 'file'
+  };
+}
+
+function wearXmlNum(el) { return el ? Number(el.textContent) : NaN; }
+
+function wearParseGpx(text) {
+  const xml = new DOMParser().parseFromString(text, 'application/xml');
+  if (xml.getElementsByTagName('parsererror').length) return null;
+  const pts = Array.prototype.slice.call(xml.getElementsByTagName('trkpt')).map(function (pt) {
+    const time = pt.getElementsByTagName('time')[0];
+    const hrEl = Array.prototype.slice.call(pt.getElementsByTagName('*')).filter(function (e) { return e.localName === 'hr'; })[0];
+    return { t: time ? Date.parse(time.textContent) : NaN, lat: Number(pt.getAttribute('lat')), lon: Number(pt.getAttribute('lon')),
+      ele: wearXmlNum(pt.getElementsByTagName('ele')[0]), hr: hrEl ? Number(hrEl.textContent) : NaN };
+  });
+  if (!pts.length) return null;
+  const type = xml.getElementsByTagName('type')[0];
+  pts.forEach(function (p) { if (!isFinite(p.ele)) p.ele = null; });
+  return wearSummarize(pts, { sport: type ? type.textContent : 'run' });
+}
+
+function wearParseTcx(text) {
+  const xml = new DOMParser().parseFromString(text, 'application/xml');
+  if (xml.getElementsByTagName('parsererror').length) return null;
+  const act = xml.getElementsByTagName('Activity')[0];
+  if (!act) return null;
+  const laps = Array.prototype.slice.call(xml.getElementsByTagName('Lap'));
+  let dur = 0, dist = 0, kcal = 0, maxHr = 0;
+  laps.forEach(function (lap) {
+    const kid = function (name) { return Array.prototype.slice.call(lap.children).filter(function (c) { return c.localName === name; })[0]; };
+    dur += Number((kid('TotalTimeSeconds') || {}).textContent) || 0;
+    dist += Number((kid('DistanceMeters') || {}).textContent) || 0;
+    kcal += Number((kid('Calories') || {}).textContent) || 0;
+    const mx = kid('MaximumHeartRateBpm');
+    if (mx) maxHr = Math.max(maxHr, Number(mx.textContent.trim()) || 0);
+  });
+  const pts = Array.prototype.slice.call(xml.getElementsByTagName('Trackpoint')).map(function (tp) {
+    const get = function (name) { return Array.prototype.slice.call(tp.getElementsByTagName('*')).filter(function (e) { return e.localName === name; })[0]; };
+    const hr = get('HeartRateBpm');
+    const pos = get('Position');
+    return { t: Date.parse((get('Time') || {}).textContent), hr: hr ? Number(hr.textContent.trim()) : NaN,
+      ele: get('AltitudeMeters') ? Number(get('AltitudeMeters').textContent) : null,
+      lat: pos ? Number(pos.getElementsByTagName('*')[0].textContent) : null, lon: pos ? Number(pos.getElementsByTagName('*')[1].textContent) : null };
+  });
+  const startEl = laps[0] && laps[0].getAttribute('StartTime');
+  return wearSummarize(pts, { sport: act.getAttribute('Sport'), durationSec: dur || null, distanceM: laps.length ? dist : null, calories: kcal, maxHr: maxHr || null,
+    start: startEl ? Date.parse(startEl) : null });
+}
+
+/*
+ * FIT: ملف Garmin الثنائي. بنقرا الرسايل اللي محتاجينها بس:
+ * session (18) = الملخص، record (20) = النبض والوقت كل ثانية.
+ * التوقيت في FIT بيبدأ من ١ يناير ١٩٩٠.
+ */
+function wearParseFit(buf) {
+  const dv = new DataView(buf);
+  if (buf.byteLength < 14) return null;
+  const hdr = dv.getUint8(0);
+  if (String.fromCharCode(dv.getUint8(8), dv.getUint8(9), dv.getUint8(10), dv.getUint8(11)) !== '.FIT') return null;
+  const dataSize = dv.getUint32(4, true);
+  let pos = hdr;
+  const end = Math.min(buf.byteLength, hdr + dataSize);
+  const defs = {};
+  const FIT_EPOCH = 631065600000;
+  const sizes = { 0: 1, 1: 1, 2: 1, 3: 2, 4: 2, 5: 4, 6: 4, 7: 1, 8: 4, 9: 8, 10: 1, 11: 2, 12: 4, 13: 1, 14: 8, 15: 8, 16: 8 };
+  const read = function (at, base, size, little) {
+    const t = base & 0x1f;
+    if (t === 0 || t === 2 || t === 10 || t === 13) return size === 1 ? dv.getUint8(at) : null;
+    if (t === 1) return dv.getInt8(at);
+    if (t === 3) return dv.getInt16(at, little);
+    if (t === 4 || t === 11) return dv.getUint16(at, little);
+    if (t === 5) return dv.getInt32(at, little);
+    if (t === 6 || t === 12) return dv.getUint32(at, little);
+    if (t === 8) return dv.getFloat32(at, little);
+    return null;
+  };
+  const invalid = { 0: 0xff, 2: 0xff, 1: 0x7f, 3: 0x7fff, 4: 0xffff, 5: 0x7fffffff, 6: 0xffffffff, 10: 0, 11: 0, 12: 0 };
+  let lastTs = 0;
+  const pts = [];
+  let session = null;
+  while (pos < end) {
+    const h = dv.getUint8(pos); pos++;
+    if (h & 0x80) {
+      /* compressed timestamp header — رسالة بيانات بتوقيت مختصر */
+      const local = (h >> 5) & 0x3;
+      const offset = h & 0x1f;
+      let ts = (lastTs & ~0x1f) + offset;
+      if (offset < (lastTs & 0x1f)) ts += 0x20;
+      lastTs = ts;
+      const def = defs[local];
+      if (!def) return null;
+      const vals = { 253: ts };
+      def.fields.forEach(function (f) { vals[f.num] = read(pos, f.base, f.size, def.little); pos += f.size; });
+      pos += def.devSize;
+      if (def.global === 20) pts.push({ t: FIT_EPOCH + ts * 1000, hr: vals[3], lat: null, lon: null, ele: null });
+      continue;
+    }
+    const local = h & 0x0f;
+    if (h & 0x40) {
+      const little = dv.getUint8(pos + 1) === 0;
+      const global = little ? dv.getUint16(pos + 2, true) : dv.getUint16(pos + 2, false);
+      const n = dv.getUint8(pos + 4);
+      pos += 5;
+      const fields = [];
+      for (let i = 0; i < n; i++) { fields.push({ num: dv.getUint8(pos), size: dv.getUint8(pos + 1), base: dv.getUint8(pos + 2) }); pos += 3; }
+      let devSize = 0;
+      if (h & 0x20) {
+        const dn = dv.getUint8(pos); pos++;
+        for (let i = 0; i < dn; i++) { devSize += dv.getUint8(pos + 1); pos += 3; }
+      }
+      defs[local] = { global: global, little: little, fields: fields, devSize: devSize };
+    } else {
+      const def = defs[local];
+      if (!def) return null;
+      const vals = {};
+      def.fields.forEach(function (f) {
+        const t = f.base & 0x1f;
+        const v = (sizes[t] === f.size) ? read(pos, f.base, f.size, def.little) : null;
+        vals[f.num] = (v === invalid[t]) ? null : v;
+        pos += f.size;
+      });
+      pos += def.devSize;
+      if (vals[253] != null) lastTs = vals[253];
+      if (def.global === 20) {
+        const semi = 180 / 2147483648;
+        pts.push({ t: FIT_EPOCH + (vals[253] || lastTs) * 1000, hr: vals[3], lat: vals[0] != null ? vals[0] * semi : null, lon: vals[1] != null ? vals[1] * semi : null,
+          ele: vals[2] != null ? vals[2] / 5 - 500 : null });
+      } else if (def.global === 18) {
+        session = vals;
+      }
+    }
+  }
+  const sports = { 1: 'run', 2: 'ride', 5: 'swim', 11: 'walk', 17: 'hike', 10: 'strength' };
+  const extra = { source: 'file' };
+  if (session) {
+    extra.sport = sports[session[5]] || 'other';
+    if (session[2] != null) extra.start = FIT_EPOCH + session[2] * 1000;
+    if (session[7] != null) extra.durationSec = session[7] / 1000;
+    if (session[9] != null) extra.distanceM = session[9] / 100;
+    if (session[11] != null) extra.calories = session[11];
+    if (session[16] != null) extra.avgHr = session[16];
+    if (session[17] != null) extra.maxHr = session[17];
+    if (session[22] != null) extra.ascentM = session[22];
+  }
+  return wearSummarize(pts, extra);
+}
+
+async function wearParseFile(file) {
+  const name = String(file.name || '').toLowerCase();
+  if (/\.fit$/.test(name)) return wearParseFit(await file.arrayBuffer());
+  const text = await file.text();
+  if (/\.tcx$/.test(name) || /<TrainingCenterDatabase/.test(text)) return wearParseTcx(text);
+  if (/\.gpx$/.test(name) || /<gpx/.test(text)) return wearParseGpx(text);
+  return null;
+}
+
+async function loadWearables() {
+  if (!document.getElementById('wr-list')) return;
+  try {
+    const snap = await getDoc(doc(db, 'wearables', progressTargetEmail));
+    wearSessions = snap.exists() && Array.isArray(snap.data().sessions) ? snap.data().sessions : [];
+  } catch (error) {
+    wearSessions = [];
+  }
+  renderWearables();
+  /* البلوتوث للعميل نفسه بس — مش للمدرب وهو فاتح متابعة العميل */
+  document.getElementById('wr-ble-box').classList.toggle('hidden', progressTargetEmail !== clientEmail);
+  stravaRefresh(true);
+}
+
+/* بيحفظ التمرين، وبيحسب اليوم يوم تمرين في التزام العميل */
+async function wearSave(session) {
+  if (wearSessions.some(function (w) { return w.id === session.id; })) return 'dup';
+  wearSessions = [session].concat(wearSessions).sort(function (a, b) { return String(b.start).localeCompare(String(a.start)); }).slice(0, WEAR_KEEP);
+  await setDoc(doc(db, 'wearables', progressTargetEmail), { sessions: wearSessions, updatedAt: new Date().toISOString() }, { merge: true });
+  let counted = false;
+  if (progressTargetEmail === clientEmail) {
+    try {
+      const day = dateStamp(new Date(session.start));
+      const snap = await getDoc(doc(db, 'progress', clientEmail));
+      const history = snap.exists() && Array.isArray(snap.data().history) ? snap.data().history.slice() : [];
+      if (history.indexOf(day) === -1) {
+        history.push(day);
+        history.sort();
+        await setDoc(doc(db, 'progress', clientEmail), { history: history.slice(-400) }, { merge: true });
+        if (typeof progressHistory !== 'undefined') progressHistory = history;
+        counted = true;
+      }
+    } catch (error) { /* التمرين اتحفظ في كل الأحوال */ }
+  }
+  renderWearables();
+  return counted ? 'counted' : 'ok';
+}
+
+function wearDurText(sec) { return fill('wr_dur', { m: Math.max(1, Math.round((Number(sec) || 0) / 60)) }); }
+
+function wearSpark(values) {
+  if (!values || values.length < 2) return null;
+  const w = 160, h = 34, min = Math.min.apply(null, values), max = Math.max.apply(null, values);
+  const pts = values.map(function (v, i) { return (i / (values.length - 1) * w).toFixed(1) + ',' + (h - 3 - (max === min ? 0.5 : (v - min) / (max - min)) * (h - 6)).toFixed(1); }).join(' ');
+  const wrap = document.createElement('div');
+  wrap.className = 'wr-spark';
+  wrap.innerHTML = '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true"><polyline points="' + pts + '" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+  return wrap;
+}
+
+function renderWearables() {
+  const list = document.getElementById('wr-list');
+  if (!list) return;
+  list.innerHTML = '';
+  document.getElementById('wr-empty').classList.toggle('hidden', wearSessions.length > 0);
+  wearSessions.forEach(function (w) {
+    const card = document.createElement('div');
+    card.className = 'wr-card';
+    const head = document.createElement('div');
+    head.className = 'wr-head';
+    const title = document.createElement('strong');
+    title.textContent = w.source === 'ble' ? t('wr_ble_session') : (w.name || t('wr_sport_' + wearSportKey(w.sport)));
+    const when = document.createElement('span');
+    when.className = 'ex-meta';
+    try { when.textContent = new Date(w.start).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }); } catch (e) { when.textContent = w.start; }
+    head.append(title, when);
+    card.appendChild(head);
+    if (w.source === 'strava') {
+      const pw = document.createElement('div');
+      pw.className = 'wr-powered';
+      pw.textContent = t('wr_powered');
+      card.appendChild(pw);
+    }
+    const nums = [wearDurText(w.durationSec)];
+    if (w.distanceM > 50) nums.push(fill('wr_km', { km: (w.distanceM / 1000).toFixed(2) }));
+    if (w.avgHr) nums.push(fill('wr_avg_hr', { v: w.avgHr }));
+    if (w.maxHr) nums.push(fill('wr_max_hr', { v: w.maxHr }));
+    if (w.calories) nums.push(fill('wr_kcal', { v: w.calories }));
+    const line = document.createElement('div');
+    line.className = 'wr-nums';
+    line.textContent = nums.join(' · ');
+    card.appendChild(line);
+    const spark = wearSpark(w.hr);
+    if (spark) card.appendChild(spark);
+    const total = (w.zones || []).reduce(function (a, b) { return a + b; }, 0);
+    if (total > 0) {
+      const bar = document.createElement('div');
+      bar.className = 'wr-zones';
+      bar.title = t('wr_zones');
+      w.zones.forEach(function (sec, i) {
+        if (!sec) return;
+        const seg = document.createElement('span');
+        seg.className = 'z' + (i + 1);
+        seg.style.width = (sec / total * 100).toFixed(1) + '%';
+        seg.title = fill('wr_zone', { n: i + 1 }) + ': ' + wearDurText(sec);
+        bar.appendChild(seg);
+      });
+      card.appendChild(bar);
+    }
+    list.appendChild(card);
+  });
+}
+
+(function () {
+  const input = document.getElementById('wr-file');
+  if (!input) return;
+  const msg = document.getElementById('wr-message');
+  input.addEventListener('change', async function () {
+    const files = Array.prototype.slice.call(input.files || []);
+    input.value = '';
+    for (let i = 0; i < files.length; i++) {
+      try {
+        const s = await wearParseFile(files[i]);
+        if (!s || !s.durationSec) throw new Error(t('wr_bad'));
+        const res = await wearSave(s);
+        if (res === 'dup') { msg.className = 'message'; msg.textContent = t('wr_dup'); continue; }
+        setStatusMessage(msg, fill('wr_saved', { sport: t('wr_sport_' + s.sport), dur: wearDurText(s.durationSec) }) + (res === 'counted' ? ' — ' + t('wr_counted') : ''), 'success');
+      } catch (error) {
+        msg.className = 'message error';
+        msg.textContent = error.message === t('wr_bad') ? error.message : t('wr_bad');
+      }
+    }
+  });
+})();
+
+/* ---------- نبض مباشر بالبلوتوث ---------- */
+
+let wearBle = null;   /* { device, char, samples: [{t,hr}], started, timer } */
+
+function wearZoneOf(hr) {
+  const pct = hr / wearMaxHr();
+  return pct < 0.6 ? 1 : pct < 0.7 ? 2 : pct < 0.8 ? 3 : pct < 0.9 ? 4 : 5;
+}
+
+function wearBleUi() {
+  const live = document.getElementById('wr-ble-live');
+  const btn = document.getElementById('wr-ble-btn');
+  btn.textContent = t(wearBle ? 'wr_ble_stop' : 'wr_ble_connect');
+  btn.classList.toggle('recording', !!wearBle);
+  live.classList.toggle('hidden', !wearBle);
+  if (!wearBle) return;
+  const last = wearBle.samples[wearBle.samples.length - 1];
+  const sec = Math.floor((Date.now() - wearBle.started) / 1000);
+  live.innerHTML = '';
+  const big = document.createElement('b');
+  big.textContent = last ? last.hr : '…';
+  const small = document.createElement('span');
+  /* الرقم لوحده والباقي تحته — عشان العربي والأرقام مايتلخبطوش */
+  small.textContent = last ? fill('wr_ble_live', { bpm: last.hr, zone: fill('wr_zone', { n: wearZoneOf(last.hr) }), time: Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0') }) : '';
+  live.append(big, small);
+  live.className = 'wr-live z' + (last ? wearZoneOf(last.hr) : 1);
+}
+
+function wearOnHr(event) {
+  const v = event.target.value;
+  const flags = v.getUint8(0);
+  const hr = (flags & 1) ? v.getUint16(1, true) : v.getUint8(1);
+  if (!wearBle || !(hr > 30 && hr < 240)) return;
+  wearBle.samples.push({ t: Date.now(), hr: hr });
+  wearBleUi();
+}
+
+async function wearBleStart() {
+  const msg = document.getElementById('wr-message');
+  if (!navigator.bluetooth) { msg.className = 'message error'; msg.textContent = t('wr_ble_unsupported'); return; }
+  try {
+    const device = await navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] });
+    const server = await device.gatt.connect();
+    const service = await server.getPrimaryService('heart_rate');
+    const char = await service.getCharacteristic('heart_rate_measurement');
+    wearBle = { device: device, char: char, samples: [], started: Date.now() };
+    char.addEventListener('characteristicvaluechanged', wearOnHr);
+    await char.startNotifications();
+    wearBle.timer = setInterval(wearBleUi, 1000);
+    msg.textContent = '';
+    wearBleUi();
+  } catch (error) {
+    wearBle = null;
+    if (error && error.name === 'NotFoundError') return;   /* قفل نافذة الاختيار */
+    msg.className = 'message error';
+    msg.textContent = t('wr_ble_failed') + (error && error.message ? error.message : '');
+    wearBleUi();
+  }
+}
+
+async function wearBleStop() {
+  const rec = wearBle;
+  wearBle = null;
+  if (!rec) return;
+  clearInterval(rec.timer);
+  try { await rec.char.stopNotifications(); } catch (e) { /* خلاص */ }
+  try { if (rec.device.gatt.connected) rec.device.gatt.disconnect(); } catch (e) { /* خلاص */ }
+  wearBleUi();
+  if (rec.samples.length < 10) return;   /* أقل من ١٠ ثواني نبض — مالوش لازمة */
+  const s = wearSummarize(rec.samples.map(function (x) { return { t: x.t, hr: x.hr }; }), { sport: 'strength', source: 'ble', distanceM: 0, start: rec.started, durationSec: (Date.now() - rec.started) / 1000 });
+  const res = await wearSave(s);
+  setStatusMessage(document.getElementById('wr-message'), fill('wr_saved', { sport: t('wr_ble_session'), dur: wearDurText(s.durationSec) }) + (res === 'counted' ? ' — ' + t('wr_counted') : ''), 'success');
+}
+
+(function () {
+  const btn = document.getElementById('wr-ble-btn');
+  if (!btn) return;
+  btn.addEventListener('click', function () { if (wearBle) wearBleStop(); else wearBleStart(); });
+})();
+
+
+/* ---------- Strava ---------- */
+
+let stravaState = null;   /* { ready, connected } */
+
+async function stravaRefresh(autoSync) {
+  const box = document.getElementById('wr-strava-box');
+  if (!box) return;
+  box.classList.add('hidden');
+  if (progressTargetEmail !== clientEmail) return;   /* الربط للعميل نفسه بس */
+  try {
+    const res = await scriptCall('strava_status');
+    stravaState = res && res.stravaApi ? res : null;
+  } catch (error) { stravaState = null; }
+  if (!stravaState || !stravaState.ready) return;
+  box.classList.remove('hidden');
+  document.getElementById('wr-strava-connect').classList.toggle('hidden', stravaState.connected);
+  document.getElementById('wr-strava-on').classList.toggle('hidden', !stravaState.connected);
+  if (stravaState.connected && autoSync) stravaSync(false);
+}
+
+async function stravaSync(force) {
+  const msg = document.getElementById('wr-message');
+  try {
+    const res = await scriptCall('strava_sync', { force: !!force });
+    if (!res || !res.ok) throw new Error((res && res.error) || '—');
+    if (res.skipped) return;
+    let added = 0;
+    const days = {};
+    (res.activities || []).forEach(function (a) {
+      const t0 = Date.parse(a.start);
+      /* نفس التمرين ممكن يكون اترفع كملف قبل كده — بنقارن بوقت البداية */
+      const dup = wearSessions.some(function (w) { return w.id === a.id || Math.abs(Date.parse(w.start) - t0) < 90000; });
+      if (dup || !a.durationSec) return;
+      wearSessions.push(a);
+      days[dateStamp(new Date(t0))] = true;
+      added++;
+    });
+    if (added) {
+      wearSessions.sort(function (x, y) { return String(y.start).localeCompare(String(x.start)); });
+      wearSessions = wearSessions.slice(0, WEAR_KEEP);
+      await setDoc(doc(db, 'wearables', clientEmail), { sessions: wearSessions, updatedAt: new Date().toISOString() }, { merge: true });
+      try {
+        const snap = await getDoc(doc(db, 'progress', clientEmail));
+        const history = snap.exists() && Array.isArray(snap.data().history) ? snap.data().history.slice() : [];
+        Object.keys(days).forEach(function (d) { if (history.indexOf(d) === -1) history.push(d); });
+        history.sort();
+        await setDoc(doc(db, 'progress', clientEmail), { history: history.slice(-400) }, { merge: true });
+      } catch (error) { /* التمارين اتحفظت في كل الأحوال */ }
+      renderWearables();
+    }
+    if (force || added) setStatusMessage(msg, added ? fill('wr_strava_synced', { n: added }) : t('wr_strava_none'), 'success');
+  } catch (error) {
+    msg.className = 'message error';
+    msg.textContent = t('wr_strava_failed') + error.message;
+  }
+}
+
+(function () {
+  const connect = document.getElementById('wr-strava-connect');
+  if (!connect) return;
+  connect.addEventListener('click', async function () {
+    try {
+      const res = await scriptCall('strava_start');
+      if (!res || !res.ok || !res.url) throw new Error((res && res.error) || '—');
+      window.location.href = res.url;
+    } catch (error) {
+      const msg = document.getElementById('wr-message');
+      msg.className = 'message error';
+      msg.textContent = t('wr_strava_failed') + error.message;
+    }
+  });
+  document.getElementById('wr-strava-sync').addEventListener('click', function () { stravaSync(true); });
+  document.getElementById('wr-strava-off').addEventListener('click', async function () {
+    try { await scriptCall('strava_disconnect'); } catch (error) { /* عندنا اتمسح */ }
+    stravaRefresh(false);
+  });
+})();
