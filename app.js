@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getFirestore, doc, getDoc, setDoc as fbSetDoc, addDoc as fbAddDoc, updateDoc as fbUpdateDoc, deleteDoc, deleteField, collection, getDocs, onSnapshot, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
 import { REHAB_TEMPLATES as BASE_REHAB_TEMPLATES } from './rehab-templates.js';
@@ -1110,6 +1110,117 @@ const TEXT = {
     wr_max_hr: 'أقصى {v}',
     wr_kcal: '{v} سعر',
     wr_zones: 'وقت المناطق',
+    google_btn: "كمّل بحساب جوجل",
+    google_hint: "أسرع طريقة — من غير باسورد ومن غير رسالة تأكيد",
+    or_email: "أو بالإيميل والباسورد",
+    google_inapp: "إنت فاتح الموقع من جوه إنستجرام أو فيسبوك، وجوجل مابتسمحش بالدخول من هنا. دوس على ⋮ فوق واختار «افتح في المتصفح» (Chrome أو Safari) وجرّب تاني.",
+    google_not_enabled: "الدخول بجوجل لسه مش متفعّل — استخدم الإيميل والباسورد دلوقتي.",
+    google_bad_domain: "الدخول بجوجل مش متاح من الرابط ده — افتح الموقع من الرابط الأساسي.",
+    google_failed: "مقدرناش ندخلك بجوجل — جرّب تاني أو استخدم الإيميل والباسورد.",
+    eng_ring_t: "تمرين",
+    eng_ring_f: "أكل",
+    eng_ring_w: "ماية",
+    eng_rn_t: "التمرين",
+    eng_rn_f: "الأكل",
+    eng_rn_w: "الماية",
+    eng_and: " و",
+    eng_rest: "راحة ✓",
+    eng_days_unit: "يوم",
+    eng_stars_week: "{n}/7 الأسبوع ده",
+    eng_xp: "{n} نقطة",
+    eng_next: "فاضل {n} نقطة لـ{lvl}",
+    eng_max_level: "وصلت لأعلى مستوى 👑",
+    eng_nudge_star: "قفلت كل الحلقات — نجمة النهارده بتاعتك ⭐",
+    eng_nudge_counted: "يومك اتحسب في السلسلة 🔥 — فاضلك {rings} وتاخد النجمة",
+    eng_nudge_need: "قفّل {rings} ويومك يتحسب في السلسلة 🔥",
+    eng_shield_ready: "🛡️ الدرع جاهز — لو فوّت يوم واحد السلسلة مش هتضيع",
+    eng_shield_used: "🛡️ الدرع حماك يوم {d} — هيرجع بعد {n} {w}",
+    eng_best: "أطول سلسلة: {n} {w}",
+    eng_sheet_title: "إنجازاتي",
+    eng_streak_lbl: "السلسلة والنجوم",
+    eng_now: "دلوقتي",
+    eng_best_lbl: "أطول سلسلة",
+    eng_stars_lbl: "نجمة",
+    eng_train_lbl: "يوم تمرين",
+    eng_last14: "آخر ١٤ يوم",
+    eng_badges: "الشارات",
+    eng_badges_count: "{a} من {b}",
+    eng_how_title: "إزاي بتكسب نقط؟",
+    eng_how_body: "حلقة التمرين = ١٠ نقط · حلقة الأكل = ٥ · حلقة الماية = ٥\nقفّلت كل حلقات اليوم = نجمة ⭐ و١٠ نقط زيادة\nالسلسلة 🔥 بتزيد كل يوم تقفل فيه حلقتين على الأقل — ويوم الراحة في برنامجك حلقة التمرين بتتقفل لوحدها\nالدرع 🛡️: يوم واحد تفوّته كل أسبوع مابيقطعش السلسلة\nكل ٧ أيام في السلسلة = صندوق مفاجآت 🎁 فيه من ٢٠ لـ٦٠ نقطة\nرجعت بعد غياب وخدت نجمة؟ نقط اليوم ده ×٢\nالنقط بتطلّعك مستويات: برونزي ← فضي ← ذهبي ← بلاتيني ← ماسي ← أسطورة ADAM",
+    eng_share: "شارك",
+    eng_share_card: "شارك إنجازك ستوري",
+    eng_share_hint: "بتطلع صورة جاهزة بلوجو ADAM — ارفعها ستوري على إنستجرام أو واتساب",
+    eng_share_saved: "الصورة اتنزلت — ارفعها ستوري 📸",
+    eng_ok: "تمام 💪",
+    eng_cel_star_t: "نجمة جديدة!",
+    eng_cel_star_b: "قفلت كل حلقات النهارده. كده معاك {n} نجمة ⭐",
+    eng_cel_comeback: "ورجعت بعد غياب — نقط النهارده ×٢ 🦅",
+    eng_cel_level_t: "مستوى جديد: {lvl}",
+    eng_cel_level_b: "وصلت {n} نقطة. كمّل كده!",
+    eng_cel_badge_t: "شارة جديدة: {b}",
+    eng_cel_chest_t: "صندوق المفاجآت 🎁",
+    eng_cel_chest_b: "{d} {w} ورا بعض — كسبت {n} نقطة زيادة",
+    eng_cel_welcome_t: "جديد: حلقات ADAM",
+    eng_cel_welcome_b: "كل يوم قفّل حلقاتك (تمرين · أكل · ماية) واكسب نجوم ونقط وشارات. حسبنالك اللي عملته قبل كده — معاك {xp} نقطة من دلوقتي!",
+    eng_cel_welcome_b0: "كل يوم قفّل حلقاتك (تمرين · أكل · ماية) واكسب نجوم ونقط وشارات. ابدأ النهارده واعمل أول نجمة ⭐",
+    eng_toast_ring: "قفلت حلقة {r} ✓",
+    eng_toast_counted: "يومك اتحسب — السلسلة بقت {n} 🔥",
+    eng_recap_title: "ملخّص أسبوعك اللي فات",
+    eng_recap_line: "⭐ {s} نجوم · 🏋️ {t} أيام تمرين · +{x} نقطة",
+    eng_recap_close: "قفل",
+    eng_card_join: "اتمرّن معايا على ADAM",
+    eng_card_rings: "قفّلت حلقات النهارده",
+    eng_card_streak: "{n} {w} ورا بعض",
+    eng_card_level: "مستوى {lvl}",
+    eng_card_week: "أسبوعي في ADAM",
+    eng_nudge_toggle: "فكّرني بالليل لو فاضلي حلقات",
+    eng_lv_start: "بداية",
+    eng_lv_bronze: "برونزي",
+    eng_lv_silver: "فضي",
+    eng_lv_gold: "ذهبي",
+    eng_lv_platinum: "بلاتيني",
+    eng_lv_diamond: "ماسي",
+    eng_lv_legend: "أسطورة ADAM",
+    eng_b_first_star: "أول نجمة",
+    eng_bd_first_star: "قفّلت كل حلقات يوم لأول مرة",
+    eng_b_streak_3: "بداية النار",
+    eng_bd_streak_3: "سلسلة ٣ أيام",
+    eng_b_streak_7: "أسبوع نار",
+    eng_bd_streak_7: "سلسلة ٧ أيام",
+    eng_b_streak_14: "أسبوعين ورا بعض",
+    eng_bd_streak_14: "سلسلة ١٤ يوم",
+    eng_b_streak_30: "شهر كامل",
+    eng_bd_streak_30: "سلسلة ٣٠ يوم",
+    eng_b_streak_60: "بركان",
+    eng_bd_streak_60: "سلسلة ٦٠ يوم",
+    eng_b_streak_100: "المية",
+    eng_bd_streak_100: "سلسلة ١٠٠ يوم",
+    eng_b_perfect_week: "الأسبوع الكامل",
+    eng_bd_perfect_week: "٧ نجوم في أسبوع واحد",
+    eng_b_stars_25: "٢٥ نجمة",
+    eng_bd_stars_25: "جمعت ٢٥ نجمة",
+    eng_b_stars_100: "١٠٠ نجمة",
+    eng_bd_stars_100: "جمعت ١٠٠ نجمة",
+    eng_b_train_10: "١٠ تمرينات",
+    eng_bd_train_10: "اتمرّنت ١٠ أيام",
+    eng_b_train_50: "٥٠ تمرين",
+    eng_bd_train_50: "اتمرّنت ٥٠ يوم",
+    eng_b_train_100: "١٠٠ تمرين",
+    eng_bd_train_100: "اتمرّنت ١٠٠ يوم",
+    eng_b_food_30: "ملتزم في الأكل",
+    eng_bd_food_30: "قفّلت حلقة الأكل ٣٠ يوم",
+    eng_b_water_30: "صاحب الماية",
+    eng_bd_water_30: "قفّلت حلقة الماية ٣٠ يوم",
+    eng_b_comeback: "رجعت أقوى",
+    eng_bd_comeback: "رجعت بعد غياب وخدت نجمة",
+    eng_b_km_10: "أول ١٠ كم",
+    eng_bd_km_10: "١٠ كم جري أو مشي أو عجلة",
+    eng_b_km_50: "٥٠ كم",
+    eng_bd_km_50: "٥٠ كم في المجموع",
+    eng_b_km_100: "١٠٠ كم",
+    eng_bd_km_100: "١٠٠ كم في المجموع",
+    eng_b_km_250: "٢٥٠ كم",
+    eng_bd_km_250: "٢٥٠ كم في المجموع",
     wr_sport_run: 'جري', wr_sport_ride: 'عجلة', wr_sport_swim: 'سباحة', wr_sport_walk: 'مشي', wr_sport_strength: 'حديد', wr_sport_hike: 'هايكنج', wr_sport_other: 'تمرين',
     pw_title: 'مكان شغلك ومواعيدك (اختياري — بيزوّد ثقة العملاء فيك)',
     pw_gov: 'المحافظة',
@@ -2697,6 +2808,117 @@ const TEXT = {
     wr_max_hr: 'max {v}',
     wr_kcal: '{v} kcal',
     wr_zones: 'Time in zones',
+    google_btn: "Continue with Google",
+    google_hint: "Fastest way — no password and no confirmation email",
+    or_email: "or with email and password",
+    google_inapp: "You opened the site inside Instagram or Facebook, and Google doesn't allow signing in there. Tap ⋮ at the top, choose “Open in browser” (Chrome or Safari) and try again.",
+    google_not_enabled: "Google sign-in isn't turned on yet — use email and password for now.",
+    google_bad_domain: "Google sign-in isn't available from this link — open the site from its main address.",
+    google_failed: "We couldn't sign you in with Google — try again or use email and password.",
+    eng_ring_t: "Train",
+    eng_ring_f: "Food",
+    eng_ring_w: "Water",
+    eng_rn_t: "training",
+    eng_rn_f: "food",
+    eng_rn_w: "water",
+    eng_and: " and ",
+    eng_rest: "Rest ✓",
+    eng_days_unit: "days",
+    eng_stars_week: "{n}/7 this week",
+    eng_xp: "{n} pts",
+    eng_next: "{n} pts to {lvl}",
+    eng_max_level: "Top level reached 👑",
+    eng_nudge_star: "All rings closed — today's star is yours ⭐",
+    eng_nudge_counted: "Today counts for your streak 🔥 — close {rings} for the star",
+    eng_nudge_need: "Close {rings} and today counts for your streak 🔥",
+    eng_shield_ready: "🛡️ Shield ready — miss one day and your streak survives",
+    eng_shield_used: "🛡️ Your shield saved {d} — back in {n} days",
+    eng_best: "Best streak: {n} days",
+    eng_sheet_title: "My achievements",
+    eng_streak_lbl: "Streak and stars",
+    eng_now: "now",
+    eng_best_lbl: "best streak",
+    eng_stars_lbl: "stars",
+    eng_train_lbl: "training days",
+    eng_last14: "Last 14 days",
+    eng_badges: "Badges",
+    eng_badges_count: "{a} of {b}",
+    eng_how_title: "How do I earn points?",
+    eng_how_body: "Training ring = 10 pts · Food ring = 5 · Water ring = 5\nClose all of today's rings = a star ⭐ and 10 bonus pts\nYour streak 🔥 grows every day you close at least two rings — on a planned rest day the training ring closes by itself\nShield 🛡️: one missed day a week doesn't break your streak\nEvery 7 streak days = a mystery chest 🎁 with 20–60 pts\nBack after a break and earned a star? That day's points ×2\nPoints level you up: Bronze → Silver → Gold → Platinum → Diamond → ADAM Legend",
+    eng_share: "Share",
+    eng_share_card: "Share as a story",
+    eng_share_hint: "Makes a ready image with the ADAM logo — post it to your Instagram or WhatsApp story",
+    eng_share_saved: "Image downloaded — post it as a story 📸",
+    eng_ok: "Nice 💪",
+    eng_cel_star_t: "New star!",
+    eng_cel_star_b: "You closed all of today's rings. That's {n} stars ⭐",
+    eng_cel_comeback: "And you're back after a break — today's points ×2 🦅",
+    eng_cel_level_t: "New level: {lvl}",
+    eng_cel_level_b: "You reached {n} points. Keep going!",
+    eng_cel_badge_t: "New badge: {b}",
+    eng_cel_chest_t: "Mystery chest 🎁",
+    eng_cel_chest_b: "{d} days in a row — you won {n} bonus points",
+    eng_cel_welcome_t: "New: ADAM Rings",
+    eng_cel_welcome_b: "Close your rings every day (train · food · water) and earn stars, points and badges. We counted what you already did — you start with {xp} points!",
+    eng_cel_welcome_b0: "Close your rings every day (train · food · water) and earn stars, points and badges. Start today and earn your first star ⭐",
+    eng_toast_ring: "{r} ring closed ✓",
+    eng_toast_counted: "Day counted — streak is now {n} 🔥",
+    eng_recap_title: "Your last week",
+    eng_recap_line: "⭐ {s} stars · 🏋️ {t} training days · +{x} pts",
+    eng_recap_close: "Close",
+    eng_card_join: "Train with me on ADAM",
+    eng_card_rings: "Today's rings",
+    eng_card_streak: "{n} days in a row",
+    eng_card_level: "Level: {lvl}",
+    eng_card_week: "My week on ADAM",
+    eng_nudge_toggle: "Remind me in the evening if rings are left",
+    eng_lv_start: "Starter",
+    eng_lv_bronze: "Bronze",
+    eng_lv_silver: "Silver",
+    eng_lv_gold: "Gold",
+    eng_lv_platinum: "Platinum",
+    eng_lv_diamond: "Diamond",
+    eng_lv_legend: "ADAM Legend",
+    eng_b_first_star: "First star",
+    eng_bd_first_star: "Closed all rings in a day for the first time",
+    eng_b_streak_3: "Spark",
+    eng_bd_streak_3: "3-day streak",
+    eng_b_streak_7: "On fire",
+    eng_bd_streak_7: "7-day streak",
+    eng_b_streak_14: "Two weeks strong",
+    eng_bd_streak_14: "14-day streak",
+    eng_b_streak_30: "Full month",
+    eng_bd_streak_30: "30-day streak",
+    eng_b_streak_60: "Volcano",
+    eng_bd_streak_60: "60-day streak",
+    eng_b_streak_100: "The hundred",
+    eng_bd_streak_100: "100-day streak",
+    eng_b_perfect_week: "Perfect week",
+    eng_bd_perfect_week: "7 stars in one week",
+    eng_b_stars_25: "25 stars",
+    eng_bd_stars_25: "Collected 25 stars",
+    eng_b_stars_100: "100 stars",
+    eng_bd_stars_100: "Collected 100 stars",
+    eng_b_train_10: "10 workouts",
+    eng_bd_train_10: "Trained on 10 days",
+    eng_b_train_50: "50 workouts",
+    eng_bd_train_50: "Trained on 50 days",
+    eng_b_train_100: "100 workouts",
+    eng_bd_train_100: "Trained on 100 days",
+    eng_b_food_30: "Food on point",
+    eng_bd_food_30: "Closed the food ring on 30 days",
+    eng_b_water_30: "Hydrated",
+    eng_bd_water_30: "Closed the water ring on 30 days",
+    eng_b_comeback: "Comeback",
+    eng_bd_comeback: "Came back after a break and earned a star",
+    eng_b_km_10: "First 10 km",
+    eng_bd_km_10: "10 km of running, walking or riding",
+    eng_b_km_50: "50 km",
+    eng_bd_km_50: "50 km in total",
+    eng_b_km_100: "100 km",
+    eng_bd_km_100: "100 km in total",
+    eng_b_km_250: "250 km",
+    eng_bd_km_250: "250 km in total",
     wr_sport_run: 'Run', wr_sport_ride: 'Ride', wr_sport_swim: 'Swim', wr_sport_walk: 'Walk', wr_sport_strength: 'Strength', wr_sport_hike: 'Hike', wr_sport_other: 'Workout',
     pw_title: 'Where you work and when (optional — builds client trust)',
     pw_gov: 'Governorate',
@@ -4696,6 +4918,48 @@ document.getElementById('login-btn').addEventListener('click', async function ()
     loginMessage.textContent = t('bad_login');
   }
 });
+
+/*
+ * الدخول بجوجل — من غير باسورد ومن غير رسالة تأكيد (جوجل متأكدة من
+ * الإيميل أصلًا)، فمفيش رسالة تروح الـ Spam. نفس الإيميل = نفس الحساب،
+ * فالعميل القديم أو المدرب يدخل بيه عادي.
+ */
+function inAppBrowser() {
+  const ua = navigator.userAgent || '';
+  return /FBAN|FBAV|FB_IAB|Instagram|Line\/|TikTok|musical_ly|Snapchat|; wv\)/i.test(ua);
+}
+
+async function googleSignIn(messageEl) {
+  if (inAppBrowser()) {
+    messageEl.textContent = t('google_inapp');
+    return;
+  }
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  auth.languageCode = lang;
+  messageEl.textContent = t('logging_in');
+  try {
+    await signInWithPopup(auth, provider);
+    messageEl.textContent = '';
+    // onAuthStateChanged هيوديه للمكان الصح (بياناته الأولى أو برنامجه)
+  } catch (error) {
+    const code = (error && error.code) || '';
+    if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment') {
+      try { await signInWithRedirect(auth, provider); return; } catch (e2) { /* تحت */ }
+    }
+    if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+      messageEl.textContent = '';
+    } else if (code === 'auth/operation-not-allowed') {
+      messageEl.textContent = t('google_not_enabled');
+    } else if (code === 'auth/unauthorized-domain') {
+      messageEl.textContent = t('google_bad_domain');
+    } else {
+      messageEl.textContent = t('google_failed');
+    }
+  }
+}
+
+document.getElementById('login-google-btn').addEventListener('click', function () { googleSignIn(loginMessage); });
 
 logoutButton.addEventListener('click', function () {
   // لو كان بيعدّل بروفايله وخرج، الوضع ما يفضلش متعلّق لحد بعده
@@ -9196,6 +9460,7 @@ function renderHomeSummary() {
 }
 
 function renderClientHome() {
+  renderEngCard();
   renderHomeSummary();
   renderWeekStreak();
   renderClientTiles();
@@ -9440,6 +9705,8 @@ async function loadClient(email) {
       : [];
     progressHistory = (progressDoc.exists() && Array.isArray(progressDoc.data().history))
       ? progressDoc.data().history : [];
+    engRehabHistory = (progressDoc.exists() && Array.isArray(progressDoc.data().rehabHistory))
+      ? progressDoc.data().rehabHistory : [];
 
     // لو بدأ جلسة النهاردة، نكمّل عليها مهما كان اليوم اللي اختاره
     if (progressDoc.exists() && progressDoc.data().date === today
@@ -9475,6 +9742,8 @@ async function loadClient(email) {
 
     await loadFoodLog(email);
     await loadClientHealth(email);
+    /* حلقات ADAM — بتحمّل لوحدها ومابتأخرش الشاشة */
+    engInit(email);
     // إعدادات المساعد الذكي — العميل محتاجها عشان يعرف مفعّل ولا لأ
     fetchWelcomeSettings().catch(function () {});
 
@@ -9732,6 +10001,7 @@ function saveProgress() {
     actualSets: actualSetsToday,
     setsDone: setsDoneToday
   }, { merge: true });
+  engRefreshSoon();
 }
 
 function actualVolume(exercise, actualArr) {
@@ -9770,12 +10040,18 @@ function saveActualSets() {
 }
 
 function saveRehabProgress() {
+  /* أيام التأهيل — عشان حلقة التمرين تتحسب في الأيام اللي فاتت كمان */
+  engRehabHistory = engRehabHistory.filter(function (d) { return d !== todayStamp; });
+  if (rehabDoneToday.length) engRehabHistory.push(todayStamp);
+  engRehabHistory = engRehabHistory.slice(-60);
   setDoc(doc(db, 'progress', clientEmail), {
     rehabDate: today,
     rehabDone: rehabDoneToday,
     rehabActualSets: rehabActualSetsToday,
-    rehabSetsDone: rehabSetsDoneToday
+    rehabSetsDone: rehabSetsDoneToday,
+    rehabHistory: engRehabHistory
   }, { merge: true });
+  engRefreshSoon();
 }
 
 /* ============================================================
@@ -12029,6 +12305,7 @@ function saveFoodLog() {
     delete clientFoodLog[keys.shift()];
   }
   setDoc(doc(db, 'foodlog', clientEmail), { days: clientFoodLog }, { merge: true });
+  engRefreshSoon();
 }
 
 async function loadFoodLog(email) {
@@ -12770,6 +13047,7 @@ function renderActivity() {
 
 async function saveActivity() {
   await setDoc(doc(db, 'activity', clientEmail), { entries: clientActivity });
+  engRefreshSoon();
 }
 
 document.getElementById('act-add-btn').addEventListener('click', async function () {
@@ -15855,6 +16133,8 @@ document.getElementById('signup-back-welcome-btn').addEventListener('click', fun
   showScreen(welcomeScreen);
 });
 
+document.getElementById('signup-google-btn').addEventListener('click', function () { googleSignIn(signupMessage); });
+
 document.getElementById('signup-btn').addEventListener('click', async function () {
   const emailInput = document.getElementById('signup-email');
   const passwordInput = document.getElementById('signup-password');
@@ -16999,7 +17279,8 @@ function prefillOnboarding(data) {
   fillPhoneCodeSelect();
 
   const phoneParts = splitStoredPhone(data && data.phone);
-  obName.value = (data && data.name) || '';
+  /* اللي دخل بجوجل: اسمه جاي جاهز */
+  obName.value = (data && data.name) || (auth.currentUser && auth.currentUser.displayName) || '';
   obPhoneCode.value = phoneParts.code;
   obPhone.value = phoneParts.number;
   obGender.value = (data && data.gender) || '';
@@ -26717,6 +26998,7 @@ async function wearSave(session) {
     } catch (error) { /* التمرين اتحفظ في كل الأحوال */ }
   }
   renderWearables();
+  if (progressTargetEmail === clientEmail) { engSetWear(wearSessions); engRefreshSoon(); }
   return counted ? 'counted' : 'ok';
 }
 
@@ -26935,8 +27217,11 @@ async function stravaSync(force) {
         Object.keys(days).forEach(function (d) { if (history.indexOf(d) === -1) history.push(d); });
         history.sort();
         await setDoc(doc(db, 'progress', clientEmail), { history: history.slice(-400) }, { merge: true });
+        progressHistory = history;
       } catch (error) { /* التمارين اتحفظت في كل الأحوال */ }
       renderWearables();
+      engSetWear(wearSessions);
+      engRefreshSoon();
     }
     if (force || added) setStatusMessage(msg, added ? fill('wr_strava_synced', { n: added }) : t('wr_strava_none'), 'success');
   } catch (error) {
@@ -26965,3 +27250,1029 @@ async function stravaSync(force) {
     stravaRefresh(false);
   });
 })();
+
+
+/* ============================================================
+   حلقات ADAM — الحلقات اليومية + السلسلة + النجوم + المستويات + الشارات
+
+   engage/{email} = {
+     days: { 'YYYY-MM-DD': [closed, avail, km] }
+           البتّات: 1 تمرين · 2 أكل · 4 ماية · 8 (مع 1) = يوم راحة في البرنامج
+     start, xp, level, stars, streak, best, trainDays, km, weekStars,
+     badges: { id: 'YYYY-MM-DD' }, seen: { level, star, chest }, nudge, updatedAt }
+
+   كل يوم بيتحسب من البيانات الأصلية (progress / foodlog / activity /
+   wearables). آخر كام يوم بس بيتعادوا — الأقدم بيتثبت، عشان لو المدرب
+   غيّر البرنامج النهارده النجوم القديمة ماتضيعش.
+   ============================================================ */
+
+const ENG_RINGS = [
+  { bit: 1, key: 't', color: '#22c55e' },
+  { bit: 2, key: 'f', color: '#f59e0b' },
+  { bit: 4, key: 'w', color: '#38bdf8' }
+];
+const ENG_REST = 8;
+const ENG_LEVELS = [
+  { id: 'start',    xp: 0,    color: '#94a3b8', icon: '🌱' },
+  { id: 'bronze',   xp: 150,  color: '#d97706', icon: '🥉' },
+  { id: 'silver',   xp: 500,  color: '#cbd5e1', icon: '🥈' },
+  { id: 'gold',     xp: 1200, color: '#facc15', icon: '🥇' },
+  { id: 'platinum', xp: 2500, color: '#67e8f9', icon: '💠' },
+  { id: 'diamond',  xp: 5000, color: '#a78bfa', icon: '💎' },
+  { id: 'legend',   xp: 9000, color: '#22c55e', icon: '👑' }
+];
+function engAtLeast(field, n) { return function (s) { return (s[field] || 0) >= n; }; }
+const ENG_BADGES = [
+  { id: 'first_star',   icon: '⭐', ok: engAtLeast('stars', 1) },
+  { id: 'streak_3',     icon: '🔥', ok: engAtLeast('best', 3) },
+  { id: 'streak_7',     icon: '🔥', ok: engAtLeast('best', 7) },
+  { id: 'streak_14',    icon: '🔥', ok: engAtLeast('best', 14) },
+  { id: 'streak_30',    icon: '☄️', ok: engAtLeast('best', 30) },
+  { id: 'streak_60',    icon: '🌋', ok: engAtLeast('best', 60) },
+  { id: 'streak_100',   icon: '💯', ok: engAtLeast('best', 100) },
+  { id: 'perfect_week', icon: '🏆', ok: engAtLeast('perfectWeeks', 1) },
+  { id: 'stars_25',     icon: '🌟', ok: engAtLeast('stars', 25) },
+  { id: 'stars_100',    icon: '✨', ok: engAtLeast('stars', 100) },
+  { id: 'train_10',     icon: '💪', ok: engAtLeast('trainDays', 10) },
+  { id: 'train_50',     icon: '🏋️', ok: engAtLeast('trainDays', 50) },
+  { id: 'train_100',    icon: '🦾', ok: engAtLeast('trainDays', 100) },
+  { id: 'food_30',      icon: '🥗', ok: engAtLeast('foodDays', 30) },
+  { id: 'water_30',     icon: '💧', ok: engAtLeast('waterDays', 30) },
+  { id: 'comeback',     icon: '🦅', ok: engAtLeast('comebacks', 1) },
+  { id: 'km_10',        icon: '👟', ok: engAtLeast('km', 10) },
+  { id: 'km_50',        icon: '🏃', ok: engAtLeast('km', 50) },
+  { id: 'km_100',       icon: '🛣️', ok: engAtLeast('km', 100) },
+  { id: 'km_250',       icon: '🚀', ok: engAtLeast('km', 250) }
+];
+const ENG_FIRST_DAYS = 60;      /* أول مرة: بنحسب له اللي عمله قبل كده */
+const ENG_MIN_RECOMPUTE = 7;
+const ENG_KEEP_DAYS = 400;
+
+let engDoc = null;
+let engReady = false;
+let engFirstRun = false;
+let engStats = null;
+let engWearDays = {};
+let engRehabHistory = [];
+let engPrevToday = null;
+let engSaveTimer = null;
+let engRefreshTimer = null;
+let engLastSaved = '';
+let engQueue = [];
+let engShowing = false;
+let engLoadToken = 0;
+let engWelcome = null;
+
+function engIsSelf() {
+  const user = auth.currentUser;
+  return !!(user && clientEmail && String(user.email || '').toLowerCase() === String(clientEmail).toLowerCase());
+}
+
+function engDate(stamp) { return new Date(stamp + 'T12:00:00'); }
+function engShift(stamp, n) { const d = engDate(stamp); d.setDate(d.getDate() + n); return dateStamp(d); }
+function engWeekIdx(stamp) { return (engDate(stamp).getDay() + 1) % 7; }
+function engBits(m) { return (m & 1) + ((m >> 1) & 1) + ((m >> 2) & 1); }
+function engHash(text) {
+  let h = 2166136261;
+  for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+/* ٣–١٠ أيام، غير كده يوم */
+function engDaysWord(n) {
+  if (lang !== 'ar') return n === 1 ? 'day' : t('eng_days_unit');
+  return (n >= 3 && n <= 10) ? 'أيام' : 'يوم';
+}
+function engDaysBetween(a, b) { return Math.round((engDate(b) - engDate(a)) / 86400000); }
+
+/* ---------- الحلقات المتاحة للعميل ده ---------- */
+
+function engHasTraining() {
+  return clientWeek.some(function (day) { return day && dayCount(day) > 0; }) || rehabHasContent(clientRehab);
+}
+
+function engHasFood() {
+  if (!nutritionHasContent(clientNutrition)) return false;
+  const tg = clientNutrition.targets || {};
+  return !!(tg.kcal || tg.protein) || clientNutrition.week.some(function (day) { return nutritionDayCount(day) > 0; });
+}
+
+/* اليوم ده فيه تمرين في البرنامج؟ التأهيل بيتعمل كل يوم إلا لو اليوم راحة */
+function engPlanned(idx) {
+  const day = clientWeek[idx];
+  if (day && day.rest) return false;
+  if (day && dayCount(day) > 0) return true;
+  return rehabHasContent(clientRehab);
+}
+
+function engFoodTarget(idx) {
+  const plan = clientNutrition && clientNutrition.week && clientNutrition.week[idx];
+  const items = plan ? nutritionDayCount(plan) : 0;
+  return items ? Math.max(1, Math.ceil(items * 0.6)) : 2;
+}
+
+function engKmOn(stamp) {
+  let km = engWearDays[stamp] || 0;
+  clientActivity.forEach(function (entry) {
+    if (!entry || entry.date !== stamp || !entry.values) return;
+    const meters = parseFloat(entry.values.distance);
+    if (meters > 0) km += meters / 1000;
+  });
+  return Math.round(km * 10) / 10;
+}
+
+/* يوم واحد من البيانات الأصلية */
+function engDayFromSource(stamp) {
+  const isToday = stamp === todayStamp;
+  const idx = engWeekIdx(stamp);
+  const out = { m: 0, a: 0, k: engKmOn(stamp), frac: { 1: 0, 2: 0, 4: 0 }, food: [0, 0], water: [0, 0] };
+  const sport = clientActivity.some(function (e) { return e && e.date === stamp; }) || (engWearDays[stamp] || 0) > 0 || engWearDays['@' + stamp];
+
+  if (engHasTraining()) {
+    out.a |= 1;
+    let trained;
+    if (isToday) {
+      const day = clientWeek[sessionDay] || clientWeek[todayIndex];
+      const total = day ? dayCount(day) : 0;
+      const frac = total ? Math.min(1, doneToday.length / total) : 0;
+      out.frac[1] = frac;
+      trained = (total > 0 && (frac >= 0.5 || wholeDayDone(day))) || rehabDoneToday.length > 0 || !!sport;
+    } else {
+      trained = progressHistory.indexOf(stamp) !== -1 || engRehabHistory.indexOf(stamp) !== -1 || !!sport;
+    }
+    const planned = engPlanned(idx) || (isToday && sessionDay !== todayIndex);
+    if (trained) { out.m |= 1; out.frac[1] = 1; }
+    else if (!planned) { out.m |= 1 | ENG_REST; out.frac[1] = 1; }
+  }
+
+  if (engHasFood()) {
+    out.a |= 2 | 4;
+    const log = clientFoodLog[stamp] || {};
+    const count = (Array.isArray(log.eaten) ? log.eaten.length : 0) + (Array.isArray(log.extra) ? log.extra.length : 0);
+    const target = engFoodTarget(idx);
+    out.food = [count, target];
+    out.frac[2] = Math.min(1, count / target);
+    if (count >= target) out.m |= 2;
+    const goal = waterGoal();
+    const water = Number(log.water) || 0;
+    out.water = [water, goal];
+    out.frac[4] = goal ? Math.min(1, water / goal) : 0;
+    if (goal && water >= goal) out.m |= 4;
+  }
+  return out;
+}
+
+/* ---------- الحساب الكامل ---------- */
+
+function engLevelIndex(xp) {
+  let idx = 0;
+  ENG_LEVELS.forEach(function (lv, i) { if (xp >= lv.xp) idx = i; });
+  return idx;
+}
+
+function engCompute() {
+  const days = Object.assign({}, (engDoc && engDoc.days) || {});
+  let span = ENG_MIN_RECOMPUTE;
+  if (engFirstRun) span = ENG_FIRST_DAYS;
+  else if (engDoc && engDoc.lastDay) span = Math.min(ENG_FIRST_DAYS, Math.max(ENG_MIN_RECOMPUTE, engDaysBetween(engDoc.lastDay, todayStamp) + 1));
+
+  let todayInfo = null;
+  for (let i = span - 1; i >= 0; i--) {
+    const stamp = engShift(todayStamp, -i);
+    const r = engDayFromSource(stamp);
+    if (i === 0) todayInfo = r;
+    days[stamp] = [r.m, r.a, r.k];
+  }
+
+  /* أول يوم ليه نشاط حقيقي — قبله مابنحسبش أيام فايتة */
+  let start = engDoc && engDoc.start;
+  if (!start) {
+    start = todayStamp;
+    Object.keys(days).sort().some(function (s) {
+      const m = days[s][0];
+      const real = (m & 7) & ~((m & ENG_REST) ? 1 : 0);
+      if (real) { start = s; return true; }
+      return false;
+    });
+  }
+  Object.keys(days).forEach(function (s) { if (s < start || s > todayStamp) delete days[s]; });
+  const keys = Object.keys(days).sort();
+  while (keys.length > ENG_KEEP_DAYS) delete days[keys.shift()];
+
+  const weekStart = engShift(todayStamp, -todayIndex);
+  const lastWeekStart = engShift(weekStart, -7);
+  const s = {
+    xp: 0, stars: 0, streak: 0, best: 0, trainDays: 0, foodDays: 0, waterDays: 0, km: 0,
+    comebacks: 0, perfectWeeks: 0, weekStars: 0, weekXp: 0, chests: [], shieldDay: null,
+    recap: { stars: 0, train: 0, xp: 0, from: lastWeekStart }, days: days, start: start, today: todayInfo
+  };
+  const weekStars = {};
+  let cur = 0, lastShield = -99, idle = 0, hadActivity = false, i = 0;
+  let stamp = start;
+  while (stamp <= todayStamp) {
+    const d = days[stamp] || [0, 0, 0];
+    const m = d[0], a = d[1] & 7;
+    const rest = !!(m & ENG_REST);
+    const real = (m & 7) & ~(rest ? 1 : 0);
+    const closedN = engBits(m & 7);
+    const availN = engBits(a);
+    const isToday = stamp === todayStamp;
+    const star = availN > 0 && real > 0 && (m & a) === a;
+    const neutral = availN === 0 || (rest && availN === 1);
+    const counts = !neutral && closedN >= Math.min(2, availN) && real > 0;
+
+    let dayXp = 0;
+    if ((m & 1) && !rest) dayXp += 10;
+    if (m & 2) dayXp += 5;
+    if (m & 4) dayXp += 5;
+    if (star) dayXp += 10;
+    if (star && hadActivity && idle >= 3) { dayXp *= 2; s.comebacks += 1; if (isToday) s.comebackToday = true; }
+    if (real > 0) { hadActivity = true; idle = 0; } else if (!neutral && !isToday) idle += 1;
+
+    if (counts) {
+      cur += 1;
+      if (cur % 7 === 0) {
+        const bonus = 20 + (engHash(String(clientEmail) + stamp) % 41);
+        dayXp += bonus;
+        s.chests.push({ day: stamp, n: cur, xp: bonus });
+      }
+    } else if (isToday || neutral) {
+      /* النهارده لسه مخلصش، ويوم الراحة مابيقطعش */
+    } else if (cur > 0 && i - lastShield >= 7) {
+      lastShield = i;
+      s.shieldDay = stamp;
+    } else {
+      cur = 0;
+    }
+    s.best = Math.max(s.best, cur);
+
+    if (star) s.stars += 1;
+    if ((m & 1) && !rest) s.trainDays += 1;
+    if (m & 2) s.foodDays += 1;
+    if (m & 4) s.waterDays += 1;
+    s.km += d[2] || 0;
+    s.xp += dayXp;
+    const wk = engShift(stamp, -engWeekIdx(stamp));
+    if (star) weekStars[wk] = (weekStars[wk] || 0) + 1;
+    if (stamp >= weekStart) { s.weekStars += star ? 1 : 0; s.weekXp += dayXp; }
+    if (stamp >= lastWeekStart && stamp < weekStart) {
+      s.recap.stars += star ? 1 : 0;
+      s.recap.train += ((m & 1) && !rest) ? 1 : 0;
+      s.recap.xp += dayXp;
+    }
+    if (isToday) { s.todayCounts = counts; s.todayStar = star; s.todayXp = dayXp; }
+    stamp = engShift(stamp, 1);
+    i += 1;
+  }
+  s.streak = cur;
+  s.km = Math.round(s.km * 10) / 10;
+  s.perfectWeeks = Object.keys(weekStars).filter(function (k) { return weekStars[k] >= 7; }).length;
+  s.shieldReady = (i - 1) - lastShield >= 7;
+  s.shieldBack = Math.max(0, 7 - ((i - 1) - lastShield));
+  s.level = engLevelIndex(s.xp);
+  s.chestToday = s.chests.filter(function (c) { return c.day === todayStamp; })[0] || null;
+
+  const had = (engDoc && engDoc.badges) || {};
+  s.badges = Object.assign({}, had);
+  ENG_BADGES.forEach(function (b) { if (!s.badges[b.id] && b.ok(s)) s.badges[b.id] = todayStamp; });
+  return s;
+}
+
+/* ---------- تحميل وحفظ ---------- */
+
+let engEmail = '';
+
+async function engInit(email) {
+  /* نفس العميل اتحمّل تاني (تحديث الشاشة) — نكمّل على اللي معانا */
+  if (engReady && engDoc && engEmail === email) { engRefresh(); return; }
+  const token = ++engLoadToken;
+  engEmail = email;
+  engReady = false;
+  engDoc = null;
+  engStats = null;
+  engWelcome = null;
+  engPrevToday = null;
+  engQueue = [];
+  engWearDays = {};
+  renderEngCard();
+  if (!engIsSelf()) return;
+  let data = null;
+  try {
+    const snap = await getDoc(doc(db, 'engage', email));
+    data = snap.exists() ? snap.data() : null;
+  } catch (error) { data = null; }
+  try {
+    const snap = await getDoc(doc(db, 'wearables', email));
+    const sessions = snap.exists() && Array.isArray(snap.data().sessions) ? snap.data().sessions : [];
+    engSetWear(sessions);
+  } catch (error) { /* من غير الساعة عادي */ }
+  if (token !== engLoadToken) return;
+  engDoc = data;
+  engFirstRun = !data;
+  engReady = true;
+  engRefresh();
+}
+
+function engSetWear(sessions) {
+  engWearDays = {};
+  (sessions || []).forEach(function (w) {
+    if (!w || !w.start) return;
+    const day = dateStamp(new Date(w.start));
+    engWearDays[day] = (engWearDays[day] || 0) + (Number(w.distanceM) || 0) / 1000;
+    engWearDays['@' + day] = true;
+  });
+}
+
+function engRefreshSoon() {
+  if (!engReady) return;
+  clearTimeout(engRefreshTimer);
+  engRefreshTimer = setTimeout(engRefresh, 350);
+}
+
+function engRefresh() {
+  if (!engReady || !engIsSelf()) return;
+  const s = engCompute();
+  const prev = engStats;
+  engStats = s;
+  const seen = Object.assign({ level: 0, star: '', chest: '' }, (engDoc && engDoc.seen) || {});
+
+  if (engFirstRun) {
+    engFirstRun = false;
+    seen.level = s.level;
+    if (s.todayStar) seen.star = todayStamp;
+    if (s.chestToday) seen.chest = todayStamp;
+    /* الترحيب جوه الكارت نفسه مش شاشة فوق كل حاجة — أول فتحة فيها حاجات تانية كتير */
+    engWelcome = { xp: s.xp };
+  } else {
+    /* حلقة اتقفلت دلوقتي قدّامه */
+    const now = s.today ? s.today.m : 0;
+    if (engPrevToday !== null) {
+      ENG_RINGS.forEach(function (ring) {
+        if ((now & ring.bit) && !(engPrevToday.m & ring.bit) && !(now & ENG_REST && ring.bit === 1)) {
+          engToast(fill('eng_toast_ring', { r: t('eng_rn_' + ring.key) }));
+        }
+      });
+      if (s.todayCounts && !engPrevToday.counts && !s.todayStar) engToast(fill('eng_toast_counted', { n: s.streak }));
+    }
+    if (s.todayStar && seen.star !== todayStamp) {
+      seen.star = todayStamp;
+      engCelebrate({ kind: 'star', emoji: '⭐', title: t('eng_cel_star_t'), body: fill('eng_cel_star_b', { n: s.stars }) + (s.comebackToday ? ' ' + t('eng_cel_comeback') : ''), share: 'today' });
+    }
+    if (s.chestToday && seen.chest !== todayStamp) {
+      seen.chest = todayStamp;
+      engCelebrate({ kind: 'chest', emoji: '🎁', title: t('eng_cel_chest_t'), body: fill('eng_cel_chest_b', { d: s.chestToday.n, w: engDaysWord(s.chestToday.n), n: s.chestToday.xp }), share: 'streak' });
+    }
+    if (s.level > (seen.level || 0)) {
+      const lv = ENG_LEVELS[s.level];
+      engCelebrate({ kind: 'level', emoji: lv.icon, title: fill('eng_cel_level_t', { lvl: t('eng_lv_' + lv.id) }), body: fill('eng_cel_level_b', { n: s.xp }), share: 'level' });
+    }
+    seen.level = Math.max(seen.level || 0, s.level);
+    const had = (engDoc && engDoc.badges) || {};
+    ENG_BADGES.forEach(function (b) {
+      if (s.badges[b.id] && !had[b.id]) {
+        engCelebrate({ kind: 'badge', emoji: b.icon, title: fill('eng_cel_badge_t', { b: t('eng_b_' + b.id) }), body: t('eng_bd_' + b.id), share: 'badge:' + b.id });
+      }
+    });
+  }
+  engPrevToday = { m: s.today ? s.today.m : 0, counts: !!s.todayCounts };
+
+  engDoc = Object.assign({}, engDoc || {}, {
+    days: s.days, start: s.start, lastDay: todayStamp, xp: s.xp, level: s.level, stars: s.stars,
+    streak: s.streak, best: s.best, trainDays: s.trainDays, km: s.km, weekStars: s.weekStars,
+    todayMask: s.today ? s.today.m : 0, todayAvail: s.today ? s.today.a : 0,
+    badges: s.badges, seen: seen
+  });
+  if (engDoc.nudge === undefined) engDoc.nudge = true;
+  renderEngCard();
+  if (engSheet && !engSheet.classList.contains('hidden')) renderEngSheet();
+  engSaveSoon();
+  return prev;
+}
+
+function engSaveSoon() {
+  clearTimeout(engSaveTimer);
+  engSaveTimer = setTimeout(engSave, 1500);
+}
+
+async function engSave() {
+  if (!engDoc || !engIsSelf()) return;
+  const payload = Object.assign({}, engDoc, { updatedAt: new Date().toISOString() });
+  const sig = JSON.stringify(Object.assign({}, payload, { updatedAt: '' }));
+  if (sig === engLastSaved) return;
+  try {
+    await setDoc(doc(db, 'engage', clientEmail), payload);
+    engLastSaved = sig;
+  } catch (error) { /* المرة الجاية */ }
+}
+
+/* ---------- كارت الرئيسية ---------- */
+
+function engRingsSvg(frac, avail, size) {
+  const radii = [44, 33, 22];
+  let html = '<svg class="eng-svg" viewBox="0 0 100 100" width="' + size + '" height="' + size + '" aria-hidden="true">';
+  ENG_RINGS.forEach(function (ring, i) {
+    if (!(avail & ring.bit)) return;
+    const r = radii[i];
+    const len = 2 * Math.PI * r;
+    const f = Math.max(0, Math.min(1, frac[ring.bit] || 0));
+    html += '<circle cx="50" cy="50" r="' + r + '" fill="none" stroke="' + ring.color + '" stroke-opacity=".18" stroke-width="9"/>';
+    html += '<circle class="eng-arc" cx="50" cy="50" r="' + r + '" fill="none" stroke="' + ring.color + '" stroke-width="9" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="' + len.toFixed(1) + '" stroke-dashoffset="' + (len * (1 - f)).toFixed(1) + '"/>';
+  });
+  return html + '</svg>';
+}
+
+function engRingsLeft(today) {
+  const names = [];
+  ENG_RINGS.forEach(function (ring) {
+    if ((today.a & ring.bit) && !(today.m & ring.bit)) names.push(t('eng_rn_' + ring.key));
+  });
+  return names.join(t('eng_and'));
+}
+
+function engNudgeText(s) {
+  const today = s.today;
+  if (!today || !today.a) return '';
+  if (s.todayStar) return t('eng_nudge_star');
+  const left = engRingsLeft(today);
+  if (s.todayCounts) return fill('eng_nudge_counted', { rings: left });
+  return fill('eng_nudge_need', { rings: left });
+}
+
+function engLegendItems(s) {
+  const today = s.today;
+  const items = [];
+  if (today.a & 1) {
+    items.push({ key: 't', done: !!(today.m & 1), text: (today.m & ENG_REST) ? t('eng_rest') : Math.round(today.frac[1] * 100) + '%' });
+  }
+  if (today.a & 2) items.push({ key: 'f', done: !!(today.m & 2), text: today.food[0] + '/' + today.food[1] });
+  if (today.a & 4) items.push({ key: 'w', done: !!(today.m & 4), text: today.water[0] + '/' + today.water[1] });
+  return items;
+}
+
+function engLevelBlock(s, big) {
+  const lv = ENG_LEVELS[s.level];
+  const next = ENG_LEVELS[s.level + 1];
+  const box = document.createElement('div');
+  box.className = 'eng-level' + (big ? ' big' : '');
+  const chip = document.createElement('span');
+  chip.className = 'eng-lv-chip';
+  chip.style.setProperty('--lv', lv.color);
+  chip.textContent = lv.icon + ' ' + t('eng_lv_' + lv.id);
+  const pts = document.createElement('span');
+  pts.className = 'eng-xp';
+  pts.textContent = fill('eng_xp', { n: s.xp });
+  const top = document.createElement('div');
+  top.className = 'eng-level-top';
+  top.append(chip, pts);
+  const bar = document.createElement('div');
+  bar.className = 'eng-bar';
+  const fillEl = document.createElement('i');
+  fillEl.style.width = next ? Math.round(((s.xp - lv.xp) / (next.xp - lv.xp)) * 100) + '%' : '100%';
+  fillEl.style.background = lv.color;
+  bar.appendChild(fillEl);
+  const note = document.createElement('small');
+  note.className = 'eng-next';
+  note.textContent = next ? fill('eng_next', { n: next.xp - s.xp, lvl: t('eng_lv_' + next.id) }) : t('eng_max_level');
+  box.append(top, bar, note);
+  return box;
+}
+
+function renderEngCard() {
+  const card = document.getElementById('eng-card');
+  if (!card) return;
+  const s = engStats;
+  if (!engReady || !s || !s.today || !s.today.a) {
+    card.classList.add('hidden');
+    renderEngRecap();
+    return;
+  }
+  card.classList.remove('hidden');
+  card.innerHTML = '';
+
+  if (engWelcome) {
+    const hi = document.createElement('div');
+    hi.className = 'eng-welcome';
+    const title = document.createElement('strong');
+    title.textContent = '🎯 ' + t('eng_cel_welcome_t');
+    const text = document.createElement('p');
+    text.textContent = engWelcome.xp ? fill('eng_cel_welcome_b', { xp: engWelcome.xp }) : t('eng_cel_welcome_b0');
+    const gotIt = document.createElement('button');
+    gotIt.type = 'button';
+    gotIt.className = 'eng-welcome-ok';
+    gotIt.textContent = t('eng_ok');
+    gotIt.addEventListener('click', function () { engWelcome = null; renderEngCard(); });
+    hi.append(title, text, gotIt);
+    card.appendChild(hi);
+  }
+
+  const main = document.createElement('button');
+  main.type = 'button';
+  main.className = 'eng-main';
+  main.setAttribute('aria-label', t('eng_sheet_title'));
+  const rings = document.createElement('div');
+  rings.className = 'eng-rings' + (s.todayStar ? ' star' : '');
+  rings.innerHTML = engRingsSvg(s.today.frac, s.today.a, 108) + (s.todayStar ? '<span class="eng-star">⭐</span>' : '');
+  const side = document.createElement('div');
+  side.className = 'eng-side';
+  const streak = document.createElement('div');
+  streak.className = 'eng-streak' + (s.streak ? '' : ' zero');
+  streak.innerHTML = '<span class="eng-fire">🔥</span>';
+  const num = document.createElement('strong');
+  num.textContent = s.streak;
+  const unit = document.createElement('span');
+  unit.textContent = engDaysWord(s.streak);
+  streak.append(num, unit);
+  if (s.streak && s.shieldReady) {
+    const sh = document.createElement('span');
+    sh.className = 'eng-shield';
+    sh.title = t('eng_shield_ready');
+    sh.textContent = '🛡️';
+    streak.appendChild(sh);
+  }
+  const week = document.createElement('div');
+  week.className = 'eng-week';
+  week.textContent = '⭐ ' + fill('eng_stars_week', { n: s.weekStars });
+  side.append(streak, week, engLevelBlock(s, false));
+  main.append(rings, side);
+  main.addEventListener('click', openEngSheet);
+  card.appendChild(main);
+
+  const legend = document.createElement('div');
+  legend.className = 'eng-legend';
+  engLegendItems(s).forEach(function (item) {
+    const el = document.createElement('span');
+    el.className = 'eng-lg eng-lg-' + item.key + (item.done ? ' done' : '');
+    const dot = document.createElement('i');
+    const label = document.createElement('span');
+    label.textContent = t('eng_ring_' + item.key) + ' ';
+    const val = document.createElement('bdi');
+    val.textContent = item.done && item.key !== 't' ? '✓' : item.text;
+    if (item.done && item.key === 't' && !(s.today.m & ENG_REST)) val.textContent = '✓';
+    el.append(dot, label, val);
+    legend.appendChild(el);
+  });
+  card.appendChild(legend);
+
+  const nudge = document.createElement('div');
+  nudge.className = 'eng-nudge' + (s.todayStar ? ' star' : '');
+  nudge.textContent = engNudgeText(s);
+  card.appendChild(nudge);
+
+  renderEngRecap();
+}
+
+/* ملخّص الأسبوع اللي فات — بيظهر السبت والحد */
+function engRecapKey() { return 'adam-eng-recap:' + (engStats ? engStats.recap.from : ''); }
+
+function renderEngRecap() {
+  const box = document.getElementById('eng-recap');
+  if (!box) return;
+  const s = engStats;
+  let dismissed = false;
+  try { dismissed = !!localStorage.getItem(engRecapKey()); } catch (error) { dismissed = false; }
+  const show = !!(engReady && s && todayIndex <= 1 && s.start < s.recap.from && (s.recap.stars || s.recap.train || s.recap.xp) && !dismissed);
+  box.classList.toggle('hidden', !show);
+  if (!show) return;
+  box.innerHTML = '';
+  const title = document.createElement('div');
+  title.className = 'eng-recap-title';
+  title.textContent = '📅 ' + t('eng_recap_title');
+  const line = document.createElement('div');
+  line.className = 'eng-recap-line';
+  line.textContent = fill('eng_recap_line', { s: s.recap.stars, t: s.recap.train, x: s.recap.xp });
+  const actions = document.createElement('div');
+  actions.className = 'eng-recap-actions';
+  const share = document.createElement('button');
+  share.type = 'button';
+  share.className = 'eng-share-btn';
+  share.textContent = t('eng_share');
+  share.addEventListener('click', function () { engShare('week'); });
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'eng-recap-close';
+  close.textContent = t('eng_recap_close');
+  close.addEventListener('click', function () {
+    try { localStorage.setItem(engRecapKey(), '1'); } catch (error) { /* عادي */ }
+    box.classList.add('hidden');
+  });
+  actions.append(share, close);
+  box.append(title, line, actions);
+}
+
+/* ---------- شيت الإنجازات ---------- */
+
+const engSheet = document.getElementById('eng-sheet');
+
+function openEngSheet() {
+  if (!engSheet || !engStats) return;
+  renderEngSheet();
+  engSheet.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+}
+
+function closeEngSheet() {
+  if (!engSheet) return;
+  engSheet.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+}
+
+function engSection(titleText) {
+  const sec = document.createElement('section');
+  sec.className = 'eng-sec';
+  if (titleText) {
+    const h = document.createElement('h3');
+    h.textContent = titleText;
+    sec.appendChild(h);
+  }
+  return sec;
+}
+
+function engWeekdayName(stamp) {
+  try { return engDate(stamp).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB', { weekday: 'long' }); }
+  catch (error) { return stamp; }
+}
+
+function renderEngSheet() {
+  const body = document.getElementById('eng-body');
+  if (!body || !engStats) return;
+  const s = engStats;
+  body.innerHTML = '';
+
+  /* المستوى */
+  const lvSec = engSection('');
+  lvSec.classList.add('eng-sec-level');
+  const emblem = document.createElement('div');
+  emblem.className = 'eng-emblem';
+  emblem.style.setProperty('--lv', ENG_LEVELS[s.level].color);
+  emblem.textContent = ENG_LEVELS[s.level].icon;
+  lvSec.append(emblem, engLevelBlock(s, true));
+  body.appendChild(lvSec);
+
+  /* السلسلة */
+  const stSec = engSection(t('eng_streak_lbl'));
+  const stRow = document.createElement('div');
+  stRow.className = 'eng-stat-row';
+  [
+    ['🔥', s.streak, t('eng_now')],
+    ['🏅', s.best, t('eng_best_lbl')],
+    ['⭐', s.stars, t('eng_stars_lbl')],
+    ['🏋️', s.trainDays, t('eng_train_lbl')]
+  ].forEach(function (row) {
+    const cell = document.createElement('div');
+    cell.className = 'eng-stat';
+    const big = document.createElement('strong');
+    big.textContent = row[0] + ' ' + row[1];
+    const lbl = document.createElement('span');
+    lbl.textContent = row[2];
+    cell.append(big, lbl);
+    stRow.appendChild(cell);
+  });
+  stSec.appendChild(stRow);
+  const shield = document.createElement('p');
+  shield.className = 'eng-shield-note';
+  shield.textContent = s.shieldReady
+    ? t('eng_shield_ready')
+    : fill('eng_shield_used', { d: s.shieldDay ? engWeekdayName(s.shieldDay) : '', n: s.shieldBack, w: engDaysWord(s.shieldBack) });
+  stSec.appendChild(shield);
+  body.appendChild(stSec);
+
+  /* آخر ١٤ يوم */
+  const dSec = engSection(t('eng_last14'));
+  const strip = document.createElement('div');
+  strip.className = 'eng-days';
+  for (let i = 13; i >= 0; i--) {
+    const stamp = engShift(todayStamp, -i);
+    const d = s.days[stamp];
+    const cell = document.createElement('div');
+    cell.className = 'eng-day';
+    const dot = document.createElement('span');
+    dot.className = 'eng-dot';
+    if (!d || stamp < s.start) dot.classList.add('none');
+    else {
+      const m = d[0], a = d[1] & 7;
+      const rest = !!(m & ENG_REST);
+      const real = (m & 7) & ~(rest ? 1 : 0);
+      if (engBits(a) && real && (m & a) === a) { dot.classList.add('star'); dot.textContent = '⭐'; }
+      else {
+        const pct = engBits(a) ? Math.round((engBits(m & 7) / engBits(a)) * 100) : 0;
+        dot.style.setProperty('--p', pct + '%');
+        if (rest && engBits(a) === 1) dot.classList.add('rest');
+      }
+    }
+    if (stamp === todayStamp) cell.classList.add('today');
+    const lbl = document.createElement('small');
+    lbl.textContent = String(engDate(stamp).getDate());
+    cell.append(dot, lbl);
+    strip.appendChild(cell);
+  }
+  dSec.appendChild(strip);
+  body.appendChild(dSec);
+
+  /* الشارات */
+  const earned = ENG_BADGES.filter(function (b) { return s.badges[b.id]; }).length;
+  const bSec = engSection(t('eng_badges') + ' · ' + fill('eng_badges_count', { a: earned, b: ENG_BADGES.length }));
+  const grid = document.createElement('div');
+  grid.className = 'eng-badges';
+  ENG_BADGES.forEach(function (b) {
+    const got = !!s.badges[b.id];
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'eng-badge' + (got ? ' got' : '');
+    const ic = document.createElement('span');
+    ic.className = 'eng-badge-ic';
+    ic.textContent = got ? b.icon : '🔒';
+    const name = document.createElement('span');
+    name.className = 'eng-badge-name';
+    name.textContent = t('eng_b_' + b.id);
+    const desc = document.createElement('small');
+    desc.textContent = t('eng_bd_' + b.id);
+    cell.append(ic, name, desc);
+    if (got) cell.addEventListener('click', function () { engShare('badge:' + b.id); });
+    grid.appendChild(cell);
+  });
+  bSec.appendChild(grid);
+  body.appendChild(bSec);
+
+  /* شارك */
+  const shSec = engSection('');
+  const shareBtn = document.createElement('button');
+  shareBtn.type = 'button';
+  shareBtn.className = 'eng-share-main';
+  shareBtn.textContent = '📸 ' + t('eng_share_card');
+  shareBtn.addEventListener('click', function () { engShare('today'); });
+  const hint = document.createElement('p');
+  hint.className = 'eng-share-hint';
+  hint.textContent = t('eng_share_hint');
+  shSec.append(shareBtn, hint);
+  body.appendChild(shSec);
+
+  /* إزاي بتكسب نقط */
+  const how = document.createElement('details');
+  how.className = 'eng-how';
+  const sum = document.createElement('summary');
+  sum.textContent = t('eng_how_title');
+  const txt = document.createElement('p');
+  txt.textContent = t('eng_how_body');
+  how.append(sum, txt);
+  body.appendChild(how);
+
+  /* تذكير بالليل */
+  const nudgeRow = document.createElement('label');
+  nudgeRow.className = 'eng-nudge-toggle';
+  const box = document.createElement('input');
+  box.type = 'checkbox';
+  box.checked = !engDoc || engDoc.nudge !== false;
+  box.addEventListener('change', function () {
+    if (!engDoc) return;
+    engDoc.nudge = box.checked;
+    engSaveSoon();
+  });
+  const lbl = document.createElement('span');
+  lbl.textContent = t('eng_nudge_toggle');
+  nudgeRow.append(box, lbl);
+  body.appendChild(nudgeRow);
+}
+
+(function () {
+  const close = document.getElementById('eng-close');
+  if (close) close.addEventListener('click', closeEngSheet);
+  if (engSheet) engSheet.addEventListener('click', function (event) { if (event.target === engSheet) closeEngSheet(); });
+})();
+
+/* ---------- احتفالات وتوست ---------- */
+
+function engToast(text) {
+  const box = document.getElementById('eng-toast');
+  if (!box) return;
+  box.textContent = text;
+  box.classList.remove('hidden');
+  box.classList.remove('show');
+  void box.offsetWidth;
+  box.classList.add('show');
+  clearTimeout(box._timer);
+  box._timer = setTimeout(function () { box.classList.remove('show'); box.classList.add('hidden'); }, 2600);
+}
+
+function engCelebrate(item) {
+  engQueue.push(item);
+  if (!engShowing) engNextCelebration();
+}
+
+function engNextCelebration() {
+  const box = document.getElementById('eng-celebrate');
+  const item = engQueue.shift();
+  if (!box || !item) { engShowing = false; return; }
+  engShowing = true;
+  box.dataset.kind = item.kind;
+  document.getElementById('eng-cel-emoji').textContent = item.emoji;
+  document.getElementById('eng-cel-title').textContent = item.title;
+  document.getElementById('eng-cel-body').textContent = item.body;
+  const share = document.getElementById('eng-cel-share');
+  share.classList.toggle('hidden', !item.share);
+  share.onclick = function () { engShare(item.share); };
+  box.classList.remove('hidden');
+  engConfetti(document.getElementById('eng-confetti'));
+}
+
+(function () {
+  const ok = document.getElementById('eng-cel-ok');
+  if (!ok) return;
+  ok.addEventListener('click', function () {
+    document.getElementById('eng-celebrate').classList.add('hidden');
+    setTimeout(engNextCelebration, 180);
+  });
+})();
+
+function engConfetti(canvas) {
+  if (!canvas || !canvas.getContext) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width = canvas.offsetWidth || 360;
+  const h = canvas.height = canvas.offsetHeight || 640;
+  if (reduce) { ctx.clearRect(0, 0, w, h); return; }
+  const colors = ['#22c55e', '#f59e0b', '#38bdf8', '#f472b6', '#facc15', '#a78bfa'];
+  const bits = [];
+  for (let i = 0; i < 110; i++) {
+    bits.push({ x: w / 2, y: h * 0.38, vx: (Math.random() - 0.5) * 12, vy: -Math.random() * 13 - 3, s: 4 + Math.random() * 5, c: colors[i % colors.length], r: Math.random() * 6 });
+  }
+  const until = Date.now() + 1800;
+  (function frame() {
+    ctx.clearRect(0, 0, w, h);
+    bits.forEach(function (p) {
+      p.vy += 0.38; p.x += p.vx; p.y += p.vy; p.r += 0.2;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * 0.6);
+      ctx.restore();
+    });
+    if (Date.now() < until) requestAnimationFrame(frame);
+    else ctx.clearRect(0, 0, w, h);
+  })();
+}
+
+/* ---------- كارت المشاركة بلوجو ADAM (ستوري ١٠٨٠×١٩٢٠) ---------- */
+
+function engLoadImage(src) {
+  return new Promise(function (resolve) {
+    const img = new Image();
+    img.onload = function () { resolve(img); };
+    img.onerror = function () { resolve(null); };
+    img.src = src;
+  });
+}
+
+function engRoundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function engCardContent(kind) {
+  const s = engStats;
+  const lv = ENG_LEVELS[s.level];
+  const first = String(clientName || '').trim().split(/\s+/)[0] || '';
+  const base = { name: first, lv: lv, rings: false };
+  if (kind.indexOf('badge:') === 0) {
+    const b = ENG_BADGES.filter(function (x) { return x.id === kind.slice(6); })[0];
+    return Object.assign(base, { emoji: b ? b.icon : '🏅', title: b ? t('eng_b_' + b.id) : '', sub: b ? t('eng_bd_' + b.id) : '' });
+  }
+  if (kind === 'level') return Object.assign(base, { emoji: lv.icon, title: fill('eng_card_level', { lvl: t('eng_lv_' + lv.id) }), sub: fill('eng_xp', { n: s.xp }) });
+  if (kind === 'streak') return Object.assign(base, { emoji: '🔥', title: fill('eng_card_streak', { n: s.streak, w: engDaysWord(s.streak) }), sub: fill('eng_best', { n: s.best, w: engDaysWord(s.best) }) });
+  if (kind === 'week') return Object.assign(base, { emoji: '📅', title: t('eng_card_week'), sub: fill('eng_recap_line', { s: s.recap.stars, t: s.recap.train, x: s.recap.xp }) });
+  return Object.assign(base, {
+    emoji: s.todayStar ? '⭐' : '🔥',
+    title: s.streak ? fill('eng_card_streak', { n: s.streak, w: engDaysWord(s.streak) }) : t('eng_card_rings'),
+    sub: fill('eng_card_level', { lvl: t('eng_lv_' + lv.id) }) + ' · ' + fill('eng_xp', { n: s.xp }),
+    /* الحلقات في الصورة بس لو فيها حاجة النهارده — حلقات فاضية شكلها وحش */
+    rings: !!(s.today && ((s.today.frac[1] || 0) + (s.today.frac[2] || 0) + (s.today.frac[4] || 0)) > 0.3)
+  });
+}
+
+async function engDrawCard(kind) {
+  const c = engCardContent(kind);
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080;
+  canvas.height = 1920;
+  const ctx = canvas.getContext('2d');
+  try { await document.fonts.load('700 80px Cairo'); await document.fonts.load('400 40px Cairo'); } catch (error) { /* خط احتياطي */ }
+  const rtl = lang === 'ar';
+
+  const bg = ctx.createLinearGradient(0, 0, 0, 1920);
+  bg.addColorStop(0, '#0b1220');
+  bg.addColorStop(1, '#0f2a24');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, 1080, 1920);
+  [[180, 360, 420, 'rgba(34,197,94,.16)'], [900, 1500, 520, 'rgba(56,189,248,.12)'], [980, 260, 300, 'rgba(245,158,11,.10)']].forEach(function (g) {
+    const rg = ctx.createRadialGradient(g[0], g[1], 0, g[0], g[1], g[2]);
+    rg.addColorStop(0, g[3]);
+    rg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = rg;
+    ctx.fillRect(0, 0, 1080, 1920);
+  });
+
+  /* اللوجو */
+  const logo = await engLoadImage('icon-512.png');
+  if (logo) ctx.drawImage(logo, 440, 120, 200, 200);
+  ctx.textAlign = 'center';
+  ctx.direction = rtl ? 'rtl' : 'ltr';
+  ctx.fillStyle = '#eef3f9';
+  ctx.font = '700 64px Cairo, sans-serif';
+  ctx.fillText('ADAM', 540, 400);
+
+  let y = 560;
+  if (c.rings && engStats.today && engStats.today.a) {
+    const radii = [230, 172, 114];
+    ENG_RINGS.forEach(function (ring, i) {
+      if (!(engStats.today.a & ring.bit)) return;
+      const f = Math.max(0, Math.min(1, engStats.today.frac[ring.bit] || 0));
+      ctx.lineWidth = 46;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = ring.color + '33';
+      ctx.beginPath(); ctx.arc(540, 820, radii[i], 0, Math.PI * 2); ctx.stroke();
+      if (f > 0) {
+        ctx.strokeStyle = ring.color;
+        ctx.beginPath(); ctx.arc(540, 820, radii[i], -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * f); ctx.stroke();
+      }
+    });
+    ctx.font = '120px sans-serif';
+    ctx.fillText(c.emoji, 540, 862);
+    y = 1180;
+  } else {
+    ctx.fillStyle = 'rgba(255,255,255,.06)';
+    ctx.beginPath(); ctx.arc(540, 800, 250, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = c.lv.color; ctx.lineWidth = 10;
+    ctx.beginPath(); ctx.arc(540, 800, 250, 0, Math.PI * 2); ctx.stroke();
+    ctx.font = '260px sans-serif';
+    ctx.fillText(c.emoji, 540, 890);
+    y = 1180;
+  }
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '700 88px Cairo, sans-serif';
+  engWrap(ctx, c.title, 540, y, 940, 104);
+  ctx.fillStyle = '#9fb3c8';
+  ctx.font = '400 50px Cairo, sans-serif';
+  engWrap(ctx, c.sub, 540, y + 150, 940, 66);
+
+  if (c.name) {
+    ctx.fillStyle = c.lv.color;
+    ctx.font = '700 56px Cairo, sans-serif';
+    ctx.fillText(c.lv.icon + ' ' + c.name, 540, 1500);
+  }
+
+  /* الفوتر */
+  engRoundRect(ctx, 150, 1640, 780, 150, 75);
+  ctx.fillStyle = '#22c55e';
+  ctx.fill();
+  ctx.fillStyle = '#06210f';
+  ctx.font = '700 54px Cairo, sans-serif';
+  ctx.fillText(t('eng_card_join'), 540, 1700);
+  ctx.font = '400 36px Cairo, sans-serif';
+  ctx.direction = 'ltr';
+  ctx.fillText('dradamcoach.github.io/adam', 540, 1755);
+  return canvas;
+}
+
+function engWrap(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = String(text || '').split(' ');
+  let line = '';
+  let row = 0;
+  words.forEach(function (word) {
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      ctx.fillText(line, x, y + row * lineHeight);
+      line = word;
+      row += 1;
+    } else line = test;
+  });
+  if (line) ctx.fillText(line, x, y + row * lineHeight);
+}
+
+async function engShare(kind) {
+  if (!engStats) return;
+  let canvas;
+  try { canvas = await engDrawCard(kind || 'today'); } catch (error) { return; }
+  const blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/png'); });
+  if (!blob) return;
+  const file = new File([blob], 'adam-' + todayStamp + '.png', { type: 'image/png' });
+  const text = t('eng_card_join') + ' 💪 https://dradamcoach.github.io/adam/';
+  try {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], text: text });
+      return;
+    }
+  } catch (error) {
+    if (error && error.name === 'AbortError') return;
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = file.name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  engToast(t('eng_share_saved'));
+}
