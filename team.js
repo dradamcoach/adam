@@ -28,6 +28,7 @@ let busy = false;
 const ICONS = {
   analyst: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>',
   success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11.5l2 2 4-4"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
   content: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg>'
 };
 
@@ -82,6 +83,7 @@ function renderStaff() {
   const staff = [
     { key: 'analyst', name: 'محلّل الأعمال', job: 'كل سبت: أرقام الأسبوع قدّام اللي قبله، و٥ أسطر تعمل إيه.', chip: a.on ? ['on', 'شغّال'] : ['off', 'موقوف'] },
     { key: 'success', name: 'مساعد نجاح العملاء', job: 'كل يوم: رسالة لكل عميل ساكت — ماتتبعتش غير بموافقتك.', chip: !state.success ? ['soon', 'محتاج تحديث'] : (state.success.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
+    { key: 'mail', name: 'ساعي البريد', job: 'إيميل واحد في اليوم للعميل اللي فاتته رسايل أو تحديثات أكتر من ساعتين.', chip: !state.mail ? ['soon', 'محتاج تحديث'] : (state.mail.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
     { key: 'content', name: 'صانع المحتوى', job: 'بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.', chip: !state.content ? ['soon', 'محتاج تحديث'] : (state.content.on ? ['on', 'شغّال'] : ['off', 'موقوف']) }
   ];
   $('staff').innerHTML = '';
@@ -233,9 +235,9 @@ function renderLog() {
   log.forEach(e => {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
-    const who = e.by === 'schedule' ? 'تلقائي' : 'يدوي';
-    const agent = e.agent === 'success' ? 'نجاح العملاء' : (e.agent === 'content' ? 'صانع المحتوى' : 'المحلّل');
-    li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
+    const who = e.by === 'schedule' ? 'تلقائي' : (e.by === 'client' ? 'العميل' : 'يدوي');
+    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد' }[e.agent] || 'المحلّل';
+    li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms >= 1000 ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });
 }
@@ -675,8 +677,78 @@ $('ct-toggle-btn').addEventListener('click', async () => {
   }
 });
 
+/* ---------- ساعي البريد ---------- */
+
+function mailMsg(text, kind) {
+  $('ml-msg').textContent = text || '';
+  $('ml-msg').className = 'msg' + (kind ? ' ' + kind : '');
+}
+
+function renderMail() {
+  const ml = state.mail;
+  $('mail-card').classList.toggle('hidden', !ml);
+  if (!ml) return;
+  $('ml-toggle-btn').textContent = ml.on ? 'أوقفه' : 'شغّله تاني';
+  $('ml-toggle-btn').className = ml.on ? 'danger' : '';
+  $('ml-stats').innerHTML = '';
+  [['النهارده', ml.today], ['آخر ٧ أيام', ml.week], ['وقّفوا الإيميلات', ml.unsubscribed]].forEach(([label, n]) => {
+    const box = document.createElement('div');
+    box.className = 'ml-stat';
+    box.innerHTML = '<b></b><span></span>';
+    box.querySelector('b').textContent = n;
+    box.querySelector('span').textContent = label;
+    $('ml-stats').appendChild(box);
+  });
+}
+
+function renderMailPreview(list) {
+  const ul = $('ml-preview');
+  ul.innerHTML = '';
+  ul.classList.remove('hidden');
+  if (!list.length) {
+    ul.innerHTML = '<li>مفيش حد محتاج إيميل دلوقتي — كل العملاء شافوا رسايلهم أو لسه ماعدّاش ساعتين.</li>';
+    return;
+  }
+  list.forEach(p => {
+    const li = document.createElement('li');
+    li.innerHTML = '<strong></strong> <span class="muted"></span><div class="ml-titles"></div>';
+    li.querySelector('strong').textContent = p.name;
+    li.querySelector('.muted').textContent = '· ' + p.count + (p.count === 1 ? ' حاجة' : ' حاجات') + (p.lang === 'en' ? ' · English' : '');
+    li.querySelector('.ml-titles').textContent = p.titles.join(' · ');
+    ul.appendChild(li);
+  });
+}
+
+$('ml-toggle-btn').addEventListener('click', async () => {
+  const turnOn = !state.mail.on;
+  try {
+    state = await call('team_mail_toggle', { on: turnOn });
+    renderMail();
+    renderStaff();
+    renderLog();
+  } catch (err) {
+    mailMsg(err.message, 'err');
+  }
+});
+
+$('ml-preview-btn').addEventListener('click', async () => {
+  $('ml-preview-btn').disabled = true;
+  mailMsg('بيبص على الإشعارات…');
+  try {
+    const data = await call('team_mail_preview');
+    state = data;
+    renderMail();
+    renderMailPreview(data.preview || []);
+    mailMsg('');
+  } catch (err) {
+    mailMsg(err.message, 'err');
+  }
+  $('ml-preview-btn').disabled = false;
+});
+
 function renderAll(keepShown) {
   renderStaff();
+  renderMail();
   renderSuccess();
   renderContent();
   renderControls();

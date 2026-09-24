@@ -47,6 +47,11 @@
     input { font: inherit; width: 100%; padding: 10px 12px; margin: 0 0 8px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
 
     /* الموظفين */
+    .ml-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 12px; }
+    .ml-stat { border: 1px solid var(--line, #e5e7eb); border-radius: 10px; padding: 10px; text-align: center; }
+    .ml-stat b { display: block; font-size: 22px; }
+    .ml-stat span { font-size: 12.5px; opacity: .75; }
+    .ml-titles { font-size: 13px; opacity: .8; margin-top: 2px; }
     .staff { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
     .agent { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
     .agent.soon { opacity: .6; }
@@ -230,6 +235,23 @@
           <summary>اللي اتعمل قبل كده</summary>
           <ul class="log" id="cs-done"></ul>
         </details>
+      </div>
+
+      <!-- ساعي البريد -->
+      <div class="card hidden" id="mail-card">
+        <div class="report-head">
+          <div>
+            <h2>ساعي البريد</h2>
+            <p class="muted">لو عميل ماشافش رسالة أو تحديث بقاله أكتر من ساعتين، بيوصله إيميل واحد فيه كل اللي فاته وزرار يفتح ADAM. مرة واحدة في اليوم بالكتير، من ٩ الصبح لـ ١٠ بالليل، وفي آخره رابط يوقّف الإيميلات.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" class="ghost" id="ml-toggle-btn"></button>
+          </div>
+        </div>
+        <div class="ml-stats" id="ml-stats"></div>
+        <button type="button" class="ghost" id="ml-preview-btn">مين هيوصله إيميل دلوقتي؟</button>
+        <p class="msg" id="ml-msg"></p>
+        <ul class="log hidden" id="ml-preview"></ul>
       </div>
 
       <!-- صانع المحتوى -->
