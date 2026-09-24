@@ -1075,6 +1075,43 @@ const TEXT = {
     med_saved: 'اتحفظ',
     seed_medlib_btn: 'تحميل محتوى مبدئي للمكتبة الطبية',
     team_link: 'فريق الذكاء الاصطناعي',
+    drv_attach: 'ارفع ملف',
+    drv_uploading: 'بيرفع {name}…',
+    drv_too_big: 'الملف أكبر من ١٥ ميجا',
+    drv_bad_type: 'نوع الملف ده مش مدعوم — صور أو PDF أو صوت بس',
+    drv_failed: 'الرفع فشل: ',
+    drv_open_failed: 'الملف مافتحش: ',
+    drv_loading: 'بيفتح…',
+    drv_voice: 'رسالة صوتية',
+    drv_play: 'اسمع',
+    drv_open_file: 'افتح',
+    drv_remove: 'شيل',
+    drv_not_ready: 'رفع الملفات لسه مش متفعّل على السيرفر',
+    drv_injury_files: 'ارفع أشعة أو تحاليل أو تقارير (صور أو PDF)',
+    drv_consult_files: 'ملفات مع السؤال (اختياري)',
+    chat_file_msg: 'ملف مرفق',
+    chat_photo_msg: 'صورة',
+    chat_voice_msg: 'رسالة صوتية',
+    chat_attach_btn: 'ارفع صورة أو ملف',
+    chat_rec_start: 'سجّل فويس',
+    chat_rec_stop: 'وقّف وابعت',
+    chat_rec_cancel: 'إلغاء',
+    chat_recording: 'بيسجّل… {t}',
+    chat_rec_denied: 'المتصفح مش سامح بالمايك — اسمحله من إعدادات المتصفح',
+    chat_rec_unsupported: 'المتصفح ده مابيسجّلش صوت',
+    pgtab_photos: 'صور التقدم',
+    pp_title: 'ضيف صورة',
+    pp_pose_front: 'من قدّام',
+    pp_pose_side: 'من الجنب',
+    pp_pose_back: 'من ضهر',
+    pp_pose_other: 'تانية',
+    pp_pick: 'اختار صورة وارفعها',
+    pp_saved: 'الصورة اترفعت',
+    pp_empty: 'لسه مفيش صور. صوّر نفسك في نفس المكان والإضاءة كل مرة عشان المقارنة تبقى صح.',
+    pp_compare: 'قارن بين يومين',
+    pp_compare_btn: 'قارن',
+    pp_history: 'الصور',
+    pp_private: 'الصور دي بيشوفها إنت وفريقك المتابع بس.',
     adv_title: 'مستشار البرامج',
     adv_sub: 'بيقترح برنامج من مكتبة التمارين على حسب بيانات العميل — من غير اسمه. إنت اللي بتراجع وتعدّل وتحفظ.',
     adv_open: 'اسأل المستشار',
@@ -2548,6 +2585,43 @@ const TEXT = {
     med_saved: 'Saved',
     seed_medlib_btn: 'Load starter content for the medical library',
     team_link: 'AI team',
+    drv_attach: 'Attach a file',
+    drv_uploading: 'Uploading {name}…',
+    drv_too_big: 'The file is larger than 15 MB',
+    drv_bad_type: 'Unsupported file — photos, PDF or audio only',
+    drv_failed: 'Upload failed: ',
+    drv_open_failed: 'Could not open the file: ',
+    drv_loading: 'Opening…',
+    drv_voice: 'Voice note',
+    drv_play: 'Play',
+    drv_open_file: 'Open',
+    drv_remove: 'Remove',
+    drv_not_ready: 'File uploads are not set up on the server yet',
+    drv_injury_files: 'Upload scans, lab results or reports (photos or PDF)',
+    drv_consult_files: 'Files with the question (optional)',
+    chat_file_msg: 'Attachment',
+    chat_photo_msg: 'Photo',
+    chat_voice_msg: 'Voice note',
+    chat_attach_btn: 'Attach a photo or file',
+    chat_rec_start: 'Record a voice note',
+    chat_rec_stop: 'Stop and send',
+    chat_rec_cancel: 'Cancel',
+    chat_recording: 'Recording… {t}',
+    chat_rec_denied: 'Microphone access is blocked — allow it in your browser settings',
+    chat_rec_unsupported: 'This browser cannot record audio',
+    pgtab_photos: 'Progress photos',
+    pp_title: 'Add a photo',
+    pp_pose_front: 'Front',
+    pp_pose_side: 'Side',
+    pp_pose_back: 'Back',
+    pp_pose_other: 'Other',
+    pp_pick: 'Choose a photo to upload',
+    pp_saved: 'Photo uploaded',
+    pp_empty: 'No photos yet. Take them in the same spot and light each time so the comparison is fair.',
+    pp_compare: 'Compare two days',
+    pp_compare_btn: 'Compare',
+    pp_history: 'Photos',
+    pp_private: 'Only you and your team can see these photos.',
     adv_title: 'Program advisor',
     adv_sub: 'Suggests a program from the exercise library based on the client\'s data — without their name. You review, edit and save.',
     adv_open: 'Ask the advisor',
@@ -6027,6 +6101,7 @@ function consultRequestCard(row) {
   body.style.whiteSpace = 'pre-wrap';
   body.textContent = row.text || '';
   item.appendChild(body);
+  if (Array.isArray(row.files) && row.files.length) item.appendChild(driveFilesBox(row.files));
 
   const meta = document.createElement('div');
   meta.className = 'ex-meta';
@@ -9152,10 +9227,12 @@ clientConsultSendBtn.addEventListener('click', async function () {
       clientName: clientName || '',
       providerEmail: providerEmail,
       text: text,
+      files: consultFilesPicker ? consultFilesPicker.refs() : [],
       status: 'pending',
       createdAt: new Date().toISOString()
     });
     clientConsultText.value = '';
+    if (consultFilesPicker) consultFilesPicker.reset();
     notify(providerEmail, 'consult_request', {
       target: 'consult', about: clientEmail, aboutName: clientName || '',
       params: function () { return { name: clientName || clientEmail, text: text }; }
@@ -18568,6 +18645,10 @@ function renderChatMessages(messages) {
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
     bubble.textContent = msg.text || '';
+    if (Array.isArray(msg.files) && msg.files.length) {
+      bubble.classList.add('has-files');
+      bubble.appendChild(driveFilesBox(msg.files));
+    }
     row.appendChild(bubble);
 
     chatMessagesList.appendChild(row);
@@ -20927,6 +21008,8 @@ async function loadInjuryHistory() {
         item.appendChild(desc);
       }
 
+      if (Array.isArray(report.files) && report.files.length) item.appendChild(driveFilesBox(report.files));
+
       const status = document.createElement('div');
       status.className = 'client-status';
       status.textContent = t('status_' + (report.status || 'requested'));
@@ -20954,6 +21037,7 @@ document.getElementById('injury-submit-btn').addEventListener('click', async fun
       bodyParts: selectedInjuryParts.slice(),
       description: injuryDesc.value.trim(),
       scan: injuryScanImage,
+      files: injuryFilesPicker ? injuryFilesPicker.refs() : [],
       status: 'requested',
       createdAt: new Date().toISOString()
     });
@@ -20966,6 +21050,7 @@ document.getElementById('injury-submit-btn').addEventListener('click', async fun
       }
     });
     resetInjuryForm();
+    if (injuryFilesPicker) injuryFilesPicker.reset();
     loadInjuryHistory();
   } catch (error) {
     injuryMessage.textContent = t('problem') + error.message;
@@ -21066,6 +21151,7 @@ async function loadCoachInjuryReports() {
         });
         item.appendChild(scanBtn);
       }
+      if (Array.isArray(report.files) && report.files.length) item.appendChild(driveFilesBox(report.files));
 
       const statusRow = document.createElement('div');
       statusRow.className = 'row';
@@ -21902,12 +21988,14 @@ const progressForClientLabel = document.getElementById('progress-for-client');
 const PROGRESS_PANELS = {
   inbody: document.getElementById('progress-inbody'),
   checkins: document.getElementById('progress-checkins'),
-  appt: document.getElementById('progress-appt')
+  appt: document.getElementById('progress-appt'),
+  photos: document.getElementById('progress-photos')
 };
 const PROGRESS_TABS = {
   inbody: document.getElementById('pgtab-inbody'),
   checkins: document.getElementById('pgtab-checkins'),
-  appt: document.getElementById('pgtab-appt')
+  appt: document.getElementById('pgtab-appt'),
+  photos: document.getElementById('pgtab-photos')
 };
 
 function showProgressTab(key) {
@@ -22051,6 +22139,7 @@ async function loadProgressData() {
     checkinEntries = [];
   }
   renderCheckinList();
+  loadProgressPhotos();
 }
 
 async function saveInbodyDoc() {
@@ -25503,4 +25592,438 @@ async function advisorApply(msg) {
     m.textContent = t('adv_undone');
     advisorRender();
   });
+})();
+
+
+/* ============================================================
+   ملفات على Google Drive — فويس وصور بجودة كاملة وأشعة وPDF
+   ------------------------------------------------------------
+   الملف بيروح لـ Apps Script وهو اللي بيحفظه في فولدر خاص في درايف
+   صاحب المنصة. الداتابيز فيها { driveId, name, mime, size } بس.
+   الفتح برضه من Apps Script، وهو اللي بيتأكد إن اللي بيفتح هو العميل
+   أو حد من فريقه — فحتى لو حد عرف رقم الملف مايقدرش يفتحه.
+   ============================================================ */
+
+const DRIVE_MAX = 15 * 1024 * 1024;
+const DRIVE_TYPES = /^(image\/(jpeg|png|webp|heic|heif)|application\/pdf|audio\/(webm|mp4|mpeg|ogg|aac|x-m4a|wav))/;
+const driveUrlCache = {};
+
+async function scriptCall(action, extra) {
+  if (!welcomeSettings) await fetchWelcomeSettings();
+  if (!welcomeSettings || !welcomeSettings.url) throw new Error(t('drv_not_ready'));
+  const user = auth.currentUser;
+  if (!user) throw new Error('auth');
+  const idToken = await user.getIdToken();
+  const res = await fetch(welcomeSettings.url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(Object.assign({ action: action, idToken: idToken }, extra || {}))
+  });
+  return res.json();
+}
+
+function blobToBase64(blob) {
+  return new Promise(function (resolve, reject) {
+    const reader = new FileReader();
+    reader.onerror = function () { reject(new Error('read failed')); };
+    reader.onload = function () { resolve(String(reader.result).split(',')[1] || ''); };
+    reader.readAsDataURL(blob);
+  });
+}
+
+/* صورة كبيرة أوي بتتصغّر لـ ٢٥٦٠ بكسل بجودة عالية — غير كده بتترفع زي ما هي */
+async function drivePrepare(file) {
+  const mime = String(file.type || '').toLowerCase();
+  if (/^image\/(jpeg|png|webp)$/.test(mime) && file.size > 6 * 1024 * 1024) {
+    const dataUrl = await compressImage(file, 2560, 0.9);
+    return { mime: 'image/jpeg', data: String(dataUrl).split(',')[1], name: String(file.name || 'photo').replace(/\.\w+$/, '') + '.jpg' };
+  }
+  return { mime: mime, data: await blobToBase64(file), name: file.name || 'file' };
+}
+
+async function driveUpload(file, client, context, name) {
+  const mime = String(file.type || '').toLowerCase();
+  if (!DRIVE_TYPES.test(mime)) throw new Error(t('drv_bad_type'));
+  const ready = await drivePrepare(file);
+  if (ready.data.length * 0.75 > DRIVE_MAX) throw new Error(t('drv_too_big'));
+  const res = await scriptCall('file_upload', { client: client, context: context, name: name || ready.name, mime: ready.mime, data: ready.data });
+  if (!res || !res.filesApi) throw new Error(t('drv_not_ready'));
+  if (!res.ok) throw new Error(res.error || '—');
+  return res.file;
+}
+
+function driveBlobUrl(ref) {
+  if (driveUrlCache[ref.driveId]) return driveUrlCache[ref.driveId];
+  driveUrlCache[ref.driveId] = scriptCall('file_get', { id: ref.driveId }).then(function (res) {
+    if (!res || !res.ok) throw new Error((res && res.error) || '—');
+    const bin = atob(res.data);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return URL.createObjectURL(new Blob([bytes], { type: res.mime || ref.mime }));
+  }).catch(function (error) {
+    delete driveUrlCache[ref.driveId];
+    throw error;
+  });
+  return driveUrlCache[ref.driveId];
+}
+
+function driveKind(ref) {
+  const mime = String(ref.mime || '');
+  if (mime.indexOf('image/') === 0) return 'image';
+  if (mime.indexOf('audio/') === 0) return 'audio';
+  return 'file';
+}
+
+function driveSizeText(bytes) {
+  const n = Number(bytes) || 0;
+  if (n >= 1024 * 1024) return (n / 1024 / 1024).toFixed(1) + ' MB';
+  return Math.max(1, Math.round(n / 1024)) + ' KB';
+}
+
+/* عنصر واحد: صورة مصغّرة / زرار اسمع / زرار افتح */
+function driveAttachment(ref) {
+  const box = document.createElement('div');
+  box.className = 'drv-item drv-' + driveKind(ref);
+  const err = function (error) {
+    box.classList.add('drv-error');
+    box.title = t('drv_open_failed') + error.message;
+  };
+  if (driveKind(ref) === 'image') {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'drv-thumb';
+    btn.textContent = t('drv_loading');
+    const img = document.createElement('img');
+    img.alt = ref.name || '';
+    driveBlobUrl(ref).then(function (url) {
+      img.src = url;
+      btn.textContent = '';
+      btn.appendChild(img);
+    }).catch(function (error) { btn.textContent = t('drv_open_failed') + error.message; err(error); });
+    btn.addEventListener('click', function () {
+      if (!img.src) return;
+      lightboxTitle.textContent = ref.name || '';
+      lightboxImages.innerHTML = '';
+      addShot(img.src, '');
+      lightbox.classList.remove('hidden');
+    });
+    box.appendChild(btn);
+    return box;
+  }
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'secondary drv-btn';
+  const icon = driveKind(ref) === 'audio' ? 'M8 5v14l11-7z' : 'M6 2h9l5 5v15H6zM14 2v6h6';
+  btn.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="' + icon + '"></path></svg>';
+  const label = document.createElement('span');
+  label.textContent = (driveKind(ref) === 'audio' ? t('drv_voice') + ' — ' + t('drv_play') : (ref.name || t('drv_open_file'))) + ' · ' + driveSizeText(ref.size);
+  btn.appendChild(label);
+  btn.addEventListener('click', function () {
+    /* الصفحة الجديدة بتتفتح قبل الانتظار، عشان المتصفح مايمنعهاش */
+    const win = driveKind(ref) === 'file' ? window.open('', '_blank') : null;
+    label.textContent = t('drv_loading');
+    driveBlobUrl(ref).then(function (url) {
+      if (driveKind(ref) === 'audio') {
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.src = url;
+        box.replaceChild(audio, btn);
+        audio.play().catch(function () {});
+      } else {
+        label.textContent = ref.name || t('drv_open_file');
+        if (win) win.location.href = url; else window.open(url, '_blank');
+      }
+    }).catch(function (error) {
+      if (win) win.close();
+      label.textContent = t('drv_open_failed') + error.message;
+      err(error);
+    });
+  });
+  box.appendChild(btn);
+  return box;
+}
+
+function driveFilesBox(refs) {
+  const wrap = document.createElement('div');
+  wrap.className = 'drv-files';
+  (refs || []).filter(function (r) { return r && r.driveId; }).forEach(function (ref) { wrap.appendChild(driveAttachment(ref)); });
+  return wrap;
+}
+
+/*
+ * زرار "ارفع ملف" لأي فورم: بيرفع أول ما تختار، وبيعرض اللي اترفع
+ * بزرار "شيل". clientFn بترجّع إيميل العميل اللي الملفات بتاعته.
+ */
+function driveAttachPicker(host, clientFn, context, labelKey) {
+  if (!host) return null;
+  let refs = [];
+  const label = document.createElement('label');
+  label.className = 'file-pick drv-pick';
+  const span = document.createElement('span');
+  span.textContent = t(labelKey);
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.multiple = true;
+  input.accept = 'image/*,application/pdf,audio/*';
+  label.append(span, input);
+  const list = document.createElement('div');
+  list.className = 'drv-picked';
+  const msg = document.createElement('p');
+  msg.className = 'message';
+  host.append(label, list, msg);
+  const draw = function () {
+    list.innerHTML = '';
+    refs.forEach(function (ref, i) {
+      const chip = document.createElement('span');
+      chip.className = 'drv-chip';
+      chip.textContent = ref.name + ' · ' + driveSizeText(ref.size) + ' ';
+      const x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'link';
+      x.textContent = t('drv_remove');
+      x.addEventListener('click', function () { refs.splice(i, 1); draw(); });
+      chip.appendChild(x);
+      list.appendChild(chip);
+    });
+  };
+  input.addEventListener('change', async function () {
+    const files = Array.prototype.slice.call(input.files || []);
+    input.value = '';
+    for (let i = 0; i < files.length; i++) {
+      msg.className = 'message';
+      msg.textContent = fill('drv_uploading', { name: files[i].name });
+      try {
+        refs.push(await driveUpload(files[i], clientFn(), context));
+        msg.textContent = '';
+      } catch (error) {
+        msg.className = 'message error';
+        msg.textContent = t('drv_failed') + error.message;
+      }
+      draw();
+    }
+  });
+  return {
+    refs: function () { return refs.slice(); },
+    reset: function () { refs = []; draw(); msg.textContent = ''; },
+    busy: function () { return /…/.test(msg.textContent); }
+  };
+}
+
+const injuryFilesPicker = driveAttachPicker(document.getElementById('injury-files-box'), function () { return clientEmail; }, 'injury', 'drv_injury_files');
+const consultFilesPicker = driveAttachPicker(document.getElementById('client-consult-files'), function () { return clientEmail; }, 'consult', 'drv_consult_files');
+
+/* ---------- الشات: صورة/ملف وفويس ---------- */
+
+async function sendChatFile(ref, labelKey) {
+  const sender = chatViewerIsCoach() ? 'coach' : 'client';
+  const label = t(labelKey);
+  await addDoc(collection(db, 'chats', currentChatEmail, 'messages'), {
+    sender: sender, text: '', files: [ref], createdAt: new Date().toISOString()
+  });
+  await setDoc(doc(db, 'chats', currentChatEmail), {
+    clientEmail: currentChatEmail, lastMessage: label, lastMessageAt: new Date().toISOString(), lastSender: sender
+  }, { merge: true });
+  notifyChat(label);
+}
+
+(function () {
+  const input = document.getElementById('chat-file-input');
+  if (!input) return;
+  input.addEventListener('change', async function () {
+    const files = Array.prototype.slice.call(input.files || []);
+    input.value = '';
+    for (let i = 0; i < files.length; i++) {
+      chatMessage.className = 'message';
+      chatMessage.textContent = fill('drv_uploading', { name: files[i].name });
+      try {
+        const ref = await driveUpload(files[i], currentChatEmail, 'chat');
+        await sendChatFile(ref, driveKind(ref) === 'image' ? 'chat_photo_msg' : (driveKind(ref) === 'audio' ? 'chat_voice_msg' : 'chat_file_msg'));
+        chatMessage.textContent = '';
+      } catch (error) {
+        chatMessage.className = 'message error';
+        chatMessage.textContent = t('drv_failed') + error.message;
+      }
+    }
+  });
+})();
+
+let voiceRec = null;   /* { recorder, chunks, stream, timer, started, cancelled } */
+
+function voiceRecordingUi(on) {
+  const mic = document.getElementById('chat-mic-btn');
+  const cancel = document.getElementById('chat-rec-cancel');
+  mic.classList.toggle('recording', on);
+  mic.title = t(on ? 'chat_rec_stop' : 'chat_rec_start');
+  cancel.classList.toggle('hidden', !on);
+  document.getElementById('chat-input').classList.toggle('hidden', on);
+}
+
+function voiceStop(cancelled) {
+  if (!voiceRec) return;
+  voiceRec.cancelled = !!cancelled;
+  clearInterval(voiceRec.timer);
+  try { voiceRec.recorder.stop(); } catch (e) { /* خلاص وقف */ }
+}
+
+async function voiceStart() {
+  if (!window.MediaRecorder || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    chatMessage.className = 'message error';
+    chatMessage.textContent = t('chat_rec_unsupported');
+    return;
+  }
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (error) {
+    chatMessage.className = 'message error';
+    chatMessage.textContent = t('chat_rec_denied');
+    return;
+  }
+  const type = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4'].filter(function (m) {
+    return MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m);
+  })[0] || '';
+  const recorder = type ? new MediaRecorder(stream, { mimeType: type }) : new MediaRecorder(stream);
+  voiceRec = { recorder: recorder, chunks: [], stream: stream, started: Date.now(), cancelled: false };
+  recorder.addEventListener('dataavailable', function (e) { if (e.data && e.data.size) voiceRec.chunks.push(e.data); });
+  recorder.addEventListener('stop', async function () {
+    const rec = voiceRec;
+    voiceRec = null;
+    rec.stream.getTracks().forEach(function (tr) { tr.stop(); });
+    voiceRecordingUi(false);
+    chatMessage.textContent = '';
+    if (rec.cancelled || !rec.chunks.length) return;
+    const mime = String(recorder.mimeType || type || 'audio/webm').split(';')[0];
+    const blob = new Blob(rec.chunks, { type: mime });
+    const file = new File([blob], 'voice-' + Date.now() + (mime === 'audio/mp4' ? '.m4a' : '.webm'), { type: mime });
+    chatMessage.className = 'message';
+    chatMessage.textContent = fill('drv_uploading', { name: t('drv_voice') });
+    try {
+      const ref = await driveUpload(file, currentChatEmail, 'chat');
+      await sendChatFile(ref, 'chat_voice_msg');
+      chatMessage.textContent = '';
+    } catch (error) {
+      chatMessage.className = 'message error';
+      chatMessage.textContent = t('drv_failed') + error.message;
+    }
+  });
+  recorder.start();
+  voiceRecordingUi(true);
+  voiceRec.timer = setInterval(function () {
+    const sec = Math.floor((Date.now() - voiceRec.started) / 1000);
+    chatMessage.className = 'message';
+    chatMessage.textContent = fill('chat_recording', { t: Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0') });
+    if (sec >= 180) voiceStop(false);   /* ٣ دقايق بالكتير */
+  }, 500);
+}
+
+(function () {
+  const mic = document.getElementById('chat-mic-btn');
+  if (!mic) return;
+  mic.addEventListener('click', function () { if (voiceRec) voiceStop(false); else voiceStart(); });
+  document.getElementById('chat-rec-cancel').addEventListener('click', function () { voiceStop(true); });
+})();
+
+/* ---------- صور التقدم ---------- */
+
+let progressPhotos = [];
+const PP_POSES = ['front', 'side', 'back', 'other'];
+
+async function loadProgressPhotos() {
+  const list = document.getElementById('pp-list');
+  if (!list) return;
+  try {
+    const snap = await getDoc(doc(db, 'progressPhotos', progressTargetEmail));
+    progressPhotos = snap.exists() && Array.isArray(snap.data().entries) ? snap.data().entries : [];
+  } catch (error) {
+    progressPhotos = [];
+  }
+  renderProgressPhotos();
+}
+
+function ppDates() {
+  return progressPhotos.map(function (p) { return p.date; }).filter(function (d, i, all) { return d && all.indexOf(d) === i; }).sort().reverse();
+}
+
+function renderProgressPhotos() {
+  const list = document.getElementById('pp-list');
+  const pose = document.getElementById('pp-pose');
+  if (!list) return;
+  const keep = pose.value;
+  pose.innerHTML = '';
+  PP_POSES.forEach(function (k) {
+    const o = document.createElement('option');
+    o.value = k;
+    o.textContent = t('pp_pose_' + k);
+    pose.appendChild(o);
+  });
+  pose.value = keep || 'front';
+  const dates = ppDates();
+  list.innerHTML = '';
+  document.getElementById('pp-empty').classList.toggle('hidden', dates.length > 0);
+  dates.forEach(function (date) {
+    const group = document.createElement('div');
+    group.className = 'pp-day';
+    const h = document.createElement('h4');
+    h.textContent = date;
+    group.appendChild(h);
+    group.appendChild(driveFilesBox(progressPhotos.filter(function (p) { return p.date === date; })
+      .sort(function (a, b) { return PP_POSES.indexOf(a.pose) - PP_POSES.indexOf(b.pose); })));
+    list.appendChild(group);
+  });
+  /* الافتراضي: أول يوم قدّام آخر يوم — ولو اتضاف يوم جديد بنرجع للافتراضي */
+  const fresh = renderProgressPhotos.count !== dates.length;
+  renderProgressPhotos.count = dates.length;
+  ['pp-cmp-a', 'pp-cmp-b'].forEach(function (id, n) {
+    const sel = document.getElementById(id);
+    const was = sel.value;
+    sel.innerHTML = '';
+    dates.forEach(function (d) { const o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o); });
+    sel.value = (!fresh && was && dates.indexOf(was) !== -1) ? was : ((n === 0 ? dates[dates.length - 1] : dates[0]) || '');
+  });
+  document.getElementById('pp-compare-box').classList.toggle('hidden', dates.length < 2);
+}
+
+(function () {
+  const input = document.getElementById('pp-file');
+  if (!input) return;
+  const msg = document.getElementById('pp-message');
+  input.addEventListener('change', async function () {
+    const files = Array.prototype.slice.call(input.files || []);
+    input.value = '';
+    const date = document.getElementById('pp-date').value || dateStamp(new Date());
+    const pose = document.getElementById('pp-pose').value || 'front';
+    for (let i = 0; i < files.length; i++) {
+      msg.className = 'message';
+      msg.textContent = fill('drv_uploading', { name: files[i].name });
+      try {
+        if (!/^image\//.test(files[i].type)) throw new Error(t('drv_bad_type'));
+        const ref = await driveUpload(files[i], progressTargetEmail, 'progress', date + '-' + pose + '.jpg');
+        progressPhotos.push(Object.assign({}, ref, { date: date, pose: pose }));
+        await setDoc(doc(db, 'progressPhotos', progressTargetEmail), { entries: progressPhotos }, { merge: true });
+        setStatusMessage(msg, t('pp_saved'), 'success');
+      } catch (error) {
+        msg.className = 'message error';
+        msg.textContent = t('drv_failed') + error.message;
+      }
+    }
+    renderProgressPhotos();
+  });
+  document.getElementById('pp-compare-btn').addEventListener('click', function () {
+    const a = document.getElementById('pp-cmp-a').value;
+    const b = document.getElementById('pp-cmp-b').value;
+    const out = document.getElementById('pp-compare-out');
+    out.innerHTML = '';
+    [a, b].forEach(function (date) {
+      const col = document.createElement('div');
+      col.className = 'pp-col';
+      const h = document.createElement('h4');
+      h.textContent = date;
+      col.appendChild(h);
+      col.appendChild(driveFilesBox(progressPhotos.filter(function (p) { return p.date === date; })
+        .sort(function (x, y) { return PP_POSES.indexOf(x.pose) - PP_POSES.indexOf(y.pose); })));
+      out.appendChild(col);
+    });
+  });
+  const dateInput = document.getElementById('pp-date');
+  if (dateInput && !dateInput.value) dateInput.value = dateStamp(new Date());
 })();

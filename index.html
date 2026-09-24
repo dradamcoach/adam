@@ -261,6 +261,9 @@
       <em data-t="chat_ai_typing">المساعد الذكي بيكتب…</em>
     </div>
     <div class="chat-input-row">
+      <label class="chat-tool-btn" id="chat-attach-label" data-t-title="chat_attach_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5 12.6 20a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"></path></svg><input type="file" id="chat-file-input" accept="image/*,application/pdf,audio/*" multiple></label>
+      <button type="button" class="chat-tool-btn" id="chat-mic-btn" data-t-title="chat_rec_start"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><line x1="12" y1="18" x2="12" y2="21"></line></svg></button>
+      <button type="button" class="link hidden" id="chat-rec-cancel" data-t="chat_rec_cancel">إلغاء</button>
       <input id="chat-input" data-t-ph="chat_input_ph">
       <button type="button" id="chat-send-btn" class="chat-send-btn" data-t-title="chat_send_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="20" y1="4" x2="10" y2="14"></line><path d="M20 4l-7 17-3-7-7-3z"></path></svg></button>
     </div>
@@ -820,6 +823,7 @@
       <span data-t="choose_scan">ارفع أشعة أو صورة (اختياري)</span>
       <input type="file" id="injury-scan" accept="image/*">
     </label>
+    <div id="injury-files-box"></div>
     <div class="preview-box hidden" id="injury-scan-box">
       <img id="injury-scan-preview" alt="">
       <button type="button" id="injury-scan-remove" class="delete"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
@@ -1724,6 +1728,7 @@
       <p class="or" data-t="client_consult_ask_hint">اختار المتخصص واكتب سؤالك أو شكوتك — هيوصله ويرد عليك هنا</p>
       <select id="client-consult-provider"></select>
       <textarea id="client-consult-text" rows="4" data-t-ph="client_consult_text_ph"></textarea>
+      <div id="client-consult-files"></div>
       <button type="button" id="client-consult-send-btn" data-t="client_consult_send_btn">إرسال الطلب</button>
       <p class="message" id="client-consult-message"></p>
 
@@ -1886,6 +1891,35 @@
       <button type="button" class="tab active" id="pgtab-inbody" data-t="pgtab_inbody">InBody</button>
       <button type="button" class="tab" id="pgtab-checkins" data-t="pgtab_checkins">تقارير المتابعة</button>
       <button type="button" class="tab" id="pgtab-appt" data-t="pgtab_appt">المواعيد</button>
+      <button type="button" class="tab" id="pgtab-photos" data-t="pgtab_photos">صور التقدم</button>
+    </div>
+
+    <div id="progress-photos" class="hidden">
+      <div class="add-box">
+        <h3 data-t="pp_title">ضيف صورة</h3>
+        <div class="row">
+          <input id="pp-date" type="date">
+          <select id="pp-pose"></select>
+        </div>
+        <label class="file-pick">
+          <span data-t="pp_pick">اختار صورة وارفعها</span>
+          <input type="file" id="pp-file" accept="image/*" multiple>
+        </label>
+        <p class="message" id="pp-message"></p>
+        <p class="hint-text" data-t="pp_private">الصور دي بيشوفها إنت وفريقك المتابع بس.</p>
+      </div>
+      <div class="add-box hidden" id="pp-compare-box">
+        <h3 data-t="pp_compare">قارن بين يومين</h3>
+        <div class="row">
+          <select id="pp-cmp-a"></select>
+          <select id="pp-cmp-b"></select>
+        </div>
+        <button type="button" class="secondary" id="pp-compare-btn" data-t="pp_compare_btn">قارن</button>
+        <div class="pp-compare" id="pp-compare-out"></div>
+      </div>
+      <h3 data-t="pp_history">الصور</h3>
+      <p class="hint-text" id="pp-empty" data-t="pp_empty"></p>
+      <div id="pp-list"></div>
     </div>
 
     <div id="progress-inbody">

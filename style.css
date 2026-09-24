@@ -9637,3 +9637,30 @@ body.sheet-open { overflow: hidden; }
 .card .advisor-box li .adv-custom-tag { color: var(--warn); }
 .card .advisor-box .adv-day ul { padding-inline-start: 20px; }
 .card .advisor-box li.adv-phase-info { list-style: none; margin-inline-start: -20px; }
+
+/* ============ ملفات Google Drive ============ */
+.drv-files { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.drv-item { max-width: 100%; }
+.drv-item audio { max-width: 240px; height: 40px; }
+.card button.drv-thumb, button.drv-thumb { width: 120px; height: 120px; padding: 0; margin: 0; border-radius: 12px; overflow: hidden; background: var(--field); border: 1px solid var(--line); color: var(--muted); font-size: 12px; display: flex; align-items: center; justify-content: center; }
+.drv-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card button.drv-btn, button.drv-btn { width: auto; margin: 0; padding: 8px 12px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; max-width: 100%; }
+.drv-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
+.drv-error button { border-color: var(--danger); }
+.drv-picked { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.drv-chip { font-size: 12.5px; padding: 4px 10px; border-radius: 999px; background: var(--field); border: 1px solid var(--line); }
+.drv-chip .link { padding: 0; margin: 0 4px; font-size: 12.5px; width: auto; }
+.chat-bubble.has-files { max-width: 86%; }
+.chat-tool-btn { width: 40px; height: 40px; min-width: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--muted); background: var(--field); border: 1px solid var(--line); }
+.card button.chat-tool-btn { width: 40px; height: 40px; min-width: 40px; padding: 0; margin: 0; border-radius: 50%; background: var(--field); color: var(--muted); border: 1px solid var(--line); }
+.chat-tool-btn .ui-icon { width: 19px; height: 19px; }
+.chat-tool-btn input[type="file"] { display: none; }
+.card button.chat-tool-btn.recording { background: var(--danger); color: #fff; border-color: var(--danger); animation: recPulse 1.2s ease-in-out infinite; }
+@keyframes recPulse { 50% { opacity: 0.6; } }
+.chat-input-row #chat-rec-cancel { width: auto; margin: 0; flex: 1; text-align: start; }
+.pp-day h4, .pp-col h4 { margin: 12px 0 4px; font-size: 13.5px; color: var(--muted); }
+.pp-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.pp-compare .card button.drv-thumb, .pp-compare button.drv-thumb { width: 100%; height: auto; aspect-ratio: 3 / 4; }
+.pp-compare .drv-files { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.pp-compare .drv-item { width: 100%; }
+.card .pp-compare button.drv-thumb { width: 100%; height: auto; aspect-ratio: 3 / 4; }
