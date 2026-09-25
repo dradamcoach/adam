@@ -14,6 +14,60 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'https:/
 import { getFirestore, doc, getDoc, setDoc, addDoc, collection } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
 import { SPORTS } from './sports.js';
+import { TEAM_EN } from './team-i18n.js';
+
+/* ---------- اللغة: عربي أو إنجليزي ----------
+   الصفحة بتتكتب عربي، و L() بتقلبها إنجليزي لو اخترت EN. تغيير اللغة
+   بيعيد تحميل الصفحة عشان كل حاجة تتبني من الأول باللغة الجديدة */
+function readTeamLang() {
+  try {
+    const v = localStorage.getItem('adam-team-lang') || localStorage.getItem('adam-lang');
+    return v === 'en' ? 'en' : 'ar';
+  } catch (e) { return 'ar'; }
+}
+const TEAM_LANG = readTeamLang();
+const LOCALE = TEAM_LANG === 'en' ? 'en-GB' : 'ar-EG';
+function L(ar) {
+  if (TEAM_LANG !== 'en') return ar;
+  const hit = TEAM_EN[ar];
+  return hit === undefined ? ar : hit;
+}
+
+/* الكلام الثابت في team.html (نصوص وخانات) */
+function translateStatic(root) {
+  if (TEAM_LANG !== 'en') return;
+  const norm = t => t.replace(/\s+/g, ' ').trim();
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n => {
+    const raw = n.nodeValue;
+    if (!/[\u0600-\u06FF]/.test(raw)) return;
+    const hit = TEAM_EN[norm(raw)];
+    if (hit !== undefined) n.nodeValue = raw.replace(norm(raw), hit);
+  });
+  root.querySelectorAll('[placeholder]').forEach(el => {
+    const hit = TEAM_EN[norm(el.getAttribute('placeholder'))];
+    if (hit !== undefined) el.setAttribute('placeholder', hit);
+  });
+}
+document.documentElement.lang = TEAM_LANG;
+document.documentElement.dir = TEAM_LANG === 'en' ? 'ltr' : 'rtl';
+document.title = L('فريق ADAM الذكي');
+translateStatic(document.body);
+(function wireTeamLang() {
+  const btn = document.getElementById('team-lang-btn');
+  if (!btn) return;
+  btn.textContent = TEAM_LANG === 'en' ? 'ع' : 'EN';
+  btn.addEventListener('click', async () => {
+    const next = TEAM_LANG === 'en' ? 'ar' : 'en';
+    try { localStorage.setItem('adam-team-lang', next); } catch (e) { /* تجاهل */ }
+    btn.disabled = true;
+    /* التقارير اللي جاية كمان بتتكتب باللغة دي */
+    try { if (auth.currentUser && scriptUrl) await call('team_lang', { lang: next }); } catch (e) { /* مش أساسي */ }
+    location.reload();
+  });
+})();
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -55,7 +109,7 @@ function blocked(title, text) {
 
 async function call(action, extra) {
   const user = auth.currentUser;
-  if (!user) throw new Error('مش داخل');
+  if (!user) throw new Error(L('مش داخل'));
   const idToken = await user.getIdToken();
   // text/plain عشان المتصفح مايعملش preflight — Apps Script مابيردّش على OPTIONS
   const res = await fetch(scriptUrl, {
@@ -65,8 +119,8 @@ async function call(action, extra) {
   });
   const data = await res.json();
   // نسخة Apps Script قديمة (قبل ملف analyst) — بتفهم الطلب غلط
-  if (!data.teamApi) throw new Error('ملف analyst مش متضاف');
-  if (!data.ok) throw new Error(data.error || 'حصلت مشكلة');
+  if (!data.teamApi) throw new Error(L('ملف analyst مش متضاف'));
+  if (!data.ok) throw new Error(data.error || L('حصلت مشكلة'));
   /* أي رد فيه القايمة بيحدّث «مستني منك» — بعد ما اللي نادى يحفظ الحالة */
   if (data.pending) setTimeout(renderInbox, 0);
   return data;
@@ -77,30 +131,30 @@ async function call(action, extra) {
 function fmtDate(iso) {
   if (!iso) return '';
   const d = new Date(iso);
-  return isNaN(d) ? iso : d.toLocaleString('ar-EG', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+  return isNaN(d) ? iso : d.toLocaleString(LOCALE, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
 }
 
 /* 2026-09-17 ← "١٧ سبتمبر" — التاريخ بالأرقام بيتقلب في صفحة عربي */
 function fmtDay(stamp) {
   if (!stamp) return '';
   const d = new Date(stamp + 'T12:00:00');
-  return isNaN(d) ? stamp : d.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' });
+  return isNaN(d) ? stamp : d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
 }
 
 function renderStaff() {
   const a = state.analyst;
   const staff = [
-    { key: 'analyst', name: 'محلّل الأعمال', job: 'كل سبت: أرقام الأسبوع قدّام اللي قبله، و٥ أسطر تعمل إيه.', chip: a.on ? ['on', 'شغّال'] : ['off', 'موقوف'] },
-    { key: 'success', name: 'مساعد نجاح العملاء', job: 'كل يوم: رسالة لكل عميل ساكت — ماتتبعتش غير بموافقتك.', chip: !state.success ? ['soon', 'محتاج تحديث'] : (state.success.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
-    { key: 'mail', name: 'ساعي البريد', job: 'إيميل واحد في اليوم للعميل اللي فاتته رسايل أو تحديثات أكتر من ساعتين.', chip: !state.mail ? ['soon', 'محتاج تحديث'] : (state.mail.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
-    { key: 'advisor', name: 'مستشار البرامج', job: 'جوه صفحة العميل: بيقترح برنامج تمرين من المكتبة، وإنت أو المتخصص تراجعوا وتحفظوا.', chip: !state.advisor ? ['soon', 'محتاج تحديث'] : (state.advisor.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
-    { key: 'sup', name: 'مدير المتابعة', job: 'كل يوم: بريف لكل مدرب وأخصائي بحالاته ومستواه، وكل سبت ترتيبه وسط زمايله — وليك البونص.', chip: !state.sup ? ['soon', 'محتاج تحديث'] : (state.sup.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
-    { key: 'rd', name: 'موظف التطوير', job: 'كل أحد: أفكار جديدة بمصادرها — منافسين وأبحاث وأدوات وتسويق. إنت اللي بتختار.', chip: !state.rd ? ['soon', 'محتاج تحديث'] : (state.rd.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
-    { key: 'content', name: 'صانع المحتوى', job: 'بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.', chip: !state.content ? ['soon', 'محتاج تحديث'] : (state.content.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
-    { key: 'socm', name: 'مدير السوشيال ميديا', job: 'كل سبت: التريند في مصر + جدول ٧ بوستات بميعادها وكلامها وصورتها — والصور بلوجو ADAM.', chip: !state.socm ? ['soon', 'محتاج تحديث'] : (state.socm.on ? ['on', 'شغّال'] : ['off', 'موقوف']) },
-    { key: 'chal', name: 'موظف المسابقات', job: 'كل جمعة: ٣ أفكار مسابقات للأسبوع الجاي — بتنشرها من لوحة التحكم ← المسابقات.', chip: state.socm ? ['on', 'شغّال'] : ['soon', 'محتاج تحديث'] },
-    { key: 'inbody', name: 'فريق الإنبودي', job: 'العميل أو الأخصائي يصوّر ورقة الإنبودي: الأرقام بتتقري لوحدها، وبعد الحفظ تحليل بيوصل للعميل ولأخصائي التغذية والمدرب.', chip: state.socm ? ['on', 'شغّال'] : ['soon', 'محتاج تحديث'] },
-    { key: 'rings', name: 'تذكير الحلقات', job: 'كل يوم ٨ بالليل: إشعار للعميل اللي سلسلته في خطر — مرة واحدة بالكتير.', chip: state.socm ? ['on', 'شغّال'] : ['soon', 'محتاج تحديث'] }
+    { key: 'analyst', name: L('محلّل الأعمال'), job: L('كل سبت: أرقام الأسبوع قدّام اللي قبله، و٥ أسطر تعمل إيه.'), chip: a.on ? ['on', L('شغّال')] : ['off', L('موقوف')] },
+    { key: 'success', name: L('مساعد نجاح العملاء'), job: L('كل يوم: رسالة لكل عميل ساكت — ماتتبعتش غير بموافقتك.'), chip: !state.success ? ['soon', L('محتاج تحديث')] : (state.success.on ? ['on', L('شغّال')] : ['off', L('موقوف')]) },
+    { key: 'mail', name: L('ساعي البريد'), job: L('إيميل واحد في اليوم للعميل اللي فاتته رسايل أو تحديثات أكتر من ساعتين.'), chip: !state.mail ? ['soon', L('محتاج تحديث')] : (state.mail.on ? ['on', L('شغّال')] : ['off', L('موقوف')]) },
+    { key: 'advisor', name: L('مستشار البرامج'), job: L('جوه صفحة العميل: بيقترح برنامج تمرين من المكتبة، وإنت أو المتخصص تراجعوا وتحفظوا.'), chip: !state.advisor ? ['soon', L('محتاج تحديث')] : (state.advisor.on ? ['on', L('شغّال')] : ['off', L('موقوف')]) },
+    { key: 'sup', name: L('مدير المتابعة'), job: L('كل يوم: بريف لكل مدرب وأخصائي بحالاته ومستواه، وكل سبت ترتيبه وسط زمايله — وليك البونص.'), chip: !state.sup ? ['soon', L('محتاج تحديث')] : (state.sup.on ? ['on', L('شغّال')] : ['off', L('موقوف')]) },
+    { key: 'rd', name: L('موظف التطوير'), job: L('كل أحد: أفكار جديدة بمصادرها — منافسين وأبحاث وأدوات وتسويق. إنت اللي بتختار.'), chip: !state.rd ? ['soon', L('محتاج تحديث')] : (state.rd.on ? ['on', L('شغّال')] : ['off', L('موقوف')]) },
+    { key: 'content', name: L('صانع المحتوى'), job: L('بوستات وسكريبتات ريلز من مكتبات التمارين والأكل والمكملات.'), chip: !state.content ? ['soon', L('محتاج تحديث')] : (state.content.on ? ['on', L('شغّال')] : ['off', L('موقوف')]) },
+    { key: 'socm', name: L('مدير السوشيال ميديا'), job: L('كل سبت: التريند في مصر + جدول ٧ بوستات بميعادها وكلامها وصورتها — والصور بلوجو ADAM.'), chip: !state.socm ? ['soon', L('محتاج تحديث')] : (state.socm.on ? ['on', L('شغّال')] : ['off', L('موقوف')]) },
+    { key: 'chal', name: L('موظف المسابقات'), job: L('كل جمعة: ٣ أفكار مسابقات للأسبوع الجاي — بتنشرها من لوحة التحكم ← المسابقات.'), chip: state.socm ? ['on', L('شغّال')] : ['soon', L('محتاج تحديث')] },
+    { key: 'inbody', name: L('فريق الإنبودي'), job: L('العميل أو الأخصائي يصوّر ورقة الإنبودي: الأرقام بتتقري لوحدها، وبعد الحفظ تحليل بيوصل للعميل ولأخصائي التغذية والمدرب.'), chip: state.socm ? ['on', L('شغّال')] : ['soon', L('محتاج تحديث')] },
+    { key: 'rings', name: L('تذكير الحلقات'), job: L('كل يوم ٨ بالليل: إشعار للعميل اللي سلسلته في خطر — مرة واحدة بالكتير.'), chip: state.socm ? ['on', L('شغّال')] : ['soon', L('محتاج تحديث')] }
   ];
   $('staff').innerHTML = '';
   staff.forEach(s => {
@@ -132,7 +186,7 @@ function renderReport(report) {
   $('report-empty').classList.toggle('hidden', !empty);
   $('report-body').classList.toggle('hidden', empty);
   $('report-period').textContent = empty ? '' :
-    ('من ' + fmtDay(report.period.from) + ' لـ ' + fmtDay(report.period.to) + ' · اتعمل ' + fmtDate(report.at) + (report.by === 'schedule' ? ' (تلقائي)' : ' (يدوي)'));
+    (L('من ') + fmtDay(report.period.from) + L(' لـ ') + fmtDay(report.period.to) + L(' · اتعمل ') + fmtDate(report.at) + (report.by === 'schedule' ? L(' (تلقائي)') : L(' (يدوي)')));
   if (empty) return;
   shownId = report.id;
 
@@ -145,7 +199,7 @@ function renderReport(report) {
   });
   const aiErr = $('report-ai-err');
   aiErr.classList.toggle('hidden', !!(report.lines && report.lines.length));
-  aiErr.textContent = 'الذكاء الاصطناعي ما ردّش المرة دي (' + (report.aiError || 'مش معروف ليه') + ') — الأرقام تحت كاملة ومظبوطة.';
+  aiErr.textContent = L('الذكاء الاصطناعي ما ردّش المرة دي (') + (report.aiError || L('مش معروف ليه')) + L(') — الأرقام تحت كاملة ومظبوطة.');
 
   const movers = $('report-movers');
   movers.innerHTML = '';
@@ -153,7 +207,7 @@ function renderReport(report) {
     const chip = document.createElement('span');
     chip.className = 'mover' + (m.better === true ? ' good' : (m.better === false ? ' bad' : ''));
     // "كان ٠ وبقى ٣" بدل السهم — الأسهم والأرقام بتتقلب في الكلام العربي
-    chip.textContent = m.label + ': كان ' + m.before + ' وبقى ' + m.now;
+    chip.textContent = m.label + L(': كان ') + m.before + L(' وبقى ') + m.now;
     movers.appendChild(chip);
   });
 
@@ -177,11 +231,11 @@ function renderReport(report) {
 
   const t = report.totals || {};
   const todo = [
-    [t.waitingInjuries, 'بلاغ إصابة مستني رد من أكتر من يومين'],
-    [t.waitingConsults, 'طلب استشارة مستني رد من أكتر من يومين'],
-    [t.leadsNotContacted, 'رسالة تواصل ماحدش كلّم صاحبها'],
-    [t.trialsEnding, 'عميل تجربته المجانية بتخلص خلال أسبوع'],
-    [t.newOrdersOpen, 'طلب متجر جديد']
+    [t.waitingInjuries, L('بلاغ إصابة مستني رد من أكتر من يومين')],
+    [t.waitingConsults, L('طلب استشارة مستني رد من أكتر من يومين')],
+    [t.leadsNotContacted, L('رسالة تواصل ماحدش كلّم صاحبها')],
+    [t.trialsEnding, L('عميل تجربته المجانية بتخلص خلال أسبوع')],
+    [t.newOrdersOpen, L('طلب متجر جديد')]
   ].filter(x => x[0] > 0);
   $('todo-wrap').classList.toggle('hidden', !todo.length);
   $('report-todo').innerHTML = '';
@@ -197,13 +251,13 @@ function renderReport(report) {
   $('fb-ask').classList.toggle('hidden', !!fb);
   $('fb-done').classList.toggle('hidden', !fb);
   if (fb) {
-    $('fb-done').textContent = (fb.decision === 'yes' ? 'خدت قرار' : 'ماكانش مفيد') + (fb.note ? ' — ' + fb.note : '') + '  ';
+    $('fb-done').textContent = (fb.decision === 'yes' ? L('خدت قرار') : L('ماكانش مفيد')) + (fb.note ? ' — ' + fb.note : '') + '  ';
     const undo = document.createElement('button');
     undo.type = 'button';
     undo.className = 'ghost';
     undo.id = 'fb-undo';
     undo.style.cssText = 'padding:4px 10px;font-size:12px';
-    undo.textContent = 'غيّر';
+    undo.textContent = L('غيّر');
     undo.addEventListener('click', () => sendFeedback(''));
     $('fb-done').appendChild(undo);
   } else {
@@ -216,8 +270,8 @@ function renderReport(report) {
 function renderScore() {
   const a = state.analyst;
   $('score').textContent = a.rated
-    ? ('قرارات اتاخدت بسبب المحلّل: ' + a.decisions + ' من ' + a.rated + ' تقرير متقيّم. لو الرقم ده فضل صفر بعد شهر، أوقف الموظف — ده توفير مش فشل.')
-    : 'قيّم كل تقرير بدوسة — بعد شهر هنعرف الموظف ده نافع ولا لأ.';
+    ? (L('قرارات اتاخدت بسبب المحلّل: ') + a.decisions + L(' من ') + a.rated + L(' تقرير متقيّم. لو الرقم ده فضل صفر بعد شهر، أوقف الموظف — ده توفير مش فشل.'))
+    : L('قيّم كل تقرير بدوسة — بعد شهر هنعرف الموظف ده نافع ولا لأ.');
 }
 
 function highlightHistory() {
@@ -234,7 +288,7 @@ function renderHistory() {
     li.innerHTML = '<span class="h-date"></span><span class="h-text"></span><span class="h-fb"></span>';
     li.children[0].textContent = h.period ? fmtDay(h.period.from) : fmtDate(h.at);
     li.children[1].textContent = h.headline || '—';
-    li.children[2].textContent = h.feedback ? (h.feedback.decision === 'yes' ? 'تم' : 'رفض') : '';
+    li.children[2].textContent = h.feedback ? (h.feedback.decision === 'yes' ? L('تم') : L('رفض')) : '';
     li.addEventListener('click', () => openReport(h.id));
     $('history').appendChild(li);
   });
@@ -245,25 +299,25 @@ function renderLog() {
   const log = state.log || [];
   $('log').innerHTML = '';
   if (!log.length) {
-    $('log').innerHTML = '<li>لسه مفيش تشغيل.</li>';
+    $('log').innerHTML = L('<li>لسه مفيش تشغيل.</li>');
     return;
   }
   log.forEach(e => {
     const li = document.createElement('li');
     if (!e.ok) li.className = 'bad';
-    const who = e.by === 'schedule' ? 'تلقائي' : (e.by === 'client' ? 'العميل' : 'يدوي');
-    const agent = { success: 'نجاح العملاء', content: 'صانع المحتوى', mail: 'ساعي البريد', advisor: 'مستشار البرامج', rd: 'موظف التطوير', sup: 'مدير المتابعة', rings: 'تذكير الحلقات', chal: 'موظف المسابقات', socm: 'مدير السوشيال', inbody: 'فريق الإنبودي' }[e.agent] || 'المحلّل';
-    li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? 'تمام' : 'فشل') + (e.ms >= 1000 ? ' · ' + Math.round(e.ms / 1000) + ' ث' : '') + (e.note ? ' · ' + e.note : '');
+    const who = e.by === 'schedule' ? L('تلقائي') : (e.by === 'client' ? L('العميل') : L('يدوي'));
+    const agent = { success: L('نجاح العملاء'), content: L('صانع المحتوى'), mail: L('ساعي البريد'), advisor: L('مستشار البرامج'), rd: L('موظف التطوير'), sup: L('مدير المتابعة'), rings: L('تذكير الحلقات'), chal: L('موظف المسابقات'), socm: L('مدير السوشيال'), inbody: L('فريق الإنبودي') }[e.agent] || L('المحلّل');
+    li.textContent = fmtDate(e.at) + ' · ' + agent + ' · ' + who + ' · ' + (e.ok ? L('تمام') : L('فشل')) + (e.ms >= 1000 ? ' · ' + Math.round(e.ms / 1000) + L(' ث') : '') + (e.note ? ' · ' + e.note : '');
     $('log').appendChild(li);
   });
 }
 
 function renderControls() {
   const a = state.analyst;
-  $('toggle-btn').textContent = a.on ? 'أوقفه' : 'شغّله تاني';
+  $('toggle-btn').textContent = a.on ? L('أوقفه') : L('شغّله تاني');
   $('toggle-btn').className = a.on ? 'danger' : '';
   $('run-btn').disabled = busy || !a.on || a.runsLeft <= 0;
-  $('run-btn').textContent = 'شغّله دلوقتي' + (a.on ? ' (' + a.runsLeft + ' فاضلين النهارده)' : '');
+  $('run-btn').textContent = L('شغّله دلوقتي') + (a.on ? ' (' + a.runsLeft + L(' فاضلين النهارده)') : '');
 }
 
 /* ---------- مساعد نجاح العملاء ---------- */
@@ -274,11 +328,11 @@ function sportLabel(key) {
 }
 
 function reasonChip(d) {
-  const since = d.days ? (' من ' + d.days + ' يوم') : '';
-  if (d.kind === 'care') return ['danger', d.care === 'clearance' ? 'مستني إذن طبي' : 'بلاغ إصابة مفتوح'];
-  if (d.kind === 'noplan') return ['danger', 'مالوش برنامج لسه'];
-  if (d.kind === 'never') return ['warn', 'ما بدأش' + since];
-  return ['warn', 'ساكت' + since];
+  const since = d.days ? (TEAM_LANG === 'en' ? ' for ' + d.days + ' days' : ' من ' + d.days + ' يوم') : '';
+  if (d.kind === 'care') return ['danger', d.care === 'clearance' ? L('مستني إذن طبي') : L('بلاغ إصابة مفتوح')];
+  if (d.kind === 'noplan') return ['danger', L('مالوش برنامج لسه')];
+  if (d.kind === 'never') return ['warn', L('ما بدأش') + since];
+  return ['warn', L('ساكت') + since];
 }
 
 function draftText(d) {
@@ -289,10 +343,10 @@ function renderSuccess() {
   const cs = state.success;
   $('success-card').classList.toggle('hidden', !cs);
   if (!cs) return;
-  $('cs-toggle-btn').textContent = cs.on ? 'أوقفه' : 'شغّله تاني';
+  $('cs-toggle-btn').textContent = cs.on ? L('أوقفه') : L('شغّله تاني');
   $('cs-toggle-btn').className = cs.on ? 'danger' : '';
   $('cs-scan-btn').disabled = csBusy || !cs.on || cs.scansLeft <= 0;
-  $('cs-scan-btn').textContent = 'دوّر دلوقتي' + (cs.on ? ' (' + cs.scansLeft + ')' : '');
+  $('cs-scan-btn').textContent = L('دوّر دلوقتي') + (cs.on ? ' (' + cs.scansLeft + ')' : '');
   $('cs-empty').classList.toggle('hidden', cs.pending.length > 0);
 
   const list = $('cs-list');
@@ -315,8 +369,8 @@ function renderSuccess() {
 
     const meta = [];
     if (sportLabel(d.sport)) meta.push(sportLabel(d.sport));
-    if (d.coachEmail && d.coachEmail !== String(COACH_EMAIL).toLowerCase()) meta.push('مدربه: ' + d.coachEmail);
-    if (d.kind !== 'care' && d.kind !== 'noplan' && !d.fromAi) meta.push('رسالة جاهزة — الذكاء الاصطناعي ما ردّش المرة دي');
+    if (d.coachEmail && d.coachEmail !== String(COACH_EMAIL).toLowerCase()) meta.push(L('مدربه: ') + d.coachEmail);
+    if (d.kind !== 'care' && d.kind !== 'noplan' && !d.fromAi) meta.push(L('رسالة جاهزة — الذكاء الاصطناعي ما ردّش المرة دي'));
     if (meta.length) {
       const m = document.createElement('div');
       m.className = 'draft-meta';
@@ -330,29 +384,30 @@ function renderSuccess() {
       const note = document.createElement('p');
       note.className = 'care-note';
       note.textContent = d.kind === 'noplan'
-        ? 'مفيش رسالة عن قصد — العميل ده مالوش برنامج تمرين ولا تغذية ولا تأهيل لسه، فمش هنقوله "ابدأ". اكتبله برنامج الأول (أو قول لمدربه).'
-        : 'مفيش رسالة جاهزة للعميل ده عن قصد — عنده حاجة صحية مفتوحة، فالأحسن تكلّمه إنت بنفسك من الشات.';
+        ? L('مفيش رسالة عن قصد — العميل ده مالوش برنامج تمرين ولا تغذية ولا تأهيل لسه، فمش هنقوله "ابدأ". اكتبله برنامج الأول (أو قول لمدربه).')
+        : L('مفيش رسالة جاهزة للعميل ده عن قصد — عنده حاجة صحية مفتوحة، فالأحسن تكلّمه إنت بنفسك من الشات.');
       box.appendChild(note);
       const okBtn = document.createElement('button');
       okBtn.type = 'button';
       okBtn.className = 'ghost cs-skip';
-      okBtn.textContent = d.kind === 'noplan' ? 'تمام، هظبطله برنامج' : 'تمام، هكلّمه بنفسي';
+      okBtn.textContent = d.kind === 'noplan' ? L('تمام، هظبطله برنامج') : L('تمام، هكلّمه بنفسي');
       okBtn.addEventListener('click', () => markDraft(d, 'skipped', '', box));
       row.appendChild(okBtn);
     } else {
       const area = document.createElement('textarea');
       area.value = draftText(d);
-      area.setAttribute('aria-label', 'نص الرسالة');
+      area.dir = d.lang === 'en' ? 'ltr' : 'rtl';
+      area.setAttribute('aria-label', L('نص الرسالة') + (d.lang === 'en' ? ' · English' : ''));
       box.appendChild(area);
       const send = document.createElement('button');
       send.type = 'button';
       send.className = 'cs-send';
-      send.textContent = 'وافق وابعت';
+      send.textContent = L('وافق وابعت');
       send.addEventListener('click', () => sendDraft(d, area.value.trim(), box));
       const skip = document.createElement('button');
       skip.type = 'button';
       skip.className = 'ghost cs-skip';
-      skip.textContent = 'تخطّي';
+      skip.textContent = L('تخطّي');
       skip.addEventListener('click', () => markDraft(d, 'skipped', '', box));
       row.append(send, skip);
     }
@@ -361,15 +416,15 @@ function renderSuccess() {
   });
 
   $('cs-score').textContent = cs.sent
-    ? ('اتبعت ' + cs.sent + ' رسالة · ' + cs.returned + ' منهم رجعوا يتمرنوا أو يسجّلوا · ' + cs.unedited + ' اتبعتت من غير تعديل')
-    : 'أول ما تبعت رسايل، هنا هتعرف كام عميل رجع بسببها.';
+    ? (L('اتبعت ') + cs.sent + L(' رسالة · ') + cs.returned + L(' منهم رجعوا يتمرنوا أو يسجّلوا · ') + cs.unedited + L(' اتبعتت من غير تعديل'))
+    : L('أول ما تبعت رسايل، هنا هتعرف كام عميل رجع بسببها.');
 
   const done = cs.done || [];
   $('cs-done-box').classList.toggle('hidden', !done.length);
   $('cs-done').innerHTML = '';
   done.forEach(d => {
     const li = document.createElement('li');
-    const what = d.status === 'sent' ? ('اتبعتت' + (d.returned ? ' · رجع' : '')) : 'اتخطّت';
+    const what = d.status === 'sent' ? (L('اتبعتت') + (d.returned ? L(' · رجع') : '')) : L('اتخطّت');
     li.textContent = (d.name || d.firstName) + ' · ' + what + ' · ' + fmtDate(d.doneAt);
     $('cs-done').appendChild(li);
   });
@@ -389,7 +444,7 @@ async function markDraft(d, status, finalText, box) {
     renderSuccess();
     renderLog();
     renderStaff();
-    csMsg(status === 'sent' ? ('اتبعتت لـ ' + (d.firstName || d.name) + ' في الشات') : 'اتشالت من القايمة', 'ok');
+    csMsg(status === 'sent' ? (L('اتبعتت لـ ') + (d.firstName || d.name) + L(' في الشات')) : L('اتشالت من القايمة'), 'ok');
   } catch (err) {
     box.classList.remove('sending');
     csMsg(err.message, 'err');
@@ -401,16 +456,16 @@ async function markDraft(d, status, finalText, box) {
  * رسالة باسم المدرب، وإشعار في جرس العميل وعلى موبايله
  */
 async function sendDraft(d, text, box) {
-  if (!text) { csMsg('الرسالة فاضية', 'err'); return; }
+  if (!text) { csMsg(L('الرسالة فاضية'), 'err'); return; }
   box.classList.add('sending');
   const me = String(auth.currentUser.email || '').toLowerCase();
   const now = new Date().toISOString();
   try {
-    await addDoc(collection(db, 'chats', d.email, 'messages'), { sender: 'coach', text, createdAt: now });
+    await addDoc(collection(db, 'chats', d.email, 'messages'), { sender: 'coach', text, createdAt: now, senderEmail: me, senderSpec: 'coach' });
     await setDoc(doc(db, 'chats', d.email), { clientEmail: d.email, lastMessage: text, lastMessageAt: now, lastSender: 'coach' }, { merge: true });
   } catch (err) {
     box.classList.remove('sending');
-    csMsg('الرسالة ما اتبعتتش: ' + err.message, 'err');
+    csMsg(L('الرسالة ما اتبعتتش: ') + err.message, 'err');
     return;
   }
   /* الإشعار إضافة — لو فشل، الرسالة وصلت الشات في كل الأحوال */
@@ -431,12 +486,12 @@ $('cs-scan-btn').addEventListener('click', async () => {
   if (csBusy) return;
   csBusy = true;
   renderSuccess();
-  $('cs-msg').innerHTML = '<span class="spin"></span> بيدوّر على العملاء الساكتين ويكتب الرسايل… ممكن ياخد دقيقة';
+  $('cs-msg').innerHTML = L('<span class="spin"></span> بيدوّر على العملاء الساكتين ويكتب الرسايل… ممكن ياخد دقيقة');
   try {
     const before = state.success.pending.length;
     state = await call('team_cs_scan');
     const added = state.success.pending.length - before;
-    csMsg(added > 0 ? ('اتكتب ' + added + ' رسالة جديدة — راجعهم تحت') : 'مفيش حد ساكت جديد محتاج رسالة', 'ok');
+    csMsg(added > 0 ? (L('اتكتب ') + added + L(' رسالة جديدة — راجعهم تحت')) : L('مفيش حد ساكت جديد محتاج رسالة'), 'ok');
   } catch (err) {
     csMsg(err.message, 'err');
   }
@@ -452,7 +507,7 @@ $('cs-toggle-btn').addEventListener('click', async () => {
     renderSuccess();
     renderStaff();
     renderLog();
-    csMsg(turnOn ? 'المساعد رجع يشتغل' : 'المساعد اتوقف — مش هيكتب رسايل جديدة لحد ما تشغّله', turnOn ? 'ok' : '');
+    csMsg(turnOn ? L('المساعد رجع يشتغل') : L('المساعد اتوقف — مش هيكتب رسايل جديدة لحد ما تشغّله'), turnOn ? 'ok' : '');
   } catch (err) {
     csMsg(err.message, 'err');
   }
@@ -485,18 +540,18 @@ const pickRandom = list => list[Math.floor(Math.random() * list.length)];
 const tx = (obj, l) => (obj && typeof obj === 'object') ? (obj[l] || obj.ar || '') : (obj || '');
 
 /* بنبني "معلومات" كل حاجة من المكتبة بس — مفيش أي بيانات عملاء */
-function buildItem(kind, L, lang, used) {
+function buildItem(kind, LIB, lang, used) {
   const en = lang === 'en';
   const skip = id => used.indexOf(id) !== -1;
   if (kind === 'exercise' || kind === 'mistake') {
-    const pool = L.exercises.filter(x => {
-      const d = L.details[x.id];
+    const pool = LIB.exercises.filter(x => {
+      const d = LIB.details[x.id];
       return d && x.m && !skip(x.id + ':' + kind) && (kind !== 'mistake' || (Array.isArray(d[4]) && d[4].length));
     });
     if (!pool.length) return null;
     const x = pickRandom(pool);
-    const d = L.details[x.id];
-    const src = L.sources[x.src];
+    const d = LIB.details[x.id];
+    const src = LIB.sources[x.src];
     return {
       id: x.id + ':' + kind, kind,
       title: (kind === 'mistake' ? 'غلطات: ' : 'تمرين: ') + x.n.ar,
@@ -509,7 +564,7 @@ function buildItem(kind, L, lang, used) {
     };
   }
   if (kind === 'food') {
-    const pool = L.foods.filter(f => f.c && !skip('food:' + f.id));
+    const pool = LIB.foods.filter(f => f.c && !skip('food:' + f.id));
     if (!pool.length) return null;
     const f = pickRandom(pool);
     return {
@@ -518,13 +573,13 @@ function buildItem(kind, L, lang, used) {
     };
   }
   if (kind === 'supplement') {
-    const pool = L.supps.filter(x => !skip('sup:' + x.id));
+    const pool = LIB.supps.filter(x => !skip('sup:' + x.id));
     if (!pool.length) return null;
     const x = pickRandom(pool);
     return {
       id: 'sup:' + x.id, kind, title: 'مكمل: ' + x.ar, image: '', credit: '',
       facts: {
-        name: en ? x.en : x.ar, evidence: tx(L.grades[x.grade], lang),
+        name: en ? x.en : x.ar, evidence: tx(LIB.grades[x.grade], lang),
         use: tx(x.use, lang), dose: tx(x.dose, lang), when: tx(x.when, lang), caution: tx(x.care, lang)
       }
     };
@@ -541,10 +596,10 @@ function renderContent() {
   const ct = state.content;
   $('content-card').classList.toggle('hidden', !ct);
   if (!ct) return;
-  $('ct-toggle-btn').textContent = ct.on ? 'أوقفه' : 'شغّله تاني';
+  $('ct-toggle-btn').textContent = ct.on ? L('أوقفه') : L('شغّله تاني');
   $('ct-toggle-btn').className = ct.on ? 'danger' : '';
   $('ct-write-btn').disabled = ctBusy || !ct.on || ct.writesLeft <= 0;
-  $('ct-write-btn').textContent = 'اكتب مسودات' + (ct.on ? ' (' + ct.writesLeft + ' فاضلين النهارده)' : '');
+  $('ct-write-btn').textContent = L('اكتب مسودات') + (ct.on ? ' (' + ct.writesLeft + L(' فاضلين النهارده)') : '');
 
   const list = $('ct-list');
   list.innerHTML = '';
@@ -559,7 +614,7 @@ function renderContent() {
     name.textContent = d.title;
     const chip = document.createElement('span');
     chip.className = 'chip on';
-    chip.textContent = (d.format === 'reel' ? 'ريلز' : 'بوست') + (d.lang === 'en' ? ' · EN' : '');
+    chip.textContent = (d.format === 'reel' ? L('ريلز') : L('بوست')) + (d.lang === 'en' ? ' · EN' : '');
     top.append(name, chip);
     box.appendChild(top);
     if (d.image) {
@@ -590,7 +645,7 @@ function renderContent() {
     if (d.credit) {
       const cr = document.createElement('p');
       cr.className = 'post-credit';
-      cr.textContent = d.credit + ' — السطر ده بيتنسخ مع البوست ولازم يفضل (شرط رخصة الرسم)';
+      cr.textContent = d.credit + L(' — السطر ده بيتنسخ مع البوست ولازم يفضل (شرط رخصة الرسم)');
       box.appendChild(cr);
     }
     const row = document.createElement('div');
@@ -598,25 +653,25 @@ function renderContent() {
     const copy = document.createElement('button');
     copy.type = 'button';
     copy.className = 'ghost ct-copy';
-    copy.textContent = 'انسخ';
+    copy.textContent = L('انسخ');
     copy.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(fullPost(d, area.value));
-        ctMsg('اتنسخ — الصقه في البوست', 'ok');
+        ctMsg(L('اتنسخ — الصقه في البوست'), 'ok');
       } catch (e) {
         area.select();
-        ctMsg('علّم على النص وانسخه بإيدك (Cmd+C)', '');
+        ctMsg(L('علّم على النص وانسخه بإيدك (Cmd+C)'), '');
       }
     });
     const done = document.createElement('button');
     done.type = 'button';
     done.className = 'ct-posted';
-    done.textContent = 'نشرته';
+    done.textContent = L('نشرته');
     done.addEventListener('click', () => markPost(d, 'posted', area.value, box));
     const skip = document.createElement('button');
     skip.type = 'button';
     skip.className = 'ghost ct-skip';
-    skip.textContent = 'تخطّي';
+    skip.textContent = L('تخطّي');
     skip.addEventListener('click', () => markPost(d, 'skipped', '', box));
     row.append(copy, done, skip);
     box.appendChild(row);
@@ -624,14 +679,14 @@ function renderContent() {
   });
 
   $('ct-score').textContent = ct.posted
-    ? ('اتنشر ' + ct.posted + ' بوست · ' + ct.unedited + ' منهم من غير تعديل')
-    : 'بعد ما تنشر، دوس «نشرته» — كده نعرف كام بوست بيطلع صالح من أول مرة.';
+    ? (L('اتنشر ') + ct.posted + L(' بوست · ') + ct.unedited + L(' منهم من غير تعديل'))
+    : L('بعد ما تنشر، دوس «نشرته» — كده نعرف كام بوست بيطلع صالح من أول مرة.');
   const doneList = ct.done || [];
   $('ct-done-box').classList.toggle('hidden', !doneList.length);
   $('ct-done').innerHTML = '';
   doneList.forEach(d => {
     const li = document.createElement('li');
-    li.textContent = d.title + ' · ' + (d.status === 'posted' ? ('اتنشر' + (d.edited ? ' بعد تعديل' : '')) : 'اتخطّى') + ' · ' + fmtDate(d.doneAt);
+    li.textContent = d.title + ' · ' + (d.status === 'posted' ? (L('اتنشر') + (d.edited ? L(' بعد تعديل') : '')) : L('اتخطّى')) + ' · ' + fmtDate(d.doneAt);
     $('ct-done').appendChild(li);
   });
 }
@@ -646,7 +701,7 @@ async function markPost(d, status, finalText, box) {
   try {
     state = await call('team_ct_mark', { id: d.id, status, finalText });
     renderContent();
-    ctMsg(status === 'posted' ? 'اتسجّل إنه اتنشر' : 'اتشال من القايمة', 'ok');
+    ctMsg(status === 'posted' ? L('اتسجّل إنه اتنشر') : L('اتشال من القايمة'), 'ok');
   } catch (err) {
     box.classList.remove('sending');
     ctMsg(err.message, 'err');
@@ -657,9 +712,9 @@ $('ct-write-btn').addEventListener('click', async () => {
   if (ctBusy) return;
   ctBusy = true;
   renderContent();
-  $('ct-msg').innerHTML = '<span class="spin"></span> بيختار من المكتبة ويكتب… ممكن ياخد دقيقة';
+  $('ct-msg').innerHTML = L('<span class="spin"></span> بيختار من المكتبة ويكتب… ممكن ياخد دقيقة');
   try {
-    const L = await loadLibs();
+    const LIB = await loadLibs();
     const kindSel = $('ct-kind').value;
     const lang = $('ct-lang').value;
     const count = Number($('ct-count').value) || 3;
@@ -667,12 +722,12 @@ $('ct-write-btn').addEventListener('click', async () => {
     const used = (state.content.used || []).slice();
     const items = [];
     for (let i = 0; i < count; i++) {
-      const it = buildItem(kinds[i % kinds.length], L, lang, used);
+      const it = buildItem(kinds[i % kinds.length], LIB, lang, used);
       if (it) { items.push(it); used.push(it.id); }
     }
-    if (!items.length) throw new Error('خلصت الحاجات الجديدة في النوع ده — جرّب نوع تاني');
+    if (!items.length) throw new Error(L('خلصت الحاجات الجديدة في النوع ده — جرّب نوع تاني'));
     state = await call('team_ct_write', { items, format: $('ct-format').value, lang });
-    ctMsg(state.written ? ('اتكتب ' + state.written + ' مسودة' + (state.writeNote ? ' · ' + state.writeNote : '')) : (state.writeNote || 'ما اتكتبش حاجة'), state.written ? 'ok' : 'err');
+    ctMsg(state.written ? (L('اتكتب ') + state.written + L(' مسودة') + (state.writeNote ? ' · ' + state.writeNote : '')) : (state.writeNote || L('ما اتكتبش حاجة')), state.written ? 'ok' : 'err');
   } catch (err) {
     ctMsg(err.message, 'err');
   }
@@ -704,10 +759,10 @@ function renderMail() {
   const ml = state.mail;
   $('mail-card').classList.toggle('hidden', !ml);
   if (!ml) return;
-  $('ml-toggle-btn').textContent = ml.on ? 'أوقفه' : 'شغّله تاني';
+  $('ml-toggle-btn').textContent = ml.on ? L('أوقفه') : L('شغّله تاني');
   $('ml-toggle-btn').className = ml.on ? 'danger' : '';
   $('ml-stats').innerHTML = '';
-  [['النهارده', ml.today], ['آخر ٧ أيام', ml.week], ['وقّفوا الإيميلات', ml.unsubscribed]].forEach(([label, n]) => {
+  [[L('النهارده'), ml.today], [L('آخر ٧ أيام'), ml.week], [L('وقّفوا الإيميلات'), ml.unsubscribed]].forEach(([label, n]) => {
     const box = document.createElement('div');
     box.className = 'ml-stat';
     box.innerHTML = '<b></b><span></span>';
@@ -722,14 +777,14 @@ function renderMailPreview(list) {
   ul.innerHTML = '';
   ul.classList.remove('hidden');
   if (!list.length) {
-    ul.innerHTML = '<li>مفيش حد محتاج إيميل دلوقتي — كل العملاء شافوا رسايلهم أو لسه ماعدّاش ساعتين.</li>';
+    ul.innerHTML = L('<li>مفيش حد محتاج إيميل دلوقتي — كل العملاء شافوا رسايلهم أو لسه ماعدّاش ساعتين.</li>');
     return;
   }
   list.forEach(p => {
     const li = document.createElement('li');
     li.innerHTML = '<strong></strong> <span class="muted"></span><div class="ml-titles"></div>';
     li.querySelector('strong').textContent = p.name;
-    li.querySelector('.muted').textContent = '· ' + p.count + (p.count === 1 ? ' حاجة' : ' حاجات') + (p.lang === 'en' ? ' · English' : '');
+    li.querySelector('.muted').textContent = '· ' + p.count + (p.count === 1 ? L(' حاجة') : L(' حاجات')) + (p.lang === 'en' ? ' · English' : '');
     li.querySelector('.ml-titles').textContent = p.titles.join(' · ');
     ul.appendChild(li);
   });
@@ -749,7 +804,7 @@ $('ml-toggle-btn').addEventListener('click', async () => {
 
 $('ml-preview-btn').addEventListener('click', async () => {
   $('ml-preview-btn').disabled = true;
-  mailMsg('بيبص على الإشعارات…');
+  mailMsg(L('بيبص على الإشعارات…'));
   try {
     const data = await call('team_mail_preview');
     state = data;
@@ -768,10 +823,10 @@ function renderAdvisor() {
   const av = state.advisor;
   $('advisor-card').classList.toggle('hidden', !av);
   if (!av) return;
-  $('av-toggle-btn').textContent = av.on ? 'أوقفه' : 'شغّله تاني';
+  $('av-toggle-btn').textContent = av.on ? L('أوقفه') : L('شغّله تاني');
   $('av-toggle-btn').className = av.on ? 'danger' : '';
   $('av-stats').innerHTML = '';
-  [['أسئلة', av.week.asked], ['اقترح برنامج', av.week.drafts], ['اتحط في المحرر', av.week.applied]].forEach(([label, n]) => {
+  [[L('أسئلة'), av.week.asked], [L('اقترح برنامج'), av.week.drafts], [L('اتحط في المحرر'), av.week.applied]].forEach(([label, n]) => {
     const box = document.createElement('div');
     box.className = 'ml-stat';
     box.innerHTML = '<b></b><span></span>';
@@ -796,8 +851,8 @@ $('av-toggle-btn').addEventListener('click', async () => {
 
 /* ---------- موظف التطوير ---------- */
 
-const RD_AREA = { competitors: 'المنافسين', research: 'أبحاث', tech: 'أدوات وتقنية', growth: 'تسويق ونمو' };
-const RD_EFFORT = { small: ['on', 'سهلة — ساعات'], medium: ['warn', 'متوسطة — أيام'], large: ['danger', 'كبيرة — أسابيع'] };
+const RD_AREA = { competitors: L('المنافسين'), research: L('أبحاث'), tech: L('أدوات وتقنية'), growth: L('تسويق ونمو') };
+const RD_EFFORT = { small: ['on', L('سهلة — ساعات')], medium: ['warn', L('متوسطة — أيام')], large: ['danger', L('كبيرة — أسابيع')] };
 let rdBusy = false;
 
 function rdMsg(text, kind) {
@@ -834,7 +889,7 @@ function rdIdeaCard(idea, mode) {
   if (idea.status === 'later') {
     const later = document.createElement('span');
     later.className = 'chip soon';
-    later.textContent = 'بعدين';
+    later.textContent = L('بعدين');
     top.appendChild(later);
   }
   box.appendChild(top);
@@ -843,31 +898,31 @@ function rdIdeaCard(idea, mode) {
   what.textContent = idea.what;
   const why = document.createElement('p');
   why.className = 'draft-meta';
-  why.textContent = 'ليه: ' + idea.why;
+  why.textContent = L('ليه: ') + idea.why;
   box.append(what, why);
   if (idea.sources && idea.sources.length) {
     const src = document.createElement('div');
     src.className = 'rd-sources';
-    src.appendChild(document.createTextNode('المصادر: '));
+    src.appendChild(document.createTextNode(L('المصادر: ')));
     idea.sources.forEach((s, i) => {
       const a = document.createElement('a');
       a.href = s.url;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
-      a.textContent = s.title || ('مصدر ' + (i + 1));
+      a.textContent = s.title || (L('مصدر ') + (i + 1));
       src.appendChild(a);
     });
     box.appendChild(src);
   } else {
     const none = document.createElement('p');
     none.className = 'draft-meta';
-    none.textContent = 'مفيش مصدر — دي فكرة من عنده، اتأكد منها.';
+    none.textContent = L('مفيش مصدر — دي فكرة من عنده، اتأكد منها.');
     box.appendChild(none);
   }
   if (idea.note) {
     const note = document.createElement('p');
     note.className = 'draft-meta';
-    note.textContent = 'ملاحظتك: ' + idea.note;
+    note.textContent = L('ملاحظتك: ') + idea.note;
     box.appendChild(note);
   }
   const row = document.createElement('div');
@@ -884,14 +939,14 @@ function rdIdeaCard(idea, mode) {
   if (mode === 'new') {
     const note = document.createElement('input');
     note.className = 'rd-note';
-    note.placeholder = 'ملاحظة ليك أو لـ Claude (اختياري)';
+    note.placeholder = L('ملاحظة ليك أو لـ Claude (اختياري)');
     box.appendChild(note);
-    btn('عاوزها', 'rd-want', () => rdMark(idea.id, 'want', note.value.trim()));
-    if (idea.status !== 'later') btn('بعدين', 'ghost rd-later', () => rdMark(idea.id, 'later', note.value.trim()));
-    btn('لأ', 'ghost rd-no', () => rdMark(idea.id, 'no', note.value.trim()));
+    btn(L('عاوزها'), 'rd-want', () => rdMark(idea.id, 'want', note.value.trim()));
+    if (idea.status !== 'later') btn(L('بعدين'), 'ghost rd-later', () => rdMark(idea.id, 'later', note.value.trim()));
+    btn(L('لأ'), 'ghost rd-no', () => rdMark(idea.id, 'no', note.value.trim()));
   } else if (mode === 'want') {
-    btn('اتنفّذت', 'rd-done', () => rdMark(idea.id, 'done', idea.note));
-    btn('رجّعها للأفكار', 'ghost rd-back', () => rdMark(idea.id, 'new', idea.note));
+    btn(L('اتنفّذت'), 'rd-done', () => rdMark(idea.id, 'done', idea.note));
+    btn(L('رجّعها للأفكار'), 'ghost rd-back', () => rdMark(idea.id, 'new', idea.note));
   }
   if (row.children.length) box.appendChild(row);
   return box;
@@ -899,9 +954,9 @@ function rdIdeaCard(idea, mode) {
 
 function rdCopyText() {
   const list = (state.rd && state.rd.wanted) || [];
-  return 'أفكار وافقت عليها من موظف التطوير — نفّذها واحدة واحدة:\n\n' + list.map((i, n) =>
-    (n + 1) + '. ' + i.title + '\n' + i.what + (i.note ? '\nملاحظتي: ' + i.note : '')
-    + (i.sources && i.sources.length ? '\nمصادر: ' + i.sources.map(s => s.url).join(' ') : '')
+  return L('أفكار وافقت عليها من موظف التطوير — نفّذها واحدة واحدة:\n\n') + list.map((i, n) =>
+    (n + 1) + '. ' + i.title + '\n' + i.what + (i.note ? L('\nملاحظتي: ') + i.note : '')
+    + (i.sources && i.sources.length ? L('\nمصادر: ') + i.sources.map(s => s.url).join(' ') : '')
   ).join('\n\n');
 }
 
@@ -909,10 +964,10 @@ function renderRd() {
   const rd = state.rd;
   $('rd-card').classList.toggle('hidden', !rd);
   if (!rd) return;
-  $('rd-toggle-btn').textContent = rd.on ? 'أوقفه' : 'شغّله تاني';
+  $('rd-toggle-btn').textContent = rd.on ? L('أوقفه') : L('شغّله تاني');
   $('rd-toggle-btn').className = rd.on ? 'danger' : '';
   $('rd-run-btn').disabled = rdBusy || !rd.on || rd.runsLeft <= 0;
-  $('rd-run-btn').textContent = 'دوّر دلوقتي' + (rd.on ? ' (' + rd.runsLeft + ' فاضلين النهارده)' : '');
+  $('rd-run-btn').textContent = L('دوّر دلوقتي') + (rd.on ? ' (' + rd.runsLeft + L(' فاضلين النهارده)') : '');
   $('rd-list').innerHTML = '';
   rd.ideas.forEach(i => $('rd-list').appendChild(rdIdeaCard(i, 'new')));
   $('rd-empty').classList.toggle('hidden', rd.ideas.length > 0);
@@ -923,7 +978,7 @@ function renderRd() {
   $('rd-done').innerHTML = '';
   rd.done.forEach(i => {
     const li = document.createElement('li');
-    li.textContent = (i.status === 'done' ? 'اتنفّذت · ' : 'لأ · ') + i.title;
+    li.textContent = (i.status === 'done' ? L('اتنفّذت · ') : L('لأ · ')) + i.title;
     $('rd-done').appendChild(li);
   });
   renderStaff();
@@ -932,10 +987,10 @@ function renderRd() {
 $('rd-run-btn').addEventListener('click', async () => {
   rdBusy = true;
   renderRd();
-  rdMsg('بيلم الجديد ويرتّب الأفكار… ممكن ياخد دقيقة');
+  rdMsg(L('بيلم الجديد ويرتّب الأفكار… ممكن ياخد دقيقة'));
   try {
     state = await call('team_rd_run');
-    rdMsg(state.rdFound ? ('لقى ' + state.rdFound + ' أفكار جديدة') : (state.rdNote || 'مالقاش حاجة جديدة'), state.rdFound ? 'ok' : 'err');
+    rdMsg(state.rdFound ? (L('لقى ') + state.rdFound + L(' أفكار جديدة')) : (state.rdNote || L('مالقاش حاجة جديدة')), state.rdFound ? 'ok' : 'err');
     renderLog();
   } catch (err) {
     rdMsg(err.message, 'err');
@@ -957,9 +1012,9 @@ $('rd-toggle-btn').addEventListener('click', async () => {
 $('rd-copy-btn').addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(rdCopyText());
-    $('rd-copy-btn').textContent = 'اتنسخت — ابعتها لـ Claude';
+    $('rd-copy-btn').textContent = L('اتنسخت — ابعتها لـ Claude');
   } catch (err) {
-    rdMsg('النسخ مااشتغلش — علّم على الأفكار وانسخها بإيدك', 'err');
+    rdMsg(L('النسخ مااشتغلش — علّم على الأفكار وانسخها بإيدك'), 'err');
   }
 });
 
@@ -969,7 +1024,7 @@ function renderInbox() {
   const list = state.pending || [];
   $('inbox').innerHTML = '';
   if (!list.length) {
-    $('inbox').innerHTML = '<li class="clear">مفيش حاجة مستنياك دلوقتي.</li>';
+    $('inbox').innerHTML = L('<li class="clear">مفيش حاجة مستنياك دلوقتي.</li>');
   }
   list.forEach(item => {
     const li = document.createElement('li');
@@ -978,11 +1033,11 @@ function renderInbox() {
     const n = document.createElement('b');
     n.textContent = item.n;
     const label = document.createElement('span');
-    label.textContent = item.label;
+    label.textContent = L(item.label);
     const go = document.createElement('button');
     go.type = 'button';
     go.className = 'ghost';
-    go.textContent = 'افتح';
+    go.textContent = L('افتح');
     go.addEventListener('click', () => {
       const card = $(item.card);
       if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -991,14 +1046,144 @@ function renderInbox() {
     $('inbox').appendChild(li);
   });
   const o = state.outputs;
-  $('outputs').textContent = o ? ('آخر ٧ أيام: ' + o.silentClientsMessaged + ' رسالة لعملاء ساكتين (رجع ' + o.silentClientsReturned + ') · '
-    + o.postsPublished + ' بوست · ' + o.programDraftsUsed + ' مسودة برنامج · ' + o.reminderEmailsSent + ' إيميل تذكير') : '';
+  $('outputs').textContent = o ? (L('آخر ٧ أيام: ') + o.silentClientsMessaged + L(' رسالة لعملاء ساكتين (رجع ') + o.silentClientsReturned + ') · '
+    + o.postsPublished + L(' بوست · ') + o.programDraftsUsed + L(' مسودة برنامج · ') + o.reminderEmailsSent + L(' إيميل تذكير')) : '';
   $('inbox-card').classList.toggle('hidden', !state.pending);
 }
 
+/* ---------- صندوق «لكلود» ----------
+   البرنامج مايقدرش يكلّم Claude مباشرة: الطلبات بتتجمّع هنا (منك ومن
+   موظف التطوير)، كل طلب بيوصلك إيميل [ADAM → Claude] بتقراه مهمة
+   Claude المجدولة، و«انسخ لكلود» بتعمل رسالة واحدة تلزقها في الشات */
+
+const CLAUDE_FROM = { me: 'إنت', rd: 'موظف التطوير', analyst: 'محلّل الأعمال', success: 'مساعد نجاح العملاء', socm: 'مدير السوشيال ميديا', sup: 'مدير المتابعة', content: 'صانع المحتوى', chal: 'موظف المسابقات' };
+const CLAUDE_KIND = { feature: 'ميزة جديدة', bug: 'حاجة بايظة', question: 'سؤال', content: 'محتوى' };
+
+function clMsg(text, kind) {
+  $('cl-msg').textContent = text || '';
+  $('cl-msg').className = 'msg' + (kind ? ' ' + kind : '');
+}
+
+function renderClaude() {
+  const box = $('cl-list');
+  if (!box) return;
+  const cl = state.claude || { open: [], done: [] };
+  box.innerHTML = '';
+  $('cl-empty').classList.toggle('hidden', cl.open.length > 0);
+  $('cl-copy-btn').disabled = !cl.open.length;
+  cl.open.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'cl-item' + (item.status === 'sent' ? ' sent' : '');
+    const head = document.createElement('div');
+    head.className = 'cl-head';
+    const kind = document.createElement('span');
+    kind.className = 'chip ' + (item.kind === 'bug' ? 'warn' : 'soon');
+    kind.textContent = L(CLAUDE_KIND[item.kind] || CLAUDE_KIND.feature);
+    const title = document.createElement('strong');
+    title.textContent = item.title;
+    head.append(kind, title);
+    if (item.status === 'sent') {
+      const sent = document.createElement('span');
+      sent.className = 'chip on';
+      sent.textContent = L('اتبعت لكلود');
+      head.appendChild(sent);
+    }
+    const meta = document.createElement('div');
+    meta.className = 'muted';
+    meta.textContent = L('من: ') + L(CLAUDE_FROM[item.from] || item.from) + ' · ' + fmtDate(item.at);
+    const text = document.createElement('p');
+    text.className = 'cl-text';
+    text.textContent = item.text || '';
+    const actions = document.createElement('div');
+    actions.className = 'row';
+    const done = document.createElement('button');
+    done.type = 'button';
+    done.textContent = L('اتنفّذت');
+    done.addEventListener('click', () => claudeMark([item.id], 'done'));
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'ghost';
+    del.textContent = L('امسح');
+    del.addEventListener('click', async () => {
+      try { state = await call('team_claude_delete', { id: item.id }); renderAll(true); } catch (err) { clMsg(err.message, 'err'); }
+    });
+    actions.append(done, del);
+    row.append(head, meta);
+    if (item.text) row.appendChild(text);
+    row.appendChild(actions);
+    box.appendChild(row);
+  });
+  const doneList = $('cl-done');
+  doneList.innerHTML = '';
+  (cl.done || []).forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item.title + ' · ' + fmtDate(item.markedAt || item.at) + ' ';
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'ghost';
+    back.textContent = L('رجّعه مفتوح');
+    back.addEventListener('click', () => claudeMark([item.id], 'new'));
+    li.appendChild(back);
+    doneList.appendChild(li);
+  });
+  $('cl-done-box').classList.toggle('hidden', !(cl.done || []).length);
+}
+
+async function claudeMark(ids, status) {
+  try {
+    state = await call('team_claude_mark', { ids, status });
+    renderAll(true);
+  } catch (err) { clMsg(err.message, 'err'); }
+}
+
+/* رسالة واحدة جاهزة للشات مع Claude */
+function claudeBrief(list) {
+  const head = [
+    L('أهلًا Claude — دي طلبات من صفحة فريق ADAM. نفس المشروع اللي شغالين عليه (vanilla JS + Firebase + Apps Script): app.js / index.html / glass.css / team.js / analyst.gs.'),
+    L('نفّذها واحدة واحدة، وابعتلي الملفات اللي اتغيرت بس في zip، وقولّي الخطوات بالمصري.'),
+    ''
+  ];
+  const body = list.map((item, i) => [
+    (i + 1) + ') [' + L(CLAUDE_KIND[item.kind] || CLAUDE_KIND.feature) + '] ' + item.title + ' — ' + L('من: ') + L(CLAUDE_FROM[item.from] || item.from),
+    item.text || ''
+  ].filter(Boolean).join('\n'));
+  return head.join('\n') + body.join('\n\n');
+}
+
+$('cl-add-btn').addEventListener('click', async () => {
+  const title = $('cl-title').value.trim();
+  const text = $('cl-text').value.trim();
+  if (!title && !text) { clMsg(L('اكتب الطلب الأول'), 'err'); return; }
+  $('cl-add-btn').disabled = true;
+  try {
+    state = await call('team_claude_add', { kind: $('cl-kind').value, title, text });
+    $('cl-title').value = '';
+    $('cl-text').value = '';
+    renderAll(true);
+    clMsg(L('الطلب اتضاف — ووصلك إيميل بيه'), 'ok');
+  } catch (err) {
+    clMsg(err.message, 'err');
+  } finally {
+    $('cl-add-btn').disabled = false;
+  }
+});
+
+$('cl-copy-btn').addEventListener('click', async () => {
+  const open = ((state && state.claude && state.claude.open) || []);
+  if (!open.length) { clMsg(L('مفيش طلبات مفتوحة تتنسخ'), 'err'); return; }
+  try {
+    await navigator.clipboard.writeText(claudeBrief(open));
+    clMsg(L('اتنسخت — افتح شات Claude والزقها'), 'ok');
+    const fresh = open.filter(x => x.status === 'new').map(x => x.id);
+    if (fresh.length) claudeMark(fresh, 'sent');
+  } catch (err) {
+    clMsg(L('النسخ مااشتغلش — علّم على الأفكار وانسخها بإيدك'), 'err');
+  }
+});
+
 /* ---------- مدير المتابعة ---------- */
 
-const SUP_LEVEL = { top: ['on', 'متميز'], ok: ['soon', 'كويس'], low: ['warn', 'محتاج يتحسن'], idle: ['danger', 'غير نشط'], none: ['soon', 'مالوش عملاء'] };
+const SUP_LEVEL = { top: ['on', L('متميز')], ok: ['soon', L('كويس')], low: ['warn', L('محتاج يتحسن')], idle: ['danger', L('غير نشط')], none: ['soon', L('مالوش عملاء')] };
 
 function supMsg(text, kind) {
   $('sup-msg').textContent = text || '';
@@ -1009,13 +1194,13 @@ function renderSup() {
   const sp = state.sup;
   $('sup-card').classList.toggle('hidden', !sp);
   if (!sp) return;
-  $('sup-toggle-btn').textContent = sp.on ? 'أوقفه' : 'شغّله تاني';
+  $('sup-toggle-btn').textContent = sp.on ? L('أوقفه') : L('شغّله تاني');
   $('sup-toggle-btn').className = sp.on ? 'danger' : '';
   const body = $('sup-table');
   body.innerHTML = '';
   const list = (sp.last && sp.last.providers) || [];
   $('sup-empty').classList.toggle('hidden', list.length > 0);
-  $('sup-when').textContent = sp.last ? ('آخر حساب: ' + fmtDate(sp.last.at)) : '';
+  $('sup-when').textContent = sp.last ? (L('آخر حساب: ') + fmtDate(sp.last.at)) : '';
   const pick = $('sup-preview-pick');
   const keep = pick.value;
   pick.innerHTML = '';
@@ -1023,7 +1208,7 @@ function renderSup() {
     const tr = document.createElement('tr');
     const lv = SUP_LEVEL[p.level] || SUP_LEVEL.none;
     const cells = [p.name, p.specialty, p.clients + ' (' + p.active + ')', p.clients ? p.score : '—', '', p.rank ? p.rank + '/' + p.groupSize : '—',
-      p.lastSeenDays === null ? 'ماخلش' : (p.lastSeenDays === 0 ? 'النهارده' : 'من ' + p.lastSeenDays + ' يوم')];
+      p.lastSeenDays === null ? L('ماخلش') : (p.lastSeenDays === 0 ? L('النهارده') : (TEAM_LANG === 'en' ? p.lastSeenDays + ' days ago' : 'من ' + p.lastSeenDays + ' يوم'))];
     cells.forEach((c, i) => {
       const td = document.createElement('td');
       if (i === 4) {
@@ -1036,7 +1221,7 @@ function renderSup() {
       tr.appendChild(td);
     });
     if (p.counts && (p.counts.silent || p.counts.overdue || p.counts.noPlan)) {
-      tr.title = [p.counts.silent ? p.counts.silent + ' عميل ساكت' : '', p.counts.overdue ? p.counts.overdue + ' استشارة متأخرة' : '', p.counts.noPlan ? p.counts.noPlan + ' من غير برنامج' : ''].filter(Boolean).join(' · ');
+      tr.title = [p.counts.silent ? p.counts.silent + L(' عميل ساكت') : '', p.counts.overdue ? p.counts.overdue + L(' استشارة متأخرة') : '', p.counts.noPlan ? p.counts.noPlan + L(' من غير برنامج') : ''].filter(Boolean).join(' · ');
     }
     body.appendChild(tr);
     if (!p.isOwner && p.clients) {
@@ -1056,7 +1241,7 @@ function renderSup() {
   rows.innerHTML = '';
   b.rows.forEach(r => {
     const tr = document.createElement('tr');
-    [r.name, r.points, b.amount ? r.share + ' جنيه' : '—'].forEach((c, i) => {
+    [r.name, r.points, b.amount ? r.share + L(' جنيه') : '—'].forEach((c, i) => {
       const td = document.createElement('td');
       td.textContent = c;
       if (i) td.className = 'n';
@@ -1066,24 +1251,24 @@ function renderSup() {
   });
   $('sup-bonus-empty').classList.toggle('hidden', b.rows.length > 0);
   $('sup-approve-btn').disabled = !b.amount || !b.rows.length;
-  $('sup-approved').textContent = b.approved ? ('اعتمدت توزيع الشهر ده (' + b.approved.amount + ' جنيه) — ' + fmtDate(b.approved.at)) : '';
+  $('sup-approved').textContent = b.approved ? (L('اعتمدت توزيع الشهر ده (') + b.approved.amount + L(' جنيه) — ') + fmtDate(b.approved.at)) : '';
 }
 
 $('sup-run-btn').addEventListener('click', async () => {
   $('sup-run-btn').disabled = true;
-  supMsg('بيحسب…');
-  try { state = await call('team_sup_run'); renderSup(); renderLog(); supMsg('اتحسب — مفيش إيميلات اتبعتت', 'ok'); } catch (err) { supMsg(err.message, 'err'); }
+  supMsg(L('بيحسب…'));
+  try { state = await call('team_sup_run'); renderSup(); renderLog(); supMsg(L('اتحسب — مفيش إيميلات اتبعتت'), 'ok'); } catch (err) { supMsg(err.message, 'err'); }
   $('sup-run-btn').disabled = false;
 });
 $('sup-preview-btn').addEventListener('click', async () => {
-  supMsg('بيبعت نسخة ليك…');
-  try { state = await call('team_sup_preview', { provider: $('sup-preview-pick').value }); renderSup(); supMsg(state.supNote || 'اتبعتت', 'ok'); } catch (err) { supMsg(err.message, 'err'); }
+  supMsg(L('بيبعت نسخة ليك…'));
+  try { state = await call('team_sup_preview', { provider: $('sup-preview-pick').value }); renderSup(); supMsg(state.supNote || L('اتبعتت'), 'ok'); } catch (err) { supMsg(err.message, 'err'); }
 });
 $('sup-amount-btn').addEventListener('click', async () => {
-  try { state = await call('team_sup_bonus', { month: state.sup.bonus.month, amount: Number($('sup-amount').value) || 0 }); renderSup(); supMsg('اتحفظ مبلغ البونص', 'ok'); } catch (err) { supMsg(err.message, 'err'); }
+  try { state = await call('team_sup_bonus', { month: state.sup.bonus.month, amount: Number($('sup-amount').value) || 0 }); renderSup(); supMsg(L('اتحفظ مبلغ البونص'), 'ok'); } catch (err) { supMsg(err.message, 'err'); }
 });
 $('sup-approve-btn').addEventListener('click', async () => {
-  try { state = await call('team_sup_approve'); renderSup(); renderLog(); supMsg('اتعتمد — الدفع عليك إنت', 'ok'); } catch (err) { supMsg(err.message, 'err'); }
+  try { state = await call('team_sup_approve'); renderSup(); renderLog(); supMsg(L('اتعتمد — الدفع عليك إنت'), 'ok'); } catch (err) { supMsg(err.message, 'err'); }
 });
 $('sup-toggle-btn').addEventListener('click', async () => {
   try { state = await call('team_sup_toggle', { on: !state.sup.on }); renderSup(); renderStaff(); renderLog(); } catch (err) { supMsg(err.message, 'err'); }
@@ -1091,6 +1276,7 @@ $('sup-toggle-btn').addEventListener('click', async () => {
 
 function renderAll(keepShown) {
   renderInbox();
+  renderClaude();
   renderSup();
   renderStaff();
   renderRd();
@@ -1113,9 +1299,15 @@ function setMsg(text, kind) {
   $('run-msg').className = 'msg' + (kind ? ' ' + kind : '');
 }
 
+let langSynced = false;
 async function refresh() {
   state = await call('team_state');
   renderAll(false);
+  /* تقارير الموظفين بتمشي مع لغة الصفحة */
+  if (!langSynced && state.lang && state.lang !== TEAM_LANG) {
+    langSynced = true;
+    call('team_lang', { lang: TEAM_LANG }).catch(() => {});
+  }
 }
 
 async function openReport(id) {
@@ -1149,12 +1341,12 @@ $('run-btn').addEventListener('click', async () => {
   busy = true;
   renderControls();
   setMsg('');
-  $('run-msg').innerHTML = '<span class="spin"></span> بيقرا الأرقام ويكتب التقرير… ممكن ياخد دقيقة';
+  $('run-msg').innerHTML = L('<span class="spin"></span> بيقرا الأرقام ويكتب التقرير… ممكن ياخد دقيقة');
   try {
     state = await call('team_run');
     shownId = '';
     renderAll(false);
-    setMsg('اتعمل تقرير جديد', 'ok');
+    setMsg(L('اتعمل تقرير جديد'), 'ok');
   } catch (err) {
     setMsg(err.message, 'err');
   }
@@ -1167,7 +1359,7 @@ $('toggle-btn').addEventListener('click', async () => {
   try {
     state = await call('team_toggle', { on: turnOn });
     renderAll(true);
-    setMsg(turnOn ? 'المحلّل رجع يشتغل' : 'المحلّل اتوقف — مش هيشتغل السبت الجاي لحد ما تشغّله', turnOn ? 'ok' : '');
+    setMsg(turnOn ? L('المحلّل رجع يشتغل') : L('المحلّل اتوقف — مش هيشتغل السبت الجاي لحد ما تشغّله'), turnOn ? 'ok' : '');
   } catch (err) {
     setMsg(err.message, 'err');
   }
@@ -1178,7 +1370,7 @@ $('login-btn').addEventListener('click', async () => {
   try {
     await signInWithEmailAndPassword(auth, $('login-email').value.trim(), $('login-pass').value);
   } catch (err) {
-    $('login-msg').textContent = 'الإيميل أو الباسورد مش مظبوطين';
+    $('login-msg').textContent = L('الإيميل أو الباسورد مش مظبوطين');
   }
 });
 
@@ -1201,7 +1393,7 @@ onAuthStateChanged(auth, async user => {
     scriptUrl = '';
   }
   if (!scriptUrl) {
-    blocked('رابط Apps Script مش متحط', 'افتح لوحة التحكم ← رسالة الترحيب، واتأكد إن الرابط موجود ومحفوظ.');
+    blocked(L('رابط Apps Script مش متحط'), L('افتح لوحة التحكم ← رسالة الترحيب، واتأكد إن الرابط موجود ومحفوظ.'));
     return;
   }
 
@@ -1209,25 +1401,25 @@ onAuthStateChanged(auth, async user => {
     await refresh();
     show('main');
   } catch (err) {
-    if (/مش مسموح/.test(err.message)) blocked('الصفحة دي مش ليك', 'فريق الذكاء الاصطناعي لصاحب المنصة بس.');
-    else if (/مش متضاف|طلب مش معروف/.test(err.message)) blocked('ملف analyst لسه مش في Apps Script', 'ضيف ملف analyst.gs في مشروع Apps Script واعمل Deploy بـ New version.');
-    else blocked('حصلت مشكلة', err.message);
+    if (/مش مسموح/.test(err.message)) blocked(L('الصفحة دي مش ليك'), L('فريق الذكاء الاصطناعي لصاحب المنصة بس.'));
+    else if (/مش متضاف|طلب مش معروف/.test(err.message)) blocked(L('ملف analyst لسه مش في Apps Script'), L('ضيف ملف analyst.gs في مشروع Apps Script واعمل Deploy بـ New version.'));
+    else blocked(L('حصلت مشكلة'), err.message);
   }
 });
 
 /* ---------- مدير السوشيال ميديا + استوديو الصور ---------- */
 
-const SOCM_DAYS = ['السبت', 'الحد', 'الاتنين', 'التلات', 'الأربع', 'الخميس', 'الجمعة'];
-const SOCM_PLATFORM = { instagram: 'إنستجرام', tiktok: 'تيك توك', facebook: 'فيسبوك' };
-const SOCM_FORMAT = { reel: 'ريل', post: 'بوست', carousel: 'كاروسيل', story: 'ستوري' };
+const SOCM_DAYS = [L('السبت'), L('الحد'), L('الاتنين'), L('التلات'), L('الأربع'), L('الخميس'), L('الجمعة')];
+const SOCM_PLATFORM = { instagram: L('إنستجرام'), tiktok: L('تيك توك'), facebook: L('فيسبوك') };
+const SOCM_FORMAT = { reel: L('ريل'), post: L('بوست'), carousel: L('كاروسيل'), story: L('ستوري') };
 const SOCM_VISUAL = {
-  photo_you: 'صورة ليك أو لعميل (بموافقته) — وحط عليها اللوجو من الاستوديو',
-  video_you: 'فيديو تصوّره بموبايلك',
-  template_tip: 'قالب نصيحة جاهز — دوس «اعمل الصورة»',
-  template_quote: 'قالب جملة جاهز — دوس «اعمل الصورة»',
-  template_stat: 'قالب رقم من ADAM — دوس «اعمل الصورة»',
-  template_champion: 'قالب بطل الأسبوع — دوس «اعمل الصورة»',
-  ai_image: 'صورة من Gemini: انسخ الوصف، افتح Gemini واطلب الصورة، وبعدين ارفعها في الاستوديو عشان اللوجو'
+  photo_you: L('صورة ليك أو لعميل (بموافقته) — وحط عليها اللوجو من الاستوديو'),
+  video_you: L('فيديو تصوّره بموبايلك'),
+  template_tip: L('قالب نصيحة جاهز — دوس «اعمل الصورة»'),
+  template_quote: L('قالب جملة جاهز — دوس «اعمل الصورة»'),
+  template_stat: L('قالب رقم من ADAM — دوس «اعمل الصورة»'),
+  template_champion: L('قالب بطل الأسبوع — دوس «اعمل الصورة»'),
+  ai_image: L('صورة من Gemini: انسخ الوصف، افتح Gemini واطلب الصورة، وبعدين ارفعها في الاستوديو عشان اللوجو')
 };
 let socmBusy = false;
 
@@ -1237,7 +1429,7 @@ function socmMsg(text, kind) {
 }
 
 function socmCopy(text, okText) {
-  try { navigator.clipboard.writeText(text); socmMsg(okText || 'اتنسخ', 'ok'); } catch (err) { socmMsg('مقدرتش أنسخ — علّم الكلام وانسخه بإيدك', 'err'); }
+  try { navigator.clipboard.writeText(text); socmMsg(okText || L('اتنسخ'), 'ok'); } catch (err) { socmMsg(L('مقدرتش أنسخ — علّم الكلام وانسخه بإيدك'), 'err'); }
 }
 
 function socmPostCard(p, todayIdx) {
@@ -1247,7 +1439,7 @@ function socmPostCard(p, todayIdx) {
   top.className = 'draft-top';
   const when = document.createElement('span');
   when.className = 'chip ' + (p.day === todayIdx ? 'warn' : 'soon');
-  when.textContent = SOCM_DAYS[p.day] + ' ' + p.time + (p.day === todayIdx ? ' · النهارده' : '');
+  when.textContent = SOCM_DAYS[p.day] + ' ' + p.time + (p.day === todayIdx ? L(' · النهارده') : '');
   const where = document.createElement('span');
   where.className = 'chip on';
   where.textContent = (SOCM_PLATFORM[p.platform] || p.platform) + ' · ' + (SOCM_FORMAT[p.format] || p.format);
@@ -1258,7 +1450,7 @@ function socmPostCard(p, todayIdx) {
     tr.textContent = p.trend;
     top.appendChild(tr);
   }
-  if (p.status === 'posted') top.appendChild(Object.assign(document.createElement('span'), { className: 'chip on', textContent: 'اتنشر' }));
+  if (p.status === 'posted') top.appendChild(Object.assign(document.createElement('span'), { className: 'chip on', textContent: L('اتنشر') }));
   const hook = document.createElement('div');
   hook.className = 'socm-hook';
   hook.textContent = p.hookAr;
@@ -1289,34 +1481,34 @@ function socmPostCard(p, todayIdx) {
   actions.className = 'socm-actions';
   const copyText = document.createElement('button');
   copyText.type = 'button';
-  copyText.textContent = 'انسخ الكلام';
-  copyText.addEventListener('click', () => socmCopy(p.hookAr + '\n' + p.captionAr + '\n\n' + (p.hashtags || []).join(' '), 'الكلام اتنسخ — الصقه في البوست'));
+  copyText.textContent = L('انسخ الكلام');
+  copyText.addEventListener('click', () => socmCopy(p.hookAr + '\n' + p.captionAr + '\n\n' + (p.hashtags || []).join(' '), L('الكلام اتنسخ — الصقه في البوست')));
   actions.appendChild(copyText);
   if (p.visual === 'ai_image' && p.imagePrompt) {
     const cp = document.createElement('button');
     cp.type = 'button';
     cp.className = 'ghost';
-    cp.textContent = 'انسخ وصف الصورة';
-    cp.addEventListener('click', () => socmCopy(p.imagePrompt, 'الوصف اتنسخ — الصقه في Gemini'));
+    cp.textContent = L('انسخ وصف الصورة');
+    cp.addEventListener('click', () => socmCopy(p.imagePrompt, L('الوصف اتنسخ — الصقه في Gemini')));
     actions.appendChild(cp);
   }
   if (/^template_/.test(p.visual) || p.visual === 'ai_image' || p.visual === 'photo_you') {
     const mk = document.createElement('button');
     mk.type = 'button';
     mk.className = 'ghost';
-    mk.textContent = p.visual.indexOf('template_') === 0 ? 'اعمل الصورة' : 'حط اللوجو على صورتك';
+    mk.textContent = p.visual.indexOf('template_') === 0 ? L('اعمل الصورة') : L('حط اللوجو على صورتك');
     mk.addEventListener('click', () => studioFrom(p));
     actions.appendChild(mk);
   }
   const done = document.createElement('button');
   done.type = 'button';
   done.className = p.status === 'posted' ? 'ghost' : '';
-  done.textContent = p.status === 'posted' ? 'رجّعها' : 'نشرته';
+  done.textContent = p.status === 'posted' ? L('رجّعها') : L('نشرته');
   done.addEventListener('click', () => socmMark(p.i, p.status === 'posted' ? 'new' : 'posted'));
   const skip = document.createElement('button');
   skip.type = 'button';
   skip.className = 'ghost';
-  skip.textContent = p.status === 'skip' ? 'رجّعها' : 'اتخطّاها';
+  skip.textContent = p.status === 'skip' ? L('رجّعها') : L('اتخطّاها');
   skip.addEventListener('click', () => socmMark(p.i, p.status === 'skip' ? 'new' : 'skip'));
   actions.append(done, skip);
   box.append(top, hook, cap, tags, vis, why, actions);
@@ -1331,13 +1523,13 @@ function renderSocm() {
   const sm = state.socm;
   $('socm-card').classList.toggle('hidden', !sm);
   if (!sm) return;
-  $('socm-toggle-btn').textContent = sm.on ? 'أوقفه' : 'شغّله تاني';
+  $('socm-toggle-btn').textContent = sm.on ? L('أوقفه') : L('شغّله تاني');
   $('socm-toggle-btn').className = sm.on ? 'danger' : '';
   $('socm-run-btn').disabled = socmBusy || sm.runsLeft <= 0;
-  $('socm-run-btn').textContent = socmBusy ? 'بيشتغل… (دقيقة)' : 'اعمل جدول دلوقتي (' + sm.runsLeft + ' فاضلين النهارده)';
+  $('socm-run-btn').textContent = socmBusy ? L('بيشتغل… (دقيقة)') : L('اعمل جدول دلوقتي (') + sm.runsLeft + L(' فاضلين النهارده)');
   if (document.activeElement !== $('socm-times')) $('socm-times').value = sm.times || '';
   $('socm-trends').innerHTML = '';
-  if (!(sm.trends || []).length) $('socm-trends').appendChild(Object.assign(document.createElement('span'), { className: 'muted', textContent: 'لسه مفيش — بيتجاب مع الجدول' }));
+  if (!(sm.trends || []).length) $('socm-trends').appendChild(Object.assign(document.createElement('span'), { className: 'muted', textContent: L('لسه مفيش — بيتجاب مع الجدول') }));
   (sm.trends || []).forEach(t => {
     const a = document.createElement(t.url ? 'a' : 'span');
     a.className = 'socm-trend';
@@ -1354,10 +1546,10 @@ function renderSocm() {
 }
 
 $('socm-run-btn').addEventListener('click', async () => {
-  socmBusy = true; renderSocm(); socmMsg('بيشوف التريند ويكتب الجدول…');
+  socmBusy = true; renderSocm(); socmMsg(L('بيشوف التريند ويكتب الجدول…'));
   try {
     state = await call('team_socm_run');
-    socmMsg(state.socmNote ? 'مقدرش يعمل جدول: ' + state.socmNote : 'الجدول جاهز', state.socmNote ? 'err' : 'ok');
+    socmMsg(state.socmNote ? L('مقدرش يعمل جدول: ') + state.socmNote : L('الجدول جاهز'), state.socmNote ? 'err' : 'ok');
   } catch (err) { socmMsg(err.message, 'err'); }
   socmBusy = false; renderSocm(); renderLog(); renderInbox();
 });
@@ -1365,7 +1557,7 @@ $('socm-toggle-btn').addEventListener('click', async () => {
   try { state = await call('team_socm_toggle', { on: !state.socm.on }); renderSocm(); renderStaff(); renderLog(); } catch (err) { socmMsg(err.message, 'err'); }
 });
 $('socm-times-btn').addEventListener('click', async () => {
-  try { state = await call('team_socm_times', { times: $('socm-times').value }); renderSocm(); socmMsg('المواعيد اتحفظت — الجدول الجاي هيمشي عليها', 'ok'); } catch (err) { socmMsg(err.message, 'err'); }
+  try { state = await call('team_socm_times', { times: $('socm-times').value }); renderSocm(); socmMsg(L('المواعيد اتحفظت — الجدول الجاي هيمشي عليها'), 'ok'); } catch (err) { socmMsg(err.message, 'err'); }
 });
 
 /* الاستوديو: كل الرسم على الموبايل/الكمبيوتر نفسه — مفيش رفع لأي حتة */
@@ -1474,7 +1666,7 @@ function studioSync() {
   const kind = $('st-kind').value;
   $('st-file-wrap').classList.toggle('hidden', kind !== 'photo');
   $('st-champ-note').classList.toggle('hidden', kind !== 'champion');
-  $('st-title').placeholder = kind === 'stat' ? 'الرقم (مثلًا: 120 نجمة)' : kind === 'champion' ? 'الاسم (بموافقته)' : 'العنوان';
+  $('st-title').placeholder = kind === 'stat' ? L('الرقم (مثلًا: 120 نجمة)') : kind === 'champion' ? L('الاسم (بموافقته)') : L('العنوان');
   studioDraw();
 }
 

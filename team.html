@@ -168,6 +168,18 @@
     .studio-file { font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
     .studio select, .studio textarea { font: inherit; width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
     .studio input { margin: 0; }
+    .head-actions { display: flex; align-items: center; gap: 8px; }
+    .lang-toggle { width: auto; margin: 0; padding: 6px 12px; border-radius: 999px; background: var(--surface-2); color: var(--brand); border: 1px solid var(--line); font: 700 13px 'Cairo', sans-serif; cursor: pointer; }
+    .cl-form { display: grid; gap: 8px; margin: 10px 0 4px; }
+    .cl-form textarea { font: inherit; width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); resize: vertical; box-sizing: border-box; }
+    .cl-form select, .cl-form input, .cl-form textarea { margin: 0; }
+    .cl-item { border: 1px solid var(--line); background: var(--surface-2); border-radius: 12px; padding: 10px 12px; margin: 8px 0; }
+    .cl-item.sent { border-color: rgba(34, 197, 94, 0.45); }
+    .cl-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .cl-text { white-space: pre-wrap; margin: 6px 0; font-size: 14px; }
+    .cl-item .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cl-item .row button { width: auto; }
+    #cl-copy-btn { margin-top: 6px; }
     #st-canvas { width: 100%; max-width: 360px; height: auto; border-radius: 12px; border: 1px solid var(--line); justify-self: center; background: #000; }
     @media (min-width: 700px) { .studio { grid-template-columns: 1fr 300px; } }
   </style>
@@ -179,7 +191,10 @@
         <h1>فريق ADAM الذكي</h1>
         <p class="sub" id="who"></p>
       </div>
-      <a class="back" href="./">← البرنامج</a>
+      <div class="head-actions">
+        <button type="button" class="lang-toggle" id="team-lang-btn" aria-label="language">EN</button>
+        <a class="back" href="./">← البرنامج</a>
+      </div>
     </header>
 
     <!-- جاري التحميل -->
@@ -207,6 +222,31 @@
         <h2>مستني منك</h2>
         <ul class="inbox" id="inbox"></ul>
         <p class="muted" id="outputs"></p>
+      </div>
+
+      <!-- صندوق «لكلود» -->
+      <div class="card" id="claude-card">
+        <h2>صندوق «لكلود»</h2>
+        <p class="muted">أي حاجة عاوز Claude يعملها في البرنامج: ميزة جديدة، حاجة بايظة، سؤال. موظف التطوير بيحط هنا لوحده أي فكرة تقول عليها «عاوزها». كل طلب جديد بيوصلك إيميل عنوانه [ADAM → Claude]، وClaude بيقرا الإيميلات دي كل يوم ويرد عليك بخطة. ولما تحب تبدأ التنفيذ: «انسخ لكلود» والزقها في الشات.</p>
+        <div class="cl-form">
+          <select id="cl-kind">
+            <option value="feature">ميزة جديدة</option>
+            <option value="bug">حاجة بايظة</option>
+            <option value="question">سؤال</option>
+            <option value="content">محتوى</option>
+          </select>
+          <input id="cl-title" placeholder="عنوان قصير">
+          <textarea id="cl-text" rows="3" placeholder="اشرح عاوز إيه بالظبط — ولو حاجة بايظة: بيحصل إيه وكان المفروض يحصل إيه"></textarea>
+          <button type="button" id="cl-add-btn">ضيف الطلب</button>
+        </div>
+        <p class="msg" id="cl-msg"></p>
+        <p class="muted hidden" id="cl-empty">مفيش طلبات مفتوحة.</p>
+        <div id="cl-list"></div>
+        <button type="button" class="ghost" id="cl-copy-btn">انسخ الطلبات المفتوحة لكلود</button>
+        <details id="cl-done-box" class="hidden">
+          <summary>اللي اتنفّذ</summary>
+          <ul class="log" id="cl-done"></ul>
+        </details>
       </div>
 
       <!-- الموظفين -->
@@ -344,7 +384,7 @@
         <div class="report-head">
           <div>
             <h2>موظف التطوير</h2>
-            <p class="muted">كل أحد بيلم الجديد من أخبار جوجل وأبحاث PubMed وأدوات GitHub: مميزات عند المنافسين، أبحاث في التدريب والتأهيل والتغذية، مكتبات وأدوات، وأفكار تسويق ونمو. كل فكرة معاها مصادرها. إنت بتختار، واللي توافق عليه تبعته لـ Claude ينفّذه.</p>
+            <p class="muted">كل أحد بيلم الجديد من أخبار جوجل وأبحاث PubMed وأدوات GitHub: مميزات عند المنافسين، أبحاث في التدريب والتأهيل والتغذية، مكتبات وأدوات، وأفكار تسويق ونمو. كل فكرة معاها مصادرها. إنت بتختار، واللي تقول عليه «عاوزها» بيروح لوحده لصندوق «لكلود».</p>
           </div>
           <div class="toolbar">
             <button type="button" id="rd-run-btn">دوّر دلوقتي</button>
