@@ -1114,6 +1114,46 @@ const TEXT = {
     wr_max_hr: 'أقصى {v}',
     wr_kcal: '{v} سعر',
     wr_zones: 'وقت المناطق',
+    story_teaser_kicker: "ليه اسمه ADAM؟",
+    story_teaser_title: "آدم أول الخلق… وأول الحكاية",
+    story_teaser_text: "رحلة معاك من قبل ما تتولد لحد آخر العمر — وفريق كامل جنبك في كل مرحلة.",
+    story_teaser_btn: "▶ اتفرّج على الحكاية",
+    story_client_link: "▶ حكاية ADAM",
+    story_cta: "ابدأ حكايتك",
+    story_cta_in: "يلا نكمّل حكايتك 💪",
+    story_intro_label: "حكاية الاسم",
+    story_intro_title: "ليه ADAM؟",
+    story_intro_text: "آدم أول الخلق… وأول الحكاية. ADAM مش مجرد اسم — دي رحلة معاك من قبل ما تتولد لحد آخر العمر، وإحنا جنبك في كل مرحلة.",
+    story_womb_label: "قبل ما تيجي الدنيا",
+    story_womb_title: "الحكاية بتبدأ في بطن أمك",
+    story_womb_text: "أمك بتتمرن معانا وهي حامل بأمان، بأكل محسوب ومتابعة طبية أسبوع بأسبوع — عشان إنت وهي تكونوا بخير.",
+    story_born_label: "أهلًا بيك في الدنيا",
+    story_born_title: "أول نفَس",
+    story_born_text: "بعد الولادة بنرجّع لأمك لياقتها خطوة خطوة: تغذية للرضاعة، وعلاج طبيعي للضهر وعضلات الحوض… وإنت بتكبر قدّام عينينا.",
+    story_child_label: "طفولة",
+    story_child_title: "بيجري وبيلعب",
+    story_child_text: "حركة ولعب على قد سنّه، أكل صحي للمدرسة، وعادات حلوة بتتبني من بدري.",
+    story_strong_label: "شباب",
+    story_strong_title: "بيبقى قوي",
+    story_strong_text: "كورة، جري، سباحة، جيم… مدرب لكل رياضة، تحضير بدني، وأكل على قد مجهوده.",
+    story_fall_label: "ولما يقع",
+    story_fall_title: "بيقع… ويقوم أقوى",
+    story_fall_text: "إصابة؟ دكتور يشخّص، علاج طبيعي يهدّي الألم، وتأهيل يرجّعه الملعب أقوى من الأول.",
+    story_work_label: "شغل وحياة",
+    story_work_title: "الشغل واخد وقته كله",
+    story_work_text: "تمرين في ٢٠ دقيقة، أكل يمشي مع يومه، وكشف واستشارة من غير ما يسيب مكتبه.",
+    story_family_label: "بيت وعيلة",
+    story_family_title: "بيبني بيته",
+    story_family_text: "تمرين للاتنين، أكل للعيلة كلها، واستشارة وقت ما يحتاجوا… والحكاية بتبدأ من جديد مع أول طفل.",
+    story_old_label: "العمر بيكبر",
+    story_old_title: "واللياقة ليها كل سن",
+    story_old_text: "حركة آمنة للمفاصل، متابعة للضغط والسكر، وأدويته مظبوطة مع دكتوره وصيدليّه.",
+    story_mind_label: "وفي وقت الزعل",
+    story_mind_title: "مش لوحدك",
+    story_mind_text: "لما تحس إنك مش قادر تتمرن ولا تكمّل، الطبيب النفسي معاك يسمعك ويرجّعلك نفسك.",
+    story_end_label: "ADAM",
+    story_end_title: "معاك طول العمر",
+    story_end_text: "من أول نفَس لآخر العمر… تمرين، تغذية، علاج، ودعم نفسي في مكان واحد. ابدأ حكايتك النهارده.",
     tour_replay: "🧭 جولة سريعة في البرنامج",
     tour_start: "يلا نبدأ",
     tour_next: "التالي",
@@ -3291,6 +3331,46 @@ const TEXT = {
     wr_max_hr: 'max {v}',
     wr_kcal: '{v} kcal',
     wr_zones: 'Time in zones',
+    story_teaser_kicker: "Why ADAM?",
+    story_teaser_title: "Adam — the first human, the first chapter",
+    story_teaser_text: "A journey with you from before you’re born to the very end — with a full team beside you at every stage.",
+    story_teaser_btn: "▶ Watch the story",
+    story_client_link: "▶ The ADAM story",
+    story_cta: "Start your story",
+    story_cta_in: "Let’s keep your story going 💪",
+    story_intro_label: "The name",
+    story_intro_title: "Why ADAM?",
+    story_intro_text: "Adam was the first human — the first chapter. ADAM isn’t just a name: it’s a journey with you from before you’re born to the very end, with us beside you at every stage.",
+    story_womb_label: "Before you arrive",
+    story_womb_title: "It starts in your mother’s womb",
+    story_womb_text: "Your mom trains with us safely during pregnancy, with measured nutrition and medical follow-up week by week — so you both stay well.",
+    story_born_label: "Welcome to the world",
+    story_born_title: "First breath",
+    story_born_text: "After birth we bring your mom’s fitness back step by step: nutrition for breastfeeding, physio for her back and pelvic floor… while you grow before our eyes.",
+    story_child_label: "Childhood",
+    story_child_title: "Running and playing",
+    story_child_text: "Movement and play for their age, healthy school food, and good habits built early.",
+    story_strong_label: "Youth",
+    story_strong_title: "Growing strong",
+    story_strong_text: "Football, running, swimming, the gym… a coach for every sport, physical prep, and food that matches the effort.",
+    story_fall_label: "When you fall",
+    story_fall_title: "You fall… and come back stronger",
+    story_fall_text: "Injured? A doctor diagnoses, physio calms the pain, and rehab gets you back on the pitch stronger than before.",
+    story_work_label: "Work & life",
+    story_work_title: "Work takes all the time",
+    story_work_text: "A 20-minute workout, food that fits the day, and check-ups and consults without leaving the desk.",
+    story_family_label: "Home & family",
+    story_family_title: "Building a home",
+    story_family_text: "Training for both, food for the whole family, and support whenever they need it… and the story starts again with the first child.",
+    story_old_label: "Growing older",
+    story_old_title: "Fitness has every age",
+    story_old_text: "Safe movement for the joints, blood pressure and sugar follow-up, and medication kept right with the doctor and pharmacist.",
+    story_mind_label: "On the hard days",
+    story_mind_title: "You’re not alone",
+    story_mind_text: "When you feel you can’t train or keep going, the psychologist is with you — to listen and help you find yourself again.",
+    story_end_label: "ADAM",
+    story_end_title: "With you for life",
+    story_end_text: "From first breath to the last chapter… training, nutrition, treatment and emotional support in one place. Start your story today.",
     tour_replay: "🧭 Quick tour of the app",
     tour_start: "Let’s go",
     tour_next: "Next",
@@ -33014,3 +33094,289 @@ function tourPlace() {
     tourStart(id === 'tour-replay-client' ? 'client' : 'provider');
   });
 });
+
+
+/* ============================================================
+   حكاية ADAM — «آدم أول الخلق… وأول الحكاية»
+   ------------------------------------------------------------
+   الاسم مش مجرد اسم: رحلة معاك من بطن أمك لحد آخر العمر.
+   مشغّل زي الستوري: ١١ فصل، كل فصل مشهد متحرك (SVG مرسوم هنا)
+   + الفريق اللي معاك في المرحلة دي. بيتفتح من صفحة الترحيب
+   ومن رئيسية العميل. الرسومات بسيطة وأصلية — مفيش صور من برّه.
+   ============================================================ */
+
+const STORY_CHAPTERS = [
+  { key: 'intro',  c: '#2ee07a', ms: 6500, scene: 'intro' },
+  { key: 'womb',   c: '#f472b6', ms: 7000, scene: 'womb',   team: ['coach', 'nutritionist', 'doctor'] },
+  { key: 'born',   c: '#7dd3fc', ms: 7000, scene: 'born',   team: ['physio', 'nutritionist', 'doctor'] },
+  { key: 'child',  c: '#facc15', ms: 6500, scene: 'child',  team: ['coach', 'nutritionist'] },
+  { key: 'strong', c: '#2ee07a', ms: 6500, scene: 'strong', team: ['coach', 'nutritionist', 'sports_medicine'] },
+  { key: 'fall',   c: '#fb923c', ms: 7000, scene: 'fall',   team: ['ortho', 'physio', 'rehab'] },
+  { key: 'work',   c: '#818cf8', ms: 6500, scene: 'work',   team: ['coach', 'nutritionist', 'doctor'] },
+  { key: 'family', c: '#fb7185', ms: 7000, scene: 'family', team: ['coach', 'nutritionist', 'psychologist'] },
+  { key: 'old',    c: '#2dd4bf', ms: 7000, scene: 'old',    team: ['doctor', 'pharmacist', 'physio'] },
+  { key: 'mind',   c: '#a78bfa', ms: 7000, scene: 'mind',   team: ['psychologist'] },
+  { key: 'end',    c: '#2ee07a', ms: 9000, scene: 'end' }
+];
+const STORY_EMOJI = ['🤰', '👶', '🧒', '🏃', '🩹', '💼', '💍', '🧓', '🫶'];
+
+/* المشاهد — viewBox واحد (320×260) وستايل خط واحد عشان تبان عيلة واحدة */
+function storyScene(name) {
+  const head = function (x, y, r) { return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" class="sv-fill"/>'; };
+  const halo = '<circle cx="160" cy="128" r="104" class="sv-halo"/><circle cx="160" cy="128" r="72" class="sv-halo sv-halo2"/>';
+  const ground = '<line x1="40" y1="222" x2="280" y2="222" class="sv-ground"/>';
+  const S = {
+    intro:
+      '<path class="sv-life" d="M20 170 C 60 110, 100 210, 140 150 S 220 90, 300 140"/>'
+      + STORY_EMOJI.map(function (e, idx) {
+        let i = idx;
+        const pts = [[34, 158], [66, 142], [98, 172], [132, 158], [166, 130], [198, 112], [232, 110], [264, 124], [292, 138]];
+        /* بالعربي الحكاية بتبدأ من اليمين */
+        if (lang === 'ar') i = pts.length - 1 - i;
+        return '<g class="sv-dot" style="animation-delay:' + (0.35 + idx * 0.28) + 's"><circle cx="' + pts[i][0] + '" cy="' + pts[i][1] + '" r="15" class="sv-dotbg"/><text x="' + pts[i][0] + '" y="' + (pts[i][1] + 6) + '" text-anchor="middle" font-size="16">' + e + '</text></g>';
+      }).join('')
+      + '<text x="160" y="72" text-anchor="middle" class="sv-word">ADAM</text>',
+    womb:
+      halo
+      + '<g class="sv-breathe">' + head(150, 58, 15)
+      + '<path class="sv-line" d="M148 76 C 146 100, 142 130, 146 160"/>'
+      + '<path class="sv-line" d="M150 84 C 170 96, 192 112, 190 138 C 188 158, 168 164, 150 160"/>'
+      + '<path class="sv-line" d="M150 92 C 160 108, 172 118, 176 128"/>'
+      + '<path class="sv-line" d="M146 160 L 138 218 M 152 160 L 162 218"/></g>'
+      + '<path class="sv-heart" d="M172 138 c -3 -5 -11 -4 -11 2 c 0 5 7 9 11 12 c 4 -3 11 -7 11 -12 c 0 -6 -8 -7 -11 -2 z"/>'
+      + '<path class="sv-ecg" d="M40 238 h70 l10 -18 l12 34 l10 -26 l8 10 h130"/>'
+      + '<circle cx="80" cy="90" r="4" class="sv-spark"/><circle cx="240" cy="70" r="3" class="sv-spark" style="animation-delay:1s"/><circle cx="250" cy="150" r="5" class="sv-spark" style="animation-delay:2s"/>',
+    born:
+      halo
+      + '<g class="sv-rock"><path class="sv-line" d="M92 140 C 100 196, 220 196, 228 140"/>'
+      + '<path class="sv-line" d="M92 140 H 228"/>'
+      + '<ellipse cx="170" cy="150" rx="40" ry="16" class="sv-fill sv-soft"/>' + head(122, 146, 15)
+      + '<path class="sv-line" d="M112 190 l -8 22 M 208 190 l 8 22"/></g>'
+      + '<path class="sv-star" d="M70 60 l4 9 l9 4 l-9 4 l-4 9 l-4 -9 l-9 -4 l9 -4 z"/>'
+      + '<path class="sv-star" style="animation-delay:.8s" d="M250 50 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 z"/>'
+      + '<path class="sv-star" style="animation-delay:1.6s" d="M232 104 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z"/>'
+      + '<text x="200" y="100" class="sv-z">z</text><text x="214" y="84" class="sv-z" style="animation-delay:.7s">z</text>',
+    child:
+      halo + ground
+      + '<g class="sv-hop">' + head(150, 96, 13)
+      + '<line x1="150" y1="110" x2="150" y2="150" class="sv-line"/>'
+      + '<g class="sv-swing" style="transform-origin:150px 118px"><line x1="150" y1="118" x2="130" y2="138" class="sv-line"/></g>'
+      + '<g class="sv-swing sv-rev" style="transform-origin:150px 118px"><line x1="150" y1="118" x2="170" y2="136" class="sv-line"/></g>'
+      + '<g class="sv-swing" style="transform-origin:150px 150px"><line x1="150" y1="150" x2="138" y2="186" class="sv-line"/></g>'
+      + '<g class="sv-swing sv-rev" style="transform-origin:150px 150px"><line x1="150" y1="150" x2="164" y2="186" class="sv-line"/></g></g>'
+      + '<g class="sv-bounce"><circle cx="222" cy="170" r="16" class="sv-line sv-ball"/><path class="sv-line" d="M208 162 q14 8 28 0 M 222 154 v 32"/></g>'
+      + '<line x1="80" y1="140" x2="108" y2="140" class="sv-dash"/><line x1="72" y1="160" x2="104" y2="160" class="sv-dash" style="animation-delay:.3s"/>',
+    strong:
+      halo + ground
+      + '<g class="sv-track"><line x1="20" y1="236" x2="70" y2="236" class="sv-dash"/><line x1="120" y1="236" x2="170" y2="236" class="sv-dash"/><line x1="220" y1="236" x2="270" y2="236" class="sv-dash"/></g>'
+      + '<g class="sv-run">' + head(178, 70, 14)
+      + '<line x1="172" y1="86" x2="152" y2="140" class="sv-line"/>'
+      + '<g class="sv-swing" style="transform-origin:168px 96px"><path d="M168 96 l -26 12 l -10 -14" class="sv-line"/></g>'
+      + '<g class="sv-swing sv-rev" style="transform-origin:168px 96px"><path d="M168 96 l 24 10 l 12 -12" class="sv-line"/></g>'
+      + '<g class="sv-swing" style="transform-origin:152px 140px"><path d="M152 140 l 26 22 l -6 32" class="sv-line"/></g>'
+      + '<g class="sv-swing sv-rev" style="transform-origin:152px 140px"><path d="M152 140 l -22 26 l -22 4" class="sv-line"/></g></g>'
+      + '<g class="sv-cycle"><g class="sv-c1"><circle cx="262" cy="64" r="14" class="sv-line"/><path class="sv-line" d="M252 58 q10 6 20 0"/></g>'
+      + '<g class="sv-c2"><path class="sv-line" d="M246 64 q8 -8 16 0 t 16 0"/><path class="sv-line" d="M246 74 q8 -8 16 0 t 16 0"/></g>'
+      + '<g class="sv-c3"><path class="sv-line" d="M248 64 h28 M 250 56 v16 M 274 56 v16 M 244 60 v8 M 280 60 v8"/></g></g>'
+      + '<line x1="70" y1="90" x2="118" y2="90" class="sv-dash"/><line x1="60" y1="112" x2="112" y2="112" class="sv-dash" style="animation-delay:.25s"/>',
+    fall:
+      halo
+      + '<path class="sv-line" d="M112 70 L 158 140"/><path class="sv-line" d="M158 140 L 142 214"/>'
+      + '<circle cx="158" cy="140" r="11" class="sv-fill"/>'
+      + '<circle cx="158" cy="140" r="22" class="sv-pain"/>'
+      + '<circle cx="158" cy="140" r="36" class="sv-ring-bg"/><circle cx="158" cy="140" r="36" class="sv-ring"/>'
+      + '<g class="sv-plus"><rect x="214" y="70" width="40" height="40" rx="12" class="sv-fill sv-soft"/><path class="sv-line sv-ink" d="M234 80 v20 M224 90 h20"/></g>'
+      + '<g class="sv-rise"><path class="sv-line" d="M226 204 V 150 M 210 166 l 16 -16 l 16 16"/></g>',
+    work:
+      halo
+      + '<g class="sv-stretch">' + head(160, 64, 14)
+      + '<line x1="160" y1="80" x2="160" y2="128" class="sv-line"/>'
+      + '<g class="sv-armup" style="transform-origin:160px 90px"><path class="sv-line" d="M160 90 l -26 -22"/></g>'
+      + '<g class="sv-armup sv-rev" style="transform-origin:160px 90px"><path class="sv-line" d="M160 90 l 26 -22"/></g></g>'
+      + '<rect x="104" y="128" width="112" height="62" rx="8" class="sv-line"/><path class="sv-line" d="M92 198 h136"/>'
+      + '<path class="sv-bar1 sv-line" d="M124 176 v -14"/><path class="sv-bar2 sv-line" d="M148 176 v -24"/><path class="sv-bar3 sv-line" d="M172 176 v -18"/><path class="sv-bar4 sv-line" d="M196 176 v -30"/>'
+      + '<circle cx="256" cy="70" r="22" class="sv-line"/><line x1="256" y1="70" x2="256" y2="56" class="sv-line sv-hand"/><line x1="256" y1="70" x2="266" y2="70" class="sv-line sv-hand2"/>'
+      + '<path class="sv-line" d="M52 170 h26 v26 a8 8 0 0 1 -8 8 h-10 a8 8 0 0 1 -8 -8 z"/><path class="sv-steam" d="M60 160 q -6 -8 0 -16"/><path class="sv-steam" style="animation-delay:.6s" d="M70 160 q -6 -8 0 -16"/>',
+    family:
+      halo
+      + '<g class="sv-rings"><circle cx="138" cy="120" r="30" class="sv-line"/><circle cx="180" cy="120" r="30" class="sv-line"/></g>'
+      + '<path class="sv-heart sv-float" d="M160 70 c -4 -7 -15 -6 -15 3 c 0 7 10 12 15 16 c 5 -4 15 -9 15 -16 c 0 -9 -11 -10 -15 -3 z"/>'
+      + '<g class="sv-kid">' + head(160, 180, 10) + '<line x1="160" y1="191" x2="160" y2="216" class="sv-line"/><path class="sv-line" d="M160 198 l -12 8 M 160 198 l 12 8 M 160 216 l -8 12 M 160 216 l 8 12"/></g>'
+      + '<path class="sv-orbit" d="M160 30 a 98 98 0 1 1 -0.1 0"/>',
+    old:
+      halo + ground
+      + '<g class="sv-walk">' + head(146, 72, 14)
+      + '<path class="sv-line" d="M150 88 C 158 110, 156 132, 150 150"/>'
+      + '<path class="sv-line" d="M154 104 L 178 132 L 180 218"/>'
+      + '<g class="sv-swing sv-slow" style="transform-origin:150px 150px"><line x1="150" y1="150" x2="140" y2="216" class="sv-line"/></g>'
+      + '<g class="sv-swing sv-slow sv-rev" style="transform-origin:150px 150px"><line x1="150" y1="150" x2="160" y2="216" class="sv-line"/></g></g>'
+      + '<g class="sv-float"><rect x="226" y="72" width="40" height="18" rx="9" class="sv-line"/><line x1="246" y1="72" x2="246" y2="90" class="sv-line"/></g>'
+      + '<path class="sv-ecg" d="M40 244 h60 l8 -14 l10 26 l8 -20 l6 8 h140"/>'
+      + '<circle cx="84" cy="80" r="18" class="sv-sun"/>',
+    mind:
+      halo
+      + '<path class="sv-line" d="M190 214 v -26 c 26 -6 40 -30 34 -58 c -6 -34 -40 -52 -72 -46 c -30 6 -48 34 -44 62 c 2 16 10 26 20 34 v 34"/>'
+      + '<g class="sv-cloudy"><path class="sv-line sv-cloud" d="M134 136 a14 14 0 0 1 4 -27 a18 18 0 0 1 34 -4 a13 13 0 0 1 8 25 z"/>'
+      + '<line x1="146" y1="146" x2="142" y2="158" class="sv-rain"/><line x1="160" y1="146" x2="156" y2="158" class="sv-rain" style="animation-delay:.3s"/><line x1="174" y1="146" x2="170" y2="158" class="sv-rain" style="animation-delay:.6s"/></g>'
+      + '<g class="sv-sunny"><circle cx="160" cy="124" r="15" class="sv-sun"/><g class="sv-rays"><path class="sv-line" d="M160 96 v-8 M160 160 v-8 M132 124 h-8 M196 124 h-8 M140 104 l-6 -6 M186 150 l-6 -6 M180 104 l6 -6 M134 150 l6 -6"/></g></g>',
+    end:
+      '<g class="sv-wheel">' + STORY_EMOJI.map(function (e, i) {
+        const a = (i / STORY_EMOJI.length) * Math.PI * 2 - Math.PI / 2;
+        const x = 160 + Math.cos(a) * 96, y = 130 + Math.sin(a) * 96;
+        return '<g><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="17" class="sv-dotbg"/><text x="' + x.toFixed(1) + '" y="' + (y + 6).toFixed(1) + '" text-anchor="middle" font-size="17" class="sv-up">' + e + '</text></g>';
+      }).join('') + '</g>'
+      + '<circle cx="160" cy="130" r="96" class="sv-orbit2"/>'
+      + '<text x="160" y="140" text-anchor="middle" class="sv-word sv-word2">ADAM</text>'
+  };
+  return '<svg viewBox="0 0 320 260" class="sv" aria-hidden="true">' + (S[name] || '') + '</svg>';
+}
+
+let storyState = null;
+
+function storyRoot() {
+  let root = document.querySelector('div#adam-story');
+  if (root) return root;
+  root = document.createElement('div');
+  root.id = 'adam-story';
+  root.className = 'story hidden';
+  root.setAttribute('role', 'dialog');
+  root.setAttribute('aria-modal', 'true');
+  root.innerHTML = '<div class="st-bg"></div><div class="st-bars"></div>'
+    + '<button type="button" class="st-close" aria-label="close">✕</button>'
+    + '<div class="st-stage"><div class="st-scene"></div><div class="st-chapter"></div><h2 class="st-title"></h2>'
+    + '<p class="st-text"></p><div class="st-team"></div><div class="st-cta"></div></div>'
+    + '<button type="button" class="st-tap st-prev" aria-label="prev"></button><button type="button" class="st-tap st-next" aria-label="next"></button>';
+  document.body.appendChild(root);
+  root.querySelector('.st-close').addEventListener('click', storyClose);
+  /* في RTL: يمين الشاشة = اللي فات، شمالها = اللي جاي (زي ما بنقرا) */
+  root.querySelector('.st-prev').addEventListener('click', function () { storyGo(-1); });
+  root.querySelector('.st-next').addEventListener('click', function () { storyGo(1); });
+  /* الضغطة الطويلة بتوقّف الحكاية زي الستوري */
+  ['pointerdown', 'pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) {
+    root.addEventListener(ev, function (e) {
+      if (!storyState || e.target.closest('.st-close, .st-cta')) return;
+      storyPause(ev === 'pointerdown');
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!storyState) return;
+    if (e.key === 'Escape') storyClose();
+    if (e.key === 'ArrowLeft') storyGo(lang === 'ar' ? 1 : -1);
+    if (e.key === 'ArrowRight') storyGo(lang === 'ar' ? -1 : 1);
+  });
+  return root;
+}
+
+function openStory(from) {
+  const root = storyRoot();
+  root.classList.remove('hidden');
+  root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  document.body.classList.add('story-open');
+  const bars = root.querySelector('.st-bars');
+  bars.innerHTML = STORY_CHAPTERS.map(function () { return '<span><i></i></span>'; }).join('');
+  storyState = { i: 0, from: from || '', timer: null, started: 0, left: 0, paused: false };
+  storyShow();
+}
+
+function storyClose() {
+  if (!storyState) return;
+  clearTimeout(storyState.timer);
+  storyState = null;
+  const root = storyRoot();
+  root.classList.add('hidden');
+  document.body.classList.remove('story-open');
+}
+
+function storyGo(d) {
+  if (!storyState) return;
+  const n = storyState.i + d;
+  if (n < 0) { storyShow(); return; }
+  if (n >= STORY_CHAPTERS.length) { storyClose(); return; }
+  storyState.i = n;
+  storyShow();
+}
+
+function storyPause(on) {
+  const st = storyState;
+  if (!st || st.paused === on) return;
+  const root = storyRoot();
+  const bar = root.querySelectorAll('.st-bars i')[st.i];
+  st.paused = on;
+  root.classList.toggle('paused', on);
+  if (on) {
+    clearTimeout(st.timer);
+    st.left = Math.max(300, st.left - (Date.now() - st.started));
+    if (bar) { const w = getComputedStyle(bar).width; bar.style.transition = 'none'; bar.style.width = w; }
+  } else {
+    st.started = Date.now();
+    if (bar) { void bar.offsetWidth; bar.style.transition = 'width ' + st.left + 'ms linear'; bar.style.width = '100%'; }
+    st.timer = setTimeout(function () { storyGo(1); }, st.left);
+  }
+}
+
+function storyShow() {
+  const st = storyState;
+  const ch = STORY_CHAPTERS[st.i];
+  const root = storyRoot();
+  clearTimeout(st.timer);
+  root.style.setProperty('--c', ch.c);
+  root.classList.remove('paused');
+  st.paused = false;
+  const k = 'story_' + ch.key;
+  const stage = root.querySelector('.st-stage');
+  stage.classList.remove('in');
+  void stage.offsetWidth;
+  stage.classList.add('in');
+  root.querySelector('.st-scene').innerHTML = storyScene(ch.scene);
+  root.querySelector('.st-chapter').textContent = (st.i > 0 && st.i < STORY_CHAPTERS.length - 1 ? String(st.i).padStart(2, '0') + ' · ' : '') + t(k + '_label');
+  root.querySelector('.st-title').textContent = t(k + '_title');
+  root.querySelector('.st-text').textContent = t(k + '_text');
+  const team = root.querySelector('.st-team');
+  team.innerHTML = '';
+  (ch.team || []).forEach(function (key, i) {
+    const chip = document.createElement('span');
+    chip.className = 'st-chip';
+    chip.style.animationDelay = (0.9 + i * 0.18) + 's';
+    chip.innerHTML = specialtyIconSvg(key);
+    chip.appendChild(document.createTextNode(' ' + specialtyName(key, lang)));
+    team.appendChild(chip);
+  });
+  const cta = root.querySelector('.st-cta');
+  cta.innerHTML = '';
+  if (ch.key === 'end') {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'st-cta-btn';
+    b.textContent = clientEmail || currentProviderEmail ? t('story_cta_in') : t('story_cta');
+    b.addEventListener('click', function () {
+      storyClose();
+      const start = document.getElementById('hero2-start-btn');
+      if (!clientEmail && !currentProviderEmail && start && tourVisible(start)) start.click();
+    });
+    cta.appendChild(b);
+  }
+  /* شرايط التقدّم فوق: اللي فات مليان، الحالي بيتملى */
+  root.querySelectorAll('.st-bars i').forEach(function (bar, i) {
+    bar.style.transition = 'none';
+    bar.style.width = i < st.i ? '100%' : '0%';
+  });
+  const cur = root.querySelectorAll('.st-bars i')[st.i];
+  void cur.offsetWidth;
+  cur.style.transition = 'width ' + ch.ms + 'ms linear';
+  cur.style.width = '100%';
+  st.started = Date.now();
+  st.left = ch.ms;
+  st.timer = setTimeout(function () { storyGo(1); }, ch.ms);
+}
+
+/* تمهيد في صفحة الترحيب: خط العمر بالمراحل ونقطة ماشية عليه */
+(function wireStoryEntry() {
+  const teaser = document.getElementById('story-teaser-line');
+  if (teaser) {
+    teaser.innerHTML = STORY_EMOJI.map(function (e, i) { return '<span class="stl-dot" style="animation-delay:' + (i * 0.35) + 's">' + e + '</span>'; }).join('');
+  }
+  ['story-open-welcome', 'story-open-client'].forEach(function (id) {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', function () { openStory(id); });
+  });
+})();
