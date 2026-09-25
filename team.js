@@ -197,7 +197,7 @@ function renderReport(report) {
   $('fb-ask').classList.toggle('hidden', !!fb);
   $('fb-done').classList.toggle('hidden', !fb);
   if (fb) {
-    $('fb-done').textContent = (fb.decision === 'yes' ? '✓ خدت قرار' : '✗ ماكانش مفيد') + (fb.note ? ' — ' + fb.note : '') + '  ';
+    $('fb-done').textContent = (fb.decision === 'yes' ? 'خدت قرار' : 'ماكانش مفيد') + (fb.note ? ' — ' + fb.note : '') + '  ';
     const undo = document.createElement('button');
     undo.type = 'button';
     undo.className = 'ghost';
@@ -234,7 +234,7 @@ function renderHistory() {
     li.innerHTML = '<span class="h-date"></span><span class="h-text"></span><span class="h-fb"></span>';
     li.children[0].textContent = h.period ? fmtDay(h.period.from) : fmtDate(h.at);
     li.children[1].textContent = h.headline || '—';
-    li.children[2].textContent = h.feedback ? (h.feedback.decision === 'yes' ? '✓' : '✗') : '';
+    li.children[2].textContent = h.feedback ? (h.feedback.decision === 'yes' ? 'تم' : 'رفض') : '';
     li.addEventListener('click', () => openReport(h.id));
     $('history').appendChild(li);
   });
@@ -369,7 +369,7 @@ function renderSuccess() {
   $('cs-done').innerHTML = '';
   done.forEach(d => {
     const li = document.createElement('li');
-    const what = d.status === 'sent' ? ('اتبعتت' + (d.returned ? ' · رجع ✓' : '')) : 'اتخطّت';
+    const what = d.status === 'sent' ? ('اتبعتت' + (d.returned ? ' · رجع' : '')) : 'اتخطّت';
     li.textContent = (d.name || d.firstName) + ' · ' + what + ' · ' + fmtDate(d.doneAt);
     $('cs-done').appendChild(li);
   });
@@ -389,7 +389,7 @@ async function markDraft(d, status, finalText, box) {
     renderSuccess();
     renderLog();
     renderStaff();
-    csMsg(status === 'sent' ? ('اتبعتت لـ ' + (d.firstName || d.name) + ' في الشات ✓') : 'اتشالت من القايمة', 'ok');
+    csMsg(status === 'sent' ? ('اتبعتت لـ ' + (d.firstName || d.name) + ' في الشات') : 'اتشالت من القايمة', 'ok');
   } catch (err) {
     box.classList.remove('sending');
     csMsg(err.message, 'err');
@@ -611,7 +611,7 @@ function renderContent() {
     const done = document.createElement('button');
     done.type = 'button';
     done.className = 'ct-posted';
-    done.textContent = 'نشرته ✓';
+    done.textContent = 'نشرته';
     done.addEventListener('click', () => markPost(d, 'posted', area.value, box));
     const skip = document.createElement('button');
     skip.type = 'button';
@@ -646,7 +646,7 @@ async function markPost(d, status, finalText, box) {
   try {
     state = await call('team_ct_mark', { id: d.id, status, finalText });
     renderContent();
-    ctMsg(status === 'posted' ? 'اتسجّل إنه اتنشر ✓' : 'اتشال من القايمة', 'ok');
+    ctMsg(status === 'posted' ? 'اتسجّل إنه اتنشر' : 'اتشال من القايمة', 'ok');
   } catch (err) {
     box.classList.remove('sending');
     ctMsg(err.message, 'err');
@@ -1154,7 +1154,7 @@ $('run-btn').addEventListener('click', async () => {
     state = await call('team_run');
     shownId = '';
     renderAll(false);
-    setMsg('اتعمل تقرير جديد ✓', 'ok');
+    setMsg('اتعمل تقرير جديد', 'ok');
   } catch (err) {
     setMsg(err.message, 'err');
   }
@@ -1237,7 +1237,7 @@ function socmMsg(text, kind) {
 }
 
 function socmCopy(text, okText) {
-  try { navigator.clipboard.writeText(text); socmMsg(okText || 'اتنسخ ✓', 'ok'); } catch (err) { socmMsg('مقدرتش أنسخ — علّم الكلام وانسخه بإيدك', 'err'); }
+  try { navigator.clipboard.writeText(text); socmMsg(okText || 'اتنسخ', 'ok'); } catch (err) { socmMsg('مقدرتش أنسخ — علّم الكلام وانسخه بإيدك', 'err'); }
 }
 
 function socmPostCard(p, todayIdx) {
@@ -1255,10 +1255,10 @@ function socmPostCard(p, todayIdx) {
   if (p.trend) {
     const tr = document.createElement('span');
     tr.className = 'chip danger';
-    tr.textContent = '🔥 ' + p.trend;
+    tr.textContent = p.trend;
     top.appendChild(tr);
   }
-  if (p.status === 'posted') top.appendChild(Object.assign(document.createElement('span'), { className: 'chip on', textContent: 'اتنشر ✓' }));
+  if (p.status === 'posted') top.appendChild(Object.assign(document.createElement('span'), { className: 'chip on', textContent: 'اتنشر' }));
   const hook = document.createElement('div');
   hook.className = 'socm-hook';
   hook.textContent = p.hookAr;
@@ -1270,7 +1270,7 @@ function socmPostCard(p, todayIdx) {
   tags.textContent = (p.hashtags || []).join(' ');
   const vis = document.createElement('div');
   vis.className = 'socm-visual';
-  vis.textContent = '🎨 ' + (SOCM_VISUAL[p.visual] || '');
+  vis.textContent = SOCM_VISUAL[p.visual] || '';
   if (p.visual === 'ai_image' && p.imagePrompt) {
     const pr = document.createElement('p');
     pr.className = 'socm-prompt';
@@ -1284,7 +1284,7 @@ function socmPostCard(p, todayIdx) {
   }
   const why = document.createElement('p');
   why.className = 'socm-why';
-  why.textContent = '💡 ' + (p.why || '');
+  why.textContent = p.why || '';
   const actions = document.createElement('div');
   actions.className = 'socm-actions';
   const copyText = document.createElement('button');
@@ -1311,7 +1311,7 @@ function socmPostCard(p, todayIdx) {
   const done = document.createElement('button');
   done.type = 'button';
   done.className = p.status === 'posted' ? 'ghost' : '';
-  done.textContent = p.status === 'posted' ? 'رجّعها' : 'نشرته ✓';
+  done.textContent = p.status === 'posted' ? 'رجّعها' : 'نشرته';
   done.addEventListener('click', () => socmMark(p.i, p.status === 'posted' ? 'new' : 'posted'));
   const skip = document.createElement('button');
   skip.type = 'button';
@@ -1357,7 +1357,7 @@ $('socm-run-btn').addEventListener('click', async () => {
   socmBusy = true; renderSocm(); socmMsg('بيشوف التريند ويكتب الجدول…');
   try {
     state = await call('team_socm_run');
-    socmMsg(state.socmNote ? 'مقدرش يعمل جدول: ' + state.socmNote : 'الجدول جاهز ✓', state.socmNote ? 'err' : 'ok');
+    socmMsg(state.socmNote ? 'مقدرش يعمل جدول: ' + state.socmNote : 'الجدول جاهز', state.socmNote ? 'err' : 'ok');
   } catch (err) { socmMsg(err.message, 'err'); }
   socmBusy = false; renderSocm(); renderLog(); renderInbox();
 });
@@ -1446,7 +1446,7 @@ async function studioDraw() {
   ctx.fillStyle = '#eef3f9'; ctx.font = '700 44px Cairo, sans-serif';
   ctx.fillText('ADAM', W / 2, 290);
   const mid = H / 2;
-  const badge = { tip: '💡 نصيحة', quote: '💬', stat: '📊 مجتمع ADAM', champion: '🏆 بطل الأسبوع', photo: '' }[kind];
+  const badge = { tip: 'نصيحة', quote: 'اقتباس', stat: 'مجتمع ADAM', champion: 'بطل الأسبوع', photo: '' }[kind];
   ctx.font = '700 46px Cairo, sans-serif'; ctx.fillStyle = kind === 'champion' ? '#facc15' : '#22c55e';
   if (badge) ctx.fillText(badge, W / 2, mid - 190);
   if (kind === 'stat' || kind === 'champion') {

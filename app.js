@@ -504,10 +504,10 @@ const TEXT = {
     verify_too_many: 'اتبعت رسايل كتير ورا بعض — استنى شوية وجرّب تاني',
     verify_checking: 'بنتأكد...',
     verify_wrong_btn: 'الإيميل ده غلط — عايز أسجّل بإيميل تاني',
-    vb_title: "📩 أكّد إيميلك — فاضلك {n} {w}",
+ vb_title: "أكّد إيميلك — فاضلك {n} {w}",
     vb_text: "بعتنالك رسالة على {email}. دوس على اللينك اللي فيها. مش لاقيها؟ بص في الـ Spam أو «غير المرغوب فيه»، ولو لقيتها هناك دوس «مش سبام» عشان رسايلنا الجاية توصلك على طول.",
     vb_done: "أكّدت خلاص",
-    vb_ok: "تمام — إيميلك اتأكد ✓",
+ vb_ok: "تمام — إيميلك اتأكد",
     // ---- الإشعارات ----
     notif_title: 'الإشعارات',
     notif_empty: 'مفيش إشعارات لسه — أول ما فريقك يبعتلك أو يعدّل برنامجك هتلاقيها هنا',
@@ -1084,7 +1084,7 @@ const TEXT = {
     wr_strava_connect: 'اربط Strava',
     wr_strava_sync: 'زامن دلوقتي',
     wr_strava_disconnect: 'افصل Strava',
-    wr_strava_connected: 'Strava مربوط ✓',
+ wr_strava_connected: 'Strava مربوط',
     wr_strava_synced: 'وصل {n} تمرين جديد من Strava',
     wr_strava_none: 'مفيش تمارين جديدة على Strava',
     wr_strava_failed: 'Strava: ',
@@ -1093,7 +1093,7 @@ const TEXT = {
     wr_title: 'تمارين الساعة',
     wr_upload: 'ارفع ملف تمرين من ساعتك (GPX أو TCX أو FIT)',
     wr_help_title: 'أجيب الملف إزاي؟',
-    wr_help: 'Garmin Connect: افتح التمرين ← ⚙️ ← Export Original (FIT) أو Export to TCX.\nStrava: افتح التمرين ← … ← Export GPX أو Export Original.\nCOROS / Polar / Suunto: من التطبيق أو الموقع ← Export ← FIT أو GPX.\nApple Watch: تطبيق زي HealthFit أو RunGap بيصدّر التمرين FIT أو GPX.\nSamsung / Huawei: صدّر لـ Strava الأول، وبعدين نزّل الملف من Strava.',
+ wr_help: 'Garmin Connect: افتح التمرين ← الإعدادات ← Export Original (FIT) أو Export to TCX.\nStrava: افتح التمرين ← … ← Export GPX أو Export Original.\nCOROS / Polar / Suunto: من التطبيق أو الموقع ← Export ← FIT أو GPX.\nApple Watch: تطبيق زي HealthFit أو RunGap بيصدّر التمرين FIT أو GPX.\nSamsung / Huawei: صدّر لـ Strava الأول، وبعدين نزّل الملف من Strava.',
     wr_saved: 'اتسجل التمرين: {sport} — {dur}',
     wr_dup: 'التمرين ده متسجل قبل كده',
     wr_bad: 'الملف ده مش مفهوم — ارفع GPX أو TCX أو FIT',
@@ -1117,10 +1117,8 @@ const TEXT = {
     story_teaser_kicker: "ليه اسمه ADAM؟",
     story_teaser_title: "آدم أول الخلق… وأول الحكاية",
     story_teaser_text: "رحلة معاك من قبل ما تتولد لحد آخر العمر — وفريق كامل جنبك في كل مرحلة.",
-    story_teaser_btn: "▶ اتفرّج على الحكاية",
-    story_client_link: "▶ حكاية ADAM",
     story_cta: "ابدأ حكايتك",
-    story_cta_in: "يلا نكمّل حكايتك 💪",
+ story_cta_in: "يلا نكمّل حكايتك",
     story_intro_label: "حكاية الاسم",
     story_intro_title: "ليه ADAM؟",
     story_intro_text: "آدم أول الخلق… وأول الحكاية. ADAM مش مجرد اسم — دي رحلة معاك من قبل ما تتولد لحد آخر العمر، وإحنا جنبك في كل مرحلة.",
@@ -1154,70 +1152,70 @@ const TEXT = {
     story_end_label: "ADAM",
     story_end_title: "معاك طول العمر",
     story_end_text: "من أول نفَس لآخر العمر… تمرين، تغذية، علاج، ودعم نفسي في مكان واحد. ابدأ حكايتك النهارده.",
-    tour_replay: "🧭 جولة سريعة في البرنامج",
+ tour_replay: "جولة سريعة في البرنامج",
     tour_start: "يلا نبدأ",
     tour_next: "التالي",
     tour_back: "رجوع",
-    tour_finish: "تمام 💪",
+ tour_finish: "تمام",
     tour_skip: "تخطّي",
-    tour_c_hi_e: "👋",
+ tour_c_hi_e: "",
     tour_c_hi_t: "أهلًا بيك في ADAM",
     tour_c_hi_b: "جولة سريعة ٣٠ ثانية تعرف فيها كل حاجة. تقدر تتخطاها في أي وقت.",
-    tour_c_rings_e: "🎯",
+ tour_c_rings_e: "",
     tour_c_rings_t: "حلقاتك اليومية",
     tour_c_rings_b: "كل يوم قفّل ٣ حلقات: تمرين وأكل ومية. كل يوم بتقفلهم بيزود سلسلتك ونقطك ومستواك.",
-    tour_c_train_e: "🏋️",
+ tour_c_train_e: "",
     tour_c_train_t: "تمرينك",
     tour_c_train_b: "برنامجك يوم بيوم. افتح التمرين، اتفرّج على الفيديو، وعلّم اللي خلّصته.",
-    tour_c_food_e: "🥗",
+ tour_c_food_e: "",
     tour_c_food_t: "أكلك",
     tour_c_food_b: "خطة أكلك من الأخصائي، وبتسجّل فيها وجباتك وكوبايات المية.",
-    tour_c_friends_e: "🤝",
+ tour_c_friends_e: "",
     tour_c_friends_t: "صحابك",
     tour_c_friends_b: "ضيف صحابك بكود، شجّعوا بعض، ونزّل ستوري بإنجازك.",
-    tour_c_chal_e: "🏆",
+ tour_c_chal_e: "",
     tour_c_chal_t: "المسابقات والنقط",
     tour_c_chal_b: "ادخل مسابقات الأسبوع، واجمع نقط تبدّلها بجوايز.",
-    tour_c_tiles_e: "🧩",
+ tour_c_tiles_e: "",
     tour_c_tiles_t: "كل حاجة تانية هنا",
     tour_c_tiles_b: "فريقك، المحادثة مع مدربك، تقدّمك والإنبودي، الاستشارة، والإبلاغ عن إصابة.",
-    tour_c_bell_e: "🔔",
+ tour_c_bell_e: "",
     tour_c_bell_t: "الإشعارات",
     tour_c_bell_b: "أي تعديل في برنامجك أو رسالة من فريقك بتوصلك هنا.",
-    tour_c_done_e: "💪",
+ tour_c_done_e: "",
     tour_c_done_t: "إنت جاهز!",
     tour_c_done_b: "ابدأ بتمرين النهارده. ولو احتجت الجولة تاني هتلاقيها تحت في الرئيسية.",
-    tour_p_hi_e: "👋",
+ tour_p_hi_e: "",
     tour_p_hi_t: "أهلًا يا كابتن",
     tour_p_hi_b: "جولة سريعة في لوحة شغلك — أقل من دقيقة.",
-    tour_p_tiles_e: "🧭",
+ tour_p_tiles_e: "",
     tour_p_tiles_t: "لوحتك",
     tour_p_tiles_b: "من هنا توصل لكل حاجة: عملائك، الالتزام، المحادثات، والحجوزات.",
-    tour_p_profile_e: "✨",
+ tour_p_profile_e: "",
     tour_p_profile_t: "بروفايلك",
     tour_p_profile_b: "حط صورتك وشهاداتك ومكان شغلك على الخريطة — العملاء بيختاروا باللي بيشوفوه.",
-    tour_p_search_e: "🔎",
+ tour_p_search_e: "",
     tour_p_search_t: "دوّر على عميل",
     tour_p_search_b: "اكتب اسمه وافتح برنامجه على طول.",
-    tour_p_list_e: "👥",
+ tour_p_list_e: "",
     tour_p_list_t: "عملائك",
     tour_p_list_b: "دوس على أي عميل تفتح برنامجه. العلامة الحمرا معناها إن عنده حاجة مستنياك.",
-    tour_p_bell_e: "🔔",
+ tour_p_bell_e: "",
     tour_p_bell_t: "الإشعارات",
     tour_p_bell_b: "إصابة جديدة، رسالة، أو تحليل إنبودي — كله بيوصلك هنا.",
-    tour_p_done_e: "💪",
+ tour_p_done_e: "",
     tour_p_done_t: "يلا نشتغل",
     tour_p_done_b: "الجولة موجودة تحت اللوحة لو احتجتها تاني.",
-    tour_g_tabs_e: "🗂️",
+ tour_g_tabs_e: "",
     tour_g_tabs_t: "تبويبات البرنامج",
     tour_g_tabs_b: "كل تخصص ليه تبويب: تمرين، تأهيل، علاج طبيعي، تغذية... وبيظهرلك اللي يخص تخصصك.",
-    tour_g_health_e: "⚠️",
+ tour_g_health_e: "",
     tour_g_health_t: "حالته الصحية",
     tour_g_health_b: "اقرا دي الأول: الأمراض والاحتياطات وإذن الطبيب قبل ما تكتب أي حاجة.",
-    tour_g_advisor_e: "🤖",
+ tour_g_advisor_e: "",
     tour_g_advisor_t: "المستشار",
     tour_g_advisor_b: "اسأله يقترحلك برنامج أو يراجع اللي كتبته — والقرار في الآخر ليك.",
-    tour_g_injuries_e: "🩹",
+ tour_g_injuries_e: "",
     tour_g_injuries_t: "الإصابات",
     tour_g_injuries_b: "لو عميلك بلّغ عن إصابة هتلاقيها هنا بعلامة حمرا.",
     tab_physio: "علاج طبيعي",
@@ -1234,7 +1232,7 @@ const TEXT = {
     ph_session_of: "الجلسة {n} من {total}",
     ph_sessions_done: "{n} جلسة لحد دلوقتي",
     ph_left_weeks: "فاضل {n} جلسة — حوالي {w} أسبوع",
-    ph_plan_done: "الخطة خلصت 👏",
+ ph_plan_done: "الخطة خلصت",
     ph_assess_title: "التقييم",
     ph_assess_start: "+ ابدأ التقييم",
     ph_reassess: "+ إعادة تقييم (تقييم جديد)",
@@ -1299,42 +1297,42 @@ const TEXT = {
     ph_times_n: "{n} مرات في اليوم",
     ph_home_count: "{n} تمرين للبيت",
     ph_save: "حفظ العلاج الطبيعي",
-    ph_saved: "العلاج الطبيعي اتحفظ ✓",
+ ph_saved: "العلاج الطبيعي اتحفظ",
     ph_open: "افتح خطتك",
     ph_client_title: "العلاج الطبيعي",
     ph_client_empty_title: "لسه مفيش خطة علاج طبيعي",
     ph_client_empty: "لما أخصائي العلاج الطبيعي يكتبلك خطة هتلاقيها هنا.",
     ph_last_session: "آخر جلسة: {d}",
     ph_pain_trend: "ألمك بعد الجلسات (من ١٠)",
-    ph_pain_better: "ألمك نزل من {a} لـ {b} — كمّل 👏",
+ ph_pain_better: "ألمك نزل من {a} لـ {b} — كمّل",
     ph_pain_same: "ألمك كان {a} ودلوقتي {b} — قول لأخصائيك لو في حاجة مضايقاك",
     pw_map: "مكان الشغل على الخريطة",
     pw_map_ph: "الزق لينك جوجل ماب هنا",
-    pw_locate: "📍 حدد مكاني دلوقتي",
+ pw_locate: "حدد مكاني دلوقتي",
     pw_map_clear: "شيل المكان",
     pw_map_hint: "الزق لينك جوجل ماب لمكان الشغل، أو دوس «حدد مكاني» وإنت في الجيم/العيادة. حط مكان الشغل مش البيت — المكان بيظهر للعملاء.",
-    pw_map_ok: "تمام ✓ المكان متحدد — العملاء هيشوفوا «افتح على الخريطة» والمسافة. متنساش تحفظ.",
+ pw_map_ok: "تمام المكان متحدد — العملاء هيشوفوا «افتح على الخريطة» والمسافة. متنساش تحفظ.",
     pw_map_short: "اللينك اتحفظ، بس اللينك المختصر مابيحددش المسافة. عشان العملاء القريبين يلاقوك، دوس «حدد مكاني» وإنت في مكان الشغل.",
     pw_map_bad: "ده مش لينك خريطة — الزق لينك من جوجل ماب (أو اكتب الإحداثيات).",
     pw_locating: "بنحدد المكان...",
     pw_locate_fail: "مقدرناش نحدد المكان — اسمح للموقع يعرف مكانك من إعدادات المتصفح، أو الزق لينك جوجل ماب.",
     pw_open_map: "افتح على الخريطة",
-    near_btn: "📍 رتّب بالأقرب ليا",
-    near_btn_off: "✕ الترتيب العادي",
+ near_btn: "رتّب بالأقرب ليا",
+ near_btn_off: "الترتيب العادي",
     near_on: "مرتّبين بالأقرب ليك — مكانك مابيتحفظش.",
     near_none: "لسه ولا متخصص حاطط مكانه على الخريطة.",
     near_fail: "مقدرناش نعرف مكانك — اسمح للموقع يعرف مكانك من إعدادات المتصفح.",
     near_km: "{n} كم",
     near_away: "على بُعد {d} منك",
-    ib_ai_btn: "📸 صوّر ورقة الإنبودي — الأرقام هتتملى لوحدها",
+ ib_ai_btn: "صوّر ورقة الإنبودي — الأرقام هتتملى لوحدها",
     ib_ai_hint: "بعد الحفظ فريق الإنبودي بيحلّل القياس ويبعته لأخصائي التغذية ومدربك",
     ib_ai_reading: "بنقرا الأرقام من الصورة…",
     ib_ai_not_sheet: "الصورة دي مش باينة ورقة إنبودي — صوّر الورقة كلها في نور كويس",
-    ib_ai_done: "اتقرت ✓ — راجع الأرقام ودوس حفظ",
+ ib_ai_done: "اتقرت — راجع الأرقام ودوس حفظ",
     ib_ai_failed: "مقدرناش نقرا الصورة — اكتب الأرقام بإيدك أو جرّب صورة أوضح.",
     ib_ai_analyzing: "فريق الإنبودي بيحلّل القياس…",
     ib_ai_retry: "حلّل تاني",
-    ib_ai_analyze_btn: "🔍 حلّل القياس ده",
+ ib_ai_analyze_btn: "حلّل القياس ده",
     ib_ai_failed_analyze: "التحليل ماتمش — جرّب تاني بعد شوية",
     ib_ai_title: "تحليل القياس",
     ib_ai_changes: "إيه اللي اتغير",
@@ -1360,7 +1358,7 @@ const TEXT = {
     fp_dislikes_short: "مابيحبش",
     fp_tag_like: "بيحبها",
     fp_tag_dislike: "مابيحبهاش",
-    notif_t_ib_analysis: "🔍 تحليل إنبودي جديد",
+ notif_t_ib_analysis: "تحليل إنبودي جديد",
     notif_b_ib_analysis: "{name}: {h}",
     chal_sheet_title: "المسابقات",
     pts_sheet_title: "متجر النقط",
@@ -1370,26 +1368,26 @@ const TEXT = {
     chal_live: "شغالة دلوقتي",
     chal_upcoming: "جاية قريب",
     chal_recent: "خلصت",
-    chal_none: "مفيش مسابقات شغالة دلوقتي — أول ما تنزل مسابقة جديدة هيوصلك إشعار 🏆",
+ chal_none: "مفيش مسابقات شغالة دلوقتي — أول ما تنزل مسابقة جديدة هيوصلك إشعار",
     chal_ended: "خلصت",
     chal_starts: "بتبدأ يوم {d}",
     chal_left: "فاضل {n} {w}",
     chal_target: "الهدف: {n} {unit}",
     chal_target_sport: "الهدف: {n} مرة {sport}",
     chal_progress: "إنت عند {v} من {n} {unit}",
-    chal_done_me: "خلّصت الهدف 🎉 ({v}) — كمّل عشان الترتيب",
+ chal_done_me: "خلّصت الهدف ({v}) — كمّل عشان الترتيب",
     chal_my_team: "فريقك: {t}",
     chal_pick_team: "اختار فريقك",
     chal_join: "اشترك",
-    chal_joined: "اشتركت في «{t}» — يلا بينا 💪",
+ chal_joined: "اشتركت في «{t}» — يلا بينا",
     chal_board: "الترتيب",
     chal_board_failed: "مقدرناش نجيب الترتيب دلوقتي — جرّب تاني",
     chal_board_empty: "لسه محدش اشترك — كن الأول!",
     chal_my_rank: "ترتيبك {r} من {n}",
     chal_team_avg: "متوسط {v}",
     chal_note: "الترتيب بيتحسب من حلقاتك في البرنامج نفسه، وبيظهر فيه اسمك الأول بس. الجوايز بيأكدها فريق ADAM بعد ما المسابقة تخلص.",
-    chal_team_a: "🦅 الصقور",
-    chal_team_b: "🐯 النمور",
+ chal_team_a: "الصقور",
+ chal_team_b: "النمور",
     chal_unit_stars: "نجمة",
     chal_unit_train_days: "يوم تمرين",
     chal_unit_active_days: "يوم متحسب",
@@ -1398,14 +1396,14 @@ const TEXT = {
     chal_unit_km: "كم",
     chal_unit_xp: "نقطة",
     chal_unit_sport: "مرة",
-    chal_metric_stars: "النجوم ⭐",
-    chal_metric_train_days: "أيام التمرين 🏋️",
-    chal_metric_active_days: "الأيام المتحسبة 🔥",
-    chal_metric_water_days: "أيام الماية 💧",
-    chal_metric_food_days: "أيام الأكل 🥗",
-    chal_metric_km: "الكيلومترات 🏃",
-    chal_metric_xp: "النقط ⚡",
-    chal_metric_sport: "مرات رياضة معيّنة ⚽",
+ chal_metric_stars: "النجوم",
+ chal_metric_train_days: "أيام التمرين",
+ chal_metric_active_days: "الأيام المتحسبة",
+ chal_metric_water_days: "أيام الماية",
+ chal_metric_food_days: "أيام الأكل",
+ chal_metric_km: "الكيلومترات",
+ chal_metric_xp: "النقط",
+ chal_metric_sport: "مرات رياضة معيّنة",
     chal_tpl_stars_week: "أسبوع النجوم",
     chal_tpld_stars_week: "اجمع ٥ نجوم الأسبوع ده — كل نجمة يعني قفّلت كل حلقاتك في يوم.",
     chal_tpl_perfect_week: "الأسبوع الكامل",
@@ -1437,23 +1435,23 @@ const TEXT = {
     pts_balance: "رصيد نقطك",
     pts_balance_note: "كسبت {all} · صرفت {spent}",
     pts_rewards: "الجوايز",
-    pts_no_rewards: "الجوايز لسه بتتجهز — نقطك محفوظة لحد ما تنزل 🎁",
+ pts_no_rewards: "الجوايز لسه بتتجهز — نقطك محفوظة لحد ما تنزل",
     pts_cost: "{n} نقطة",
     pts_out: "خلصت",
     pts_get: "اطلبها",
     pts_need: "فاضلك {n}",
     pts_confirm: "تطلب «{t}» بـ{n} نقطة؟",
-    pts_requested: "الطلب وصل لفريق ADAM ✓",
+ pts_requested: "الطلب وصل لفريق ADAM",
     pts_my_requests: "طلباتك",
     pts_st_pending: "مستني الموافقة",
-    pts_st_approved: "اتوافق عليه ✓",
+ pts_st_approved: "اتوافق عليه",
     pts_st_rejected: "اترفض — النقط رجعتلك",
     pts_how: "النقط بتيجي من حلقاتك كل يوم، والنجوم، وصناديق المفاجآت، والمسابقات، ولما تدعي صاحب يشترك.",
     chal_admin_title: "المسابقات",
     adm_tab_chal: "المسابقات",
     chal_admin_hint: "اختار مسابقة جاهزة أو فكرة من موظف المسابقات، عدّلها لو حبيت، وانشرها. العملاء بيشتركوا بدوسة والترتيب بيتحسب لوحده.",
     chal_admin_templates: "مسابقات جاهزة (دوس عشان تملى الفورم)",
-    chal_admin_ideas: "أفكار موظف المسابقات 🤖",
+ chal_admin_ideas: "أفكار موظف المسابقات",
     chal_admin_ideas_btn: "هات أفكار الأسبوع",
     chal_admin_ideas_more: "هات أفكار جديدة",
     chal_admin_ideas_wait: "الموظف بيفكّر...",
@@ -1463,7 +1461,7 @@ const TEXT = {
     chal_admin_finishing: "بنحسب الترتيب ونكرّم...",
     chal_admin_finished: "خلصت — {n} فايزين و{f} خلّصوا الهدف خدوا نقطهم",
     chal_admin_del_q: "تمسح المسابقة دي؟",
-    chal_admin_created: "المسابقة اتنشرت ✓",
+ chal_admin_created: "المسابقة اتنشرت",
     chal_admin_need_title: "اكتب اسم المسابقة",
     chal_admin_need_sport: "اختار الرياضة",
     chal_st_live: "شغالة",
@@ -1480,7 +1478,7 @@ const TEXT = {
     chal_f_start: "بتبدأ يوم",
     chal_f_days: "المدة بالأيام",
     chal_f_sport: "الرياضة",
-    chal_f_teams: "فرق (اختياري) — افصل بفاصلة: 🦅 الصقور، 🐯 النمور",
+ chal_f_teams: "فرق (اختياري) — افصل بفاصلة: الصقور، النمور",
     chal_f_prize_ar: "الجايزة (عربي) — زي: أسبوع مجاني للأول",
     chal_f_prize_en: "الجايزة (English)",
     chal_f_bonus: "نقط لكل اللي يخلّص الهدف",
@@ -1504,25 +1502,25 @@ const TEXT = {
     rw_admin_gift_xp: "عدد النقط",
     rw_admin_gift_why: "السبب (بيظهر له)",
     rw_admin_gift_btn: "ابعت النقط",
-    rw_admin_gift_done: "النقط وصلت ✓",
+ rw_admin_gift_done: "النقط وصلت",
     rw_admin_invites: "الدعوات ({n})",
     rw_admin_invites_hint: "عملاء جم من لينك صاحبهم. أول ما الجديد يشترك فعلًا، كافئ الاتنين (٢٠٠ نقطة لكل واحد) — وتقدر تدّيهم أسبوع مجاني من «التحكم في الوصول».",
     rw_admin_reward_both: "كافئ الاتنين",
     rw_admin_rewarded: "اتكافئوا",
     rw_invite_reason: "دعوة صاحب",
-    notif_t_chal_win: "🏆 المركز {r} في «{t}»",
+ notif_t_chal_win: "المركز {r} في «{t}»",
     notif_b_chal_win: "مبروك! الجايزة: {p}",
-    notif_t_chal_done: "🎉 خلّصت «{t}»",
+ notif_t_chal_done: "خلّصت «{t}»",
     notif_b_chal_done: "كسبت +{x} نقطة — شوف متجر النقط",
-    notif_t_redeem_req: "طلب جايزة 🎁",
+ notif_t_redeem_req: "طلب جايزة",
     notif_b_redeem_req: "{name} عايز «{t}»",
-    notif_t_redeem_ok: "جايزتك اتوافق عليها 🎁",
+ notif_t_redeem_ok: "جايزتك اتوافق عليها",
     notif_b_redeem_ok: "«{t}» — فريق ADAM هيتواصل معاك",
     notif_t_redeem_no: "طلب الجايزة ماتمش",
     notif_b_redeem_no: "«{t}» — النقط رجعت لرصيدك",
-    notif_t_bonus_gift: "🎁 نقط هدية",
+ notif_t_bonus_gift: "نقط هدية",
     notif_b_bonus_gift: "+{n} نقطة من فريق ADAM",
-    notif_t_invite_reward: "🤝 مكافأة الدعوة",
+ notif_t_invite_reward: "مكافأة الدعوة",
     notif_b_invite_reward: "+{n} نقطة ليك ولصاحبك",
     soc_sheet_title: "صحابي",
     soc_story_title: "ستوري جديدة",
@@ -1540,7 +1538,7 @@ const TEXT = {
     soc_cancel: "إلغاء",
     soc_incoming: "طلبات صداقة جديدة",
     soc_my_friends: "صحابك ({n})",
-    soc_empty: "لسه ماعندكش صحاب هنا. ضيف صحابك اللي بيتمرنوا معاك وتشجعوا بعض كل يوم 💪",
+ soc_empty: "لسه ماعندكش صحاب هنا. ضيف صحابك اللي بيتمرنوا معاك وتشجعوا بعض كل يوم",
     soc_no_pub: "لسه مافتحش البرنامج من ساعة ما بقيتوا صحاب",
     soc_options: "اختيارات",
     soc_remove: "شيله من صحابي",
@@ -1557,47 +1555,47 @@ const TEXT = {
     soc_cheer_clap: "برافو",
     soc_cheer_star: "نجم",
     soc_cheer_heart: "فخور بيك",
-    soc_cheer_toast: "{e} {name} بيشجعك!",
+    soc_cheer_toast: "{name} بيشجعك: {e}",
     soc_cheered_today: "شجعوك النهارده:",
     soc_waiting: "مستنيين",
     soc_st_pending: "مستني يقبل",
     soc_st_review: "مستني موافقة ADAM",
     soc_rank_title: "ترتيب صحابك الأسبوع ده",
-    soc_rank_hint: "بالنجوم ⭐ من السبت — ولو اتعادلوا بالسلسلة 🔥",
+ soc_rank_hint: "بالنجوم من السبت — ولو اتعادلوا بالسلسلة",
     soc_rank_empty: "ضيف صحابك عشان تتنافسوا مع بعض",
     soc_my_code: "كودك — ابعته لصاحبك",
     soc_send_wa: "ابعته على واتساب",
     soc_copy: "انسخ اللينك",
-    soc_copied: "اتنسخ ✓",
-    soc_invite_text: "تعالى نتمرن مع بعض على ADAM 💪 كودي: {code}",
+ soc_copied: "اتنسخ",
+ soc_invite_text: "تعالى نتمرن مع بعض على ADAM كودي: {code}",
     soc_add_title: "عندك كود صاحبك؟",
     soc_code_ph: "اكتب الكود هنا",
     soc_add_btn: "ابعت طلب صداقة",
     soc_code_bad: "الكود ده مش صح — اتأكد منه",
-    soc_code_self: "ده كودك إنت 😄",
+ soc_code_self: "ده كودك إنت",
     soc_too_many: "وصلت لأقصى عدد صحاب",
     soc_already: "إنتوا صحاب أو في طلب بينكم بالفعل",
     soc_sending: "بنبعت...",
-    soc_sent: "الطلب اتبعت لـ{name} ✓",
+ soc_sent: "الطلب اتبعت لـ{name}",
     soc_wait_review: "تمام — مستني موافقة إدارة ADAM وبعدها تبقوا صحاب",
-    soc_safe_note: "🔒 صحابك بس بيشوفوا نجومك والستوري بتاعتك. مفيش شات بين العملاء — تشجيع بس. وأي حاجة مضايقاك دوس «بلّغ».",
-    soc_safe_note_review: "🔒 كل طلب صداقة بيعدّي على إدارة ADAM الأول. صحابك بس بيشوفوا نجومك والستوري بتاعتك، ومفيش شات بين العملاء — تشجيع بس.",
+ soc_safe_note: "صحابك بس بيشوفوا نجومك والستوري بتاعتك. مفيش شات بين العملاء — تشجيع بس. وأي حاجة مضايقاك دوس «بلّغ».",
+ soc_safe_note_review: "كل طلب صداقة بيعدّي على إدارة ADAM الأول. صحابك بس بيشوفوا نجومك والستوري بتاعتك، ومفيش شات بين العملاء — تشجيع بس.",
     soc_story_no_friends: "الستوري بتظهر لصحابك بس — ضيف صحابك الأول",
     soc_pick_photo: "اختار صورة (جيم، تراك، أكلك…)",
     soc_pick_tag: "ضيف إنجاز على الصورة",
-    soc_tag_streak: "🔥 {n} يوم ورا بعض",
-    soc_tag_star: "⭐ نجمة النهارده",
-    soc_tag_trained: "🏋️ خلّصت تمرين النهارده",
-    soc_tag_water: "💧 قفلت الماية",
-    soc_tag_gym: "📍 في الجيم",
-    soc_tag_track: "🏃 في التراك",
-    soc_tag_home: "🏠 تمرين في البيت",
-    soc_tag_meal: "🥗 أكل صحي",
+ soc_tag_streak: "{n} يوم ورا بعض",
+ soc_tag_star: "نجمة النهارده",
+ soc_tag_trained: "خلّصت تمرين النهارده",
+ soc_tag_water: "قفلت الماية",
+ soc_tag_gym: "في الجيم",
+ soc_tag_track: "في التراك",
+ soc_tag_home: "تمرين في البيت",
+ soc_tag_meal: "أكل صحي",
     soc_caption_ph: "اكتب كلمتين (اختياري)",
     soc_audience: "مين يشوفها؟",
     soc_post: "انشر الستوري (٢٤ ساعة)",
     soc_posting: "بننشر...",
-    soc_posted: "الستوري اتنشرت ✓",
+ soc_posted: "الستوري اتنشرت",
     soc_pick_someone: "اختار صاحب واحد على الأقل",
     soc_story_for: "ظاهرة لـ{n} من صحابك",
     soc_delete_story: "امسح",
@@ -1615,20 +1613,20 @@ const TEXT = {
     soc_admin_cut: "افصلهم وامسح",
     soc_admin_dismiss: "مفيش مشكلة",
     soc_admin_stories: "ستوري شغالة ({n}) · صداقات ({f})",
-    notif_t_friend_req: "طلب صداقة 👋",
+ notif_t_friend_req: "طلب صداقة",
     notif_b_friend_req: "{name} عايز يبقى صاحبك على ADAM",
-    notif_t_friend_ok: "بقيتوا صحاب 🤝",
+ notif_t_friend_ok: "بقيتوا صحاب",
     notif_b_friend_ok: "{name} قبل طلبك — شجعوا بعض",
-    notif_t_friend_ok_admin: "بقيتوا صحاب 🤝",
+ notif_t_friend_ok_admin: "بقيتوا صحاب",
     notif_b_friend_ok_admin: "طلب الصداقة اتوافق عليه — افتح صحابك",
     notif_t_friend_review: "طلب صداقة مستني موافقتك",
     notif_b_friend_review: "{a} و{b}",
     notif_t_soc_report: "بلاغ جديد",
     notif_b_soc_report: "عميل بلّغ عن حاجة — افتح «الصحاب» في لوحة التحكم",
-    notif_t_cheer: "{e} {name} بيشجعك",
+    notif_t_cheer: "{name} بيشجعك: {e}",
     notif_b_cheer: "افتح ADAM وقفّل حلقاتك النهارده",
-    notif_t_story_react: "{e} {name} عجبته الستوري بتاعتك",
-    notif_b_story_react: "كمّل كده 💪",
+    notif_t_story_react: "{name} عجبته الستوري بتاعتك",
+ notif_b_story_react: "كمّل كده",
     google_btn: "كمّل بحساب جوجل",
     google_hint: "أسرع طريقة — من غير باسورد ومن غير رسالة تأكيد",
     or_email: "أو بالإيميل والباسورد",
@@ -1643,17 +1641,17 @@ const TEXT = {
     eng_rn_f: "الأكل",
     eng_rn_w: "الماية",
     eng_and: " و",
-    eng_rest: "راحة ✓",
+ eng_rest: "راحة",
     eng_days_unit: "يوم",
     eng_stars_week: "{n}/7 الأسبوع ده",
     eng_xp: "{n} نقطة",
     eng_next: "فاضل {n} نقطة لـ{lvl}",
-    eng_max_level: "وصلت لأعلى مستوى 👑",
-    eng_nudge_star: "قفلت كل الحلقات — نجمة النهارده بتاعتك ⭐",
-    eng_nudge_counted: "يومك اتحسب في السلسلة 🔥 — فاضلك {rings} وتاخد النجمة",
-    eng_nudge_need: "قفّل {rings} ويومك يتحسب في السلسلة 🔥",
-    eng_shield_ready: "🛡️ الدرع جاهز — لو فوّت يوم واحد السلسلة مش هتضيع",
-    eng_shield_used: "🛡️ الدرع حماك يوم {d} — هيرجع بعد {n} {w}",
+ eng_max_level: "وصلت لأعلى مستوى",
+ eng_nudge_star: "قفلت كل الحلقات — نجمة النهارده بتاعتك",
+ eng_nudge_counted: "يومك اتحسب في السلسلة — فاضلك {rings} وتاخد النجمة",
+ eng_nudge_need: "قفّل {rings} ويومك يتحسب في السلسلة",
+ eng_shield_ready: "الدرع جاهز — لو فوّت يوم واحد السلسلة مش هتضيع",
+ eng_shield_used: "الدرع حماك يوم {d} — هيرجع بعد {n} {w}",
     eng_best: "أطول سلسلة: {n} {w}",
     eng_sheet_title: "إنجازاتي",
     eng_streak_lbl: "السلسلة والنجوم",
@@ -1665,27 +1663,27 @@ const TEXT = {
     eng_badges: "الشارات",
     eng_badges_count: "{a} من {b}",
     eng_how_title: "إزاي بتكسب نقط؟",
-    eng_how_body: "حلقة التمرين = ١٠ نقط · حلقة الأكل = ٥ · حلقة الماية = ٥\nقفّلت كل حلقات اليوم = نجمة ⭐ و١٠ نقط زيادة\nالسلسلة 🔥 بتزيد كل يوم تقفل فيه حلقتين على الأقل — ويوم الراحة في برنامجك حلقة التمرين بتتقفل لوحدها\nالدرع 🛡️: يوم واحد تفوّته كل أسبوع مابيقطعش السلسلة\nكل ٧ أيام في السلسلة = صندوق مفاجآت 🎁 فيه من ٢٠ لـ٦٠ نقطة\nرجعت بعد غياب وخدت نجمة؟ نقط اليوم ده ×٢\nالنقط بتطلّعك مستويات: برونزي ← فضي ← ذهبي ← بلاتيني ← ماسي ← أسطورة ADAM",
+ eng_how_body: "حلقة التمرين = ١٠ نقط · حلقة الأكل = ٥ · حلقة الماية = ٥\nقفّلت كل حلقات اليوم = نجمة و١٠ نقط زيادة\nالسلسلة بتزيد كل يوم تقفل فيه حلقتين على الأقل — ويوم الراحة في برنامجك حلقة التمرين بتتقفل لوحدها\nالدرع : يوم واحد تفوّته كل أسبوع مابيقطعش السلسلة\nكل ٧ أيام في السلسلة = صندوق مفاجآت فيه من ٢٠ لـ٦٠ نقطة\nرجعت بعد غياب وخدت نجمة؟ نقط اليوم ده ×٢\nالنقط بتطلّعك مستويات: برونزي ← فضي ← ذهبي ← بلاتيني ← ماسي ← أسطورة ADAM",
     eng_share: "شارك",
     eng_share_card: "شارك إنجازك ستوري",
     eng_share_hint: "بتطلع صورة جاهزة بلوجو ADAM — ارفعها ستوري على إنستجرام أو واتساب",
-    eng_share_saved: "الصورة اتنزلت — ارفعها ستوري 📸",
-    eng_ok: "تمام 💪",
+ eng_share_saved: "الصورة اتنزلت — ارفعها ستوري",
+ eng_ok: "تمام",
     eng_cel_star_t: "نجمة جديدة!",
-    eng_cel_star_b: "قفلت كل حلقات النهارده. كده معاك {n} نجمة ⭐",
-    eng_cel_comeback: "ورجعت بعد غياب — نقط النهارده ×٢ 🦅",
+ eng_cel_star_b: "قفلت كل حلقات النهارده. كده معاك {n} نجمة",
+ eng_cel_comeback: "ورجعت بعد غياب — نقط النهارده ×٢",
     eng_cel_level_t: "مستوى جديد: {lvl}",
     eng_cel_level_b: "وصلت {n} نقطة. كمّل كده!",
     eng_cel_badge_t: "شارة جديدة: {b}",
-    eng_cel_chest_t: "صندوق المفاجآت 🎁",
+ eng_cel_chest_t: "صندوق المفاجآت",
     eng_cel_chest_b: "{d} {w} ورا بعض — كسبت {n} نقطة زيادة",
     eng_cel_welcome_t: "جديد: حلقات ADAM",
     eng_cel_welcome_b: "كل يوم قفّل حلقاتك (تمرين · أكل · ماية) واكسب نجوم ونقط وشارات. حسبنالك اللي عملته قبل كده — معاك {xp} نقطة من دلوقتي!",
-    eng_cel_welcome_b0: "كل يوم قفّل حلقاتك (تمرين · أكل · ماية) واكسب نجوم ونقط وشارات. ابدأ النهارده واعمل أول نجمة ⭐",
-    eng_toast_ring: "قفلت حلقة {r} ✓",
-    eng_toast_counted: "يومك اتحسب — السلسلة بقت {n} 🔥",
+ eng_cel_welcome_b0: "كل يوم قفّل حلقاتك (تمرين · أكل · ماية) واكسب نجوم ونقط وشارات. ابدأ النهارده واعمل أول نجمة",
+ eng_toast_ring: "قفلت حلقة {r}",
+ eng_toast_counted: "يومك اتحسب — السلسلة بقت {n}",
     eng_recap_title: "ملخّص أسبوعك اللي فات",
-    eng_recap_line: "⭐ {s} نجوم · 🏋️ {t} أيام تمرين · +{x} نقطة",
+ eng_recap_line: "{s} نجوم · {t} أيام تمرين · +{x} نقطة",
     eng_recap_close: "قفل",
     eng_card_join: "اتمرّن معايا على ADAM",
     eng_card_rings: "قفّلت حلقات النهارده",
@@ -2721,10 +2719,10 @@ const TEXT = {
     verify_too_many: 'Too many messages in a row — wait a little and try again',
     verify_checking: 'Checking...',
     verify_wrong_btn: 'That email is wrong — sign up with another one',
-    vb_title: "📩 Confirm your email — {n} {w} left",
+ vb_title: "Confirm your email — {n} {w} left",
     vb_text: "We sent a message to {email}. Tap the link inside. Can't find it? Check Spam or Junk, and if it's there mark it “Not spam” so our next messages reach you.",
     vb_done: "I've confirmed",
-    vb_ok: "Done — your email is confirmed ✓",
+ vb_ok: "Done — your email is confirmed",
     // ---- notifications ----
     notif_title: 'Notifications',
     notif_empty: 'No notifications yet — when your team messages you or updates your program, you’ll find it here',
@@ -3301,7 +3299,7 @@ const TEXT = {
     wr_strava_connect: 'Connect Strava',
     wr_strava_sync: 'Sync now',
     wr_strava_disconnect: 'Disconnect Strava',
-    wr_strava_connected: 'Strava connected ✓',
+ wr_strava_connected: 'Strava connected',
     wr_strava_synced: '{n} new workouts from Strava',
     wr_strava_none: 'No new workouts on Strava',
     wr_strava_failed: 'Strava: ',
@@ -3310,7 +3308,7 @@ const TEXT = {
     wr_title: 'Watch workouts',
     wr_upload: 'Upload a workout file from your watch (GPX, TCX or FIT)',
     wr_help_title: 'How do I get the file?',
-    wr_help: 'Garmin Connect: open the activity ← ⚙️ ← Export Original (FIT) or Export to TCX.\nStrava: open the activity ← … ← Export GPX or Export Original.\nCOROS / Polar / Suunto: in the app or website ← Export ← FIT or GPX.\nApple Watch: an app like HealthFit or RunGap exports FIT or GPX.\nSamsung / Huawei: sync to Strava first, then download the file from Strava.',
+ wr_help: 'Garmin Connect: open the activity ← Settings ← Export Original (FIT) or Export to TCX.\nStrava: open the activity ← … ← Export GPX or Export Original.\nCOROS / Polar / Suunto: in the app or website ← Export ← FIT or GPX.\nApple Watch: an app like HealthFit or RunGap exports FIT or GPX.\nSamsung / Huawei: sync to Strava first, then download the file from Strava.',
     wr_saved: 'Workout saved: {sport} — {dur}',
     wr_dup: 'This workout is already saved',
     wr_bad: 'Could not read this file — upload GPX, TCX or FIT',
@@ -3334,10 +3332,8 @@ const TEXT = {
     story_teaser_kicker: "Why ADAM?",
     story_teaser_title: "Adam — the first human, the first chapter",
     story_teaser_text: "A journey with you from before you’re born to the very end — with a full team beside you at every stage.",
-    story_teaser_btn: "▶ Watch the story",
-    story_client_link: "▶ The ADAM story",
     story_cta: "Start your story",
-    story_cta_in: "Let’s keep your story going 💪",
+ story_cta_in: "Let’s keep your story going",
     story_intro_label: "The name",
     story_intro_title: "Why ADAM?",
     story_intro_text: "Adam was the first human — the first chapter. ADAM isn’t just a name: it’s a journey with you from before you’re born to the very end, with us beside you at every stage.",
@@ -3371,70 +3367,70 @@ const TEXT = {
     story_end_label: "ADAM",
     story_end_title: "With you for life",
     story_end_text: "From first breath to the last chapter… training, nutrition, treatment and emotional support in one place. Start your story today.",
-    tour_replay: "🧭 Quick tour of the app",
+ tour_replay: "Quick tour of the app",
     tour_start: "Let’s go",
     tour_next: "Next",
     tour_back: "Back",
-    tour_finish: "Got it 💪",
+ tour_finish: "Got it",
     tour_skip: "Skip",
-    tour_c_hi_e: "👋",
+ tour_c_hi_e: "",
     tour_c_hi_t: "Welcome to ADAM",
     tour_c_hi_b: "A 30-second tour so you know where everything is. Skip anytime.",
-    tour_c_rings_e: "🎯",
+ tour_c_rings_e: "",
     tour_c_rings_t: "Your daily rings",
     tour_c_rings_b: "Close 3 rings every day: training, food and water. Each day you do grows your streak, points and level.",
-    tour_c_train_e: "🏋️",
+ tour_c_train_e: "",
     tour_c_train_t: "Your training",
     tour_c_train_b: "Your program day by day. Open a workout, watch the video, tick what you finish.",
-    tour_c_food_e: "🥗",
+ tour_c_food_e: "",
     tour_c_food_t: "Your food",
     tour_c_food_b: "Your meal plan from your specialist — log your meals and glasses of water here.",
-    tour_c_friends_e: "🤝",
+ tour_c_friends_e: "",
     tour_c_friends_t: "Your friends",
     tour_c_friends_b: "Add friends with a code, cheer each other on, and share a story of your win.",
-    tour_c_chal_e: "🏆",
+ tour_c_chal_e: "",
     tour_c_chal_t: "Challenges & points",
     tour_c_chal_b: "Join the weekly challenges and collect points you can swap for rewards.",
-    tour_c_tiles_e: "🧩",
+ tour_c_tiles_e: "",
     tour_c_tiles_t: "Everything else",
     tour_c_tiles_b: "Your team, chat with your coach, progress and InBody, consultations, and injury reports.",
-    tour_c_bell_e: "🔔",
+ tour_c_bell_e: "",
     tour_c_bell_t: "Notifications",
     tour_c_bell_b: "Any change to your program or message from your team lands here.",
-    tour_c_done_e: "💪",
+ tour_c_done_e: "",
     tour_c_done_t: "You’re all set!",
     tour_c_done_b: "Start with today’s workout. Need the tour again? It’s at the bottom of Home.",
-    tour_p_hi_e: "👋",
+ tour_p_hi_e: "",
     tour_p_hi_t: "Welcome, coach",
     tour_p_hi_b: "A quick tour of your workspace — under a minute.",
-    tour_p_tiles_e: "🧭",
+ tour_p_tiles_e: "",
     tour_p_tiles_t: "Your dashboard",
     tour_p_tiles_b: "Everything starts here: clients, adherence, chats and bookings.",
-    tour_p_profile_e: "✨",
+ tour_p_profile_e: "",
     tour_p_profile_t: "Your profile",
     tour_p_profile_b: "Add your photo, certificates and workplace on the map — clients choose by what they see.",
-    tour_p_search_e: "🔎",
+ tour_p_search_e: "",
     tour_p_search_t: "Find a client",
     tour_p_search_b: "Type a name and open their program right away.",
-    tour_p_list_e: "👥",
+ tour_p_list_e: "",
     tour_p_list_t: "Your clients",
     tour_p_list_b: "Tap any client to open their program. A red badge means something is waiting for you.",
-    tour_p_bell_e: "🔔",
+ tour_p_bell_e: "",
     tour_p_bell_t: "Notifications",
     tour_p_bell_b: "New injuries, messages or InBody analyses — they all land here.",
-    tour_p_done_e: "💪",
+ tour_p_done_e: "",
     tour_p_done_t: "Let’s get to work",
     tour_p_done_b: "The tour lives under your dashboard if you need it again.",
-    tour_g_tabs_e: "🗂️",
+ tour_g_tabs_e: "",
     tour_g_tabs_t: "Program tabs",
     tour_g_tabs_b: "Each specialty has a tab: training, rehab, physio, nutrition... you see the ones for your specialty.",
-    tour_g_health_e: "⚠️",
+ tour_g_health_e: "",
     tour_g_health_t: "Health status",
     tour_g_health_b: "Read this first: conditions, precautions and doctor clearance before you write anything.",
-    tour_g_advisor_e: "🤖",
+ tour_g_advisor_e: "",
     tour_g_advisor_t: "The advisor",
     tour_g_advisor_b: "Ask it to suggest a program or review yours — the final call is always yours.",
-    tour_g_injuries_e: "🩹",
+ tour_g_injuries_e: "",
     tour_g_injuries_t: "Injuries",
     tour_g_injuries_b: "If your client reports an injury, it shows up here with a red badge.",
     tab_physio: "Physio",
@@ -3451,7 +3447,7 @@ const TEXT = {
     ph_session_of: "Session {n} of {total}",
     ph_sessions_done: "{n} sessions so far",
     ph_left_weeks: "{n} sessions left — about {w} weeks",
-    ph_plan_done: "Plan complete 👏",
+ ph_plan_done: "Plan complete",
     ph_assess_title: "Assessment",
     ph_assess_start: "+ Start assessment",
     ph_reassess: "+ Re-assess (new assessment)",
@@ -3516,42 +3512,42 @@ const TEXT = {
     ph_times_n: "{n}× a day",
     ph_home_count: "{n} home exercises",
     ph_save: "Save physiotherapy",
-    ph_saved: "Physiotherapy saved ✓",
+ ph_saved: "Physiotherapy saved",
     ph_open: "Open your plan",
     ph_client_title: "Physiotherapy",
     ph_client_empty_title: "No physiotherapy plan yet",
     ph_client_empty: "When your physiotherapist writes your plan, you’ll find it here.",
     ph_last_session: "Last session: {d}",
     ph_pain_trend: "Your pain after sessions (out of 10)",
-    ph_pain_better: "Your pain dropped from {a} to {b} — keep going 👏",
+ ph_pain_better: "Your pain dropped from {a} to {b} — keep going",
     ph_pain_same: "Your pain was {a} and is now {b} — tell your physio if something bothers you",
     pw_map: "Workplace on the map",
     pw_map_ph: "Paste a Google Maps link here",
-    pw_locate: "📍 Use my current location",
+ pw_locate: "Use my current location",
     pw_map_clear: "Remove location",
     pw_map_hint: "Paste a Google Maps link to your workplace, or tap “Use my location” while at the gym/clinic. Use your workplace, not your home — clients can see it.",
-    pw_map_ok: "Done ✓ Location set — clients will see “Open in maps” and the distance. Don’t forget to save.",
+ pw_map_ok: "Done Location set — clients will see “Open in maps” and the distance. Don’t forget to save.",
     pw_map_short: "Link saved, but short links don’t give a distance. So nearby clients find you, tap “Use my location” while at your workplace.",
     pw_map_bad: "That’s not a map link — paste a Google Maps link (or type the coordinates).",
     pw_locating: "Finding the location...",
     pw_locate_fail: "Couldn’t get the location — allow location access in your browser settings, or paste a Google Maps link.",
     pw_open_map: "Open in maps",
-    near_btn: "📍 Sort by nearest",
-    near_btn_off: "✕ Normal order",
+ near_btn: "Sort by nearest",
+ near_btn_off: "Normal order",
     near_on: "Sorted by nearest to you — your location isn’t saved.",
     near_none: "No specialist has added their location yet.",
     near_fail: "Couldn’t get your location — allow location access in your browser settings.",
     near_km: "{n} km",
     near_away: "{d} away",
-    ib_ai_btn: "📸 Snap your InBody sheet — the numbers fill in by themselves",
+ ib_ai_btn: "Snap your InBody sheet — the numbers fill in by themselves",
     ib_ai_hint: "After saving, the InBody team analyzes it and sends it to your nutrition specialist and coach",
     ib_ai_reading: "Reading the numbers from the photo…",
     ib_ai_not_sheet: "This doesn't look like an InBody sheet — photograph the whole sheet in good light",
-    ib_ai_done: "Read ✓ — check the numbers and tap save",
+ ib_ai_done: "Read — check the numbers and tap save",
     ib_ai_failed: "We couldn't read the photo — type the numbers or try a clearer photo.",
     ib_ai_analyzing: "The InBody team is analyzing this test…",
     ib_ai_retry: "Analyze again",
-    ib_ai_analyze_btn: "🔍 Analyze this test",
+ ib_ai_analyze_btn: "Analyze this test",
     ib_ai_failed_analyze: "The analysis didn't finish — try again in a bit",
     ib_ai_title: "Test analysis",
     ib_ai_changes: "What changed",
@@ -3577,7 +3573,7 @@ const TEXT = {
     fp_dislikes_short: "Doesn't eat",
     fp_tag_like: "loves it",
     fp_tag_dislike: "doesn't eat it",
-    notif_t_ib_analysis: "🔍 New InBody analysis",
+ notif_t_ib_analysis: "New InBody analysis",
     notif_b_ib_analysis: "{name}: {h}",
     chal_sheet_title: "Challenges",
     pts_sheet_title: "Points store",
@@ -3587,26 +3583,26 @@ const TEXT = {
     chal_live: "Live now",
     chal_upcoming: "Coming soon",
     chal_recent: "Finished",
-    chal_none: "No live challenges right now — you'll get a notification when a new one starts 🏆",
+ chal_none: "No live challenges right now — you'll get a notification when a new one starts",
     chal_ended: "Finished",
     chal_starts: "Starts on {d}",
     chal_left: "{n} {w} left",
     chal_target: "Goal: {n} {unit}",
     chal_target_sport: "Goal: {n} × {sport}",
     chal_progress: "You're at {v} of {n} {unit}",
-    chal_done_me: "Goal reached 🎉 ({v}) — keep going for the ranking",
+ chal_done_me: "Goal reached ({v}) — keep going for the ranking",
     chal_my_team: "Your team: {t}",
     chal_pick_team: "Pick your team",
     chal_join: "Join",
-    chal_joined: "You joined “{t}” — let's go 💪",
+ chal_joined: "You joined “{t}” — let's go",
     chal_board: "Ranking",
     chal_board_failed: "Couldn't load the ranking right now — try again",
     chal_board_empty: "Nobody joined yet — be the first!",
     chal_my_rank: "You're #{r} of {n}",
     chal_team_avg: "avg {v}",
     chal_note: "The ranking is counted from your rings in the app, and only your first name shows. The ADAM team confirms prizes after the challenge ends.",
-    chal_team_a: "🦅 Falcons",
-    chal_team_b: "🐯 Tigers",
+ chal_team_a: "Falcons",
+ chal_team_b: "Tigers",
     chal_unit_stars: "stars",
     chal_unit_train_days: "training days",
     chal_unit_active_days: "counted days",
@@ -3615,14 +3611,14 @@ const TEXT = {
     chal_unit_km: "km",
     chal_unit_xp: "pts",
     chal_unit_sport: "times",
-    chal_metric_stars: "Stars ⭐",
-    chal_metric_train_days: "Training days 🏋️",
-    chal_metric_active_days: "Counted days 🔥",
-    chal_metric_water_days: "Water days 💧",
-    chal_metric_food_days: "Food days 🥗",
-    chal_metric_km: "Kilometres 🏃",
-    chal_metric_xp: "Points ⚡",
-    chal_metric_sport: "Sessions of one sport ⚽",
+ chal_metric_stars: "Stars",
+ chal_metric_train_days: "Training days",
+ chal_metric_active_days: "Counted days",
+ chal_metric_water_days: "Water days",
+ chal_metric_food_days: "Food days",
+ chal_metric_km: "Kilometres",
+ chal_metric_xp: "Points",
+ chal_metric_sport: "Sessions of one sport",
     chal_tpl_stars_week: "Star week",
     chal_tpld_stars_week: "Collect 5 stars this week — a star means you closed all your rings in a day.",
     chal_tpl_perfect_week: "Perfect week",
@@ -3654,23 +3650,23 @@ const TEXT = {
     pts_balance: "Your points",
     pts_balance_note: "earned {all} · spent {spent}",
     pts_rewards: "Rewards",
-    pts_no_rewards: "Rewards are being prepared — your points are saved until they arrive 🎁",
+ pts_no_rewards: "Rewards are being prepared — your points are saved until they arrive",
     pts_cost: "{n} pts",
     pts_out: "out of stock",
     pts_get: "Get it",
     pts_need: "{n} to go",
     pts_confirm: "Get “{t}” for {n} points?",
-    pts_requested: "Request sent to the ADAM team ✓",
+ pts_requested: "Request sent to the ADAM team",
     pts_my_requests: "Your requests",
     pts_st_pending: "Waiting for approval",
-    pts_st_approved: "Approved ✓",
+ pts_st_approved: "Approved",
     pts_st_rejected: "Declined — points returned",
     pts_how: "Points come from your daily rings, stars, mystery chests, challenges, and inviting a friend who joins.",
     chal_admin_title: "Challenges",
     adm_tab_chal: "Challenges",
     chal_admin_hint: "Pick a ready challenge or an idea from the challenges employee, edit it if you like, and publish. Clients join with one tap and the ranking is counted automatically.",
     chal_admin_templates: "Ready challenges (tap to fill the form)",
-    chal_admin_ideas: "Challenges employee ideas 🤖",
+ chal_admin_ideas: "Challenges employee ideas",
     chal_admin_ideas_btn: "Get this week's ideas",
     chal_admin_ideas_more: "Get new ideas",
     chal_admin_ideas_wait: "Thinking...",
@@ -3680,7 +3676,7 @@ const TEXT = {
     chal_admin_finishing: "Counting the ranking and rewarding...",
     chal_admin_finished: "Done — {n} winners, and {f} who hit the goal got their points",
     chal_admin_del_q: "Delete this challenge?",
-    chal_admin_created: "Challenge published ✓",
+ chal_admin_created: "Challenge published",
     chal_admin_need_title: "Write the challenge name",
     chal_admin_need_sport: "Pick the sport",
     chal_st_live: "live",
@@ -3697,7 +3693,7 @@ const TEXT = {
     chal_f_start: "Starts on",
     chal_f_days: "Length in days",
     chal_f_sport: "Sport",
-    chal_f_teams: "Teams (optional) — separate with commas: 🦅 Falcons, 🐯 Tigers",
+ chal_f_teams: "Teams (optional) — separate with commas: Falcons, Tigers",
     chal_f_prize_ar: "Prize (Arabic) — e.g. a free week for 1st place",
     chal_f_prize_en: "Prize (English)",
     chal_f_bonus: "Points for everyone who hits the goal",
@@ -3721,25 +3717,25 @@ const TEXT = {
     rw_admin_gift_xp: "Points",
     rw_admin_gift_why: "Reason (shown to them)",
     rw_admin_gift_btn: "Send points",
-    rw_admin_gift_done: "Points sent ✓",
+ rw_admin_gift_done: "Points sent",
     rw_admin_invites: "Invites ({n})",
     rw_admin_invites_hint: "Clients who came from a friend's link. Once the new one actually subscribes, reward both (200 points each) — and you can give them a free week from “Access control”.",
     rw_admin_reward_both: "Reward both",
     rw_admin_rewarded: "rewarded",
     rw_invite_reason: "Invited a friend",
-    notif_t_chal_win: "🏆 Place {r} in “{t}”",
+ notif_t_chal_win: "Place {r} in “{t}”",
     notif_b_chal_win: "Congratulations! Prize: {p}",
-    notif_t_chal_done: "🎉 You finished “{t}”",
+ notif_t_chal_done: "You finished “{t}”",
     notif_b_chal_done: "You earned +{x} points — check the points store",
-    notif_t_redeem_req: "Reward request 🎁",
+ notif_t_redeem_req: "Reward request",
     notif_b_redeem_req: "{name} wants “{t}”",
-    notif_t_redeem_ok: "Your reward is approved 🎁",
+ notif_t_redeem_ok: "Your reward is approved",
     notif_b_redeem_ok: "“{t}” — the ADAM team will contact you",
     notif_t_redeem_no: "Reward request declined",
     notif_b_redeem_no: "“{t}” — the points are back in your balance",
-    notif_t_bonus_gift: "🎁 Gift points",
+ notif_t_bonus_gift: "Gift points",
     notif_b_bonus_gift: "+{n} points from the ADAM team",
-    notif_t_invite_reward: "🤝 Invite reward",
+ notif_t_invite_reward: "Invite reward",
     notif_b_invite_reward: "+{n} points for you and your friend",
     soc_sheet_title: "My friends",
     soc_story_title: "New story",
@@ -3757,7 +3753,7 @@ const TEXT = {
     soc_cancel: "Cancel",
     soc_incoming: "New friend requests",
     soc_my_friends: "Your friends ({n})",
-    soc_empty: "No friends here yet. Add the friends who train with you and cheer each other on every day 💪",
+ soc_empty: "No friends here yet. Add the friends who train with you and cheer each other on every day",
     soc_no_pub: "Hasn't opened the app since you became friends",
     soc_options: "Options",
     soc_remove: "Remove friend",
@@ -3774,47 +3770,47 @@ const TEXT = {
     soc_cheer_clap: "Bravo",
     soc_cheer_star: "Star",
     soc_cheer_heart: "Proud of you",
-    soc_cheer_toast: "{e} {name} is cheering you on!",
+    soc_cheer_toast: "{name} is cheering you on: {e}",
     soc_cheered_today: "Cheered you today:",
     soc_waiting: "Waiting",
     soc_st_pending: "Waiting for them",
     soc_st_review: "Waiting for ADAM approval",
     soc_rank_title: "Your friends this week",
-    soc_rank_hint: "By stars ⭐ since Saturday — ties go to the streak 🔥",
+ soc_rank_hint: "By stars since Saturday — ties go to the streak",
     soc_rank_empty: "Add friends to compete with each other",
     soc_my_code: "Your code — send it to a friend",
     soc_send_wa: "Send on WhatsApp",
     soc_copy: "Copy link",
-    soc_copied: "Copied ✓",
-    soc_invite_text: "Let's train together on ADAM 💪 My code: {code}",
+ soc_copied: "Copied",
+ soc_invite_text: "Let's train together on ADAM My code: {code}",
     soc_add_title: "Got a friend's code?",
     soc_code_ph: "Type the code here",
     soc_add_btn: "Send friend request",
     soc_code_bad: "That code isn't right — check it",
-    soc_code_self: "That's your own code 😄",
+ soc_code_self: "That's your own code",
     soc_too_many: "You've reached the friend limit",
     soc_already: "You're already friends or there's a request between you",
     soc_sending: "Sending...",
-    soc_sent: "Request sent to {name} ✓",
+ soc_sent: "Request sent to {name}",
     soc_wait_review: "Done — waiting for ADAM approval, then you're friends",
-    soc_safe_note: "🔒 Only your friends see your stars and stories. There's no chat between clients — cheers only. Anything bothering you? Tap “Report”.",
-    soc_safe_note_review: "🔒 Every friend request is checked by the ADAM team first. Only your friends see your stars and stories, and there's no chat between clients — cheers only.",
+ soc_safe_note: "Only your friends see your stars and stories. There's no chat between clients — cheers only. Anything bothering you? Tap “Report”.",
+ soc_safe_note_review: "Every friend request is checked by the ADAM team first. Only your friends see your stars and stories, and there's no chat between clients — cheers only.",
     soc_story_no_friends: "Stories are for your friends only — add friends first",
     soc_pick_photo: "Pick a photo (gym, track, your meal…)",
     soc_pick_tag: "Add an achievement to the photo",
-    soc_tag_streak: "🔥 {n} days in a row",
-    soc_tag_star: "⭐ Today's star",
-    soc_tag_trained: "🏋️ Workout done today",
-    soc_tag_water: "💧 Water ring closed",
-    soc_tag_gym: "📍 At the gym",
-    soc_tag_track: "🏃 On the track",
-    soc_tag_home: "🏠 Home workout",
-    soc_tag_meal: "🥗 Clean meal",
+ soc_tag_streak: "{n} days in a row",
+ soc_tag_star: "Today's star",
+ soc_tag_trained: "Workout done today",
+ soc_tag_water: "Water ring closed",
+ soc_tag_gym: "At the gym",
+ soc_tag_track: "On the track",
+ soc_tag_home: "Home workout",
+ soc_tag_meal: "Clean meal",
     soc_caption_ph: "Say something (optional)",
     soc_audience: "Who can see it?",
     soc_post: "Post story (24 hours)",
     soc_posting: "Posting...",
-    soc_posted: "Story posted ✓",
+ soc_posted: "Story posted",
     soc_pick_someone: "Pick at least one friend",
     soc_story_for: "Visible to {n} of your friends",
     soc_delete_story: "Delete",
@@ -3832,20 +3828,20 @@ const TEXT = {
     soc_admin_cut: "Unfriend and delete",
     soc_admin_dismiss: "No problem",
     soc_admin_stories: "Live stories ({n}) · friendships ({f})",
-    notif_t_friend_req: "Friend request 👋",
+ notif_t_friend_req: "Friend request",
     notif_b_friend_req: "{name} wants to be your friend on ADAM",
-    notif_t_friend_ok: "You're friends now 🤝",
+ notif_t_friend_ok: "You're friends now",
     notif_b_friend_ok: "{name} accepted — cheer each other on",
-    notif_t_friend_ok_admin: "You're friends now 🤝",
+ notif_t_friend_ok_admin: "You're friends now",
     notif_b_friend_ok_admin: "Your friend request was approved — open your friends",
     notif_t_friend_review: "A friend request needs your approval",
     notif_b_friend_review: "{a} and {b}",
     notif_t_soc_report: "New report",
     notif_b_soc_report: "A client reported something — open “Friends” in the admin panel",
-    notif_t_cheer: "{e} {name} is cheering you on",
+    notif_t_cheer: "{name} is cheering you on: {e}",
     notif_b_cheer: "Open ADAM and close your rings today",
-    notif_t_story_react: "{e} {name} liked your story",
-    notif_b_story_react: "Keep it up 💪",
+    notif_t_story_react: "{name} liked your story",
+ notif_b_story_react: "Keep it up",
     google_btn: "Continue with Google",
     google_hint: "Fastest way — no password and no confirmation email",
     or_email: "or with email and password",
@@ -3860,17 +3856,17 @@ const TEXT = {
     eng_rn_f: "food",
     eng_rn_w: "water",
     eng_and: " and ",
-    eng_rest: "Rest ✓",
+ eng_rest: "Rest",
     eng_days_unit: "days",
     eng_stars_week: "{n}/7 this week",
     eng_xp: "{n} pts",
     eng_next: "{n} pts to {lvl}",
-    eng_max_level: "Top level reached 👑",
-    eng_nudge_star: "All rings closed — today's star is yours ⭐",
-    eng_nudge_counted: "Today counts for your streak 🔥 — close {rings} for the star",
-    eng_nudge_need: "Close {rings} and today counts for your streak 🔥",
-    eng_shield_ready: "🛡️ Shield ready — miss one day and your streak survives",
-    eng_shield_used: "🛡️ Your shield saved {d} — back in {n} days",
+ eng_max_level: "Top level reached",
+ eng_nudge_star: "All rings closed — today's star is yours",
+ eng_nudge_counted: "Today counts for your streak — close {rings} for the star",
+ eng_nudge_need: "Close {rings} and today counts for your streak",
+ eng_shield_ready: "Shield ready — miss one day and your streak survives",
+ eng_shield_used: "Your shield saved {d} — back in {n} days",
     eng_best: "Best streak: {n} days",
     eng_sheet_title: "My achievements",
     eng_streak_lbl: "Streak and stars",
@@ -3882,27 +3878,27 @@ const TEXT = {
     eng_badges: "Badges",
     eng_badges_count: "{a} of {b}",
     eng_how_title: "How do I earn points?",
-    eng_how_body: "Training ring = 10 pts · Food ring = 5 · Water ring = 5\nClose all of today's rings = a star ⭐ and 10 bonus pts\nYour streak 🔥 grows every day you close at least two rings — on a planned rest day the training ring closes by itself\nShield 🛡️: one missed day a week doesn't break your streak\nEvery 7 streak days = a mystery chest 🎁 with 20–60 pts\nBack after a break and earned a star? That day's points ×2\nPoints level you up: Bronze → Silver → Gold → Platinum → Diamond → ADAM Legend",
+ eng_how_body: "Training ring = 10 pts · Food ring = 5 · Water ring = 5\nClose all of today's rings = a star and 10 bonus pts\nYour streak grows every day you close at least two rings — on a planned rest day the training ring closes by itself\nShield : one missed day a week doesn't break your streak\nEvery 7 streak days = a mystery chest with 20–60 pts\nBack after a break and earned a star? That day's points ×2\nPoints level you up: Bronze → Silver → Gold → Platinum → Diamond → ADAM Legend",
     eng_share: "Share",
     eng_share_card: "Share as a story",
     eng_share_hint: "Makes a ready image with the ADAM logo — post it to your Instagram or WhatsApp story",
-    eng_share_saved: "Image downloaded — post it as a story 📸",
-    eng_ok: "Nice 💪",
+ eng_share_saved: "Image downloaded — post it as a story",
+ eng_ok: "Nice",
     eng_cel_star_t: "New star!",
-    eng_cel_star_b: "You closed all of today's rings. That's {n} stars ⭐",
-    eng_cel_comeback: "And you're back after a break — today's points ×2 🦅",
+ eng_cel_star_b: "You closed all of today's rings. That's {n} stars",
+ eng_cel_comeback: "And you're back after a break — today's points ×2",
     eng_cel_level_t: "New level: {lvl}",
     eng_cel_level_b: "You reached {n} points. Keep going!",
     eng_cel_badge_t: "New badge: {b}",
-    eng_cel_chest_t: "Mystery chest 🎁",
+ eng_cel_chest_t: "Mystery chest",
     eng_cel_chest_b: "{d} days in a row — you won {n} bonus points",
     eng_cel_welcome_t: "New: ADAM Rings",
     eng_cel_welcome_b: "Close your rings every day (train · food · water) and earn stars, points and badges. We counted what you already did — you start with {xp} points!",
-    eng_cel_welcome_b0: "Close your rings every day (train · food · water) and earn stars, points and badges. Start today and earn your first star ⭐",
-    eng_toast_ring: "{r} ring closed ✓",
-    eng_toast_counted: "Day counted — streak is now {n} 🔥",
+ eng_cel_welcome_b0: "Close your rings every day (train · food · water) and earn stars, points and badges. Start today and earn your first star",
+ eng_toast_ring: "{r} ring closed",
+ eng_toast_counted: "Day counted — streak is now {n}",
     eng_recap_title: "Your last week",
-    eng_recap_line: "⭐ {s} stars · 🏋️ {t} training days · +{x} pts",
+ eng_recap_line: "{s} stars · {t} training days · +{x} pts",
     eng_recap_close: "Close",
     eng_card_join: "Train with me on ADAM",
     eng_card_rings: "Today's rings",
@@ -28498,36 +28494,36 @@ const ENG_RINGS = [
 ];
 const ENG_REST = 8;
 const ENG_LEVELS = [
-  { id: 'start',    xp: 0,    color: '#94a3b8', icon: '🌱' },
-  { id: 'bronze',   xp: 150,  color: '#d97706', icon: '🥉' },
-  { id: 'silver',   xp: 500,  color: '#cbd5e1', icon: '🥈' },
-  { id: 'gold',     xp: 1200, color: '#facc15', icon: '🥇' },
-  { id: 'platinum', xp: 2500, color: '#67e8f9', icon: '💠' },
-  { id: 'diamond',  xp: 5000, color: '#a78bfa', icon: '💎' },
-  { id: 'legend',   xp: 9000, color: '#22c55e', icon: '👑' }
+  { id: 'start',    xp: 0,    color: '#94a3b8', icon: 'sprout' },
+  { id: 'bronze',   xp: 150,  color: '#d97706', icon: 'medal' },
+  { id: 'silver',   xp: 500,  color: '#cbd5e1', icon: 'medal' },
+  { id: 'gold',     xp: 1200, color: '#facc15', icon: 'medal' },
+  { id: 'platinum', xp: 2500, color: '#67e8f9', icon: 'hexgem' },
+  { id: 'diamond',  xp: 5000, color: '#a78bfa', icon: 'gem' },
+  { id: 'legend',   xp: 9000, color: '#22c55e', icon: 'crown' }
 ];
 function engAtLeast(field, n) { return function (s) { return (s[field] || 0) >= n; }; }
 const ENG_BADGES = [
-  { id: 'first_star',   icon: '⭐', ok: engAtLeast('stars', 1) },
-  { id: 'streak_3',     icon: '🔥', ok: engAtLeast('best', 3) },
-  { id: 'streak_7',     icon: '🔥', ok: engAtLeast('best', 7) },
-  { id: 'streak_14',    icon: '🔥', ok: engAtLeast('best', 14) },
-  { id: 'streak_30',    icon: '☄️', ok: engAtLeast('best', 30) },
-  { id: 'streak_60',    icon: '🌋', ok: engAtLeast('best', 60) },
-  { id: 'streak_100',   icon: '💯', ok: engAtLeast('best', 100) },
-  { id: 'perfect_week', icon: '🏆', ok: engAtLeast('perfectWeeks', 1) },
-  { id: 'stars_25',     icon: '🌟', ok: engAtLeast('stars', 25) },
-  { id: 'stars_100',    icon: '✨', ok: engAtLeast('stars', 100) },
-  { id: 'train_10',     icon: '💪', ok: engAtLeast('trainDays', 10) },
-  { id: 'train_50',     icon: '🏋️', ok: engAtLeast('trainDays', 50) },
-  { id: 'train_100',    icon: '🦾', ok: engAtLeast('trainDays', 100) },
-  { id: 'food_30',      icon: '🥗', ok: engAtLeast('foodDays', 30) },
-  { id: 'water_30',     icon: '💧', ok: engAtLeast('waterDays', 30) },
-  { id: 'comeback',     icon: '🦅', ok: engAtLeast('comebacks', 1) },
-  { id: 'km_10',        icon: '👟', ok: engAtLeast('km', 10) },
-  { id: 'km_50',        icon: '🏃', ok: engAtLeast('km', 50) },
-  { id: 'km_100',       icon: '🛣️', ok: engAtLeast('km', 100) },
-  { id: 'km_250',       icon: '🚀', ok: engAtLeast('km', 250) }
+  { id: 'first_star',   icon: 'star', ok: engAtLeast('stars', 1) },
+  { id: 'streak_3',     icon: 'flame', ok: engAtLeast('best', 3) },
+  { id: 'streak_7',     icon: 'flame', ok: engAtLeast('best', 7) },
+  { id: 'streak_14',    icon: 'flame', ok: engAtLeast('best', 14) },
+  { id: 'streak_30',    icon: 'comet', ok: engAtLeast('best', 30) },
+  { id: 'streak_60',    icon: 'flame', ok: engAtLeast('best', 60) },
+  { id: 'streak_100',   icon: 'hundred', ok: engAtLeast('best', 100) },
+  { id: 'perfect_week', icon: 'trophy', ok: engAtLeast('perfectWeeks', 1) },
+  { id: 'stars_25',     icon: 'star', ok: engAtLeast('stars', 25) },
+  { id: 'stars_100',    icon: 'sparkle', ok: engAtLeast('stars', 100) },
+  { id: 'train_10',     icon: 'arm', ok: engAtLeast('trainDays', 10) },
+  { id: 'train_50',     icon: 'dumbbell', ok: engAtLeast('trainDays', 50) },
+  { id: 'train_100',    icon: 'arm', ok: engAtLeast('trainDays', 100) },
+  { id: 'food_30',      icon: 'bowl', ok: engAtLeast('foodDays', 30) },
+  { id: 'water_30',     icon: 'drop', ok: engAtLeast('waterDays', 30) },
+  { id: 'comeback',     icon: 'rebound', ok: engAtLeast('comebacks', 1) },
+  { id: 'km_10',        icon: 'steps', ok: engAtLeast('km', 10) },
+  { id: 'km_50',        icon: 'run', ok: engAtLeast('km', 50) },
+  { id: 'km_100',       icon: 'route', ok: engAtLeast('km', 100) },
+  { id: 'km_250',       icon: 'rocket', ok: engAtLeast('km', 250) }
 ];
 const ENG_FIRST_DAYS = 60;      /* أول مرة: بنحسب له اللي عمله قبل كده */
 const ENG_MIN_RECOMPUTE = 7;
@@ -28852,11 +28848,11 @@ function engRefresh() {
     }
     if (s.todayStar && seen.star !== todayStamp) {
       seen.star = todayStamp;
-      engCelebrate({ kind: 'star', emoji: '⭐', title: t('eng_cel_star_t'), body: fill('eng_cel_star_b', { n: s.stars }) + (s.comebackToday ? ' ' + t('eng_cel_comeback') : ''), share: 'today' });
+      engCelebrate({ kind: 'star', emoji: 'star', title: t('eng_cel_star_t'), body: fill('eng_cel_star_b', { n: s.stars }) + (s.comebackToday ? ' ' + t('eng_cel_comeback') : ''), share: 'today' });
     }
     if (s.chestToday && seen.chest !== todayStamp) {
       seen.chest = todayStamp;
-      engCelebrate({ kind: 'chest', emoji: '🎁', title: t('eng_cel_chest_t'), body: fill('eng_cel_chest_b', { d: s.chestToday.n, w: engDaysWord(s.chestToday.n), n: s.chestToday.xp }), share: 'streak' });
+      engCelebrate({ kind: 'chest', emoji: 'gift', title: t('eng_cel_chest_t'), body: fill('eng_cel_chest_b', { d: s.chestToday.n, w: engDaysWord(s.chestToday.n), n: s.chestToday.xp }), share: 'streak' });
     }
     if (s.level > (seen.level || 0)) {
       const lv = ENG_LEVELS[s.level];
@@ -28955,7 +28951,8 @@ function engLevelBlock(s, big) {
   const chip = document.createElement('span');
   chip.className = 'eng-lv-chip';
   chip.style.setProperty('--lv', lv.color);
-  chip.textContent = lv.icon + ' ' + t('eng_lv_' + lv.id);
+  chip.innerHTML = glyph(lv.icon, '', lv.color);
+  chip.appendChild(document.createTextNode(' ' + t('eng_lv_' + lv.id)));
   const pts = document.createElement('span');
   pts.className = 'eng-xp';
   pts.textContent = fill('eng_xp', { n: s.xp });
@@ -28991,7 +28988,8 @@ function renderEngCard() {
     const hi = document.createElement('div');
     hi.className = 'eng-welcome';
     const title = document.createElement('strong');
-    title.textContent = '🎯 ' + t('eng_cel_welcome_t');
+    title.innerHTML = glyph('target') + ' ';
+    title.appendChild(document.createTextNode(t('eng_cel_welcome_t')));
     const text = document.createElement('p');
     text.textContent = engWelcome.xp ? fill('eng_cel_welcome_b', { xp: engWelcome.xp }) : t('eng_cel_welcome_b0');
     const gotIt = document.createElement('button');
@@ -29009,12 +29007,12 @@ function renderEngCard() {
   main.setAttribute('aria-label', t('eng_sheet_title'));
   const rings = document.createElement('div');
   rings.className = 'eng-rings' + (s.todayStar ? ' star' : '');
-  rings.innerHTML = engRingsSvg(s.today.frac, s.today.a, 108) + (s.todayStar ? '<span class="eng-star">⭐</span>' : '');
+  rings.innerHTML = engRingsSvg(s.today.frac, s.today.a, 108) + (s.todayStar ? '<span class="eng-star">' + glyph('star') + '</span>' : '');
   const side = document.createElement('div');
   side.className = 'eng-side';
   const streak = document.createElement('div');
   streak.className = 'eng-streak' + (s.streak ? '' : ' zero');
-  streak.innerHTML = '<span class="eng-fire">🔥</span>';
+  streak.innerHTML = '<span class="eng-fire">' + glyph('flame') + '</span>';
   const num = document.createElement('strong');
   num.textContent = s.streak;
   const unit = document.createElement('span');
@@ -29024,12 +29022,13 @@ function renderEngCard() {
     const sh = document.createElement('span');
     sh.className = 'eng-shield';
     sh.title = t('eng_shield_ready');
-    sh.textContent = '🛡️';
+    sh.innerHTML = glyph('shield');
     streak.appendChild(sh);
   }
   const week = document.createElement('div');
   week.className = 'eng-week';
-  week.textContent = '⭐ ' + fill('eng_stars_week', { n: s.weekStars });
+  week.innerHTML = glyph('star') + ' ';
+  week.appendChild(document.createTextNode(fill('eng_stars_week', { n: s.weekStars })));
   side.append(streak, week, engLevelBlock(s, false));
   main.append(rings, side);
   main.addEventListener('click', openEngSheet);
@@ -29044,8 +29043,8 @@ function renderEngCard() {
     const label = document.createElement('span');
     label.textContent = t('eng_ring_' + item.key) + ' ';
     const val = document.createElement('bdi');
-    val.textContent = item.done && item.key !== 't' ? '✓' : item.text;
-    if (item.done && item.key === 't' && !(s.today.m & ENG_REST)) val.textContent = '✓';
+    const doneMark = item.done && (item.key !== 't' || !(s.today.m & ENG_REST));
+    if (doneMark) val.innerHTML = glyph('check'); else val.textContent = item.text;
     el.append(dot, label, val);
     legend.appendChild(el);
   });
@@ -29074,7 +29073,8 @@ function renderEngRecap() {
   box.innerHTML = '';
   const title = document.createElement('div');
   title.className = 'eng-recap-title';
-  title.textContent = '📅 ' + t('eng_recap_title');
+  title.innerHTML = glyph('calendar') + ' ';
+  title.appendChild(document.createTextNode(t('eng_recap_title')));
   const line = document.createElement('div');
   line.className = 'eng-recap-line';
   line.textContent = fill('eng_recap_line', { s: s.recap.stars, t: s.recap.train, x: s.recap.xp });
@@ -29142,7 +29142,7 @@ function renderEngSheet() {
   const emblem = document.createElement('div');
   emblem.className = 'eng-emblem';
   emblem.style.setProperty('--lv', ENG_LEVELS[s.level].color);
-  emblem.textContent = ENG_LEVELS[s.level].icon;
+  emblem.innerHTML = glyph(ENG_LEVELS[s.level].icon, '', ENG_LEVELS[s.level].color);
   lvSec.append(emblem, engLevelBlock(s, true));
   body.appendChild(lvSec);
 
@@ -29151,15 +29151,16 @@ function renderEngSheet() {
   const stRow = document.createElement('div');
   stRow.className = 'eng-stat-row';
   [
-    ['🔥', s.streak, t('eng_now')],
-    ['🏅', s.best, t('eng_best_lbl')],
-    ['⭐', s.stars, t('eng_stars_lbl')],
-    ['🏋️', s.trainDays, t('eng_train_lbl')]
+    ['flame', s.streak, t('eng_now')],
+    ['medal', s.best, t('eng_best_lbl')],
+    ['star', s.stars, t('eng_stars_lbl')],
+    ['dumbbell', s.trainDays, t('eng_train_lbl')]
   ].forEach(function (row) {
     const cell = document.createElement('div');
     cell.className = 'eng-stat';
     const big = document.createElement('strong');
-    big.textContent = row[0] + ' ' + row[1];
+    big.innerHTML = glyph(row[0]) + ' ';
+    big.appendChild(document.createTextNode(row[1]));
     const lbl = document.createElement('span');
     lbl.textContent = row[2];
     cell.append(big, lbl);
@@ -29190,7 +29191,7 @@ function renderEngSheet() {
       const m = d[0], a = d[1] & 7;
       const rest = !!(m & ENG_REST);
       const real = (m & 7) & ~(rest ? 1 : 0);
-      if (engBits(a) && real && (m & a) === a) { dot.classList.add('star'); dot.textContent = '⭐'; }
+      if (engBits(a) && real && (m & a) === a) { dot.classList.add('star'); dot.innerHTML = glyph('star'); }
       else {
         const pct = engBits(a) ? Math.round((engBits(m & 7) / engBits(a)) * 100) : 0;
         dot.style.setProperty('--p', pct + '%');
@@ -29218,7 +29219,7 @@ function renderEngSheet() {
     cell.className = 'eng-badge' + (got ? ' got' : '');
     const ic = document.createElement('span');
     ic.className = 'eng-badge-ic';
-    ic.textContent = got ? b.icon : '🔒';
+    ic.innerHTML = glyph(got ? b.icon : 'lock');
     const name = document.createElement('span');
     name.className = 'eng-badge-name';
     name.textContent = t('eng_b_' + b.id);
@@ -29236,7 +29237,8 @@ function renderEngSheet() {
   const shareBtn = document.createElement('button');
   shareBtn.type = 'button';
   shareBtn.className = 'eng-share-main';
-  shareBtn.textContent = '📸 ' + t('eng_share_card');
+  shareBtn.innerHTML = glyph('camera') + ' ';
+  shareBtn.appendChild(document.createTextNode(t('eng_share_card')));
   shareBtn.addEventListener('click', function () { engShare('today'); });
   const hint = document.createElement('p');
   hint.className = 'eng-share-hint';
@@ -29302,7 +29304,7 @@ function engNextCelebration() {
   if (!box || !item) { engShowing = false; return; }
   engShowing = true;
   box.dataset.kind = item.kind;
-  document.getElementById('eng-cel-emoji').textContent = item.emoji;
+  document.getElementById('eng-cel-emoji').innerHTML = glyph(item.emoji);
   document.getElementById('eng-cel-title').textContent = item.title;
   document.getElementById('eng-cel-body').textContent = item.body;
   const share = document.getElementById('eng-cel-share');
@@ -29375,13 +29377,13 @@ function engCardContent(kind) {
   const base = { name: first, lv: lv, rings: false };
   if (kind.indexOf('badge:') === 0) {
     const b = ENG_BADGES.filter(function (x) { return x.id === kind.slice(6); })[0];
-    return Object.assign(base, { emoji: b ? b.icon : '🏅', title: b ? t('eng_b_' + b.id) : '', sub: b ? t('eng_bd_' + b.id) : '' });
+    return Object.assign(base, { emoji: b ? b.icon : 'medal', title: b ? t('eng_b_' + b.id) : '', sub: b ? t('eng_bd_' + b.id) : '' });
   }
   if (kind === 'level') return Object.assign(base, { emoji: lv.icon, title: fill('eng_card_level', { lvl: t('eng_lv_' + lv.id) }), sub: fill('eng_xp', { n: s.xp }) });
-  if (kind === 'streak') return Object.assign(base, { emoji: '🔥', title: fill('eng_card_streak', { n: s.streak, w: engDaysWord(s.streak) }), sub: fill('eng_best', { n: s.best, w: engDaysWord(s.best) }) });
-  if (kind === 'week') return Object.assign(base, { emoji: '📅', title: t('eng_card_week'), sub: fill('eng_recap_line', { s: s.recap.stars, t: s.recap.train, x: s.recap.xp }) });
+  if (kind === 'streak') return Object.assign(base, { emoji: 'flame', title: fill('eng_card_streak', { n: s.streak, w: engDaysWord(s.streak) }), sub: fill('eng_best', { n: s.best, w: engDaysWord(s.best) }) });
+  if (kind === 'week') return Object.assign(base, { emoji: 'calendar', title: t('eng_card_week'), sub: fill('eng_recap_line', { s: s.recap.stars, t: s.recap.train, x: s.recap.xp }) });
   return Object.assign(base, {
-    emoji: s.todayStar ? '⭐' : '🔥',
+    emoji: s.todayStar ? 'star' : 'flame',
     title: s.streak ? fill('eng_card_streak', { n: s.streak, w: engDaysWord(s.streak) }) : t('eng_card_rings'),
     sub: fill('eng_card_level', { lvl: t('eng_lv_' + lv.id) }) + ' · ' + fill('eng_xp', { n: s.xp }),
     /* الحلقات في الصورة بس لو فيها حاجة النهارده — حلقات فاضية شكلها وحش */
@@ -29435,16 +29437,16 @@ async function engDrawCard(kind) {
         ctx.beginPath(); ctx.arc(540, 820, radii[i], -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * f); ctx.stroke();
       }
     });
-    ctx.font = '120px sans-serif';
-    ctx.fillText(c.emoji, 540, 862);
+    const gi = await glyphImage(c.emoji, 150);
+    if (gi) ctx.drawImage(gi, 465, 745, 150, 150);
     y = 1180;
   } else {
     ctx.fillStyle = 'rgba(255,255,255,.06)';
     ctx.beginPath(); ctx.arc(540, 800, 250, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = c.lv.color; ctx.lineWidth = 10;
     ctx.beginPath(); ctx.arc(540, 800, 250, 0, Math.PI * 2); ctx.stroke();
-    ctx.font = '260px sans-serif';
-    ctx.fillText(c.emoji, 540, 890);
+    const gi2 = await glyphImage(c.emoji, 300, c.emoji === c.lv.icon ? c.lv.color : undefined);
+    if (gi2) ctx.drawImage(gi2, 390, 650, 300, 300);
     y = 1180;
   }
 
@@ -29458,7 +29460,7 @@ async function engDrawCard(kind) {
   if (c.name) {
     ctx.fillStyle = c.lv.color;
     ctx.font = '700 56px Cairo, sans-serif';
-    ctx.fillText(c.lv.icon + ' ' + c.name, 540, 1500);
+    ctx.fillText(c.name, 540, 1500);
   }
 
   /* الفوتر */
@@ -29496,7 +29498,7 @@ async function engShare(kind) {
   const blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/png'); });
   if (!blob) return;
   const file = new File([blob], 'adam-' + todayStamp + '.png', { type: 'image/png' });
-  const text = t('eng_card_join') + ' 💪 https://dradamcoach.github.io/adam/';
+  const text = t('eng_card_join') + ' — https://dradamcoach.github.io/adam/';
   try {
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], text: text });
@@ -29538,11 +29540,11 @@ async function engShare(kind) {
    ============================================================ */
 
 const SOC_CHEERS = [
-  { type: 'strong', emoji: '💪' },
-  { type: 'fire',   emoji: '🔥' },
-  { type: 'clap',   emoji: '👏' },
-  { type: 'star',   emoji: '⭐' },
-  { type: 'heart',  emoji: '❤️' }
+  { type: 'strong', emoji: 'arm' },
+  { type: 'fire',   emoji: 'flame' },
+  { type: 'clap',   emoji: 'clap' },
+  { type: 'star',   emoji: 'star' },
+  { type: 'heart',  emoji: 'heart' }
 ];
 const SOC_MAX_FRIENDS = 40;
 const SOC_STORY_HOURS = 24;
@@ -29734,7 +29736,7 @@ async function socLoadCheers() {
   if (fresh.length) {
     const c = fresh[0];
     const cheer = SOC_CHEERS.filter(function (x) { return x.type === c.type; })[0];
-    engToast(fill('soc_cheer_toast', { name: c.fromName || '', e: cheer ? cheer.emoji : '💪' }) + (fresh.length > 1 ? ' +' + (fresh.length - 1) : ''));
+    engToast(fill('soc_cheer_toast', { name: c.fromName || '', e: cheer ? t('soc_cheer_' + cheer.type) : '' }) + (fresh.length > 1 ? ' +' + (fresh.length - 1) : ''));
     try { localStorage.setItem('adam-soc-cheer-seen:' + me, String(socCheersIn[0].createdAt)); } catch (e) { /* عادي */ }
   }
 }
@@ -29884,7 +29886,7 @@ async function socCheer(to, type, story, btn) {
   try {
     await setDoc(doc(db, 'cheers', id), { from: me, to: to, pair: socPair(me, to), type: type, story: story || '', day: day, fromName: socShortName(clientName), createdAt: new Date().toISOString() });
     const cheer = SOC_CHEERS.filter(function (c) { return c.type === type; })[0];
-    notify(to, story ? 'story_react' : 'cheer', { target: 'friends', params: function () { return { name: socShortName(clientName), e: cheer ? cheer.emoji : '' }; } });
+    notify(to, story ? 'story_react' : 'cheer', { target: 'friends', params: function () { return { name: socShortName(clientName), e: cheer ? t('soc_cheer_' + cheer.type) : '' }; } });
   } catch (e) {
     socCheersOut[key] = false;
     if (btn) btn.classList.remove('sent');
@@ -29972,7 +29974,8 @@ function renderSocBar() {
   const friendsBtn = document.createElement('button');
   friendsBtn.type = 'button';
   friendsBtn.className = 'soc-item friends';
-  const fAv = socAvatar('👥', 'friends-ic');
+  const fAv = socAvatar('', 'friends-ic');
+  fAv.innerHTML = glyph('users');
   if (pendingIn) {
     const dot = document.createElement('b');
     dot.className = 'soc-dot';
@@ -30060,10 +30063,13 @@ function renderSocFriends(body, msg) {
   if (todayIn.length) {
     const box = document.createElement('div');
     box.className = 'soc-cheered';
-    box.textContent = t('soc_cheered_today') + ' ' + todayIn.slice(0, 8).map(function (c) {
+    box.appendChild(document.createTextNode(t('soc_cheered_today') + ' '));
+    todayIn.slice(0, 8).forEach(function (c, i) {
       const cheer = SOC_CHEERS.filter(function (x) { return x.type === c.type; })[0];
-      return (cheer ? cheer.emoji : '') + ' ' + (c.fromName || '');
-    }).join(' · ');
+      if (i) box.appendChild(document.createTextNode(' · '));
+      if (cheer) box.insertAdjacentHTML('beforeend', glyph(cheer.emoji) + ' ');
+      box.appendChild(document.createTextNode(c.fromName || ''));
+    });
     body.appendChild(box);
   }
 
@@ -30125,7 +30131,12 @@ function renderSocFriends(body, msg) {
     const meta = document.createElement('small');
     if (pub) {
       const lv = ENG_LEVELS[pub.level || 0] || ENG_LEVELS[0];
-      meta.textContent = lv.icon + ' ' + t('eng_lv_' + lv.id) + ' · 🔥 ' + (pub.streak || 0) + ' · ⭐ ' + (pub.weekStart === engShift(todayStamp, -todayIndex) ? (pub.weekStars || 0) : 0) + '/7';
+      meta.innerHTML = glyph(lv.icon, '', lv.color) + ' ';
+      meta.appendChild(document.createTextNode(t('eng_lv_' + lv.id) + ' · '));
+      meta.insertAdjacentHTML('beforeend', glyph('flame') + ' ');
+      meta.appendChild(document.createTextNode((pub.streak || 0) + ' · '));
+      meta.insertAdjacentHTML('beforeend', glyph('star') + ' ');
+      meta.appendChild(document.createTextNode((pub.weekStart === engShift(todayStamp, -todayIndex) ? (pub.weekStars || 0) : 0) + '/7'));
     } else {
       meta.textContent = t('soc_no_pub');
     }
@@ -30148,7 +30159,7 @@ function renderSocFriends(body, msg) {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'soc-cheer' + (socCheersOut[email + '|' + c.type + '|'] ? ' sent' : '');
-      b.textContent = c.emoji;
+      b.innerHTML = glyph(c.emoji);
       b.setAttribute('aria-label', t('soc_cheer_' + c.type));
       b.title = t('soc_cheer_' + c.type);
       b.addEventListener('click', function () { socCheer(email, c.type, '', b); });
@@ -30210,13 +30221,13 @@ function renderSocRank(body) {
     row.className = 'soc-rank' + (r.me ? ' me' : '');
     const pos = document.createElement('b');
     pos.className = 'soc-pos';
-    pos.textContent = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : String(i + 1);
+    if (i < 3) pos.innerHTML = glyph('medal', '', ['#fbbf24', '#cbd5e1', '#d97706'][i]); else pos.textContent = String(i + 1);
     const nm = document.createElement('span');
     nm.className = 'soc-name';
     nm.textContent = r.name;
     const val = document.createElement('span');
     val.className = 'soc-val';
-    val.textContent = '⭐ ' + stars(r) + '  🔥 ' + (r.pub.streak || 0);
+    val.innerHTML = glyph('star') + ' ' + stars(r) + ' &nbsp; ' + glyph('flame') + ' ' + (r.pub.streak || 0);
     row.append(pos, nm, val);
     body.appendChild(row);
   });
@@ -30290,7 +30301,7 @@ function socStoryTags() {
   if (s && s.todayStar) tags.push(t('soc_tag_star'));
   if (s && s.today && (s.today.m & 1) && !(s.today.m & ENG_REST)) tags.push(t('soc_tag_trained'));
   if (s && s.today && (s.today.m & 4)) tags.push(t('soc_tag_water'));
-  if (s) tags.push(ENG_LEVELS[s.level].icon + ' ' + t('eng_lv_' + ENG_LEVELS[s.level].id));
+  if (s) tags.push(t('eng_lv_' + ENG_LEVELS[s.level].id));
   ['soc_tag_gym', 'soc_tag_track', 'soc_tag_home', 'soc_tag_meal'].forEach(function (k) { tags.push(t(k)); });
   return tags;
 }
@@ -30369,7 +30380,8 @@ function renderStoryComposer() {
       preview.appendChild(chip);
     }
   } else {
-    preview.textContent = '📸 ' + t('soc_pick_photo');
+    preview.innerHTML = glyph('camera') + ' ';
+    preview.appendChild(document.createTextNode(t('soc_pick_photo')));
   }
   file.addEventListener('change', async function () {
     const f = file.files && file.files[0];
@@ -30522,7 +30534,7 @@ function renderStoryView() {
   const close = document.createElement('button');
   close.type = 'button';
   close.className = 'sv-close';
-  close.textContent = '✕';
+  close.innerHTML = glyph('close', '', '#ffffff');
   close.setAttribute('aria-label', t('focus_close'));
   close.addEventListener('click', closeStoryViewer);
   head.append(socAvatar(s.name), nm, ago, close);
@@ -30579,7 +30591,8 @@ function renderStoryView() {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'soc-cheer' + (socCheersOut[s.owner + '|' + c.type + '|' + s.id] ? ' sent' : '');
-      b.textContent = c.emoji;
+      b.innerHTML = glyph(c.emoji);
+      b.setAttribute('aria-label', t('soc_cheer_' + c.type));
       b.addEventListener('click', function () { socCheer(s.owner, c.type, s.id, b); });
       foot.appendChild(b);
     });
@@ -30769,31 +30782,31 @@ const CHAL_METRICS = ['stars', 'train_days', 'active_days', 'water_days', 'food_
 
 /* مسابقات جاهزة — صاحب المنصة بيختار واحدة وبيعدّل لو حب */
 const CHAL_TEMPLATES = [
-  { id: 'stars_week',   emoji: '⭐', metric: 'stars',       target: 5,  days: 7,  bonusXp: 100 },
-  { id: 'perfect_week', emoji: '🏆', metric: 'stars',       target: 7,  days: 7,  bonusXp: 200 },
-  { id: 'water_week',   emoji: '💧', metric: 'water_days',  target: 7,  days: 7,  bonusXp: 70 },
-  { id: 'train_week',   emoji: '🏋️', metric: 'train_days',  target: 4,  days: 7,  bonusXp: 80 },
-  { id: 'food_week',    emoji: '🥗', metric: 'food_days',   target: 6,  days: 7,  bonusXp: 80 },
-  { id: 'xp_race',      emoji: '⚡', metric: 'xp',          target: 250, days: 7, bonusXp: 100 },
-  { id: 'km_week',      emoji: '👟', metric: 'km',          target: 10, days: 7,  bonusXp: 80 },
-  { id: 'km_month',     emoji: '🏃', metric: 'km',          target: 50, days: 30, bonusXp: 250 },
-  { id: 'fire_month',   emoji: '🔥', metric: 'active_days', target: 25, days: 30, bonusXp: 400 },
-  { id: 'teams_week',   emoji: '⚔️', metric: 'stars',       target: 5,  days: 7,  bonusXp: 120, teams: true },
-  { id: 'sport_month',  emoji: '⚽', metric: 'sport',       target: 8,  days: 30, bonusXp: 200 },
-  { id: 'ramadan',      emoji: '🌙', metric: 'active_days', target: 25, days: 30, bonusXp: 500 },
-  { id: 'summer',       emoji: '☀️', metric: 'train_days',  target: 16, days: 30, bonusXp: 300 },
-  { id: 'fresh_start',  emoji: '🎯', metric: 'stars',       target: 20, days: 30, bonusXp: 300 }
+  { id: 'stars_week',   emoji: 'star', metric: 'stars',       target: 5,  days: 7,  bonusXp: 100 },
+  { id: 'perfect_week', emoji: 'trophy', metric: 'stars',       target: 7,  days: 7,  bonusXp: 200 },
+  { id: 'water_week',   emoji: 'drop', metric: 'water_days',  target: 7,  days: 7,  bonusXp: 70 },
+  { id: 'train_week',   emoji: 'dumbbell', metric: 'train_days',  target: 4,  days: 7,  bonusXp: 80 },
+  { id: 'food_week',    emoji: 'bowl', metric: 'food_days',   target: 6,  days: 7,  bonusXp: 80 },
+  { id: 'xp_race',      emoji: 'bolt', metric: 'xp',          target: 250, days: 7, bonusXp: 100 },
+  { id: 'km_week',      emoji: 'steps', metric: 'km',          target: 10, days: 7,  bonusXp: 80 },
+  { id: 'km_month',     emoji: 'run', metric: 'km',          target: 50, days: 30, bonusXp: 250 },
+  { id: 'fire_month',   emoji: 'flame', metric: 'active_days', target: 25, days: 30, bonusXp: 400 },
+  { id: 'teams_week',   emoji: 'flag', metric: 'stars',       target: 5,  days: 7,  bonusXp: 120, teams: true },
+  { id: 'sport_month',  emoji: 'ball', metric: 'sport',       target: 8,  days: 30, bonusXp: 200 },
+  { id: 'ramadan',      emoji: 'moon', metric: 'active_days', target: 25, days: 30, bonusXp: 500 },
+  { id: 'summer',       emoji: 'sun', metric: 'train_days',  target: 16, days: 30, bonusXp: 300 },
+  { id: 'fresh_start',  emoji: 'target', metric: 'stars',       target: 20, days: 30, bonusXp: 300 }
 ];
 
 /* جوايز مقترحة للمتجر — صاحب المنصة بيعدّلها */
 const REWARD_SEEDS = [
-  { emoji: '📅', cost: 600,  ar: 'أسبوع اشتراك مجاني',            en: 'A free subscription week' },
-  { emoji: '🏷️', cost: 900,  ar: 'خصم ٢٠٪ على التجديد',            en: '20% off your renewal' },
-  { emoji: '🥗', cost: 1200, ar: 'استشارة تغذية مجانية',           en: 'A free nutrition consultation' },
-  { emoji: '🎯', cost: 1500, ar: 'جلسة تقييم مع الكوتش',           en: 'An assessment session with the coach' },
-  { emoji: '🧴', cost: 1000, ar: 'زجاجة ماية ADAM',                en: 'An ADAM water bottle' },
-  { emoji: '👕', cost: 2000, ar: 'تي شيرت ADAM',                   en: 'An ADAM T-shirt' },
-  { emoji: '🌟', cost: 2500, ar: 'بطل الشهر على صفحة ADAM',        en: 'Champion of the month on ADAM\'s page' }
+  { emoji: 'calendar', cost: 600,  ar: 'أسبوع اشتراك مجاني',            en: 'A free subscription week' },
+  { emoji: 'tag', cost: 900,  ar: 'خصم ٢٠٪ على التجديد',            en: '20% off your renewal' },
+  { emoji: 'bowl', cost: 1200, ar: 'استشارة تغذية مجانية',           en: 'A free nutrition consultation' },
+  { emoji: 'target', cost: 1500, ar: 'جلسة تقييم مع الكوتش',           en: 'An assessment session with the coach' },
+  { emoji: 'bottle', cost: 1000, ar: 'زجاجة ماية ADAM',                en: 'An ADAM water bottle' },
+  { emoji: 'shirt', cost: 2000, ar: 'تي شيرت ADAM',                   en: 'An ADAM T-shirt' },
+  { emoji: 'star', cost: 2500, ar: 'بطل الشهر على صفحة ADAM',        en: 'Champion of the month on ADAM\'s page' }
 ];
 
 let chalList = [];
@@ -30885,7 +30898,7 @@ function renderChalRow() {
   const a = document.createElement('button');
   a.type = 'button';
   a.className = 'chal-btn';
-  a.innerHTML = '<span class="chal-btn-ic">🏆</span>';
+  a.innerHTML = '<span class="chal-btn-ic">' + glyph('trophy') + '</span>';
   const at = document.createElement('span');
   at.textContent = live.length ? fill('chal_btn_n', { n: live.length }) : t('chal_btn');
   a.appendChild(at);
@@ -30899,7 +30912,7 @@ function renderChalRow() {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'chal-btn pts';
-  b.innerHTML = '<span class="chal-btn-ic">🎁</span>';
+  b.innerHTML = '<span class="chal-btn-ic">' + glyph('gift') + '</span>';
   const bt = document.createElement('span');
   bt.textContent = fill('pts_btn', { n: ptsBalance() });
   b.appendChild(bt);
@@ -30938,7 +30951,7 @@ function chalCard(ch) {
   head.className = 'chal-head';
   const em = document.createElement('span');
   em.className = 'chal-emoji';
-  em.textContent = ch.emoji || '🏆';
+  em.innerHTML = glyph(glyphKey(ch.emoji, 'trophy'));
   const ttl = document.createElement('div');
   ttl.className = 'chal-titles';
   const name = document.createElement('strong');
@@ -30958,7 +30971,10 @@ function chalCard(ch) {
   }
   const meta = document.createElement('div');
   meta.className = 'chal-meta';
-  meta.textContent = '🎯 ' + chalTargetText(ch) + (chalL(ch.prize) ? '  ·  🎁 ' + chalL(ch.prize) : '') + (ch.bonusXp ? '  ·  +' + ch.bonusXp + ' ' + t('chal_unit_xp') : '');
+  meta.innerHTML = glyph('target') + ' ';
+  meta.appendChild(document.createTextNode(chalTargetText(ch)));
+  if (chalL(ch.prize)) { meta.insertAdjacentHTML('beforeend', ' &nbsp;·&nbsp; ' + glyph('gift') + ' '); meta.appendChild(document.createTextNode(chalL(ch.prize))); }
+  if (ch.bonusXp) meta.appendChild(document.createTextNode('  ·  +' + ch.bonusXp + ' ' + t('chal_unit_xp')));
   card.appendChild(meta);
 
   if (joined && ch.status !== 'ended') {
@@ -30986,7 +31002,11 @@ function chalCard(ch) {
   if (ch.status === 'ended' && Array.isArray(ch.winners) && ch.winners.length) {
     const w = document.createElement('p');
     w.className = 'chal-winners';
-    w.textContent = '🏅 ' + ch.winners.slice(0, 3).map(function (x, i) { return ['🥇', '🥈', '🥉'][i] + ' ' + x.name; }).join('  ');
+    ch.winners.slice(0, 3).forEach(function (x, i) {
+      if (i) w.appendChild(document.createTextNode('   '));
+      w.insertAdjacentHTML('beforeend', glyph('medal', '', ['#fbbf24', '#cbd5e1', '#d97706'][i]) + ' ');
+      w.appendChild(document.createTextNode(x.name));
+    });
     card.appendChild(w);
   }
 
@@ -31070,7 +31090,7 @@ function chalPaintBoard(ch, card, res) {
       const r = document.createElement('div');
       r.className = 'soc-rank';
       r.innerHTML = '';
-      const pos = document.createElement('b'); pos.className = 'soc-pos'; pos.textContent = i === 0 ? '👑' : String(i + 1);
+      const pos = document.createElement('b'); pos.className = 'soc-pos'; if (i === 0) pos.innerHTML = glyph('crown'); else pos.textContent = String(i + 1);
       const nm = document.createElement('span'); nm.className = 'soc-name'; nm.textContent = tm.team + ' (' + tm.count + ')';
       const val = document.createElement('span'); val.className = 'soc-val'; val.textContent = fill('chal_team_avg', { v: tm.avg });
       r.append(pos, nm, val);
@@ -31090,14 +31110,17 @@ function chalPaintBoard(ch, card, res) {
     row.className = 'soc-rank' + (r.me ? ' me' : '') + (r.v >= ch.target ? ' hit' : '');
     const pos = document.createElement('b');
     pos.className = 'soc-pos';
-    pos.textContent = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : String(i + 1);
+    if (i < 3) pos.innerHTML = glyph('medal', '', ['#fbbf24', '#cbd5e1', '#d97706'][i]); else pos.textContent = String(i + 1);
     const nm = document.createElement('span');
     nm.className = 'soc-name';
     const lv = ENG_LEVELS[r.l || 0] || ENG_LEVELS[0];
-    nm.textContent = (r.me ? t('soc_you') : r.n) + ' ' + lv.icon + (r.t ? ' · ' + r.t : '');
+    nm.textContent = (r.me ? t('soc_you') : r.n) + ' ';
+    nm.insertAdjacentHTML('beforeend', glyph(lv.icon, '', lv.color));
+    if (r.t) nm.appendChild(document.createTextNode(' · ' + r.t));
     const val = document.createElement('span');
     val.className = 'soc-val';
-    val.textContent = r.v + ' ' + chalMetricUnit(ch.metric) + (r.v >= ch.target ? ' ✓' : '');
+    val.textContent = r.v + ' ' + chalMetricUnit(ch.metric) + ' ';
+    if (r.v >= ch.target) val.insertAdjacentHTML('beforeend', glyph('check'));
     row.append(pos, nm, val);
     box.appendChild(row);
   });
@@ -31183,7 +31206,7 @@ function renderPtsSheet() {
     row.className = 'pts-reward';
     const em = document.createElement('span');
     em.className = 'pts-emoji';
-    em.textContent = r.emoji || '🎁';
+    em.innerHTML = glyph(glyphKey(r.emoji, 'gift'));
     const info = document.createElement('div');
     info.className = 'soc-info';
     const nm = document.createElement('strong');
@@ -31261,7 +31284,8 @@ function chalTplDesc(tpl, L) { return withLang(L, function () { return t('chal_t
 
 function chalFormFill(src) {
   const f = function (id) { return document.getElementById(id); };
-  f('ch-emoji').value = src.emoji || '🏆';
+  f('ch-emoji').value = glyphKey(src.emoji, 'trophy');
+  renderGlyphPick('ch-glyph-pick', 'ch-emoji', CHAL_GLYPHS);
   f('ch-title-ar').value = src.titleAr || '';
   f('ch-title-en').value = src.titleEn || '';
   f('ch-desc-ar').value = src.descAr || '';
@@ -31296,7 +31320,8 @@ async function loadChalAdmin() {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'chal-tpl';
-    b.textContent = tpl.emoji + ' ' + chalTplTitle(tpl, lang);
+    b.innerHTML = glyph(tpl.emoji) + ' ';
+    b.appendChild(document.createTextNode(chalTplTitle(tpl, lang)));
     b.addEventListener('click', function () {
       chalFormFill({
         emoji: tpl.emoji, metric: tpl.metric, target: tpl.target, days: tpl.days, bonusXp: tpl.bonusXp,
@@ -31331,7 +31356,8 @@ async function loadChalAdmin() {
         b.type = 'button';
         b.className = 'chal-tpl idea';
         const tt = document.createElement('strong');
-        tt.textContent = (idea.emoji || '🏆') + ' ' + (lang === 'en' ? idea.titleEn : idea.titleAr);
+        tt.innerHTML = glyph(glyphKey(idea.emoji, 'trophy')) + ' ';
+        tt.appendChild(document.createTextNode(lang === 'en' ? idea.titleEn : idea.titleAr));
         const why = document.createElement('small');
         why.textContent = idea.why || '';
         b.append(tt, why);
@@ -31363,7 +31389,8 @@ async function loadChalAdmin() {
     const info = document.createElement('div');
     info.className = 'soc-admin-info';
     const a = document.createElement('span');
-    a.textContent = (ch.emoji || '🏆') + ' ' + chalL(ch.title);
+    a.innerHTML = glyph(glyphKey(ch.emoji, 'trophy')) + ' ';
+    a.appendChild(document.createTextNode(chalL(ch.title)));
     const b = document.createElement('small');
     b.textContent = ch.start + ' → ' + ch.end + ' · ' + chalTargetText(ch) + ' · ' + t('chal_st_' + (ch.status === 'ended' ? 'ended' : (ch.end < todayStamp ? 'over' : (ch.start > todayStamp ? 'soon' : 'live'))));
     info.append(a, b);
@@ -31396,7 +31423,7 @@ function chalFormRead() {
   const start = v('ch-start') || todayStamp;
   const metric = CHAL_METRICS.indexOf(v('ch-metric')) !== -1 ? v('ch-metric') : 'stars';
   return {
-    emoji: v('ch-emoji').slice(0, 4) || '🏆',
+    emoji: glyphKey(v('ch-emoji'), 'trophy'),
     title: { ar: v('ch-title-ar').slice(0, 60), en: v('ch-title-en').slice(0, 60) },
     desc: { ar: v('ch-desc-ar').slice(0, 240), en: v('ch-desc-en').slice(0, 240) },
     metric: metric,
@@ -31578,7 +31605,8 @@ async function loadRewardsAdmin() {
     const info = document.createElement('div');
     info.className = 'soc-admin-info';
     const a = document.createElement('span');
-    a.textContent = (r.emoji || '🎁') + ' ' + chalL(r.title) + (r.active ? '' : ' · ' + t('rw_admin_hidden'));
+    a.innerHTML = glyph(glyphKey(r.emoji, 'gift')) + ' ';
+    a.appendChild(document.createTextNode(chalL(r.title) + (r.active ? '' : ' · ' + t('rw_admin_hidden'))));
     const costIn = document.createElement('input');
     costIn.type = 'number';
     costIn.className = 'rw-cost';
@@ -31602,7 +31630,9 @@ async function loadRewardsAdmin() {
   const add = document.createElement('div');
   add.className = 'add-box rw-add';
   add.innerHTML = '';
-  const e1 = Object.assign(document.createElement('input'), { placeholder: '🎁', maxLength: 4, className: 'rw-emoji' });
+  const e1 = Object.assign(document.createElement('input'), { type: 'hidden', value: 'gift' });
+  e1.id = 'rw-glyph-val';
+  const e1pick = Object.assign(document.createElement('div'), { className: 'glyph-pick', id: 'rw-glyph-pick' });
   const n1 = Object.assign(document.createElement('input'), { placeholder: t('rw_admin_name_ph') });
   const n2 = Object.assign(document.createElement('input'), { placeholder: t('rw_admin_name_en_ph') });
   const c1 = Object.assign(document.createElement('input'), { placeholder: t('rw_admin_cost'), type: 'number' });
@@ -31612,10 +31642,11 @@ async function loadRewardsAdmin() {
   addBtn.textContent = t('rw_admin_add');
   addBtn.addEventListener('click', async function () {
     if (!n1.value.trim() || !(parseInt(c1.value, 10) > 0)) { msg.textContent = t('rw_admin_need'); return; }
-    await addDoc(collection(db, 'rewards'), { emoji: e1.value.trim() || '🎁', title: { ar: n1.value.trim().slice(0, 60), en: (n2.value.trim() || n1.value.trim()).slice(0, 60) }, cost: parseInt(c1.value, 10), stock: -1, active: true, createdAt: new Date().toISOString() });
+    await addDoc(collection(db, 'rewards'), { emoji: glyphKey(e1.value, 'gift'), title: { ar: n1.value.trim().slice(0, 60), en: (n2.value.trim() || n1.value.trim()).slice(0, 60) }, cost: parseInt(c1.value, 10), stock: -1, active: true, createdAt: new Date().toISOString() });
     loadRewardsAdmin();
   });
-  add.append(e1, n1, n2, c1, addBtn);
+  add.append(e1pick, e1, n1, n2, c1, addBtn);
+  setTimeout(function () { renderGlyphPick('rw-glyph-pick', 'rw-glyph-val', REWARD_GLYPHS); }, 0);
   box.appendChild(add);
 
   /* نقط هدية */
@@ -31671,7 +31702,9 @@ async function loadRewardsAdmin() {
     info.append(a, b);
     row.appendChild(info);
     if (c.inviteRewarded) {
-      row.appendChild(Object.assign(document.createElement('small'), { textContent: '✓ ' + t('rw_admin_rewarded') }));
+      const rwd = Object.assign(document.createElement('small'), { textContent: ' ' + t('rw_admin_rewarded') });
+        rwd.insertAdjacentHTML('afterbegin', glyph('check'));
+        row.appendChild(rwd);
     } else {
       const give = document.createElement('button');
       give.type = 'button';
@@ -31817,7 +31850,7 @@ function ibAnalysisBlock(entry) {
   if (!a) {
     if (state === 'busy') {
       box.classList.add('busy');
-      box.textContent = '🔍 ' + t('ib_ai_analyzing');
+      box.append(glyphEl('scan', 'ib-icon'), document.createTextNode(' ' + t('ib_ai_analyzing')));
       return box;
     }
     const btn = document.createElement('button');
@@ -31832,7 +31865,7 @@ function ibAnalysisBlock(entry) {
   }
   const title = document.createElement('div');
   title.className = 'ib-an-title';
-  title.textContent = '🔍 ' + t('ib_ai_title');
+  title.append(glyphEl('scan', 'ib-icon'), document.createTextNode(' ' + t('ib_ai_title')));
   const head = document.createElement('strong');
   head.className = 'ib-an-head';
   head.textContent = a.headline || '';
@@ -31840,20 +31873,26 @@ function ibAnalysisBlock(entry) {
   sum.className = 'ib-an-sum';
   sum.textContent = a.summary || '';
   box.append(title, head, sum);
-  const list = function (items, cls, label) {
+  const list = function (items, cls, label, icon) {
     if (!Array.isArray(items) || !items.length) return;
     const h = document.createElement('div');
     h.className = 'ib-an-label';
-    h.textContent = label;
+    if (icon) h.append(glyphEl(icon, 'ib-icon'), document.createTextNode(' ' + label));
+    else h.textContent = label;
     const ul = document.createElement('ul');
     ul.className = 'ib-an-list ' + cls;
     items.forEach(function (x) { const li = document.createElement('li'); li.textContent = x; ul.appendChild(li); });
     box.append(h, ul);
   };
   list(a.changes, 'changes', t('ib_ai_changes'));
-  list(a.flags, 'flags', '⚠️ ' + t('ib_ai_flags'));
-  list(a.suggestions, 'sugg', '🥗 ' + t('ib_ai_sugg'));
-  if (a.nextCheck) box.appendChild(Object.assign(document.createElement('p'), { className: 'ib-an-next', textContent: '📅 ' + fill('ib_ai_next', { w: a.nextCheck }) }));
+  list(a.flags, 'flags', t('ib_ai_flags'), 'warning');
+  list(a.suggestions, 'sugg', t('ib_ai_sugg'), 'bowl');
+  if (a.nextCheck) {
+    const nextP = document.createElement('p');
+    nextP.className = 'ib-an-next';
+    nextP.append(glyphEl('calendar', 'ib-icon'), document.createTextNode(' ' + fill('ib_ai_next', { w: a.nextCheck })));
+    box.appendChild(nextP);
+  }
   box.appendChild(Object.assign(document.createElement('p'), { className: 'ib-an-note', textContent: t('ib_ai_note') }));
   return box;
 }
@@ -31967,7 +32006,10 @@ function foodPrefDecorate(li, food) {
   li.classList.add('fp-' + mark);
   const tag = document.createElement('span');
   tag.className = 'fp-tag';
-  tag.textContent = mark === 'like' ? '❤️ ' + t('fp_tag_like') : '🚫 ' + t('fp_tag_dislike');
+  tag.append(
+    glyphEl(mark === 'like' ? 'heart' : 'close', 'fp-icon'),
+    document.createTextNode(' ' + (mark === 'like' ? t('fp_tag_like') : t('fp_tag_dislike')))
+  );
   li.appendChild(tag);
 }
 
@@ -31983,8 +32025,18 @@ function renderNutFoodPrefs() {
   title.className = 'fp-box-title';
   title.textContent = t('fp_box_title');
   box.appendChild(title);
-  if (likes.length) box.appendChild(Object.assign(document.createElement('p'), { className: 'fp-line like', textContent: '❤️ ' + t('fp_likes_short') + ': ' + likes.map(foodPrefName).join('، ') }));
-  if (dislikes.length) box.appendChild(Object.assign(document.createElement('p'), { className: 'fp-line dislike', textContent: '🚫 ' + t('fp_dislikes_short') + ': ' + dislikes.map(foodPrefName).join('، ') }));
+  if (likes.length) {
+    const pLike = document.createElement('p');
+    pLike.className = 'fp-line like';
+    pLike.append(glyphEl('heart', 'fp-icon'), document.createTextNode(' ' + t('fp_likes_short') + ': ' + likes.map(foodPrefName).join('، ')));
+    box.appendChild(pLike);
+  }
+  if (dislikes.length) {
+    const pDis = document.createElement('p');
+    pDis.className = 'fp-line dislike';
+    pDis.append(glyphEl('close', 'fp-icon'), document.createTextNode(' ' + t('fp_dislikes_short') + ': ' + dislikes.map(foodPrefName).join('، ')));
+    box.appendChild(pDis);
+  }
 }
 
 
@@ -32847,7 +32899,7 @@ function providerMapRow(provider, href) {
   a.href = href;
   a.target = '_blank';
   a.rel = 'noopener noreferrer';
-  a.textContent = '📍 ' + t('pw_open_map');
+  a.append(glyphEl('pin', 'pw-icon'), document.createTextNode(' ' + t('pw_open_map')));
   row.appendChild(a);
   const km = providerDistanceKm(provider);
   if (km !== null) {
@@ -32863,10 +32915,14 @@ function providerMapRow(provider, href) {
   const btn = document.getElementById('team-near-btn');
   if (!btn) return;
   const msg = document.getElementById('team-near-msg');
+  const setLabel = function (key, icon) {
+    btn.innerHTML = '';
+    btn.append(glyphEl(icon, 'glyph-slot'), document.createTextNode(' ' + t(key)));
+  };
   btn.addEventListener('click', function () {
     if (teamNear) {
       teamNear = null;
-      btn.textContent = t('near_btn');
+      setLabel('near_btn', 'pin');
       btn.classList.remove('on');
       msg.textContent = '';
       renderTeamPicker();
@@ -32876,7 +32932,7 @@ function providerMapRow(provider, href) {
     msg.textContent = t('pw_locating');
     navigator.geolocation.getCurrentPosition(function (pos) {
       teamNear = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-      btn.textContent = t('near_btn_off');
+      setLabel('near_btn_off', 'compass');
       btn.classList.add('on');
       const withMap = teamProviders.filter(function (p) { return !!providerCoords(p); }).length;
       msg.textContent = withMap ? t('near_on') : t('near_none');
@@ -33097,286 +33153,235 @@ function tourPlace() {
 
 
 /* ============================================================
-   حكاية ADAM — «آدم أول الخلق… وأول الحكاية»
+   رحلة العمر — «ليه اسمه ADAM؟»
    ------------------------------------------------------------
-   الاسم مش مجرد اسم: رحلة معاك من بطن أمك لحد آخر العمر.
-   مشغّل زي الستوري: ١١ فصل، كل فصل مشهد متحرك (SVG مرسوم هنا)
-   + الفريق اللي معاك في المرحلة دي. بيتفتح من صفحة الترحيب
-   ومن رئيسية العميل. الرسومات بسيطة وأصلية — مفيش صور من برّه.
+   مش شاشة كاملة بتاخد الموبايل زي الستوري القديمة — رسمة واحدة
+   متحركة، جوه كارت عادي في الصفحة، وباقي الشاشة زي ما هي.
+   بني آدم واحد بيكبر من طفل لكبير، ٩ مراحل، كل مرحلة لها لون
+   ومزاج وأيقونة صغيرة وجملة قصيرة. بتلف لوحدها من غير ما تاخد
+   من المستخدم أي حركة، وترجع تاني زي ما تكون حكاية بتتقال من جديد.
    ============================================================ */
 
-const STORY_CHAPTERS = [
-  { key: 'intro',  c: '#2ee07a', ms: 6500, scene: 'intro' },
-  { key: 'womb',   c: '#f472b6', ms: 7000, scene: 'womb',   team: ['coach', 'nutritionist', 'doctor'] },
-  { key: 'born',   c: '#7dd3fc', ms: 7000, scene: 'born',   team: ['physio', 'nutritionist', 'doctor'] },
-  { key: 'child',  c: '#facc15', ms: 6500, scene: 'child',  team: ['coach', 'nutritionist'] },
-  { key: 'strong', c: '#2ee07a', ms: 6500, scene: 'strong', team: ['coach', 'nutritionist', 'sports_medicine'] },
-  { key: 'fall',   c: '#fb923c', ms: 7000, scene: 'fall',   team: ['ortho', 'physio', 'rehab'] },
-  { key: 'work',   c: '#818cf8', ms: 6500, scene: 'work',   team: ['coach', 'nutritionist', 'doctor'] },
-  { key: 'family', c: '#fb7185', ms: 7000, scene: 'family', team: ['coach', 'nutritionist', 'psychologist'] },
-  { key: 'old',    c: '#2dd4bf', ms: 7000, scene: 'old',    team: ['doctor', 'pharmacist', 'physio'] },
-  { key: 'mind',   c: '#a78bfa', ms: 7000, scene: 'mind',   team: ['psychologist'] },
-  { key: 'end',    c: '#2ee07a', ms: 9000, scene: 'end' }
+const LJ_STAGES = ['womb', 'born', 'child', 'strong', 'fall', 'work', 'family', 'old', 'mind'];
+const LJ_MS = 36000;
+
+const LJ_BADGE_SVG = [
+  '<path d="M12 19c-4-2.8-8-6-8-10.2C4 5.6 6.3 4 8.7 4c1.4 0 2.7.8 3.3 2 .6-1.2 1.9-2 3.3-2 2.4 0 4.7 1.6 4.7 4.8 0 4.2-4 7.4-8 10.2z"/>',
+  '<path d="M10 3h4v3l1.5 2v11a1.5 1.5 0 0 1-1.5 1.5h-4A1.5 1.5 0 0 1 8.5 19V8L10 6z"/><path d="M8.5 11h7"/>',
+  '<path d="M12 2l7 7-3 10-4 3-4-3-3-10z"/><path d="M12 2v20M5 9h14"/>',
+  '<rect x="3" y="10" width="3" height="4" rx="1"/><rect x="18" y="10" width="3" height="4" rx="1"/><rect x="6" y="8.5" width="2.2" height="7" rx="1"/><rect x="15.8" y="8.5" width="2.2" height="7" rx="1"/><line x1="8.2" y1="12" x2="15.8" y2="12"/>',
+  '<circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/>',
+  '<rect x="3.5" y="8" width="17" height="11" rx="2"/><path d="M9 8V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v2M3.5 13h17"/>',
+  '<circle cx="9" cy="13" r="5"/><circle cx="15" cy="13" r="5"/>',
+  '<circle cx="12" cy="12" r="4.5"/><path d="M12 3v2M12 19v2M4 12h2M18 12h2M6 6l1.5 1.5M16.5 16.5L18 18M18 6l-1.5 1.5M7.5 16.5L6 18"/>',
+  '<path d="M8 17a4 4 0 1 1 1-7.9 5 5 0 0 1 9.7 1.7A3.3 3.3 0 0 1 18 17z"/><path d="M12 5.5v-2M8.5 7l-1.4-1.4M16 7l1.4-1.4" opacity=".8"/>'
 ];
-const STORY_EMOJI = ['🤰', '👶', '🧒', '🏃', '🩹', '💼', '💍', '🧓', '🫶'];
 
-/* المشاهد — viewBox واحد (320×260) وستايل خط واحد عشان تبان عيلة واحدة */
-function storyScene(name) {
-  const head = function (x, y, r) { return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" class="sv-fill"/>'; };
-  const halo = '<circle cx="160" cy="128" r="104" class="sv-halo"/><circle cx="160" cy="128" r="72" class="sv-halo sv-halo2"/>';
-  const ground = '<line x1="40" y1="222" x2="280" y2="222" class="sv-ground"/>';
-  const S = {
-    intro:
-      '<path class="sv-life" d="M20 170 C 60 110, 100 210, 140 150 S 220 90, 300 140"/>'
-      + STORY_EMOJI.map(function (e, idx) {
-        let i = idx;
-        const pts = [[34, 158], [66, 142], [98, 172], [132, 158], [166, 130], [198, 112], [232, 110], [264, 124], [292, 138]];
-        /* بالعربي الحكاية بتبدأ من اليمين */
-        if (lang === 'ar') i = pts.length - 1 - i;
-        return '<g class="sv-dot" style="animation-delay:' + (0.35 + idx * 0.28) + 's"><circle cx="' + pts[i][0] + '" cy="' + pts[i][1] + '" r="15" class="sv-dotbg"/><text x="' + pts[i][0] + '" y="' + (pts[i][1] + 6) + '" text-anchor="middle" font-size="16">' + e + '</text></g>';
-      }).join('')
-      + '<text x="160" y="72" text-anchor="middle" class="sv-word">ADAM</text>',
-    womb:
-      halo
-      + '<g class="sv-breathe">' + head(150, 58, 15)
-      + '<path class="sv-line" d="M148 76 C 146 100, 142 130, 146 160"/>'
-      + '<path class="sv-line" d="M150 84 C 170 96, 192 112, 190 138 C 188 158, 168 164, 150 160"/>'
-      + '<path class="sv-line" d="M150 92 C 160 108, 172 118, 176 128"/>'
-      + '<path class="sv-line" d="M146 160 L 138 218 M 152 160 L 162 218"/></g>'
-      + '<path class="sv-heart" d="M172 138 c -3 -5 -11 -4 -11 2 c 0 5 7 9 11 12 c 4 -3 11 -7 11 -12 c 0 -6 -8 -7 -11 -2 z"/>'
-      + '<path class="sv-ecg" d="M40 238 h70 l10 -18 l12 34 l10 -26 l8 10 h130"/>'
-      + '<circle cx="80" cy="90" r="4" class="sv-spark"/><circle cx="240" cy="70" r="3" class="sv-spark" style="animation-delay:1s"/><circle cx="250" cy="150" r="5" class="sv-spark" style="animation-delay:2s"/>',
-    born:
-      halo
-      + '<g class="sv-rock"><path class="sv-line" d="M92 140 C 100 196, 220 196, 228 140"/>'
-      + '<path class="sv-line" d="M92 140 H 228"/>'
-      + '<ellipse cx="170" cy="150" rx="40" ry="16" class="sv-fill sv-soft"/>' + head(122, 146, 15)
-      + '<path class="sv-line" d="M112 190 l -8 22 M 208 190 l 8 22"/></g>'
-      + '<path class="sv-star" d="M70 60 l4 9 l9 4 l-9 4 l-4 9 l-4 -9 l-9 -4 l9 -4 z"/>'
-      + '<path class="sv-star" style="animation-delay:.8s" d="M250 50 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 z"/>'
-      + '<path class="sv-star" style="animation-delay:1.6s" d="M232 104 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z"/>'
-      + '<text x="200" y="100" class="sv-z">z</text><text x="214" y="84" class="sv-z" style="animation-delay:.7s">z</text>',
-    child:
-      halo + ground
-      + '<g class="sv-hop">' + head(150, 96, 13)
-      + '<line x1="150" y1="110" x2="150" y2="150" class="sv-line"/>'
-      + '<g class="sv-swing" style="transform-origin:150px 118px"><line x1="150" y1="118" x2="130" y2="138" class="sv-line"/></g>'
-      + '<g class="sv-swing sv-rev" style="transform-origin:150px 118px"><line x1="150" y1="118" x2="170" y2="136" class="sv-line"/></g>'
-      + '<g class="sv-swing" style="transform-origin:150px 150px"><line x1="150" y1="150" x2="138" y2="186" class="sv-line"/></g>'
-      + '<g class="sv-swing sv-rev" style="transform-origin:150px 150px"><line x1="150" y1="150" x2="164" y2="186" class="sv-line"/></g></g>'
-      + '<g class="sv-bounce"><circle cx="222" cy="170" r="16" class="sv-line sv-ball"/><path class="sv-line" d="M208 162 q14 8 28 0 M 222 154 v 32"/></g>'
-      + '<line x1="80" y1="140" x2="108" y2="140" class="sv-dash"/><line x1="72" y1="160" x2="104" y2="160" class="sv-dash" style="animation-delay:.3s"/>',
-    strong:
-      halo + ground
-      + '<g class="sv-track"><line x1="20" y1="236" x2="70" y2="236" class="sv-dash"/><line x1="120" y1="236" x2="170" y2="236" class="sv-dash"/><line x1="220" y1="236" x2="270" y2="236" class="sv-dash"/></g>'
-      + '<g class="sv-run">' + head(178, 70, 14)
-      + '<line x1="172" y1="86" x2="152" y2="140" class="sv-line"/>'
-      + '<g class="sv-swing" style="transform-origin:168px 96px"><path d="M168 96 l -26 12 l -10 -14" class="sv-line"/></g>'
-      + '<g class="sv-swing sv-rev" style="transform-origin:168px 96px"><path d="M168 96 l 24 10 l 12 -12" class="sv-line"/></g>'
-      + '<g class="sv-swing" style="transform-origin:152px 140px"><path d="M152 140 l 26 22 l -6 32" class="sv-line"/></g>'
-      + '<g class="sv-swing sv-rev" style="transform-origin:152px 140px"><path d="M152 140 l -22 26 l -22 4" class="sv-line"/></g></g>'
-      + '<g class="sv-cycle"><g class="sv-c1"><circle cx="262" cy="64" r="14" class="sv-line"/><path class="sv-line" d="M252 58 q10 6 20 0"/></g>'
-      + '<g class="sv-c2"><path class="sv-line" d="M246 64 q8 -8 16 0 t 16 0"/><path class="sv-line" d="M246 74 q8 -8 16 0 t 16 0"/></g>'
-      + '<g class="sv-c3"><path class="sv-line" d="M248 64 h28 M 250 56 v16 M 274 56 v16 M 244 60 v8 M 280 60 v8"/></g></g>'
-      + '<line x1="70" y1="90" x2="118" y2="90" class="sv-dash"/><line x1="60" y1="112" x2="112" y2="112" class="sv-dash" style="animation-delay:.25s"/>',
-    fall:
-      halo
-      + '<path class="sv-line" d="M112 70 L 158 140"/><path class="sv-line" d="M158 140 L 142 214"/>'
-      + '<circle cx="158" cy="140" r="11" class="sv-fill"/>'
-      + '<circle cx="158" cy="140" r="22" class="sv-pain"/>'
-      + '<circle cx="158" cy="140" r="36" class="sv-ring-bg"/><circle cx="158" cy="140" r="36" class="sv-ring"/>'
-      + '<g class="sv-plus"><rect x="214" y="70" width="40" height="40" rx="12" class="sv-fill sv-soft"/><path class="sv-line sv-ink" d="M234 80 v20 M224 90 h20"/></g>'
-      + '<g class="sv-rise"><path class="sv-line" d="M226 204 V 150 M 210 166 l 16 -16 l 16 16"/></g>',
-    work:
-      halo
-      + '<g class="sv-stretch">' + head(160, 64, 14)
-      + '<line x1="160" y1="80" x2="160" y2="128" class="sv-line"/>'
-      + '<g class="sv-armup" style="transform-origin:160px 90px"><path class="sv-line" d="M160 90 l -26 -22"/></g>'
-      + '<g class="sv-armup sv-rev" style="transform-origin:160px 90px"><path class="sv-line" d="M160 90 l 26 -22"/></g></g>'
-      + '<rect x="104" y="128" width="112" height="62" rx="8" class="sv-line"/><path class="sv-line" d="M92 198 h136"/>'
-      + '<path class="sv-bar1 sv-line" d="M124 176 v -14"/><path class="sv-bar2 sv-line" d="M148 176 v -24"/><path class="sv-bar3 sv-line" d="M172 176 v -18"/><path class="sv-bar4 sv-line" d="M196 176 v -30"/>'
-      + '<circle cx="256" cy="70" r="22" class="sv-line"/><line x1="256" y1="70" x2="256" y2="56" class="sv-line sv-hand"/><line x1="256" y1="70" x2="266" y2="70" class="sv-line sv-hand2"/>'
-      + '<path class="sv-line" d="M52 170 h26 v26 a8 8 0 0 1 -8 8 h-10 a8 8 0 0 1 -8 -8 z"/><path class="sv-steam" d="M60 160 q -6 -8 0 -16"/><path class="sv-steam" style="animation-delay:.6s" d="M70 160 q -6 -8 0 -16"/>',
-    family:
-      halo
-      + '<g class="sv-rings"><circle cx="138" cy="120" r="30" class="sv-line"/><circle cx="180" cy="120" r="30" class="sv-line"/></g>'
-      + '<path class="sv-heart sv-float" d="M160 70 c -4 -7 -15 -6 -15 3 c 0 7 10 12 15 16 c 5 -4 15 -9 15 -16 c 0 -9 -11 -10 -15 -3 z"/>'
-      + '<g class="sv-kid">' + head(160, 180, 10) + '<line x1="160" y1="191" x2="160" y2="216" class="sv-line"/><path class="sv-line" d="M160 198 l -12 8 M 160 198 l 12 8 M 160 216 l -8 12 M 160 216 l 8 12"/></g>'
-      + '<path class="sv-orbit" d="M160 30 a 98 98 0 1 1 -0.1 0"/>',
-    old:
-      halo + ground
-      + '<g class="sv-walk">' + head(146, 72, 14)
-      + '<path class="sv-line" d="M150 88 C 158 110, 156 132, 150 150"/>'
-      + '<path class="sv-line" d="M154 104 L 178 132 L 180 218"/>'
-      + '<g class="sv-swing sv-slow" style="transform-origin:150px 150px"><line x1="150" y1="150" x2="140" y2="216" class="sv-line"/></g>'
-      + '<g class="sv-swing sv-slow sv-rev" style="transform-origin:150px 150px"><line x1="150" y1="150" x2="160" y2="216" class="sv-line"/></g></g>'
-      + '<g class="sv-float"><rect x="226" y="72" width="40" height="18" rx="9" class="sv-line"/><line x1="246" y1="72" x2="246" y2="90" class="sv-line"/></g>'
-      + '<path class="sv-ecg" d="M40 244 h60 l8 -14 l10 26 l8 -20 l6 8 h140"/>'
-      + '<circle cx="84" cy="80" r="18" class="sv-sun"/>',
-    mind:
-      halo
-      + '<path class="sv-line" d="M190 214 v -26 c 26 -6 40 -30 34 -58 c -6 -34 -40 -52 -72 -46 c -30 6 -48 34 -44 62 c 2 16 10 26 20 34 v 34"/>'
-      + '<g class="sv-cloudy"><path class="sv-line sv-cloud" d="M134 136 a14 14 0 0 1 4 -27 a18 18 0 0 1 34 -4 a13 13 0 0 1 8 25 z"/>'
-      + '<line x1="146" y1="146" x2="142" y2="158" class="sv-rain"/><line x1="160" y1="146" x2="156" y2="158" class="sv-rain" style="animation-delay:.3s"/><line x1="174" y1="146" x2="170" y2="158" class="sv-rain" style="animation-delay:.6s"/></g>'
-      + '<g class="sv-sunny"><circle cx="160" cy="124" r="15" class="sv-sun"/><g class="sv-rays"><path class="sv-line" d="M160 96 v-8 M160 160 v-8 M132 124 h-8 M196 124 h-8 M140 104 l-6 -6 M186 150 l-6 -6 M180 104 l6 -6 M134 150 l6 -6"/></g></g>',
-    end:
-      '<g class="sv-wheel">' + STORY_EMOJI.map(function (e, i) {
-        const a = (i / STORY_EMOJI.length) * Math.PI * 2 - Math.PI / 2;
-        const x = 160 + Math.cos(a) * 96, y = 130 + Math.sin(a) * 96;
-        return '<g><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="17" class="sv-dotbg"/><text x="' + x.toFixed(1) + '" y="' + (y + 6).toFixed(1) + '" text-anchor="middle" font-size="17" class="sv-up">' + e + '</text></g>';
-      }).join('') + '</g>'
-      + '<circle cx="160" cy="130" r="96" class="sv-orbit2"/>'
-      + '<text x="160" y="140" text-anchor="middle" class="sv-word sv-word2">ADAM</text>'
+/* بيبني رسمة رحلة العمر (SVG + الأيقونة الصغيرة) — بدون كتابة ولا نص، النص بيتحط جنبها */
+function lifeJourneyStage() {
+  const badge = LJ_BADGE_SVG.map(function (inner, i) {
+    return '<svg class="lj-b lj-b' + i + '" viewBox="0 0 24 24">' + inner + '</svg>';
+  }).join('');
+  return (
+    '<div class="lj-mood"></div>'
+    + '<svg class="lj-fig-wrap" viewBox="0 0 200 240" aria-hidden="true">'
+    + '<path class="lj-womb" d="M100 150c-4-8-18-6-18 3 0 9 12 15 18 20 6-5 18-11 18-20 0-9-14-11-18-3z"/>'
+    + '<g class="lj-fig">'
+    + '<path class="lj-hair" d="M74 56C74 34 88 22 100 22c12 0 26 12 26 34 0-10-8-16-26-16s-26 6-26 16z"/>'
+    + '<circle class="lj-line" cx="100" cy="62" r="26"/>'
+    + '<circle class="lj-face" cx="90" cy="60" r="2.6"/><circle class="lj-face" cx="110" cy="60" r="2.6"/>'
+    + '<path class="lj-line lj-smile" d="M90 72q10 8 20 0"/>'
+    + '<rect class="lj-line" x="82" y="92" width="36" height="60" rx="18"/>'
+    + '<path class="lj-line" d="M84 100c-16 8-22 22-18 38"/>'
+    + '<path class="lj-line" d="M116 100c16 8 22 22 18 38"/>'
+    + '<path class="lj-line" d="M92 150c-2 25-4 45-6 70"/>'
+    + '<path class="lj-line" d="M108 150c2 25 4 45 6 70"/>'
+    + '<line class="lj-line lj-cane" x1="128" y1="140" x2="140" y2="222"/>'
+    + '</g></svg>'
+    + '<div class="lj-badge">' + badge + '</div>'
+  );
+}
+
+/* بيولّد كارت رحلة العمر جوه أي عنصر عليه data-lj (فاضي أو بمقاس mini) */
+function lifeJourneyBuild(root) {
+  if (!root || root.dataset.ljBuilt) return;
+  root.dataset.ljBuilt = '1';
+  const stage = document.createElement('div');
+  stage.className = 'lj-stage';
+  stage.innerHTML = lifeJourneyStage();
+  root.appendChild(stage);
+  const cap = document.createElement('div');
+  cap.className = 'lj-cap';
+  root.appendChild(cap);
+  const t0 = performance.now();
+  let last = -1;
+  const tick = function () {
+    const elapsed = (performance.now() - t0) % LJ_MS;
+    const idx = Math.min(LJ_STAGES.length - 1, Math.floor((elapsed / LJ_MS) * LJ_STAGES.length));
+    if (idx === last) return;
+    last = idx;
+    cap.textContent = t('story_' + LJ_STAGES[idx] + '_label');
   };
-  return '<svg viewBox="0 0 320 260" class="sv" aria-hidden="true">' + (S[name] || '') + '</svg>';
+  tick();
+  setInterval(tick, 400);
 }
 
-let storyState = null;
+function lifeJourneyInit() {
+  document.querySelectorAll('[data-lj]').forEach(lifeJourneyBuild);
+}
+lifeJourneyInit();
 
-function storyRoot() {
-  let root = document.querySelector('div#adam-story');
-  if (root) return root;
-  root = document.createElement('div');
-  root.id = 'adam-story';
-  root.className = 'story hidden';
-  root.setAttribute('role', 'dialog');
-  root.setAttribute('aria-modal', 'true');
-  root.innerHTML = '<div class="st-bg"></div><div class="st-bars"></div>'
-    + '<button type="button" class="st-close" aria-label="close">✕</button>'
-    + '<div class="st-stage"><div class="st-scene"></div><div class="st-chapter"></div><h2 class="st-title"></h2>'
-    + '<p class="st-text"></p><div class="st-team"></div><div class="st-cta"></div></div>'
-    + '<button type="button" class="st-tap st-prev" aria-label="prev"></button><button type="button" class="st-tap st-next" aria-label="next"></button>';
-  document.body.appendChild(root);
-  root.querySelector('.st-close').addEventListener('click', storyClose);
-  /* في RTL: يمين الشاشة = اللي فات، شمالها = اللي جاي (زي ما بنقرا) */
-  root.querySelector('.st-prev').addEventListener('click', function () { storyGo(-1); });
-  root.querySelector('.st-next').addEventListener('click', function () { storyGo(1); });
-  /* الضغطة الطويلة بتوقّف الحكاية زي الستوري */
-  ['pointerdown', 'pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) {
-    root.addEventListener(ev, function (e) {
-      if (!storyState || e.target.closest('.st-close, .st-cta')) return;
-      storyPause(ev === 'pointerdown');
-    });
+
+/* ============================================================
+   ADAM Glyphs — أيقونات مرسومة مخصوص بدل الإيموجي
+   ------------------------------------------------------------
+   كل أيقونة طبقتين: شكل ناعم متلوّن (gf) + خط واضح (gs) — «ديوتون».
+   اللون بييجي من الأيقونة نفسها (--gc) فبتبان واحدة في أي مكان.
+   glyph('flame') بترجع SVG كنص، glyphEl بترجع عنصر.
+   emoji قديم محفوظ في الداتا (مسابقات/جوايز) بيتحوّل لأقرب أيقونة.
+   ============================================================ */
+
+const GLYPHS = {
+  flame:   ['#fb923c', '<path class="gf" d="M12 21.5c-3.9 0-6.6-2.7-6.6-6.3 0-3.2 2.1-5.3 3.6-7.5.3 1.8 1.3 2.9 2.3 3.3.1-3 1.3-5.9 3.7-8 .4 3.1 1.9 4.9 3.2 6.8 1 1.4 1.8 3 1.8 5.3 0 3.7-3.4 6.4-8 6.4z"/><path class="gs" d="M12 21.5c-3.9 0-6.6-2.7-6.6-6.3 0-3.2 2.1-5.3 3.6-7.5.3 1.8 1.3 2.9 2.3 3.3.1-3 1.3-5.9 3.7-8 .4 3.1 1.9 4.9 3.2 6.8 1 1.4 1.8 3 1.8 5.3 0 3.7-3.4 6.4-8 6.4z"/><path class="gs" d="M12 21.5c-1.7 0-2.9-1.2-2.9-2.9 0-1.8 1.5-2.9 2.3-4.4.9 1.2 3.5 2.3 3.5 4.6 0 1.6-1.2 2.7-2.9 2.7z"/>'],
+  star:    ['#fbbf24', '<path class="gf gs" d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/>'],
+  trophy:  ['#fbbf24', '<path class="gf" d="M7.5 4h9v5a4.5 4.5 0 0 1-9 0z"/><path class="gs" d="M7.5 4h9v5a4.5 4.5 0 0 1-9 0zM7.5 6H5.2a2.6 2.6 0 0 0 2.8 3.5M16.5 6h2.3a2.6 2.6 0 0 1-2.8 3.5M12 13.5V17M8.5 20.5h7M9.5 17h5v3.5h-5z"/>'],
+  medal:   ['#fbbf24', '<path class="gs" d="M8.2 3l2.6 6M15.8 3l-2.6 6"/><circle class="gf gs" cx="12" cy="14.8" r="5.4"/><path class="gs" d="M12 12.4l.9 1.8 2 .3-1.4 1.4.3 2-1.8-.9-1.8.9.3-2-1.4-1.4 2-.3z"/>'],
+  crown:   ['#facc15', '<path class="gf gs" d="M4.2 17.5L3 8.3l5 3.8L12 5l4 7.1 5-3.8-1.2 9.2z"/><path class="gs" d="M5 20.5h14"/><circle class="gs" cx="12" cy="13.8" r="1.1"/>'],
+  gift:    ['#f472b6', '<path class="gf" d="M4.5 10.5h15v10h-15z"/><path class="gs" d="M4.5 10.5h15v10h-15zM3.5 7.5h17v3h-17zM12 7.5v13M12 7.5C10.6 3.8 6.6 3.9 6.6 6c0 1.3 2.4 1.5 5.4 1.5zM12 7.5c1.4-3.7 5.4-3.6 5.4-1.5 0 1.3-2.4 1.5-5.4 1.5z"/>'],
+  bolt:    ['#facc15', '<path class="gf gs" d="M13.4 2.5L5 13.4h6l-1 8.1 8.5-11h-6.1z"/>'],
+  drop:    ['#38bdf8', '<path class="gf gs" d="M12 3c3.5 4.2 6 7.4 6 10.7A6 6 0 0 1 6 13.7C6 10.4 8.5 7.2 12 3z"/><path class="gs" d="M9.2 14.3a3 3 0 0 0 2.6 2.7"/>'],
+  sprout:  ['#4ade80', '<path class="gf gs" d="M12 13.2C12 9.2 9 6.7 4.9 6.7c0 4 3 6.5 7.1 6.5zM12 11c0-3.6 2.7-6.1 6.6-6.1 0 3.6-2.7 6.1-6.6 6.1z"/><path class="gs" d="M12 21v-9.8M8 21h8"/>'],
+  gem:     ['#a78bfa', '<path class="gf gs" d="M6.5 4h11L21 9l-9 11.5L3 9z"/><path class="gs" d="M3 9h18M9 4L7.5 9 12 20.5 16.5 9 15 4"/>'],
+  hexgem:  ['#67e8f9', '<path class="gf gs" d="M12 2.8l7.8 4.5v9.4L12 21.2l-7.8-4.5V7.3z"/><path class="gs" d="M12 7.2l4.2 2.4v4.8L12 16.8l-4.2-2.4V9.6z"/>'],
+  target:  ['#f87171', '<circle class="gf gs" cx="11" cy="13" r="8"/><circle class="gs" cx="11" cy="13" r="4.4"/><circle class="gs" cx="11" cy="13" r="1"/><path class="gs" d="M11 13l8-8M16.2 4.6h3.2v3.2"/>'],
+  dumbbell:['#2ee07a', '<path class="gf" d="M5.2 7h3v10h-3zM15.8 7h3v10h-3z"/><path class="gs" d="M5.2 7h3v10h-3zM15.8 7h3v10h-3zM8.2 12h7.6M3 9.5v5M21 9.5v5"/>'],
+  arm: ['#2ee07a', '<path class="gf gs" d="M3.5 20v-4.2c0-2.7 2.3-4.6 4.9-4.1.9-2 3.3-2.6 5-1.3l-.9-3.6a2.3 2.3 0 0 1 4.4-1.2l1.6 5.3c1.3 4.4-1.4 9.1-6.1 9.1z"/><path class="gs" d="M8.4 11.7c.3 1.6 1.9 2.6 3.6 2.2M12.9 6.5l2.6-.8"/>'],
+  heart:   ['#fb7185', '<path class="gf gs" d="M12 20s-7.6-4.6-7.6-9.9A4.2 4.2 0 0 1 12 7.6a4.2 4.2 0 0 1 7.6 2.5C19.6 15.4 12 20 12 20z"/>'],
+  shield:  ['#60a5fa', '<path class="gf gs" d="M12 3l7.5 3v5.6c0 4.3-3.1 8-7.5 9.4-4.4-1.4-7.5-5.1-7.5-9.4V6z"/><path class="gs" d="M8.8 12l2.2 2.2 4.3-4.4"/>'],
+  lock:    ['#94a3b8', '<rect class="gf gs" x="5" y="10.5" width="14" height="10" rx="3"/><path class="gs" d="M8 10.5V8a4 4 0 0 1 8 0v2.5M12 14.5v2.2"/>'],
+  camera:  ['#e2e8f0', '<path class="gf gs" d="M4 8.2h3.2L9 5.5h6l1.8 2.7H20a1 1 0 0 1 1 1V19a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.2a1 1 0 0 1 1-1z"/><circle class="gs" cx="12" cy="13.6" r="3.6"/>'],
+  scan:    ['#38bdf8', '<circle class="gf gs" cx="10.5" cy="10.5" r="6.5"/><path class="gs" d="M15.3 15.3l5 5M7 10.8h1.6l1.1-2.4 1.6 4.6 1-2.2H14"/>'],
+  calendar:['#818cf8', '<rect class="gf gs" x="3.5" y="5" width="17" height="15.5" rx="3"/><path class="gs" d="M3.5 10h17M8 3v4M16 3v4M8 14h2M14 14h2M8 17h2"/>'],
+  check:   ['#2ee07a', '<circle class="gf gs" cx="12" cy="12" r="8.6"/><path class="gs" d="M8 12.3l2.7 2.7 5.3-5.6"/>'],
+  close:   ['#94a3b8', '<path class="gs" d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>'],
+  pin:     ['#f87171', '<path class="gf gs" d="M12 21s-6.5-6.1-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.9 12 21 12 21z"/><circle class="gs" cx="12" cy="9.8" r="2.4"/>'],
+  compass: ['#2ee07a', '<circle class="gf gs" cx="12" cy="12" r="8.6"/><path class="gs" d="M15.6 8.4l-2 5.2-5.2 2 2-5.2z"/>'],
+  bell:    ['#fbbf24', '<path class="gf gs" d="M6 10a6 6 0 0 1 12 0c0 5 2 6.5 2 6.5H4S6 15 6 10z"/><path class="gs" d="M10.2 19.8a2 2 0 0 0 3.6 0"/>'],
+  sparkle: ['#c4b5fd', '<path class="gf gs" d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/><path class="gs" d="M19 16.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/>'],
+  users:   ['#60a5fa', '<circle class="gf gs" cx="9" cy="8.5" r="3.2"/><path class="gf gs" d="M3 19.5c0-3.4 2.7-6 6-6s6 2.6 6 6z"/><circle class="gs" cx="16.6" cy="9.3" r="2.6"/><path class="gs" d="M16.2 14c2.7-.2 4.8 2 4.8 5"/>'],
+  rebound: ['#2ee07a', '<path class="gf" d="M12 4a8 8 0 1 1-7.4 5"/><path class="gs" d="M4.6 9A8 8 0 1 0 12 4M4.3 4.5v4.6h4.6"/><path class="gs" d="M12 15.5v-7M9.2 11.2L12 8.4l2.8 2.8"/>'],
+  steps:   ['#38bdf8', '<path class="gf gs" d="M7.6 3.5c1.8 0 3 2.4 2.8 5.1-.1 1.8-1 2.9-2.6 2.9S5 10.3 5 8.2C5 5.6 6 3.5 7.6 3.5zM16.4 9c1.6 0 2.6 2.1 2.6 4.7 0 2.1-1.2 3.3-2.8 3.3s-2.5-1.1-2.6-2.9C13.4 11.4 14.6 9 16.4 9z"/><path class="gs" d="M6 14.3h4.2M13.8 19.8H18"/>'],
+  route:   ['#a3e635', '<circle class="gf gs" cx="6" cy="18" r="2.4"/><circle class="gf gs" cx="18" cy="6" r="2.4"/><path class="gs" d="M8.4 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.6" stroke-dasharray="2.2 2.4"/>'],
+  rocket:  ['#f472b6', '<path class="gf gs" d="M14.5 3.5c3 0 6 3 6 6-2 3.8-5 6.4-8.4 7.9L6.6 12C8.1 8.5 10.7 5.5 14.5 3.5z"/><circle class="gs" cx="15" cy="9" r="1.8"/><path class="gs" d="M6.6 12l-3 .9 2.4-4.1 3.7-.6M12.1 17.4l-.9 3 4.1-2.4.6-3.7M6.9 17.1L4 20"/>'],
+  comet:   ['#fb923c', '<circle class="gf gs" cx="15.5" cy="8.5" r="4.5"/><path class="gs" d="M12.3 11.7L4 20M10.5 8.7L5.5 13.7M15.3 13.5l-5 5"/>'],
+  hundred: ['#f87171', '<circle class="gf gs" cx="12" cy="12" r="8.8"/><path class="gs" d="M6.6 10.4l1.3-.9v5"/><ellipse class="gs" cx="11.6" cy="12" rx="1.5" ry="2.5"/><ellipse class="gs" cx="16" cy="12" rx="1.5" ry="2.5"/>'],
+  bowl:    ['#4ade80', '<path class="gf gs" d="M3.5 12h17c0 4.6-3.8 8-8.5 8s-8.5-3.4-8.5-8z"/><path class="gs" d="M8 12c-.4-2.6 1-4.6 3.2-5.2M12.5 12c.2-3 2.2-5.4 5.4-6-.2 2.9-2 5.3-5 6M7 9.2c1.3-.2 2.4.4 3 1.4"/>'],
+  chip:    ['#a78bfa', '<rect class="gf gs" x="6" y="6" width="12" height="12" rx="3"/><path class="gs" d="M9.5 3v3M14.5 3v3M9.5 18v3M14.5 18v3M3 9.5h3M3 14.5h3M18 9.5h3M18 14.5h3M10 14.5l2-5 2 5M10.6 13h2.8"/>'],
+  grid:    ['#2ee07a', '<rect class="gf gs" x="4" y="4" width="7" height="7" rx="2"/><rect class="gs" x="13" y="4" width="7" height="7" rx="2"/><rect class="gs" x="4" y="13" width="7" height="7" rx="2"/><rect class="gf gs" x="13" y="13" width="7" height="7" rx="2"/>'],
+  layers:  ['#818cf8', '<path class="gf gs" d="M12 4l8.5 4.5L12 13 3.5 8.5z"/><path class="gs" d="M3.5 12.5L12 17l8.5-4.5M3.5 16.2L12 20.7l8.5-4.5"/>'],
+  warning: ['#fbbf24', '<path class="gf gs" d="M12 3.6l9.4 16.4H2.6z"/><path class="gs" d="M12 9.8v4.4M12 17.2v.3"/>'],
+  bandage: ['#fb923c', '<rect class="gf gs" x="2.8" y="8.2" width="18.4" height="7.6" rx="3.8" transform="rotate(-40 12 12)"/><path class="gs" d="M10.4 10.4h.1M13.6 10.4h.1M10.4 13.6h.1M13.6 13.6h.1"/>'],
+  adam:    ['#2ee07a', '<circle class="gf gs" cx="12" cy="12" r="9"/><path class="gs" d="M7.8 16.5L12 7l4.2 9.5M9.4 13.1h5.2"/>'],
+  mail:    ['#60a5fa', '<rect class="gf gs" x="3" y="5.5" width="18" height="13" rx="3"/><path class="gs" d="M4 7.5l8 5.6 8-5.6"/>'],
+  sun:     ['#fbbf24', '<circle class="gf gs" cx="12" cy="12" r="4.2"/><path class="gs" d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/>'],
+  moon:    ['#c4b5fd', '<path class="gf gs" d="M19.5 14.6A7.9 7.9 0 0 1 9.4 4.5a7.9 7.9 0 1 0 10.1 10.1z"/>'],
+  tag:     ['#f472b6', '<path class="gf gs" d="M3.5 12.3V4.5a1 1 0 0 1 1-1h7.8l8.3 8.3a1.4 1.4 0 0 1 0 2l-6.8 6.8a1.4 1.4 0 0 1-2 0z"/><circle class="gs" cx="8" cy="8" r="1.4"/>'],
+  bottle:  ['#38bdf8', '<path class="gf gs" d="M9.5 7.5h5l1.5 3v9a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 8 19.5v-9z"/><path class="gs" d="M10 3.5h4v4h-4zM8 12.5h8"/>'],
+  shirt:   ['#2ee07a', '<path class="gf gs" d="M8.5 3.5L3.5 6.5l2 4 2-1v11h9v-11l2 1 2-4-5-3c-.5 1.7-1.8 2.6-3.5 2.6S9 5.2 8.5 3.5z"/>'],
+  flag:    ['#f87171', '<path class="gf gs" d="M5.5 4.5c4-2 7 2 11 0v9c-4 2-7-2-11 0z"/><path class="gs" d="M5.5 21V3.5"/>'],
+  burst:   ['#facc15', '<path class="gs" d="M12 3v3.5M12 17.5V21M3 12h3.5M17.5 12H21M5.6 5.6l2.5 2.5M15.9 15.9l2.5 2.5M18.4 5.6l-2.5 2.5M8.1 15.9l-2.5 2.5"/><circle class="gf gs" cx="12" cy="12" r="3"/>'],
+  home:    ['#2ee07a', '<path class="gf gs" d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H14V15h-4v5.5H5.5A1.5 1.5 0 0 1 4 19z"/>'],
+  run:     ['#2ee07a', '<circle class="gf gs" cx="15" cy="4.8" r="2"/><path class="gs" d="M9 21l2.6-5.4 2.9 2.4V22M6.6 11.2l3.2-3.3 4.5.6 2.4 3.2 3 .8M9.8 7.9l1.8 7.7M4 14.5l3.4-.4 1.4-2.2"/>'],
+  swords: ['#f87171', '<path class="gf gs" d="M12 3l7.5 3v5.6c0 4.3-3.1 8-7.5 9.4-4.4-1.4-7.5-5.1-7.5-9.4V6z"/><path class="gs" d="M12 6.5v12.8M8 9.5l8 6M16 9.5l-8 6"/>'],
+  ball:    ['#e2e8f0', '<circle class="gf gs" cx="12" cy="12" r="8.6"/><path class="gs" d="M12 8.2l3.2 2.3-1.2 3.8h-4l-1.2-3.8zM12 3.4v4.8M15.2 10.5l4.6-1.5M14 14.3l2.9 3.9M10 14.3l-2.9 3.9M8.8 10.5L4.2 9"/>'],
+  clap:    ['#facc15', '<path class="gf gs" d="M8.6 20.5c-2.7-1.5-4.4-4.6-3.6-7.6l1.3-5a1.3 1.3 0 0 1 2.5.7L8 12l4.1-6.8a1.3 1.3 0 0 1 2.2 1.3L11.8 11l3.6-5.3a1.3 1.3 0 0 1 2.2 1.4L14.4 12l2.6-3a1.3 1.3 0 0 1 2 1.6c-1.7 3-3.3 6.6-5.5 8.9-1.4 1.5-3.4 1.9-4.9 1z"/><path class="gs" d="M16.8 3.5l.8-1.4M19.6 5l1.4-.8M20.5 8h1.4"/>'],
+  bag:     ['#60a5fa', '<rect class="gf gs" x="3.5" y="7.5" width="17" height="12.5" rx="3"/><path class="gs" d="M9 7.5V5.8A1.8 1.8 0 0 1 10.8 4h2.4A1.8 1.8 0 0 1 15 5.8v1.7M3.5 12.5h17"/>'],
+  rings:   ['#fb7185', '<circle class="gf gs" cx="9" cy="13" r="5.5"/><circle class="gs" cx="15" cy="13" r="5.5"/><path class="gs" d="M9 4.5l1.5 2h-3zM9 6.5V7.5"/>']
+};
+
+/* إيموجي قديم (من داتا المسابقات والجوايز) ← أقرب أيقونة */
+const EMOJI_GLYPH = {
+  '🔥': 'flame', '⭐': 'star', '🌟': 'star', '✨': 'sparkle', '🏆': 'trophy', '🏅': 'medal', '🥇': 'medal', '🥈': 'medal', '🥉': 'medal',
+  '👑': 'crown', '🎁': 'gift', '⚡': 'bolt', '💧': 'drop', '🌱': 'sprout', '💎': 'gem', '💠': 'hexgem', '🎯': 'target',
+  '🏋️': 'dumbbell', '🏋': 'dumbbell', '💪': 'arm', '🦾': 'arm', '❤️': 'heart', '❤': 'heart', '🛡️': 'shield', '🔒': 'lock',
+  '📸': 'camera', '🔍': 'scan', '📅': 'calendar', '✓': 'check', '✅': 'check', '📍': 'pin', '🧭': 'compass', '🔔': 'bell',
+  '👥': 'users', '🤝': 'users', '🦅': 'rebound', '👟': 'steps', '🏃': 'run', '🛣️': 'route', '🚀': 'rocket', '☄️': 'comet',
+  '🌋': 'flame', '💯': 'hundred', '🥗': 'bowl', '🤖': 'chip', '🧩': 'grid', '🗂️': 'layers', '⚠️': 'warning', '🩹': 'bandage',
+  '📩': 'mail', '☀️': 'sun', '🌙': 'moon', '🏷️': 'tag', '🧴': 'bottle', '👕': 'shirt', '⚔️': 'swords', '⚽': 'ball', '👏': 'clap',
+  '🏠': 'home', '🐯': 'flag', '🎉': 'burst'
+};
+
+function glyphKey(val, fallback) {
+  const v = String(val || '').trim();
+  if (GLYPHS[v]) return v;
+  if (EMOJI_GLYPH[v]) return EMOJI_GLYPH[v];
+  const bare = v.replace(/️/g, '');
+  if (EMOJI_GLYPH[bare]) return EMOJI_GLYPH[bare];
+  return GLYPHS[fallback] ? fallback : 'sparkle';
+}
+
+function glyph(name, cls, color) {
+  const g = GLYPHS[glyphKey(name, 'sparkle')];
+  return '<svg class="glyph' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" aria-hidden="true" style="--gc:' + (color || g[0]) + '">' + g[1] + '</svg>';
+}
+
+function glyphEl(name, cls, color) {
+  const wrap = document.createElement('span');
+  wrap.innerHTML = glyph(name, cls, color);
+  return wrap.firstChild;
+}
+
+/* أيقونة جوه «مربع زجاج» ملوّن — للجولة والمربعات المهمة */
+function glyphChip(name, cls) {
+  const key = glyphKey(name, 'sparkle');
+  return '<span class="glyph-chip' + (cls ? ' ' + cls : '') + '" style="--gc:' + GLYPHS[key][0] + '">' + glyph(key, '', '#ffffff') + '</span>';
+}
+
+/* نسخة من الأيقونة كصورة (للكانفاس بتاع كارت المشاركة) */
+function glyphImage(name, size, color) {
+  const g = GLYPHS[glyphKey(name, 'sparkle')];
+  const c = color || g[0];
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="' + size + '" height="' + size + '">'
+    + '<style>.gf{fill:' + c + ';fill-opacity:.3}.gs{fill:none;stroke:' + c + ';stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.gf.gs{fill:' + c + ';fill-opacity:.3}</style>'
+    + g[1] + '</svg>';
+  return new Promise(function (resolve) {
+    const img = new Image();
+    img.onload = function () { resolve(img); };
+    img.onerror = function () { resolve(null); };
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   });
-  document.addEventListener('keydown', function (e) {
-    if (!storyState) return;
-    if (e.key === 'Escape') storyClose();
-    if (e.key === 'ArrowLeft') storyGo(lang === 'ar' ? 1 : -1);
-    if (e.key === 'ArrowRight') storyGo(lang === 'ar' ? -1 : 1);
+}
+
+/* أي عنصر في الصفحة عليه data-glyph بيتملي بالأيقونة */
+function hydrateGlyphs(root) {
+  (root || document).querySelectorAll('[data-glyph]').forEach(function (el) {
+    if (el.getAttribute('data-glyph-done') === el.getAttribute('data-glyph')) return;
+    el.innerHTML = glyph(el.getAttribute('data-glyph'));
+    el.setAttribute('data-glyph-done', el.getAttribute('data-glyph'));
   });
-  return root;
 }
+hydrateGlyphs();
 
-function openStory(from) {
-  const root = storyRoot();
-  root.classList.remove('hidden');
-  root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-  document.body.classList.add('story-open');
-  const bars = root.querySelector('.st-bars');
-  bars.innerHTML = STORY_CHAPTERS.map(function () { return '<span><i></i></span>'; }).join('');
-  storyState = { i: 0, from: from || '', timer: null, started: 0, left: 0, paused: false };
-  storyShow();
-}
+/* اختيار أيقونة للمسابقة/الجايزة (بدل خانة الإيموجي) */
+const CHAL_GLYPHS = ['trophy', 'star', 'flame', 'drop', 'dumbbell', 'bowl', 'bolt', 'steps', 'run', 'route', 'flag', 'ball', 'target', 'medal', 'crown', 'heart', 'moon', 'sun'];
+const REWARD_GLYPHS = ['gift', 'calendar', 'tag', 'bowl', 'target', 'bottle', 'shirt', 'bag', 'star', 'medal', 'crown', 'heart'];
 
-function storyClose() {
-  if (!storyState) return;
-  clearTimeout(storyState.timer);
-  storyState = null;
-  const root = storyRoot();
-  root.classList.add('hidden');
-  document.body.classList.remove('story-open');
-}
-
-function storyGo(d) {
-  if (!storyState) return;
-  const n = storyState.i + d;
-  if (n < 0) { storyShow(); return; }
-  if (n >= STORY_CHAPTERS.length) { storyClose(); return; }
-  storyState.i = n;
-  storyShow();
-}
-
-function storyPause(on) {
-  const st = storyState;
-  if (!st || st.paused === on) return;
-  const root = storyRoot();
-  const bar = root.querySelectorAll('.st-bars i')[st.i];
-  st.paused = on;
-  root.classList.toggle('paused', on);
-  if (on) {
-    clearTimeout(st.timer);
-    st.left = Math.max(300, st.left - (Date.now() - st.started));
-    if (bar) { const w = getComputedStyle(bar).width; bar.style.transition = 'none'; bar.style.width = w; }
-  } else {
-    st.started = Date.now();
-    if (bar) { void bar.offsetWidth; bar.style.transition = 'width ' + st.left + 'ms linear'; bar.style.width = '100%'; }
-    st.timer = setTimeout(function () { storyGo(1); }, st.left);
-  }
-}
-
-function storyShow() {
-  const st = storyState;
-  const ch = STORY_CHAPTERS[st.i];
-  const root = storyRoot();
-  clearTimeout(st.timer);
-  root.style.setProperty('--c', ch.c);
-  root.classList.remove('paused');
-  st.paused = false;
-  const k = 'story_' + ch.key;
-  const stage = root.querySelector('.st-stage');
-  stage.classList.remove('in');
-  void stage.offsetWidth;
-  stage.classList.add('in');
-  root.querySelector('.st-scene').innerHTML = storyScene(ch.scene);
-  root.querySelector('.st-chapter').textContent = (st.i > 0 && st.i < STORY_CHAPTERS.length - 1 ? String(st.i).padStart(2, '0') + ' · ' : '') + t(k + '_label');
-  root.querySelector('.st-title').textContent = t(k + '_title');
-  root.querySelector('.st-text').textContent = t(k + '_text');
-  const team = root.querySelector('.st-team');
-  team.innerHTML = '';
-  (ch.team || []).forEach(function (key, i) {
-    const chip = document.createElement('span');
-    chip.className = 'st-chip';
-    chip.style.animationDelay = (0.9 + i * 0.18) + 's';
-    chip.innerHTML = specialtyIconSvg(key);
-    chip.appendChild(document.createTextNode(' ' + specialtyName(key, lang)));
-    team.appendChild(chip);
-  });
-  const cta = root.querySelector('.st-cta');
-  cta.innerHTML = '';
-  if (ch.key === 'end') {
+function renderGlyphPick(boxId, inputId, keys) {
+  const box = document.querySelector('#' + boxId);
+  const input = document.querySelector('#' + inputId);
+  if (!box || !input) return;
+  box.innerHTML = '';
+  if (!input.value || !GLYPHS[input.value]) input.value = keys[0];
+  keys.forEach(function (k) {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'st-cta-btn';
-    b.textContent = clientEmail || currentProviderEmail ? t('story_cta_in') : t('story_cta');
+    b.className = 'glyph-pick-btn' + (input.value === k ? ' on' : '');
+    b.innerHTML = glyph(k);
+    b.setAttribute('aria-label', k);
     b.addEventListener('click', function () {
-      storyClose();
-      const start = document.getElementById('hero2-start-btn');
-      if (!clientEmail && !currentProviderEmail && start && tourVisible(start)) start.click();
+      input.value = k;
+      box.querySelectorAll('.glyph-pick-btn').forEach(function (x) { x.classList.toggle('on', x === b); });
     });
-    cta.appendChild(b);
-  }
-  /* شرايط التقدّم فوق: اللي فات مليان، الحالي بيتملى */
-  root.querySelectorAll('.st-bars i').forEach(function (bar, i) {
-    bar.style.transition = 'none';
-    bar.style.width = i < st.i ? '100%' : '0%';
+    box.appendChild(b);
   });
-  const cur = root.querySelectorAll('.st-bars i')[st.i];
-  void cur.offsetWidth;
-  cur.style.transition = 'width ' + ch.ms + 'ms linear';
-  cur.style.width = '100%';
-  st.started = Date.now();
-  st.left = ch.ms;
-  st.timer = setTimeout(function () { storyGo(1); }, ch.ms);
 }
-
-/* تمهيد في صفحة الترحيب: خط العمر بالمراحل ونقطة ماشية عليه */
-(function wireStoryEntry() {
-  const teaser = document.getElementById('story-teaser-line');
-  if (teaser) {
-    teaser.innerHTML = STORY_EMOJI.map(function (e, i) { return '<span class="stl-dot" style="animation-delay:' + (i * 0.35) + 's">' + e + '</span>'; }).join('');
-  }
-  ['story-open-welcome', 'story-open-client'].forEach(function (id) {
-    const btn = document.getElementById(id);
-    if (btn) btn.addEventListener('click', function () { openStory(id); });
-  });
-})();

@@ -89,8 +89,7 @@
       <div class="st-kicker" data-t="story_teaser_kicker">ليه اسمه ADAM؟</div>
       <h3 class="st-teaser-title" data-t="story_teaser_title">آدم أول الخلق… وأول الحكاية</h3>
       <p class="st-teaser-text" data-t="story_teaser_text">رحلة معاك من قبل ما تتولد لحد آخر العمر — وفريق كامل جنبك في كل مرحلة.</p>
-      <div class="story-teaser-line" id="story-teaser-line" aria-hidden="true"></div>
-      <button type="button" class="secondary st-teaser-btn" id="story-open-welcome" data-t="story_teaser_btn">▶ اتفرّج على الحكاية</button>
+      <div class="lj-wrap" data-lj></div>
     </div>
 
     <div class="team-strip">
@@ -433,7 +432,7 @@
     <div id="chal-admin-body"></div>
     <div class="add-box chal-form" id="chal-admin-form">
       <div class="row">
-        <input id="ch-emoji" class="rw-emoji" maxlength="4" data-t-ph="chal_f_emoji" placeholder="🏆">
+        <input id="ch-emoji" type="hidden" value="trophy"><div class="glyph-pick" id="ch-glyph-pick"></div>
         <input id="ch-title-ar" data-t-ph="chal_f_title_ar">
       </div>
       <input id="ch-title-en" data-t-ph="chal_f_title_en">
@@ -774,7 +773,7 @@
     <p class="or" data-t="team_hint">دوس على أي متخصص تحب تشتغل معاه — تقدر تغيّر اختيارك في أي وقت بعدين</p>
 
     <input id="team-search" type="search" data-t-ph="team_search_ph">
-    <div class="team-near-row"><button type="button" class="secondary" id="team-near-btn" data-t="near_btn">📍 رتّب بالأقرب ليا</button><span class="hint-text" id="team-near-msg"></span></div>
+    <div class="team-near-row"><button type="button" class="secondary btn-ic" id="team-near-btn"><span class="glyph-slot" data-glyph="pin"></span><span data-t="near_btn">رتّب بالأقرب ليا</span></button><span class="hint-text" id="team-near-msg"></span></div>
     <p class="team-empty hidden" id="team-empty" data-t="team_no_match">مفيش متخصص بالاسم ده</p>
 
     <div id="team-list"></div>
@@ -1081,7 +1080,7 @@
     </div>
 
     <div class="home-tiles" id="coach-tiles"></div>
-    <button type="button" class="link tour-replay" id="tour-replay-provider" data-t="tour_replay">🧭 جولة سريعة في البرنامج</button>
+    <button type="button" class="link tour-replay" id="tour-replay-provider"><span class="glyph-slot" data-glyph="compass"></span><span data-t="tour_replay">جولة سريعة في البرنامج</span></button>
 
     <input id="clients-search" type="search" data-t-ph="clients_search_ph">
     <ul class="clients-grid" id="clients-list"></ul>
@@ -1195,7 +1194,7 @@
       <label class="field-label" data-t="pw_map">مكان الشغل على الخريطة</label>
       <input id="pw-map" type="url" maxlength="400" inputmode="url" data-t-ph="pw_map_ph">
       <div class="pw-map-row">
-        <button type="button" class="secondary" id="pw-locate-btn" data-t="pw_locate">📍 حدد مكاني دلوقتي</button>
+        <button type="button" class="secondary btn-ic" id="pw-locate-btn"><span class="glyph-slot" data-glyph="pin"></span><span data-t="pw_locate">حدد مكاني دلوقتي</span></button>
         <button type="button" class="link hidden" id="pw-map-clear" data-t="pw_map_clear">شيل المكان</button>
       </div>
       <p class="hint-text" id="pw-map-status" data-t="pw_map_hint">الزق لينك جوجل ماب لمكان الشغل، أو دوس «حدد مكاني» وإنت في الجيم/العيادة. حط مكان الشغل مش البيت — المكان بيظهر للعملاء.</p>
@@ -1769,8 +1768,8 @@
       <div class="home-cards" id="home-cards"></div>
       <div class="home-tiles" id="home-tiles"></div>
       <div class="home-extra-links">
-        <button type="button" class="link tour-replay" id="story-open-client" data-t="story_client_link">▶ حكاية ADAM</button>
-        <button type="button" class="link tour-replay" id="tour-replay-client" data-t="tour_replay">🧭 جولة سريعة في البرنامج</button>
+        <div class="lj-wrap lj-mini" data-lj></div>
+        <button type="button" class="link tour-replay" id="tour-replay-client"><span class="glyph-slot" data-glyph="compass"></span><span data-t="tour_replay">جولة سريعة في البرنامج</span></button>
       </div>
     </div>
 
@@ -2071,7 +2070,7 @@
           <p class="hint-text" data-t="wr_strava_hint"></p>
           <button type="button" class="strava-btn" id="wr-strava-connect" data-t="wr_strava_connect">اربط Strava</button>
           <div class="hidden" id="wr-strava-on">
-            <p class="wr-strava-ok" data-t="wr_strava_connected">Strava مربوط ✓</p>
+            <p class="wr-strava-ok"><span class="glyph-slot" data-glyph="check"></span><span data-t="wr_strava_connected">Strava مربوط</span></p>
             <div class="row">
               <button type="button" class="secondary" id="wr-strava-sync" data-t="wr_strava_sync">زامن دلوقتي</button>
               <button type="button" class="secondary" id="wr-strava-off" data-t="wr_strava_disconnect">افصل Strava</button>
@@ -2122,7 +2121,7 @@
     <div id="progress-inbody">
       <div class="add-box">
         <h3 data-t="ib_add_title">تسجيل قياس جديد</h3>
-        <button type="button" class="ib-ai-btn" id="ib-ai-btn" data-t="ib_ai_btn">📸 صوّر ورقة الإنبودي — الأرقام هتتملى لوحدها</button>
+        <button type="button" class="ib-ai-btn" id="ib-ai-btn"><span class="glyph-slot" data-glyph="camera"></span><span data-t="ib_ai_btn">صوّر ورقة الإنبودي — الأرقام هتتملى لوحدها</span></button>
         <input type="file" id="ib-ai-file" accept="image/*" class="hidden">
         <p class="hint-text" data-t="ib_ai_hint">بعد الحفظ فريق الإنبودي بيحلّل القياس ويبعته لأخصائي التغذية ومدربك</p>
         <div class="ib-ai-extra hidden" id="ib-ai-extra"></div>
@@ -2247,7 +2246,7 @@
       <p class="eng-cel-body" id="eng-cel-body"></p>
       <div class="eng-cel-actions">
         <button type="button" class="eng-share-btn hidden" id="eng-cel-share" data-t="eng_share_card">شارك إنجازك ستوري</button>
-        <button type="button" class="eng-cel-ok" id="eng-cel-ok" data-t="eng_ok">تمام 💪</button>
+        <button type="button" class="eng-cel-ok" id="eng-cel-ok" data-t="eng_ok">تمام</button>
       </div>
     </div>
   </div>
