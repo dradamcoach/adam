@@ -278,34 +278,50 @@
   <div class="card hidden" id="squad-screen">
     <button type="button" id="squad-back-btn" class="link" data-t="back_simple">‹ رجوع</button>
     <h2 id="squad-title"></h2>
+    <p class="sq-role hidden" id="squad-role"></p>
     <div class="sq-season" id="sq-season"></div>
     <div class="sq-tabs" id="sq-tabs"></div>
     <div id="sq-pane"></div>
     <p class="message" id="squad-msg"></p>
   </div>
 
-  <div class="card hidden" id="chat-inbox-screen">
-    <button type="button" id="chat-inbox-back-btn" class="link" data-t="back_clients">‹ رجوع لقائمة العملاء</button>
-    <h2 data-t="chat_inbox_title">المحادثات</h2>
+  <div class="card hidden wa-card" id="chat-inbox-screen">
+    <div class="wa-top">
+      <button type="button" id="chat-inbox-back-btn" class="wa-icon-btn" data-t-title="back_simple" aria-label="back"><svg class="ui-icon wa-back-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg></button>
+      <h2 data-t="chat_inbox_title">المحادثات</h2>
+      <button type="button" id="chat-new-btn" class="wa-new-btn hidden"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v10.5H9l-4 3.5v-3.5H4z"></path><line x1="12" y1="8" x2="12" y2="13.5"></line><line x1="9.25" y1="10.75" x2="14.75" y2="10.75"></line></svg><span data-t="chat_new_btn">محادثة جديدة</span></button>
+    </div>
+    <input id="chat-inbox-search" class="wa-search" data-t-ph="chat_search_ph">
     <p class="or hidden" id="chat-inbox-empty" data-t="chat_inbox_empty">مفيش محادثات لسه</p>
-    <div id="chat-inbox-list"></div>
+    <div id="chat-inbox-list" class="wa-list"></div>
   </div>
 
-  <div class="card hidden" id="chat-screen">
-    <button type="button" id="chat-back-btn" class="link" data-t="back_to_client">‹ رجوع</button>
-    <h2 id="chat-title-text" data-t="chat_title">الشات</h2>
-    <p class="or" data-t="chat_ai_note">هيردّ عليك المساعد الذكي فورًا، ولو محتاج تفاصيل أكتر مدربك هيدخل يرد عليك بنفسه</p>
-    <div class="chat-messages" id="chat-messages-list"></div>
+  <div class="card hidden wa-card" id="chat-screen">
+    <div class="wa-head">
+      <button type="button" id="chat-back-btn" class="wa-icon-btn" data-t-title="back_simple" aria-label="back"><svg class="ui-icon wa-back-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg></button>
+      <div class="wa-avatar" id="chat-head-avatar"></div>
+      <div class="wa-head-text">
+        <div class="wa-head-name" id="chat-title-text">الشات</div>
+        <div class="wa-head-sub" id="chat-head-sub"></div>
+      </div>
+    </div>
+    <p class="wa-ai-note" data-t="chat_ai_note">هيردّ عليك المساعد الذكي فورًا، ولو محتاج تفاصيل أكتر مدربك هيدخل يرد عليك بنفسه</p>
+    <div class="chat-messages wa-body" id="chat-messages-list"></div>
     <div class="chat-typing hidden" id="chat-typing">
       <span></span><span></span><span></span>
       <em data-t="chat_ai_typing">المساعد الذكي بيكتب…</em>
     </div>
-    <div class="chat-input-row">
+    <div class="chat-input-row wa-input">
+      <button type="button" class="chat-tool-btn" id="chat-emoji-btn" data-t-title="chat_emoji_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 14.2c.9 1.3 2.1 2 3.5 2s2.6-.7 3.5-2"></path><line x1="9" y1="9.5" x2="9" y2="9.6"></line><line x1="15" y1="9.5" x2="15" y2="9.6"></line></svg></button>
       <label class="chat-tool-btn" id="chat-attach-label" data-t-title="chat_attach_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5 12.6 20a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"></path></svg><input type="file" id="chat-file-input" accept="image/*,application/pdf,audio/*" multiple></label>
-      <button type="button" class="chat-tool-btn" id="chat-mic-btn" data-t-title="chat_rec_start"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><line x1="12" y1="18" x2="12" y2="21"></line></svg></button>
       <button type="button" class="link hidden" id="chat-rec-cancel" data-t="chat_rec_cancel">إلغاء</button>
-      <input id="chat-input" data-t-ph="chat_input_ph">
+      <input id="chat-input" data-t-ph="chat_input_ph" autocomplete="off">
+      <button type="button" class="chat-tool-btn" id="chat-mic-btn" data-t-title="chat_rec_start"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><line x1="12" y1="18" x2="12" y2="21"></line></svg></button>
       <button type="button" id="chat-send-btn" class="chat-send-btn" data-t-title="chat_send_btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="20" y1="4" x2="10" y2="14"></line><path d="M20 4l-7 17-3-7-7-3z"></path></svg></button>
+    </div>
+    <div class="wa-panel hidden" id="chat-panel">
+      <div class="wa-panel-tabs" id="chat-panel-tabs"></div>
+      <div class="wa-panel-grid" id="chat-panel-grid"></div>
     </div>
     <p class="message" id="chat-message"></p>
   </div>
@@ -1110,7 +1126,10 @@
     <button type="button" class="link tour-replay" id="tour-replay-provider"><span class="glyph-slot" data-glyph="compass"></span><span data-t="tour_replay">جولة سريعة في البرنامج</span></button>
 
     <input id="clients-search" type="search" data-t-ph="clients_search_ph">
+    <div class="cl-chips hidden" id="clients-chips"></div>
+    <p class="cl-count hidden" id="clients-count"></p>
     <ul class="clients-grid" id="clients-list"></ul>
+    <button type="button" class="secondary cl-more hidden" id="clients-more"></button>
 
     <div class="hidden" id="clients-admin-box">
       <div class="row">

@@ -35,6 +35,7 @@ import { NUTRITION_PROGRAMS_SPORTS } from './library/programs-sports.js';
 import { MED_LIBRARY_RD, TEMPLATES_MED_RD } from './library/med-rd.js';
 /* رسومات التمارين اللي كانت ناقصة (tools/mannequin.js) */
 import { MEDIA_EXTRA } from './library/media-extra.js';
+import { STICKERS, stickerSvg, EMOJI_GROUPS } from './library/chat-stickers.js';
 
 /* ============================================================
    حارس الكتابة في قاعدة البيانات
@@ -157,6 +158,40 @@ const TEXT = {
     sq_tab_today: 'النهارده',
     sq_tab_season: 'الموسم',
     sq_tab_players: 'اللاعبين',
+    sq_tab_talk: 'النقاش',
+    sq_tab_staff: 'الجهاز الفني',
+    sq_none_staff: 'لسه محدش ضافك في جهاز فني لفريق. أول ما مدرب رئيسي يضيفك هتلاقي الفريق هنا.',
+    sq_you_staff: 'انت في الجهاز الفني',
+    sq_role_lead: 'انت المدرب الرئيسي — البرنامج والقرار النهائي عندك.',
+    sq_role_staff: 'انت في الجهاز الفني — القرار النهائي للمدرب الرئيسي ({name}).',
+    sq_lead_coach: 'المدرب الرئيسي',
+    sq_suggest_today: 'اقترح جلسة تانية للنهارده:',
+    sq_suggest_auto: 'اقتراح تغيير جلسة.',
+    sq_suggest_sent: 'اقتراحك اتبعت للمدرب الرئيسي.',
+    sq_note_sent: 'اتكتبت.',
+    sq_readonly_note: 'البرنامج بيعدّله المدرب الرئيسي بس. لو عندك تعديل ابعته كـ«اقتراح» من تبويب النقاش.',
+    sq_log_for: 'سجّل له',
+    sq_log_save: 'احفظ جلسة {name}',
+    sq_note_btn: 'ملاحظة',
+    sq_notes_n: '{n} ملاحظة',
+    sq_kind_note: 'ملاحظة',
+    sq_kind_suggest: 'اقتراح تعديل',
+    sq_about_team: 'عن الفريق كله',
+    sq_about_x: 'عن {name}',
+    sq_talk_ph_note: 'اكتب ملاحظتك (حمل، إصابة، أكل، نوم، أداء…)',
+    sq_talk_ph_suggest: 'اكتب التعديل اللي بتقترحه وليه…',
+    sq_talk_send: 'ابعت',
+    sq_talk_empty: 'لسه مفيش نقاش — أول ملاحظة من عندك.',
+    sq_st_pending: 'مستني الرئيسي',
+    sq_st_approved: 'اتوافق عليه',
+    sq_st_rejected: 'اترفض',
+    sq_approved: 'اتوافق عليه',
+    sq_rejected: 'اترفض',
+    sq_approve: 'موافق',
+    sq_reject: 'رفض',
+    sq_change_line: 'التغيير: يوم {date} ← {tpl}',
+    sq_staff_intro: 'ضيف مدربين وأخصائيين تغذية ومؤهلين وأطباء يتابعوا معاك. هيقدروا يشوفوا ويسجّلوا ويكتبوا ملاحظات ويقترحوا — والبرنامج نفسه مايتغيّرش غير بموافقتك.',
+    sq_add_staff: '+ ضيف للجهاز الفني',
     sq_tab_me: 'إنجازاتي',
     sq_phase_off: 'خارج الموسم',
     sq_phase_pre: 'تحضير',
@@ -211,6 +246,14 @@ const TEXT = {
     sq_weeks_ago: '-{n}',
     sq_home_kicker: 'فريقي · {name}',
     notif_t_squad_joined: 'انضميت لفريق تمرين',
+    notif_t_squad_staff: 'اتضفت للجهاز الفني',
+    notif_b_squad_staff: 'اتضفت للجهاز الفني لفريق {name} — تقدر تتابع وتسجّل وتكتب ملاحظات.',
+    notif_t_squad_note: 'ملاحظة جديدة في الفريق',
+    notif_b_squad_note: '{name} كتب ملاحظة في فريق {team}.',
+    notif_t_squad_suggest: 'اقتراح مستني موافقتك',
+    notif_b_squad_suggest: '{name} اقترح تغيير في برنامج فريق {team}.',
+    notif_t_squad_decided: 'اتردّ على اقتراحك',
+    notif_b_squad_decided: 'اقتراحك في فريق {team}: {state}.',
     notif_b_squad_joined: 'مدربك ضافك لفريق {name} — افتحه وشوف جلسة النهارده.',
     notif_t_squad_session: 'برنامج الفريق اتحدّث',
     notif_b_squad_session: 'فيه تغيير في جلسات فريق {name}.',
@@ -2311,6 +2354,26 @@ const TEXT = {
     chat_sender_coach: 'مدربك',
     chat_sender_ai: 'المساعد الذكي',
     chat_thread_with: 'المحادثة مع {name}',
+    chat_team_name: 'فريقي',
+    cl_f_all: 'الكل',
+    cl_f_injury: 'عندهم إصابة',
+    cl_f_new: 'جداد',
+    cl_more: 'اعرض {n} كمان (فاضل {left})',
+    cl_count: 'ظاهر {shown} من {total}',
+    chat_team_sub: 'كل فريقك + المساعد الذكي',
+    chat_team_sub_coach: 'جروب الفريق مع العميل',
+    chat_team_of: 'فريق {name}',
+    chat_private: 'محادثة خاصة',
+    chat_say_hi: 'ابدأ المحادثة',
+    chat_you: 'انت',
+    chat_today: 'النهارده',
+    chat_yesterday: 'امبارح',
+    chat_sticker_msg: 'استيكر',
+    chat_emoji_btn: 'إيموجي واستيكرات',
+    chat_stickers_tab: 'استيكرات ADAM',
+    chat_new_btn: 'محادثة جديدة',
+    chat_pick_client: 'اختار العميل اللي عايز تكلّمه',
+    chat_search_ph: 'دوّر على محادثة',
     coach_chat_btn: 'كلّمه',
     open_subscription_btn: 'الاشتراك',
     open_provider_subscription_btn: 'اشتراكي',
@@ -2470,6 +2533,40 @@ const TEXT = {
     sq_tab_today: 'Today',
     sq_tab_season: 'Season',
     sq_tab_players: 'Players',
+    sq_tab_talk: 'Discussion',
+    sq_tab_staff: 'Staff',
+    sq_none_staff: 'You are not on any squad staff yet. Once a head coach adds you, the squad shows up here.',
+    sq_you_staff: 'You are on the staff',
+    sq_role_lead: 'You are the head coach — the program and the final call are yours.',
+    sq_role_staff: 'You are on the staff — the final call belongs to the head coach ({name}).',
+    sq_lead_coach: 'Head coach',
+    sq_suggest_today: 'Suggest a different session for today:',
+    sq_suggest_auto: 'Session change suggestion.',
+    sq_suggest_sent: 'Your suggestion was sent to the head coach.',
+    sq_note_sent: 'Posted.',
+    sq_readonly_note: 'Only the head coach edits the program. If you want a change, send it as a “suggestion” from the Discussion tab.',
+    sq_log_for: 'Log for them',
+    sq_log_save: 'Save {name}\'s session',
+    sq_note_btn: 'Note',
+    sq_notes_n: '{n} notes',
+    sq_kind_note: 'Note',
+    sq_kind_suggest: 'Suggest a change',
+    sq_about_team: 'About the whole squad',
+    sq_about_x: 'About {name}',
+    sq_talk_ph_note: 'Write your note (load, injury, food, sleep, performance…)',
+    sq_talk_ph_suggest: 'Describe the change you suggest and why…',
+    sq_talk_send: 'Send',
+    sq_talk_empty: 'No discussion yet — start with the first note.',
+    sq_st_pending: 'Waiting for head coach',
+    sq_st_approved: 'Approved',
+    sq_st_rejected: 'Rejected',
+    sq_approved: 'approved',
+    sq_rejected: 'rejected',
+    sq_approve: 'Approve',
+    sq_reject: 'Reject',
+    sq_change_line: 'Change: {date} → {tpl}',
+    sq_staff_intro: 'Add coaches, nutritionists, rehab specialists and doctors to follow the squad with you. They can view, log, write notes and suggest — the program only changes with your approval.',
+    sq_add_staff: '+ Add to staff',
     sq_tab_me: 'My progress',
     sq_phase_off: 'Off-season',
     sq_phase_pre: 'Pre-season',
@@ -2524,6 +2621,14 @@ const TEXT = {
     sq_weeks_ago: '-{n}',
     sq_home_kicker: 'My squad · {name}',
     notif_t_squad_joined: 'You joined a training squad',
+    notif_t_squad_staff: 'You joined the coaching staff',
+    notif_b_squad_staff: 'You were added to the staff of {name} — follow, log and add notes.',
+    notif_t_squad_note: 'New note in the squad',
+    notif_b_squad_note: '{name} added a note in {team}.',
+    notif_t_squad_suggest: 'A suggestion needs your approval',
+    notif_b_squad_suggest: '{name} suggested a change to the {team} program.',
+    notif_t_squad_decided: 'Your suggestion got a reply',
+    notif_b_squad_decided: 'Your suggestion in {team}: {state}.',
     notif_b_squad_joined: 'Your coach added you to {name} — open it to see today\'s session.',
     notif_t_squad_session: 'Squad program updated',
     notif_b_squad_session: 'There are changes to the {name} squad sessions.',
@@ -4624,6 +4729,26 @@ const TEXT = {
     chat_sender_coach: 'Your coach',
     chat_sender_ai: 'AI assistant',
     chat_thread_with: 'Chat with {name}',
+    chat_team_name: 'My team',
+    cl_f_all: 'All',
+    cl_f_injury: 'Injured',
+    cl_f_new: 'New',
+    cl_more: 'Show {n} more ({left} left)',
+    cl_count: 'Showing {shown} of {total}',
+    chat_team_sub: 'Your whole team + the AI assistant',
+    chat_team_sub_coach: 'Team group with the client',
+    chat_team_of: '{name}\'s team',
+    chat_private: 'Private chat',
+    chat_say_hi: 'Start the conversation',
+    chat_you: 'You',
+    chat_today: 'Today',
+    chat_yesterday: 'Yesterday',
+    chat_sticker_msg: 'Sticker',
+    chat_emoji_btn: 'Emoji & stickers',
+    chat_stickers_tab: 'ADAM stickers',
+    chat_new_btn: 'New chat',
+    chat_pick_client: 'Pick the client you want to message',
+    chat_search_ph: 'Search chats',
     coach_chat_btn: 'Message',
     open_subscription_btn: 'Subscription',
     open_provider_subscription_btn: 'My subscription',
@@ -5934,6 +6059,104 @@ let nutDay = todayIndex;
 let clientNutrition = emptyNutrition();
 let cNutDay = todayIndex;
 
+/* ============================================================
+   الرجوع — زرار الرجوع في الموبايل والمتصفح بقى شغال جوه البرنامج
+   كل شاشة (وكل قسم جوه صفحة العميل) بتتسجل في تاريخ المتصفح،
+   فزرار الرجوع بيرجّعك للي كنت فيه بدل ما يخرّجك من البرنامج.
+   ولو دوست زرار «رجوع» جوه البرنامج على نفس الشاشة اللي قبلها،
+   بنرجع خطوة في التاريخ بدل ما نزوّد خطوة جديدة — عشان الاتنين
+   يفضلوا ماشيين مع بعض
+   ============================================================ */
+var navStack = [];
+var navIdx = -1;
+var navRestoring = false;
+var navSkipPop = 0;
+var navLastAt = 0;
+var NAV_AUTH_SCREENS = ['welcome-screen', 'login-screen', 'signup-screen'];
+
+function navState(key, screenId, mode) {
+  return { adamNav: 1, key: key, screen: screenId, mode: mode || '', i: navIdx };
+}
+
+function navRecord(screenEl, mode) {
+  if (!screenEl || !screenEl.id || !window.history || !history.pushState) return;
+  const key = screenEl.id + (mode ? '|' + mode : '');
+  if (navRestoring) return;
+  if (navIdx >= 0 && navStack[navIdx] === key) return;
+  const now = Date.now();
+  const sameScreenQuick = navIdx >= 0 && (now - navLastAt) < 700 &&
+    String(navStack[navIdx]).split('|')[0] === screenEl.id;
+  navLastAt = now;
+  try {
+    if (navIdx < 0 || sameScreenQuick || NAV_AUTH_SCREENS.indexOf(screenEl.id) !== -1) {
+      if (navIdx < 0) navIdx = 0;
+      navStack[navIdx] = key;
+      navStack.length = navIdx + 1;
+      history.replaceState(navState(key, screenEl.id, mode), '');
+      return;
+    }
+    /* زرار رجوع جوه البرنامج على نفس اللي قبلها = رجوع في التاريخ */
+    if (navIdx > 0 && navStack[navIdx - 1] === key) {
+      navIdx -= 1;
+      navSkipPop += 1;
+      history.back();
+      return;
+    }
+    navStack = navStack.slice(0, navIdx + 1);
+    navStack.push(key);
+    navIdx = navStack.length - 1;
+    history.pushState(navState(key, screenEl.id, mode), '');
+  } catch (e) { /* المتصفح رافض — البرنامج يشتغل عادي من غير تاريخ */ }
+}
+
+function navCanGoBack() {
+  return navIdx > 0;
+}
+
+/* زرار «رجوع» العام: خطوة لورا لو فيه، ولو مفيش نروح الرئيسية */
+function navBack(fallback) {
+  if (navCanGoBack()) { history.back(); return; }
+  if (typeof fallback === 'function') fallback();
+}
+
+function navRestoreClientMode(mode) {
+  const m = mode || 'home';
+  if (m === 'home') { setClientMode('home'); return; }
+  const tab = document.getElementById('ctab-' + m);
+  if (tab) tab.click(); else setClientMode(m);
+}
+
+window.addEventListener('popstate', function (event) {
+  const st = event.state;
+  if (navSkipPop > 0) { navSkipPop -= 1; return; }
+  if (!st || !st.adamNav) return;
+  const el = document.getElementById(st.screen);
+  if (!el) return;
+  const signedIn = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
+  const isAuthScreen = NAV_AUTH_SCREENS.indexOf(st.screen) !== -1;
+  /* بعد الدخول مانرجعش لشاشة الدخول، وبعد الخروج مانفتحش شاشة جوه الحساب */
+  if (signedIn === isAuthScreen) return;
+  navIdx = typeof st.i === 'number' ? st.i : navIdx;
+  navStack[navIdx] = st.key;
+  navRestoring = true;
+  try {
+    if (st.screen === 'client-screen') {
+      showScreen(el);
+      navRestoreClientMode(st.mode);
+    } else {
+      showScreen(el);
+      if (typeof navAfterRestore === 'function') navAfterRestore(el);
+    }
+  } catch (e) { /* تجاهل */ } finally {
+    navRestoring = false;
+  }
+});
+
+function navAfterRestore(el) {
+  if (el && el.id === 'chat-screen' && typeof chatReopenCurrent === 'function') chatReopenCurrent();
+  if (el && el.id === 'chat-inbox-screen' && typeof loadChatInbox === 'function') loadChatInbox();
+}
+
 function showScreen(screen) {
   [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, clearanceScreen, adherenceScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, supplementsScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen,
    // بالـ id مش بمتغيّر — showScreen بتشتغل قبل ما تعريفاتهم توصل
@@ -5959,6 +6182,9 @@ function showScreen(screen) {
   if (screen !== classDetailScreen && typeof stopLive === 'function') stopLive();
   // ونقفل اشتراك الشات اللحظي أول ما نسيب شاشة الشات عشان الاستهلاك
   if (screen !== chatScreen && typeof stopChatListener === 'function') stopChatListener();
+  let navMode = '';
+  if (screen === clientScreen) { try { navMode = clientMode; } catch (e) { navMode = ''; } }
+  navRecord(screen, navMode);
   window.scrollTo(0, 0);
 }
 
@@ -6325,31 +6551,101 @@ const openAdminPanelBtn = document.getElementById('open-admin-panel-btn');
  * في لوحة التحكم تحت "إدارة الوصول" — دي بتاعة إيقاف/تمديد وصول أي حد،
  * مش عشان تفتح برنامج عميل)
  */
-let clientsSearchMsgShown = false;
+/*
+ * العملاء بقوا كتير: بدل ما القايمة كلها تتعرض والمدرب يفضل ينزل لحد
+ * آخر الصفحة، بنعرض ١٢ بس وتحتهم «اعرض كمان». وفوقهم فلاتر سريعة
+ * (الكل · عندهم إصابة · جداد · حسب الرياضة). البحث بيدوّر في كل
+ * العملاء مش في اللي ظاهرين بس
+ */
+var CLIENTS_PAGE = 12;
+var clientsAll = [];
+var clientsShown = 12;
+var clientsFilter = 'all';
 
-function applyClientsFilter() {
-  if (!clientsSearch) return;
-  const query = clientsSearch.value.trim().toLowerCase();
-  let visible = 0;
-
-  Array.prototype.forEach.call(clientsList.children, function (item) {
-    const nameEl = item.querySelector('.client-name');
-    const name = (nameEl ? nameEl.textContent : '').toLowerCase();
-    // الإيميل مبقاش معروض في المربع، فبنقراه من الخاصية
-    const email = (item.getAttribute('data-email') || '').toLowerCase();
-    const match = !query || name.indexOf(query) !== -1 || email.indexOf(query) !== -1;
-    item.classList.toggle('hidden', !match);
-    if (match) visible++;
+function clientsFiltered() {
+  const q = clientsSearch ? clientsSearch.value.trim().toLowerCase() : '';
+  const newCut = dateStamp(new Date(Date.now() - 14 * 86400000));
+  return clientsAll.filter(function (c) {
+    if (q && String(c.name).toLowerCase().indexOf(q) === -1 && c.email.indexOf(q) === -1) return false;
+    if (clientsFilter === 'injury') return c.injury > 0;
+    if (clientsFilter === 'new') return c.createdAt && c.createdAt.slice(0, 10) >= newCut;
+    if (clientsFilter.indexOf('sport:') === 0) return c.sport === clientsFilter.slice(6);
+    return true;
   });
+}
 
-  if (query && !visible && clientsList.children.length) {
+function renderClientsChips() {
+  const box = document.getElementById('clients-chips');
+  if (!box) return;
+  box.innerHTML = '';
+  if (clientsAll.length < 6) { box.classList.add('hidden'); return; }
+  box.classList.remove('hidden');
+  const newCut = dateStamp(new Date(Date.now() - 14 * 86400000));
+  const chips = [
+    { key: 'all', label: t('cl_f_all'), n: clientsAll.length },
+    { key: 'injury', label: t('cl_f_injury'), n: clientsAll.filter(function (c) { return c.injury > 0; }).length },
+    { key: 'new', label: t('cl_f_new'), n: clientsAll.filter(function (c) { return c.createdAt && c.createdAt.slice(0, 10) >= newCut; }).length }
+  ];
+  const sports = {};
+  clientsAll.forEach(function (c) { if (c.sport) sports[c.sport] = (sports[c.sport] || 0) + 1; });
+  Object.keys(sports).sort(function (a, b) { return sports[b] - sports[a]; }).slice(0, 4).forEach(function (sp) {
+    if (sports[sp] < 2) return;
+    chips.push({ key: 'sport:' + sp, label: sportName(sp), n: sports[sp] });
+  });
+  chips.forEach(function (chip) {
+    if (chip.key !== 'all' && !chip.n) return;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cl-chip' + (clientsFilter === chip.key ? ' on' : '');
+    b.setAttribute('data-filter', chip.key);
+    b.textContent = chip.label + ' · ' + chip.n;
+    b.addEventListener('click', function () {
+      clientsFilter = chip.key;
+      clientsShown = CLIENTS_PAGE;
+      renderClientsChips();
+      paintClientsList();
+    });
+    box.appendChild(b);
+  });
+}
+
+function paintClientsList() {
+  clientsList.innerHTML = '';
+  const list = clientsFiltered();
+  list.slice(0, clientsShown).forEach(function (c) {
+    showClientRow(c.email, c.name, c.sport, c.injury);
+  });
+  const more = document.getElementById('clients-more');
+  const left = list.length - Math.min(clientsShown, list.length);
+  if (more) {
+    more.classList.toggle('hidden', left <= 0);
+    more.textContent = fill('cl_more', { n: Math.min(left, CLIENTS_PAGE), left: left });
+  }
+  const count = document.getElementById('clients-count');
+  if (count) {
+    count.classList.toggle('hidden', clientsAll.length < 6);
+    count.textContent = fill('cl_count', { shown: Math.min(clientsShown, list.length), total: list.length });
+  }
+  const q = clientsSearch ? clientsSearch.value.trim() : '';
+  if (q && !list.length && clientsAll.length) {
     clientsMessage.textContent = t('no_client_search_results');
-    clientsSearchMsgShown = true;
-  } else if (clientsSearchMsgShown) {
+  } else if (clientsMessage.textContent === t('no_client_search_results')) {
     clientsMessage.textContent = '';
-    clientsSearchMsgShown = false;
   }
 }
+
+function applyClientsFilter() {
+  clientsShown = CLIENTS_PAGE;
+  paintClientsList();
+}
+
+(function () {
+  const more = document.getElementById('clients-more');
+  if (more) more.addEventListener('click', function () {
+    clientsShown += CLIENTS_PAGE;
+    paintClientsList();
+  });
+})();
 
 if (clientsSearch) {
   clientsSearch.addEventListener('input', applyClientsFilter);
@@ -6376,7 +6672,8 @@ async function loadClients() {
   if (canClearMedical()) loadClearanceRequests().catch(function () {});
   openAdminPanelBtn.classList.toggle('hidden', !isFullAdminAccount());
   /* فرق التمرين للمدربين والإدارة */
-  document.getElementById('open-squads-btn').classList.toggle('hidden', !(isFullCoachRole() || isFullAdminAccount()));
+  /* الفرق لكل المتخصصين: المدرب بيعمل فرق، والباقي بيشوفوا الفرق اللي هما في جهازها الفني */
+  document.getElementById('open-squads-btn').classList.remove('hidden');
   openProviderSubscriptionBtn.classList.toggle('hidden', isFullAdminAccount());
   refreshProviderSubBanner();
   if (isFullAdminAccount()) { refreshLeadsBadge(); refreshPendingSpecsBadge(); }
@@ -6398,6 +6695,9 @@ async function loadClients() {
     if (clientsSearch) clientsSearch.classList.toggle('hidden', !mine.length);
 
     if (!mine.length) {
+      clientsAll = [];
+      renderClientsChips();
+      paintClientsList();
       clientsMessage.textContent = t('no_clients');
       return;
     }
@@ -6422,16 +6722,24 @@ async function loadClients() {
     }
 
     clientsMessage.textContent = '';
-    for (const clientDoc of mine) {
-      await showClientRow(
-        clientDoc.id,
-        clientDoc.data().name,
-        clientDoc.data().sport || '',
-        injuryCounts[clientDoc.id] || 0
-      );
-    }
-    // لو كان في بحث مكتوب قبل ما القائمة تتحدّث، نطبّقه على السطور الجديدة
-    applyClientsFilter();
+    clientsAll = mine.map(function (clientDoc) {
+      const data = clientDoc.data() || {};
+      return {
+        email: clientDoc.id,
+        name: data.name || clientDoc.id,
+        sport: data.sport || '',
+        injury: injuryCounts[clientDoc.id] || 0,
+        createdAt: String(data.createdAt || data.trialStartedAt || '')
+      };
+    }).sort(function (a, b) {
+      /* اللي عنده إصابة الأول، وبعدين أبجدي */
+      if ((b.injury > 0) !== (a.injury > 0)) return b.injury > 0 ? 1 : -1;
+      return String(a.name).localeCompare(String(b.name), lang);
+    });
+    if (!clientsAll.some(function (c) { return clientsFilter === 'all' || clientsFilter === 'injury' || clientsFilter === 'new' || clientsFilter === 'sport:' + c.sport; })) clientsFilter = 'all';
+    renderClientsChips();
+    // لو كان في بحث مكتوب قبل ما القائمة تتحدّث، بيتطبّق على الكل
+    paintClientsList();
   } catch (error) {
     clientsMessage.textContent = t('problem') + error.message;
   }
@@ -10406,6 +10714,7 @@ function setClientMode(mode) {
   ctabConsult.classList.toggle('active', mode === 'consult');
   if (mode === 'home') renderClientHome();
   paintAppbar();
+  if (!clientScreen.classList.contains('hidden')) navRecord(clientScreen, mode);
   window.scrollTo(0, 0);
 }
 
@@ -10441,6 +10750,22 @@ ctabStore.addEventListener('click', function () {
 ctabConsult.addEventListener('click', function () {
   setClientMode('consult');
   loadClientConsult();
+});
+
+/* الأقسام اللي مالهاش زرار في الشريط اللي تحت بتفتح من مربعات الرئيسية —
+   فلازم يبقى فيها «رجوع» واضح فوق بدل ما العميل يدوّر على الرئيسية */
+['client-store', 'client-consult', 'client-activity', 'client-classes', 'client-physio'].forEach(function (id) {
+  const panel = document.getElementById(id);
+  if (!panel || panel.querySelector(':scope > .nav-back')) return;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'link nav-back';
+  btn.setAttribute('data-t', 'back_simple');
+  btn.textContent = t('back_simple');
+  btn.addEventListener('click', function () {
+    navBack(function () { setClientMode('home'); });
+  });
+  panel.insertBefore(btn, panel.firstChild);
 });
 
 
@@ -10808,9 +11133,27 @@ let squadUnsub = null;
 let squadReturn = null;
 let squadMyLog = null;
 let squadSaveTimer = null;
+let squadTalk = [];
 
 function sqScreen() { return document.getElementById('squad-screen'); }
 function sqIsCoach() { return !!currentProviderEmail; }
+/*
+ * الجهاز الفني: المدرب الرئيسي (coachEmail) هو صاحب القرار — هو بس اللي
+ * بيعدّل البرنامج. المدربين والأخصائيين التانيين (staff) بيتابعوا ويسجّلوا
+ * ويكتبوا ملاحظات ويتناقشوا، ولو عايزين تغيير بيبعتوا «اقتراح» والرئيسي
+ * يوافق أو يرفض بدوسة
+ */
+function sqRole(sq) {
+  if (!sqIsCoach()) return 'player';
+  const me = sqMe();
+  if (!sq) return 'staff';
+  if (sq.coachEmail === me || isFullAdminAccount()) return 'lead';
+  return 'staff';
+}
+function sqIsLead(sq) { return sqRole(sq || squadCurrent) === 'lead'; }
+function sqStaffEmails(sq) {
+  return ((sq && sq.staff) || []).map(function (x) { return String(x.email || '').toLowerCase(); }).filter(Boolean);
+}
 function sqMe() { return String(sqIsCoach() ? currentProviderEmail : clientEmail || '').toLowerCase(); }
 
 function sqDateStamp(d) { return dateStamp(d || new Date()); }
@@ -10939,9 +11282,17 @@ async function sqLoadMine() {
       ? await getDocs(collection(db, 'squads'))
       : await getDocs(query(collection(db, 'squads'), where('members', 'array-contains', me)));
     squadsCache = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
-      .filter(function (sq) { return !sqIsCoach() || isFullAdminAccount() || sq.coachEmail === me; });
+      .filter(function (sq) { return !sqIsCoach() || isFullAdminAccount() || sq.coachEmail === me || sqStaffEmails(sq).indexOf(me) !== -1; });
   } catch (error) { squadsCache = []; }
   return squadsCache;
+}
+
+async function sqLoadTalk(id) {
+  try {
+    const snap = await getDocs(collection(db, 'squads', id, 'talk'));
+    return snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
+      .sort(function (a, b) { return String(b.createdAt || '').localeCompare(String(a.createdAt || '')); });
+  } catch (error) { return []; }
 }
 
 async function sqLoadLogs(id) {
@@ -10962,8 +11313,10 @@ async function openSquads() {
   msg.textContent = t('loading');
   await sqLoadMine();
   msg.textContent = '';
+  const canCreate = isFullCoachRole() || isFullAdminAccount();
+  document.getElementById('sq-new-box').classList.toggle('hidden', !canCreate);
   renderSquadsList();
-  sqFillNewForm();
+  if (canCreate) sqFillNewForm();
 }
 
 function renderSquadsList() {
@@ -10972,7 +11325,7 @@ function renderSquadsList() {
   if (!squadsCache.length) {
     const p = document.createElement('p');
     p.className = 'hint-text';
-    p.textContent = t('sq_none');
+    p.textContent = t((isFullCoachRole() || isFullAdminAccount()) ? 'sq_none' : 'sq_none_staff');
     box.appendChild(p);
     document.getElementById('sq-new-box').open = true;
     return;
@@ -10987,6 +11340,7 @@ function renderSquadsList() {
     b.innerHTML = '<span class="sq-item-name"></span><span class="sq-item-meta"></span>';
     b.querySelector('.sq-item-name').textContent = sq.name;
     b.querySelector('.sq-item-meta').textContent = [
+      sqRole(sq) === 'staff' ? t('sq_you_staff') : '',
       sportName(sq.sport) || '',
       fill('sq_members_n', { n: (sq.members || []).length }),
       now && !now.before && !now.after ? sqPhaseName(now.phase.key) : '',
@@ -11040,6 +11394,7 @@ document.getElementById('sq-create-btn').addEventListener('click', async functio
   try {
     await setDoc(doc(db, 'squads', id), {
       name: name, sport: sport, coachEmail: currentProviderEmail, members: members, memberNames: memberNames,
+      coachName: String((currentProviderData && currentProviderData.name) || ''), staff: [], staffEmails: [],
       season: { start: start, phases: [{ key: 'pre', weeks: 4, plan: planFor('pre') }, { key: 'in', weeks: 8, plan: planFor('in') }] },
       overrides: {}, createdAt: new Date().toISOString()
     });
@@ -11068,6 +11423,7 @@ async function openSquad(id, returnScreen) {
   squadCurrent = sq;
   squadTab = 'today';
   squadLogs = await sqLoadLogs(id);
+  squadTalk = sqIsCoach() ? await sqLoadTalk(id) : [];
   showScreen(sqScreen());
   sqStartLive();
   renderSquad();
@@ -11096,15 +11452,31 @@ document.getElementById('squad-back-btn').addEventListener('click', function () 
 function renderSquad() {
   const sq = squadCurrent;
   document.getElementById('squad-title').textContent = sq.name;
+  const roleLine = document.getElementById('squad-role');
+  if (roleLine) {
+    const r = sqRole(sq);
+    roleLine.textContent = r === 'lead' ? t('sq_role_lead') : (r === 'staff' ? fill('sq_role_staff', { name: sq.coachName || t('sq_lead_coach') }) : '');
+    roleLine.classList.toggle('hidden', r === 'player');
+  }
   renderSquadSeason();
   const tabs = document.getElementById('sq-tabs');
   tabs.innerHTML = '';
-  const list = sqIsCoach() ? ['today', 'season', 'players'] : ['today', 'me'];
+  const role = sqRole(sq);
+  const list = role === 'player' ? ['today', 'me'] : (role === 'lead' ? ['today', 'season', 'players', 'talk', 'staff'] : ['today', 'season', 'players', 'talk']);
+  if (list.indexOf(squadTab) === -1) squadTab = 'today';
+  const pendingN = role === 'lead' ? squadTalk.filter(function (x) { return x.kind === 'suggest' && x.status === 'pending'; }).length : 0;
   list.forEach(function (key) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'sq-tab' + (squadTab === key ? ' on' : '');
+    b.setAttribute('data-tab', key);
     b.textContent = t('sq_tab_' + key);
+    if (key === 'talk' && pendingN) {
+      const badge = document.createElement('span');
+      badge.className = 'sq-badge';
+      badge.textContent = String(pendingN);
+      b.appendChild(badge);
+    }
     b.addEventListener('click', function () { squadTab = key; renderSquad(); });
     tabs.appendChild(b);
   });
@@ -11113,6 +11485,8 @@ function renderSquad() {
   if (squadTab === 'today') renderSquadToday(pane);
   else if (squadTab === 'season') renderSquadSeasonEditor(pane);
   else if (squadTab === 'players') renderSquadPlayers(pane);
+  else if (squadTab === 'talk') renderSquadTalk(pane);
+  else if (squadTab === 'staff') renderSquadStaff(pane);
   else renderSquadMe(pane);
 }
 
@@ -11157,7 +11531,27 @@ function renderSquadToday(pane) {
   }
   pane.appendChild(head);
 
-  if (sqIsCoach()) {
+  if (sqIsCoach() && !sqIsLead(sq)) {
+    /* المساعد مايغيّرش — بيقترح، والرئيسي يوافق */
+    const row = document.createElement('div');
+    row.className = 'sq-override';
+    const lab = document.createElement('span');
+    lab.textContent = t('sq_suggest_today');
+    const sel = sqTemplateSelect(sq, tplId);
+    sel.addEventListener('change', async function () {
+      if (sel.value === (tplId || '')) return;
+      const tplNew = sel.value ? templateById(sel.value) : null;
+      await sqPostTalk({
+        kind: 'suggest', text: t('sq_suggest_auto'),
+        change: { date: todayStamp, tpl: sel.value, tplName: tplNew ? templateTitle(tplNew) : t('sq_rest_day') }
+      });
+      sel.value = tplId || '';
+      document.getElementById('squad-msg').textContent = t('sq_suggest_sent');
+    });
+    row.append(lab, sel);
+    pane.appendChild(row);
+  }
+  if (sqIsCoach() && sqIsLead(sq)) {
     const row = document.createElement('div');
     row.className = 'sq-override';
     const lab = document.createElement('span');
@@ -11354,6 +11748,13 @@ function renderSquadBoard() {
 /* ---------- الموسم (المدرب) ---------- */
 function renderSquadSeasonEditor(pane) {
   const sq = squadCurrent;
+  const lead = sqIsLead(sq);
+  if (!lead) {
+    const note = document.createElement('p');
+    note.className = 'sq-readonly';
+    note.textContent = t('sq_readonly_note');
+    pane.appendChild(note);
+  }
   const season = JSON.parse(JSON.stringify(sq.season || { start: todayStamp, phases: [] }));
   const startLab = document.createElement('label');
   startLab.className = 'field-label';
@@ -11401,6 +11802,11 @@ function renderSquadSeasonEditor(pane) {
     });
   };
   draw();
+  if (!lead) {
+    pane.querySelectorAll('input, select').forEach(function (el) { el.disabled = true; });
+    pane.querySelectorAll('.sq-del').forEach(function (el) { el.remove(); });
+    return;
+  }
   const add = document.createElement('button');
   add.type = 'button'; add.className = 'secondary';
   add.textContent = t('sq_add_phase');
@@ -11454,6 +11860,22 @@ function renderSquadPlayers(pane) {
     chat.type = 'button'; chat.className = 'link';
     chat.textContent = t('coach_chat_btn');
     chat.addEventListener('click', function () { openChatThread(email, sqScreen(), name.textContent); });
+    const logBtn = document.createElement('button');
+    logBtn.type = 'button'; logBtn.className = 'link';
+    logBtn.textContent = t('sq_log_for');
+    logBtn.addEventListener('click', function () {
+      const open = row.querySelector('.sq-logfor');
+      if (open) { open.remove(); return; }
+      row.appendChild(sqLogForForm(email, name.textContent));
+    });
+    const noteBtn = document.createElement('button');
+    noteBtn.type = 'button'; noteBtn.className = 'link';
+    noteBtn.textContent = t('sq_note_btn');
+    noteBtn.addEventListener('click', function () {
+      squadTalkAbout = email;
+      squadTab = 'talk';
+      renderSquad();
+    });
     const rm = document.createElement('button');
     rm.type = 'button'; rm.className = 'link sq-del';
     rm.textContent = t('sq_remove_member');
@@ -11465,11 +11887,20 @@ function renderSquadPlayers(pane) {
     });
     const actions = document.createElement('div');
     actions.className = 'sq-player-actions';
-    actions.append(flag, chat, rm);
+    actions.append(flag, chat, logBtn, noteBtn);
+    if (sqIsLead(sq)) actions.appendChild(rm);
+    const notesN = squadTalk.filter(function (x) { return x.about === email; }).length;
+    if (notesN) {
+      const nb = document.createElement('span');
+      nb.className = 'sq-notes-n';
+      nb.textContent = fill('sq_notes_n', { n: notesN });
+      actions.appendChild(nb);
+    }
     row.append(name, meta, actions);
     table.appendChild(row);
   });
   pane.appendChild(table);
+  if (!sqIsLead(sq)) return;
   /* إضافة لاعبين */
   const addBox = document.createElement('details');
   addBox.className = 'sq-new';
@@ -11508,6 +11939,297 @@ function renderSquadPlayers(pane) {
     renderSquad();
   });
   pane.appendChild(addBox);
+}
+
+/* ---------- الجهاز الفني: نقاش + ملاحظات + اقتراحات ---------- */
+let squadTalkAbout = '';
+
+function sqLeadAndStaff(sq) {
+  return [sq.coachEmail].concat(sqStaffEmails(sq)).filter(function (e, i, all) { return e && all.indexOf(e) === i; });
+}
+
+async function sqPostTalk(data) {
+  const sq = squadCurrent;
+  const me = chatSenderFields();
+  const row = Object.assign({
+    author: sqMe(), authorName: me.senderName || sqMe(), authorSpec: me.senderSpec || '',
+    kind: 'note', about: '', aboutName: '', text: '', createdAt: new Date().toISOString()
+  }, data);
+  if (row.kind === 'suggest') row.status = 'pending';
+  const ref = await addDoc(collection(db, 'squads', sq.id, 'talk'), row);
+  squadTalk.unshift(Object.assign({ id: ref && ref.id }, row));
+  const to = row.kind === 'suggest' ? [sq.coachEmail] : sqLeadAndStaff(sq);
+  notify(to, row.kind === 'suggest' ? 'squad_suggest' : 'squad_note', {
+    target: 'squad', about: sq.id, aboutName: sq.name,
+    params: function () { return { name: row.authorName, team: sq.name }; }
+  });
+  return row;
+}
+
+async function sqDecide(item, approve) {
+  const sq = squadCurrent;
+  const patch = { status: approve ? 'approved' : 'rejected', decidedBy: sqMe(), decidedAt: new Date().toISOString() };
+  try {
+    await setDoc(doc(db, 'squads', sq.id, 'talk', item.id), patch, { merge: true });
+    Object.assign(item, patch);
+    /* الاقتراح فيه تغيير جلسة؟ الموافقة بتطبّقه على طول */
+    if (approve && item.change && item.change.date) {
+      const overrides = Object.assign({}, sq.overrides || {});
+      overrides[item.change.date] = item.change.tpl || '';
+      await setDoc(doc(db, 'squads', sq.id), { overrides: overrides }, { merge: true });
+      sq.overrides = overrides;
+      if (item.change.date === todayStamp) {
+        notify(sq.members || [], 'squad_session', { target: 'squad', about: sq.id, aboutName: sq.name, params: function () { return { name: sq.name }; } });
+      }
+    }
+    notify([item.author], 'squad_decided', {
+      target: 'squad', about: sq.id, aboutName: sq.name,
+      params: function () { return { team: sq.name, state: t(approve ? 'sq_approved' : 'sq_rejected') }; }
+    });
+    renderSquad();
+  } catch (error) {
+    document.getElementById('squad-msg').textContent = t('problem') + error.message;
+  }
+}
+
+function renderSquadTalk(pane) {
+  const sq = squadCurrent;
+  const lead = sqIsLead(sq);
+
+  /* الكتابة */
+  const box = document.createElement('div');
+  box.className = 'sq-talk-new';
+  const kinds = document.createElement('div');
+  kinds.className = 'sq-kinds';
+  let kind = 'note';
+  const kindBtns = ['note', 'suggest'].filter(function (k) { return k === 'note' || !lead; }).map(function (k) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cl-chip' + (k === kind ? ' on' : '');
+    b.textContent = t('sq_kind_' + k);
+    b.addEventListener('click', function () {
+      kind = k;
+      kindBtns.forEach(function (x) { x.classList.toggle('on', x === b); });
+      area.placeholder = t('sq_talk_ph_' + k);
+    });
+    kinds.appendChild(b);
+    return b;
+  });
+  const about = document.createElement('select');
+  const all = document.createElement('option');
+  all.value = ''; all.textContent = t('sq_about_team');
+  about.appendChild(all);
+  (sq.members || []).forEach(function (email) {
+    const o = document.createElement('option');
+    o.value = email; o.textContent = (sq.memberNames || {})[email] || email;
+    about.appendChild(o);
+  });
+  about.value = squadTalkAbout || '';
+  squadTalkAbout = '';
+  const area = document.createElement('textarea');
+  area.rows = 3;
+  area.placeholder = t('sq_talk_ph_note');
+  const send = document.createElement('button');
+  send.type = 'button';
+  send.textContent = t('sq_talk_send');
+  send.addEventListener('click', async function () {
+    const text = area.value.trim();
+    if (!text) return;
+    send.disabled = true;
+    try {
+      await sqPostTalk({ kind: kind, text: text, about: about.value, aboutName: about.value ? ((sq.memberNames || {})[about.value] || about.value) : '' });
+      area.value = '';
+      document.getElementById('squad-msg').textContent = t(kind === 'suggest' ? 'sq_suggest_sent' : 'sq_note_sent');
+      renderSquad();
+    } catch (error) {
+      document.getElementById('squad-msg').textContent = t('problem') + error.message;
+    }
+    send.disabled = false;
+  });
+  box.append(kinds, about, area, send);
+  pane.appendChild(box);
+
+  /* فلتر: الكل / اقتراحات مستنية / عن لاعب */
+  const list = document.createElement('div');
+  list.className = 'sq-talk-list';
+  if (!squadTalk.length) {
+    const empty = document.createElement('p');
+    empty.className = 'hint-text';
+    empty.textContent = t('sq_talk_empty');
+    list.appendChild(empty);
+  }
+  squadTalk.forEach(function (item) {
+    const card = document.createElement('div');
+    card.className = 'sq-talk ' + item.kind + (item.status ? ' st-' + item.status : '');
+    const head = document.createElement('div');
+    head.className = 'sq-talk-head';
+    const av = document.createElement('div');
+    chatAvatar(av, item.authorName, chatPhotoCache['p:' + item.author] || '', 'dm');
+    const who = document.createElement('div');
+    who.className = 'sq-talk-who';
+    const nm = document.createElement('strong');
+    nm.textContent = item.authorName + (item.authorSpec ? ' · ' + specialtyName(item.authorSpec, lang) : '');
+    const when = document.createElement('span');
+    when.textContent = chatListTime(item.createdAt) + (item.aboutName ? ' · ' + fill('sq_about_x', { name: item.aboutName }) : '');
+    who.append(nm, when);
+    head.append(av, who);
+    if (item.kind === 'suggest') {
+      const tag = document.createElement('span');
+      tag.className = 'sq-talk-tag';
+      tag.textContent = t('sq_st_' + (item.status || 'pending'));
+      head.appendChild(tag);
+    }
+    card.appendChild(head);
+    const body = document.createElement('p');
+    body.className = 'sq-talk-text';
+    body.textContent = item.text || '';
+    card.appendChild(body);
+    if (item.change && item.change.date) {
+      const ch = document.createElement('p');
+      ch.className = 'sq-talk-change';
+      ch.textContent = fill('sq_change_line', { date: item.change.date, tpl: item.change.tplName || item.change.tpl || t('sq_rest_day') });
+      card.appendChild(ch);
+    }
+    if (lead && item.kind === 'suggest' && (item.status || 'pending') === 'pending') {
+      const acts = document.createElement('div');
+      acts.className = 'sq-talk-acts';
+      const yes = document.createElement('button');
+      yes.type = 'button'; yes.className = 'sq-yes'; yes.textContent = t('sq_approve');
+      yes.addEventListener('click', function () { sqDecide(item, true); });
+      const no = document.createElement('button');
+      no.type = 'button'; no.className = 'secondary sq-no'; no.textContent = t('sq_reject');
+      no.addEventListener('click', function () { sqDecide(item, false); });
+      acts.append(yes, no);
+      card.appendChild(acts);
+    }
+    list.appendChild(card);
+  });
+  pane.appendChild(list);
+}
+
+/* ---------- الجهاز الفني (المدرب الرئيسي بيضيف ويشيل) ---------- */
+function renderSquadStaff(pane) {
+  const sq = squadCurrent;
+  const intro = document.createElement('p');
+  intro.className = 'hint-text';
+  intro.textContent = t('sq_staff_intro');
+  pane.appendChild(intro);
+
+  const leadRow = document.createElement('div');
+  leadRow.className = 'sq-staff lead';
+  leadRow.textContent = (sq.coachName || sq.coachEmail) + ' · ' + t('sq_lead_coach');
+  pane.appendChild(leadRow);
+
+  (sq.staff || []).forEach(function (m) {
+    const row = document.createElement('div');
+    row.className = 'sq-staff';
+    const nm = document.createElement('span');
+    nm.textContent = (m.name || m.email) + (m.spec ? ' · ' + specialtyName(m.spec, lang) : '');
+    const rm = document.createElement('button');
+    rm.type = 'button'; rm.className = 'link sq-del';
+    rm.textContent = t('sq_remove_member');
+    rm.addEventListener('click', async function () {
+      const staff = (sq.staff || []).filter(function (x) { return x.email !== m.email; });
+      await setDoc(doc(db, 'squads', sq.id), { staff: staff, staffEmails: staff.map(function (x) { return x.email; }) }, { merge: true });
+      sq.staff = staff; sq.staffEmails = staff.map(function (x) { return x.email; });
+      renderSquad();
+    });
+    row.append(nm, rm);
+    pane.appendChild(row);
+  });
+
+  const addBox = document.createElement('details');
+  addBox.className = 'sq-new';
+  const sum = document.createElement('summary');
+  sum.textContent = t('sq_add_staff');
+  addBox.appendChild(sum);
+  const pick = document.createElement('div');
+  pick.className = 'sq-pick';
+  addBox.appendChild(pick);
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button'; addBtn.textContent = t('sq_add_btn');
+  addBox.appendChild(addBtn);
+  addBox.addEventListener('toggle', async function () {
+    if (!addBox.open || pick.childNodes.length) return;
+    const have = sqLeadAndStaff(sq);
+    try {
+      const snap = await getDocs(collection(db, 'providers'));
+      snap.docs.map(function (d) { return Object.assign({ email: d.id.toLowerCase() }, d.data()); })
+        .filter(function (p) { return have.indexOf(p.email) === -1 && p.status !== 'blocked'; })
+        .sort(function (a, b) { return String(a.name || a.email).localeCompare(String(b.name || b.email), lang); })
+        .forEach(function (p) {
+          const lab = document.createElement('label');
+          lab.className = 'sq-pick-row';
+          const cb = document.createElement('input');
+          cb.type = 'checkbox'; cb.value = p.email;
+          cb.setAttribute('data-name', p.name || p.email);
+          cb.setAttribute('data-spec', p.specialty || '');
+          lab.append(cb, document.createTextNode(' ' + (p.name || p.email) + (p.specialty ? ' · ' + specialtyName(p.specialty, lang) : '')));
+          pick.appendChild(lab);
+        });
+    } catch (e) { /* تجاهل */ }
+  });
+  addBtn.addEventListener('click', async function () {
+    const picked = Array.prototype.slice.call(pick.querySelectorAll('input:checked'));
+    if (!picked.length) return;
+    const staff = (sq.staff || []).concat(picked.map(function (cb) {
+      return { email: cb.value, name: cb.getAttribute('data-name'), spec: cb.getAttribute('data-spec') };
+    }));
+    await setDoc(doc(db, 'squads', sq.id), { staff: staff, staffEmails: staff.map(function (x) { return x.email; }) }, { merge: true });
+    notify(picked.map(function (cb) { return cb.value; }), 'squad_staff', { target: 'squad', about: sq.id, aboutName: sq.name, params: function () { return { name: sq.name }; } });
+    sq.staff = staff; sq.staffEmails = staff.map(function (x) { return x.email; });
+    renderSquad();
+  });
+  pane.appendChild(addBox);
+}
+
+/* المدرب أو المساعد بيسجّل جلسة للاعب (لو اللاعب مامعاهوش موبايل في التمرين) */
+function sqLogForForm(email, playerName) {
+  const sq = squadCurrent;
+  const box = document.createElement('div');
+  box.className = 'sq-logfor';
+  const existing = squadLogs.filter(function (l) { return l.email === email && l.date === todayStamp; })[0] || {};
+  const fields = [['minutes', 'sq_f_minutes'], ['rpe', 'sq_f_rpe'], ['hr', 'sq_f_hr'], ['kcal', 'sq_f_kcal']];
+  const inputs = {};
+  const grid = document.createElement('div');
+  grid.className = 'sq-session';
+  fields.forEach(function (f) {
+    const lab = document.createElement('label');
+    lab.className = 'sq-field';
+    lab.textContent = t(f[1]);
+    const inp = document.createElement('input');
+    inp.type = 'number'; inp.inputMode = 'decimal';
+    inp.value = existing[f[0]] || '';
+    inputs[f[0]] = inp;
+    lab.appendChild(inp);
+    grid.appendChild(lab);
+  });
+  const save = document.createElement('button');
+  save.type = 'button';
+  save.textContent = fill('sq_log_save', { name: playerName });
+  save.addEventListener('click', async function () {
+    const rpe = Number(inputs.rpe.value) || 0;
+    const minutes = Number(inputs.minutes.value) || 0;
+    const tplId = sqSessionTemplateId(sq);
+    const tpl = tplId ? templateById(tplId) : null;
+    const total = tpl ? sqTemplateItems(tpl).length : 0;
+    const row = Object.assign({}, existing, {
+      email: email, name: playerName, date: todayStamp,
+      rpe: inputs.rpe.value, minutes: inputs.minutes.value, hr: inputs.hr.value, kcal: inputs.kcal.value,
+      load: rpe * minutes, total: existing.total || total, doneCount: existing.doneCount || total,
+      loggedBy: sqMe(), updatedAt: new Date().toISOString()
+    });
+    try {
+      await setDoc(doc(db, 'squads', sq.id, 'logs', todayStamp + '__' + email), row, { merge: true });
+      squadLogs = squadLogs.filter(function (l) { return !(l.email === email && l.date === todayStamp); }).concat([row]);
+      document.getElementById('squad-msg').textContent = t('sq_saved');
+      renderSquad();
+    } catch (error) {
+      document.getElementById('squad-msg').textContent = t('problem') + error.message;
+    }
+  });
+  box.append(grid, save);
+  return box;
 }
 
 /* ---------- إنجازاتي (اللاعب) ---------- */
@@ -11701,7 +12423,7 @@ function renderFirst4() {
     go.textContent = t('f4_go');
     go.addEventListener('click', function () {
       if (!step.auto) first4Mark(i);
-      if (step.go === 'chat') openChatThread(clientEmail, clientScreen);
+      if (step.go === 'chat') openChatInbox();
       else setClientMode(step.go);
     });
     box.appendChild(go);
@@ -11739,7 +12461,8 @@ async function loadClientConsultTeam() {
     return {
       email: member.email,
       specialty: (provider.specialty || member.specialty),
-      name: provider.name || fallbackName
+      name: provider.name || fallbackName,
+      photo: provider.photo || ''
     };
   });
 }
@@ -16222,8 +16945,10 @@ function refreshAll() {
   if (!adminPanelScreen.classList.contains('hidden')) loadAdminPanel();
   if (!trialEndedScreen.classList.contains('hidden')) showAccessLocked(currentAccessLockReason);
   if (!chatInboxScreen.classList.contains('hidden')) loadChatInbox();
-  if (!chatScreen.classList.contains('hidden') && currentChatEmail) {
-    chatTitleText.textContent = chatViewerIsCoach() ? fill('chat_thread_with', { name: clientNameOf(currentChatEmail) }) : t('chat_title');
+  if (!chatScreen.classList.contains('hidden') && chatThread) {
+    chatPaintHead();
+    if (chatLastMessages.length) renderChatMessages(chatLastMessages);
+    if (chatPanel && !chatPanel.classList.contains('hidden')) chatPanelPaint();
   }
   // تأكيد الإيميل والإشعارات — متبنيين بالجافاسكريبت فلازم يتعادوا هنا
   const verifyScr = document.getElementById('verify-screen');
@@ -21307,17 +22032,59 @@ function renderPlansInto(container, allowSubmit, targetEmail, onSubmitted, plans
   container.appendChild(grid);
 }
 
-/* ============================ الشات (العميل والفريق والمساعد الذكي) ============================ */
+/* ============================ الشات — شكل واتساب ============================ */
+/*
+ * نوعين محادثات:
+ *  - «فريقي» (team): chats/{clientEmail} — العميل + كل فريقه + المساعد الذكي
+ *    (نفس الشات القديم بالظبط، فمفيش رسالة قديمة بتضيع)
+ *  - خاص (dm): dms/{clientEmail}__{providerEmail} — العميل مع متخصص واحد
+ * العميل بيشوف قايمة فيها فريقه كله + خاص مع كل واحد في فريقه.
+ * المتخصص بيشوف الخاص بتاعه مع عملاءه + جروبات فرق عملاءه.
+ */
 
 const chatInboxList = document.getElementById('chat-inbox-list');
 const chatInboxEmpty = document.getElementById('chat-inbox-empty');
+const chatInboxSearch = document.getElementById('chat-inbox-search');
 const chatTitleText = document.getElementById('chat-title-text');
+const chatHeadAvatar = document.getElementById('chat-head-avatar');
+const chatHeadSub = document.getElementById('chat-head-sub');
 const chatMessagesList = document.getElementById('chat-messages-list');
 const chatInput = document.getElementById('chat-input');
 const chatMessage = document.getElementById('chat-message');
+const chatPanel = document.getElementById('chat-panel');
+
+var chatThread = null;          /* المحادثة المفتوحة دلوقتي */
+var chatThreadUnsub = null;     /* متابعة مستند المحادثة (عشان علامة «اتقرت») */
+var chatThreadMeta = {};
+var chatLastMessages = [];
+let chatInboxRows = [];
+let chatInboxPicking = false;   /* المدرب بيختار عميل يبدأ معاه محادثة جديدة */
+let chatMyClients = [];         /* [{email, name, photo}] للمدرب */
+const chatPhotoCache = {};
 
 function chatViewerIsCoach() {
   return !!currentProviderEmail;
+}
+
+function chatMe() {
+  return String((chatViewerIsCoach() ? currentProviderEmail : clientEmail) || '').toLowerCase();
+}
+
+function chatDmId(clientE, providerE) {
+  return String(clientE || '').toLowerCase() + '__' + String(providerE || '').toLowerCase();
+}
+
+function chatThreadRef(th) {
+  return th.kind === 'dm' ? doc(db, 'dms', th.id) : doc(db, 'chats', th.clientEmail);
+}
+
+function chatMsgsRef(th) {
+  return th.kind === 'dm' ? collection(db, 'dms', th.id, 'messages') : collection(db, 'chats', th.clientEmail, 'messages');
+}
+
+/* آخر مرة كل واحد فتح المحادثة — حقل مسطّح لكل إيميل */
+function chatReadKey(email) {
+  return 'read__' + String(email || '').toLowerCase();
 }
 
 function stopChatListener() {
@@ -21325,63 +22092,258 @@ function stopChatListener() {
     try { chatUnsub(); } catch (error) { /* تجاهل */ }
     chatUnsub = null;
   }
+  if (chatThreadUnsub) {
+    try { chatThreadUnsub(); } catch (error) { /* تجاهل */ }
+    chatThreadUnsub = null;
+  }
 }
 
+/* ---------- الصورة الشخصية (أو أول حرفين من الاسم) ---------- */
+
+function chatInitials(name) {
+  let parts = String(name || '').replace(/[^\p{L}\p{N}\s]/gu, ' ').trim().split(/\s+/).filter(Boolean);
+  /* «د. سارة» / «كابتن أحمد» — اللقب مش جزء من الاسم */
+  const named = parts.filter(function (w) { return w.length > 1 && ['dr', 'coach', 'captain', 'كابتن', 'دكتور', 'دكتورة', 'أ', 'م'].indexOf(w.toLowerCase()) === -1; });
+  if (named.length) parts = named;
+  if (!parts.length) return '?';
+  /* الحروف العربي بتتشبك في بعض، فحرف واحد أوضح من حرفين */
+  if (/[\u0600-\u06FF]/.test(parts[0].charAt(0))) return parts[0].charAt(0);
+  return (parts[0].charAt(0) + (parts[1] ? parts[1].charAt(0) : '')).toUpperCase();
+}
+
+function chatHue(text) {
+  let h = 0;
+  const str = String(text || '');
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+  return h;
+}
+
+function chatAvatar(el, name, photo, kind) {
+  el.innerHTML = '';
+  el.style.background = '';
+  el.className = 'wa-avatar' + (kind === 'team' ? ' team' : '');
+  if (kind === 'team') {
+    el.appendChild(iconSvg('team', 'wa-avatar-ico'));
+    return el;
+  }
+  if (photo && /^(data:image\/|https:\/\/)/.test(String(photo))) {
+    const img = document.createElement('img');
+    img.src = photo;
+    img.alt = '';
+    img.loading = 'lazy';
+    el.appendChild(img);
+    return el;
+  }
+  el.textContent = chatInitials(name);
+  el.style.background = 'hsl(' + chatHue(name) + ' 42% 36%)';
+  return el;
+}
+
+async function chatPhotoOf(email, isProvider) {
+  const key = (isProvider ? 'p:' : 'c:') + email;
+  if (key in chatPhotoCache) return chatPhotoCache[key];
+  chatPhotoCache[key] = '';
+  try {
+    const snap = await getDoc(doc(db, isProvider ? 'providers' : 'clients', email));
+    chatPhotoCache[key] = snap.exists() ? (snap.data().photo || '') : '';
+  } catch (error) { /* من غير صورة */ }
+  return chatPhotoCache[key];
+}
+
+/* ---------- الوقت والتاريخ ---------- */
+
+function chatLocale() {
+  return lang === 'ar' ? 'ar-EG' : 'en-GB';
+}
+
+function chatTime(iso) {
+  const d = new Date(iso || '');
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleTimeString(chatLocale(), { hour: '2-digit', minute: '2-digit' });
+}
+
+function chatDayLabel(iso) {
+  const d = new Date(iso || '');
+  if (isNaN(d.getTime())) return '';
+  const ago = daysAgo(dateStamp(d));
+  if (ago === 0) return t('chat_today');
+  if (ago === 1) return t('chat_yesterday');
+  return d.toLocaleDateString(chatLocale(), { day: 'numeric', month: 'long' });
+}
+
+/* في القايمة: الساعة لو النهارده، وإلا اليوم */
+function chatListTime(iso) {
+  const d = new Date(iso || '');
+  if (isNaN(d.getTime())) return '';
+  return daysAgo(dateStamp(d)) === 0 ? chatTime(iso) : chatDayLabel(iso);
+}
+
+/* ---------- عرض الرسايل ---------- */
+
+function chatIsMine(msg) {
+  if (chatViewerIsCoach()) return msg.sender === 'coach' && (!msg.senderEmail || msg.senderEmail === currentProviderEmail);
+  return msg.sender === 'client';
+}
+
+/* آخر مرة الطرف التاني فتح المحادثة — عشان علامتين «اتقرت» */
+function chatOtherReadAt() {
+  const th = chatThread;
+  if (!th) return '';
+  const me = chatMe();
+  let best = '';
+  Object.keys(chatThreadMeta || {}).forEach(function (key) {
+    if (key.indexOf('read__') !== 0) return;
+    const who = key.slice(6);
+    if (who === me) return;
+    /* في جروب الفريق: المدرب يهمه العميل قرا، والعميل يهمه أي حد من فريقه */
+    if (th.kind === 'team' && chatViewerIsCoach() && who !== th.clientEmail) return;
+    const val = String(chatThreadMeta[key] || '');
+    if (val > best) best = val;
+  });
+  return best;
+}
+
+function chatSenderName(msg) {
+  if (msg.sender === 'ai') return t('chat_sender_ai');
+  if (msg.sender === 'coach') return chatSenderLabel(msg);
+  return chatThread ? (chatThread.clientName || clientNameOf(chatThread.clientEmail)) : '';
+}
+
+const CHAT_TICK_ONE = '<svg viewBox="0 0 18 12" aria-hidden="true"><path d="M2 6.5 5.6 10 13 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHAT_TICK_TWO = '<svg viewBox="0 0 18 12" aria-hidden="true"><path d="M1 6.5 4.6 10 12 2.5M7.6 9.2 8.4 10 15.8 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
 function renderChatMessages(messages) {
-  chatMessagesList.innerHTML = '';
+  chatLastMessages = messages;
+  const box = chatMessagesList;
+  const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 120;
+  box.innerHTML = '';
 
   if (!messages.length) {
     const empty = document.createElement('p');
     empty.className = 'chat-empty-note';
     empty.textContent = t('chat_empty_note');
-    chatMessagesList.appendChild(empty);
+    box.appendChild(empty);
     return;
   }
 
-  const viewerIsCoach = chatViewerIsCoach();
+  const isGroup = !!(chatThread && chatThread.kind === 'team');
+  const otherRead = chatOtherReadAt();
+  let lastDay = '';
+  let prevWho = '';
 
   messages.forEach(function (msg) {
-    /* رسايل الفريق بقت شايلة مين اللي كتبها — فالمتخصص يشوف رسايل زمايله
-       باسمهم مش كأنها رسايله هو */
-    const mine = viewerIsCoach
-      ? (msg.sender === 'coach' && (!msg.senderEmail || msg.senderEmail === currentProviderEmail))
-      : (msg.sender === 'client');
+    const day = String(msg.createdAt || '').slice(0, 10);
+    if (day && day !== lastDay) {
+      const sep = document.createElement('div');
+      sep.className = 'wa-day';
+      const pill = document.createElement('span');
+      pill.textContent = chatDayLabel(msg.createdAt);
+      sep.appendChild(pill);
+      box.appendChild(sep);
+      lastDay = day;
+      prevWho = '';
+    }
+
+    const mine = chatIsMine(msg);
+    const who = msg.sender + ':' + (msg.senderEmail || '');
+    const cont = who === prevWho;
+    prevWho = who;
 
     const row = document.createElement('div');
-    row.className = 'chat-bubble-row ' + (mine ? 'mine' : 'theirs') + (msg.sender === 'ai' ? ' ai' : '');
-
-    if (!mine) {
-      const senderLabel = document.createElement('div');
-      senderLabel.className = 'chat-bubble-sender';
-      if (msg.sender === 'ai') senderLabel.textContent = t('chat_sender_ai');
-      else if (msg.sender === 'coach') senderLabel.textContent = chatSenderLabel(msg);
-      else senderLabel.textContent = viewerIsCoach ? clientNameOf(currentChatEmail) : '';
-      row.appendChild(senderLabel);
-    }
+    row.className = 'chat-bubble-row ' + (mine ? 'mine' : 'theirs') + (msg.sender === 'ai' ? ' ai' : '') + (cont ? ' cont' : '');
 
     const bubble = document.createElement('div');
-    bubble.className = 'chat-bubble';
-    bubble.textContent = msg.text || '';
-    if (Array.isArray(msg.files) && msg.files.length) {
-      bubble.classList.add('has-files');
-      bubble.appendChild(driveFilesBox(msg.files));
+    if (!mine && isGroup && !cont) {
+      const senderLabel = document.createElement('div');
+      senderLabel.className = 'chat-bubble-sender';
+      const nm = chatSenderName(msg);
+      senderLabel.textContent = nm;
+      senderLabel.style.color = msg.sender === 'ai' ? '' : 'hsl(' + chatHue(nm) + ' 70% 68%)';
+      bubble.appendChild(senderLabel);
     }
-    row.appendChild(bubble);
 
-    chatMessagesList.appendChild(row);
+    if (msg.sticker && typeof stickerSvg === 'function') {
+      bubble.className = 'chat-sticker';
+      const art = document.createElement('div');
+      art.className = 'chat-sticker-art';
+      art.innerHTML = stickerSvg(msg.sticker, lang);
+      bubble.appendChild(art);
+    } else {
+      bubble.className = 'chat-bubble';
+      if (msg.text) {
+        const text = document.createElement('span');
+        text.className = 'chat-text';
+        text.textContent = msg.text;
+        /* رسالة إيموجي بس (من غير كلام) بتتعرض كبيرة زي واتساب */
+        if (/^(\p{Extended_Pictographic}|\p{Emoji_Component}|‍|️|\s){1,8}$/u.test(msg.text) && !/[0-9#*]/.test(msg.text)) {
+          bubble.classList.add('emoji-only');
+        }
+        bubble.appendChild(text);
+      }
+      if (Array.isArray(msg.files) && msg.files.length) {
+        bubble.classList.add('has-files');
+        bubble.appendChild(driveFilesBox(msg.files));
+      }
+    }
+
+    const meta = document.createElement('span');
+    meta.className = 'chat-meta';
+    meta.appendChild(document.createTextNode(chatTime(msg.createdAt)));
+    if (mine) {
+      const tick = document.createElement('span');
+      const read = otherRead && otherRead >= String(msg.createdAt || '');
+      tick.className = 'chat-tick' + (read ? ' read' : '');
+      tick.innerHTML = read ? CHAT_TICK_TWO : CHAT_TICK_ONE;
+      meta.appendChild(tick);
+    }
+    bubble.appendChild(meta);
+    row.appendChild(bubble);
+    box.appendChild(row);
   });
 
-  chatMessagesList.scrollTop = chatMessagesList.scrollHeight;
+  const last = messages[messages.length - 1];
+  if (nearBottom || !box.dataset.painted || (last && chatIsMine(last))) {
+    box.scrollTop = box.scrollHeight;
+  }
+  box.dataset.painted = '1';
 }
 
-function startChatListener(email) {
+/* ---------- فتح محادثة ومتابعتها ---------- */
+
+async function chatMarkRead(th) {
+  const me = chatMe();
+  if (!me || !th) return;
+  const last = chatLastMessages[chatLastMessages.length - 1];
+  if (!last) return;
+  const seen = String((chatThreadMeta || {})[chatReadKey(me)] || '');
+  if (seen && seen >= String(last.createdAt || '')) return;
+  const patch = {};
+  patch[chatReadKey(me)] = new Date().toISOString();
+  chatThreadMeta[chatReadKey(me)] = patch[chatReadKey(me)];
+  try { await setDoc(chatThreadRef(th), patch, { merge: true }); } catch (error) { /* مش مهم */ }
+}
+
+function startChatListener(th) {
   stopChatListener();
+  if (!th) return;
+  const opened = th;
   try {
-    const messagesQuery = query(collection(db, 'chats', email, 'messages'), orderBy('createdAt'));
-    chatUnsub = onSnapshot(messagesQuery, function (snapshot) {
-      const messages = snapshot.docs.map(function (item) { return item.data(); });
+    chatUnsub = onSnapshot(query(chatMsgsRef(th), orderBy('createdAt')), function (snapshot) {
+      if (chatThread !== opened) return;
+      const messages = snapshot.docs.map(function (item) { return item.data(); })
+        .sort(function (a, b) { return String(a.createdAt || '').localeCompare(String(b.createdAt || '')); });
       renderChatMessages(messages);
+      if (messages.length && !chatScreen.classList.contains('hidden')) chatMarkRead(th);
     });
+    chatThreadUnsub = onSnapshot(chatThreadRef(th), function (snap) {
+      if (chatThread !== opened) return;
+      const data = (snap && snap.exists && snap.exists()) ? snap.data() : {};
+      const mineKey = chatReadKey(chatMe());
+      const localSeen = chatThreadMeta[mineKey];
+      chatThreadMeta = data || {};
+      if (localSeen && !chatThreadMeta[mineKey]) chatThreadMeta[mineKey] = localSeen;
+      if (chatLastMessages.length) renderChatMessages(chatLastMessages);
+    }, function () { /* المحادثة لسه ماتعملتش — عادي */ });
   } catch (error) {
     chatUnsub = null;
   }
@@ -21407,19 +22369,83 @@ function chatSenderFields() {
 
 let chatNameHint = {};
 
-function openChatThread(email, returnScreen, name) {
-  if (name) chatNameHint[email] = name;
-  currentChatEmail = email;
-  chatReturnScreen = returnScreen;
+function chatPaintHead() {
+  const th = chatThread;
+  if (!th) return;
+  if (th.kind === 'team') {
+    chatTitleText.textContent = chatViewerIsCoach() ? fill('chat_team_of', { name: th.clientName || clientNameOf(th.clientEmail) }) : t('chat_team_name');
+    chatHeadSub.textContent = t(chatViewerIsCoach() ? 'chat_team_sub_coach' : 'chat_team_sub');
+    chatAvatar(chatHeadAvatar, '', '', 'team');
+  } else {
+    chatTitleText.textContent = th.name || '';
+    chatHeadSub.textContent = th.sub || t('chat_private');
+    chatAvatar(chatHeadAvatar, th.name, th.photo, 'dm');
+  }
+  const aiNote = document.querySelector('#chat-screen [data-t="chat_ai_note"]');
+  if (aiNote) aiNote.classList.toggle('hidden', chatViewerIsCoach() || th.kind !== 'team');
+}
+
+function openChat(th, returnScreen) {
+  chatThread = th;
+  currentChatEmail = th.clientEmail;
+  chatReturnScreen = returnScreen || null;
+  chatThreadMeta = {};
+  chatLastMessages = [];
   chatMessage.textContent = '';
   chatInput.value = '';
-  const nm = chatNameHint[email] || clientNameOf(email);
-  chatTitleText.textContent = chatViewerIsCoach() ? fill('chat_thread_with', { name: nm }) : t('chat_title');
-  const aiNote = document.querySelector('#chat-screen [data-t="chat_ai_note"]');
-  if (aiNote) aiNote.classList.toggle('hidden', chatViewerIsCoach());
+  chatPanelShow(false);
   chatMessagesList.innerHTML = '';
+  delete chatMessagesList.dataset.painted;
+  chatPaintHead();
   showScreen(chatScreen);
-  startChatListener(email);
+  startChatListener(th);
+  /* الصورة بتيجي بعدين لو مش متخزنة — مانستناهاش عشان الشات يفتح على طول */
+  if (th.kind === 'dm' && !th.photo) {
+    const other = chatViewerIsCoach() ? th.clientEmail : th.providerEmail;
+    chatPhotoOf(other, !chatViewerIsCoach()).then(function (photo) {
+      if (photo && chatThread === th) { th.photo = photo; chatPaintHead(); }
+    });
+  }
+}
+
+/* الرجوع لمحادثة مفتوحة (زرار الرجوع في الموبايل) */
+function chatReopenCurrent() {
+  if (!chatThread) return;
+  chatPaintHead();
+  startChatListener(chatThread);
+}
+
+function openChatTeam(clientE, returnScreen, clientNm) {
+  const email = String(clientE || '').toLowerCase();
+  if (clientNm) chatNameHint[email] = clientNm;
+  openChat({
+    kind: 'team', id: email, clientEmail: email,
+    clientName: chatNameHint[email] || (chatViewerIsCoach() ? clientNameOf(email) : clientName)
+  }, returnScreen);
+}
+
+/* خاص بين عميل ومتخصص. info = { name, sub, photo } للطرف التاني */
+function openChatDm(clientE, providerE, returnScreen, info) {
+  const c = String(clientE || '').toLowerCase();
+  const p = String(providerE || '').toLowerCase();
+  const data = info || {};
+  if (chatViewerIsCoach() && data.name) chatNameHint[c] = data.name;
+  openChat({
+    kind: 'dm', id: chatDmId(c, p), clientEmail: c, providerEmail: p,
+    name: data.name || (chatViewerIsCoach() ? (chatNameHint[c] || clientNameOf(c)) : p),
+    clientName: chatViewerIsCoach() ? (data.name || chatNameHint[c] || clientNameOf(c)) : clientName,
+    sub: data.sub || '',
+    photo: data.photo || ''
+  }, returnScreen);
+}
+
+/*
+ * الاسم القديم لسه مستخدم في أماكن كتير:
+ * المدرب → الخاص بينه وبين العميل، والعميل → شات فريقه
+ */
+function openChatThread(email, returnScreen, name) {
+  if (chatViewerIsCoach()) openChatDm(email, currentProviderEmail, returnScreen, { name: name });
+  else openChatTeam(email, returnScreen, name);
 }
 
 
@@ -21542,28 +22568,62 @@ function aiFailed(reason, build) {
   if (box) setStatusMessage(box, t('chat_ai_unavailable'), '');
 }
 
+/* ---------- الإرسال ---------- */
+
+/* كل رسالة (كلام/صورة/استيكر) بتعدّي من هنا */
+async function chatPost(payload, preview) {
+  const th = chatThread;
+  if (!th) return;
+  const sender = chatViewerIsCoach() ? 'coach' : 'client';
+  const now = new Date().toISOString();
+  const msg = Object.assign({ sender: sender, text: '', createdAt: now }, payload,
+    sender === 'coach' ? chatSenderFields() : { senderEmail: chatMe() });
+  await addDoc(chatMsgsRef(th), msg);
+
+  const meta = {
+    clientEmail: th.clientEmail,
+    lastMessage: preview,
+    lastMessageAt: now,
+    lastSender: sender,
+    lastSenderEmail: chatMe()
+  };
+  meta[chatReadKey(chatMe())] = now;
+  if (th.kind === 'dm') {
+    meta.providerEmail = th.providerEmail;
+    meta.members = [th.clientEmail, th.providerEmail];
+    if (sender === 'coach') {
+      const me = chatSenderFields();
+      if (me.senderName) meta.providerName = me.senderName;
+      if (me.senderSpec) meta.providerSpec = me.senderSpec;
+      if (th.clientName && th.clientName !== th.clientEmail) meta.clientName = th.clientName;
+    } else {
+      if (clientName) meta.clientName = clientName;
+      if (th.name && th.name !== th.providerEmail) meta.providerName = th.name;
+    }
+  }
+  await setDoc(chatThreadRef(th), meta, { merge: true });
+  notifyChat(preview);
+  /* المساعد الذكي بيرد في شات الفريق بس، ومش على الاستيكرات */
+  if (th.kind === 'team' && sender === 'client' && payload.text) requestAiReply(payload.text);
+}
+
 async function sendChatMessage() {
   const text = chatInput.value.trim();
-  if (!text || !currentChatEmail) return;
-
-  const sender = chatViewerIsCoach() ? 'coach' : 'client';
+  if (!text || !chatThread) return;
   chatInput.value = '';
   chatMessage.textContent = '';
-
   try {
-    await addDoc(collection(db, 'chats', currentChatEmail, 'messages'), Object.assign({
-      sender: sender,
-      text: text,
-      createdAt: new Date().toISOString()
-    }, sender === 'coach' ? chatSenderFields() : {}));
-    await setDoc(doc(db, 'chats', currentChatEmail), {
-      clientEmail: currentChatEmail,
-      lastMessage: text,
-      lastMessageAt: new Date().toISOString(),
-      lastSender: sender
-    }, { merge: true });
-    notifyChat(text);
-    requestAiReply(text);
+    await chatPost({ text: text }, text);
+  } catch (error) {
+    chatMessage.textContent = t('problem') + error.message;
+  }
+}
+
+async function sendChatSticker(id) {
+  if (!chatThread) return;
+  chatPanelShow(false);
+  try {
+    await chatPost({ sticker: id }, t('chat_sticker_msg'));
   } catch (error) {
     chatMessage.textContent = t('problem') + error.message;
   }
@@ -21576,82 +22636,349 @@ chatInput.addEventListener('keydown', function (event) {
     sendChatMessage();
   }
 });
+chatInput.addEventListener('focus', function () { chatPanelShow(false); });
 
-document.getElementById('open-chat-btn').addEventListener('click', function () {
-  openChatThread(clientEmail, clientScreen);
+/* ---------- الإيموجي والاستيكرات ---------- */
+
+let chatPanelTab = 'stickers';
+
+function chatPanelShow(on) {
+  if (!chatPanel) return;
+  chatPanel.classList.toggle('hidden', !on);
+  const btn = document.getElementById('chat-emoji-btn');
+  if (btn) btn.classList.toggle('on', !!on);
+  if (on) chatPanelPaint();
+}
+
+function chatInsertEmoji(emoji) {
+  const input = chatInput;
+  const start = typeof input.selectionStart === 'number' ? input.selectionStart : input.value.length;
+  const end = typeof input.selectionEnd === 'number' ? input.selectionEnd : input.value.length;
+  input.value = input.value.slice(0, start) + emoji + input.value.slice(end);
+  const pos = start + emoji.length;
+  try { input.setSelectionRange(pos, pos); } catch (e) { /* تجاهل */ }
+}
+
+function chatPanelPaint() {
+  const tabs = document.getElementById('chat-panel-tabs');
+  const grid = document.getElementById('chat-panel-grid');
+  tabs.innerHTML = '';
+  grid.innerHTML = '';
+
+  const addTab = function (key, content, title, isSvg) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'wa-tab' + (chatPanelTab === key ? ' on' : '');
+    b.title = title;
+    if (isSvg) b.innerHTML = content; else b.textContent = content;
+    b.addEventListener('click', function () { chatPanelTab = key; chatPanelPaint(); });
+    tabs.appendChild(b);
+  };
+  addTab('stickers', '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6.5z"></path><path d="M20 12.5 12.5 20v-5.5a2 2 0 0 1 2-2z"></path><path d="M8.5 13.5c1 1 2.2 1.5 3.5 1.5"></path><line x1="9" y1="9" x2="9" y2="9.1"></line><line x1="15" y1="9" x2="15" y2="9.1"></line></svg>', t('chat_stickers_tab'), true);
+  EMOJI_GROUPS.forEach(function (g) { addTab(g.key, g.icon, g.icon, false); });
+
+  if (chatPanelTab === 'stickers') {
+    grid.className = 'wa-panel-grid stickers';
+    STICKERS.forEach(function (s) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'wa-sticker-btn';
+      b.setAttribute('data-sticker', s.id);
+      b.innerHTML = stickerSvg(s.id, lang);
+      b.addEventListener('click', function () { sendChatSticker(s.id); });
+      grid.appendChild(b);
+    });
+    return;
+  }
+  const group = EMOJI_GROUPS.filter(function (g) { return g.key === chatPanelTab; })[0] || EMOJI_GROUPS[0];
+  grid.className = 'wa-panel-grid emoji';
+  group.list.forEach(function (emoji) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'wa-emoji-btn';
+    b.textContent = emoji;
+    b.addEventListener('click', function () { chatInsertEmoji(emoji); });
+    grid.appendChild(b);
+  });
+}
+
+document.getElementById('chat-emoji-btn').addEventListener('click', function () {
+  chatPanelShow(chatPanel.classList.contains('hidden'));
 });
 
-/* من جوه برنامج العميل: «كلّمه» بتفتح الشات معاه ورجوع لنفس البرنامج */
+/* ---------- أزرار فتح الشات من أماكن تانية ---------- */
+
+document.getElementById('open-chat-btn').addEventListener('click', function () {
+  openChatInbox();
+});
+
+/* من جوه برنامج العميل: «كلّمه» بتفتح الخاص معاه ورجوع لنفس البرنامج */
 document.getElementById('open-chat-coach-btn').addEventListener('click', function () {
-  if (currentClient) openChatThread(currentClient, coachScreen, currentClientName);
+  if (currentClient) openChatDm(currentClient, currentProviderEmail, coachScreen, { name: currentClientName });
 });
 
 document.getElementById('chat-back-btn').addEventListener('click', function () {
-  stopChatListener();
-  if (chatReturnScreen) showScreen(chatReturnScreen);
-  else showScreen(chatViewerIsCoach() ? chatInboxScreen : clientScreen);
+  chatPanelShow(false);
+  navBack(function () {
+    stopChatListener();
+    if (chatReturnScreen) showScreen(chatReturnScreen);
+    else openChatInbox();
+  });
 });
 
-/* ---------- صندوق وارد المحادثات (المدرب/المتخصص) ---------- */
+/* ---------- قايمة المحادثات (العميل والمتخصص) ---------- */
+
+function openChatInbox() {
+  chatInboxPicking = false;
+  if (chatInboxSearch) chatInboxSearch.value = '';
+  showScreen(chatInboxScreen);
+  loadChatInbox();
+}
+
+function chatUnread(meta, me, fromOthers) {
+  if (!meta || !meta.lastMessageAt) return false;
+  if (!fromOthers) return false;
+  const seen = String(meta[chatReadKey(me)] || '');
+  return !seen || seen < String(meta.lastMessageAt);
+}
+
+/* صفوف العميل: فريقه كله + خاص مع كل واحد في فريقه */
+async function chatInboxRowsClient() {
+  const me = chatMe();
+  const rows = [];
+  let teamMeta = {};
+  try {
+    const snap = await getDoc(doc(db, 'chats', me));
+    teamMeta = snap.exists() ? snap.data() : {};
+  } catch (error) { teamMeta = {}; }
+  rows.push({
+    th: { kind: 'team', id: me, clientEmail: me, clientName: clientName },
+    kind: 'team', name: t('chat_team_name'), sub: t('chat_team_sub'),
+    meta: teamMeta,
+    unread: chatUnread(teamMeta, me, teamMeta.lastSender && teamMeta.lastSender !== 'client')
+  });
+
+  try { await loadClientConsultTeam(); } catch (error) { /* من غير فريق */ }
+  const dmMeta = {};
+  try {
+    const dms = await getDocs(query(collection(db, 'dms'), where('clientEmail', '==', me)));
+    dms.forEach(function (d) { const data = d.data(); if (data && data.providerEmail) dmMeta[data.providerEmail] = data; });
+  } catch (error) { /* لسه مفيش */ }
+
+  (clientConsultTeam || []).forEach(function (member) {
+    const pe = String(member.email || '').toLowerCase();
+    if (!pe) return;
+    const meta = dmMeta[pe] || {};
+    const sub = member.specialty ? specialtyName(member.specialty, lang) : '';
+    rows.push({
+      th: { kind: 'dm', id: chatDmId(me, pe), clientEmail: me, providerEmail: pe, name: member.name, sub: sub, photo: member.photo || '', clientName: clientName },
+      kind: 'dm', name: member.name, sub: sub, photo: member.photo || '',
+      meta: meta,
+      unread: chatUnread(meta, me, meta.lastSender === 'coach')
+    });
+  });
+  return rows;
+}
+
+/* صفوف المتخصص: الخاص بتاعه + جروبات فرق عملاءه */
+async function chatInboxRowsCoach() {
+  const me = chatMe();
+  const rows = [];
+  let clientDocs = [];
+  try {
+    const cl = await getDocs(collection(db, 'clients'));
+    clientDocs = filterMyClients(cl.docs);
+  } catch (error) { clientDocs = []; }
+  const info = {};
+  chatMyClients = clientDocs.map(function (d) {
+    const data = d.data() || {};
+    const row = { email: d.id, name: data.name || d.id, photo: data.photo || '' };
+    info[d.id] = row;
+    chatPhotoCache['c:' + d.id] = row.photo;
+    return row;
+  }).sort(function (a, b) { return String(a.name).localeCompare(String(b.name), lang); });
+
+  try {
+    const dms = await getDocs(query(collection(db, 'dms'), where('providerEmail', '==', me)));
+    dms.forEach(function (d) {
+      const meta = d.data() || {};
+      const ce = meta.clientEmail;
+      if (!ce) return;
+      const who = info[ce] || { name: meta.clientName || clientNameOf(ce), photo: '' };
+      rows.push({
+        th: { kind: 'dm', id: d.id, clientEmail: ce, providerEmail: me, name: who.name, sub: '', photo: who.photo, clientName: who.name },
+        kind: 'dm', name: who.name, sub: t('chat_private'), photo: who.photo,
+        meta: meta,
+        unread: chatUnread(meta, me, meta.lastSender === 'client')
+      });
+    });
+  } catch (error) { /* لسه مفيش */ }
+
+  try {
+    const snapshot = await getDocs(collection(db, 'chats'));
+    const allowAll = isFullAdminAccount();
+    snapshot.docs.forEach(function (item) {
+      const meta = item.data() || {};
+      const ce = meta.clientEmail || item.id;
+      if (!ce || (!allowAll && !info[ce])) return;
+      if (!meta.lastMessageAt) return;
+      const who = info[ce] || { name: clientNameOf(ce) };
+      rows.push({
+        th: { kind: 'team', id: ce, clientEmail: ce, clientName: who.name },
+        kind: 'team', name: fill('chat_team_of', { name: who.name }), sub: t('chat_team_sub_coach'),
+        meta: meta,
+        unread: chatUnread(meta, me, meta.lastSender === 'client')
+      });
+    });
+  } catch (error) { /* تجاهل */ }
+  return rows;
+}
 
 async function loadChatInbox() {
   chatInboxList.innerHTML = '';
+  chatInboxEmpty.classList.add('hidden');
+  const loading = document.createElement('p');
+  loading.className = 'hint-text wa-loading';
+  loading.textContent = t('loading');
+  chatInboxList.appendChild(loading);
+  const coach = chatViewerIsCoach();
+  document.getElementById('chat-new-btn').classList.toggle('hidden', !coach);
   try {
-    const snapshot = await getDocs(collection(db, 'chats'));
-    /* المتخصص يشوف محادثات عملاءه بس — صاحب المنصة والفريق الإداري يشوفوا الكل */
-    let mineSet = null;
-    if (!isFullAdminAccount()) {
-      try {
-        const cl = await getDocs(collection(db, 'clients'));
-        mineSet = {};
-        filterMyClients(cl.docs).forEach(function (d) { mineSet[d.id] = d.data().name || d.id; });
-      } catch (e) { mineSet = null; }
-    }
-    const threads = snapshot.docs
-      .map(function (item) { return item.data(); })
-      .filter(function (row) { return row && row.clientEmail && (!mineSet || mineSet[row.clientEmail] !== undefined); })
-      .sort(function (a, b) {
-        return (b.lastMessageAt || '').localeCompare(a.lastMessageAt || '');
-      });
-
-    chatInboxEmpty.classList.toggle('hidden', threads.length > 0);
-
-    threads.forEach(function (thread) {
-      const item = document.createElement('button');
-      item.type = 'button';
-      item.className = 'chat-inbox-item';
-
-      const name = document.createElement('div');
-      name.className = 'chat-inbox-item-name';
-      name.textContent = (mineSet && mineSet[thread.clientEmail]) || clientNameOf(thread.clientEmail);
-      item.appendChild(name);
-
-      const preview = document.createElement('div');
-      preview.className = 'chat-inbox-item-preview';
-      const prefix = (thread.lastSender === 'ai') ? (t('chat_sender_ai') + ': ') : '';
-      preview.textContent = prefix + (thread.lastMessage || '');
-      item.appendChild(preview);
-
-      item.addEventListener('click', function () {
-        openChatThread(thread.clientEmail, chatInboxScreen, mineSet && mineSet[thread.clientEmail]);
-      });
-
-      chatInboxList.appendChild(item);
-    });
+    chatInboxRows = coach ? await chatInboxRowsCoach() : await chatInboxRowsClient();
   } catch (error) {
-    chatInboxEmpty.classList.remove('hidden');
+    chatInboxRows = [];
   }
+  paintChatInbox();
 }
 
+function chatPreviewOf(row) {
+  const meta = row.meta || {};
+  if (!meta.lastMessageAt) return row.kind === 'dm' ? t('chat_say_hi') : t('chat_team_sub');
+  const mineLast = meta.lastSenderEmail ? meta.lastSenderEmail === chatMe()
+    : (chatViewerIsCoach() ? meta.lastSender === 'coach' : meta.lastSender === 'client');
+  let prefix = '';
+  if (mineLast) prefix = t('chat_you') + ': ';
+  else if (meta.lastSender === 'ai') prefix = t('chat_sender_ai') + ': ';
+  return prefix + String(meta.lastMessage || '');
+}
+
+function paintChatInbox() {
+  chatInboxList.innerHTML = '';
+  const q = chatInboxSearch ? chatInboxSearch.value.trim().toLowerCase() : '';
+
+  /* المدرب بيختار عميل يبدأ معاه محادثة */
+  if (chatInboxPicking) {
+    const head = document.createElement('p');
+    head.className = 'wa-pick-head';
+    head.textContent = t('chat_pick_client');
+    chatInboxList.appendChild(head);
+    const list = chatMyClients.filter(function (c) {
+      return !q || String(c.name).toLowerCase().indexOf(q) !== -1 || c.email.indexOf(q) !== -1;
+    });
+    list.forEach(function (c) {
+      chatInboxList.appendChild(chatInboxItem({
+        kind: 'dm', name: c.name, photo: c.photo, sub: '', meta: {},
+        th: { kind: 'dm', id: chatDmId(c.email, chatMe()), clientEmail: c.email, providerEmail: chatMe(), name: c.name, photo: c.photo, clientName: c.name }
+      }, true));
+    });
+    chatInboxEmpty.classList.toggle('hidden', list.length > 0);
+    return;
+  }
+
+  const rows = chatInboxRows.filter(function (r) {
+    return !q || String(r.name).toLowerCase().indexOf(q) !== -1 || String((r.th && r.th.clientEmail) || '').indexOf(q) !== -1;
+  }).sort(function (a, b) {
+    const ta = String((a.meta && a.meta.lastMessageAt) || '');
+    const tb = String((b.meta && b.meta.lastMessageAt) || '');
+    if (a.kind === 'team' && !chatViewerIsCoach()) return -1;
+    if (b.kind === 'team' && !chatViewerIsCoach()) return 1;
+    if (ta !== tb) return tb.localeCompare(ta);
+    return String(a.name).localeCompare(String(b.name), lang);
+  });
+
+  chatInboxEmpty.classList.toggle('hidden', rows.length > 0);
+  rows.forEach(function (row) { chatInboxList.appendChild(chatInboxItem(row, false)); });
+}
+
+function chatInboxItem(row, picking) {
+  const item = document.createElement('button');
+  item.type = 'button';
+  item.className = 'wa-item' + (row.unread ? ' unread' : '');
+  item.setAttribute('data-kind', row.kind);
+  item.setAttribute('data-thread', row.th.id);
+
+  const av = document.createElement('div');
+  chatAvatar(av, row.name, row.photo, row.kind);
+  item.appendChild(av);
+
+  const main = document.createElement('div');
+  main.className = 'wa-item-main';
+  const top = document.createElement('div');
+  top.className = 'wa-item-top';
+  const name = document.createElement('span');
+  name.className = 'wa-item-name';
+  name.textContent = row.name;
+  top.appendChild(name);
+  const meta = row.meta || {};
+  if (meta.lastMessageAt) {
+    const time = document.createElement('span');
+    time.className = 'wa-item-time';
+    time.textContent = chatListTime(meta.lastMessageAt);
+    top.appendChild(time);
+  }
+  main.appendChild(top);
+
+  const bottom = document.createElement('div');
+  bottom.className = 'wa-item-bottom';
+  const preview = document.createElement('span');
+  preview.className = 'wa-item-preview';
+  preview.textContent = picking ? (row.sub || t('chat_private')) : chatPreviewOf(row);
+  bottom.appendChild(preview);
+  if (row.sub && !picking) {
+    const tag = document.createElement('span');
+    tag.className = 'wa-item-tag';
+    tag.textContent = row.sub;
+    bottom.appendChild(tag);
+  }
+  if (row.unread) {
+    const dot = document.createElement('span');
+    dot.className = 'wa-unread';
+    bottom.appendChild(dot);
+  }
+  main.appendChild(bottom);
+  item.appendChild(main);
+
+  item.addEventListener('click', function () {
+    chatInboxPicking = false;
+    openChat(Object.assign({}, row.th), chatInboxScreen);
+  });
+  return item;
+}
+
+if (chatInboxSearch) chatInboxSearch.addEventListener('input', paintChatInbox);
+
+document.getElementById('chat-new-btn').addEventListener('click', function () {
+  chatInboxPicking = !chatInboxPicking;
+  paintChatInbox();
+});
+
 document.getElementById('open-chat-inbox-btn').addEventListener('click', function () {
-  showScreen(chatInboxScreen);
-  loadChatInbox();
+  openChatInbox();
 });
 
 document.getElementById('chat-inbox-back-btn').addEventListener('click', function () {
-  showScreen(clientsScreen);
-  loadClients();
+  if (chatInboxPicking) { chatInboxPicking = false; paintChatInbox(); return; }
+  navBack(function () {
+    if (chatViewerIsCoach()) {
+      showScreen(clientsScreen);
+      loadClients();
+    } else {
+      showScreen(clientScreen);
+      setClientMode('home');
+    }
+  });
 });
+
 
 /* ---------- شاشة الاشتراك (العميل) ---------- */
 
@@ -24210,7 +25537,11 @@ async function loadTeamView() {
       chatBtn.className = 'secondary';
       chatBtn.textContent = t('chat_with_provider_btn');
       chatBtn.addEventListener('click', function () {
-        openChatThread(clientEmail, teamViewScreen);
+        openChatDm(clientEmail, providerEmail, teamViewScreen, {
+          name: provider.name || providerEmail,
+          sub: specialtyName(provider.specialty || specialty, lang),
+          photo: provider.photo || ''
+        });
       });
       card.appendChild(chatBtn);
 
@@ -26721,26 +28052,32 @@ function notifyProgramChange(type, target) {
  * رسايل ورا بعض مش هنرن على موبايل حد عشر مرات
  */
 function notifyChat(text) {
+  const th = chatThread;
   const thread = currentChatEmail;
-  if (!thread) return;
+  if (!th || !thread) return;
+  const key = th.kind + ':' + th.id;
   const now = Date.now();
-  if (notifChatLast[thread] && now - notifChatLast[thread] < NOTIF_CHAT_GAP) return;
-  notifChatLast[thread] = now;
+  if (notifChatLast[key] && now - notifChatLast[key] < NOTIF_CHAT_GAP) return;
+  notifChatLast[key] = now;
 
   if (chatViewerIsCoach()) {
     const who = chatSenderFields();
+    const whoName = who.senderName || (who.senderSpec ? specialtyName(who.senderSpec, lang) : t('chat_sender_coach'));
     notify(thread, 'chat_client', {
-      target: 'chat',
+      target: th.kind === 'dm' ? 'chat_dm' : 'chat',
+      about: th.kind === 'dm' ? currentProviderEmail : '',
+      aboutName: th.kind === 'dm' ? whoName : '',
       params: function () {
-        return { text: text, name: who.senderName || (who.senderSpec ? specialtyName(who.senderSpec, lang) : t('chat_sender_coach')) };
+        return { text: text, name: whoName };
       }
     });
-  } else {
-    notify(teamEmailsOf(clientRecord), 'chat_team', {
-      target: 'chat', about: thread, aboutName: clientName || '',
-      params: function () { return { name: clientName || thread, text: text }; }
-    });
+    return;
   }
+  const to = th.kind === 'dm' ? th.providerEmail : teamEmailsOf(clientRecord);
+  notify(to, 'chat_team', {
+    target: th.kind === 'dm' ? 'chat_dm' : 'chat', about: thread, aboutName: clientName || '',
+    params: function () { return { name: clientName || thread, text: text }; }
+  });
 }
 
 function notifyNewTeamMembers(before, after) {
@@ -26847,7 +28184,8 @@ var NOTIF_ICONS = {
   clearance_client: 'shield', clearance_team: 'shield',
   injury_new: 'injury', injury_status: 'injury',
   booking_new: 'classes', booking_status: 'classes',
-  team_joined: 'team'
+  team_joined: 'team',
+  squad_joined: 'team', squad_session: 'training', squad_staff: 'team', squad_note: 'chat', squad_suggest: 'consult', squad_decided: 'consult'
 };
 
 function notifAgo(iso) {
@@ -26931,7 +28269,8 @@ function goToNotifTarget(item) {
   const target = item.target || '';
   try {
     if (currentProviderEmail) {
-      if (target === 'chat' && item.about) { openChatThread(item.about, chatInboxScreen); return; }
+      if (target === 'chat' && item.about) { openChatTeam(item.about, chatInboxScreen, item.aboutName); return; }
+      if (target === 'chat_dm' && item.about) { openChatDm(item.about, currentProviderEmail, chatInboxScreen, { name: item.aboutName || clientNameOf(item.about) }); return; }
       if (target === 'squad' && item.about) { openSquad(item.about, clientsScreen); return; }
       if (target === 'bookings') { document.getElementById('open-bookings-btn').click(); return; }
       if (target === 'rewards_admin' && isFullAdminAccount()) { document.getElementById('open-admin-panel-btn').click(); showAdminSection('rewards_admin_title'); return; }
@@ -26942,7 +28281,8 @@ function goToNotifTarget(item) {
       return;
     }
     showScreen(clientScreen);
-    if (target === 'chat') { openChatThread(clientEmail, clientScreen); return; }
+    if (target === 'chat') { openChatTeam(clientEmail, clientScreen); return; }
+    if (target === 'chat_dm' && item.about) { openChatDm(clientEmail, item.about, clientScreen, { name: item.aboutName || '' }); return; }
     if (target === 'squad' && item.about) { openSquad(item.about, clientScreen); return; }
     if (target === 'injury') { document.getElementById('report-injury-btn').click(); return; }
     if (target === 'consult') { setClientMode('consult'); return; }
@@ -28718,15 +30058,7 @@ const consultFilesPicker = driveAttachPicker(document.getElementById('client-con
 /* ---------- الشات: صورة/ملف وفويس ---------- */
 
 async function sendChatFile(ref, labelKey) {
-  const sender = chatViewerIsCoach() ? 'coach' : 'client';
-  const label = t(labelKey);
-  await addDoc(collection(db, 'chats', currentChatEmail, 'messages'), Object.assign({
-    sender: sender, text: '', files: [ref], createdAt: new Date().toISOString()
-  }, sender === 'coach' ? chatSenderFields() : {}));
-  await setDoc(doc(db, 'chats', currentChatEmail), {
-    clientEmail: currentChatEmail, lastMessage: label, lastMessageAt: new Date().toISOString(), lastSender: sender
-  }, { merge: true });
-  notifyChat(label);
+  await chatPost({ text: '', files: [ref] }, t(labelKey));
 }
 
 (function () {

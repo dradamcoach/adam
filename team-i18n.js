@@ -121,7 +121,7 @@ export const TEAM_EN = {
 
   /* ---------- صندوق «لكلود» ---------- */
   'صندوق «لكلود»': '“For Claude” inbox',
-  'أي حاجة عاوز Claude يعملها في البرنامج: ميزة جديدة، حاجة بايظة، سؤال. موظف التطوير بيحط هنا لوحده أي فكرة تقول عليها «عاوزها». كل طلب جديد بيوصلك إيميل عنوانه [ADAM → Claude]، وClaude بيقرا الإيميلات دي كل يوم ويرد عليك بخطة. ولما تحب تبدأ التنفيذ: «انسخ لكلود» والزقها في الشات.': 'Anything you want Claude to do in the app: a new feature, something broken, a question. The R&D employee adds any idea you mark “I want it”. Every new request emails you with the subject [ADAM → Claude], and Claude reads those emails daily and replies with a plan. When you’re ready to build: “Copy for Claude” and paste it into the chat.',
+  'أي حاجة عاوز Claude يعملها في البرنامج: ميزة جديدة، حاجة بايظة، سؤال. موظف التطوير بيحط هنا لوحده أي فكرة تقول عليها «عاوزها». كل طلب جديد بيوصلك إيميل عنوانه [ADAM → Claude]، وClaude بيقرا الإيميلات دي (والـ Issues المفتوحة على GitHub) كل يوم الصبح، وبيجهّز الملفات اللي اتغيرت على Google Drive ويسيبلك إيميل فيه اللينك والخطوات. تقدر كمان تفتح أي طلب كـ Issue على GitHub بدوسة.': 'Anything you want Claude to do in the app: a new feature, something broken, a question. The dev employee drops any idea you mark “want it” here automatically. Every new request emails you with the subject [ADAM → Claude]; every morning Claude reads those emails (and open GitHub issues), prepares the changed files on Google Drive and leaves you an email draft with the link and the steps. You can also open any request as a GitHub issue in one tap.',
   'ميزة جديدة': 'New feature',
   'حاجة بايظة': 'Something broken',
   'سؤال': 'Question',
@@ -135,6 +135,9 @@ export const TEAM_EN = {
   'إنت': 'You',
   'محلّل الأعمال ': 'Business analyst ',
   'اتنفّذت': 'Done',
+  'افتحه Issue على GitHub': 'Open as GitHub issue',
+  'لـ Claude — اتبعت من صفحة فريق ADAM': 'For Claude — sent from the ADAM team page',
+  'طلب': 'Request',
   'امسح': 'Delete',
   'رجّعه مفتوح': 'Reopen',
   'اتبعت لكلود': 'Sent to Claude',

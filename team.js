@@ -1107,7 +1107,13 @@ function renderClaude() {
     del.addEventListener('click', async () => {
       try { state = await call('team_claude_delete', { id: item.id }); renderAll(true); } catch (err) { clMsg(err.message, 'err'); }
     });
-    actions.append(done, del);
+    /* نفس الطلب كـ Issue على GitHub — Claude بيقرا الـ Issues المفتوحة كمان */
+    const gh = document.createElement('button');
+    gh.type = 'button';
+    gh.className = 'ghost';
+    gh.textContent = L('افتحه Issue على GitHub');
+    gh.addEventListener('click', () => window.open(claudeIssueUrl(item), '_blank', 'noopener'));
+    actions.append(done, gh, del);
     row.append(head, meta);
     if (item.text) row.appendChild(text);
     row.appendChild(actions);
@@ -1134,6 +1140,24 @@ async function claudeMark(ids, status) {
     state = await call('team_claude_mark', { ids, status });
     renderAll(true);
   } catch (err) { clMsg(err.message, 'err'); }
+}
+
+const GITHUB_REPO = 'dradamcoach/adam';
+
+/* رابط Issue جاهز: العنوان والتفاصيل مكتوبين، والإنت بتدوس «Submit» بس */
+function claudeIssueUrl(item) {
+  const body = [
+    '**' + L(CLAUDE_KIND[item.kind] || CLAUDE_KIND.feature) + '** — ' + L('من: ') + L(CLAUDE_FROM[item.from] || item.from),
+    '',
+    String(item.text || '').slice(0, 3000),
+    '',
+    '---',
+    'ADAM-REQ: ' + (item.id || '') + ' · ' + L('لـ Claude — اتبعت من صفحة فريق ADAM')
+  ].join('\n');
+  return 'https://github.com/' + GITHUB_REPO + '/issues/new'
+    + '?title=' + encodeURIComponent('[Claude] ' + (item.title || L('طلب'))) 
+    + '&labels=claude'
+    + '&body=' + encodeURIComponent(body);
 }
 
 /* رسالة واحدة جاهزة للشات مع Claude */
