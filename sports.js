@@ -116,6 +116,7 @@ export const SPORTS = [
   { id: 'powerlifting', group: 'strength',  metric: 'reps_sets',     ar: 'باورليفتنج',        en: 'Powerlifting' },
   { id: 'weightlifting',group: 'strength',  metric: 'reps_sets',     ar: 'رفع أثقال أولمبي',  en: 'Olympic weightlifting' },
   { id: 'crossfit',     group: 'strength',  metric: 'rounds',        ar: 'كروسفت',            en: 'CrossFit' },
+  { id: 'hyrox',        group: 'strength',  metric: 'distance_time', ar: 'هايروكس',           en: 'HYROX' },
   { id: 'strongman',    group: 'strength',  metric: 'reps_sets',     ar: 'سترونجمان',         en: 'Strongman' },
   { id: 'calisthenics', group: 'strength',  metric: 'reps_sets',     ar: 'كاليسثينكس',        en: 'Calisthenics' },
 

@@ -36,6 +36,7 @@ import { MED_LIBRARY_RD, TEMPLATES_MED_RD } from './library/med-rd.js';
 /* رسومات التمارين اللي كانت ناقصة (tools/mannequin.js) */
 import { MEDIA_EXTRA } from './library/media-extra.js';
 import { STICKERS, stickerSvg, EMOJI_GROUPS } from './library/chat-stickers.js';
+import { PLAN_COMPONENTS, PLAN_PERIOD_TYPES, PLAN_WEEK_TYPES, PLAN_LOAD_LEVELS, PLAN_ITEM_KINDS, PLAN_BASES, PLAN_REST_TYPES, PLAN_WOD_FORMATS, PLAN_STROKES, TRACK_DISTANCES, SWIM_DISTANCES } from './library/plan-defs.js';
 
 /* ============================================================
    حارس الكتابة في قاعدة البيانات
@@ -2364,6 +2365,117 @@ const TEXT = {
     chat_sender_ai: 'المساعد الذكي',
     chat_thread_with: 'المحادثة مع {name}',
     chat_team_name: 'فريقي',
+    plan_title: 'المخطط الموسمي',
+    plan_open_btn: 'المخطط الموسمي',
+    plan_for_squad: 'فريق: {name}',
+    plan_for_client: 'العميل: {name}',
+    plan_new_hint: 'لسه مفيش مخطط — اختار قالب جاهز أو ابدأ تكتب بنفسك.',
+    plan_leave_unsaved: 'فيه تعديلات ماتحفظتش. تخرج من غير حفظ؟',
+    plan_readonly: 'المخطط ده للقراية بس — التعديل للمدرب الرئيسي. لو عندك تعديل ابعته كاقتراح من تبويب النقاش.',
+    plan_templates_btn: 'قوالب جاهزة',
+    plan_save: 'احفظ المخطط',
+    plan_saved: 'المخطط اتحفظ',
+    plan_unsaved: 'فيه تعديلات ماتحفظتش',
+    plan_all_saved: 'كله محفوظ',
+    plan_season: 'الموسم',
+    plan_f_title: 'اسم المخطط',
+    plan_f_start: 'بداية الموسم',
+    plan_f_goal: 'الهدف',
+    plan_goal_ph: 'مثلًا: كسر ١٠.٥ ث في ١٠٠م في بطولة الجمهورية',
+    plan_f_components: 'العناصر اللي بنشتغل عليها',
+    plan_add_comp: '+ عنصر',
+    plan_remove: 'شيل',
+    plan_chart: 'شدة الحمل على مدار الموسم',
+    plan_now_line: 'أسبوع {w} من {n} · {period} · {block}',
+    plan_today: 'النهارده',
+    plan_rest_today: 'النهارده راحة',
+    plan_starts_in: 'الموسم بيبدأ بعد {n} يوم',
+    plan_over: 'الموسم خلص',
+    plan_add_period: '+ فترة جديدة',
+    plan_sessions_bank: 'بنك التمرينات ({n})',
+    plan_used_n: 'مستخدمة {n} مرة',
+    plan_items_word: 'تمرين',
+    plan_edit: 'عدّل',
+    plan_view: 'شوف',
+    plan_new_session: '+ تمرينة جديدة',
+    plan_client_tip: 'بعد ما تخلص الأسبوع، دوس «انقل الأسبوع لبرنامج العميل» عشان يظهر له في التمرين بتاعه بالتفصيل.',
+    plan_period_n: 'الفترة {n}',
+    plan_weeks_n: '{n} أسبوع',
+    plan_f_period_type: 'نوع الفترة',
+    plan_block_n: 'بلوك {n}',
+    plan_f_block_name: 'اسم البلوك (الشهر)',
+    plan_add_week: '+ أسبوع',
+    plan_add_block: '+ بلوك',
+    plan_del_period: 'امسح الفترة',
+    plan_del_confirm: 'متأكد إنك عايز تمسح؟',
+    plan_week_n: 'أسبوع {n}',
+    plan_f_week_type: 'نوع الأسبوع',
+    plan_f_load: 'الحمل',
+    plan_rest_short: 'راحة',
+    plan_f_week_note: 'ملاحظة الأسبوع',
+    plan_week_note_ph: 'مثلًا: اختبار ٣٠م طاير يوم الخميس',
+    plan_push_week: 'انقل الأسبوع لبرنامج العميل',
+    plan_dup_week: 'كرّر الأسبوع',
+    plan_del_week: 'امسح الأسبوع',
+    plan_pick_session: 'اختار تمرينة اليوم ده',
+    plan_rest_day: 'راحة',
+    plan_min: 'د',
+    plan_edit_this: 'عدّل التمرينة دي',
+    plan_shared_confirm: 'التمرينة دي مستخدمة في {n} أيام. دوس «موافق» لو التعديل يسري على كل الأيام، أو «إلغاء» عشان تعمل نسخة لليوم ده بس.',
+    plan_session: 'تمرينة',
+    plan_f_session_title: 'اسم التمرينة',
+    plan_f_duration: 'المدة (دقيقة)',
+    plan_f_session_goal: 'هدف التمرينة',
+    plan_f_rpe: 'الشدة المتوقعة (RPE)',
+    plan_items_n: 'التمارين ({n})',
+    plan_add_from_lib: '+ من المكتبة',
+    plan_del_session: 'امسح التمرينة',
+    plan_unnamed: 'تمرين من غير اسم',
+    plan_purpose: 'الغرض',
+    plan_f_kind: 'النوع',
+    plan_f_name: 'اسم التمرين',
+    plan_f_name_override: 'اسم تاني (اختياري)',
+    plan_f_sets: 'مجموعات',
+    plan_f_reps: 'تكرارات',
+    plan_f_distance: 'المسافة',
+    plan_f_time: 'الزمن المستهدف',
+    plan_f_dur: 'المدة',
+    plan_set_rest: 'راحة بين المجموعات',
+    plan_f_intensity: 'الشدة',
+    plan_f_basis: 'محسوبة على',
+    plan_f_rest_type: 'نوع الراحة',
+    plan_f_stroke: 'نوع السباحة',
+    plan_f_format: 'شكل الـ WOD',
+    plan_f_component: 'العنصر',
+    plan_f_purpose: 'الغرض من التمرين',
+    plan_purpose_ph: 'ليه التمرين ده؟ مثلًا: تطوير مرحلة التسارع أول ٣٠م',
+    plan_f_note: 'ملاحظة للاعب',
+    plan_note_ph: 'مثلًا: خليك مايل لقدام أول ١٠ خطوات',
+    plan_up: 'لفوق',
+    plan_down: 'لتحت',
+    plan_dup: 'كرّر',
+    plan_templates_title: 'قوالب مواسم جاهزة',
+    plan_tpl_search: 'دوّر على قالب…',
+    plan_tpl_none: 'مفيش قوالب للرياضة دي لسه',
+    plan_lv_beginner: 'مبتدئ',
+    plan_lv_intermediate: 'متوسط',
+    plan_lv_advanced: 'متقدم',
+    plan_per_week: '{n} تمرينات في الأسبوع',
+    plan_use_tpl: 'استخدم القالب ده',
+    plan_replace_confirm: 'القالب هيحل مكان المخطط الحالي. متأكد؟',
+    plan_tpl_applied: 'القالب اتطبّق — عدّل اللي عايزه ودوس «احفظ المخطط».',
+    plan_push_confirm: 'هننقل أسبوع {n} لبرنامج العميل مكان الأيام الحالية. تكمل؟',
+    plan_pushed: 'أسبوع {n} اتنقل لبرنامج العميل',
+    plan_week_goal: 'هدف المرحلة',
+    plan_today_details: 'تفاصيل تمرينة النهارده',
+    plan_target: 'المستهدف',
+    plan_sets_word: 'مجموعات',
+    plan_of_1rm: 'من أقصى وزن',
+    plan_of_vmax: 'من أقصى سرعة',
+    plan_of_best: 'من أحسن زمن',
+    plan_open_detailed: 'افتح المخطط الموسمي التفصيلي',
+    plan_create_detailed: 'اعمل مخطط موسمي تفصيلي (فترات وأسابيع وتمارين)',
+    plan_squad_uses_plan: 'الفريق ماشي على المخطط الموسمي — جلسة كل يوم بتيجي منه تلقائي.',
     cl_f_all: 'الكل',
     cl_f_injury: 'عندهم إصابة',
     cl_f_new: 'جداد',
@@ -4748,6 +4860,117 @@ const TEXT = {
     chat_sender_ai: 'AI assistant',
     chat_thread_with: 'Chat with {name}',
     chat_team_name: 'My team',
+    plan_title: 'Season plan',
+    plan_open_btn: 'Season plan',
+    plan_for_squad: 'Squad: {name}',
+    plan_for_client: 'Client: {name}',
+    plan_new_hint: 'No plan yet — pick a ready template or start writing your own.',
+    plan_leave_unsaved: 'You have unsaved changes. Leave without saving?',
+    plan_readonly: 'This plan is read-only — only the head coach edits it. Send changes as a suggestion from the Discussion tab.',
+    plan_templates_btn: 'Templates',
+    plan_save: 'Save plan',
+    plan_saved: 'Plan saved',
+    plan_unsaved: 'Unsaved changes',
+    plan_all_saved: 'All saved',
+    plan_season: 'Season',
+    plan_f_title: 'Plan name',
+    plan_f_start: 'Season start',
+    plan_f_goal: 'Goal',
+    plan_goal_ph: 'e.g. break 10.5s in the 100m at nationals',
+    plan_f_components: 'Components we develop',
+    plan_add_comp: '+ component',
+    plan_remove: 'Remove',
+    plan_chart: 'Load across the season',
+    plan_now_line: 'Week {w} of {n} · {period} · {block}',
+    plan_today: 'Today',
+    plan_rest_today: 'Rest day today',
+    plan_starts_in: 'Season starts in {n} days',
+    plan_over: 'Season finished',
+    plan_add_period: '+ New period',
+    plan_sessions_bank: 'Session bank ({n})',
+    plan_used_n: 'used {n}×',
+    plan_items_word: 'exercises',
+    plan_edit: 'Edit',
+    plan_view: 'View',
+    plan_new_session: '+ New session',
+    plan_client_tip: 'When a week is ready, tap “Send week to client program” so it shows in their training in full detail.',
+    plan_period_n: 'Period {n}',
+    plan_weeks_n: '{n} weeks',
+    plan_f_period_type: 'Period type',
+    plan_block_n: 'Block {n}',
+    plan_f_block_name: 'Block (month) name',
+    plan_add_week: '+ Week',
+    plan_add_block: '+ Block',
+    plan_del_period: 'Delete period',
+    plan_del_confirm: 'Are you sure you want to delete this?',
+    plan_week_n: 'Week {n}',
+    plan_f_week_type: 'Week type',
+    plan_f_load: 'Load',
+    plan_rest_short: 'Rest',
+    plan_f_week_note: 'Week note',
+    plan_week_note_ph: 'e.g. 30m flying test on Thursday',
+    plan_push_week: 'Send week to client program',
+    plan_dup_week: 'Duplicate week',
+    plan_del_week: 'Delete week',
+    plan_pick_session: 'Pick the session for this day',
+    plan_rest_day: 'Rest',
+    plan_min: 'min',
+    plan_edit_this: 'Edit this session',
+    plan_shared_confirm: 'This session is used on {n} days. Press OK to change it everywhere, or Cancel to make a copy just for this day.',
+    plan_session: 'Session',
+    plan_f_session_title: 'Session name',
+    plan_f_duration: 'Duration (min)',
+    plan_f_session_goal: 'Session goal',
+    plan_f_rpe: 'Planned intensity (RPE)',
+    plan_items_n: 'Exercises ({n})',
+    plan_add_from_lib: '+ From library',
+    plan_del_session: 'Delete session',
+    plan_unnamed: 'Unnamed exercise',
+    plan_purpose: 'Purpose',
+    plan_f_kind: 'Type',
+    plan_f_name: 'Exercise name',
+    plan_f_name_override: 'Custom name (optional)',
+    plan_f_sets: 'Sets',
+    plan_f_reps: 'Reps',
+    plan_f_distance: 'Distance',
+    plan_f_time: 'Target time',
+    plan_f_dur: 'Duration',
+    plan_set_rest: 'Rest between sets',
+    plan_f_intensity: 'Intensity',
+    plan_f_basis: 'Based on',
+    plan_f_rest_type: 'Rest type',
+    plan_f_stroke: 'Stroke',
+    plan_f_format: 'WOD format',
+    plan_f_component: 'Component',
+    plan_f_purpose: 'Purpose of the exercise',
+    plan_purpose_ph: 'Why this exercise? e.g. develop the first 30m acceleration',
+    plan_f_note: 'Note for the athlete',
+    plan_note_ph: 'e.g. stay leaning forward for the first 10 steps',
+    plan_up: 'Up',
+    plan_down: 'Down',
+    plan_dup: 'Duplicate',
+    plan_templates_title: 'Ready season templates',
+    plan_tpl_search: 'Search templates…',
+    plan_tpl_none: 'No templates for this sport yet',
+    plan_lv_beginner: 'Beginner',
+    plan_lv_intermediate: 'Intermediate',
+    plan_lv_advanced: 'Advanced',
+    plan_per_week: '{n} sessions/week',
+    plan_use_tpl: 'Use this template',
+    plan_replace_confirm: 'The template will replace the current plan. Are you sure?',
+    plan_tpl_applied: 'Template applied — edit what you need, then tap “Save plan”.',
+    plan_push_confirm: 'Week {n} will replace the current days in the client program. Continue?',
+    plan_pushed: 'Week {n} sent to the client program',
+    plan_week_goal: 'Phase goal',
+    plan_today_details: 'Today’s session in detail',
+    plan_target: 'target',
+    plan_sets_word: 'sets',
+    plan_of_1rm: 'of 1RM',
+    plan_of_vmax: 'of max speed',
+    plan_of_best: 'of best time',
+    plan_open_detailed: 'Open the detailed season plan',
+    plan_create_detailed: 'Create a detailed season plan (periods, weeks, exercises)',
+    plan_squad_uses_plan: 'The squad follows the season plan — each day’s session comes from it automatically.',
     cl_f_all: 'All',
     cl_f_injury: 'Injured',
     cl_f_new: 'New',
@@ -6179,7 +6402,7 @@ function showScreen(screen) {
   [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, clearanceScreen, adherenceScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, supplementsScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen,
    // بالـ id مش بمتغيّر — showScreen بتشتغل قبل ما تعريفاتهم توصل
    document.getElementById('verify-screen'), document.getElementById('notif-screen'),
-   document.getElementById('squads-screen'), document.getElementById('squad-screen')].forEach(function (s) {
+   document.getElementById('squads-screen'), document.getElementById('squad-screen'), document.getElementById('plan-screen')].forEach(function (s) {
     if (s) s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
@@ -9772,6 +9995,10 @@ document.getElementById('open-library-btn').addEventListener('click', function (
 document.getElementById('rehab-library-btn').addEventListener('click', openLibrary);
 
 document.getElementById('lib-back-btn').addEventListener('click', function () {
+  if (libraryContext === 'plan') {
+    showScreen(document.getElementById('plan-screen'));
+    return;
+  }
   if (libraryContext === 'class') {
     renderClassExercises(classExercisesList, currentClass, true);
     showScreen(classDetailScreen);
@@ -11153,6 +11380,7 @@ let squadReturn = null;
 let squadMyLog = null;
 let squadSaveTimer = null;
 let squadTalk = [];
+let squadPlan = null;
 
 function sqScreen() { return document.getElementById('squad-screen'); }
 function sqIsCoach() { return !!currentProviderEmail; }
@@ -11443,6 +11671,11 @@ async function openSquad(id, returnScreen) {
   squadTab = 'today';
   squadLogs = await sqLoadLogs(id);
   squadTalk = sqIsCoach() ? await sqLoadTalk(id) : [];
+  squadPlan = await planFetch(planDocId('squad', id));
+  /* لاعبين جداد اتضافوا؟ نحدّث مين يقدر يشوف المخطط */
+  if (squadPlan && sqIsLead(sq) && JSON.stringify((squadPlan.viewers || []).slice().sort()) !== JSON.stringify((sq.members || []).slice().sort())) {
+    setDoc(doc(db, 'plans', planDocId('squad', id)), { viewers: sq.members || [] }, { merge: true }).catch(function () {});
+  }
   showScreen(sqScreen());
   sqStartLive();
   renderSquad();
@@ -11535,13 +11768,39 @@ function renderSquadSeason() {
 /* ---------- النهارده: الجلسة + اللوحة اللايف ---------- */
 function renderSquadToday(pane) {
   const sq = squadCurrent;
-  const tplId = sqSessionTemplateId(sq);
+  /* فيه مخطط موسمي؟ جلسة النهارده بتيجي منه (إلا لو المدرب غيّرها النهارده بقالب) */
+  const planLoc = squadPlan ? planLocate(squadPlan) : null;
+  const usePlan = !!(planLoc && planLoc.entry && !(sq.overrides || {})[todayStamp]);
+  const planSess = usePlan ? planLoc.session : null;
+  const tplId = usePlan ? '' : sqSessionTemplateId(sq);
   const tpl = tplId ? templateById(tplId) : null;
   const head = document.createElement('div');
   head.className = 'sq-today-head';
   const title = document.createElement('strong');
-  title.textContent = tpl ? templateTitle(tpl) : t('sq_rest_day');
+  title.textContent = planSess ? (pv(planSess.title) || t('plan_session')) : (tpl ? templateTitle(tpl) : t('sq_rest_day'));
   head.appendChild(title);
+  if (usePlan) {
+    const e = planLoc.entry;
+    const ctxLine = document.createElement('p');
+    ctxLine.className = 'sq-plan-ctx';
+    const lv = planLoadLevel(e.week.load);
+    ctxLine.textContent = fill('plan_now_line', { w: e.n + 1, n: planLoc.total, period: planPeriodType(e.period.type)[lang], block: pv(e.block.name) || fill('plan_block_n', { n: e.bi + 1 }) }) + ' · ' + t('plan_f_load') + ' ' + e.week.load + '/10 (' + lv[lang] + ')';
+    head.appendChild(ctxLine);
+    const goalTxt = planSess ? pv(planSess.goal) : (pv(e.block.goal) || pv(e.period.goal));
+    if (goalTxt) {
+      const g = document.createElement('p');
+      g.className = 'hint-text';
+      g.textContent = t('plan_f_session_goal') + ': ' + goalTxt;
+      head.appendChild(g);
+    }
+    const comps = (planSess && planSess.components && planSess.components.length) ? planSess.components : (e.block.components || []);
+    if (comps.length) {
+      const cr = document.createElement('div');
+      cr.className = 'plan-chips';
+      comps.slice(0, 5).forEach(function (c) { const sp = document.createElement('span'); sp.className = 'plan-chip on'; sp.textContent = planCompName(c); cr.appendChild(sp); });
+      head.appendChild(cr);
+    }
+  }
   if (tpl && tpl.note) {
     const note = document.createElement('p');
     note.className = 'hint-text';
@@ -11588,7 +11847,7 @@ function renderSquadToday(pane) {
     pane.appendChild(row);
   }
 
-  const items = tpl ? sqTemplateItems(tpl) : [];
+  const items = planSess ? planSessionItems(planSess) : (tpl ? sqTemplateItems(tpl) : []);
   if (!sqIsCoach() && items.length) pane.appendChild(sqMyLogForm(items));
   else if (items.length) pane.appendChild(sqItemsPreview(items));
 
@@ -11606,8 +11865,9 @@ function sqItemsPreview(items) {
     const li = document.createElement('li');
     if (it.media) { const img = document.createElement('img'); img.src = it.media; img.alt = ''; img.loading = 'lazy'; li.appendChild(img); }
     const txt = document.createElement('span');
-    txt.textContent = it.name + ' — ' + it.sets + ' × ' + it.reps + (it.rest ? ' · ' + it.rest : '');
+    txt.textContent = it.name + ' — ' + (it.line ? it.reps : (it.sets + ' × ' + it.reps + (it.rest ? ' · ' + it.rest : '')));
     li.appendChild(txt);
+    if (it.purpose) { const pp = document.createElement('em'); pp.className = 'sq-item-purpose'; pp.textContent = t('plan_purpose') + ': ' + it.purpose; txt.appendChild(document.createElement('br')); txt.appendChild(pp); }
     ul.appendChild(li);
   });
   return ul;
@@ -11638,7 +11898,7 @@ function sqMyLogForm(items) {
     nm.textContent = it.name;
     const pres = document.createElement('div');
     pres.className = 'sq-log-pres';
-    pres.textContent = it.sets + ' × ' + it.reps + (it.rest ? ' · ' + t('sq_rest') + ' ' + it.rest : '') + (it.rpe ? ' · RPE ' + it.rpe : '');
+    pres.textContent = it.line ? it.reps : (it.sets + ' × ' + it.reps + (it.rest ? ' · ' + t('sq_rest') + ' ' + it.rest : '') + (it.rpe ? ' · RPE ' + it.rpe : ''));
     const inputs = document.createElement('div');
     inputs.className = 'sq-log-inputs';
     const reps = document.createElement('input');
@@ -11648,7 +11908,14 @@ function sqMyLogForm(items) {
     reps.addEventListener('input', function () { squadMyLog.items[i].reps = reps.value.trim(); sqQueueSave(); });
     load.addEventListener('input', function () { squadMyLog.items[i].load = load.value.trim(); sqQueueSave(); });
     inputs.append(reps, load);
-    main.append(nm, pres, inputs);
+    main.append(nm, pres);
+    if (it.purpose) {
+      const pp = document.createElement('div');
+      pp.className = 'sq-log-purpose';
+      pp.textContent = t('plan_purpose') + ': ' + it.purpose;
+      main.appendChild(pp);
+    }
+    main.appendChild(inputs);
     const check = document.createElement('button');
     check.type = 'button';
     check.className = 'sq-check' + (squadMyLog.items[i].done ? ' on' : '');
@@ -11768,6 +12035,21 @@ function renderSquadBoard() {
 function renderSquadSeasonEditor(pane) {
   const sq = squadCurrent;
   const lead = sqIsLead(sq);
+  /* المخطط الموسمي التفصيلي: فترات وبلوكات وأسابيع وتمرينات بالتفصيل */
+  const planBtn = document.createElement('button');
+  planBtn.type = 'button';
+  planBtn.className = 'sq-plan-btn';
+  planBtn.textContent = squadPlan ? t('plan_open_detailed') : t('plan_create_detailed');
+  planBtn.addEventListener('click', function () {
+    openPlan({ kind: 'squad', id: sq.id, name: sq.name, lead: lead, leadEmail: sq.coachEmail, viewers: sq.members || [], returnScreen: sqScreen(), sport: sq.sport || '' });
+  });
+  pane.appendChild(planBtn);
+  if (squadPlan) {
+    const hint = document.createElement('p');
+    hint.className = 'hint-text';
+    hint.textContent = t('plan_squad_uses_plan');
+    pane.appendChild(hint);
+  }
   if (!lead) {
     const note = document.createElement('p');
     note.className = 'sq-readonly';
@@ -12681,6 +12963,7 @@ async function loadClient(email) {
 
     clientWeek = normalizeWeek(workoutDoc.exists() ? workoutDoc.data().week : null);
     playlistFill('client', workoutDoc.exists() ? workoutDoc.data().playlist : '');
+    renderClientPlanCard().catch(function () {});
     clientRehab = normalizeRehab(rehabDoc.exists() ? rehabDoc.data() : null);
     clientNutrition = normalizeNutrition(nutritionDoc.exists() ? nutritionDoc.data() : null);
     await physioLoadClient(email);
@@ -28850,6 +29133,10 @@ function buildLibExercise(ex, values) {
 
 function deliverLibExercise(built) {
   closeExSheet();
+  if (libraryContext === 'plan') {
+    planAddLibItem(built);
+    return;
+  }
   if (libraryContext === 'class') {
     addExerciseToCurrentClass(built);
     return;
@@ -29001,7 +29288,7 @@ async function openExerciseSheet(ex) {
   addBtn.type = 'button';
   addBtn.id = 'exs-add-btn';
   addBtn.addEventListener('click', function () {
-    if (libraryContext === 'class') { deliverLibExercise(buildLibExercise(ex)); return; }
+    if (libraryContext === 'class' || libraryContext === 'plan') { deliverLibExercise(buildLibExercise(ex)); return; }
     openPrescription(ex);
   });
   actions.appendChild(addBtn);
@@ -36432,3 +36719,1138 @@ function renderGlyphPick(boxId, inputId, keys) {
     box.appendChild(b);
   });
 }
+
+/* ============================================================
+   المخطط الموسمي — التخطيط الرياضي الكامل
+   الموسم ← فترات ← بلوكات (شهور) ← أسابيع ← تمرينة ← تمرين.
+   كل مستوى ليه: الهدف، العناصر اللي بنشتغل عليها، وشدة الحمل.
+   نفس المحرّر بيشتغل لفريق (squad) ولعميل لوحده.
+   الجلسات متخزنة مرة واحدة (sessions) والأيام بتشاور عليها — كده
+   موسم كامل ٢٠ أسبوع بيفضل صغير جوه مستند واحد في الداتابيز.
+   ============================================================ */
+
+let PLAN_TEMPLATES = null;
+let planCurrent = null;     /* المخطط المفتوح */
+let planCtx = null;         /* { kind: 'client'|'squad', id, name, lead, docId, returnScreen } */
+let planDirty = false;
+let planSel = { w: -1 };    /* الأسبوع المختار في الرسمة */
+
+const PLAN_TEMPLATE_FILES = ['run', 'field', 'gym', 'cf', 'swim', 'team', 'rc', 'other'];
+
+/* القوالب كبيرة — بتتحمّل لما حد يفتح المخطط بس، مش مع البرنامج */
+async function planLoadTemplates() {
+  if (PLAN_TEMPLATES) return PLAN_TEMPLATES;
+  const mods = await Promise.all(PLAN_TEMPLATE_FILES.map(function (n) {
+    return import('./library/plans-' + n + '.js').catch(function () { return {}; });
+  }));
+  PLAN_TEMPLATES = [];
+  mods.forEach(function (m) {
+    const arr = Object.keys(m).map(function (k) { return m[k]; }).filter(Array.isArray)[0] || [];
+    PLAN_TEMPLATES = PLAN_TEMPLATES.concat(arr);
+  });
+  return PLAN_TEMPLATES;
+}
+
+/* نص ممكن يبقى {ar,en} (من القالب) أو نص عادي (كتبه المدرب) */
+function pv(v) {
+  if (v && typeof v === 'object') return v[lang] || v.ar || v.en || '';
+  return v || '';
+}
+
+function planDef(list, id) {
+  return list.filter(function (x) { return x.id === id; })[0] || null;
+}
+function planCompName(id) { const c = planDef(PLAN_COMPONENTS, id); return c ? c[lang] : id; }
+function planPeriodType(id) { return planDef(PLAN_PERIOD_TYPES, id) || PLAN_PERIOD_TYPES[0]; }
+function planLoadLevel(n) {
+  const v = Number(n) || 0;
+  return PLAN_LOAD_LEVELS.filter(function (l) { return v <= l.max; })[0] || PLAN_LOAD_LEVELS[PLAN_LOAD_LEVELS.length - 1];
+}
+
+/* ---------- البناء من القالب ---------- */
+
+function planFromTemplate(tpl, start) {
+  const periods = (tpl.periods || []).map(function (p) {
+    return {
+      type: p.type, goal: p.goal || '', components: (p.components || []).slice(),
+      blocks: (p.blocks || []).map(function (b) {
+        let prev = 0;
+        return {
+          name: b.name || '', goal: b.goal || '', components: (b.components || []).slice(),
+          weeks: (b.loads || []).map(function (load, i) {
+            let type = (b.weekTypes && b.weekTypes[i]) || '';
+            if (!type) type = (prev && load <= prev - 2) ? 'deload' : 'load';
+            prev = load;
+            return { load: load, type: type, note: '', days: (b.pattern || []).slice(0, 7) };
+          })
+        };
+      })
+    };
+  });
+  return {
+    title: tpl.title || '', sport: tpl.sport || '', goal: tpl.goal || '',
+    components: (tpl.components || []).slice(), templateId: tpl.id, level: tpl.level || '',
+    start: start || todayStamp,
+    periods: periods,
+    sessions: JSON.parse(JSON.stringify(tpl.sessions || {}))
+  };
+}
+
+function planEmpty(start) {
+  return {
+    title: '', sport: '', goal: '', components: [], templateId: '', start: start || todayStamp,
+    periods: [{ type: 'gpp', goal: '', components: [], blocks: [{ name: '', goal: '', components: [], weeks: [planNewWeek()] }] }],
+    sessions: {}
+  };
+}
+
+function planNewWeek() {
+  return { load: 5, type: 'load', note: '', days: ['', '', '', '', '', '', ''] };
+}
+
+/* كل الأسابيع في صف واحد، ومع كل أسبوع الفترة والبلوك بتوعه */
+function planWeeksFlat(plan) {
+  const out = [];
+  (plan.periods || []).forEach(function (p, pi) {
+    (p.blocks || []).forEach(function (b, bi) {
+      (b.weeks || []).forEach(function (w, wi) {
+        out.push({ week: w, period: p, block: b, pi: pi, bi: bi, wi: wi, n: out.length });
+      });
+    });
+  });
+  return out;
+}
+
+function planAddDays(stamp, n) {
+  const parts = String(stamp).split('-').map(Number);
+  const d = new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0, 0);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+
+/* النهارده فين في الموسم؟ */
+function planLocate(plan, stamp) {
+  if (!plan || !plan.start) return null;
+  const diff = daysAgo(plan.start) - (stamp ? daysAgo(stamp) : 0);
+  const flat = planWeeksFlat(plan);
+  if (diff < 0) return { before: true, days: -diff, flat: flat };
+  const wn = Math.floor(diff / 7);
+  if (wn >= flat.length) return { after: true, flat: flat };
+  const entry = flat[wn];
+  const slot = diff % 7;
+  const key = entry.week.days[slot] || '';
+  return { entry: entry, slot: slot, key: key, session: key ? plan.sessions[key] || null : null, flat: flat, total: flat.length };
+}
+
+/* ---------- وصف التمرين في سطر ---------- */
+
+function planItemName(it) {
+  if (it.name) return pv(it.name);
+  const e = it.libId ? libraryEntryById(it.libId) : null;
+  return e ? exerciseLibName(e) : (it.libId || '');
+}
+
+function planItemMedia(it) {
+  const e = it.libId ? libraryEntryById(it.libId) : null;
+  if (!e) return '';
+  prepLibEntry(e);
+  return libMediaUrl(e) || '';
+}
+
+function planBasisText(it) {
+  if (!it.intensity) return '';
+  const b = planDef(PLAN_BASES, it.basis);
+  if (!b) return it.intensity;
+  if (b.id === 'rpe') return 'RPE ' + it.intensity;
+  if (b.id === 'rir') return 'RIR ' + it.intensity;
+  if (b.unit === '%') return String(it.intensity).replace('%', '') + '% ' + t('plan_of_' + b.id);
+  return it.intensity + ' (' + b[lang] + ')';
+}
+
+function planItemLine(it) {
+  const parts = [];
+  let vol = '';
+  const sets = Number(it.sets) || 0;
+  if (it.kind === 'wod' && it.format) {
+    const f = planDef(PLAN_WOD_FORMATS, it.format);
+    vol = (f ? f[lang] : it.format) + (it.duration ? ' ' + it.duration : '');
+  } else {
+    const reps = it.reps ? String(it.reps) : '';
+    const dist = it.distance ? String(it.distance) : '';
+    if (sets > 1 && reps && dist) vol = sets + ' × ' + reps + ' × ' + dist;
+    else if (reps && dist) vol = reps + ' × ' + dist;
+    else if (sets && reps) vol = sets + ' × ' + reps;
+    else if (dist) vol = (sets > 1 ? sets + ' × ' : '') + dist;
+    else if (it.duration) vol = (sets > 1 ? sets + ' × ' : '') + it.duration;
+    else if (sets) vol = sets + ' ' + t('plan_sets_word');
+    if (it.duration && vol.indexOf(it.duration) === -1 && (reps || dist)) vol += ' · ' + it.duration;
+  }
+  if (vol) parts.push(vol);
+  if (it.stroke) { const s = planDef(PLAN_STROKES, it.stroke); parts.push(s ? s[lang] : it.stroke); }
+  if (it.time) parts.push(t('plan_target') + ' ' + it.time);
+  const ib = planBasisText(it);
+  if (ib) parts.push(ib);
+  if (it.tempo) parts.push(t('ex_tempo') + ' ' + it.tempo);
+  if (it.rest) {
+    const rt = it.restType ? planDef(PLAN_REST_TYPES, it.restType) : null;
+    parts.push(t('ex_rest') + ' ' + it.rest + (rt ? ' ' + rt[lang] : ''));
+  }
+  if (it.setRest) parts.push(t('plan_set_rest') + ' ' + it.setRest);
+  return parts.join(' · ');
+}
+
+/* جلسة المخطط → نفس شكل عناصر الفريق (عشان تسجيل اللاعب يشتغل عليها) */
+function planSessionItems(sess) {
+  return ((sess && sess.items) || []).map(function (it) {
+    return {
+      sec: (it.kind === 'warmup') ? 'warmup' : (it.kind === 'mobility' ? 'mobility' : 'main'),
+      libId: it.libId || '', name: planItemName(it), media: planItemMedia(it),
+      sets: Number(it.sets) || 1, reps: planItemLine(it), rest: '', rpe: '', line: true,
+      purpose: pv(it.purpose), component: it.component || ''
+    };
+  });
+}
+
+/* ---------- القراية والحفظ ---------- */
+
+function planDocId(kind, id) {
+  return (kind === 'squad' ? 'sq__' : 'c__') + String(id || '').toLowerCase();
+}
+
+async function planFetch(docId) {
+  try {
+    const snap = await getDoc(doc(db, 'plans', docId));
+    return snap.exists() ? snap.data() : null;
+  } catch (error) { return null; }
+}
+
+async function planSave() {
+  if (!planCurrent || !planCtx || !planCtx.lead) return false;
+  const msg = document.getElementById('plan-msg');
+  const body = Object.assign({}, planCurrent, {
+    ownerKind: planCtx.kind,
+    clientEmail: planCtx.kind === 'client' ? planCtx.id : '',
+    squadId: planCtx.kind === 'squad' ? planCtx.id : '',
+    leadEmail: planCtx.kind === 'squad' ? (planCtx.leadEmail || '') : '',
+    viewers: planCtx.viewers || [],
+    updatedAt: new Date().toISOString(),
+    updatedBy: currentProviderEmail || ''
+  });
+  if (docTooBig(body, msg)) return false;
+  msg.className = 'message';
+  msg.textContent = t('saving');
+  try {
+    await setDoc(doc(db, 'plans', planCtx.docId), body);
+    planDirty = false;
+    setStatusMessage(msg, t('plan_saved'), 'success');
+    paintPlanSaveBar();
+    if (planCtx.kind === 'squad' && squadCurrent && squadCurrent.id === planCtx.id) {
+      squadPlan = planCurrent;
+      notify(squadCurrent.members || [], 'squad_session', { target: 'squad', about: squadCurrent.id, aboutName: squadCurrent.name, params: function () { return { name: squadCurrent.name }; } });
+    }
+    return true;
+  } catch (error) {
+    msg.className = 'message error';
+    msg.textContent = t('problem') + error.message;
+    return false;
+  }
+}
+
+function planTouch() {
+  planDirty = true;
+  paintPlanSaveBar();
+}
+
+/* ---------- فتح الشاشة ---------- */
+
+async function openPlan(ctx) {
+  planCtx = Object.assign({ returnScreen: null }, ctx);
+  planCtx.docId = planDocId(ctx.kind, ctx.id);
+  planSel = { w: -1 };
+  const msg = document.getElementById('plan-msg');
+  document.getElementById('plan-body').innerHTML = '';
+  msg.className = 'message';
+  msg.textContent = t('loading');
+  showScreen(document.getElementById('plan-screen'));
+  document.getElementById('plan-for').textContent = fill(ctx.kind === 'squad' ? 'plan_for_squad' : 'plan_for_client', { name: ctx.name || ctx.id });
+  await ensureExtraLibrary();
+  const saved = await planFetch(planCtx.docId);
+  planCurrent = saved || planEmpty(todayStamp);
+  if (!planCurrent.sessions) planCurrent.sessions = {};
+  if (!planCurrent.sport && ctx.sport) planCurrent.sport = ctx.sport;
+  planDirty = false;
+  msg.textContent = saved ? '' : t('plan_new_hint');
+  const loc = planLocate(planCurrent);
+  if (loc && loc.entry) planSel.w = loc.entry.n;
+  renderPlan();
+}
+
+document.getElementById('plan-back-btn').addEventListener('click', function () {
+  if (planDirty && planCtx && planCtx.lead && !window.confirm(t('plan_leave_unsaved'))) return;
+  planDirty = false;
+  navBack(function () {
+    if (planCtx && planCtx.returnScreen) showScreen(planCtx.returnScreen);
+  });
+});
+
+/* ---------- الرسم ---------- */
+
+function planEl(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function planInput(value, onChange, opts) {
+  const o = opts || {};
+  const inp = document.createElement(o.area ? 'textarea' : 'input');
+  if (o.area) inp.rows = o.rows || 2;
+  if (o.type) inp.type = o.type;
+  if (o.ph) inp.placeholder = o.ph;
+  if (o.cls) inp.className = o.cls;
+  inp.value = pv(value);
+  inp.disabled = !planCtx.lead;
+  inp.addEventListener('input', function () { onChange(o.type === 'number' ? Number(inp.value) : inp.value); planTouch(); });
+  return inp;
+}
+
+function planSelect(list, value, onChange, withEmpty) {
+  const sel = document.createElement('select');
+  if (withEmpty) { const o = document.createElement('option'); o.value = ''; o.textContent = withEmpty; sel.appendChild(o); }
+  list.forEach(function (x) {
+    const o = document.createElement('option');
+    o.value = x.id;
+    o.textContent = x[lang] || x.id;
+    sel.appendChild(o);
+  });
+  sel.value = value || '';
+  sel.disabled = !planCtx.lead;
+  sel.addEventListener('change', function () { onChange(sel.value); planTouch(); });
+  return sel;
+}
+
+/* العناصر: المختارة كشرائح + «+ عنصر» بتفتح الباقي */
+function planChips(list, onChange) {
+  const box = planEl('div', 'plan-chips');
+  const draw = function () {
+    box.innerHTML = '';
+    list.forEach(function (id, i) {
+      const c = planEl('span', 'plan-chip on', planCompName(id));
+      if (planCtx.lead) {
+        const x = planEl('button', 'plan-chip-x', '×');
+        x.type = 'button';
+        x.setAttribute('aria-label', t('plan_remove'));
+        x.addEventListener('click', function () { list.splice(i, 1); onChange(list); planTouch(); draw(); });
+        c.appendChild(x);
+      }
+      box.appendChild(c);
+    });
+    if (!planCtx.lead) { if (!list.length) box.appendChild(planEl('span', 'hint-text', '—')); return; }
+    const add = planEl('button', 'plan-chip add', t('plan_add_comp'));
+    add.type = 'button';
+    add.addEventListener('click', function () {
+      const pick = planEl('div', 'plan-chip-pick');
+      PLAN_COMPONENTS.filter(function (c) { return list.indexOf(c.id) === -1; }).forEach(function (c) {
+        const b = planEl('button', 'plan-chip', c[lang]);
+        b.type = 'button';
+        b.addEventListener('click', function () { list.push(c.id); onChange(list); planTouch(); draw(); });
+        pick.appendChild(b);
+      });
+      add.replaceWith(pick);
+    });
+    box.appendChild(add);
+  };
+  draw();
+  return box;
+}
+
+function planLoadSlider(value, onChange) {
+  const wrap = planEl('div', 'plan-load');
+  const range = document.createElement('input');
+  range.type = 'range'; range.min = '1'; range.max = '10'; range.step = '1';
+  range.value = String(value || 5);
+  range.disabled = !planCtx.lead;
+  const lab = planEl('span', 'plan-load-lab');
+  const paint = function () {
+    const lv = planLoadLevel(range.value);
+    lab.textContent = range.value + '/10 · ' + lv[lang];
+    lab.style.color = lv.color;
+  };
+  range.addEventListener('input', function () { onChange(Number(range.value)); paint(); planTouch(); planPaintChart(); });
+  paint();
+  wrap.append(range, lab);
+  return wrap;
+}
+
+function paintPlanSaveBar() {
+  const bar = document.querySelector('#plan-savebar');
+  if (!bar) return;
+  bar.classList.toggle('dirty', planDirty);
+  const st = bar.querySelector('.plan-save-state');
+  if (st) st.textContent = planDirty ? t('plan_unsaved') : t('plan_all_saved');
+}
+
+function renderPlan() {
+  const body = document.getElementById('plan-body');
+  body.innerHTML = '';
+  const plan = planCurrent;
+  const lead = planCtx.lead;
+
+  if (!lead) body.appendChild(planEl('p', 'sq-readonly', t('plan_readonly')));
+
+  /* شريط الحفظ + القوالب */
+  if (lead) {
+    const bar = planEl('div', 'plan-savebar');
+    bar.id = 'plan-savebar';
+    const tplBtn = planEl('button', 'secondary', t('plan_templates_btn'));
+    tplBtn.type = 'button';
+    tplBtn.addEventListener('click', openPlanTemplates);
+    const save = planEl('button', '', t('plan_save'));
+    save.type = 'button';
+    save.id = 'plan-save-btn';
+    save.addEventListener('click', planSave);
+    bar.append(tplBtn, planEl('span', 'plan-save-state'), save);
+    body.appendChild(bar);
+    paintPlanSaveBar();
+  }
+
+  /* الموسم */
+  const season = planEl('div', 'plan-card plan-season');
+  season.appendChild(planEl('h3', 'plan-h', t('plan_season')));
+  const g1 = planEl('div', 'plan-grid2');
+  const tl = planEl('label', 'plan-field', t('plan_f_title'));
+  tl.appendChild(planInput(plan.title, function (v) { plan.title = v; }));
+  const st = planEl('label', 'plan-field', t('plan_f_start'));
+  st.appendChild(planInput(plan.start, function (v) { plan.start = v || todayStamp; planPaintChart(); }, { type: 'date' }));
+  g1.append(tl, st);
+  season.appendChild(g1);
+  const gl = planEl('label', 'plan-field', t('plan_f_goal'));
+  gl.appendChild(planInput(plan.goal, function (v) { plan.goal = v; }, { area: true, ph: t('plan_goal_ph') }));
+  season.appendChild(gl);
+  season.appendChild(planEl('div', 'plan-sub', t('plan_f_components')));
+  season.appendChild(planChips(plan.components, function (l) { plan.components = l; }));
+  body.appendChild(season);
+
+  /* الرسمة */
+  const chartCard = planEl('div', 'plan-card');
+  chartCard.appendChild(planEl('h3', 'plan-h', t('plan_chart')));
+  const chart = planEl('div', 'plan-chart');
+  chart.id = 'plan-chart';
+  chartCard.appendChild(chart);
+  const legend = planEl('div', 'plan-legend');
+  legend.id = 'plan-legend';
+  chartCard.appendChild(legend);
+  body.appendChild(chartCard);
+
+  /* النهارده */
+  const loc = planLocate(plan);
+  const now = planEl('div', 'plan-now');
+  if (loc && loc.entry) {
+    const e = loc.entry;
+    now.appendChild(planEl('strong', '', fill('plan_now_line', {
+      w: e.n + 1, n: loc.total, period: planPeriodType(e.period.type)[lang], block: pv(e.block.name) || fill('plan_block_n', { n: e.bi + 1 })
+    })));
+    now.appendChild(planEl('span', '', loc.session ? (t('plan_today') + ': ' + pv(loc.session.title)) : t('plan_rest_today')));
+  } else if (loc && loc.before) now.appendChild(planEl('strong', '', fill('plan_starts_in', { n: loc.days })));
+  else if (loc && loc.after) now.appendChild(planEl('strong', '', t('plan_over')));
+  body.appendChild(now);
+
+  /* الفترات */
+  const list = planEl('div', 'plan-periods');
+  list.id = 'plan-periods';
+  body.appendChild(list);
+  renderPlanPeriods();
+
+  if (lead) {
+    const addP = planEl('button', 'secondary', t('plan_add_period'));
+    addP.type = 'button';
+    addP.addEventListener('click', function () {
+      plan.periods.push({ type: 'spp', goal: '', components: [], blocks: [{ name: '', goal: '', components: [], weeks: [planNewWeek()] }] });
+      planTouch(); renderPlanPeriods(); planPaintChart();
+    });
+    body.appendChild(addP);
+  }
+
+  /* بنك الجلسات */
+  const bank = planEl('details', 'plan-card plan-bank');
+  const sm = planEl('summary', '', fill('plan_sessions_bank', { n: Object.keys(plan.sessions).length }));
+  bank.appendChild(sm);
+  Object.keys(plan.sessions).forEach(function (key) {
+    const s = plan.sessions[key];
+    const row = planEl('div', 'plan-bank-row');
+    const txt = planEl('div', 'plan-bank-txt');
+    txt.appendChild(planEl('strong', '', pv(s.title) || key));
+    txt.appendChild(planEl('span', '', fill('plan_used_n', { n: planUsage(key) }) + ' · RPE ' + (s.rpe || '-') + ' · ' + (s.items || []).length + ' ' + t('plan_items_word')));
+    const open = planEl('button', 'link', lead ? t('plan_edit') : t('plan_view'));
+    open.type = 'button';
+    open.addEventListener('click', function () { openPlanSession(key, null); });
+    row.append(txt, open);
+    bank.appendChild(row);
+  });
+  if (lead) {
+    const addS = planEl('button', 'secondary', t('plan_new_session'));
+    addS.type = 'button';
+    addS.addEventListener('click', function () {
+      const key = planNewSessionKey();
+      plan.sessions[key] = { title: '', goal: '', components: [], rpe: 6, duration: 60, items: [] };
+      planTouch();
+      openPlanSession(key, null);
+    });
+    bank.appendChild(addS);
+  }
+  body.appendChild(bank);
+
+  if (planCtx.kind === 'client' && lead) {
+    const tip = planEl('p', 'hint-text', t('plan_client_tip'));
+    body.appendChild(tip);
+  }
+  planPaintChart();
+}
+
+function planUsage(key) {
+  let n = 0;
+  planWeeksFlat(planCurrent).forEach(function (e) { e.week.days.forEach(function (k) { if (k === key) n++; }); });
+  return n;
+}
+
+function planNewSessionKey() {
+  let k;
+  do { k = 's' + Math.random().toString(36).slice(2, 7); } while (planCurrent.sessions[k]);
+  return k;
+}
+
+/* رسمة الحمل: عمود لكل أسبوع بلون الفترة، والنهارده متعلّم */
+function planPaintChart() {
+  const box = document.querySelector('#plan-chart');
+  if (!box) return;
+  const flat = planWeeksFlat(planCurrent);
+  const loc = planLocate(planCurrent);
+  const curN = loc && loc.entry ? loc.entry.n : -1;
+  const n = Math.max(1, flat.length);
+  const W = 320, H = 120, pad = 4;
+  const bw = (W - pad * 2) / n;
+  let svg = '<svg viewBox="0 0 ' + W + ' ' + (H + 18) + '" class="plan-chart-svg" role="img" aria-label="' + t('plan_chart') + '">';
+  [3, 5, 7].forEach(function (lv) {
+    const y = H - (lv / 10) * (H - 8);
+    svg += '<line x1="0" x2="' + W + '" y1="' + y + '" y2="' + y + '" stroke="rgba(255,255,255,.08)" stroke-dasharray="3 3"/>';
+  });
+  flat.forEach(function (e, i) {
+    const h = Math.max(3, (Number(e.week.load) || 0) / 10 * (H - 8));
+    const x = pad + i * bw + 1;
+    const col = planPeriodType(e.period.type).color;
+    const sel = planSel.w === i;
+    svg += '<rect data-w="' + i + '" x="' + x.toFixed(1) + '" y="' + (H - h).toFixed(1) + '" width="' + Math.max(2, bw - 2).toFixed(1) + '" height="' + h.toFixed(1) + '" rx="2" fill="' + col + '" opacity="' + (e.week.type === 'deload' ? '.55' : '.95') + '"' + (sel ? ' stroke="#fff" stroke-width="1.5"' : '') + '/>';
+    if (i === curN) svg += '<circle cx="' + (x + bw / 2 - 1).toFixed(1) + '" cy="' + (H + 8) + '" r="3" fill="#fff"/>';
+    else if (n <= 26 || i % 2 === 0) svg += '<text x="' + (x + bw / 2 - 1).toFixed(1) + '" y="' + (H + 12) + '" font-size="7" text-anchor="middle" fill="#93a5bd">' + (i + 1) + '</text>';
+  });
+  svg += '</svg>';
+  box.innerHTML = svg;
+  box.querySelectorAll('rect[data-w]').forEach(function (r) {
+    r.addEventListener('click', function () {
+      planSel.w = Number(r.getAttribute('data-w'));
+      planPaintChart();
+      const row = document.querySelector('#plan-periods .plan-week[data-n="' + planSel.w + '"]');
+      if (row) { row.closest('details') && (row.closest('details').open = true); row.scrollIntoView({ behavior: 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(function () { row.classList.remove('flash'); }, 1200); }
+    });
+  });
+  const legend = document.querySelector('#plan-legend');
+  if (legend) {
+    legend.innerHTML = '';
+    const seen = {};
+    planCurrent.periods.forEach(function (p) {
+      if (seen[p.type]) return;
+      seen[p.type] = 1;
+      const pt = planPeriodType(p.type);
+      const it = planEl('span', 'plan-leg');
+      const dot = planEl('i');
+      dot.style.background = pt.color;
+      it.append(dot, document.createTextNode(pt[lang]));
+      legend.appendChild(it);
+    });
+  }
+}
+
+function renderPlanPeriods() {
+  const list = document.querySelector('#plan-periods');
+  if (!list) return;
+  list.innerHTML = '';
+  const plan = planCurrent;
+  const lead = planCtx.lead;
+  let wn = 0;
+  plan.periods.forEach(function (p, pi) {
+    const pt = planPeriodType(p.type);
+    const pc = planEl('details', 'plan-card plan-period');
+    pc.style.borderInlineStartColor = pt.color;
+    const weeksIn = p.blocks.reduce(function (s, b) { return s + b.weeks.length; }, 0);
+    const sum = planEl('summary', 'plan-period-sum');
+    sum.appendChild(planEl('strong', '', fill('plan_period_n', { n: pi + 1 }) + ' · ' + pt[lang]));
+    sum.appendChild(planEl('span', '', fill('plan_weeks_n', { n: weeksIn }) + (pv(p.goal) ? ' · ' + pv(p.goal) : '')));
+    pc.appendChild(sum);
+    if (planSel.w >= wn && planSel.w < wn + weeksIn) pc.open = true;
+
+    const g = planEl('div', 'plan-grid2');
+    const tlab = planEl('label', 'plan-field', t('plan_f_period_type'));
+    tlab.appendChild(planSelect(PLAN_PERIOD_TYPES, p.type, function (v) { p.type = v; renderPlanPeriods(); planPaintChart(); }));
+    g.appendChild(tlab);
+    pc.appendChild(g);
+    const pg = planEl('label', 'plan-field', t('plan_f_goal'));
+    pg.appendChild(planInput(p.goal, function (v) { p.goal = v; }, { area: true }));
+    pc.appendChild(pg);
+    pc.appendChild(planEl('div', 'plan-sub', t('plan_f_components')));
+    pc.appendChild(planChips(p.components, function (l) { p.components = l; }));
+
+    p.blocks.forEach(function (b, bi) {
+      const bc = planEl('div', 'plan-block');
+      bc.appendChild(planEl('div', 'plan-block-h', fill('plan_block_n', { n: bi + 1 }) + (pv(b.name) ? ' — ' + pv(b.name) : '')));
+      const bg = planEl('div', 'plan-grid2');
+      const bn = planEl('label', 'plan-field', t('plan_f_block_name'));
+      bn.appendChild(planInput(b.name, function (v) { b.name = v; }));
+      const bgl = planEl('label', 'plan-field', t('plan_f_goal'));
+      bgl.appendChild(planInput(b.goal, function (v) { b.goal = v; }));
+      bg.append(bn, bgl);
+      bc.appendChild(bg);
+      bc.appendChild(planEl('div', 'plan-sub', t('plan_f_components')));
+      bc.appendChild(planChips(b.components, function (l) { b.components = l; }));
+
+      b.weeks.forEach(function (w, wi) {
+        bc.appendChild(planWeekRow(w, wn, function () {
+          b.weeks.splice(wi, 1);
+          if (!b.weeks.length) p.blocks.splice(bi, 1);
+          if (!p.blocks.length) plan.periods.splice(pi, 1);
+          planTouch(); renderPlanPeriods(); planPaintChart();
+        }, function () {
+          b.weeks.splice(wi + 1, 0, JSON.parse(JSON.stringify(w)));
+          planTouch(); renderPlanPeriods(); planPaintChart();
+        }));
+        wn++;
+      });
+      if (lead) {
+        const acts = planEl('div', 'plan-row-acts');
+        const addW = planEl('button', 'link', t('plan_add_week'));
+        addW.type = 'button';
+        addW.addEventListener('click', function () { b.weeks.push(planNewWeek()); planTouch(); renderPlanPeriods(); planPaintChart(); });
+        const addB = planEl('button', 'link', t('plan_add_block'));
+        addB.type = 'button';
+        addB.addEventListener('click', function () { p.blocks.splice(bi + 1, 0, { name: '', goal: '', components: [], weeks: [planNewWeek()] }); planTouch(); renderPlanPeriods(); planPaintChart(); });
+        acts.append(addW, addB);
+        bc.appendChild(acts);
+      }
+      pc.appendChild(bc);
+    });
+    if (lead) {
+      const del = planEl('button', 'link sq-del', t('plan_del_period'));
+      del.type = 'button';
+      del.addEventListener('click', function () {
+        if (!window.confirm(t('plan_del_confirm'))) return;
+        plan.periods.splice(pi, 1);
+        if (!plan.periods.length) plan.periods.push({ type: 'gpp', goal: '', components: [], blocks: [{ name: '', goal: '', components: [], weeks: [planNewWeek()] }] });
+        planTouch(); renderPlanPeriods(); planPaintChart();
+      });
+      pc.appendChild(del);
+    }
+    list.appendChild(pc);
+  });
+}
+
+function planWeekdayIndex(date) { return (date.getDay() + 1) % 7; }
+
+function planWeekRow(w, n, onDelete, onDup) {
+  const row = planEl('div', 'plan-week' + (w.type === 'deload' ? ' deload' : ''));
+  row.setAttribute('data-n', n);
+  const start = planAddDays(planCurrent.start, n * 7);
+  const end = planAddDays(planCurrent.start, n * 7 + 6);
+  const head = planEl('div', 'plan-week-h');
+  head.appendChild(planEl('strong', '', fill('plan_week_n', { n: n + 1 })));
+  head.appendChild(planEl('span', 'plan-week-dates', start.getDate() + '/' + (start.getMonth() + 1) + ' – ' + end.getDate() + '/' + (end.getMonth() + 1)));
+  row.appendChild(head);
+  const g = planEl('div', 'plan-grid2');
+  const lt = planEl('label', 'plan-field', t('plan_f_week_type'));
+  lt.appendChild(planSelect(PLAN_WEEK_TYPES, w.type, function (v) { w.type = v; row.classList.toggle('deload', v === 'deload'); planPaintChart(); }));
+  const ll = planEl('label', 'plan-field', t('plan_f_load'));
+  ll.appendChild(planLoadSlider(w.load, function (v) { w.load = v; }));
+  g.append(lt, ll);
+  row.appendChild(g);
+
+  const daysBox = planEl('div', 'plan-days');
+  for (let d = 0; d < 7; d++) {
+    const date = planAddDays(planCurrent.start, n * 7 + d);
+    const key = w.days[d] || '';
+    const sess = key ? planCurrent.sessions[key] : null;
+    const b = planEl('button', 'plan-day' + (sess ? ' has' : '') + (dateStamp(date) === todayStamp ? ' today' : ''));
+    b.type = 'button';
+    b.appendChild(planEl('span', 'plan-day-name', daysShort()[planWeekdayIndex(date)]));
+    b.appendChild(planEl('span', 'plan-day-s', sess ? (pv(sess.title) || '•') : t('plan_rest_short')));
+    b.addEventListener('click', function () { openPlanDay(w, d, n); });
+    daysBox.appendChild(b);
+  }
+  row.appendChild(daysBox);
+  const note = planEl('label', 'plan-field', t('plan_f_week_note'));
+  note.appendChild(planInput(w.note, function (v) { w.note = v; }, { ph: t('plan_week_note_ph') }));
+  row.appendChild(note);
+  if (planCtx.lead) {
+    const acts = planEl('div', 'plan-row-acts');
+    if (planCtx.kind === 'client') {
+      const push = planEl('button', 'link', t('plan_push_week'));
+      push.type = 'button';
+      push.addEventListener('click', function () { planPushWeekToClient(w, n); });
+      acts.appendChild(push);
+    }
+    const dup = planEl('button', 'link', t('plan_dup_week'));
+    dup.type = 'button';
+    dup.addEventListener('click', onDup);
+    const del = planEl('button', 'link sq-del', t('plan_del_week'));
+    del.type = 'button';
+    del.addEventListener('click', onDelete);
+    acts.append(dup, del);
+    row.appendChild(acts);
+  }
+  return row;
+}
+
+/* ---------- الشيت (يوم / جلسة / قوالب) ---------- */
+
+const planSheet = document.getElementById('plan-sheet');
+
+function planSheetOpen(title) {
+  document.getElementById('plan-sheet-title').textContent = title;
+  const body = document.getElementById('plan-sheet-body');
+  body.innerHTML = '';
+  planSheet.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+  return body;
+}
+function planSheetClose() {
+  planSheet.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+}
+document.getElementById('plan-sheet-close').addEventListener('click', function () {
+  planSheetClose();
+  if (planCurrent) { renderPlanPeriods(); planPaintChart(); }
+});
+
+function openPlanDay(w, d, n) {
+  const date = planAddDays(planCurrent.start, n * 7 + d);
+  const body = planSheetOpen(days()[planWeekdayIndex(date)] + ' ' + date.getDate() + '/' + (date.getMonth() + 1) + ' · ' + fill('plan_week_n', { n: n + 1 }));
+  const key = w.days[d] || '';
+  if (!planCtx.lead) {
+    if (key && planCurrent.sessions[key]) { planSheetClose(); openPlanSession(key, null); }
+    else body.appendChild(planEl('p', 'hint-text', t('plan_rest_today')));
+    return;
+  }
+  body.appendChild(planEl('div', 'plan-sub', t('plan_pick_session')));
+  const list = planEl('div', 'plan-pick-list');
+  const opt = function (k, label, sub) {
+    const b = planEl('button', 'plan-pick' + (k === key ? ' on' : ''));
+    b.type = 'button';
+    b.appendChild(planEl('strong', '', label));
+    if (sub) b.appendChild(planEl('span', '', sub));
+    b.addEventListener('click', function () { w.days[d] = k; planTouch(); openPlanDay(w, d, n); });
+    list.appendChild(b);
+  };
+  opt('', t('plan_rest_day'), '');
+  Object.keys(planCurrent.sessions).forEach(function (k) {
+    const s = planCurrent.sessions[k];
+    opt(k, pv(s.title) || k, 'RPE ' + (s.rpe || '-') + ' · ' + (s.duration || '-') + ' ' + t('plan_min'));
+  });
+  body.appendChild(list);
+  const acts = planEl('div', 'plan-row-acts');
+  const neu = planEl('button', 'secondary', t('plan_new_session'));
+  neu.type = 'button';
+  neu.addEventListener('click', function () {
+    const k = planNewSessionKey();
+    planCurrent.sessions[k] = { title: '', goal: '', components: [], rpe: 6, duration: 60, items: [] };
+    w.days[d] = k;
+    planTouch();
+    openPlanSession(k, null);
+  });
+  acts.appendChild(neu);
+  if (key && planCurrent.sessions[key]) {
+    const edit = planEl('button', '', t('plan_edit_this'));
+    edit.type = 'button';
+    edit.addEventListener('click', function () {
+      /* الجلسة مستخدمة في أيام تانية؟ تعديل اليوم ده بس = نسخة لوحدها */
+      if (planUsage(key) > 1 && !window.confirm(fill('plan_shared_confirm', { n: planUsage(key) }))) {
+        const k2 = planNewSessionKey();
+        planCurrent.sessions[k2] = JSON.parse(JSON.stringify(planCurrent.sessions[key]));
+        w.days[d] = k2;
+        planTouch();
+        openPlanSession(k2, null);
+        return;
+      }
+      openPlanSession(key, null);
+    });
+    acts.appendChild(edit);
+  }
+  body.appendChild(acts);
+}
+
+function openPlanSession(key, focusIdx) {
+  const s = planCurrent.sessions[key];
+  if (!s) return;
+  if (!Array.isArray(s.items)) s.items = [];
+  if (!Array.isArray(s.components)) s.components = [];
+  const body = planSheetOpen(pv(s.title) || t('plan_session'));
+  body.classList.add('plan-sess');
+  const g = planEl('div', 'plan-grid2');
+  const tl = planEl('label', 'plan-field', t('plan_f_session_title'));
+  tl.appendChild(planInput(s.title, function (v) { s.title = v; }));
+  const du = planEl('label', 'plan-field', t('plan_f_duration'));
+  du.appendChild(planInput(s.duration, function (v) { s.duration = v; }, { type: 'number' }));
+  g.append(tl, du);
+  body.appendChild(g);
+  const gl = planEl('label', 'plan-field', t('plan_f_session_goal'));
+  gl.appendChild(planInput(s.goal, function (v) { s.goal = v; }, { area: true }));
+  body.appendChild(gl);
+  const rp = planEl('label', 'plan-field', t('plan_f_rpe'));
+  rp.appendChild(planLoadSlider(s.rpe, function (v) { s.rpe = v; }));
+  body.appendChild(rp);
+  body.appendChild(planEl('div', 'plan-sub', t('plan_f_components')));
+  body.appendChild(planChips(s.components, function (l) { s.components = l; }));
+
+  body.appendChild(planEl('h3', 'plan-h', fill('plan_items_n', { n: s.items.length })));
+  const items = planEl('div', 'plan-items');
+  s.items.forEach(function (it, i) { items.appendChild(planItemCard(s, it, i, key, focusIdx === i)); });
+  body.appendChild(items);
+
+  if (planCtx.lead) {
+    const adds = planEl('div', 'plan-add-row');
+    const fromLib = planEl('button', '', t('plan_add_from_lib'));
+    fromLib.type = 'button';
+    fromLib.addEventListener('click', function () { planOpenLibrary(key); });
+    adds.appendChild(fromLib);
+    PLAN_ITEM_KINDS.forEach(function (k) {
+      const b = planEl('button', 'secondary', '+ ' + k[lang]);
+      b.type = 'button';
+      b.addEventListener('click', function () {
+        const it = { kind: k.id, name: '', sets: k.id === 'wod' ? undefined : 1 };
+        if (it.sets === undefined) delete it.sets;
+        s.items.push(it);
+        planTouch();
+        openPlanSession(key, s.items.length - 1);
+      });
+      adds.appendChild(b);
+    });
+    body.appendChild(adds);
+    const delS = planEl('button', 'link sq-del', t('plan_del_session'));
+    delS.type = 'button';
+    delS.addEventListener('click', function () {
+      if (!window.confirm(t('plan_del_confirm'))) return;
+      delete planCurrent.sessions[key];
+      planWeeksFlat(planCurrent).forEach(function (e) { e.week.days = e.week.days.map(function (k) { return k === key ? '' : k; }); });
+      planTouch();
+      planSheetClose();
+      renderPlan();
+    });
+    body.appendChild(delS);
+  }
+}
+
+function planItemCard(s, it, i, key, open) {
+  const card = planEl('details', 'plan-item');
+  if (open) card.open = true;
+  const sum = planEl('summary', 'plan-item-sum');
+  const media = planItemMedia(it);
+  if (media) { const img = document.createElement('img'); img.src = media; img.alt = ''; img.loading = 'lazy'; sum.appendChild(img); }
+  const txt = planEl('div', 'plan-item-txt');
+  const kind = planDef(PLAN_ITEM_KINDS, it.kind);
+  txt.appendChild(planEl('strong', '', planItemName(it) || t('plan_unnamed')));
+  txt.appendChild(planEl('span', 'plan-item-line', planItemLine(it)));
+  const tags = planEl('span', 'plan-item-tags');
+  if (kind) tags.appendChild(planEl('i', '', kind[lang]));
+  if (it.component) tags.appendChild(planEl('i', 'comp', planCompName(it.component)));
+  txt.appendChild(tags);
+  if (pv(it.purpose)) txt.appendChild(planEl('span', 'plan-item-purpose', t('plan_purpose') + ': ' + pv(it.purpose)));
+  sum.appendChild(txt);
+  card.appendChild(sum);
+  if (!planCtx.lead) {
+    if (pv(it.note)) card.appendChild(planEl('p', 'hint-text', pv(it.note)));
+    return card;
+  }
+
+  const ed = planEl('div', 'plan-item-ed');
+  const k1 = planEl('label', 'plan-field', t('plan_f_kind'));
+  k1.appendChild(planSelect(PLAN_ITEM_KINDS, it.kind, function (v) { it.kind = v; openPlanSession(key, i); }));
+  ed.appendChild(k1);
+  const nm = planEl('label', 'plan-field', it.libId ? t('plan_f_name_override') : t('plan_f_name'));
+  nm.appendChild(planInput(it.name, function (v) { it.name = v; }, { ph: it.libId ? planItemName(Object.assign({}, it, { name: '' })) : '' }));
+  ed.appendChild(nm);
+
+  const fields = (kind ? kind.fields : ['sets', 'reps', 'rest']);
+  const grid = planEl('div', 'plan-grid3');
+  const addF = function (f, label, opts) {
+    const l = planEl('label', 'plan-field', label);
+    l.appendChild(planInput(it[f], function (v) { if (f === 'sets') it[f] = Number(v) || 1; else it[f] = v; }, opts || {}));
+    grid.appendChild(l);
+    return l;
+  };
+  if (fields.indexOf('sets') !== -1) addF('sets', t('plan_f_sets'), { type: 'number' });
+  if (fields.indexOf('reps') !== -1) addF('reps', t('plan_f_reps'));
+  let distLab = null;
+  if (fields.indexOf('distance') !== -1) distLab = addF('distance', t('plan_f_distance'));
+  if (fields.indexOf('time') !== -1) addF('time', t('plan_f_time'), { ph: '7.2s / 1:05' });
+  if (fields.indexOf('duration') !== -1) addF('duration', t('plan_f_dur'), { ph: '20min' });
+  if (fields.indexOf('tempo') !== -1) addF('tempo', t('ex_tempo'), { ph: '3-1-X-0' });
+  if (fields.indexOf('rest') !== -1) addF('rest', t('ex_rest'), { ph: '2min' });
+  if (fields.indexOf('setRest') !== -1) addF('setRest', t('plan_set_rest'), { ph: '6min' });
+  ed.appendChild(grid);
+
+  /* مسافات جاهزة: مضمار أو حمام */
+  if (distLab && (it.kind === 'run' || it.kind === 'swim')) {
+    const chips = planEl('div', 'plan-dist');
+    (it.kind === 'swim' ? SWIM_DISTANCES : TRACK_DISTANCES).forEach(function (dd) {
+      const c = planEl('button', 'plan-chip' + (it.distance === dd ? ' on' : ''), dd);
+      c.type = 'button';
+      c.addEventListener('click', function () { it.distance = dd; planTouch(); openPlanSession(key, i); });
+      chips.appendChild(c);
+    });
+    ed.appendChild(chips);
+  }
+
+  if (fields.indexOf('intensity') !== -1) {
+    const g2 = planEl('div', 'plan-grid2');
+    const il = planEl('label', 'plan-field', t('plan_f_intensity'));
+    il.appendChild(planInput(it.intensity, function (v) { it.intensity = v; }, { ph: '85 / 8 / Z2' }));
+    const bl = planEl('label', 'plan-field', t('plan_f_basis'));
+    bl.appendChild(planSelect(PLAN_BASES, it.basis, function (v) { it.basis = v; }, '—'));
+    g2.append(il, bl);
+    ed.appendChild(g2);
+  }
+  const g3 = planEl('div', 'plan-grid2');
+  if (fields.indexOf('restType') !== -1) {
+    const rl = planEl('label', 'plan-field', t('plan_f_rest_type'));
+    rl.appendChild(planSelect(PLAN_REST_TYPES, it.restType, function (v) { it.restType = v; }, '—'));
+    g3.appendChild(rl);
+  }
+  if (fields.indexOf('stroke') !== -1) {
+    const sl = planEl('label', 'plan-field', t('plan_f_stroke'));
+    sl.appendChild(planSelect(PLAN_STROKES, it.stroke, function (v) { it.stroke = v; }, '—'));
+    g3.appendChild(sl);
+  }
+  if (fields.indexOf('format') !== -1) {
+    const fl = planEl('label', 'plan-field', t('plan_f_format'));
+    fl.appendChild(planSelect(PLAN_WOD_FORMATS, it.format, function (v) { it.format = v; }, '—'));
+    g3.appendChild(fl);
+  }
+  const cl = planEl('label', 'plan-field', t('plan_f_component'));
+  cl.appendChild(planSelect(PLAN_COMPONENTS, it.component, function (v) { it.component = v; }, '—'));
+  g3.appendChild(cl);
+  ed.appendChild(g3);
+  const pl = planEl('label', 'plan-field', t('plan_f_purpose'));
+  pl.appendChild(planInput(it.purpose, function (v) { it.purpose = v; }, { area: true, ph: t('plan_purpose_ph') }));
+  ed.appendChild(pl);
+  const nl = planEl('label', 'plan-field', t('plan_f_note'));
+  nl.appendChild(planInput(it.note, function (v) { it.note = v; }, { ph: t('plan_note_ph') }));
+  ed.appendChild(nl);
+
+  const acts = planEl('div', 'plan-row-acts');
+  const up = planEl('button', 'link', t('plan_up'));
+  up.type = 'button';
+  up.addEventListener('click', function () { if (i > 0) { s.items.splice(i - 1, 0, s.items.splice(i, 1)[0]); planTouch(); openPlanSession(key, i - 1); } });
+  const down = planEl('button', 'link', t('plan_down'));
+  down.type = 'button';
+  down.addEventListener('click', function () { if (i < s.items.length - 1) { s.items.splice(i + 1, 0, s.items.splice(i, 1)[0]); planTouch(); openPlanSession(key, i + 1); } });
+  const dup = planEl('button', 'link', t('plan_dup'));
+  dup.type = 'button';
+  dup.addEventListener('click', function () { s.items.splice(i + 1, 0, JSON.parse(JSON.stringify(it))); planTouch(); openPlanSession(key, i + 1); });
+  const del = planEl('button', 'link sq-del', t('plan_remove'));
+  del.type = 'button';
+  del.addEventListener('click', function () { s.items.splice(i, 1); planTouch(); openPlanSession(key, null); });
+  acts.append(up, down, dup, del);
+  ed.appendChild(acts);
+  card.appendChild(ed);
+  return card;
+}
+
+/* ---------- إضافة تمرين من المكتبة ---------- */
+
+let planLibTarget = '';
+
+function planOpenLibrary(key) {
+  planLibTarget = key;
+  planSheetClose();
+  libraryContext = 'plan';
+  suggestedCategory = '';
+  showScreen(libraryScreen);
+  loadLibrary();
+}
+
+function planAddLibItem(built) {
+  const s = planCurrent && planCurrent.sessions[planLibTarget];
+  showScreen(document.getElementById('plan-screen'));
+  if (!s) return;
+  const type = built.exType || '';
+  const kind = (type === 'distance' || type === 'distance_time') ? 'run' : (type === 'time' ? 'timed' : 'strength');
+  const it = { kind: kind, libId: built.libId || '', sets: Number(built.sets) || 3 };
+  if (!it.libId) it.name = built.name || '';
+  if (kind === 'strength') { it.reps = String(built.reps || '8'); it.rest = built.rest || '2min'; }
+  if (kind === 'run') { it.distance = built.distance || ''; it.rest = built.rest || ''; }
+  if (kind === 'timed') { it.duration = built.duration || built.reps || ''; it.rest = built.rest || ''; }
+  s.items.push(it);
+  planTouch();
+  openPlanSession(planLibTarget, s.items.length - 1);
+}
+
+/* ---------- القوالب ---------- */
+
+async function openPlanTemplates() {
+  const body = planSheetOpen(t('plan_templates_title'));
+  body.appendChild(planEl('p', 'hint-text', t('loading')));
+  const all = await planLoadTemplates();
+  body.innerHTML = '';
+  const search = document.createElement('input');
+  search.placeholder = t('plan_tpl_search');
+  search.className = 'plan-tpl-search';
+  const sportSel = document.createElement('select');
+  fillSportSelect(sportSel, true);
+  sportSel.value = planCurrent.sport || '';
+  const list = planEl('div', 'plan-tpl-list');
+  const draw = function () {
+    list.innerHTML = '';
+    const q = search.value.trim().toLowerCase();
+    const rows = all.filter(function (tp) {
+      if (sportSel.value && tp.sport !== sportSel.value) return false;
+      if (!q) return true;
+      return (pv(tp.title) + ' ' + (tp.title && tp.title.en) + ' ' + sportName(tp.sport)).toLowerCase().indexOf(q) !== -1;
+    });
+    if (!rows.length) list.appendChild(planEl('p', 'hint-text', t('plan_tpl_none')));
+    rows.forEach(function (tp) {
+      const weeks = (tp.periods || []).reduce(function (s, p) { return s + p.blocks.reduce(function (x, b) { return x + b.loads.length; }, 0); }, 0);
+      const c = planEl('div', 'plan-tpl');
+      c.setAttribute('data-id', tp.id);
+      c.appendChild(planEl('strong', '', pv(tp.title)));
+      c.appendChild(planEl('span', 'plan-tpl-meta', [sportName(tp.sport), t('plan_lv_' + tp.level), fill('plan_weeks_n', { n: weeks }), fill('plan_per_week', { n: tp.sessionsPerWeek })].join(' · ')));
+      c.appendChild(planEl('p', 'plan-tpl-goal', pv(tp.goal)));
+      const ph = planEl('div', 'plan-tpl-phases');
+      (tp.periods || []).forEach(function (p) {
+        const w = p.blocks.reduce(function (x, b) { return x + b.loads.length; }, 0);
+        const seg = planEl('span', '', planPeriodType(p.type)[lang]);
+        seg.style.flex = String(w);
+        seg.style.background = planPeriodType(p.type).color;
+        ph.appendChild(seg);
+      });
+      c.appendChild(ph);
+      const use = planEl('button', '', t('plan_use_tpl'));
+      use.type = 'button';
+      use.addEventListener('click', function () {
+        const hasContent = Object.keys(planCurrent.sessions).length > 0;
+        if (hasContent && !window.confirm(t('plan_replace_confirm'))) return;
+        const start = planCurrent.start || todayStamp;
+        planCurrent = planFromTemplate(tp, start);
+        planSel.w = -1;
+        planTouch();
+        planSheetClose();
+        renderPlan();
+        setStatusMessage(document.getElementById('plan-msg'), t('plan_tpl_applied'), 'success');
+      });
+      c.appendChild(use);
+      list.appendChild(c);
+    });
+  };
+  search.addEventListener('input', draw);
+  sportSel.addEventListener('change', draw);
+  body.append(sportSel, search, list);
+  draw();
+}
+
+/* ---------- العميل: نقل أسبوع للبرنامج ---------- */
+
+function planItemToExercise(it) {
+  const e = it.libId ? libraryEntryById(it.libId) : null;
+  const vals = {
+    sets: Number(it.sets) || 1, reps: it.reps || '', rest: it.rest || '', tempo: it.tempo || '',
+    distance: it.distance || '', duration: it.duration || it.time || '',
+    intensity: it.basis === 'rpe' ? it.intensity : '', intensityKind: it.basis === 'rir' ? 'rir' : ''
+  };
+  if (it.basis === 'rir') vals.intensity = it.intensity;
+  const cues = [pv(it.purpose) ? t('plan_purpose') + ': ' + pv(it.purpose) : '', planItemLine(it), pv(it.note)].filter(Boolean).join('\n');
+  let ex;
+  if (e) { prepLibEntry(e); ex = buildLibExercise(e, Object.assign(vals, { cues: cues })); if (it.name) ex.name = pv(it.name); }
+  else ex = makeExercise({ name: planItemName(it), sets: vals.sets, reps: it.reps || it.distance || it.duration || '', rest: it.rest || '', tempo: it.tempo || '', duration: vals.duration, distance: vals.distance, cues: cues });
+  if (it.basis === '1rm' && it.intensity) ex.load = String(it.intensity).replace('%', '') + '% 1RM';
+  ex.goal = pv(it.purpose);
+  return ex;
+}
+
+function planSessionToDay(sess) {
+  const day = normalizeDay({ title: pv(sess.title), sections: {} });
+  (sess.items || []).forEach(function (it) {
+    const sec = it.kind === 'warmup' ? 'warmup' : (it.kind === 'mobility' ? 'mobility' : ((it.kind === 'run' || it.kind === 'swim' || it.kind === 'timed') ? 'cardio' : 'main'));
+    day.sections[sec].push(planItemToExercise(it));
+  });
+  return day;
+}
+
+async function planPushWeekToClient(w, n) {
+  if (!planCtx || planCtx.kind !== 'client') return;
+  if (!window.confirm(fill('plan_push_confirm', { n: n + 1 }))) return;
+  const msg = document.getElementById('plan-msg');
+  try {
+    const snap = await getDoc(doc(db, 'workouts', planCtx.id));
+    const week = normalizeWeek(snap.exists() ? snap.data().week : null);
+    for (let d = 0; d < 7; d++) {
+      const date = planAddDays(planCurrent.start, n * 7 + d);
+      const idx = planWeekdayIndex(date);
+      const key = w.days[d];
+      const sess = key ? planCurrent.sessions[key] : null;
+      week[idx] = sess ? planSessionToDay(sess) : normalizeDay({ title: '', rest: true });
+    }
+    if (docTooBig({ week: week }, msg)) return;
+    await setDoc(doc(db, 'workouts', planCtx.id), { week: week }, { merge: true });
+    if (currentClient === planCtx.id) coachWeek = week;
+    notify(planCtx.id, 'workout', { target: 'training' });
+    setStatusMessage(msg, fill('plan_pushed', { n: n + 1 }), 'success');
+  } catch (error) {
+    msg.className = 'message error';
+    msg.textContent = t('problem') + error.message;
+  }
+}
+
+/* ---------- العميل: كارت «فين إنت في الموسم» ---------- */
+
+async function renderClientPlanCard() {
+  const box = document.getElementById('client-plan-card');
+  if (!box || !clientEmail) return;
+  box.innerHTML = '';
+  box.classList.add('hidden');
+  const plan = await planFetch(planDocId('client', clientEmail));
+  if (!plan) return;
+  const loc = planLocate(plan);
+  if (!loc || !loc.entry) return;
+  await ensureExtraLibrary();
+  const e = loc.entry;
+  const pt = planPeriodType(e.period.type);
+  box.classList.remove('hidden');
+  box.style.borderInlineStartColor = pt.color;
+  box.appendChild(planEl('div', 'cpc-kicker', fill('plan_now_line', { w: e.n + 1, n: loc.total, period: pt[lang], block: pv(e.block.name) || fill('plan_block_n', { n: e.bi + 1 }) })));
+  const goal = pv(e.block.goal) || pv(e.period.goal);
+  if (goal) box.appendChild(planEl('p', 'cpc-goal', t('plan_week_goal') + ': ' + goal));
+  const lv = planLoadLevel(e.week.load);
+  const row = planEl('div', 'cpc-row');
+  const ld = planEl('span', 'cpc-load', t('plan_f_load') + ' ' + e.week.load + '/10 · ' + lv[lang]);
+  ld.style.color = lv.color;
+  row.appendChild(ld);
+  (e.block.components.length ? e.block.components : e.period.components).slice(0, 4).forEach(function (c) { row.appendChild(planEl('span', 'plan-chip on', planCompName(c))); });
+  box.appendChild(row);
+  if (loc.session) {
+    box.appendChild(planEl('div', 'cpc-today', t('plan_today') + ': ' + pv(loc.session.title) + (pv(loc.session.goal) ? ' — ' + pv(loc.session.goal) : '')));
+    const det = planEl('details', 'cpc-det');
+    det.appendChild(planEl('summary', '', t('plan_today_details')));
+    (loc.session.items || []).forEach(function (it) {
+      const li = planEl('div', 'cpc-item');
+      li.appendChild(planEl('strong', '', planItemName(it)));
+      const line = planItemLine(it);
+      if (line) li.appendChild(planEl('span', '', line));
+      if (pv(it.purpose)) li.appendChild(planEl('em', '', t('plan_purpose') + ': ' + pv(it.purpose)));
+      det.appendChild(li);
+    });
+    box.appendChild(det);
+  } else box.appendChild(planEl('div', 'cpc-today', t('plan_rest_today')));
+}
+
+/* المدرب يفتح المخطط الموسمي للعميل من جوه برنامجه */
+document.getElementById('open-plan-coach-btn').addEventListener('click', function () {
+  if (!currentClient) return;
+  saveCurrentDay();
+  openPlan({ kind: 'client', id: currentClient, name: currentClientName, lead: true, viewers: [currentClient], returnScreen: coachScreen, sport: currentClientSport || '' });
+});
