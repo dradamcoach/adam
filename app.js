@@ -1746,7 +1746,16 @@ const TEXT = {
     soc_posting: "بننشر...",
  soc_posted: "الستوري اتنشرت",
     soc_pick_someone: "اختار صاحب واحد على الأقل",
-    soc_story_for: "ظاهرة لـ{n} من صحابك",
+    soc_to_team: "فريقي (المدرب والمتخصصين)",
+    soc_to_clients: "كل عملائي ({n})",
+    soc_story_team_hint: "لسه مالكش صحاب هنا — الستوري هتظهر لفريقك. ضيف صحابك عشان يشوفوها هما كمان.",
+    soc_no_clients_yet: "لسه مفيش عملاء يشوفوا الستوري.",
+    soc_pick_clients: "اختار العملاء اللي يشوفوها",
+    soc_photo_loading: "بنجهّز الصورة…",
+    soc_photo_fail: "الصورة دي مش راضية تفتح (غالبًا صيغة HEIC من الآيفون). جرّب صورة تانية أو خد سكرين شوت منها.",
+    soc_reply_chat: "ردّ في الشات",
+    soc_caption_ph_coach: "كلمة لعملاءك (نصيحة، تحدي النهارده، خبر…)",
+    soc_story_for: "ظاهرة لـ{n} شخص",
     soc_delete_story: "امسح",
     social_admin_title: "الصحاب والستوري",
     adm_tab_social: "الصحاب",
@@ -4121,7 +4130,16 @@ const TEXT = {
     soc_posting: "Posting...",
  soc_posted: "Story posted",
     soc_pick_someone: "Pick at least one friend",
-    soc_story_for: "Visible to {n} of your friends",
+    soc_to_team: "My team (coach and specialists)",
+    soc_to_clients: "All my clients ({n})",
+    soc_story_team_hint: "No friends here yet — your team will see the story. Add friends so they can see it too.",
+    soc_no_clients_yet: "No clients to see the story yet.",
+    soc_pick_clients: "Pick the clients who can see it",
+    soc_photo_loading: "Preparing the photo…",
+    soc_photo_fail: "This photo won't open (probably an iPhone HEIC photo). Try another photo or a screenshot of it.",
+    soc_reply_chat: "Reply in chat",
+    soc_caption_ph_coach: "A word for your clients (tip, today's challenge, news…)",
+    soc_story_for: "Visible to {n} people",
     soc_delete_story: "Delete",
     social_admin_title: "Friends and stories",
     adm_tab_social: "Friends",
@@ -6679,6 +6697,7 @@ async function loadClients() {
   if (isFullAdminAccount()) { refreshLeadsBadge(); refreshPendingSpecsBadge(); }
 
   renderCoachTiles();
+  provSocLoad().catch(function () {});
   setTimeout(function () { tourMaybe('provider'); }, 1400);
 
   clientsList.innerHTML = '';
@@ -32128,7 +32147,14 @@ let socSeenStories = {};
 let socTab = 'friends';
 let socFlash = '';   /* رسالة نجاح بتفضل ظاهرة بعد ما الشيت يترسم تاني */
 
-function socMe() { return String(clientEmail || '').toLowerCase(); }
+function socMe() { return String(clientEmail || (typeof currentProviderEmail !== 'undefined' ? currentProviderEmail : '') || '').toLowerCase(); }
+/* الستوري بقت للمدربين والمتخصصين كمان — مش للعملاء بس */
+function socIsProvider() { return !clientEmail && !!currentProviderEmail; }
+function socTeamEmails() {
+  if (socIsProvider() || !clientRecord) return [];
+  return teamEmailsOf(clientRecord).map(function (e) { return String(e || '').toLowerCase(); })
+    .filter(function (e, i, all) { return e && e !== socMe() && all.indexOf(e) === i; });
+}
 function socPair(a, b) { a = String(a).toLowerCase(); b = String(b).toLowerCase(); return a < b ? a + '__' + b : b + '__' + a; }
 function socShortName(full) {
   const parts = String(full || '').trim().split(/\s+/).filter(Boolean);
@@ -32256,7 +32282,11 @@ async function socLoadStories() {
   try {
     const snap = await getDocs(query(collection(db, 'stories'), where('allow', 'array-contains', me)));
     socStories = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
-      .filter(function (s) { return s.expiresAt > now && s.owner !== me && socActiveEmails().indexOf(s.owner) !== -1; });
+      .filter(function (s) {
+        if (!(s.expiresAt > now) || s.owner === me) return false;
+        /* المتخصص بيشوف أي ستوري اتبعتتله؛ العميل بيشوف صحابه + فريقه (المدرب والمتخصصين) */
+        return socIsProvider() || socActiveEmails().indexOf(s.owner) !== -1 || socTeamEmails().indexOf(s.owner) !== -1;
+      });
   } catch (e) { socStories = []; }
   try {
     const snap = await getDocs(query(collection(db, 'stories'), where('owner', '==', me)));
@@ -32914,17 +32944,18 @@ function socShrinkPhoto(file) {
   });
 }
 
+let storyToTeam = true;
+let storyToClients = true;
+
 function renderStoryComposer() {
   const body = document.getElementById('story-body');
   if (!body) return;
   body.innerHTML = '';
-  const friends = socActive();
-  if (!friends.length) {
-    const p = document.createElement('p');
-    p.className = 'soc-empty';
-    p.textContent = t('soc_story_no_friends');
-    body.appendChild(p);
-  }
+  const provider = socIsProvider();
+  const friends = provider ? [] : socActive();
+  const team = socTeamEmails();
+  const myClients = provider ? (clientsAll || []).map(function (c) { return String(c.email).toLowerCase(); }) : [];
+
   const pick = document.createElement('label');
   pick.className = 'story-pick' + (storyPhoto ? ' has' : '');
   const file = document.createElement('input');
@@ -32947,39 +32978,68 @@ function renderStoryComposer() {
     preview.innerHTML = glyph('camera') + ' ';
     preview.appendChild(document.createTextNode(t('soc_pick_photo')));
   }
+  const msg = document.createElement('p');
+  msg.className = 'message';
   file.addEventListener('change', async function () {
     const f = file.files && file.files[0];
     if (!f) return;
-    try { storyPhoto = await socShrinkPhoto(f); } catch (e) { storyPhoto = ''; }
+    msg.textContent = t('soc_photo_loading');
+    try {
+      storyPhoto = await socShrinkPhoto(f);
+    } catch (e) {
+      /* صور الآيفون (HEIC) مش كل المتصفحات بتفتحها — نقول بدل ما الزرار يفضل واقف */
+      storyPhoto = '';
+      renderStoryComposer();
+      const m = document.querySelector('#story-body .message');
+      if (m) { m.className = 'message error'; m.textContent = t('soc_photo_fail'); }
+      return;
+    }
     renderStoryComposer();
   });
   pick.append(preview, file);
   body.appendChild(pick);
 
-  const tagsTitle = document.createElement('h3');
-  tagsTitle.textContent = t('soc_pick_tag');
-  body.appendChild(tagsTitle);
-  const tags = document.createElement('div');
-  tags.className = 'story-tags';
-  socStoryTags().forEach(function (tg) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'story-tag-btn' + (storyTag === tg ? ' on' : '');
-    b.textContent = tg;
-    b.addEventListener('click', function () { storyTag = storyTag === tg ? '' : tg; renderStoryComposer(); });
-    tags.appendChild(b);
-  });
-  body.appendChild(tags);
+  if (!provider) {
+    const tagsTitle = document.createElement('h3');
+    tagsTitle.textContent = t('soc_pick_tag');
+    body.appendChild(tagsTitle);
+    const tags = document.createElement('div');
+    tags.className = 'story-tags';
+    socStoryTags().forEach(function (tg) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'story-tag-btn' + (storyTag === tg ? ' on' : '');
+      b.textContent = tg;
+      b.addEventListener('click', function () { storyTag = storyTag === tg ? '' : tg; renderStoryComposer(); });
+      tags.appendChild(b);
+    });
+    body.appendChild(tags);
+  }
 
   const cap = document.createElement('input');
   cap.className = 'story-cap-input';
   cap.maxLength = 80;
-  cap.placeholder = t('soc_caption_ph');
+  cap.placeholder = t(provider ? 'soc_caption_ph_coach' : 'soc_caption_ph');
   body.appendChild(cap);
 
   const audTitle = document.createElement('h3');
   audTitle.textContent = t('soc_audience');
   body.appendChild(audTitle);
+
+  /* مجموعة كاملة بدوسة: «فريقي» للعميل، «كل عملائي» للمدرب */
+  const groupLabel = document.createElement('label');
+  groupLabel.className = 'story-group';
+  const groupCb = document.createElement('input');
+  groupCb.type = 'checkbox';
+  groupCb.checked = provider ? storyToClients : storyToTeam;
+  groupCb.addEventListener('change', function () {
+    if (provider) storyToClients = groupCb.checked; else storyToTeam = groupCb.checked;
+  });
+  const groupTxt = document.createElement('span');
+  groupTxt.textContent = provider ? fill('soc_to_clients', { n: myClients.length }) : t('soc_to_team');
+  groupLabel.append(groupCb, groupTxt);
+  if (provider ? myClients.length : team.length) body.appendChild(groupLabel);
+
   const aud = document.createElement('div');
   aud.className = 'story-aud';
   friends.forEach(function (f) {
@@ -32994,25 +33054,40 @@ function renderStoryComposer() {
     l.append(c, s);
     aud.appendChild(l);
   });
-  body.appendChild(aud);
+  if (friends.length) body.appendChild(aud);
+  else if (!provider) {
+    const p = document.createElement('p');
+    p.className = 'soc-empty';
+    p.textContent = t('soc_story_team_hint');
+    body.appendChild(p);
+  }
+  if (provider && !myClients.length) {
+    const p = document.createElement('p');
+    p.className = 'soc-empty';
+    p.textContent = t('soc_no_clients_yet');
+    body.appendChild(p);
+  }
 
   const post = document.createElement('button');
   post.type = 'button';
   post.className = 'eng-share-main story-post';
   post.textContent = t('soc_post');
-  post.disabled = !storyPhoto || !friends.length;
-  const msg = document.createElement('p');
-  msg.className = 'message';
+  post.disabled = !storyPhoto;
   post.addEventListener('click', async function () {
-    const allow = Array.prototype.slice.call(aud.querySelectorAll('input:checked')).map(function (c) { return c.value; });
-    if (!allow.length) { msg.textContent = t('soc_pick_someone'); return; }
+    let allow = Array.prototype.slice.call(aud.querySelectorAll('input:checked')).map(function (c) { return c.value; }).slice(0, SOC_MAX_FRIENDS);
+    if (provider && groupCb.checked) allow = allow.concat(myClients);
+    if (!provider && groupCb.checked) allow = allow.concat(team);
+    allow = allow.filter(function (e, i, all) { return e && e !== socMe() && all.indexOf(e) === i; }).slice(0, provider ? 300 : 50);
+    if (!allow.length) { msg.className = 'message error'; msg.textContent = t(provider ? 'soc_pick_clients' : 'soc_pick_someone'); return; }
     post.disabled = true;
+    msg.className = 'message';
     msg.textContent = t('soc_posting');
     const now = new Date();
+    const myName = provider ? String((currentProviderData && currentProviderData.name) || '') : clientName;
     const story = {
-      owner: socMe(), name: socShortName(clientName), photo: storyPhoto,
+      owner: socMe(), name: socShortName(myName).slice(0, 40), photo: storyPhoto,
       caption: String(cap.value || '').trim().slice(0, 80), tag: storyTag.slice(0, 60),
-      allow: allow.slice(0, SOC_MAX_FRIENDS), createdAt: now.toISOString(),
+      allow: allow, createdAt: now.toISOString(),
       expiresAt: new Date(now.getTime() + SOC_STORY_HOURS * 3600000).toISOString()
     };
     try {
@@ -33020,13 +33095,82 @@ function renderStoryComposer() {
       socMyStories.push(Object.assign({ id: ref.id }, story));
       closeStoryComposer();
       renderSocBar();
+      renderProvSocBar();
       engToast(t('soc_posted'));
     } catch (e) {
       post.disabled = false;
+      msg.className = 'message error';
       msg.textContent = t('problem') + ((e && e.message) || '');
     }
   });
   body.append(post, msg);
+}
+
+/* ---------- شريط الستوري عند المدرب والمتخصصين ---------- */
+
+let provSocLoaded = false;
+
+async function provSocLoad() {
+  if (!socIsProvider()) return;
+  socSeenLoad();
+  await socLoadStories();
+  provSocLoaded = true;
+  renderProvSocBar();
+}
+
+function renderProvSocBar() {
+  const bar = document.getElementById('prov-soc-bar');
+  if (!bar) return;
+  if (!provSocLoaded || !socIsProvider()) { bar.classList.add('hidden'); return; }
+  bar.classList.remove('hidden');
+  bar.innerHTML = '';
+  const row = document.createElement('div');
+  row.className = 'soc-row';
+  const myName = String((currentProviderData && currentProviderData.name) || currentProviderEmail || '');
+  const mine = document.createElement('button');
+  mine.type = 'button';
+  mine.className = 'soc-item me' + (socMyStories.length ? ' has' : '');
+  const myAv = socAvatar(myName, socMyStories.length ? 'ring seen' : '');
+  if (!socMyStories.length) {
+    const plus = document.createElement('i');
+    plus.className = 'soc-plus';
+    plus.textContent = '+';
+    myAv.appendChild(plus);
+  }
+  const myLbl = document.createElement('small');
+  myLbl.textContent = socMyStories.length ? t('soc_my_story') : t('soc_add_story');
+  mine.append(myAv, myLbl);
+  mine.addEventListener('click', function () {
+    if (socMyStories.length) openStoryViewer([socMe()], 0);
+    else openStoryComposer();
+  });
+  row.appendChild(mine);
+  if (socMyStories.length) {
+    const more = document.createElement('button');
+    more.type = 'button';
+    more.className = 'soc-item add-more';
+    const av = socAvatar('+', 'plus-only');
+    const lbl = document.createElement('small');
+    lbl.textContent = t('soc_add_story');
+    more.append(av, lbl);
+    more.addEventListener('click', openStoryComposer);
+    row.appendChild(more);
+  }
+  const owners = socStoryOwners();
+  owners.forEach(function (email, idx) {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'soc-item';
+    const unseen = socStories.some(function (st) { return st.owner === email && !socSeenStories[st.id]; });
+    const name = (socStories.filter(function (st) { return st.owner === email; })[0] || {}).name || '';
+    const av = socAvatar(name, 'ring' + (unseen ? '' : ' seen'));
+    const lbl = document.createElement('small');
+    lbl.textContent = String(name).split(' ')[0];
+    item.append(av, lbl);
+    item.addEventListener('click', function () { openStoryViewer(owners, idx); });
+    row.appendChild(item);
+  });
+  bar.appendChild(row);
 }
 
 /* ---------- عرض الستوري ---------- */
@@ -33059,6 +33203,7 @@ function closeStoryViewer() {
   storyView.classList.add('hidden');
   document.body.classList.remove('focus-open');
   renderSocBar();
+  renderProvSocBar();
 }
 
 function svNext(step) {
@@ -33151,7 +33296,21 @@ function renderStoryView() {
     });
     foot.append(seenBy, del);
   } else {
-    SOC_CHEERS.forEach(function (c) {
+    /* ستوري من المدرب أو من عميل للفريق: الرد بيروح في الشات الخاص */
+    const friend = !socIsProvider() && socActiveEmails().indexOf(s.owner) !== -1;
+    if (!friend) {
+      const reply = document.createElement('button');
+      reply.type = 'button';
+      reply.className = 'sv-reply';
+      reply.textContent = t('soc_reply_chat');
+      reply.addEventListener('click', function () {
+        closeStoryViewer();
+        if (socIsProvider()) openChatDm(s.owner, currentProviderEmail, clientsScreen, { name: s.name });
+        else openChatDm(clientEmail, s.owner, clientScreen, { name: s.name });
+      });
+      foot.appendChild(reply);
+    }
+    if (friend) SOC_CHEERS.forEach(function (c) {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'soc-cheer' + (socCheersOut[s.owner + '|' + c.type + '|' + s.id] ? ' sent' : '');

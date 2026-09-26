@@ -1173,3 +1173,9 @@ body.story-open { overflow: hidden; }
 .sq-logfor { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); }
 .sq-logfor button { margin-top: 8px; }
 .sq-notes-n { font-size: 11.5px; color: var(--muted); }
+
+/* الستوري للمدرب والفريق */
+.prov-soc-bar { margin: 4px 0 10px; }
+.story-group { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 12px; background: rgba(46, 224, 122, 0.08); border: 1px solid rgba(46, 224, 122, 0.3); font-weight: 700; margin-bottom: 8px; }
+.story-group input { width: auto; margin: 0; }
+.story-view button.sv-reply { width: auto; margin: 0; padding: 9px 16px; border-radius: 999px; background: var(--brand); color: #04200e; border: 0; font: 800 14px 'Cairo', sans-serif; cursor: pointer; }
