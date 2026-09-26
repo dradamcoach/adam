@@ -26,6 +26,15 @@ import { SUPPLEMENT_LIBRARY_EXTRA } from './library/supplements-extra.js';
 import { MED_LIBRARY_SEED_EXTRA } from './library/med-extra.js';
 import { MODALITIES_EXTRA, MODALITY_PROTOCOLS_EXTRA } from './library/modalities-extra.js';
 import { MODALITY_VALUES_EN } from './library/modalities-en.js';
+/* قوالب لكل رياضة لوحدها (مراحل الموسم) + أنواع التدريب + جلسات دريلز */
+import { SPORT_TEMPLATES_SPORTS_A } from './library/templates-sports-a.js';
+import { SPORT_TEMPLATES_SPORTS_B } from './library/templates-sports-b.js';
+/* برامج تغذية حسب الهدف والرياضة والحالة */
+import { NUTRITION_PROGRAMS_SPORTS } from './library/programs-sports.js';
+/* مقالات مسودة من اقتراحات موظف التطوير — لازم مراجعة طبيب قبل ما تتنشر */
+import { MED_LIBRARY_RD, TEMPLATES_MED_RD } from './library/med-rd.js';
+/* رسومات التمارين اللي كانت ناقصة (tools/mannequin.js) */
+import { MEDIA_EXTRA } from './library/media-extra.js';
 
 /* ============================================================
    حارس الكتابة في قاعدة البيانات
@@ -74,13 +83,13 @@ const EXERCISE_LIBRARY = BASE_EXERCISES.concat(DRILLS_LIBRARY);
 const REHAB_TEMPLATES = BASE_REHAB_TEMPLATES.concat(REHAB_TEMPLATES_EXTRA);
 const FOOD_LIBRARY = BASE_FOOD_LIBRARY.concat(FOOD_LIBRARY_EXTRA);
 const FOOD_SERVINGS = Object.assign({}, BASE_FOOD_SERVINGS, FOOD_SERVINGS_EXTRA);
-const NUTRITION_PROGRAMS = BASE_NUTRITION_PROGRAMS.concat(NUTRITION_PROGRAMS_EXTRA);
+const NUTRITION_PROGRAMS = BASE_NUTRITION_PROGRAMS.concat(NUTRITION_PROGRAMS_EXTRA, NUTRITION_PROGRAMS_SPORTS);
 const MODALITIES = BASE_MODALITIES.concat(MODALITIES_EXTRA);
 const MODALITY_PROTOCOLS = BASE_MODALITY_PROTOCOLS.concat(MODALITY_PROTOCOLS_EXTRA);
 const SUPPLEMENT_LIBRARY = BASE_SUPPLEMENT_LIBRARY.concat(SUPPLEMENT_LIBRARY_EXTRA);
-const SPORT_TEMPLATES = BASE_SPORT_TEMPLATES.concat(SPORT_TEMPLATES_EXTRA);
+const SPORT_TEMPLATES = BASE_SPORT_TEMPLATES.concat(SPORT_TEMPLATES_EXTRA, SPORT_TEMPLATES_SPORTS_A, SPORT_TEMPLATES_SPORTS_B, TEMPLATES_MED_RD);
 // الإضافات بتتحط في الآخر عشان أرقام seed_0..seed_30 القديمة ما تتغيّرش
-const MED_LIBRARY_SEED = BASE_MED_LIBRARY_SEED.concat(MED_LIBRARY_SEED_EXTRA);
+const MED_LIBRARY_SEED = BASE_MED_LIBRARY_SEED.concat(MED_LIBRARY_SEED_EXTRA, MED_LIBRARY_RD);
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -129,6 +138,102 @@ const TEXT = {
     my_template_cancel: 'إلغاء',
     my_templates_group: 'قوالبي',
     ready_templates_group: 'قوالب جاهزة',
+    tpl_group_sport: 'قوالب {sport} — مراحل الموسم',
+    tpl_group_group: 'قوالب {group}',
+    tpl_group_types: 'أنواع التدريب والدريلز',
+    tpl_group_general: 'لياقة عامة',
+    back_simple: '‹ رجوع',
+    sq_title: 'فرق التمرين',
+    sq_intro: 'فريق بيتمرن سوا بنفس البرنامج: موسم بمراحله، جلسة كل يوم، وكل لاعب بيسجّل اللي عمله والفريق كله شايف بعض لايف.',
+    sq_new: 'فريق جديد',
+    sq_name_ph: 'اسم الفريق',
+    sq_pick_members: 'اللاعبين (من عملاءك)',
+    sq_create: 'اعمل الفريق',
+    sq_none: 'مفيش فرق لسه — اعمل أول فريق من تحت.',
+    sq_need_name: 'اكتب اسم الفريق.',
+    sq_members_n: '{n} لاعب',
+    sq_today: 'النهارده',
+    sq_rest_day: 'راحة',
+    sq_tab_today: 'النهارده',
+    sq_tab_season: 'الموسم',
+    sq_tab_players: 'اللاعبين',
+    sq_tab_me: 'إنجازاتي',
+    sq_phase_off: 'خارج الموسم',
+    sq_phase_pre: 'تحضير',
+    sq_phase_in: 'الموسم',
+    sq_phase_prevent: 'وقاية واستشفاء',
+    sq_starts_in: 'الموسم بيبدأ بعد {n} يوم',
+    sq_season_over: 'الموسم خلص — ظبّط موسم جديد من تبويب الموسم.',
+    sq_week_of: '{phase} — أسبوع {w} من {n} · الموسم: أسبوع {tw} من {tn}',
+    sq_change_today: 'بدّل جلسة النهارده:',
+    sq_rest: 'راحة',
+    sq_reps_done: 'عدّاتك',
+    sq_load_kg: 'الوزن كجم',
+    sq_mark_done: 'خلصته',
+    sq_f_minutes: 'الدقايق',
+    sq_f_rpe: 'المجهود ١-١٠',
+    sq_f_hr: 'متوسط النبض',
+    sq_f_kcal: 'الحرق (سعر)',
+    sq_rpe_hint: 'المجهود: ١ سهل جدًا — ١٠ أقصى حاجة. النبض والحرق من ساعتك لو معاك (اختياري).',
+    sq_board: 'الفريق دلوقتي',
+    sq_board_sum: '{a} من {n} بدأوا النهارده',
+    sq_not_started: 'لسه ما بدأش',
+    sq_m_reps: '{n} عدّة',
+    sq_m_vol: '{n} كجم حجم',
+    sq_m_min: '{n} دقيقة',
+    sq_m_hr: 'نبض {n}',
+    sq_m_kcal: '{n} سعر',
+    sq_season_start: 'بداية الموسم',
+    sq_weeks: 'أسابيع',
+    sq_remove_phase: 'شيل المرحلة',
+    sq_add_phase: 'ضيف مرحلة',
+    sq_save_season: 'احفظ الموسم',
+    sq_saved: 'اتحفظ — اللاعبين هيشوفوا البرنامج الجديد.',
+    sq_acwr_hint: 'الحمل = المجهود × الدقايق. ACWR = حمل آخر ٧ أيام ÷ متوسط الأسبوع في آخر ٤ أسابيع. فوق ١٫٥ = زيادة مفاجئة وخطر إصابة، تحت ٠٫٨ = الحمل نازل.',
+    sq_p_sessions: '{n} جلسة في ٤ أسابيع',
+    sq_p_acute: 'حمل ٧ أيام {n}',
+    sq_p_chronic: 'متوسط أسبوعي {n}',
+    sq_p_nodata: 'لسه مفيش بيانات كفاية',
+    sq_flag_ok: 'تمام',
+    sq_flag_high: 'حمل عالي',
+    sq_flag_low: 'حمل واطي',
+    sq_remove_member: 'شيله من الفريق',
+    sq_add_members: 'ضيف لاعبين',
+    sq_add_btn: 'ضيف',
+    sq_s_sessions: 'جلسة الموسم ده',
+    sq_s_reps: 'عدّة',
+    sq_s_load7: 'حمل ٧ أيام',
+    sq_me_flag_ok: 'حملك ماشي بتوازن — كمّل كده.',
+    sq_me_flag_high: 'حملك زاد فجأة الأسبوع ده — نام كويس، اشرب ميه، وقول لمدربك لو حاسس بتعب أو ألم.',
+    sq_me_flag_low: 'حملك أقل من المعتاد — لو في سبب (إصابة أو ظروف) قول لمدربك.',
+    sq_weekly_load: 'حملك في آخر ٦ أسابيع',
+    sq_this_week: 'ده',
+    sq_weeks_ago: '-{n}',
+    sq_home_kicker: 'فريقي · {name}',
+    notif_t_squad_joined: 'انضميت لفريق تمرين',
+    notif_b_squad_joined: 'مدربك ضافك لفريق {name} — افتحه وشوف جلسة النهارده.',
+    notif_t_squad_session: 'برنامج الفريق اتحدّث',
+    notif_b_squad_session: 'فيه تغيير في جلسات فريق {name}.',
+    pl_label: 'قايمة أغاني للتمرين (اختياري)',
+    pl_ph: 'لينك Spotify أو يوتيوب أو أنغامي',
+    pl_save: 'احفظ',
+    pl_open: 'شغّل أغاني التمرين',
+    pl_bad: 'ده مش لينك قايمة أغاني — الزق لينك من Spotify أو يوتيوب أو أنغامي أو SoundCloud.',
+    pl_saved: 'اتحفظت — العميل هيلاقي زرار الأغاني فوق تمرينه.',
+    pl_removed: 'اتشالت القايمة.',
+    f4_title: 'أول ٤ أيام معانا',
+    f4_day: 'يوم {n} من ٤',
+    f4_s1: 'اتعرّف على برنامجك',
+    f4_b1: 'افتح برنامج النهارده واتفرّج على التمارين — من غير ما تعمل حاجة لسه.',
+    f4_s2: 'أول تمرين',
+    f4_b2: 'اعمل أول تمرين النهارده، ولو ١٠ دقايق بس. البداية هي أهم خطوة.',
+    f4_s3: 'سجّل أكلك أو ميتك',
+    f4_b3: 'سجّل وجبة واحدة أو كوبايات الميه النهارده — عشان فريقك يعرف يساعدك.',
+    f4_s4: 'كلّم مدربك',
+    f4_b4: 'ابعت لمدربك رسالة في الشات وقوله الأيام الأولى كانت عاملة إزاي.',
+    f4_go: 'يلا بينا',
+    f4_tomorrow: 'برافو — خطوة بكرة: {next}',
+    f4_all_done: 'خلصت أول ٤ أيام — إنت كده بدأت فعلًا.',
     other_coaches_templates_group: 'قوالب متخصصين تانيين',
     template_day_empty: 'اليوم ده فاضي — ضيف تمارين الأول وبعدين احفظه كقالب',
     template_needs_name: 'اكتب اسم للقالب',
@@ -2346,6 +2451,102 @@ const TEXT = {
     my_template_cancel: 'Cancel',
     my_templates_group: 'My templates',
     ready_templates_group: 'Ready-made templates',
+    tpl_group_sport: '{sport} templates — season phases',
+    tpl_group_group: '{group} templates',
+    tpl_group_types: 'Training types & drills',
+    tpl_group_general: 'General fitness',
+    back_simple: '‹ Back',
+    sq_title: 'Training squads',
+    sq_intro: 'A squad trains together on the same program: a season with phases, a session each day, and every player logs what they did while the whole squad sees each other live.',
+    sq_new: 'New squad',
+    sq_name_ph: 'Squad name',
+    sq_pick_members: 'Players (from your clients)',
+    sq_create: 'Create squad',
+    sq_none: 'No squads yet — create the first one below.',
+    sq_need_name: 'Enter the squad name.',
+    sq_members_n: '{n} players',
+    sq_today: 'Today',
+    sq_rest_day: 'Rest',
+    sq_tab_today: 'Today',
+    sq_tab_season: 'Season',
+    sq_tab_players: 'Players',
+    sq_tab_me: 'My progress',
+    sq_phase_off: 'Off-season',
+    sq_phase_pre: 'Pre-season',
+    sq_phase_in: 'In-season',
+    sq_phase_prevent: 'Prevention & recovery',
+    sq_starts_in: 'The season starts in {n} days',
+    sq_season_over: 'The season is over — set up a new one in the Season tab.',
+    sq_week_of: '{phase} — week {w} of {n} · Season: week {tw} of {tn}',
+    sq_change_today: 'Change today\'s session:',
+    sq_rest: 'rest',
+    sq_reps_done: 'Your reps',
+    sq_load_kg: 'Load kg',
+    sq_mark_done: 'Done',
+    sq_f_minutes: 'Minutes',
+    sq_f_rpe: 'Effort 1-10',
+    sq_f_hr: 'Avg heart rate',
+    sq_f_kcal: 'Calories',
+    sq_rpe_hint: 'Effort: 1 very easy — 10 maximal. Heart rate and calories from your watch if you have one (optional).',
+    sq_board: 'The squad right now',
+    sq_board_sum: '{a} of {n} started today',
+    sq_not_started: 'Not started yet',
+    sq_m_reps: '{n} reps',
+    sq_m_vol: '{n} kg volume',
+    sq_m_min: '{n} min',
+    sq_m_hr: 'HR {n}',
+    sq_m_kcal: '{n} kcal',
+    sq_season_start: 'Season start',
+    sq_weeks: 'weeks',
+    sq_remove_phase: 'Remove phase',
+    sq_add_phase: 'Add phase',
+    sq_save_season: 'Save season',
+    sq_saved: 'Saved — players will see the new program.',
+    sq_acwr_hint: 'Load = effort × minutes. ACWR = last 7 days load ÷ average week over the last 4 weeks. Above 1.5 = sudden spike and injury risk; below 0.8 = load dropping.',
+    sq_p_sessions: '{n} sessions in 4 weeks',
+    sq_p_acute: '7-day load {n}',
+    sq_p_chronic: 'weekly avg {n}',
+    sq_p_nodata: 'Not enough data yet',
+    sq_flag_ok: 'OK',
+    sq_flag_high: 'High load',
+    sq_flag_low: 'Low load',
+    sq_remove_member: 'Remove from squad',
+    sq_add_members: 'Add players',
+    sq_add_btn: 'Add',
+    sq_s_sessions: 'sessions this season',
+    sq_s_reps: 'reps',
+    sq_s_load7: '7-day load',
+    sq_me_flag_ok: 'Your load is balanced — keep going.',
+    sq_me_flag_high: 'Your load jumped this week — sleep well, hydrate, and tell your coach if you feel fatigue or pain.',
+    sq_me_flag_low: 'Your load is lower than usual — if there is a reason (injury or life), tell your coach.',
+    sq_weekly_load: 'Your load over the last 6 weeks',
+    sq_this_week: 'now',
+    sq_weeks_ago: '-{n}',
+    sq_home_kicker: 'My squad · {name}',
+    notif_t_squad_joined: 'You joined a training squad',
+    notif_b_squad_joined: 'Your coach added you to {name} — open it to see today\'s session.',
+    notif_t_squad_session: 'Squad program updated',
+    notif_b_squad_session: 'There are changes to the {name} squad sessions.',
+    pl_label: 'Workout playlist (optional)',
+    pl_ph: 'Spotify, YouTube or Anghami link',
+    pl_save: 'Save',
+    pl_open: 'Play workout music',
+    pl_bad: 'That is not a playlist link — paste a Spotify, YouTube, Anghami or SoundCloud link.',
+    pl_saved: 'Saved — the client will see a music button above their workout.',
+    pl_removed: 'Playlist removed.',
+    f4_title: 'Your first 4 days',
+    f4_day: 'Day {n} of 4',
+    f4_s1: 'Meet your program',
+    f4_b1: 'Open today\'s program and look through the exercises — no need to do anything yet.',
+    f4_s2: 'First session',
+    f4_b2: 'Do your first session today, even just 10 minutes. Starting is the most important step.',
+    f4_s3: 'Log food or water',
+    f4_b3: 'Log one meal or your glasses of water today so your team can help you.',
+    f4_s4: 'Talk to your coach',
+    f4_b4: 'Send your coach a message in the chat and tell them how the first days went.',
+    f4_go: 'Let\'s go',
+    f4_tomorrow: 'Well done — tomorrow\'s step: {next}',
+    f4_all_done: 'You finished your first 4 days — you have really started.',
     other_coaches_templates_group: 'Other specialists\' templates',
     template_day_empty: 'This day is empty — add exercises first, then save it as a template',
     template_needs_name: 'Enter a name for the template',
@@ -5736,7 +5937,8 @@ let cNutDay = todayIndex;
 function showScreen(screen) {
   [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, clearanceScreen, adherenceScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, supplementsScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen,
    // بالـ id مش بمتغيّر — showScreen بتشتغل قبل ما تعريفاتهم توصل
-   document.getElementById('verify-screen'), document.getElementById('notif-screen')].forEach(function (s) {
+   document.getElementById('verify-screen'), document.getElementById('notif-screen'),
+   document.getElementById('squads-screen'), document.getElementById('squad-screen')].forEach(function (s) {
     if (s) s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
@@ -6173,6 +6375,8 @@ async function loadClients() {
   clearanceBtn.classList.toggle('hidden', !canClearMedical());
   if (canClearMedical()) loadClearanceRequests().catch(function () {});
   openAdminPanelBtn.classList.toggle('hidden', !isFullAdminAccount());
+  /* فرق التمرين للمدربين والإدارة */
+  document.getElementById('open-squads-btn').classList.toggle('hidden', !(isFullCoachRole() || isFullAdminAccount()));
   openProviderSubscriptionBtn.classList.toggle('hidden', isFullAdminAccount());
   refreshProviderSubBanner();
   if (isFullAdminAccount()) { refreshLeadsBadge(); refreshPendingSpecsBadge(); }
@@ -6713,6 +6917,7 @@ const COACH_TILES = [
   { key: 'clients',   icon: 'clients',   labelKey: 'tile_clients',   scroll: 'clients-list' },
   { key: 'adherence', icon: 'progress',  labelKey: 'open_adherence_btn',        btn: 'open-adherence-btn',  badge: 'adherence-badge' },
   { key: 'chats',     icon: 'chat',      labelKey: 'open_chat_inbox_btn',       btn: 'open-chat-inbox-btn' },
+  { key: 'squads',    icon: 'team',      labelKey: 'sq_title',                  btn: 'open-squads-btn' },
   { key: 'clearance', icon: 'shield',    labelKey: 'open_clearance_btn',        btn: 'open-clearance-btn',  badge: 'clearance-badge' },
   { key: 'bookings',  icon: 'classes',   labelKey: 'open_bookings_btn',         btn: 'open-bookings-btn' },
   { key: 'myprofile', icon: 'profile',   labelKey: 'open_my_profile_btn',       btn: 'open-my-profile-btn' },
@@ -7756,6 +7961,7 @@ async function openCoachScreen(email, name, sport) {
   try {
     const workoutDoc = await getDoc(doc(db, 'workouts', email));
     coachWeek = normalizeWeek(workoutDoc.exists() ? workoutDoc.data().week : null);
+    playlistFill('coach', workoutDoc.exists() ? workoutDoc.data().playlist : '');
 
     const rehabDoc = await getDoc(doc(db, 'rehab', email));
     coachRehab = normalizeRehab(rehabDoc.exists() ? rehabDoc.data() : null);
@@ -8211,7 +8417,7 @@ document.getElementById('save-btn').addEventListener('click', async function () 
   if (docTooBig({ week: coachWeek }, coachMessage)) return;
   coachMessage.textContent = t('saving');
   try {
-    await setDoc(doc(db, 'workouts', currentClient), { week: coachWeek });
+    await setDoc(doc(db, 'workouts', currentClient), { week: coachWeek }, { merge: true });
     setStatusMessage(coachMessage, t('saved'), 'success');
     notifyProgramChange('workout', 'training');
   } catch (error) {
@@ -8797,6 +9003,31 @@ function addToTarget(exercise) {
 const coachSport = document.getElementById('coach-sport');
 const sportTemplatePick = document.getElementById('sport-template-pick');
 
+/*
+ * القوالب الجاهزة متقسّمة: رياضة العميل نفسها (مراحل الموسم) ← مجموعتها
+ * ← أنواع التدريب والدريلز ← لياقة عامة. قوالب الرياضات التانية مابتظهرش
+ * هنا عشان القايمة ماتبقاش ٣٠٠ اختيار.
+ */
+const TPL_PHASE_ORDER = { off: 0, pre: 1, in: 2, prevent: 3 };
+function templateSectionsForSport(sportId) {
+  const sport = sportById(sportId);
+  const group = sport ? sport.group : 'none';
+  const exact = sportId ? SPORT_TEMPLATES.filter(function (tpl) { return tpl.sport === sportId; })
+    .sort(function (a, b) { return (TPL_PHASE_ORDER[a.phase] || 0) - (TPL_PHASE_ORDER[b.phase] || 0); }) : [];
+  const own = group !== 'none' ? SPORT_TEMPLATES.filter(function (tpl) { return !tpl.sport && tpl.group === group && !tpl.phase; }) : [];
+  const types = SPORT_TEMPLATES.filter(function (tpl) { return tpl.phase === 'type' || tpl.phase === 'drills' || tpl.medical; });
+  const general = SPORT_TEMPLATES.filter(function (tpl) { return !tpl.sport && tpl.group === 'none' && !tpl.phase && !tpl.medical; });
+  const out = [];
+  if (exact.length) out.push({ label: fill('tpl_group_sport', { sport: sportName(sportId) }), list: exact });
+  if (own.length) out.push({ label: fill('tpl_group_group', { group: sportGroupName(group) }), list: own });
+  out.push({ label: t('tpl_group_types'), list: types });
+  out.push({ label: t('tpl_group_general'), list: general });
+  if (!exact.length && !own.length) {
+    out.push({ label: t('ready_templates_group'), list: SPORT_TEMPLATES.filter(function (tpl) { return !tpl.sport && tpl.group !== 'none' && !tpl.phase && !tpl.medical; }) });
+  }
+  return out;
+}
+
 function templatesForSport(sportId) {
   const sport = sportById(sportId);
   const group = sport ? sport.group : 'none';
@@ -8893,7 +9124,7 @@ function fillSportTemplatePicker() {
   const others = myTemplates.filter(function (tpl) { return !isMyTemplate(tpl); });
 
   addTemplateGroup(t('my_templates_group'), mine);
-  addTemplateGroup(t('ready_templates_group'), templatesForSport(coachSport.value));
+  templateSectionsForSport(coachSport.value).forEach(function (sec) { addTemplateGroup(sec.label, sec.list); });
   addTemplateGroup(t('other_coaches_templates_group'), others);
 
   sportTemplatePick.value = keep;
@@ -9058,7 +9289,8 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
     const list = tpl.sections[key] || [];
     list.forEach(function (source) {
       const fromIndex = source.libId ? libraryEntryById(source.libId) : null;
-      if (fromIndex && (fromIndex.src || fromIndex._rehab)) {
+      /* أي تمرين له معرّف في المكتبة بيتبني زي ما المدرب ضافه بإيده (بصورته المرسومة) */
+      if (fromIndex) {
         prepLibEntry(fromIndex);
         coachTarget().sections[key].push(buildLibExercise(fromIndex, templateValues(source, fromIndex._type)));
         return;
@@ -10541,6 +10773,8 @@ function renderHomeSummary() {
 }
 
 function renderClientHome() {
+  renderFirst4();
+  renderSquadHome();
   renderEngCard();
   renderSocBar();
   renderChalRow();
@@ -10550,6 +10784,929 @@ function renderClientHome() {
   heatCheck();
 }
 
+
+/* ============================================================
+   فرق التمرين — فريق بيتمرن سوا (١٠ ولا ١٠٠ لاعب)
+   ------------------------------------------------------------
+   squads/{id}: { name, sport, coachEmail, members[], memberNames{},
+     season: { start, phases: [{ key, weeks, plan: [templateId × 7 أيام] }] },
+     overrides: { 'YYYY-MM-DD': templateId } }
+   squads/{id}/logs/{date}__{email}: اللي كل لاعب عمله في جلسة اليوم
+   (التمارين اللي خلصها، العدات والوزن، المجهود ١-١٠، الدقايق، النبض والحرق
+   لو معاه ساعة). الحمل = المجهود × الدقايق (sRPE)، ونسبة الحمل الحاد للمزمن
+   (٧ أيام ÷ متوسط ٤ أسابيع) بتنبّه لو لاعب حمله زاد فجأة — ده بالظبط
+   اللي بيقلل إصابات الإجهاد الزايد.
+   كل لاعب بيفضل له برنامجه الشخصي كمان — الفريق حاجة زيادة مش بديل.
+   ============================================================ */
+
+const SQ_PHASES = ['off', 'pre', 'in', 'prevent'];
+let squadsCache = [];
+let squadCurrent = null;
+let squadTab = 'today';
+let squadLogs = [];
+let squadUnsub = null;
+let squadReturn = null;
+let squadMyLog = null;
+let squadSaveTimer = null;
+
+function sqScreen() { return document.getElementById('squad-screen'); }
+function sqIsCoach() { return !!currentProviderEmail; }
+function sqMe() { return String(sqIsCoach() ? currentProviderEmail : clientEmail || '').toLowerCase(); }
+
+function sqDateStamp(d) { return dateStamp(d || new Date()); }
+function sqDaysBetween(a, b) {
+  const x = new Date(a + 'T12:00:00'), y = new Date(b + 'T12:00:00');
+  return Math.round((y - x) / 86400000);
+}
+
+/* المرحلة والأسبوع النهارده من بداية الموسم */
+function sqSeasonNow(sq, stamp) {
+  const season = (sq && sq.season) || {};
+  const phases = Array.isArray(season.phases) ? season.phases : [];
+  if (!season.start || !phases.length) return null;
+  const days = sqDaysBetween(season.start, stamp || todayStamp);
+  if (days < 0) return { before: true, days: -days, phases: phases };
+  const week = Math.floor(days / 7);
+  let acc = 0;
+  for (let i = 0; i < phases.length; i++) {
+    const w = Math.max(1, Number(phases[i].weeks) || 1);
+    if (week < acc + w) return { index: i, phase: phases[i], week: week - acc + 1, weeks: w, totalWeek: week + 1, totalWeeks: phases.reduce(function (s, p) { return s + Math.max(1, Number(p.weeks) || 1); }, 0), phases: phases };
+    acc += w;
+  }
+  return { after: true, phases: phases, totalWeeks: acc };
+}
+
+function sqDayIndex(stamp) {
+  const d = new Date((stamp || todayStamp) + 'T12:00:00');
+  return (d.getDay() + 1) % 7;
+}
+
+/* جلسة يوم معيّن: تبديل المدرب لليوم ده، وإلا خطة المرحلة */
+function sqSessionTemplateId(sq, stamp) {
+  const key = stamp || todayStamp;
+  if (sq.overrides && sq.overrides[key] !== undefined) return sq.overrides[key] || '';
+  const now = sqSeasonNow(sq, key);
+  if (!now || now.before || now.after) return '';
+  const plan = Array.isArray(now.phase.plan) ? now.phase.plan : [];
+  return plan[sqDayIndex(key)] || '';
+}
+
+function sqTemplateItems(tpl) {
+  const out = [];
+  if (!tpl) return out;
+  SECTION_KEYS.forEach(function (sec) {
+    (tpl.sections[sec] || []).forEach(function (src) {
+      const entry = src.libId ? libraryEntryById(src.libId) : matchLibraryExercise(src.en || src.name);
+      if (entry) prepLibEntry(entry);
+      out.push({
+        sec: sec,
+        libId: entry ? entry.id : '',
+        name: entry ? exerciseLibName(entry) : (src.name || src.en || ''),
+        media: entry ? libMediaUrl(entry) : '',
+        sets: src.sets || 1,
+        reps: src.reps || '',
+        rest: src.rest || '',
+        rpe: src.rpe || ''
+      });
+    });
+  });
+  return out;
+}
+
+function sqPhaseName(key) { return t('sq_phase_' + (SQ_PHASES.indexOf(key) === -1 ? 'off' : key)); }
+
+/* القوالب اللي تنفع للفريق: رياضته + أنواع التدريب + قوالبي */
+function sqTemplateChoices(sq) {
+  return templateSectionsForSport(sq.sport || '').concat([{ label: t('my_templates_group'), list: (myTemplates || []).filter(isMyTemplate) }]);
+}
+
+function sqTemplateSelect(sq, value) {
+  const sel = document.createElement('select');
+  const rest = document.createElement('option');
+  rest.value = ''; rest.textContent = t('sq_rest_day');
+  sel.appendChild(rest);
+  sqTemplateChoices(sq).forEach(function (sec) {
+    if (!sec.list.length) return;
+    const g = document.createElement('optgroup');
+    g.label = sec.label;
+    sec.list.forEach(function (tpl) {
+      const o = document.createElement('option');
+      o.value = tpl.id; o.textContent = templateTitle(tpl);
+      g.appendChild(o);
+    });
+    sel.appendChild(g);
+  });
+  sel.value = value || '';
+  return sel;
+}
+
+/* ---------- الحمل التدريبي ---------- */
+function sqLoadStats(logs, email, stamp) {
+  const today = stamp || todayStamp;
+  const mine = logs.filter(function (l) { return l.email === email && l.date <= today; });
+  const sum = function (from, to) {
+    return mine.filter(function (l) { const d = sqDaysBetween(l.date, today); return d >= from && d <= to; })
+      .reduce(function (s, l) { return s + (Number(l.load) || 0); }, 0);
+  };
+  const acute = sum(0, 6);
+  const chronic = sum(0, 27) / 4;
+  const acwr = chronic > 0 ? acute / chronic : null;
+  const sessions28 = mine.filter(function (l) { return sqDaysBetween(l.date, today) <= 27 && l.doneCount > 0; }).length;
+  let flag = 'ok';
+  if (acwr !== null && acwr > 1.5) flag = 'high';
+  else if (acwr !== null && acwr < 0.8 && chronic > 0) flag = 'low';
+  return { acute: Math.round(acute), chronic: Math.round(chronic), acwr: acwr, flag: flag, sessions28: sessions28 };
+}
+
+function sqWeeklyLoads(logs, email, weeks) {
+  const out = [];
+  for (let w = weeks - 1; w >= 0; w--) {
+    const load = logs.filter(function (l) {
+      const d = sqDaysBetween(l.date, todayStamp);
+      return l.email === email && d >= w * 7 && d <= w * 7 + 6;
+    }).reduce(function (s, l) { return s + (Number(l.load) || 0); }, 0);
+    out.push(Math.round(load));
+  }
+  return out;
+}
+
+/* ---------- تحميل ---------- */
+async function sqLoadMine() {
+  const me = sqMe();
+  if (!me) return [];
+  try {
+    const snap = sqIsCoach()
+      ? await getDocs(collection(db, 'squads'))
+      : await getDocs(query(collection(db, 'squads'), where('members', 'array-contains', me)));
+    squadsCache = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); })
+      .filter(function (sq) { return !sqIsCoach() || isFullAdminAccount() || sq.coachEmail === me; });
+  } catch (error) { squadsCache = []; }
+  return squadsCache;
+}
+
+async function sqLoadLogs(id) {
+  try {
+    const snap = await getDocs(collection(db, 'squads', id, 'logs'));
+    return snap.docs.map(function (d) { return d.data(); });
+  } catch (error) { return []; }
+}
+
+function sqStopLive() {
+  if (squadUnsub) { try { squadUnsub(); } catch (e) { /* تجاهل */ } squadUnsub = null; }
+}
+
+/* ---------- شاشة الفرق (المدرب) ---------- */
+async function openSquads() {
+  showScreen(document.getElementById('squads-screen'));
+  const msg = document.getElementById('squads-msg');
+  msg.textContent = t('loading');
+  await sqLoadMine();
+  msg.textContent = '';
+  renderSquadsList();
+  sqFillNewForm();
+}
+
+function renderSquadsList() {
+  const box = document.getElementById('squads-list');
+  box.innerHTML = '';
+  if (!squadsCache.length) {
+    const p = document.createElement('p');
+    p.className = 'hint-text';
+    p.textContent = t('sq_none');
+    box.appendChild(p);
+    document.getElementById('sq-new-box').open = true;
+    return;
+  }
+  squadsCache.forEach(function (sq) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'sq-item';
+    const tplId = sqSessionTemplateId(sq);
+    const tpl = tplId ? templateById(tplId) : null;
+    const now = sqSeasonNow(sq);
+    b.innerHTML = '<span class="sq-item-name"></span><span class="sq-item-meta"></span>';
+    b.querySelector('.sq-item-name').textContent = sq.name;
+    b.querySelector('.sq-item-meta').textContent = [
+      sportName(sq.sport) || '',
+      fill('sq_members_n', { n: (sq.members || []).length }),
+      now && !now.before && !now.after ? sqPhaseName(now.phase.key) : '',
+      tpl ? t('sq_today') + ': ' + templateTitle(tpl) : t('sq_rest_day')
+    ].filter(Boolean).join(' · ');
+    b.addEventListener('click', function () { openSquad(sq.id, document.getElementById('squads-screen')); });
+    box.appendChild(b);
+  });
+}
+
+async function sqFillNewForm() {
+  fillSportSelect(document.getElementById('sq-sport'), true);
+  const pick = document.getElementById('sq-members-pick');
+  pick.innerHTML = '';
+  try {
+    const snap = await getDocs(collection(db, 'clients'));
+    filterMyClients(snap.docs).forEach(function (d) {
+      const lab = document.createElement('label');
+      lab.className = 'sq-pick-row';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.value = d.id; cb.setAttribute('data-name', d.data().name || d.id);
+      lab.append(cb, document.createTextNode(' ' + (d.data().name || d.id)));
+      pick.appendChild(lab);
+    });
+  } catch (error) { /* القايمة فاضية */ }
+}
+
+document.getElementById('open-squads-btn').addEventListener('click', openSquads);
+document.getElementById('squads-back-btn').addEventListener('click', function () { showScreen(clientsScreen); });
+
+document.getElementById('sq-create-btn').addEventListener('click', async function () {
+  const msg = document.getElementById('squads-msg');
+  const name = document.getElementById('sq-name').value.trim();
+  const picked = Array.prototype.slice.call(document.querySelectorAll('#sq-members-pick input:checked'));
+  if (!name) { msg.textContent = t('sq_need_name'); return; }
+  const members = picked.map(function (cb) { return cb.value.toLowerCase(); });
+  const memberNames = {};
+  picked.forEach(function (cb) { memberNames[cb.value.toLowerCase()] = cb.getAttribute('data-name'); });
+  const sport = document.getElementById('sq-sport').value || '';
+  const id = 'sq_' + Date.now().toString(36);
+  const start = sqDateStamp();
+  const guess = function (phase) {
+    const tpl = SPORT_TEMPLATES.filter(function (x) { return x.sport === sport && x.phase === phase; })[0];
+    return tpl ? tpl.id : '';
+  };
+  /* خطة مبدئية من قوالب الرياضة: ٣ أيام تمرين في الأسبوع، والمدرب يعدّل */
+  const planFor = function (phase) {
+    const main = guess(phase), prevent = guess('prevent') || main;
+    return [main, '', prevent, '', main, '', ''];
+  };
+  try {
+    await setDoc(doc(db, 'squads', id), {
+      name: name, sport: sport, coachEmail: currentProviderEmail, members: members, memberNames: memberNames,
+      season: { start: start, phases: [{ key: 'pre', weeks: 4, plan: planFor('pre') }, { key: 'in', weeks: 8, plan: planFor('in') }] },
+      overrides: {}, createdAt: new Date().toISOString()
+    });
+    notify(members, 'squad_joined', { target: 'squad', about: id, aboutName: name, params: function () { return { name: name }; } });
+    document.getElementById('sq-name').value = '';
+    await sqLoadMine();
+    renderSquadsList();
+    openSquad(id, document.getElementById('squads-screen'));
+  } catch (error) {
+    msg.textContent = t('problem') + error.message;
+  }
+});
+
+/* ---------- شاشة الفريق (المدرب واللاعب) ---------- */
+async function openSquad(id, returnScreen) {
+  squadReturn = returnScreen || null;
+  sqStopLive();
+  await ensureExtraLibrary();
+  if (!myTemplatesLoaded && sqIsCoach()) { try { await loadMyTemplates(); } catch (e) { /* تجاهل */ } }
+  let sq = squadsCache.filter(function (x) { return x.id === id; })[0];
+  try {
+    const d = await getDoc(doc(db, 'squads', id));
+    if (d.exists()) sq = Object.assign({ id: id }, d.data());
+  } catch (error) { /* نكمّل بالنسخة اللي معانا */ }
+  if (!sq) return;
+  squadCurrent = sq;
+  squadTab = 'today';
+  squadLogs = await sqLoadLogs(id);
+  showScreen(sqScreen());
+  sqStartLive();
+  renderSquad();
+}
+
+function sqStartLive() {
+  sqStopLive();
+  if (!squadCurrent) return;
+  try {
+    const q = query(collection(db, 'squads', squadCurrent.id, 'logs'), where('date', '==', todayStamp));
+    squadUnsub = onSnapshot(q, function (snap) {
+      const todays = snap.docs.map(function (d) { return d.data(); });
+      squadLogs = squadLogs.filter(function (l) { return l.date !== todayStamp; }).concat(todays);
+      if (squadTab === 'today') renderSquadBoard();
+    });
+  } catch (error) { squadUnsub = null; }
+}
+
+document.getElementById('squad-back-btn').addEventListener('click', function () {
+  sqStopLive();
+  if (squadReturn) showScreen(squadReturn);
+  else showScreen(sqIsCoach() ? clientsScreen : clientScreen);
+  if (!sqIsCoach()) renderSquadHome();
+});
+
+function renderSquad() {
+  const sq = squadCurrent;
+  document.getElementById('squad-title').textContent = sq.name;
+  renderSquadSeason();
+  const tabs = document.getElementById('sq-tabs');
+  tabs.innerHTML = '';
+  const list = sqIsCoach() ? ['today', 'season', 'players'] : ['today', 'me'];
+  list.forEach(function (key) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'sq-tab' + (squadTab === key ? ' on' : '');
+    b.textContent = t('sq_tab_' + key);
+    b.addEventListener('click', function () { squadTab = key; renderSquad(); });
+    tabs.appendChild(b);
+  });
+  const pane = document.getElementById('sq-pane');
+  pane.innerHTML = '';
+  if (squadTab === 'today') renderSquadToday(pane);
+  else if (squadTab === 'season') renderSquadSeasonEditor(pane);
+  else if (squadTab === 'players') renderSquadPlayers(pane);
+  else renderSquadMe(pane);
+}
+
+function renderSquadSeason() {
+  const box = document.getElementById('sq-season');
+  box.innerHTML = '';
+  const now = sqSeasonNow(squadCurrent);
+  if (!now) return;
+  const bar = document.createElement('div');
+  bar.className = 'sq-phasebar';
+  const total = now.phases.reduce(function (s, p) { return s + Math.max(1, Number(p.weeks) || 1); }, 0);
+  now.phases.forEach(function (p, i) {
+    const seg = document.createElement('span');
+    seg.className = 'sq-seg ph-' + p.key + (now.index === i ? ' now' : '');
+    seg.style.flex = String(Math.max(1, Number(p.weeks) || 1));
+    seg.textContent = sqPhaseName(p.key);
+    bar.appendChild(seg);
+  });
+  const line = document.createElement('div');
+  line.className = 'sq-season-line';
+  if (now.before) line.textContent = fill('sq_starts_in', { n: now.days });
+  else if (now.after) line.textContent = t('sq_season_over');
+  else line.textContent = fill('sq_week_of', { phase: sqPhaseName(now.phase.key), w: now.week, n: now.weeks, tw: now.totalWeek, tn: total });
+  box.append(bar, line);
+}
+
+/* ---------- النهارده: الجلسة + اللوحة اللايف ---------- */
+function renderSquadToday(pane) {
+  const sq = squadCurrent;
+  const tplId = sqSessionTemplateId(sq);
+  const tpl = tplId ? templateById(tplId) : null;
+  const head = document.createElement('div');
+  head.className = 'sq-today-head';
+  const title = document.createElement('strong');
+  title.textContent = tpl ? templateTitle(tpl) : t('sq_rest_day');
+  head.appendChild(title);
+  if (tpl && tpl.note) {
+    const note = document.createElement('p');
+    note.className = 'hint-text';
+    note.textContent = tpl.note[lang] || tpl.note.ar || '';
+    head.appendChild(note);
+  }
+  pane.appendChild(head);
+
+  if (sqIsCoach()) {
+    const row = document.createElement('div');
+    row.className = 'sq-override';
+    const lab = document.createElement('span');
+    lab.textContent = t('sq_change_today');
+    const sel = sqTemplateSelect(sq, tplId);
+    sel.addEventListener('change', async function () {
+      const overrides = Object.assign({}, sq.overrides || {});
+      overrides[todayStamp] = sel.value;
+      await setDoc(doc(db, 'squads', sq.id), { overrides: overrides }, { merge: true });
+      sq.overrides = overrides;
+      notify(sq.members || [], 'squad_session', { target: 'squad', about: sq.id, aboutName: sq.name, params: function () { return { name: sq.name }; } });
+      renderSquad();
+    });
+    row.append(lab, sel);
+    pane.appendChild(row);
+  }
+
+  const items = tpl ? sqTemplateItems(tpl) : [];
+  if (!sqIsCoach() && items.length) pane.appendChild(sqMyLogForm(items));
+  else if (items.length) pane.appendChild(sqItemsPreview(items));
+
+  const board = document.createElement('div');
+  board.id = 'sq-board';
+  board.className = 'sq-board';
+  pane.appendChild(board);
+  renderSquadBoard();
+}
+
+function sqItemsPreview(items) {
+  const ul = document.createElement('ul');
+  ul.className = 'sq-items';
+  items.forEach(function (it) {
+    const li = document.createElement('li');
+    if (it.media) { const img = document.createElement('img'); img.src = it.media; img.alt = ''; img.loading = 'lazy'; li.appendChild(img); }
+    const txt = document.createElement('span');
+    txt.textContent = it.name + ' — ' + it.sets + ' × ' + it.reps + (it.rest ? ' · ' + it.rest : '');
+    li.appendChild(txt);
+    ul.appendChild(li);
+  });
+  return ul;
+}
+
+/* فورم اللاعب: بيعلّم اللي خلصه (والفريق بيشوفه لايف) */
+function sqMyLogForm(items) {
+  const sq = squadCurrent;
+  const me = sqMe();
+  const existing = squadLogs.filter(function (l) { return l.email === me && l.date === todayStamp; })[0];
+  squadMyLog = existing ? JSON.parse(JSON.stringify(existing)) : {
+    email: me, name: clientName || me, date: todayStamp, items: items.map(function () { return { done: false, reps: '', load: '' }; }),
+    rpe: '', minutes: '', hr: '', kcal: '', doneCount: 0, total: items.length, load: 0
+  };
+  if (!Array.isArray(squadMyLog.items) || squadMyLog.items.length !== items.length) {
+    squadMyLog.items = items.map(function () { return { done: false, reps: '', load: '' }; });
+  }
+  const box = document.createElement('div');
+  box.className = 'sq-log';
+  items.forEach(function (it, i) {
+    const row = document.createElement('div');
+    row.className = 'sq-log-row' + (squadMyLog.items[i].done ? ' done' : '');
+    if (it.media) { const img = document.createElement('img'); img.src = it.media; img.alt = ''; img.loading = 'lazy'; row.appendChild(img); }
+    const main = document.createElement('div');
+    main.className = 'sq-log-main';
+    const nm = document.createElement('div');
+    nm.className = 'sq-log-name';
+    nm.textContent = it.name;
+    const pres = document.createElement('div');
+    pres.className = 'sq-log-pres';
+    pres.textContent = it.sets + ' × ' + it.reps + (it.rest ? ' · ' + t('sq_rest') + ' ' + it.rest : '') + (it.rpe ? ' · RPE ' + it.rpe : '');
+    const inputs = document.createElement('div');
+    inputs.className = 'sq-log-inputs';
+    const reps = document.createElement('input');
+    reps.inputMode = 'numeric'; reps.placeholder = t('sq_reps_done'); reps.value = squadMyLog.items[i].reps || '';
+    const load = document.createElement('input');
+    load.inputMode = 'decimal'; load.placeholder = t('sq_load_kg'); load.value = squadMyLog.items[i].load || '';
+    reps.addEventListener('input', function () { squadMyLog.items[i].reps = reps.value.trim(); sqQueueSave(); });
+    load.addEventListener('input', function () { squadMyLog.items[i].load = load.value.trim(); sqQueueSave(); });
+    inputs.append(reps, load);
+    main.append(nm, pres, inputs);
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'sq-check' + (squadMyLog.items[i].done ? ' on' : '');
+    check.setAttribute('aria-label', t('sq_mark_done'));
+    check.innerHTML = glyph('check', '', squadMyLog.items[i].done ? '#2ee07a' : '#94a3b8');
+    check.addEventListener('click', function () {
+      squadMyLog.items[i].done = !squadMyLog.items[i].done;
+      row.classList.toggle('done', squadMyLog.items[i].done);
+      check.classList.toggle('on', squadMyLog.items[i].done);
+      check.innerHTML = glyph('check', '', squadMyLog.items[i].done ? '#2ee07a' : '#94a3b8');
+      sqQueueSave(true);
+    });
+    row.append(main, check);
+    box.appendChild(row);
+  });
+  const sess = document.createElement('div');
+  sess.className = 'sq-session';
+  const field = function (key, val, mode) {
+    const lab = document.createElement('label');
+    lab.className = 'sq-field';
+    const span = document.createElement('span');
+    span.textContent = t('sq_f_' + key);
+    const input = document.createElement('input');
+    input.inputMode = mode || 'numeric'; input.value = val || '';
+    input.addEventListener('input', function () { squadMyLog[key] = input.value.trim(); sqQueueSave(); });
+    lab.append(span, input);
+    return lab;
+  };
+  sess.append(field('minutes', squadMyLog.minutes), field('rpe', squadMyLog.rpe), field('hr', squadMyLog.hr), field('kcal', squadMyLog.kcal));
+  const hint = document.createElement('p');
+  hint.className = 'hint-text';
+  hint.textContent = t('sq_rpe_hint');
+  box.append(sess, hint);
+  return box;
+}
+
+function sqQueueSave(now) {
+  clearTimeout(squadSaveTimer);
+  squadSaveTimer = setTimeout(sqSaveMyLog, now ? 50 : 700);
+}
+
+async function sqSaveMyLog() {
+  if (!squadCurrent || !squadMyLog) return;
+  const log = squadMyLog;
+  log.doneCount = log.items.filter(function (x) { return x.done; }).length;
+  log.total = log.items.length;
+  const rpe = Math.min(10, Math.max(0, Number(log.rpe) || 0));
+  const minutes = Math.min(600, Math.max(0, Number(log.minutes) || 0));
+  log.load = Math.round(rpe * minutes);
+  log.repsTotal = log.items.reduce(function (s, x) { return s + (parseInt(x.reps, 10) || 0); }, 0);
+  log.volume = Math.round(log.items.reduce(function (s, x) { return s + (parseInt(x.reps, 10) || 0) * (parseFloat(x.load) || 0); }, 0));
+  log.updatedAt = new Date().toISOString();
+  try {
+    await setDoc(doc(db, 'squads', squadCurrent.id, 'logs', log.date + '__' + log.email), log);
+  } catch (error) {
+    const msg = document.getElementById('squad-msg');
+    if (msg) msg.textContent = t('problem') + error.message;
+  }
+}
+
+function renderSquadBoard() {
+  const board = document.querySelector('#sq-board');
+  if (!board || !squadCurrent) return;
+  const sq = squadCurrent;
+  board.innerHTML = '';
+  const h = document.createElement('div');
+  h.className = 'sq-board-title';
+  h.textContent = t('sq_board');
+  board.appendChild(h);
+  const todays = squadLogs.filter(function (l) { return l.date === todayStamp; });
+  const members = (sq.members || []).slice();
+  const rows = members.map(function (email) {
+    const log = todays.filter(function (l) { return l.email === email; })[0];
+    return { email: email, name: (sq.memberNames || {})[email] || (log && log.name) || email.split('@')[0], log: log };
+  }).sort(function (a, b) {
+    const pa = a.log ? a.log.doneCount / Math.max(1, a.log.total) : -1;
+    const pb = b.log ? b.log.doneCount / Math.max(1, b.log.total) : -1;
+    return pb - pa;
+  });
+  const started = rows.filter(function (r) { return r.log && r.log.doneCount > 0; }).length;
+  const sum = document.createElement('div');
+  sum.className = 'sq-board-sum';
+  sum.textContent = fill('sq_board_sum', { a: started, n: rows.length });
+  board.appendChild(sum);
+  rows.forEach(function (r) {
+    const row = document.createElement('div');
+    const pct = r.log ? Math.round((r.log.doneCount / Math.max(1, r.log.total)) * 100) : 0;
+    row.className = 'sq-row' + (r.email === sqMe() ? ' me' : '') + (pct >= 100 ? ' full' : '');
+    const name = document.createElement('div');
+    name.className = 'sq-row-name';
+    name.textContent = r.name;
+    const bar = document.createElement('div');
+    bar.className = 'sq-row-bar';
+    const fillEl = document.createElement('i');
+    fillEl.style.width = pct + '%';
+    bar.appendChild(fillEl);
+    const meta = document.createElement('div');
+    meta.className = 'sq-row-meta';
+    if (!r.log || !r.log.doneCount) meta.textContent = t('sq_not_started');
+    else {
+      meta.textContent = [
+        r.log.doneCount + '/' + r.log.total,
+        r.log.repsTotal ? fill('sq_m_reps', { n: r.log.repsTotal }) : '',
+        r.log.volume ? fill('sq_m_vol', { n: r.log.volume }) : '',
+        r.log.minutes ? fill('sq_m_min', { n: r.log.minutes }) : '',
+        r.log.rpe ? 'RPE ' + r.log.rpe : '',
+        r.log.hr ? fill('sq_m_hr', { n: r.log.hr }) : '',
+        r.log.kcal ? fill('sq_m_kcal', { n: r.log.kcal }) : ''
+      ].filter(Boolean).join(' · ');
+    }
+    row.append(name, bar, meta);
+    board.appendChild(row);
+  });
+}
+
+/* ---------- الموسم (المدرب) ---------- */
+function renderSquadSeasonEditor(pane) {
+  const sq = squadCurrent;
+  const season = JSON.parse(JSON.stringify(sq.season || { start: todayStamp, phases: [] }));
+  const startLab = document.createElement('label');
+  startLab.className = 'field-label';
+  startLab.textContent = t('sq_season_start');
+  const start = document.createElement('input');
+  start.type = 'date'; start.value = season.start || todayStamp;
+  pane.append(startLab, start);
+  const list = document.createElement('div');
+  list.className = 'sq-phases';
+  pane.appendChild(list);
+  const draw = function () {
+    list.innerHTML = '';
+    season.phases.forEach(function (ph, i) {
+      const card = document.createElement('div');
+      card.className = 'sq-phase-card ph-' + ph.key;
+      const top = document.createElement('div');
+      top.className = 'sq-phase-top';
+      const kind = document.createElement('select');
+      SQ_PHASES.forEach(function (k) { const o = document.createElement('option'); o.value = k; o.textContent = sqPhaseName(k); kind.appendChild(o); });
+      kind.value = ph.key;
+      kind.addEventListener('change', function () { ph.key = kind.value; card.className = 'sq-phase-card ph-' + ph.key; });
+      const weeks = document.createElement('input');
+      weeks.type = 'number'; weeks.min = '1'; weeks.max = '52'; weeks.value = ph.weeks || 4;
+      weeks.addEventListener('input', function () { ph.weeks = Math.max(1, Math.min(52, parseInt(weeks.value, 10) || 1)); });
+      const wl = document.createElement('span');
+      wl.textContent = t('sq_weeks');
+      const del = document.createElement('button');
+      del.type = 'button'; del.className = 'link sq-del'; del.textContent = t('sq_remove_phase');
+      del.addEventListener('click', function () { season.phases.splice(i, 1); draw(); });
+      top.append(kind, weeks, wl, del);
+      card.appendChild(top);
+      const plan = Array.isArray(ph.plan) ? ph.plan : ['', '', '', '', '', '', ''];
+      ph.plan = plan;
+      days().forEach(function (dayName, d) {
+        const row = document.createElement('div');
+        row.className = 'sq-day-row';
+        const lab = document.createElement('span');
+        lab.textContent = dayName;
+        const sel = sqTemplateSelect(sq, plan[d] || '');
+        sel.addEventListener('change', function () { plan[d] = sel.value; });
+        row.append(lab, sel);
+        card.appendChild(row);
+      });
+      list.appendChild(card);
+    });
+  };
+  draw();
+  const add = document.createElement('button');
+  add.type = 'button'; add.className = 'secondary';
+  add.textContent = t('sq_add_phase');
+  add.addEventListener('click', function () { season.phases.push({ key: 'in', weeks: 4, plan: ['', '', '', '', '', '', ''] }); draw(); });
+  const save = document.createElement('button');
+  save.type = 'button';
+  save.textContent = t('sq_save_season');
+  save.addEventListener('click', async function () {
+    season.start = start.value || todayStamp;
+    try {
+      await setDoc(doc(db, 'squads', sq.id), { season: season }, { merge: true });
+      sq.season = season;
+      document.getElementById('squad-msg').textContent = t('sq_saved');
+      notify(sq.members || [], 'squad_session', { target: 'squad', about: sq.id, aboutName: sq.name, params: function () { return { name: sq.name }; } });
+      renderSquadSeason();
+    } catch (error) {
+      document.getElementById('squad-msg').textContent = t('problem') + error.message;
+    }
+  });
+  pane.append(add, save);
+}
+
+/* ---------- اللاعبين (المدرب): الحضور والحمل ---------- */
+function renderSquadPlayers(pane) {
+  const sq = squadCurrent;
+  const intro = document.createElement('p');
+  intro.className = 'hint-text';
+  intro.textContent = t('sq_acwr_hint');
+  pane.appendChild(intro);
+  const table = document.createElement('div');
+  table.className = 'sq-players';
+  (sq.members || []).forEach(function (email) {
+    const st = sqLoadStats(squadLogs, email);
+    const row = document.createElement('div');
+    row.className = 'sq-player flag-' + st.flag;
+    const name = document.createElement('div');
+    name.className = 'sq-player-name';
+    name.textContent = (sq.memberNames || {})[email] || email;
+    const meta = document.createElement('div');
+    meta.className = 'sq-player-meta';
+    meta.textContent = [
+      fill('sq_p_sessions', { n: st.sessions28 }),
+      fill('sq_p_acute', { n: st.acute }),
+      fill('sq_p_chronic', { n: st.chronic }),
+      st.acwr === null ? t('sq_p_nodata') : 'ACWR ' + st.acwr.toFixed(2)
+    ].join(' · ');
+    const flag = document.createElement('span');
+    flag.className = 'sq-flag';
+    flag.textContent = t('sq_flag_' + st.flag);
+    const chat = document.createElement('button');
+    chat.type = 'button'; chat.className = 'link';
+    chat.textContent = t('coach_chat_btn');
+    chat.addEventListener('click', function () { openChatThread(email, sqScreen(), name.textContent); });
+    const rm = document.createElement('button');
+    rm.type = 'button'; rm.className = 'link sq-del';
+    rm.textContent = t('sq_remove_member');
+    rm.addEventListener('click', async function () {
+      const members = (sq.members || []).filter(function (x) { return x !== email; });
+      await setDoc(doc(db, 'squads', sq.id), { members: members }, { merge: true });
+      sq.members = members;
+      renderSquad();
+    });
+    const actions = document.createElement('div');
+    actions.className = 'sq-player-actions';
+    actions.append(flag, chat, rm);
+    row.append(name, meta, actions);
+    table.appendChild(row);
+  });
+  pane.appendChild(table);
+  /* إضافة لاعبين */
+  const addBox = document.createElement('details');
+  addBox.className = 'sq-new';
+  const sum = document.createElement('summary');
+  sum.textContent = t('sq_add_members');
+  addBox.appendChild(sum);
+  const pick = document.createElement('div');
+  pick.className = 'sq-pick';
+  addBox.appendChild(pick);
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button'; addBtn.textContent = t('sq_add_btn');
+  addBox.appendChild(addBtn);
+  addBox.addEventListener('toggle', async function () {
+    if (!addBox.open || pick.childNodes.length) return;
+    try {
+      const snap = await getDocs(collection(db, 'clients'));
+      filterMyClients(snap.docs).filter(function (d) { return (sq.members || []).indexOf(d.id.toLowerCase()) === -1; }).forEach(function (d) {
+        const lab = document.createElement('label');
+        lab.className = 'sq-pick-row';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.value = d.id.toLowerCase(); cb.setAttribute('data-name', d.data().name || d.id);
+        lab.append(cb, document.createTextNode(' ' + (d.data().name || d.id)));
+        pick.appendChild(lab);
+      });
+    } catch (e) { /* تجاهل */ }
+  });
+  addBtn.addEventListener('click', async function () {
+    const picked = Array.prototype.slice.call(pick.querySelectorAll('input:checked'));
+    if (!picked.length) return;
+    const members = (sq.members || []).concat(picked.map(function (cb) { return cb.value; }));
+    const names = Object.assign({}, sq.memberNames || {});
+    picked.forEach(function (cb) { names[cb.value] = cb.getAttribute('data-name'); });
+    await setDoc(doc(db, 'squads', sq.id), { members: members, memberNames: names }, { merge: true });
+    notify(picked.map(function (cb) { return cb.value; }), 'squad_joined', { target: 'squad', about: sq.id, aboutName: sq.name, params: function () { return { name: sq.name }; } });
+    sq.members = members; sq.memberNames = names;
+    renderSquad();
+  });
+  pane.appendChild(addBox);
+}
+
+/* ---------- إنجازاتي (اللاعب) ---------- */
+function renderSquadMe(pane) {
+  const me = sqMe();
+  const mine = squadLogs.filter(function (l) { return l.email === me && l.doneCount > 0; });
+  const st = sqLoadStats(squadLogs, me);
+  const season = sqSeasonNow(squadCurrent);
+  const inSeason = season && season.phases ? mine.filter(function (l) { return !squadCurrent.season || l.date >= squadCurrent.season.start; }).length : mine.length;
+  const stats = document.createElement('div');
+  stats.className = 'sq-stats';
+  [
+    [inSeason, t('sq_s_sessions')],
+    [mine.reduce(function (s, l) { return s + (l.repsTotal || 0); }, 0), t('sq_s_reps')],
+    [st.acute, t('sq_s_load7')],
+    [st.acwr === null ? '—' : st.acwr.toFixed(2), 'ACWR']
+  ].forEach(function (c) {
+    const box = document.createElement('div');
+    box.className = 'sq-stat';
+    const v = document.createElement('strong'); v.textContent = c[0];
+    const l = document.createElement('span'); l.textContent = c[1];
+    box.append(v, l);
+    stats.appendChild(box);
+  });
+  pane.appendChild(stats);
+  const flag = document.createElement('p');
+  flag.className = 'sq-me-flag flag-' + st.flag;
+  flag.textContent = t('sq_me_flag_' + st.flag);
+  pane.appendChild(flag);
+  const loads = sqWeeklyLoads(squadLogs, me, 6);
+  const max = Math.max.apply(null, loads.concat([1]));
+  const chart = document.createElement('div');
+  chart.className = 'sq-chart';
+  const cap = document.createElement('div');
+  cap.className = 'sq-board-title';
+  cap.textContent = t('sq_weekly_load');
+  chart.appendChild(cap);
+  const bars = document.createElement('div');
+  bars.className = 'sq-bars';
+  loads.forEach(function (v, i) {
+    const col = document.createElement('div');
+    col.className = 'sq-bar';
+    const b = document.createElement('i');
+    b.style.height = Math.round((v / max) * 100) + '%';
+    const num = document.createElement('span');
+    num.textContent = v;
+    const lab = document.createElement('em');
+    lab.textContent = i === loads.length - 1 ? t('sq_this_week') : fill('sq_weeks_ago', { n: loads.length - 1 - i });
+    col.append(num, b, lab);
+    bars.appendChild(col);
+  });
+  chart.appendChild(bars);
+  pane.appendChild(chart);
+}
+
+/* ---------- كارت «فريقي» في رئيسية اللاعب ---------- */
+async function renderSquadHome() {
+  const box = document.getElementById('squad-home');
+  if (!box || !clientEmail || currentProviderEmail) return;
+  const list = await sqLoadMine();
+  box.classList.toggle('hidden', !list.length);
+  box.innerHTML = '';
+  list.forEach(function (sq) {
+    const tplId = sqSessionTemplateId(sq);
+    const tpl = tplId ? templateById(tplId) : null;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'sq-home-btn';
+    b.innerHTML = glyphChip('users', 'sq-home-chip') + '<span class="sq-home-text"><span class="sq-home-kicker"></span><strong></strong></span>';
+    b.querySelector('.sq-home-kicker').textContent = fill('sq_home_kicker', { name: sq.name });
+    b.querySelector('strong').textContent = tpl ? t('sq_today') + ': ' + templateTitle(tpl) : t('sq_rest_day');
+    b.addEventListener('click', function () { openSquad(sq.id, clientScreen); });
+    box.appendChild(b);
+  });
+}
+
+
+/* ---------- قايمة أغاني التمرين ----------
+   المدرب بيحط لينك (Spotify / يوتيوب / أنغامي / SoundCloud) لكل عميل، والعميل
+   بيلاقي زرار «شغّل أغاني التمرين» فوق تمرينه. لينكات المواقع دي بس. */
+const PLAYLIST_HOSTS = /^(open\.spotify\.com|spotify\.link|(www\.|m\.|music\.)?youtube\.com|youtu\.be|(play\.)?anghami\.com|(on\.)?soundcloud\.com|music\.apple\.com)$/i;
+
+function playlistClean(url) {
+  try {
+    const u = new URL(String(url || '').trim());
+    if (u.protocol !== 'https:' || !PLAYLIST_HOSTS.test(u.hostname)) return '';
+    return u.href;
+  } catch (e) { return ''; }
+}
+
+function playlistFill(who, url) {
+  const clean = playlistClean(url);
+  if (who === 'coach') {
+    const input = document.getElementById('coach-playlist');
+    if (input) input.value = clean;
+    const msg = document.getElementById('coach-playlist-msg');
+    if (msg) msg.textContent = '';
+    return;
+  }
+  const a = document.getElementById('client-playlist');
+  if (!a) return;
+  a.classList.toggle('hidden', !clean);
+  if (clean) a.href = clean; else a.removeAttribute('href');
+}
+
+document.getElementById('coach-playlist-save').addEventListener('click', async function () {
+  const input = document.getElementById('coach-playlist');
+  const msg = document.getElementById('coach-playlist-msg');
+  const raw = input.value.trim();
+  const clean = raw ? playlistClean(raw) : '';
+  if (raw && !clean) { msg.textContent = t('pl_bad'); return; }
+  if (!currentClient) return;
+  try {
+    await setDoc(doc(db, 'workouts', currentClient), { playlist: clean }, { merge: true });
+    input.value = clean;
+    msg.textContent = clean ? t('pl_saved') : t('pl_removed');
+  } catch (error) {
+    msg.textContent = t('problem') + error.message;
+  }
+});
+
+/* ---------- أول ٤ أيام: خطوة صغيرة كل يوم للعميل الجديد ----------
+   الكارت بيظهر في الرئيسية من يوم التسجيل لحد اليوم الرابع بس.
+   التمرين الأول بيتعلّم لوحده من سجل التمرين، والباقي بيتعلّم لما يدوس. */
+const FIRST4_STEPS = [
+  { icon: 'calendar', go: 'training' },
+  { icon: 'dumbbell', go: 'training', auto: 'trained' },
+  { icon: 'bowl', go: 'nutrition' },
+  { icon: 'mail', go: 'chat' }
+];
+
+function first4Day() {
+  const r = clientRecord || {};
+  const start = r.trialStartedAt || r.createdAt;
+  if (!start) return 0;
+  const d0 = new Date(String(start).slice(0, 10) + 'T12:00:00');
+  const now = new Date(); now.setHours(12, 0, 0, 0);
+  const d = Math.round((now - d0) / 86400000) + 1;
+  return d >= 1 && d <= 4 ? d : 0;
+}
+
+function first4Done() {
+  try { return JSON.parse(localStorage.getItem('adam-first4-' + clientEmail) || '{}') || {}; } catch (e) { return {}; }
+}
+
+function first4Mark(i) {
+  const done = first4Done();
+  done[i] = true;
+  try { localStorage.setItem('adam-first4-' + clientEmail, JSON.stringify(done)); } catch (e) { /* تجاهل */ }
+}
+
+function renderFirst4() {
+  const box = document.getElementById('first4-card');
+  if (!box) return;
+  const day = first4Day();
+  box.classList.toggle('hidden', !day);
+  if (!day) return;
+  const done = first4Done();
+  if ((progressHistory || []).length) done[1] = true;
+  const i = day - 1;
+  const step = FIRST4_STEPS[i];
+  const finished = !!done[i];
+  box.innerHTML = '';
+  const head = document.createElement('div');
+  head.className = 'f4-head';
+  head.innerHTML = glyphChip(step.icon, 'f4-chip');
+  const titles = document.createElement('div');
+  titles.className = 'f4-titles';
+  const kicker = document.createElement('div');
+  kicker.className = 'f4-kicker';
+  kicker.textContent = t('f4_title') + ' · ' + fill('f4_day', { n: lang === 'ar' ? '١٢٣٤'.charAt(day - 1) : day });
+  const title = document.createElement('strong');
+  title.textContent = t('f4_s' + day);
+  titles.append(kicker, title);
+  head.appendChild(titles);
+  const dots = document.createElement('div');
+  dots.className = 'f4-dots';
+  FIRST4_STEPS.forEach(function (_, k) {
+    const dot = document.createElement('span');
+    dot.className = (done[k] ? 'done' : '') + (k === i ? ' now' : '');
+    dots.appendChild(dot);
+  });
+  const text = document.createElement('p');
+  text.className = 'f4-text';
+  text.textContent = finished ? (day < 4 ? fill('f4_tomorrow', { next: t('f4_s' + (day + 1)) }) : t('f4_all_done')) : t('f4_b' + day);
+  box.append(head, dots, text);
+  if (!finished) {
+    const go = document.createElement('button');
+    go.type = 'button';
+    go.className = 'f4-go';
+    go.textContent = t('f4_go');
+    go.addEventListener('click', function () {
+      if (!step.auto) first4Mark(i);
+      if (step.go === 'chat') openChatThread(clientEmail, clientScreen);
+      else setClientMode(step.go);
+    });
+    box.appendChild(go);
+  }
+}
 
 /* ---------- استشارة: جانب العميل ---------- */
 
@@ -10781,6 +11938,7 @@ async function loadClient(email) {
       ? activityDoc.data().entries : [];
 
     clientWeek = normalizeWeek(workoutDoc.exists() ? workoutDoc.data().week : null);
+    playlistFill('client', workoutDoc.exists() ? workoutDoc.data().playlist : '');
     clientRehab = normalizeRehab(rehabDoc.exists() ? rehabDoc.data() : null);
     clientNutrition = normalizeNutrition(nutritionDoc.exists() ? nutritionDoc.data() : null);
     await physioLoadClient(email);
@@ -25774,6 +26932,7 @@ function goToNotifTarget(item) {
   try {
     if (currentProviderEmail) {
       if (target === 'chat' && item.about) { openChatThread(item.about, chatInboxScreen); return; }
+      if (target === 'squad' && item.about) { openSquad(item.about, clientsScreen); return; }
       if (target === 'bookings') { document.getElementById('open-bookings-btn').click(); return; }
       if (target === 'rewards_admin' && isFullAdminAccount()) { document.getElementById('open-admin-panel-btn').click(); showAdminSection('rewards_admin_title'); return; }
       if (target === 'social_admin' && isFullAdminAccount()) { document.getElementById('open-admin-panel-btn').click(); showAdminSection('social_admin_title'); loadSocialAdmin(); return; }
@@ -25784,6 +26943,7 @@ function goToNotifTarget(item) {
     }
     showScreen(clientScreen);
     if (target === 'chat') { openChatThread(clientEmail, clientScreen); return; }
+    if (target === 'squad' && item.about) { openSquad(item.about, clientScreen); return; }
     if (target === 'injury') { document.getElementById('report-injury-btn').click(); return; }
     if (target === 'consult') { setClientMode('consult'); return; }
     if (target === 'training' || target === 'nutrition' || target === 'rehab' || target === 'physio') { goClientMode(target); return; }
@@ -25988,7 +27148,7 @@ document.getElementById('lang-btn').addEventListener('click', function () {
    ============================================================ */
 
 var extraLib = null;
-var extraLocalMedia = {};
+var extraLocalMedia = Object.assign({}, MEDIA_EXTRA);
 var extraLibPromise = null;
 var extraDetails = null;
 var extraDetailsPromise = null;
@@ -26228,7 +27388,7 @@ function rebuildLibraryData() {
 function ensureExtraLibrary() {
   if (extraLibPromise) return extraLibPromise;
   extraLibPromise = import('./library/exercises-index.js').then(function (mod) {
-    extraLocalMedia = mod.LOCAL_MEDIA || {};
+    extraLocalMedia = Object.assign({}, MEDIA_EXTRA, mod.LOCAL_MEDIA || {});
     extraLib = (mod.EXERCISE_INDEX || []).map(expandIndexRow);
     // التمارين القديمة ممكن تكون اتجهّزت قبل ما رسومها توصل
     EXERCISE_LIBRARY.forEach(function (ex) { delete ex._media; delete ex._prepped; });
