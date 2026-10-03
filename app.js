@@ -2604,6 +2604,7 @@ const TEXT = {
     payment_approved_msg: 'اتفعّل الاشتراك',
     payment_rejected_admin_msg: 'اترفض الطلب',
     client_already_exists: 'العميل ده متسجل قبل كده — دوّر عليه في القايمة',
+    client_not_assigned: 'العميل ده مش متابع معاك — لازم تكون مدربه أو في فريقه عشان تفتح ملفه',
     hub_title: 'مكتبة الرياضة',
     hub_sub: 'الاختبارات بمعاييرها، الأدوات، القوانين والمقاسات، والجمل والخطط — لكل الرياضات',
     hub_tab_tests: 'الاختبارات',
@@ -5224,6 +5225,7 @@ const TEXT = {
     payment_approved_msg: 'Subscription activated',
     payment_rejected_admin_msg: 'Request rejected',
     client_already_exists: 'This client is already registered — find them in the list',
+    client_not_assigned: 'This client is not assigned to you — you must be their coach or on their team to open their file',
     hub_title: 'Sports hub',
     hub_sub: 'Tests with norms, equipment, rules & dimensions, plays & tactics — for every sport',
     hub_tab_tests: 'Tests',
@@ -7223,7 +7225,8 @@ async function loadClients() {
      */
     let injuryCounts = {};
     try {
-      const reportsSnap = await getDocs(collection(db, 'injuryReports'));
+      const reportsSnap = await fetchStaffInjuryReports();
+      if (isFullAdminAccount()) backfillInjuryStaff(reportsSnap.docs, snapshot.docs).catch(function () {});
       reportsSnap.forEach(function (docSnap) {
         const data = docSnap.data();
         if ((data.status || 'requested') !== 'requested') return;
@@ -7376,7 +7379,7 @@ async function loadAdherence() {
     /* البلاغات والاستشارات اللي لسه مستنية رد — بنجيبهم مرة واحدة */
     const waiting = {};
     try {
-      const reports = await getDocs(collection(db, 'injuryReports'));
+      const reports = await fetchStaffInjuryReports();
       reports.forEach(function (docSnap) {
         const data = docSnap.data();
         if ((data.status || 'requested') !== 'requested') return;
@@ -7385,7 +7388,9 @@ async function loadAdherence() {
       });
     } catch (error) { /* مش مشكلة */ }
     try {
-      const consults = await getDocs(collection(db, 'consultRequests'));
+      const consults = isFullAdminAccount()
+        ? await getDocs(collection(db, 'consultRequests'))
+        : await getDocs(query(collection(db, 'consultRequests'), where('providerEmail', '==', currentProviderEmail)));
       consults.forEach(function (docSnap) {
         const data = docSnap.data();
         if ((data.status || 'pending') === 'answered') return;
@@ -8609,7 +8614,8 @@ function consultDateText(iso) {
  * في بلاغات الإصابة بالظبط
  */
 async function fetchConsultRequestsFor(clientEmailValue, providerEmail) {
-  const snapshot = await getDocs(collection(db, 'consultRequests'));
+  /* Phase 3.3: المتخصص بيقرا الطلبات اللي جاياله هو بس */
+  const snapshot = await getDocs(query(collection(db, 'consultRequests'), where('providerEmail', '==', providerEmail)));
   return snapshot.docs
     .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
     .filter(function (row) { return row.clientEmail === clientEmailValue && row.providerEmail === providerEmail; })
@@ -8839,7 +8845,7 @@ async function openCoachScreen(email, name, sport) {
     coachMessage.textContent = '';
     setTimeout(function () { tourMaybe('program'); }, 900);
   } catch (error) {
-    coachMessage.textContent = t('problem') + error.message;
+    coachMessage.textContent = (error && error.code === 'permission-denied') ? t('client_not_assigned') : t('problem') + error.message;
   }
 }
 
@@ -10245,7 +10251,7 @@ if (libImageInput) {
       await setDoc(doc(db, 'libraryImages', key), {
         photo: compressed,
         updatedAt: new Date().toISOString(),
-        updatedBy: currentProviderEmail || ''
+        updatedBy: authEmailLower()
       }, { merge: true });
       libraryImagesMap[key] = { photo: compressed };
       setLibraryImageMessage(t('image_uploaded'));
@@ -11090,6 +11096,8 @@ function renderMyLib() {
     const deleteButton = document.createElement('button');
     deleteButton.innerHTML = DELETE_ICON_SVG;
     deleteButton.className = 'delete';
+    /* المكتبة مشتركة: المسح لصاحب التمرين أو الإدارة بس */
+    if (!isFullAdminAccount() && exercise.createdBy !== authEmailLower()) deleteButton.classList.add('hidden');
     deleteButton.addEventListener('click', async function (event) {
       event.stopPropagation();
       if (!confirm(t('confirm_delete'))) return;
@@ -11133,6 +11141,7 @@ document.getElementById('my-add-btn').addEventListener('click', async function (
   try {
     myLibMessage.textContent = t('saving');
     await setDoc(doc(db, 'myExercises', id), {
+      createdBy: authEmailLower(),
       name: name,
       muscle: myMuscle.value,
       equipment: myEquip.value,
@@ -15680,6 +15689,7 @@ document.getElementById('cf-add-btn').addEventListener('click', async function (
 
   try {
     await setDoc(doc(db, 'myFoods', id), {
+      createdBy: authEmailLower(),
       ar: name,
       en: name,
       cat: cfCat.value || 'protein',
@@ -21554,7 +21564,8 @@ async function loadClearanceRequests() {
   message.textContent = t('loading');
 
   try {
-    const snapshot = await getDocs(collection(db, 'consultRequests'));
+    /* طلبات الإذن الطبي مش متبعتة لمتخصص بعينه — أي طبيب يقدر يرد */
+    const snapshot = await getDocs(query(collection(db, 'consultRequests'), where('kind', '==', 'clearance')));
     const rows = snapshot.docs
       .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
       .filter(function (row) { return row.kind === 'clearance'; })
@@ -23407,9 +23418,21 @@ async function chatInboxRowsCoach() {
   } catch (error) { /* لسه مفيش */ }
 
   try {
-    const snapshot = await getDocs(collection(db, 'chats'));
+    /*
+     * الإدارة بتقرا كل محادثات الفرق. المتخصص بيقرا محادثات عملاءه بس
+     * (القواعد مش بتسمحله يقرا المجموعة كلها) — مستند لكل عميل متابع معاه
+     */
     const allowAll = isFullAdminAccount();
-    snapshot.docs.forEach(function (item) {
+    let chatDocs = [];
+    if (allowAll) {
+      chatDocs = (await getDocs(collection(db, 'chats'))).docs;
+    } else {
+      const got = await Promise.all(Object.keys(info).map(function (ce) {
+        return getDoc(doc(db, 'chats', ce)).catch(function () { return null; });
+      }));
+      chatDocs = got.filter(function (snap) { return snap && snap.exists(); });
+    }
+    chatDocs.forEach(function (item) {
       const meta = item.data() || {};
       const ce = meta.clientEmail || item.id;
       if (!ce || (!allowAll && !info[ce])) return;
@@ -25679,7 +25702,8 @@ document.getElementById('injury-scan-remove').addEventListener('click', function
 async function loadInjuryHistory() {
   injuryHistoryList.innerHTML = '';
   try {
-    const snapshot = await getDocs(collection(db, 'injuryReports'));
+    /* العميل مايقدرش يقرا كل البلاغات — بلاغاته هو بس */
+    const snapshot = await getDocs(query(collection(db, 'injuryReports'), where('clientEmail', '==', clientEmail)));
     const mine = snapshot.docs
       .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
       .filter(function (report) { return report.clientEmail === clientEmail; })
@@ -25730,9 +25754,11 @@ document.getElementById('injury-submit-btn').addEventListener('click', async fun
   injuryMessage.textContent = t('saving');
   try {
     const id = 'injury_' + Date.now();
+    const staff = await injuryStaffFor(clientEmail);
     await setDoc(doc(db, 'injuryReports', id), {
       clientEmail: clientEmail,
       clientName: clientName,
+      staff: staff,
       bodyParts: selectedInjuryParts.slice(),
       description: injuryDesc.value.trim(),
       scan: injuryScanImage,
@@ -25769,7 +25795,7 @@ document.getElementById('injury-back-btn').addEventListener('click', function ()
 /* ============================ بلاغات الإصابة — شاشة المدرب ============================ */
 
 async function fetchClientInjuryReports(email) {
-  const snapshot = await getDocs(collection(db, 'injuryReports'));
+  const snapshot = await fetchStaffInjuryReports();
   return snapshot.docs
     .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
     .filter(function (report) { return report.clientEmail === email; })
@@ -25913,7 +25939,7 @@ function bookingStatusOptionsMarkup(currentStatus) {
 }
 
 async function fetchProviderBookings(email) {
-  const snapshot = await getDocs(collection(db, 'bookings'));
+  const snapshot = await getDocs(query(collection(db, 'bookings'), where('providerEmail', '==', email)));
   return snapshot.docs
     .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
     .filter(function (booking) { return booking.providerEmail === email; })
@@ -25921,7 +25947,7 @@ async function fetchProviderBookings(email) {
 }
 
 async function fetchClientBookings(email) {
-  const snapshot = await getDocs(collection(db, 'bookings'));
+  const snapshot = await getDocs(query(collection(db, 'bookings'), where('clientEmail', '==', email)));
   return snapshot.docs
     .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
     .filter(function (booking) { return booking.clientEmail === email; })
@@ -30232,10 +30258,10 @@ function advisorCustomTag(li, it, kind) {
     add.disabled = true;
     try {
       if (kind === 'food') {
-        await setDoc(doc(db, 'myFoods', 'food_' + Date.now()), { ar: it.name, en: it.name, cat: 'protein', c: it.kcal100, p: it.p100 || 0, cb: it.cb100 || 0, f: it.f100 || 0 });
+        await setDoc(doc(db, 'myFoods', 'food_' + Date.now()), { createdBy: authEmailLower(), ar: it.name, en: it.name, cat: 'protein', c: it.kcal100, p: it.p100 || 0, cb: it.cb100 || 0, f: it.f100 || 0 });
         await loadMyFoods();
       } else {
-        await setDoc(doc(db, 'myExercises', 'ex_' + Date.now()), { name: it.name, muscle: '', equipment: '', notes: '', howTo: it.howTo || '', goal: '', primaryMuscles: '', secondaryMuscles: '', origin: '', insertion: '', imageUrl: '' });
+        await setDoc(doc(db, 'myExercises', 'ex_' + Date.now()), { createdBy: authEmailLower(), name: it.name, muscle: '', equipment: '', notes: '', howTo: it.howTo || '', goal: '', primaryMuscles: '', secondaryMuscles: '', origin: '', insertion: '', imageUrl: '' });
       }
       add.textContent = t('adv_added_mylib');
     } catch (error) {
@@ -39295,6 +39321,42 @@ function upsertUserRegistry(user) {
       try { localStorage.setItem(key, todayStamp); } catch (e) { /* عادي */ }
     }).catch(function () { /* مش هيوقف الدخول */ });
   } catch (error) { /* عادي */ }
+}
+
+/*
+ * Phase 3.4: بلاغات الإصابة عليها staff = المدرب الأساسي + الفريق وقت
+ * البلاغ، عشان المتخصص يجيب بلاغات عملاءه باستعلام (قواعد الأمان مش
+ * بتسمحله يقرا كل البلاغات). الإدارة بتزامنها مع الفريق الحالي.
+ */
+function staffListOf(data) {
+  const out = teamListOf((data || {}).team);
+  const coach = String((data || {}).coachEmail || '').toLowerCase().trim();
+  if (coach && out.indexOf(coach) === -1) out.push(coach);
+  return out.sort();
+}
+async function injuryStaffFor(email) {
+  try {
+    const snap = await getDoc(doc(db, 'clients', email));
+    return staffListOf(snap.exists() ? snap.data() : {});
+  } catch (error) {
+    return [];
+  }
+}
+function fetchStaffInjuryReports() {
+  if (isFullAdminAccount()) return getDocs(collection(db, 'injuryReports'));
+  return getDocs(query(collection(db, 'injuryReports'), where('staff', 'array-contains', currentProviderEmail)));
+}
+async function backfillInjuryStaff(reportDocs, clientDocs) {
+  const byEmail = {};
+  clientDocs.forEach(function (d) { byEmail[d.id] = d.data() || {}; });
+  for (let i = 0; i < reportDocs.length; i++) {
+    const r = reportDocs[i].data() || {};
+    if (!r.clientEmail || !byEmail[r.clientEmail]) continue;
+    const want = staffListOf(byEmail[r.clientEmail]);
+    const have = Array.isArray(r.staff) ? r.staff.slice().sort() : null;
+    if (have && JSON.stringify(have) === JSON.stringify(want)) continue;
+    try { await updateDoc(doc(db, 'injuryReports', reportDocs[i].id), { staff: want }); } catch (error) { /* نكمّل */ }
+  }
 }
 
 function teamListOf(team) {
