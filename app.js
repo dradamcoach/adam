@@ -26849,8 +26849,53 @@ async function loadProgressData() {
   loadTestResults(progressTargetEmail);
 }
 
+/*
+ * صور الإنبودي بقت في مستند لوحدها لكل قياس: inbody/{email}/scans/{id}
+ * قبل كده الصورة كانت جوه المستند الأم، وقياس واحد بصورته حوالي ١٠٠KB،
+ * فالعميل بعد ٩-١٠ قياسات كان المستند هيتملى (حد Firestore ١MB) والحفظ يقف.
+ * دلوقتي المستند الأم فيه الأرقام بس + hasImage، والصورة بتتحمل وقت العرض.
+ * القياسات القديمة بتتنقل لوحدها أول ما حد يحفظ (من غير ما حاجة تتمسح)،
+ * ولو كتابة الصورة فشلت لأي سبب بتفضل جوه القياس زي الأول.
+ */
+const ibScanCache = {};
+function ibIsInlineImage(url) {
+  return typeof url === 'string' && url.indexOf('data:') === 0;
+}
+async function ibWriteScan(email, entry) {
+  await setDoc(doc(db, 'inbody', email, 'scans', entry.id), {
+    imageUrl: entry.imageUrl,
+    entryId: entry.id,
+    date: entry.date || '',
+    updatedAt: new Date().toISOString()
+  });
+  ibScanCache[email + '/' + entry.id] = entry.imageUrl;
+}
+async function ibLoadScan(email, entryId) {
+  const key = email + '/' + entryId;
+  if (ibScanCache[key]) return ibScanCache[key];
+  try {
+    const snap = await getDoc(doc(db, 'inbody', email, 'scans', entryId));
+    const url = snap.exists() ? (snap.data().imageUrl || '') : '';
+    if (url) ibScanCache[key] = url;
+    return url;
+  } catch (error) {
+    return '';
+  }
+}
 async function saveInbodyDoc() {
-  await setDoc(doc(db, 'inbody', progressTargetEmail), {
+  const email = progressTargetEmail;
+  for (let i = 0; i < inbodyEntries.length; i++) {
+    const entry = inbodyEntries[i];
+    if (!entry || !entry.id || !ibIsInlineImage(entry.imageUrl)) continue;
+    try {
+      await ibWriteScan(email, entry);
+      entry.hasImage = true;
+      delete entry.imageUrl;
+    } catch (error) {
+      /* تفضل الصورة جوه القياس زي الأول — مفيش حاجة تضيع */
+    }
+  }
+  await setDoc(doc(db, 'inbody', email), {
     entries: inbodyEntries,
     nextAppointment: progressAppointment
   }, { merge: true });
@@ -26904,9 +26949,9 @@ document.getElementById('ib-add-btn').addEventListener('click', async function (
     muscleMass: ibMuscleInput.value ? parseFloat(ibMuscleInput.value) : null,
     visceralFat: ibVisceralInput.value ? parseFloat(ibVisceralInput.value) : null,
     bodyWater: ibWaterInput.value ? parseFloat(ibWaterInput.value) : null,
-    notes: ibNotesInput.value.trim(),
-    imageUrl: ibPickedImage
+    notes: ibNotesInput.value.trim()
   };
+  if (ibPickedImage) entry.imageUrl = ibPickedImage;
   /* أرقام زيادة قراها فريق الإنبودي من الصورة (BMR، كتلة الدهون، ...) */
   if (ibAiExtra) { entry.extra = ibAiExtra; entry.source = 'photo'; }
 
@@ -26989,6 +27034,11 @@ function renderInbodyList() {
       try {
         await saveInbodyDoc();
         renderInbodyList();
+        if (entry.hasImage) {
+          const owner = progressTargetEmail;
+          delete ibScanCache[owner + '/' + entry.id];
+          deleteDoc(doc(db, 'inbody', owner, 'scans', entry.id)).catch(function () {});
+        }
       } catch (error) {
         inbodyEntries = backup;
         ibMessage.textContent = t('problem') + error.message;
@@ -27004,6 +27054,20 @@ function renderInbodyList() {
       thumb.alt = '';
       thumb.addEventListener('click', function () {
         openPreview({ name: entry.date, imageUrl: entry.imageUrl });
+      });
+      item.appendChild(thumb);
+    } else if (entry.hasImage) {
+      /* الصورة في مستندها — بتتحمل بعد ما الكارت يظهر */
+      const thumb = document.createElement('img');
+      thumb.className = 'lib-thumb ib-scan-lazy';
+      thumb.alt = '';
+      thumb.dataset.scan = entry.id;
+      const owner = progressTargetEmail;
+      ibLoadScan(owner, entry.id).then(function (url) {
+        if (url) thumb.src = url; else thumb.remove();
+      });
+      thumb.addEventListener('click', function () {
+        if (thumb.src) openPreview({ name: entry.date, imageUrl: thumb.src });
       });
       item.appendChild(thumb);
     }
