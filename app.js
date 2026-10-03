@@ -6942,6 +6942,7 @@ async function routeUser(user) {
 
   const email = user.email.toLowerCase();
   startNotifListener(email);
+  upsertUserRegistry(user);
 
   let providerDoc = null;
   try {
@@ -7195,11 +7196,12 @@ async function loadClients() {
   clientsList.innerHTML = '';
   clientsMessage.textContent = t('loading');
   try {
-    const snapshot = await getDocs(collection(db, 'clients'));
+    const snapshot = await fetchMyClientDocs();
     /*
      * المدرب يشوف عملاءه، المتخصص يشوف اللي اختاروه في فريقهم،
      * والفريق الإداري يشوف الكل — نفس المنطق المستخدم في لوحة الالتزام
      */
+    if (isFullAdminAccount()) backfillTeamEmails(snapshot.docs).catch(function () {});
     const mine = filterMyClients(snapshot.docs);
 
     // خانة البحث مالهاش لازمة لو مفيش عملاء أصلاً
@@ -7363,7 +7365,7 @@ async function loadAdherence() {
   message.textContent = t('loading');
 
   try {
-    const snapshot = await getDocs(collection(db, 'clients'));
+    const snapshot = await fetchMyClientDocs();
     const mine = filterMyClients(snapshot.docs);
 
     if (!mine.length) {
@@ -11883,7 +11885,7 @@ async function sqFillNewForm() {
   const pick = document.getElementById('sq-members-pick');
   pick.innerHTML = '';
   try {
-    const snap = await getDocs(collection(db, 'clients'));
+    const snap = await fetchMyClientDocs();
     filterMyClients(snap.docs).forEach(function (d) {
       const lab = document.createElement('label');
       lab.className = 'sq-pick-row';
@@ -12497,7 +12499,7 @@ function renderSquadPlayers(pane) {
   addBox.addEventListener('toggle', async function () {
     if (!addBox.open || pick.childNodes.length) return;
     try {
-      const snap = await getDocs(collection(db, 'clients'));
+      const snap = await fetchMyClientDocs();
       filterMyClients(snap.docs).filter(function (d) { return (sq.members || []).indexOf(d.id.toLowerCase()) === -1; }).forEach(function (d) {
         const lab = document.createElement('label');
         lab.className = 'sq-pick-row';
@@ -16861,7 +16863,7 @@ document.getElementById('class-detail-back').addEventListener('click', function 
 
 async function loadClientsCache() {
   try {
-    const snapshot = await getDocs(collection(db, 'clients'));
+    const snapshot = await fetchMyClientDocs();
     clientsCache = snapshot.docs.map(function (item) {
       return { email: item.id, name: item.data().name || item.id };
     });
@@ -23372,7 +23374,7 @@ async function chatInboxRowsCoach() {
   const rows = [];
   let clientDocs = [];
   try {
-    const cl = await getDocs(collection(db, 'clients'));
+    const cl = await fetchMyClientDocs();
     clientDocs = filterMyClients(cl.docs);
   } catch (error) { clientDocs = []; }
   const info = {};
@@ -25580,6 +25582,7 @@ document.getElementById('team-save-btn').addEventListener('click', async functio
   try {
     const payload = {
       team: selectedTeam,
+      teamEmails: teamListOf(selectedTeam),
       coachEmail: selectedTeam.coach || ''
     };
     if (teamEditMode === 'onboarding') payload.onboarded = true;
@@ -39193,5 +39196,63 @@ async function backfillProviderPublic(list) {
   }
   for (const id in existing) {
     if (!live[id]) { try { await deleteDoc(doc(db, 'providerPublic', id)); } catch (error) { /* عادي */ } }
+  }
+}
+
+/* ============================================================
+   المرحلة ٢ — الهوية والاستعلامات
+   • users/{uid}: سجل لكل حساب (الـ UID هو الهوية الثابتة، والإيميل
+     معلومة). مابيتستخدمش في الصلاحيات لسه — أساس النقل التدريجي.
+   • teamEmails: نسخة "قابلة للبحث" من فريق العميل (team كان map
+     مينفعش يتعمل عليه استعلام) — عشان كل متخصص يجيب عملاءه بس بدل
+     ما يحمّل كل العملاء ويفلتر على جهازه.
+   ============================================================ */
+function upsertUserRegistry(user) {
+  try {
+    if (!user || !user.uid || !user.email) return;
+    const key = 'adam-reg:' + user.uid;
+    let last = '';
+    try { last = localStorage.getItem(key) || ''; } catch (e) { last = ''; }
+    if (last === todayStamp) return;          /* مرة في اليوم كفاية */
+    setDoc(doc(db, 'users', user.uid), {
+      uid: user.uid,
+      email: String(user.email),
+      emailVerified: !!user.emailVerified,
+      lastLoginAt: new Date().toISOString()
+    }, { merge: true }).then(function () {
+      try { localStorage.setItem(key, todayStamp); } catch (e) { /* عادي */ }
+    }).catch(function () { /* مش هيوقف الدخول */ });
+  } catch (error) { /* عادي */ }
+}
+
+function teamListOf(team) {
+  const out = [];
+  Object.keys(team || {}).forEach(function (k) {
+    const v = String((team || {})[k] || '').toLowerCase().trim();
+    if (v && out.indexOf(v) === -1) out.push(v);
+  });
+  return out.sort();
+}
+
+/* عملائي أنا بس: الإدارة = الكل، المدرب = coachEmail، المتخصص = teamEmails.
+   لو المتخصص مالقاش حد (لسه الإدارة مافتحتش البرنامج بعد التحديث وتكمّل
+   teamEmails للعملاء القدام) بنرجع للطريقة القديمة مؤقتًا عشان محدش يتوه */
+async function fetchMyClientDocs() {
+  const me = currentProviderEmail;
+  if (isFullAdminAccount() || !me) return getDocs(collection(db, 'clients'));
+  if (isFullCoachRole()) return getDocs(query(collection(db, 'clients'), where('coachEmail', '==', me)));
+  const snap = await getDocs(query(collection(db, 'clients'), where('teamEmails', 'array-contains', me)));
+  if (snap.docs.length) return snap;
+  return getDocs(collection(db, 'clients'));
+}
+
+async function backfillTeamEmails(docs) {
+  for (let i = 0; i < docs.length; i++) {
+    const d = docs[i].data() || {};
+    if (!d.team) continue;
+    const want = teamListOf(d.team);
+    const have = Array.isArray(d.teamEmails) ? d.teamEmails.slice().sort() : null;
+    if (have && JSON.stringify(have) === JSON.stringify(want)) continue;
+    try { await updateDoc(doc(db, 'clients', docs[i].id), { teamEmails: want }); } catch (error) { /* نكمّل */ }
   }
 }
