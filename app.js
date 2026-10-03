@@ -32604,7 +32604,7 @@ async function engDrawCard(kind) {
   ctx.fillText(t('eng_card_join'), 540, 1700);
   ctx.font = '400 36px Cairo, sans-serif';
   ctx.direction = 'ltr';
-  ctx.fillText('dradamcoach.github.io/adam', 540, 1755);
+  ctx.fillText('adamxfit.com', 540, 1755);
   return canvas;
 }
 
@@ -32630,7 +32630,7 @@ async function engShare(kind) {
   const blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/png'); });
   if (!blob) return;
   const file = new File([blob], 'adam-' + todayStamp + '.png', { type: 'image/png' });
-  const text = t('eng_card_join') + ' — https://dradamcoach.github.io/adam/';
+  const text = t('eng_card_join') + ' — https://adamxfit.com/';
   try {
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], text: text });
@@ -33383,7 +33383,7 @@ function renderSocRank(body) {
 }
 
 function socInviteLink() {
-  return 'https://dradamcoach.github.io/adam/?friend=' + encodeURIComponent(socMyCode);
+  return 'https://adamxfit.com/?friend=' + encodeURIComponent(socMyCode);
 }
 
 function renderSocAdd(body, msg) {
