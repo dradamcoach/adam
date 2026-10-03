@@ -7879,7 +7879,10 @@ document.getElementById('add-client-btn').addEventListener('click', async functi
   clientsMessage.textContent = t('adding');
   try {
     /* لو العميل موجود أصلًا مانكتبش فوق بياناته (كانت بتتمسح كلها) */
-    const existingClient = await getDoc(doc(db, 'clients', email)).catch(function () { return null; });
+    /* لو القواعد رفضت القراية يبقى العميل موجود ومتابع مع حد تاني */
+    const existingClient = await getDoc(doc(db, 'clients', email)).catch(function (error) {
+      return (error && error.code === 'permission-denied') ? { exists: function () { return true; } } : null;
+    });
     if (existingClient && existingClient.exists()) {
       clientsMessage.textContent = t('client_already_exists');
       return;
@@ -8808,8 +8811,9 @@ async function openCoachScreen(email, name, sport) {
     coachHealth = await loadHealthFor(email);
     renderCoachHealth();
 
-    const basicsDoc = await getDoc(doc(db, 'clients', email));
-    coachBasicsData = basicsDoc.exists() ? basicsDoc.data() : null;
+    /* لو العميل مش متابع معاك القواعد بترفض — الشاشة تكمل من غير البيانات الأساسية */
+    const basicsDoc = await getDoc(doc(db, 'clients', email)).catch(function () { return null; });
+    coachBasicsData = (basicsDoc && basicsDoc.exists()) ? basicsDoc.data() : null;
     renderCoachBasics();
 
     coachDay = todayIndex;
@@ -28180,7 +28184,11 @@ async function loadLeadsAdmin() {
       acceptBtn.addEventListener('click', async function () {
         rowMessage.textContent = t('saving');
         try {
-          const existing = await getDoc(doc(db, 'clients', email));
+          /* رفض القراية = العميل موجود ومتابع مع متخصص تاني */
+          const existing = await getDoc(doc(db, 'clients', email)).catch(function (error) {
+            if (error && error.code === 'permission-denied') return { exists: function () { return true; } };
+            throw error;
+          });
           if (existing.exists()) {
             rowMessage.textContent = t('lead_already_client');
             await updateDoc(doc(db, 'leads', lead.id), { accepted: true, contacted: true });
@@ -39307,7 +39315,8 @@ async function fetchMyClientDocs() {
   if (isFullCoachRole()) return getDocs(query(collection(db, 'clients'), where('coachEmail', '==', me)));
   const snap = await getDocs(query(collection(db, 'clients'), where('teamEmails', 'array-contains', me)));
   if (snap.docs.length) return snap;
-  return getDocs(collection(db, 'clients'));
+  /* القواعد الجديدة مش بتسمح للمتخصص يقرا كل العملاء — يبقى مفيش عملاء ليه لسه */
+  try { return await getDocs(collection(db, 'clients')); } catch (error) { return snap; }
 }
 
 async function backfillTeamEmails(docs) {
