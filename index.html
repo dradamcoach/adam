@@ -293,6 +293,18 @@
     <p class="message" id="plan-msg"></p>
   </div>
 
+  <div class="card hidden" id="hub-screen">
+    <button type="button" id="hub-back-btn" class="link" data-t="back_simple">‹ رجوع</button>
+    <h2 data-t="hub_title">مكتبة الرياضة</h2>
+    <p class="hint-text" data-t="hub_sub">الاختبارات بمعاييرها، الأدوات، القوانين والمقاسات، والجمل والخطط — لكل الرياضات</p>
+    <div class="tabs calc-tabs hub-tabs" id="hub-tabs"></div>
+    <div class="hub-tools" id="hub-tools"></div>
+    <p class="cl-count" id="hub-count"></p>
+    <div class="hub-list" id="hub-list"></div>
+    <button type="button" class="secondary cl-more hidden" id="hub-more"></button>
+    <p class="message" id="hub-msg"></p>
+  </div>
+
   <div class="card hidden wa-card" id="chat-inbox-screen">
     <div class="wa-top">
       <button type="button" id="chat-inbox-back-btn" class="wa-icon-btn" data-t-title="back_simple" aria-label="back"><svg class="ui-icon wa-back-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg></button>
@@ -1127,6 +1139,7 @@
     <button type="button" class="secondary icon-btn hidden" id="open-clearance-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.9-7 9-4.1-1.1-7-4.8-7-9V6z"></path><polyline points="9 12 11 14 15 9.5"></polyline></svg><span data-t="open_clearance_btn">طلبات الإذن الطبي</span><span class="tab-badge hidden" id="clearance-badge"></span></button>
     <button type="button" class="secondary icon-btn" id="open-adherence-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"></path><rect x="5" y="11" width="3.5" height="7" rx="1"></rect><rect x="10.25" y="7" width="3.5" height="11" rx="1"></rect><rect x="15.5" y="14" width="3.5" height="4" rx="1"></rect></svg><span data-t="open_adherence_btn">لوحة الالتزام</span><span class="tab-badge hidden" id="adherence-badge"></span></button>
     <button type="button" class="secondary icon-btn hidden" id="open-squads-btn"><span data-t="sq_title">فرق التمرين</span></button>
+    <button type="button" class="secondary icon-btn hidden" id="open-hub-btn"><span data-t="hub_title">مكتبة الرياضة</span><span class="tab-badge hidden" id="hub-badge"></span></button>
     <button type="button" class="secondary icon-btn" id="open-chat-inbox-btn"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10.5H9l-4 3.5v-3.5H4z"></path><line x1="8" y1="9.5" x2="16" y2="9.5"></line><line x1="8" y1="12.5" x2="13" y2="12.5"></line></svg><span data-t="open_chat_inbox_btn">المحادثات</span></button>
     </div>
 
@@ -2121,6 +2134,15 @@
       <button type="button" class="tab" id="pgtab-appt" data-t="pgtab_appt">المواعيد</button>
       <button type="button" class="tab" id="pgtab-photos" data-t="pgtab_photos">صور التقدم</button>
       <button type="button" class="tab" id="pgtab-watch" data-t="pgtab_watch">الساعة</button>
+      <button type="button" class="tab" id="pgtab-tests" data-t="pgtab_tests">الاختبارات</button>
+    </div>
+
+    <div id="progress-tests" class="hidden">
+      <div class="add-box">
+        <h3 data-t="pt_title">نتايج الاختبارات</h3>
+        <p class="hint-text" data-t="pt_hint">كل اختبار اتعمل والتقدير بتاعه حسب المعايير العالمية لسنك ونوعك</p>
+        <div id="pt-list"></div>
+      </div>
     </div>
 
     <div id="progress-watch" class="hidden">

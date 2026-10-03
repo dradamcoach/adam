@@ -37,6 +37,7 @@ import { MED_LIBRARY_RD, TEMPLATES_MED_RD } from './library/med-rd.js';
 import { MEDIA_EXTRA } from './library/media-extra.js';
 import { STICKERS, stickerSvg, EMOJI_GROUPS } from './library/chat-stickers.js';
 import { PLAN_COMPONENTS, PLAN_PERIOD_TYPES, PLAN_WEEK_TYPES, PLAN_LOAD_LEVELS, PLAN_ITEM_KINDS, PLAN_BASES, PLAN_REST_TYPES, PLAN_WOD_FORMATS, PLAN_STROKES, TRACK_DISTANCES, SWIM_DISTANCES } from './library/plan-defs.js';
+import { TEST_CATEGORIES, TEST_RATINGS, TEST_UNITS, EQUIP_CATEGORIES, TACTIC_KINDS, RULE_SECTIONS } from './library/hub-defs.js';
 
 /* ============================================================
    حارس الكتابة في قاعدة البيانات
@@ -2601,7 +2602,131 @@ const TEXT = {
     approve_payment_btn: 'تأكيد وتفعيل',
     reject_payment_btn: 'رفض',
     payment_approved_msg: 'اتفعّل الاشتراك',
-    payment_rejected_admin_msg: 'اترفض الطلب'
+    payment_rejected_admin_msg: 'اترفض الطلب',
+    hub_title: 'مكتبة الرياضة',
+    hub_sub: 'الاختبارات بمعاييرها، الأدوات، القوانين والمقاسات، والجمل والخطط — لكل الرياضات',
+    hub_tab_tests: 'الاختبارات',
+    hub_tab_equip: 'الأدوات',
+    hub_tab_rules: 'القوانين والمقاسات',
+    hub_tab_tactics: 'الجمل والخطط',
+    hub_tab_approvals: 'مستني موافقتك',
+    hub_add_tests: '+ اختبار جديد',
+    hub_add_equip: '+ أداة جديدة',
+    hub_add_rules: '+ قوانين رياضة',
+    hub_add_tactics: '+ جملة أو خطة',
+    hub_kind_tests: 'اختبار',
+    hub_kind_equip: 'أداة',
+    hub_kind_rules: 'قوانين',
+    hub_kind_tactics: 'جملة / خطة',
+    hub_kind_plan: 'قالب مخطط',
+    hub_all_cats: 'كل الأنواع',
+    hub_all_sports: 'كل الرياضات',
+    hub_search_ph: 'دوّر بالاسم…',
+    hub_count: '{n} عنصر',
+    hub_none: 'مفيش نتايج — جرّب تغيّر الفلتر',
+    hub_more: 'اعرض {n} كمان',
+    hub_has_norms: 'بالمعايير',
+    hub_sections_n: '{n} أقسام',
+    hub_st_mine: 'إضافتك',
+    hub_st_added: 'مضاف',
+    hub_st_pending: 'مستني الموافقة',
+    hub_st_rejected: 'اترفض',
+    hub_added_by: 'أضافه: {name}',
+    hub_measures: 'بيقيس إيه',
+    hub_population: 'مناسب لمين',
+    hub_protocol: 'طريقة الأداء',
+    hub_equipment: 'الأدوات المطلوبة',
+    hub_unit: 'الوحدة',
+    hub_better: 'الأحسن',
+    hub_better_higher: 'الرقم الأعلى أحسن',
+    hub_better_lower: 'الرقم الأقل أحسن',
+    hub_norms: 'المعايير (المسطرة)',
+    hub_no_norms: 'مفيش معايير عالمية منشورة للاختبار ده — قارن اللاعب بنفسه وبزمايله (شوف الملاحظات).',
+    hub_notes: 'ملاحظات وحسابات',
+    hub_source: 'المصدر',
+    hub_use: 'بتتستخدم في إيه',
+    hub_specs: 'المواصفات والمقاسات',
+    hub_safety: 'الأمان',
+    hub_desc: 'الفكرة',
+    hub_when: 'امتى تستخدمها',
+    hub_steps: 'الخطوات',
+    hub_cues: 'نقط تدريبية',
+    hub_record: 'سجّل نتيجة لعميل',
+    hub_pick_client: 'اختار العميل',
+    hub_client: 'العميل',
+    hub_value: 'النتيجة ({unit})',
+    hub_value_ph: 'الرقم بـ {unit}',
+    hub_sex: 'النوع',
+    hub_sex_pick: 'اختار',
+    hub_sex_m: 'ذكر',
+    hub_sex_f: 'أنثى',
+    hub_sex_any: 'الكل',
+    hub_age: 'السن',
+    hub_age_ph: 'بالسنين',
+    hub_date: 'التاريخ',
+    hub_rec_note_ph: 'ملاحظة (اختياري) — مثلا: الأرضية، الجو، المحاولة التانية',
+    hub_rating: 'التقدير',
+    hub_no_group: 'مفيش جدول معايير مناسب للنوع والسن دول',
+    hub_rec_save: 'احفظ النتيجة',
+    hub_rec_need: 'اختار العميل واكتب النتيجة',
+    hub_rec_saved: 'النتيجة اتحفظت ووصلت للعميل',
+    hub_history: 'القياسات اللي فاتت',
+    hub_approve: 'موافقة ونشر',
+    hub_reject: 'رفض',
+    hub_delete: 'مسح',
+    hub_delete_confirm: 'متأكد إنك عاوز تمسح ده؟',
+    hub_approved_msg: 'اتنشر لكل المدربين',
+    hub_rejected_msg: 'اترفض واتبلّغ صاحبه',
+    hub_no_pending: 'مفيش حاجة مستنية موافقتك',
+    hub_sessions: 'التمرينات',
+    hub_sessions_n: '{n} تمرينة',
+    hub_items_n: '{n} تمرين',
+    hub_add_note: 'إضافتك هتظهر ليك على طول، ولباقي المدربين بعد موافقة صاحب المنصة.',
+    hub_add_owner_note: 'إنت صاحب المنصة — الإضافة هتتنشر لكل المدربين على طول.',
+    hub_f_name_ar: 'الاسم بالعربي',
+    hub_f_name_en: 'الاسم بالإنجليزي (اختياري)',
+    hub_f_sport: 'الرياضة',
+    hub_f_cat: 'النوع',
+    hub_f_kind: 'النوع',
+    hub_f_level: 'المستوى',
+    hub_protocol_ph: 'كل خطوة في سطر أو بالشكل ده: 1) ... 2) ...',
+    hub_lines_ph: 'كل حاجة في سطر',
+    hub_source_ph: 'مثلا: ACSM 2021 أو اسم البحث',
+    hub_norms_hint: 'ضيف جدول لكل فئة (رجال/سيدات/سن). اكتب من (يشمل) وإلى (ميشملش) — سيب اللي مالوش لزمة فاضي.',
+    hub_add_norm: '+ جدول معايير',
+    hub_norm_group_ph: 'اسم الفئة — مثلا: رجال ٢٠-٢٩',
+    hub_age_from: 'من سن',
+    hub_age_to: 'لسن',
+    hub_min: 'من',
+    hub_max: 'إلى',
+    hub_norm_default: 'المعايير',
+    hub_rules_hint: 'اكتب كل معلومة في سطر بالشكل ده —  البند: القيمة  (مثلا: طول الملعب: 105 م)',
+    hub_rule_ph: 'البند: القيمة',
+    hub_publish: 'انشر',
+    hub_send_review: 'ابعت للموافقة',
+    hub_published: 'اتنشر لكل المدربين',
+    hub_sent: 'اتبعت لصاحب المنصة يوافق عليه',
+    hub_need_sport: 'اختار الرياضة',
+    hub_need_content: 'اكتب سطر واحد على الأقل',
+    hub_need_name: 'اكتب الاسم',
+    hub_need_protocol: 'اكتب طريقة الأداء',
+    hub_need_steps: 'اكتب الخطوات',
+    plan_save_as_tpl: 'احفظ كقالب',
+    plan_tpl_empty: 'المخطط لسه فاضي — ضيف أسابيع وتمرينات الأول',
+    plan_tpl_name_q: 'اسم القالب:',
+    pgtab_tests: 'الاختبارات',
+    pt_title: 'نتايج الاختبارات',
+    pt_hint: 'كل اختبار اتعمل والتقدير بتاعه حسب المعايير العالمية لسنك ونوعك',
+    pt_empty: 'لسه مفيش اختبارات متسجلة',
+    pt_first: 'أول قياس — القياس الجاي هيبيّن التطور',
+    notif_t_lib_pending: 'إضافة مستنية موافقتك',
+    notif_b_lib_pending: '{name} أضاف «{item}» لمكتبة الرياضة.',
+    notif_t_lib_approved: 'إضافتك اتنشرت',
+    notif_b_lib_approved: '«{name}» بقى متاح لكل المدربين.',
+    notif_t_lib_rejected: 'إضافتك اترفضت',
+    notif_b_lib_rejected: '«{name}» مااتنشرش — كلم صاحب المنصة لو محتاج تفاصيل.',
+    notif_t_test_result: 'نتيجة اختبار جديدة',
+    notif_b_test_result: 'مدربك سجّل نتيجتك في {name} — شوف تقديرك.'
   },
 
   en: {
@@ -5096,7 +5221,131 @@ const TEXT = {
     approve_payment_btn: 'Confirm & activate',
     reject_payment_btn: 'Reject',
     payment_approved_msg: 'Subscription activated',
-    payment_rejected_admin_msg: 'Request rejected'
+    payment_rejected_admin_msg: 'Request rejected',
+    hub_title: 'Sports hub',
+    hub_sub: 'Tests with norms, equipment, rules & dimensions, plays & tactics — for every sport',
+    hub_tab_tests: 'Tests',
+    hub_tab_equip: 'Equipment',
+    hub_tab_rules: 'Rules & dimensions',
+    hub_tab_tactics: 'Plays & tactics',
+    hub_tab_approvals: 'Awaiting approval',
+    hub_add_tests: '+ New test',
+    hub_add_equip: '+ New equipment',
+    hub_add_rules: '+ Sport rules',
+    hub_add_tactics: '+ Play or tactic',
+    hub_kind_tests: 'Test',
+    hub_kind_equip: 'Equipment',
+    hub_kind_rules: 'Rules',
+    hub_kind_tactics: 'Play / tactic',
+    hub_kind_plan: 'Plan template',
+    hub_all_cats: 'All types',
+    hub_all_sports: 'All sports',
+    hub_search_ph: 'Search by name…',
+    hub_count: '{n} items',
+    hub_none: 'No results — try another filter',
+    hub_more: 'Show {n} more',
+    hub_has_norms: 'with norms',
+    hub_sections_n: '{n} sections',
+    hub_st_mine: 'Yours',
+    hub_st_added: 'Added',
+    hub_st_pending: 'Pending approval',
+    hub_st_rejected: 'Rejected',
+    hub_added_by: 'Added by: {name}',
+    hub_measures: 'What it measures',
+    hub_population: 'Suitable for',
+    hub_protocol: 'Protocol',
+    hub_equipment: 'Equipment needed',
+    hub_unit: 'Unit',
+    hub_better: 'Better is',
+    hub_better_higher: 'Higher is better',
+    hub_better_lower: 'Lower is better',
+    hub_norms: 'Norms',
+    hub_no_norms: 'No widely published norms for this test — compare the athlete with themselves and teammates (see notes).',
+    hub_notes: 'Notes & calculations',
+    hub_source: 'Source',
+    hub_use: 'Used for',
+    hub_specs: 'Specs & sizes',
+    hub_safety: 'Safety',
+    hub_desc: 'Idea',
+    hub_when: 'When to use',
+    hub_steps: 'Steps',
+    hub_cues: 'Coaching points',
+    hub_record: 'Record a client result',
+    hub_pick_client: 'Pick a client',
+    hub_client: 'Client',
+    hub_value: 'Result ({unit})',
+    hub_value_ph: 'Value in {unit}',
+    hub_sex: 'Sex',
+    hub_sex_pick: 'Select',
+    hub_sex_m: 'Male',
+    hub_sex_f: 'Female',
+    hub_sex_any: 'Any',
+    hub_age: 'Age',
+    hub_age_ph: 'Years',
+    hub_date: 'Date',
+    hub_rec_note_ph: 'Note (optional) — e.g. surface, weather, second attempt',
+    hub_rating: 'Rating',
+    hub_no_group: 'No norms table fits this sex and age',
+    hub_rec_save: 'Save result',
+    hub_rec_need: 'Pick the client and enter the result',
+    hub_rec_saved: 'Result saved and sent to the client',
+    hub_history: 'Previous results',
+    hub_approve: 'Approve & publish',
+    hub_reject: 'Reject',
+    hub_delete: 'Delete',
+    hub_delete_confirm: 'Delete this item?',
+    hub_approved_msg: 'Published to all coaches',
+    hub_rejected_msg: 'Rejected and the author was notified',
+    hub_no_pending: 'Nothing is waiting for your approval',
+    hub_sessions: 'Sessions',
+    hub_sessions_n: '{n} sessions',
+    hub_items_n: '{n} exercises',
+    hub_add_note: 'You will see your addition right away; other coaches see it after the owner approves.',
+    hub_add_owner_note: 'You are the owner — this will be published to all coaches right away.',
+    hub_f_name_ar: 'Arabic name',
+    hub_f_name_en: 'English name (optional)',
+    hub_f_sport: 'Sport',
+    hub_f_cat: 'Type',
+    hub_f_kind: 'Type',
+    hub_f_level: 'Level',
+    hub_protocol_ph: 'One step per line, or like: 1) ... 2) ...',
+    hub_lines_ph: 'One item per line',
+    hub_source_ph: 'e.g. ACSM 2021 or the study name',
+    hub_norms_hint: 'Add one table per group (men/women/age). Enter from (inclusive) and to (exclusive) — leave unused cells empty.',
+    hub_add_norm: '+ Norms table',
+    hub_norm_group_ph: 'Group name — e.g. Men 20-29',
+    hub_age_from: 'Age from',
+    hub_age_to: 'Age to',
+    hub_min: 'From',
+    hub_max: 'To',
+    hub_norm_default: 'Norms',
+    hub_rules_hint: 'One fact per line, like —  Item: value  (e.g. Pitch length: 105 m)',
+    hub_rule_ph: 'Item: value',
+    hub_publish: 'Publish',
+    hub_send_review: 'Send for approval',
+    hub_published: 'Published to all coaches',
+    hub_sent: 'Sent to the owner for approval',
+    hub_need_sport: 'Pick the sport',
+    hub_need_content: 'Write at least one line',
+    hub_need_name: 'Enter the name',
+    hub_need_protocol: 'Write the protocol',
+    hub_need_steps: 'Write the steps',
+    plan_save_as_tpl: 'Save as template',
+    plan_tpl_empty: 'The plan is still empty — add weeks and sessions first',
+    plan_tpl_name_q: 'Template name:',
+    pgtab_tests: 'Tests',
+    pt_title: 'Test results',
+    pt_hint: 'Every test taken, rated against international norms for your age and sex',
+    pt_empty: 'No tests recorded yet',
+    pt_first: 'First measurement — the next one will show progress',
+    notif_t_lib_pending: 'An addition awaits your approval',
+    notif_b_lib_pending: '{name} added "{item}" to the sports hub.',
+    notif_t_lib_approved: 'Your addition was published',
+    notif_b_lib_approved: '"{name}" is now available to all coaches.',
+    notif_t_lib_rejected: 'Your addition was rejected',
+    notif_b_lib_rejected: '"{name}" was not published — contact the owner for details.',
+    notif_t_test_result: 'New test result',
+    notif_b_test_result: 'Your coach recorded your {name} result — see your rating.'
   }
 };
 
@@ -6402,7 +6651,7 @@ function showScreen(screen) {
   [welcomeScreen, trialEndedScreen, loginScreen, signupScreen, onboardingScreen, teamScreen, injuryScreen, teamViewScreen, medLibraryScreen, bookingsScreen, clientsScreen, clearanceScreen, adherenceScreen, classesScreen, classDetailScreen, providersScreen, providerHomeScreen, coachScreen, libraryScreen, mylibScreen, foodScreen, supplementsScreen, clientScreen, clientProfileScreen, subscriptionScreen, providerSubscriptionScreen, adminPanelScreen, chatScreen, chatInboxScreen, calculatorsScreen, progressScreen,
    // بالـ id مش بمتغيّر — showScreen بتشتغل قبل ما تعريفاتهم توصل
    document.getElementById('verify-screen'), document.getElementById('notif-screen'),
-   document.getElementById('squads-screen'), document.getElementById('squad-screen'), document.getElementById('plan-screen')].forEach(function (s) {
+   document.getElementById('squads-screen'), document.getElementById('squad-screen'), document.getElementById('plan-screen'), document.getElementById('hub-screen')].forEach(function (s) {
     if (s) s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
@@ -6915,6 +7164,8 @@ async function loadClients() {
   /* فرق التمرين للمدربين والإدارة */
   /* الفرق لكل المتخصصين: المدرب بيعمل فرق، والباقي بيشوفوا الفرق اللي هما في جهازها الفني */
   document.getElementById('open-squads-btn').classList.remove('hidden');
+  document.getElementById('open-hub-btn').classList.remove('hidden');
+  if (isFullAdminAccount()) hubLoadCustom().then(renderCoachTiles).catch(function () {});
   openProviderSubscriptionBtn.classList.toggle('hidden', isFullAdminAccount());
   refreshProviderSubBanner();
   if (isFullAdminAccount()) { refreshLeadsBadge(); refreshPendingSpecsBadge(); }
@@ -6970,6 +7221,8 @@ async function loadClients() {
         email: clientDoc.id,
         name: data.name || clientDoc.id,
         sport: data.sport || '',
+        gender: data.gender || '',
+        dob: data.dob || null,
         injury: injuryCounts[clientDoc.id] || 0,
         createdAt: String(data.createdAt || data.trialStartedAt || '')
       };
@@ -7468,6 +7721,7 @@ const COACH_TILES = [
   { key: 'adherence', icon: 'progress',  labelKey: 'open_adherence_btn',        btn: 'open-adherence-btn',  badge: 'adherence-badge' },
   { key: 'chats',     icon: 'chat',      labelKey: 'open_chat_inbox_btn',       btn: 'open-chat-inbox-btn' },
   { key: 'squads',    icon: 'team',      labelKey: 'sq_title',                  btn: 'open-squads-btn' },
+  { key: 'hub',       icon: 'medlib',    labelKey: 'hub_title',                 btn: 'open-hub-btn',        badge: 'hub-badge' },
   { key: 'clearance', icon: 'shield',    labelKey: 'open_clearance_btn',        btn: 'open-clearance-btn',  badge: 'clearance-badge' },
   { key: 'bookings',  icon: 'classes',   labelKey: 'open_bookings_btn',         btn: 'open-bookings-btn' },
   { key: 'myprofile', icon: 'profile',   labelKey: 'open_my_profile_btn',       btn: 'open-my-profile-btn' },
@@ -11674,7 +11928,7 @@ async function openSquad(id, returnScreen) {
   squadPlan = await planFetch(planDocId('squad', id));
   /* لاعبين جداد اتضافوا؟ نحدّث مين يقدر يشوف المخطط */
   if (squadPlan && sqIsLead(sq) && JSON.stringify((squadPlan.viewers || []).slice().sort()) !== JSON.stringify((sq.members || []).slice().sort())) {
-    setDoc(doc(db, 'plans', planDocId('squad', id)), { viewers: sq.members || [] }, { merge: true }).catch(function () {});
+    setDoc(doc(db, 'seasonPlans', planDocId('squad', id)), { viewers: sq.members || [] }, { merge: true }).catch(function () {});
   }
   showScreen(sqScreen());
   sqStartLive();
@@ -22092,7 +22346,8 @@ async function fetchPlans() {
     const snapshot = await getDocs(collection(db, 'plans'));
     cachedPlans = snapshot.docs
       .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
-      .filter(function (plan) { return plan.active !== false; })
+      /* مخطط موسمي اتحفظ هنا بالغلط في نسخة قديمة — مش باقة اشتراك */
+      .filter(function (plan) { return plan.active !== false && !plan.ownerKind; })
       .sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
   } catch (error) {
     cachedPlans = [];
@@ -23944,6 +24199,7 @@ async function fetchAllPlansForAdmin() {
     const snapshot = await getDocs(collection(db, 'plans'));
     return snapshot.docs
       .map(function (item) { return Object.assign({ id: item.id }, item.data()); })
+      .filter(function (plan) { return !plan.ownerKind; })
       .sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
   } catch (error) {
     return [];
@@ -26403,14 +26659,16 @@ const PROGRESS_PANELS = {
   checkins: document.getElementById('progress-checkins'),
   appt: document.getElementById('progress-appt'),
   photos: document.getElementById('progress-photos'),
-  watch: document.getElementById('progress-watch')
+  watch: document.getElementById('progress-watch'),
+  tests: document.getElementById('progress-tests')
 };
 const PROGRESS_TABS = {
   inbody: document.getElementById('pgtab-inbody'),
   checkins: document.getElementById('pgtab-checkins'),
   appt: document.getElementById('pgtab-appt'),
   photos: document.getElementById('pgtab-photos'),
-  watch: document.getElementById('pgtab-watch')
+  watch: document.getElementById('pgtab-watch'),
+  tests: document.getElementById('pgtab-tests')
 };
 
 function showProgressTab(key) {
@@ -26556,6 +26814,7 @@ async function loadProgressData() {
   renderCheckinList();
   loadProgressPhotos();
   loadWearables();
+  loadTestResults(progressTargetEmail);
 }
 
 async function saveInbodyDoc() {
@@ -28487,7 +28746,8 @@ var NOTIF_ICONS = {
   injury_new: 'injury', injury_status: 'injury',
   booking_new: 'classes', booking_status: 'classes',
   team_joined: 'team',
-  squad_joined: 'team', squad_session: 'training', squad_staff: 'team', squad_note: 'chat', squad_suggest: 'consult', squad_decided: 'consult'
+  squad_joined: 'team', squad_session: 'training', squad_staff: 'team', squad_note: 'chat', squad_suggest: 'consult', squad_decided: 'consult',
+  lib_pending: 'medlib', lib_approved: 'medlib', lib_rejected: 'medlib', test_result: 'progress'
 };
 
 function notifAgo(iso) {
@@ -28574,6 +28834,7 @@ function goToNotifTarget(item) {
       if (target === 'chat' && item.about) { openChatTeam(item.about, chatInboxScreen, item.aboutName); return; }
       if (target === 'chat_dm' && item.about) { openChatDm(item.about, currentProviderEmail, chatInboxScreen, { name: item.aboutName || clientNameOf(item.about) }); return; }
       if (target === 'squad' && item.about) { openSquad(item.about, clientsScreen); return; }
+      if (target === 'hub') { openHub(item.about === 'approvals' && isFullAdminAccount() ? 'approvals' : null, clientsScreen); return; }
       if (target === 'bookings') { document.getElementById('open-bookings-btn').click(); return; }
       if (target === 'rewards_admin' && isFullAdminAccount()) { document.getElementById('open-admin-panel-btn').click(); showAdminSection('rewards_admin_title'); return; }
       if (target === 'social_admin' && isFullAdminAccount()) { document.getElementById('open-admin-panel-btn').click(); showAdminSection('social_admin_title'); loadSocialAdmin(); return; }
@@ -28592,6 +28853,7 @@ function goToNotifTarget(item) {
     goClientMode('home');
     if (target === 'friends') { socTab = 'friends'; socLoad().then(openSocSheet); }
     if (target === 'inbody') { openProgress(clientEmail, clientScreen, false); return; }
+    if (target === 'tests') { openProgress(clientEmail, clientScreen, false).then(function () { showProgressTab('tests'); }); return; }
     if (target === 'challenges') { chalInit().then(openChalSheet); }
     if (target === 'rewards') { chalInit().then(openPtsSheet); }
   } catch (error) {
@@ -36781,7 +37043,8 @@ function planFromTemplate(tpl, start) {
             let type = (b.weekTypes && b.weekTypes[i]) || '';
             if (!type) type = (prev && load <= prev - 2) ? 'deload' : 'load';
             prev = load;
-            return { load: load, type: type, note: '', days: (b.pattern || []).slice(0, 7) };
+            const days = (b.weekDays && b.weekDays[i]) ? b.weekDays[i] : (b.pattern || []);
+            return { load: load, type: type, note: '', days: days.slice(0, 7) };
           })
         };
       })
@@ -36919,7 +37182,7 @@ function planDocId(kind, id) {
 
 async function planFetch(docId) {
   try {
-    const snap = await getDoc(doc(db, 'plans', docId));
+    const snap = await getDoc(doc(db, 'seasonPlans', docId));
     return snap.exists() ? snap.data() : null;
   } catch (error) { return null; }
 }
@@ -36940,7 +37203,7 @@ async function planSave() {
   msg.className = 'message';
   msg.textContent = t('saving');
   try {
-    await setDoc(doc(db, 'plans', planCtx.docId), body);
+    await setDoc(doc(db, 'seasonPlans', planCtx.docId), body);
     planDirty = false;
     setStatusMessage(msg, t('plan_saved'), 'success');
     paintPlanSaveBar();
@@ -37110,7 +37373,11 @@ function renderPlan() {
     save.type = 'button';
     save.id = 'plan-save-btn';
     save.addEventListener('click', planSave);
-    bar.append(tplBtn, planEl('span', 'plan-save-state'), save);
+    const asTpl = planEl('button', 'secondary', t('plan_save_as_tpl'));
+    asTpl.type = 'button';
+    asTpl.id = 'plan-as-tpl-btn';
+    asTpl.addEventListener('click', planSaveAsTemplate);
+    bar.append(tplBtn, asTpl, planEl('span', 'plan-save-state'), save);
     body.appendChild(bar);
     paintPlanSaveBar();
   }
@@ -37696,7 +37963,9 @@ function planAddLibItem(built) {
 async function openPlanTemplates() {
   const body = planSheetOpen(t('plan_templates_title'));
   body.appendChild(planEl('p', 'hint-text', t('loading')));
-  const all = await planLoadTemplates();
+  const base = await planLoadTemplates();
+  const custom = await planCustomTemplates();
+  const all = custom.concat(base);
   body.innerHTML = '';
   const search = document.createElement('input');
   search.placeholder = t('plan_tpl_search');
@@ -37715,17 +37984,21 @@ async function openPlanTemplates() {
     });
     if (!rows.length) list.appendChild(planEl('p', 'hint-text', t('plan_tpl_none')));
     rows.forEach(function (tp) {
-      const weeks = (tp.periods || []).reduce(function (s, p) { return s + p.blocks.reduce(function (x, b) { return x + b.loads.length; }, 0); }, 0);
+      const weeks = hubTplWeeks(tp);
       const c = planEl('div', 'plan-tpl');
       c.setAttribute('data-id', tp.id);
       c.appendChild(planEl('strong', '', pv(tp.title)));
+      if (tp._custom) {
+        const st = hubStatusChip(tp._custom);
+        if (st) c.appendChild(st);
+      }
       c.appendChild(planEl('span', 'plan-tpl-meta', [sportName(tp.sport), t('plan_lv_' + tp.level), fill('plan_weeks_n', { n: weeks }), fill('plan_per_week', { n: tp.sessionsPerWeek })].join(' · ')));
       c.appendChild(planEl('p', 'plan-tpl-goal', pv(tp.goal)));
       const ph = planEl('div', 'plan-tpl-phases');
       (tp.periods || []).forEach(function (p) {
-        const w = p.blocks.reduce(function (x, b) { return x + b.loads.length; }, 0);
+        const w = (p.blocks || []).reduce(function (x, b) { return x + (b.loads || []).length; }, 0);
         const seg = planEl('span', '', planPeriodType(p.type)[lang]);
-        seg.style.flex = String(w);
+        seg.style.flex = String(w || 1);
         seg.style.background = planPeriodType(p.type).color;
         ph.appendChild(seg);
       });
@@ -37854,3 +38127,991 @@ document.getElementById('open-plan-coach-btn').addEventListener('click', functio
   saveCurrentDay();
   openPlan({ kind: 'client', id: currentClient, name: currentClientName, lead: true, viewers: [currentClient], returnScreen: coachScreen, sport: currentClientSport || '' });
 });
+
+/* ============================================================
+   مكتبة الرياضة — الاختبارات بمعاييرها، الأدوات، القوانين
+   والمقاسات، والجمل والخطط. المحتوى الأساسي في ملفات library/
+   وبيتحمّل لما حد يفتح المكتبة بس. أي مدرب يقدر يضيف (اختبار،
+   أداة، قوانين، جملة، أو قالب مخطط موسمي) — بيتحفظ في customLib
+   ومبيظهرش لباقي المدربين غير بعد موافقة صاحب المنصة.
+   ============================================================ */
+
+var HUB = null;
+var hubCustom = [];
+var hubTab = 'tests';
+var hubPage = 1;
+var hubReturn = null;
+var hubFilter = { sport: '', q: '', cat: '' };
+const HUB_PAGE = 25;
+const HUB_KINDS = ['tests', 'equip', 'rules', 'tactics'];
+const HUB_FILES = {
+  tests: ['tests-general', 'tests-general-b', 'tests-sport'],
+  equip: ['equipment'],
+  rules: ['sport-rules', 'sport-rules-b', 'sport-rules-c'],
+  tactics: ['tactics', 'tactics-b']
+};
+
+async function hubLoad() {
+  if (HUB) return HUB;
+  const out = {};
+  await Promise.all(HUB_KINDS.map(async function (kind) {
+    const mods = await Promise.all(HUB_FILES[kind].map(function (n) {
+      return import('./library/' + n + '.js').catch(function () { return {}; });
+    }));
+    out[kind] = [];
+    mods.forEach(function (m) {
+      Object.keys(m).forEach(function (k) { if (Array.isArray(m[k])) out[kind] = out[kind].concat(m[k]); });
+    });
+  }));
+  HUB = out;
+  return HUB;
+}
+
+function hubIsOwner() { return isFullAdminAccount(); }
+
+/* الإضافات: صاحب المنصة بيشوف الكل، المدرب بيشوف المعتمد + بتاعه */
+async function hubLoadCustom() {
+  const me = currentProviderEmail;
+  const seen = {};
+  const out = [];
+  const add = function (snap) {
+    snap.docs.forEach(function (d) {
+      if (seen[d.id]) return;
+      seen[d.id] = 1;
+      out.push(Object.assign({ _id: d.id }, d.data()));
+    });
+  };
+  try {
+    if (hubIsOwner()) add(await getDocs(collection(db, 'customLib')));
+    else {
+      add(await getDocs(query(collection(db, 'customLib'), where('status', '==', 'approved'))));
+      if (me) add(await getDocs(query(collection(db, 'customLib'), where('author', '==', me))));
+    }
+  } catch (error) { /* المكتبة الأساسية تكفي */ }
+  out.sort(function (a, b) { return String(b.createdAt || '').localeCompare(String(a.createdAt || '')); });
+  hubCustom = out;
+  hubPaintBadge();
+  return out;
+}
+
+function hubPending() {
+  return hubCustom.filter(function (c) { return c.status === 'pending'; });
+}
+
+function hubPaintBadge() {
+  const b = document.getElementById('hub-badge');
+  if (!b) return;
+  const n = hubIsOwner() ? hubPending().length : 0;
+  b.textContent = n ? String(n) : '';
+  b.classList.toggle('hidden', !n);
+}
+
+/* العنصر المخصص بيتحوّل لنفس شكل عنصر المكتبة + معلومات صاحبه */
+function hubCustomEntry(c) {
+  return Object.assign({}, c.data || {}, { id: 'cu_' + c._id, _custom: c });
+}
+
+function hubItems(kind) {
+  const base = (HUB && HUB[kind]) || [];
+  const me = currentProviderEmail;
+  const mine = hubCustom.filter(function (c) {
+    if (c.kind !== kind) return false;
+    return c.status === 'approved' || c.author === me;
+  }).map(hubCustomEntry);
+  return mine.concat(base);
+}
+
+function hubName(item) {
+  if (item.sport && !item.name) return sportName(item.sport);
+  return pv(item.name);
+}
+
+function hubText(item) {
+  const n = item.name || {};
+  return [pv(n), n.en || '', n.ar || '', item.sport ? sportName(item.sport) : '', (item.sports || []).map(sportName).join(' ')].join(' ').toLowerCase();
+}
+
+function hubCatList(kind) {
+  if (kind === 'tests') return TEST_CATEGORIES;
+  if (kind === 'equip') return EQUIP_CATEGORIES;
+  if (kind === 'tactics') return TACTIC_KINDS;
+  return [];
+}
+function hubCatOf(kind, item) {
+  if (kind === 'tactics') return item.kind;
+  return item.category;
+}
+function hubCatName(kind, id) {
+  const c = planDef(hubCatList(kind), id);
+  return c ? c[lang] : (id || '');
+}
+
+function hubFiltered() {
+  const kind = hubTab;
+  const q = hubFilter.q.trim().toLowerCase();
+  return hubItems(kind).filter(function (it) {
+    if (hubFilter.sport) {
+      if (it.sport !== undefined && !it.sports) { if (it.sport !== hubFilter.sport) return false; }
+      else {
+        const sp = it.sports || [];
+        if (sp.indexOf(hubFilter.sport) === -1 && sp.indexOf('all') === -1) return false;
+      }
+    }
+    if (hubFilter.cat && hubCatOf(kind, it) !== hubFilter.cat) return false;
+    if (q && hubText(it).indexOf(q) === -1) return false;
+    return true;
+  });
+}
+
+async function openHub(tab, returnScreen) {
+  hubReturn = returnScreen || clientsScreen;
+  if (tab) hubTab = tab;
+  hubPage = 1;
+  const msg = document.getElementById('hub-msg');
+  msg.className = 'message';
+  msg.textContent = t('loading');
+  document.getElementById('hub-list').innerHTML = '';
+  showScreen(document.getElementById('hub-screen'));
+  await Promise.all([hubLoad(), hubLoadCustom()]);
+  msg.textContent = '';
+  renderHub();
+}
+
+document.getElementById('open-hub-btn').addEventListener('click', function () { openHub(null, clientsScreen); });
+document.getElementById('hub-back-btn').addEventListener('click', function () {
+  navBack(function () { showScreen(hubReturn || clientsScreen); });
+});
+
+function renderHub() {
+  const tabs = document.getElementById('hub-tabs');
+  tabs.innerHTML = '';
+  const keys = HUB_KINDS.slice();
+  if (hubIsOwner()) keys.push('approvals');
+  keys.forEach(function (k) {
+    const b = planEl('button', 'tab' + (hubTab === k ? ' active' : ''), t('hub_tab_' + k));
+    b.type = 'button';
+    b.setAttribute('data-tab', k);
+    if (k === 'approvals' && hubPending().length) b.appendChild(planEl('span', 'tab-badge', String(hubPending().length)));
+    b.addEventListener('click', function () {
+      hubTab = k;
+      hubPage = 1;
+      hubFilter.cat = '';
+      renderHub();
+    });
+    tabs.appendChild(b);
+  });
+  renderHubTools();
+  renderHubList();
+}
+
+function renderHubTools() {
+  const box = document.getElementById('hub-tools');
+  box.innerHTML = '';
+  if (hubTab === 'approvals') return;
+  const sportSel = document.createElement('select');
+  sportSel.id = 'hub-sport';
+  fillSportSelect(sportSel, true);
+  const any = sportSel.querySelector('option[value=""]');
+  if (any) any.textContent = t('hub_all_sports');
+  sportSel.value = hubFilter.sport;
+  sportSel.addEventListener('change', function () { hubFilter.sport = sportSel.value; hubPage = 1; renderHubList(); });
+  box.appendChild(sportSel);
+  const cats = hubCatList(hubTab);
+  if (cats.length) {
+    const catSel = document.createElement('select');
+    catSel.id = 'hub-cat';
+    const o = document.createElement('option');
+    o.value = '';
+    o.textContent = t('hub_all_cats');
+    catSel.appendChild(o);
+    cats.forEach(function (c) {
+      const x = document.createElement('option');
+      x.value = c.id;
+      x.textContent = c[lang];
+      catSel.appendChild(x);
+    });
+    catSel.value = hubFilter.cat;
+    catSel.addEventListener('change', function () { hubFilter.cat = catSel.value; hubPage = 1; renderHubList(); });
+    box.appendChild(catSel);
+  }
+  const search = document.createElement('input');
+  search.type = 'search';
+  search.id = 'hub-search';
+  search.placeholder = t('hub_search_ph');
+  search.value = hubFilter.q;
+  search.addEventListener('input', function () { hubFilter.q = search.value; hubPage = 1; renderHubList(); });
+  box.appendChild(search);
+  const add = planEl('button', 'hub-add', t('hub_add_' + hubTab));
+  add.type = 'button';
+  add.id = 'hub-add-btn';
+  add.addEventListener('click', function () { openHubAdd(hubTab); });
+  box.appendChild(add);
+}
+
+function hubStatusChip(c) {
+  if (!c) return null;
+  if (c.status === 'approved') return planEl('span', 'hub-st ok', c.author === currentProviderEmail ? t('hub_st_mine') : t('hub_st_added'));
+  if (c.status === 'rejected') return planEl('span', 'hub-st no', t('hub_st_rejected'));
+  return planEl('span', 'hub-st wait', t('hub_st_pending'));
+}
+
+function renderHubList() {
+  const list = document.getElementById('hub-list');
+  const more = document.getElementById('hub-more');
+  const count = document.getElementById('hub-count');
+  list.innerHTML = '';
+  if (hubTab === 'approvals') { renderHubApprovals(list); more.classList.add('hidden'); count.textContent = ''; return; }
+  const rows = hubFiltered();
+  count.textContent = fill('hub_count', { n: rows.length });
+  if (!rows.length) list.appendChild(planEl('p', 'hint-text', t('hub_none')));
+  rows.slice(0, hubPage * HUB_PAGE).forEach(function (it) {
+    const card = planEl('button', 'hub-card');
+    card.type = 'button';
+    card.setAttribute('data-id', it.id);
+    const head = planEl('div', 'hub-card-head');
+    head.appendChild(planEl('strong', '', hubName(it)));
+    const st = hubStatusChip(it._custom);
+    if (st) head.appendChild(st);
+    card.appendChild(head);
+    card.appendChild(planEl('span', 'hub-card-meta', hubMeta(hubTab, it)));
+    const sub = hubTab === 'tests' ? pv(it.measures) : (hubTab === 'equip' ? pv(it.use) : (hubTab === 'tactics' ? pv(it.desc) : ''));
+    if (sub) card.appendChild(planEl('span', 'hub-card-sub', sub));
+    card.addEventListener('click', function () { openHubDetail(hubTab, it); });
+    list.appendChild(card);
+  });
+  const left = rows.length - hubPage * HUB_PAGE;
+  more.classList.toggle('hidden', left <= 0);
+  more.textContent = fill('hub_more', { n: Math.min(left, HUB_PAGE) });
+}
+
+document.getElementById('hub-more').addEventListener('click', function () { hubPage++; renderHubList(); });
+
+function hubMeta(kind, it) {
+  const sp = it.sports ? (it.sports.indexOf('all') !== -1 ? t('hub_all_sports') : it.sports.slice(0, 3).map(sportName).join('، ')) : sportName(it.sport);
+  if (kind === 'tests') {
+    const bits = [hubCatName(kind, it.category), sp];
+    if (it.norms && it.norms.length) bits.push(t('hub_has_norms'));
+    return bits.join(' · ');
+  }
+  if (kind === 'equip') return [hubCatName(kind, it.category), sp].join(' · ');
+  if (kind === 'tactics') return [hubCatName(kind, it.kind), sp, t('plan_lv_' + it.level)].join(' · ');
+  if (kind === 'rules') return fill('hub_sections_n', { n: (it.sections || []).length });
+  return sp;
+}
+
+/* ---------- التفاصيل ---------- */
+
+function hubSection(body, title, content) {
+  if (!content) return;
+  const s = planEl('div', 'hub-sec');
+  s.appendChild(planEl('h4', '', title));
+  if (typeof content === 'string') s.appendChild(planEl('p', '', content));
+  else s.appendChild(content);
+  body.appendChild(s);
+}
+
+/* «1) ... 2) ...» بتتحول لخطوات مترقمة */
+function hubSteps(text) {
+  const parts = String(text || '').split(/\s*\d+\)\s+/).map(function (x) { return x.trim(); }).filter(Boolean);
+  if (parts.length < 2) return text ? planEl('p', '', text) : null;
+  const ol = planEl('ol', 'hub-steps');
+  parts.forEach(function (p) { ol.appendChild(planEl('li', '', p)); });
+  return ol;
+}
+
+function hubList(arr, ordered) {
+  if (!arr || !arr.length) return null;
+  const l = planEl(ordered ? 'ol' : 'ul', 'hub-steps');
+  arr.forEach(function (x) { l.appendChild(planEl('li', '', pv(x))); });
+  return l;
+}
+
+function hubRating(id) { return planDef(TEST_RATINGS, id) || { id: id, ar: id, en: id, color: '#93a5bd' }; }
+
+function hubRange(b, unit) {
+  const u = unit ? ' ' + unit : '';
+  if (b.min !== undefined && b.max !== undefined) return b.min + ' – ' + b.max + u;
+  if (b.min !== undefined) return '≥ ' + b.min + u;
+  if (b.max !== undefined) return '< ' + b.max + u;
+  return '—';
+}
+
+function hubNormsTable(test) {
+  const wrap = planEl('div', 'hub-norms');
+  (test.norms || []).forEach(function (g) {
+    const tb = planEl('div', 'hub-norm');
+    tb.appendChild(planEl('div', 'hub-norm-h', pv(g.group)));
+    (g.bands || []).forEach(function (b) {
+      const r = hubRating(b.r);
+      const row = planEl('div', 'hub-band');
+      const chip = planEl('span', 'hub-band-r', r[lang]);
+      chip.style.background = r.color;
+      row.append(chip, planEl('span', 'hub-band-v', hubRange(b, test.unit)));
+      tb.appendChild(row);
+    });
+    wrap.appendChild(tb);
+  });
+  return wrap;
+}
+
+/* أنسب جدول للنوع والسن، وبعدين الشريحة اللي فيها الرقم */
+function hubNormGroup(test, sex, age) {
+  const groups = test.norms || [];
+  const fit = groups.filter(function (g) {
+    if (g.sex && g.sex !== 'any' && sex && g.sex !== sex) return false;
+    if (g.age && age && (age < g.age[0] || age > g.age[1])) return false;
+    return true;
+  });
+  fit.sort(function (a, b) {
+    const sa = (a.sex && a.sex !== 'any' ? 2 : 0) + (a.age ? 1 : 0);
+    const sb = (b.sex && b.sex !== 'any' ? 2 : 0) + (b.age ? 1 : 0);
+    return sb - sa;
+  });
+  return fit[0] || null;
+}
+
+function hubRate(test, value, sex, age) {
+  const v = Number(value);
+  if (value === '' || isNaN(v)) return null;
+  const g = hubNormGroup(test, sex, age);
+  if (!g) return null;
+  const band = (g.bands || []).filter(function (b) {
+    return (b.min === undefined || v >= b.min) && (b.max === undefined || v < b.max);
+  })[0];
+  return band ? { group: g, rating: band.r } : null;
+}
+
+function hubAgeFromDob(dob) {
+  if (!dob || !dob.year) return 0;
+  const now = new Date();
+  let a = now.getFullYear() - Number(dob.year);
+  const m = Number(dob.month) || 1;
+  const d = Number(dob.day) || 1;
+  if (now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d)) a--;
+  return a > 0 && a < 110 ? a : 0;
+}
+
+function openHubDetail(kind, it) {
+  const body = planSheetOpen(hubName(it));
+  const meta = planEl('p', 'hint-text', hubMeta(kind, it));
+  body.appendChild(meta);
+  const c = it._custom;
+  if (c) {
+    const by = planEl('div', 'hub-by');
+    by.appendChild(planEl('span', '', fill('hub_added_by', { name: c.authorName || c.author })));
+    const st = hubStatusChip(c);
+    if (st) by.appendChild(st);
+    body.appendChild(by);
+  }
+  if (kind === 'tests') {
+    hubSection(body, t('hub_measures'), pv(it.measures));
+    hubSection(body, t('hub_population'), pv(it.population));
+    hubSection(body, t('hub_protocol'), hubSteps(pv(it.protocol)));
+    hubSection(body, t('hub_equipment'), hubList(it.equipment));
+    hubSection(body, t('hub_unit'), (it.unit || '—') + ' · ' + t(it.better === 'lower' ? 'hub_better_lower' : 'hub_better_higher'));
+    if (it.norms && it.norms.length) hubSection(body, t('hub_norms'), hubNormsTable(it));
+    else hubSection(body, t('hub_norms'), t('hub_no_norms'));
+    hubSection(body, t('hub_notes'), pv(it.notes));
+    hubSection(body, t('hub_source'), it.source || '');
+    if (currentProviderEmail) {
+      const rec = planEl('button', 'hub-rec-btn', t('hub_record'));
+      rec.type = 'button';
+      rec.id = 'hub-record-btn';
+      rec.addEventListener('click', function () { openHubRecord(it); });
+      body.appendChild(rec);
+    }
+  } else if (kind === 'equip') {
+    hubSection(body, t('hub_use'), pv(it.use));
+    hubSection(body, t('hub_specs'), pv(it.specs));
+    hubSection(body, t('hub_safety'), pv(it.safety));
+  } else if (kind === 'rules') {
+    (it.sections || []).forEach(function (s) {
+      const def = planDef(RULE_SECTIONS, s.id);
+      const tbl = planEl('div', 'hub-rules');
+      (s.items || []).forEach(function (row) {
+        const r = planEl('div', 'hub-rule');
+        r.append(planEl('span', 'hub-rule-l', pv(row.label)), planEl('span', 'hub-rule-v', pv(row.value)));
+        tbl.appendChild(r);
+      });
+      hubSection(body, def ? def[lang] : s.id, tbl);
+    });
+    hubSection(body, t('hub_source'), it.source || '');
+  } else if (kind === 'tactics') {
+    hubSection(body, t('hub_desc'), pv(it.desc));
+    hubSection(body, t('hub_when'), pv(it.when));
+    hubSection(body, t('hub_steps'), hubList(it.steps, true));
+    hubSection(body, t('hub_cues'), hubList(it.cues));
+  }
+  if (c) hubCustomActions(body, c);
+}
+
+/* موافقة / رفض / مسح الإضافة */
+function hubCustomActions(body, c) {
+  const me = currentProviderEmail;
+  const row = planEl('div', 'hub-acts');
+  if (hubIsOwner() && c.status !== 'approved') {
+    const ok = planEl('button', '', t('hub_approve'));
+    ok.type = 'button';
+    ok.className = 'hub-approve';
+    ok.addEventListener('click', function () { hubDecide(c, 'approved'); });
+    row.appendChild(ok);
+  }
+  if (hubIsOwner() && c.status === 'pending') {
+    const no = planEl('button', 'secondary', t('hub_reject'));
+    no.type = 'button';
+    no.addEventListener('click', function () { hubDecide(c, 'rejected'); });
+    row.appendChild(no);
+  }
+  if (hubIsOwner() || (c.author === me && c.status !== 'approved')) {
+    const del = planEl('button', 'link danger-link', t('hub_delete'));
+    del.type = 'button';
+    del.addEventListener('click', async function () {
+      if (!window.confirm(t('hub_delete_confirm'))) return;
+      try {
+        await deleteDoc(doc(db, 'customLib', c._id));
+        hubCustom = hubCustom.filter(function (x) { return x._id !== c._id; });
+        if (typeof PLAN_CUSTOM_CACHE !== 'undefined') PLAN_CUSTOM_CACHE = null;
+        hubPaintBadge();
+        planSheetClose();
+        if (!document.getElementById('hub-screen').classList.contains('hidden')) renderHub();
+      } catch (error) { window.alert(t('problem') + error.message); }
+    });
+    row.appendChild(del);
+  }
+  if (row.children.length) body.appendChild(row);
+}
+
+async function hubDecide(c, status) {
+  try {
+    await updateDoc(doc(db, 'customLib', c._id), { status: status, reviewedBy: currentProviderEmail, reviewedAt: new Date().toISOString() });
+    c.status = status;
+    PLAN_CUSTOM_CACHE = null;
+    notify(c.author, status === 'approved' ? 'lib_approved' : 'lib_rejected', { target: 'hub', params: function () { return { name: pv(c.title) || pv((c.data || {}).name) || '' }; } });
+    hubPaintBadge();
+    planSheetClose();
+    if (!document.getElementById('hub-screen').classList.contains('hidden')) renderHub();
+    setStatusMessage(document.getElementById('hub-msg'), t(status === 'approved' ? 'hub_approved_msg' : 'hub_rejected_msg'), 'success');
+  } catch (error) { window.alert(t('problem') + error.message); }
+}
+
+function renderHubApprovals(list) {
+  const rows = hubCustom.filter(function (c) { return c.status === 'pending'; });
+  if (!rows.length) { list.appendChild(planEl('p', 'hint-text', t('hub_no_pending'))); return; }
+  rows.forEach(function (c) {
+    const card = planEl('button', 'hub-card');
+    card.type = 'button';
+    card.setAttribute('data-cid', c._id);
+    const head = planEl('div', 'hub-card-head');
+    head.appendChild(planEl('strong', '', c.kind === 'plan' ? pv(c.title) : hubName(c.data || {})));
+    head.appendChild(planEl('span', 'hub-st wait', t('hub_kind_' + c.kind)));
+    card.appendChild(head);
+    card.appendChild(planEl('span', 'hub-card-meta', fill('hub_added_by', { name: c.authorName || c.author }) + ' · ' + String(c.createdAt || '').slice(0, 10)));
+    card.addEventListener('click', function () {
+      if (c.kind === 'plan') openHubPlanPreview(c);
+      else openHubDetail(c.kind, hubCustomEntry(c));
+    });
+    list.appendChild(card);
+  });
+}
+
+function hubTplWeeks(tp) {
+  return (tp.periods || []).reduce(function (s, p) { return s + (p.blocks || []).reduce(function (x, b) { return x + (b.loads || []).length; }, 0); }, 0);
+}
+
+function openHubPlanPreview(c) {
+  const tp = c.data || {};
+  const body = planSheetOpen(pv(c.title) || pv(tp.title));
+  body.appendChild(planEl('p', 'hint-text', [sportName(tp.sport), fill('plan_weeks_n', { n: hubTplWeeks(tp) }), fill('hub_sessions_n', { n: Object.keys(tp.sessions || {}).length })].join(' · ')));
+  const by = planEl('div', 'hub-by');
+  by.appendChild(planEl('span', '', fill('hub_added_by', { name: c.authorName || c.author })));
+  body.appendChild(by);
+  hubSection(body, t('plan_f_goal'), pv(tp.goal));
+  const ph = planEl('div', 'plan-tpl-phases');
+  (tp.periods || []).forEach(function (p) {
+    const w = (p.blocks || []).reduce(function (x, b) { return x + (b.loads || []).length; }, 0);
+    const seg = planEl('span', '', planPeriodType(p.type)[lang]);
+    seg.style.flex = String(w || 1);
+    seg.style.background = planPeriodType(p.type).color;
+    ph.appendChild(seg);
+  });
+  body.appendChild(ph);
+  const ses = planEl('ul', 'hub-steps');
+  Object.keys(tp.sessions || {}).forEach(function (k) {
+    const s = tp.sessions[k];
+    ses.appendChild(planEl('li', '', pv(s.title) + ' — ' + fill('hub_items_n', { n: (s.items || []).length })));
+  });
+  hubSection(body, t('hub_sessions'), ses);
+  hubCustomActions(body, c);
+}
+
+/* ---------- تسجيل نتيجة اختبار ---------- */
+
+function openHubRecord(test) {
+  const body = planSheetOpen(t('hub_record') + ' — ' + pv(test.name));
+  const form = planEl('div', 'hub-form');
+  const who = document.createElement('select');
+  who.id = 'hub-rec-client';
+  const o0 = document.createElement('option');
+  o0.value = '';
+  o0.textContent = t('hub_pick_client');
+  who.appendChild(o0);
+  (clientsAll || []).forEach(function (c) {
+    const o = document.createElement('option');
+    o.value = c.email;
+    o.textContent = c.name;
+    who.appendChild(o);
+  });
+  const val = document.createElement('input');
+  val.type = 'number';
+  val.step = 'any';
+  val.id = 'hub-rec-value';
+  val.placeholder = fill('hub_value_ph', { unit: test.unit || '' });
+  const sex = document.createElement('select');
+  sex.id = 'hub-rec-sex';
+  [['', t('hub_sex_pick')], ['m', t('hub_sex_m')], ['f', t('hub_sex_f')]].forEach(function (p) {
+    const o = document.createElement('option');
+    o.value = p[0];
+    o.textContent = p[1];
+    sex.appendChild(o);
+  });
+  const age = document.createElement('input');
+  age.type = 'number';
+  age.id = 'hub-rec-age';
+  age.placeholder = t('hub_age_ph');
+  const date = document.createElement('input');
+  date.type = 'date';
+  date.value = todayStamp;
+  const note = document.createElement('input');
+  note.placeholder = t('hub_rec_note_ph');
+  const out = planEl('div', 'hub-rate');
+  out.id = 'hub-rec-rate';
+  const hist = planEl('div', 'hub-hist');
+  const lbl = function (text, el) { const l = planEl('label', 'plan-field', text); l.appendChild(el); return l; };
+  const paint = function () {
+    out.innerHTML = '';
+    const r = hubRate(test, val.value, sex.value, Number(age.value) || 0);
+    if (!r) { if (val.value !== '' && test.norms && test.norms.length) out.appendChild(planEl('span', 'hint-text', t('hub_no_group'))); return; }
+    const rt = hubRating(r.rating);
+    const chip = planEl('span', 'hub-band-r', rt[lang]);
+    chip.style.background = rt.color;
+    out.append(planEl('span', '', t('hub_rating') + ': '), chip, planEl('span', 'hint-text', ' ' + pv(r.group.group)));
+  };
+  who.addEventListener('change', function () {
+    const c = (clientsAll || []).filter(function (x) { return x.email === who.value; })[0];
+    if (c) {
+      if (c.gender === 'male') sex.value = 'm';
+      else if (c.gender === 'female') sex.value = 'f';
+      const a = hubAgeFromDob(c.dob);
+      if (a) age.value = a;
+    }
+    paint();
+    hubPaintHistory(hist, test, who.value);
+  });
+  [val, sex, age].forEach(function (el) { el.addEventListener('input', paint); el.addEventListener('change', paint); });
+  const g = planEl('div', 'plan-grid2');
+  g.append(lbl(t('hub_sex'), sex), lbl(t('hub_age'), age));
+  const save = planEl('button', '', t('hub_rec_save'));
+  save.type = 'button';
+  save.id = 'hub-rec-save';
+  const msg = planEl('p', 'message');
+  save.addEventListener('click', async function () {
+    if (!who.value || val.value === '') { msg.className = 'message error'; msg.textContent = t('hub_rec_need'); return; }
+    const r = hubRate(test, val.value, sex.value, Number(age.value) || 0);
+    const rec = {
+      testId: test.id, testName: test.name || '', unit: test.unit || '', better: test.better || 'higher',
+      clientEmail: who.value, value: Number(val.value), sex: sex.value, age: Number(age.value) || 0,
+      rating: r ? r.rating : '', group: r ? (r.group.group || '') : '',
+      date: date.value || todayStamp, note: note.value.trim(),
+      by: currentProviderEmail, byName: (currentProviderData && currentProviderData.name) || '',
+      createdAt: new Date().toISOString()
+    };
+    try {
+      await addDoc(collection(db, 'testResults'), rec);
+      notify(who.value, 'test_result', { target: 'tests', params: function () { return { name: pv(test.name) }; } });
+      setStatusMessage(msg, t('hub_rec_saved'), 'success');
+      val.value = '';
+      note.value = '';
+      paint();
+      hubPaintHistory(hist, test, who.value);
+    } catch (error) { msg.className = 'message error'; msg.textContent = t('problem') + error.message; }
+  });
+  form.append(lbl(t('hub_client'), who), lbl(fill('hub_value', { unit: test.unit || '' }), val), g, lbl(t('hub_date'), date), note, out, save, msg, hist);
+  body.appendChild(form);
+}
+
+async function hubFetchResults(email) {
+  try {
+    const snap = await getDocs(query(collection(db, 'testResults'), where('clientEmail', '==', email)));
+    return snap.docs.map(function (d) { return Object.assign({ _id: d.id }, d.data()); })
+      .sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')) || String(b.createdAt || '').localeCompare(String(a.createdAt || '')); });
+  } catch (error) { return []; }
+}
+
+function hubResultRow(r, showName) {
+  const row = planEl('div', 'hub-res');
+  const top = planEl('div', 'hub-res-top');
+  if (showName) top.appendChild(planEl('strong', '', pv(r.testName)));
+  top.appendChild(planEl('span', 'hub-res-v', r.value + (r.unit ? ' ' + r.unit : '')));
+  if (r.rating) {
+    const rt = hubRating(r.rating);
+    const chip = planEl('span', 'hub-band-r', rt[lang]);
+    chip.style.background = rt.color;
+    top.appendChild(chip);
+  }
+  row.appendChild(top);
+  row.appendChild(planEl('span', 'hint-text', [r.date, r.byName || '', r.note || ''].filter(Boolean).join(' · ')));
+  return row;
+}
+
+async function hubPaintHistory(box, test, email) {
+  box.innerHTML = '';
+  if (!email) return;
+  const rows = (await hubFetchResults(email)).filter(function (r) { return r.testId === test.id; });
+  if (!rows.length) return;
+  box.appendChild(planEl('h4', '', t('hub_history')));
+  /* الفرق عن القياس اللي قبله */
+  rows.forEach(function (r, i) {
+    const row = hubResultRow(r, false);
+    const prev = rows[i + 1];
+    if (prev && prev.value !== r.value) {
+      const better = test.better === 'lower' ? r.value < prev.value : r.value > prev.value;
+      const d = Math.round((r.value - prev.value) * 100) / 100;
+      row.querySelector('.hub-res-top').appendChild(planEl('span', 'hub-delta ' + (better ? 'up' : 'down'), (d > 0 ? '+' : '') + d));
+    }
+    box.appendChild(row);
+  });
+}
+
+/* تبويب «الاختبارات» في شاشة المتابعة — للعميل وللمدرب */
+async function loadTestResults(email) {
+  const box = document.getElementById('pt-list');
+  if (!box) return;
+  box.innerHTML = '';
+  box.appendChild(planEl('p', 'hint-text', t('loading')));
+  const rows = await hubFetchResults(email);
+  box.innerHTML = '';
+  if (!rows.length) { box.appendChild(planEl('p', 'hint-text', t('pt_empty'))); return; }
+  /* آخر نتيجة لكل اختبار فوق، والتاريخ كله جوه */
+  const byTest = {};
+  rows.forEach(function (r) { (byTest[r.testId] = byTest[r.testId] || []).push(r); });
+  Object.keys(byTest).forEach(function (id) {
+    const list = byTest[id];
+    const det = planEl('details', 'hub-pt');
+    const sum = planEl('summary', '');
+    sum.appendChild(hubResultRow(list[0], true));
+    det.appendChild(sum);
+    list.slice(1).forEach(function (r) { det.appendChild(hubResultRow(r, false)); });
+    if (list.length === 1) det.appendChild(planEl('p', 'hint-text', t('pt_first')));
+    box.appendChild(det);
+  });
+}
+
+/* ---------- إضافة عنصر جديد ---------- */
+
+function hubTextVal(arText, enText) {
+  const a = String(arText || '').trim();
+  const e = String(enText || '').trim();
+  if (!a && !e) return '';
+  return { ar: a || e, en: e || a };
+}
+function hubLines(text) {
+  return String(text || '').split('\n').map(function (x) { return x.trim(); }).filter(Boolean).map(function (x) { return { ar: x, en: x }; });
+}
+
+function openHubAdd(kind) {
+  const body = planSheetOpen(t('hub_add_' + kind));
+  body.appendChild(planEl('p', 'hint-text', hubIsOwner() ? t('hub_add_owner_note') : t('hub_add_note')));
+  const form = planEl('div', 'hub-form');
+  form.id = 'hub-add-form';
+  const f = {};
+  const field = function (key, label, el) {
+    const l = planEl('label', 'plan-field', label);
+    l.appendChild(el);
+    form.appendChild(l);
+    f[key] = el;
+    return el;
+  };
+  const inp = function (ph) { const i = document.createElement('input'); if (ph) i.placeholder = ph; return i; };
+  const area = function (ph, rows) { const a = document.createElement('textarea'); a.rows = rows || 3; if (ph) a.placeholder = ph; return a; };
+  const sel = function (list, withEmpty) {
+    const s = document.createElement('select');
+    if (withEmpty) { const o = document.createElement('option'); o.value = ''; o.textContent = withEmpty; s.appendChild(o); }
+    list.forEach(function (x) { const o = document.createElement('option'); o.value = x.id; o.textContent = x[lang] || x.id; s.appendChild(o); });
+    return s;
+  };
+  const sport = document.createElement('select');
+  fillSportSelect(sport, true);
+  if (kind !== 'rules') {
+    const all = sport.querySelector('option[value=""]');
+    if (all) all.textContent = t('hub_all_sports');
+  }
+  if (hubFilter.sport) sport.value = hubFilter.sport;
+
+  if (kind !== 'rules') {
+    field('nameAr', t('hub_f_name_ar'), inp());
+    field('nameEn', t('hub_f_name_en'), inp());
+  }
+  field('sport', t('hub_f_sport'), sport);
+  if (kind === 'tests') {
+    field('cat', t('hub_f_cat'), sel(TEST_CATEGORIES));
+    field('measures', t('hub_measures'), area('', 2));
+    field('protocol', t('hub_protocol'), area(t('hub_protocol_ph'), 4));
+    field('equipment', t('hub_equipment'), area(t('hub_lines_ph'), 3));
+    const g = planEl('div', 'plan-grid2');
+    const unit = sel(TEST_UNITS.map(function (u) { return { id: u, ar: u, en: u }; }));
+    const better = sel([{ id: 'higher', ar: t('hub_better_higher'), en: t('hub_better_higher') }, { id: 'lower', ar: t('hub_better_lower'), en: t('hub_better_lower') }]);
+    const lu = planEl('label', 'plan-field', t('hub_unit'));
+    lu.appendChild(unit);
+    const lb = planEl('label', 'plan-field', t('hub_better'));
+    lb.appendChild(better);
+    g.append(lu, lb);
+    form.appendChild(g);
+    f.unit = unit;
+    f.better = better;
+    form.appendChild(planEl('h4', '', t('hub_norms')));
+    form.appendChild(planEl('p', 'hint-text', t('hub_norms_hint')));
+    const normsBox = planEl('div', 'hub-norm-edit');
+    form.appendChild(normsBox);
+    f.norms = normsBox;
+    const addNorm = planEl('button', 'secondary', t('hub_add_norm'));
+    addNorm.type = 'button';
+    addNorm.id = 'hub-add-norm';
+    addNorm.addEventListener('click', function () { hubNormEditor(normsBox); });
+    form.appendChild(addNorm);
+    field('notes', t('hub_notes'), area('', 2));
+    field('source', t('hub_source'), inp(t('hub_source_ph')));
+  } else if (kind === 'equip') {
+    field('cat', t('hub_f_cat'), sel(EQUIP_CATEGORIES));
+    field('use', t('hub_use'), area('', 2));
+    field('specs', t('hub_specs'), area('', 2));
+    field('safety', t('hub_safety'), area('', 2));
+  } else if (kind === 'rules') {
+    form.appendChild(planEl('p', 'hint-text', t('hub_rules_hint')));
+    RULE_SECTIONS.forEach(function (s) { field('sec_' + s.id, s[lang], area(t('hub_rule_ph'), 3)); });
+    field('source', t('hub_source'), inp(t('hub_source_ph')));
+  } else if (kind === 'tactics') {
+    const g = planEl('div', 'plan-grid2');
+    const kk = sel(TACTIC_KINDS);
+    const lv = sel(['beginner', 'intermediate', 'advanced'].map(function (x) { return { id: x, ar: t('plan_lv_' + x), en: t('plan_lv_' + x) }; }));
+    const l1 = planEl('label', 'plan-field', t('hub_f_kind'));
+    l1.appendChild(kk);
+    const l2 = planEl('label', 'plan-field', t('hub_f_level'));
+    l2.appendChild(lv);
+    g.append(l1, l2);
+    form.appendChild(g);
+    f.tkind = kk;
+    f.level = lv;
+    field('desc', t('hub_desc'), area('', 2));
+    field('when', t('hub_when'), area('', 2));
+    field('steps', t('hub_steps'), area(t('hub_lines_ph'), 4));
+    field('cues', t('hub_cues'), area(t('hub_lines_ph'), 2));
+  }
+  const msg = planEl('p', 'message');
+  const save = planEl('button', '', hubIsOwner() ? t('hub_publish') : t('hub_send_review'));
+  save.type = 'button';
+  save.id = 'hub-add-save';
+  save.addEventListener('click', async function () {
+    const data = hubCollect(kind, f);
+    if (data.error) { msg.className = 'message error'; msg.textContent = t(data.error); return; }
+    save.disabled = true;
+    const ok = await hubSubmit(kind, data.item, pv(data.item.name) || sportName(data.item.sport), msg);
+    save.disabled = false;
+    if (ok) {
+      planSheetClose();
+      renderHub();
+    }
+  });
+  form.append(save, msg);
+  body.appendChild(form);
+}
+
+function hubNormEditor(box) {
+  const g = planEl('div', 'hub-norm-g');
+  const label = document.createElement('input');
+  label.placeholder = t('hub_norm_group_ph');
+  label.className = 'hn-label';
+  const sex = document.createElement('select');
+  sex.className = 'hn-sex';
+  [['any', t('hub_sex_any')], ['m', t('hub_sex_m')], ['f', t('hub_sex_f')]].forEach(function (p) {
+    const o = document.createElement('option');
+    o.value = p[0];
+    o.textContent = p[1];
+    sex.appendChild(o);
+  });
+  const a1 = document.createElement('input');
+  a1.type = 'number';
+  a1.placeholder = t('hub_age_from');
+  a1.className = 'hn-a1';
+  const a2 = document.createElement('input');
+  a2.type = 'number';
+  a2.placeholder = t('hub_age_to');
+  a2.className = 'hn-a2';
+  const top = planEl('div', 'hub-norm-top');
+  top.append(label, sex, a1, a2);
+  g.appendChild(top);
+  TEST_RATINGS.forEach(function (r) {
+    const row = planEl('div', 'hub-norm-row');
+    row.setAttribute('data-r', r.id);
+    const chip = planEl('span', 'hub-band-r', r[lang]);
+    chip.style.background = r.color;
+    const mn = document.createElement('input');
+    mn.type = 'number';
+    mn.step = 'any';
+    mn.placeholder = t('hub_min');
+    mn.className = 'hn-min';
+    const mx = document.createElement('input');
+    mx.type = 'number';
+    mx.step = 'any';
+    mx.placeholder = t('hub_max');
+    mx.className = 'hn-max';
+    row.append(chip, mn, mx);
+    g.appendChild(row);
+  });
+  const rm = planEl('button', 'link danger-link', t('plan_remove'));
+  rm.type = 'button';
+  rm.addEventListener('click', function () { g.remove(); });
+  g.appendChild(rm);
+  box.appendChild(g);
+}
+
+function hubReadNorms(box) {
+  const out = [];
+  box.querySelectorAll('.hub-norm-g').forEach(function (g) {
+    const bands = [];
+    g.querySelectorAll('.hub-norm-row').forEach(function (row) {
+      const mn = row.querySelector('.hn-min').value;
+      const mx = row.querySelector('.hn-max').value;
+      if (mn === '' && mx === '') return;
+      const b = { r: row.getAttribute('data-r') };
+      if (mn !== '') b.min = Number(mn);
+      if (mx !== '') b.max = Number(mx);
+      bands.push(b);
+    });
+    if (!bands.length) return;
+    const lbl = g.querySelector('.hn-label').value.trim();
+    const n = { group: { ar: lbl || t('hub_norm_default'), en: lbl || 'Norms' }, sex: g.querySelector('.hn-sex').value, bands: bands };
+    const a1 = Number(g.querySelector('.hn-a1').value);
+    const a2 = Number(g.querySelector('.hn-a2').value);
+    if (a1 && a2 && a1 <= a2) n.age = [a1, a2];
+    out.push(n);
+  });
+  return out;
+}
+
+function hubCollect(kind, f) {
+  const sport = f.sport.value;
+  if (kind === 'rules') {
+    if (!sport) return { error: 'hub_need_sport' };
+    const sections = [];
+    RULE_SECTIONS.forEach(function (s) {
+      const items = String(f['sec_' + s.id].value || '').split('\n').map(function (line) {
+        const L = line.trim();
+        if (!L) return null;
+        const i = L.indexOf(':') !== -1 ? L.indexOf(':') : L.indexOf('：');
+        const label = i > 0 ? L.slice(0, i).trim() : L;
+        const value = i > 0 ? L.slice(i + 1).trim() : '';
+        return { label: { ar: label, en: label }, value: { ar: value, en: value } };
+      }).filter(Boolean);
+      if (items.length) sections.push({ id: s.id, items: items });
+    });
+    if (!sections.length) return { error: 'hub_need_content' };
+    return { item: { sport: sport, source: f.source.value.trim(), sections: sections } };
+  }
+  const name = hubTextVal(f.nameAr.value, f.nameEn.value);
+  if (!name) return { error: 'hub_need_name' };
+  const sports = [sport || 'all'];
+  if (kind === 'tests') {
+    if (!String(f.protocol.value).trim()) return { error: 'hub_need_protocol' };
+    return { item: {
+      name: name, category: f.cat.value, sports: sports,
+      measures: hubTextVal(f.measures.value), protocol: hubTextVal(f.protocol.value),
+      equipment: hubLines(f.equipment.value), unit: f.unit.value, better: f.better.value,
+      norms: hubReadNorms(f.norms), source: f.source.value.trim(), notes: hubTextVal(f.notes.value)
+    } };
+  }
+  if (kind === 'equip') {
+    return { item: { name: name, category: f.cat.value, sports: sports, use: hubTextVal(f.use.value), specs: hubTextVal(f.specs.value), safety: hubTextVal(f.safety.value) } };
+  }
+  const steps = hubLines(f.steps.value);
+  if (!steps.length) return { error: 'hub_need_steps' };
+  return { item: {
+    name: name, sport: sport || 'general', kind: f.tkind.value, level: f.level.value,
+    desc: hubTextVal(f.desc.value), when: hubTextVal(f.when.value), steps: steps, cues: hubLines(f.cues.value)
+  } };
+}
+
+/* بيتحفظ معتمد على طول لو صاحب المنصة، وإلا بيستنى موافقته */
+async function hubSubmit(kind, item, title, msg) {
+  const owner = hubIsOwner();
+  const rec = {
+    kind: kind, data: item, title: title || '',
+    status: owner ? 'approved' : 'pending',
+    author: currentProviderEmail,
+    authorName: (currentProviderData && currentProviderData.name) || '',
+    createdAt: new Date().toISOString()
+  };
+  if (docTooBig(rec, msg)) return false;
+  try {
+    const ref = await addDoc(collection(db, 'customLib'), rec);
+    hubCustom.unshift(Object.assign({ _id: (ref && ref.id) || ('local' + Date.now()) }, rec));
+    if (typeof PLAN_CUSTOM_CACHE !== 'undefined') PLAN_CUSTOM_CACHE = null;
+    if (!owner) notify(COACH_EMAIL, 'lib_pending', { target: 'hub', about: 'approvals', params: function () { return { name: rec.authorName || rec.author, item: title }; } });
+    setStatusMessage(document.getElementById(kind === 'plan' ? 'plan-msg' : 'hub-msg'), t(owner ? 'hub_published' : 'hub_sent'), 'success');
+    return true;
+  } catch (error) {
+    if (msg) { msg.className = 'message error'; msg.textContent = t('problem') + error.message; }
+    return false;
+  }
+}
+
+/* ---------- المخطط: «احفظ كقالب» + القوالب المضافة ---------- */
+
+var PLAN_CUSTOM_CACHE = null;
+
+function planToTemplate(plan, title) {
+  const firstWeek = ((plan.periods[0] || {}).blocks || [])[0];
+  const perWeek = firstWeek && firstWeek.weeks[0] ? firstWeek.weeks[0].days.filter(Boolean).length : 0;
+  return {
+    sport: plan.sport || '', level: plan.level || 'intermediate',
+    title: title, goal: plan.goal || '', components: (plan.components || []).slice(),
+    sessionsPerWeek: perWeek,
+    periods: (plan.periods || []).map(function (p) {
+      return {
+        type: p.type, goal: p.goal || '', components: (p.components || []).slice(),
+        blocks: (p.blocks || []).map(function (b) {
+          return {
+            name: b.name || '', goal: b.goal || '', components: (b.components || []).slice(),
+            loads: b.weeks.map(function (w) { return Number(w.load) || 0; }),
+            weekTypes: b.weeks.map(function (w) { return w.type || 'load'; }),
+            pattern: ((b.weeks[0] || {}).days || ['', '', '', '', '', '', '']).slice(0, 7),
+            weekDays: b.weeks.map(function (w) { return (w.days || []).slice(0, 7); })
+          };
+        })
+      };
+    }),
+    sessions: JSON.parse(JSON.stringify(plan.sessions || {}))
+  };
+}
+
+async function planSaveAsTemplate() {
+  if (!planCurrent) return;
+  const weeks = planWeeksFlat(planCurrent).length;
+  if (!weeks || !Object.keys(planCurrent.sessions || {}).length) { setStatusMessage(document.getElementById('plan-msg'), t('plan_tpl_empty'), 'warning'); return; }
+  const title = window.prompt(t('plan_tpl_name_q'), pv(planCurrent.title) || '');
+  if (title === null) return;
+  const name = title.trim() || pv(planCurrent.title) || t('plan_title');
+  await hubSubmit('plan', planToTemplate(planCurrent, name), name, document.getElementById('plan-msg'));
+}
+
+/* القوالب المضافة (المعتمدة + بتاعتي) جوه شاشة اختيار القوالب */
+async function planCustomTemplates() {
+  if (PLAN_CUSTOM_CACHE) return PLAN_CUSTOM_CACHE;
+  await hubLoadCustom();
+  const me = currentProviderEmail;
+  PLAN_CUSTOM_CACHE = hubCustom.filter(function (c) {
+    return c.kind === 'plan' && (c.status === 'approved' || c.author === me);
+  }).map(function (c) {
+    return Object.assign({}, c.data || {}, { id: 'cu_' + c._id, _custom: c });
+  });
+  return PLAN_CUSTOM_CACHE;
+}
