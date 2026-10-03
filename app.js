@@ -2603,6 +2603,7 @@ const TEXT = {
     reject_payment_btn: 'رفض',
     payment_approved_msg: 'اتفعّل الاشتراك',
     payment_rejected_admin_msg: 'اترفض الطلب',
+    client_already_exists: 'العميل ده متسجل قبل كده — دوّر عليه في القايمة',
     hub_title: 'مكتبة الرياضة',
     hub_sub: 'الاختبارات بمعاييرها، الأدوات، القوانين والمقاسات، والجمل والخطط — لكل الرياضات',
     hub_tab_tests: 'الاختبارات',
@@ -5222,6 +5223,7 @@ const TEXT = {
     reject_payment_btn: 'Reject',
     payment_approved_msg: 'Subscription activated',
     payment_rejected_admin_msg: 'Request rejected',
+    client_already_exists: 'This client is already registered — find them in the list',
     hub_title: 'Sports hub',
     hub_sub: 'Tests with norms, equipment, rules & dimensions, plays & tactics — for every sport',
     hub_tab_tests: 'Tests',
@@ -6960,6 +6962,17 @@ async function routeUser(user) {
 
   const loginSpecs = providerData ? providerSpecialties(providerData) : [];
 
+  /*
+   * المتخصص لازم يكون مأكد إيميله — قاعدة الأمان مابقتش تعترف بمتخصص
+   * إيميله مش متأكد، عشان محدش يعمل حساب بإيميل متخصص اتضاف ولسه
+   * ماسجلش ويدخل على بيانات العملاء. صاحب المنصة مستثنى (حسابه موجود
+   * أصلًا ومحدش يقدر يعمل حساب تاني بإيميله)
+   */
+  if (providerData && user.emailVerified === false && email !== COACH_EMAIL.toLowerCase()) {
+    showVerifyScreen(user);
+    return;
+  }
+
   if (isLegacyCoach || loginSpecs.indexOf('coach') !== -1) {
     currentProviderEmail = email;
     currentProviderSpecialty = 'coach';
@@ -6989,6 +7002,11 @@ async function routeUser(user) {
       clientDoc = await getDoc(doc(db, 'clients', email));
     } catch (error) {
       clientDoc = null;
+      /* مستند اتعمل له من مدرب قبل ما يسجّل = لازم يأكد إيميله الأول */
+      if (user.emailVerified === false && error && error.code === 'permission-denied') {
+        showVerifyScreen(user);
+        return;
+      }
     }
 
     const clientData = (clientDoc && clientDoc.exists()) ? clientDoc.data() : null;
@@ -7858,10 +7876,18 @@ document.getElementById('add-client-btn').addEventListener('click', async functi
 
   clientsMessage.textContent = t('adding');
   try {
+    /* لو العميل موجود أصلًا مانكتبش فوق بياناته (كانت بتتمسح كلها) */
+    const existingClient = await getDoc(doc(db, 'clients', email)).catch(function () { return null; });
+    if (existingClient && existingClient.exists()) {
+      clientsMessage.textContent = t('client_already_exists');
+      return;
+    }
     await setDoc(doc(db, 'clients', email), {
       name: name,
       sport: document.getElementById('new-sport').value || '',
-      coachEmail: currentProviderEmail
+      coachEmail: currentProviderEmail,
+      createdBy: authEmailLower(),
+      createdAt: new Date().toISOString()
     });
     nameInput.value = '';
     emailInput.value = '';
@@ -17710,6 +17736,7 @@ async function loadProviders() {
   try {
     const snapshot = await getDocs(collection(db, 'providers'));
     providers = snapshot.docs.map(providerFromDoc);
+    backfillProviderPublic(providers).catch(function () {});
 
     // بنحسب هنا عدد المتدربين الفعلي لكل متخصص (من مجموعة العملاء
     // كاملة) ونخزنه في مستند المتخصص نفسه كـ clientsCount — عشان شاشة
@@ -18110,7 +18137,7 @@ document.getElementById('pv-add-btn').addEventListener('click', async function (
       specialty: specialties[0],
       specialties: specialties,
       isMedical: specialtiesHaveFlag(specialties, 'medical')
-    });
+    }, { merge: true });
     nameInput.value = '';
     emailInput.value = '';
     fillSpecialtyCheckboxes(pvSpecialtyMulti, []);
@@ -18214,6 +18241,7 @@ document.getElementById('ph-save-btn').addEventListener('click', async function 
   try {
     await setDoc(doc(db, 'providers', currentProviderEmail), updated, { merge: true });
     currentProviderData = Object.assign({}, currentProviderData, updated);
+    syncProviderPublic(currentProviderEmail, currentProviderData);
     currentProviderSpecialties = newSpecialties;
     currentProviderSpecialty = newSpecialties.indexOf('coach') !== -1 ? 'coach' : (newSpecialties[0] || '');
     applyCoachScopeTabs();
@@ -18520,7 +18548,8 @@ async function loadWelcomeTrustStat() {
 async function loadWelcomeTeamPreview() {
   let providers = [];
   try {
-    const snapshot = await getDocs(collection(db, 'providers'));
+    /* الصفحة العامة بتقرا الكارت العام بس — مستند المتخصص نفسه مابقاش مفتوح للعامة */
+    const snapshot = await getDocs(collection(db, 'providerPublic'));
     providers = snapshot.docs
       .map(function (item) { return Object.assign({ email: item.id }, item.data()); })
       .filter(function (p) { return p.name && providerSpecialties(p).length; })
@@ -28097,6 +28126,7 @@ async function loadLeadsAdmin() {
             coachEmail: (currentProviderEmail || COACH_EMAIL).toLowerCase(),
             onboarded: false,
             fromLead: true,
+            createdBy: authEmailLower(),
             trialStartedAt: new Date().toISOString().slice(0, 10),
             createdAt: new Date().toISOString()
           }, { merge: true });
@@ -39114,4 +39144,54 @@ async function planCustomTemplates() {
     return Object.assign({}, c.data || {}, { id: 'cu_' + c._id, _custom: c });
   });
   return PLAN_CUSTOM_CACHE;
+}
+
+/* ============================================================
+   الكارت العام للمتخصص (providerPublic) — الاسم والصورة والتخصصات بس.
+   صفحة الترحيب (من غير تسجيل دخول) بتقرا ده، ومستند providers نفسه
+   (فيه بيانات الدفع والصلاحيات) مابقاش مقروء غير للمسجلين.
+   ============================================================ */
+function authEmailLower() {
+  return String((auth.currentUser && auth.currentUser.email) || '').toLowerCase();
+}
+
+function providerPublicData(p) {
+  const specs = providerSpecialties(p);
+  const photo = (typeof p.photo === 'string' && p.photo.length < 380000) ? p.photo : '';
+  return {
+    name: String(p.name || '').slice(0, 80),
+    photo: photo,
+    specialties: specs,
+    specialty: String(p.specialty || specs[0] || ''),
+    updatedAt: new Date().toISOString()
+  };
+}
+
+async function syncProviderPublic(email, p) {
+  if (!email || !p) return;
+  try { await setDoc(doc(db, 'providerPublic', email), providerPublicData(p)); } catch (error) { /* مش هيوقف الحفظ */ }
+}
+
+/* الإدارة بتفتح قايمة المتخصصين = نحدّث الكروت اللي اتغيرت بس */
+async function backfillProviderPublic(list) {
+  if (!isFullAdminAccount() || !Array.isArray(list)) return;
+  const existing = {};
+  try {
+    const snap = await getDocs(collection(db, 'providerPublic'));
+    snap.docs.forEach(function (d) { existing[d.id] = d.data(); });
+  } catch (error) { return; }
+  const live = {};
+  for (let i = 0; i < list.length; i++) {
+    const p = list[i];
+    if (!p || !p.email || !p.name || !providerSpecialties(p).length) continue;
+    live[p.email] = true;
+    const want = providerPublicData(p);
+    const have = existing[p.email];
+    const same = have && have.name === want.name && have.photo === want.photo
+      && JSON.stringify(have.specialties || []) === JSON.stringify(want.specialties) && have.specialty === want.specialty;
+    if (!same) await syncProviderPublic(p.email, p);
+  }
+  for (const id in existing) {
+    if (!live[id]) { try { await deleteDoc(doc(db, 'providerPublic', id)); } catch (error) { /* عادي */ } }
+  }
 }
