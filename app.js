@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getFirestore, doc, getDoc, setDoc as fbSetDoc, addDoc as fbAddDoc, updateDoc as fbUpdateDoc, deleteDoc, deleteField, collection, getDocs, onSnapshot, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig, COACH_EMAIL } from './firebase-config.js';
 import { REHAB_TEMPLATES as BASE_REHAB_TEMPLATES } from './rehab-templates.js';
@@ -114,6 +114,12 @@ const TEXT = {
     tagline: 'منصة التدريب والتأهيل والتغذية',
     login_title: 'تسجيل الدخول',
     login_btn: 'دخول',
+    forgot_password: 'نسيت كلمة السر؟',
+    reset_need_email: 'اكتب إيميلك في الخانة اللي فوق الأول، وبعدين دوس "نسيت كلمة السر؟"',
+    reset_sent: 'لو الإيميل ده مسجّل عندنا، هيوصلك رابط لتغيير كلمة السر. دوّر في الوارد وفي الـ Spam كمان. ولو بتدخل بحساب جوجل، استخدم زرار جوجل.',
+    reset_bad_email: 'الإيميل مكتوب غلط، راجعه وجرّب تاني',
+    reset_wait: 'استنى دقيقة وجرّب تاني',
+    reset_failed: 'معرفناش نبعت الرابط دلوقتي، جرّب بعد شوية',
     email: 'الإيميل',
     password: 'الباسورد',
     logging_in: 'جاري الدخول...',
@@ -2735,6 +2741,12 @@ const TEXT = {
     tagline: 'Training, Rehab & Nutrition Platform',
     login_title: 'Sign In',
     login_btn: 'Sign in',
+    forgot_password: 'Forgot your password?',
+    reset_need_email: 'Type your email in the box above first, then tap "Forgot your password?"',
+    reset_sent: "If this email is registered, a link to change your password is on its way. Check your inbox and your Spam folder. If you sign in with Google, use the Google button.",
+    reset_bad_email: 'That email looks wrong, please check it and try again',
+    reset_wait: 'Please wait a minute and try again',
+    reset_failed: "We couldn't send the link right now, please try again shortly",
     email: 'Email',
     password: 'Password',
     logging_in: 'Signing in...',
@@ -6877,6 +6889,37 @@ document.getElementById('login-btn').addEventListener('click', async function ()
     loginMessage.textContent = '';
   } catch (error) {
     loginMessage.textContent = t('bad_login');
+  }
+});
+
+/*
+ * نسيت كلمة السر: فايربيز هي اللي بتبعت رابط تغيير الباسورد.
+ * الرسالة واحدة سواء الإيميل مسجّل ولا لأ، عشان محدش يقدر يكتشف مين
+ * عندنا حساب. وفيه انتظار دقيقة بين كل طلب والتاني.
+ */
+let resetCooldownUntil = 0;
+document.getElementById('forgot-password-btn').addEventListener('click', async function () {
+  const email = document.getElementById('email').value.trim();
+  if (!email) { loginMessage.textContent = t('reset_need_email'); return; }
+  if (Date.now() < resetCooldownUntil) { loginMessage.textContent = t('reset_wait'); return; }
+  loginMessage.textContent = t('saving');
+  try { auth.languageCode = lang; } catch (e) { /* تجاهل */ }
+  try {
+    try {
+      await sendPasswordResetEmail(auth, email, { url: verifyContinueUrl() });
+    } catch (error) {
+      const code = (error && error.code) || '';
+      if (code.indexOf('continue-uri') === -1 && code.indexOf('unauthorized') === -1) throw error;
+      await sendPasswordResetEmail(auth, email);
+    }
+    resetCooldownUntil = Date.now() + 60 * 1000;
+    loginMessage.textContent = t('reset_sent');
+  } catch (error) {
+    const code = (error && error.code) || '';
+    if (code === 'auth/invalid-email') loginMessage.textContent = t('reset_bad_email');
+    else if (code === 'auth/too-many-requests') loginMessage.textContent = t('reset_wait');
+    else if (code === 'auth/user-not-found') { resetCooldownUntil = Date.now() + 60 * 1000; loginMessage.textContent = t('reset_sent'); }
+    else loginMessage.textContent = t('reset_failed');
   }
 });
 
