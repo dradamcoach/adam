@@ -29569,6 +29569,7 @@ function buildLibExercise(ex, values) {
 
 function deliverLibExercise(built) {
   closeExSheet();
+  if (typeof closeAnatomyViewer === 'function') closeAnatomyViewer();
   if (libraryContext === 'plan') {
     planAddLibItem(built);
     return;
@@ -29857,6 +29858,49 @@ async function openMediaCredits() {
 }
 
 document.getElementById('ex-sheet-close').addEventListener('click', closeExSheet);
+
+/* ---------- التشريح ثلاثي الأبعاد: فتح التمرين من العضلة ---------- */
+function closeAnatomyViewer() {
+  const ov = document.getElementById('anat-overlay');
+  if (ov) { ov.classList.add('hidden'); ov.style.display = ''; }
+}
+function openAnatomyViewer() {
+  const ov = document.getElementById('anat-overlay');
+  const fr = document.getElementById('anat-frame');
+  if (!ov || !fr) return;
+  if (!fr.getAttribute('src')) fr.setAttribute('src', 'anatomy/');
+  ov.classList.remove('hidden');
+  ov.style.display = 'flex';
+  ensureExtraLibrary();
+}
+(function () {
+  const openBtn = document.getElementById('lib-anatomy-btn');
+  const closeBtn = document.getElementById('anat-close');
+  if (openBtn) openBtn.addEventListener('click', function () { libraryContext = 'coach'; openAnatomyViewer(); });
+  if (closeBtn) closeBtn.addEventListener('click', closeAnatomyViewer);
+  window.addEventListener('message', async function (e) {
+    if (e.origin !== location.origin) return;
+    const d = e.data;
+    if (d && d.type === 'adam-open-consult') {
+      closeAnatomyViewer();
+      try {
+        if (typeof clientEmail !== 'undefined' && clientEmail) {
+          setClientMode('consult');
+          runModeLoader('consult');
+          if (typeof d.topic === 'string' && clientConsultText && !clientConsultText.value) {
+            clientConsultText.value = (document.documentElement.lang === 'en' ? 'I would like help with: ' : 'محتاج مساعدة بخصوص: ') + d.topic.slice(0, 80);
+          }
+        }
+      } catch (err) {}
+      return;
+    }
+    if (!d || d.type !== 'adam-open-ex' || typeof d.id !== 'string') return;
+    try { await ensureExtraLibrary(); } catch (err) {}
+    const ex = libraryEntryById(d.id);
+    if (ex) openExerciseSheet(ex);
+  });
+})();
+
 document.getElementById('ex-sheet').addEventListener('click', function (event) {
   if (event.target.id === 'ex-sheet') closeExSheet();
 });

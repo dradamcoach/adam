@@ -1720,6 +1720,7 @@
       <button type="button" class="chip small" id="lib-media-only"><span data-t="lib_media_only">بصورة بس</span></button>
       <button type="button" class="chip small hidden" id="lib-safe-only"><span data-t="lib_safe_only">مناسب للعميل</span></button>
       <button type="button" class="link" id="lib-credits-btn" data-t="lib_credits_link">حقوق الصور</button>
+      <button type="button" class="link" id="lib-anatomy-btn">التشريح ثلاثي الأبعاد</button>
     </div>
     <p class="message" id="lib-message"></p>
     <div class="grid" id="lib-grid"></div>
@@ -2289,6 +2290,13 @@
   <button id="logout-btn" class="link hidden" data-t="logout">تسجيل الخروج</button>
 
   <!-- تفاصيل التمرين والوصفة وحقوق الصور — شيت واحد بيتملي من الجافاسكريبت -->
+  <div class="hidden" id="anat-overlay" style="position:fixed;inset:0;z-index:70;background:#0b1016;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#0b1016;border-bottom:1px solid #273441">
+      <span style="color:#e9eef2;font-size:14px">التشريح ثلاثي الأبعاد</span>
+      <button type="button" id="anat-close" style="background:#16202a;color:#e9eef2;border:1px solid #273441;border-radius:999px;padding:6px 14px;font-size:13px;width:auto;margin:0">إغلاق</button>
+    </div>
+    <iframe id="anat-frame" title="anatomy" style="border:0;width:100%;flex:1;min-height:0;background:#0b1016"></iframe>
+  </div>
   <div class="ex-sheet-overlay hidden" id="ex-sheet">
     <div class="ex-sheet" role="dialog" aria-modal="true">
       <button type="button" class="ex-sheet-close" id="ex-sheet-close" data-t-title="exs_close" title="إغلاق" aria-label="إغلاق"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg></button>
