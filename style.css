@@ -10131,3 +10131,22 @@ body.sheet-open { overflow: hidden; }
 .card .team-near-row button { width: auto; margin: 0; padding: 8px 14px; font-size: 13px; }
 .card .team-near-row button.on { border-color: var(--brand); color: var(--brand); }
 .ap-dist { font-size: 10px; font-weight: 700; color: #38bdf8; line-height: 1; }
+
+/* ---------- لوجو ADAM على صور التمارين والتأهيل والأكل ---------- */
+.exs-media::after,
+.lightbox-shot::after,
+.exc-media::after {
+  content: '';
+  position: absolute;
+  inset-inline-end: 8px;
+  bottom: 8px;
+  width: 28px;
+  height: 28px;
+  background: url('icon-192.png') center / contain no-repeat;
+  border-radius: 7px;
+  opacity: 0.88;
+  pointer-events: none;
+}
+.lightbox-shot { position: relative; }
+.exc-media::after { inset-inline-end: 3px; bottom: 3px; width: 16px; height: 16px; border-radius: 4px; }
+.exs-media .exs-media-hint { inset-inline-start: 10px; }
