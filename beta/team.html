@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فريق ADAM الذكي</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <meta name="theme-color" content="#0b1220">
+  <style>
+    :root {
+      --bg: #0b1220; --surface: #151f33; --surface-2: #1c2942; --field: #0e1729;
+      --line: #2a3b57; --ink: #eef3f9; --muted: #8fa3bd;
+      --brand: #22c55e; --brand-dark: #16a34a; --danger: #f87171; --warn: #fbbf24; --info: #38bdf8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 22px 16px 60px;
+      background: radial-gradient(1100px 500px at 50% -220px, #1a2b45 0%, transparent 70%), var(--bg);
+      background-attachment: fixed;
+      color: var(--ink); font-family: 'Cairo', sans-serif; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; }
+    .hidden { display: none !important; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 18px; }
+    header h1 { margin: 0; font-size: 22px; color: var(--brand); letter-spacing: .5px; }
+    header .sub { margin: 0; font-size: 12.5px; color: var(--muted); }
+    a { color: var(--info); }
+    .back { font-size: 13px; text-decoration: none; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); white-space: nowrap; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin: 0 0 14px; box-shadow: 0 18px 40px -26px rgba(0,0,0,.9); }
+    .card h2 { margin: 0 0 4px; font-size: 17px; }
+    .card h3 { margin: 16px 0 8px; font-size: 14px; color: var(--muted); font-weight: 600; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .msg { font-size: 13.5px; margin: 8px 0 0; min-height: 1em; }
+    .msg.err { color: var(--danger); }
+    .msg.ok { color: var(--brand); }
+    button, .btn {
+      font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; border: none; border-radius: 12px;
+      padding: 10px 16px; color: #06210f; background: linear-gradient(180deg, var(--brand), var(--brand-dark));
+    }
+    button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); font-weight: 600; }
+    button.danger { background: transparent; color: var(--danger); border: 1px solid rgba(248,113,113,.5); }
+    button:disabled { opacity: .5; cursor: default; }
+    input { font: inherit; width: 100%; padding: 10px 12px; margin: 0 0 8px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
+
+    /* الموظفين */
+    .table-wrap { overflow-x: auto; }
+    #sup-amount, #sup-preview-pick { font: inherit; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
+    .rd-what { margin: 8px 0 2px; font-size: 14.5px; line-height: 1.8; }
+    .rd-sources { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 2px 0 6px; }
+    .rd-sources a { color: var(--brand); overflow-wrap: anywhere; }
+    .rd-note { width: 100%; font: inherit; font-size: 13.5px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--field); color: var(--ink); margin-top: 6px; }
+    #rd-copy-btn { margin: 4px 0 2px; }
+    .inbox { list-style: none; margin: 0; padding: 0; }
+    .inbox li { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(42,59,87,.5); }
+    .inbox li b { min-width: 28px; height: 28px; border-radius: 999px; background: rgba(34,197,94,.16); color: var(--brand); display: grid; place-items: center; font-size: 13.5px; }
+    .inbox li.bad b { background: rgba(248,113,113,.16); color: var(--danger); }
+    .inbox li span { flex: 1; font-size: 14px; }
+    .inbox li button { padding: 6px 12px; font-size: 13px; }
+    .inbox .clear { color: var(--brand); font-size: 14px; border: 0; }
+    .flow { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+    .flow summary { cursor: pointer; color: var(--ink); }
+    .flow ul { margin: 6px 0 0; padding-inline-start: 18px; line-height: 1.9; }
+    .ml-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 12px; }
+    .ml-stat { border: 1px solid var(--line, #e5e7eb); border-radius: 10px; padding: 10px; text-align: center; }
+    .ml-stat b { display: block; font-size: 22px; }
+    .ml-stat span { font-size: 12.5px; opacity: .75; }
+    .ml-titles { font-size: 13px; opacity: .8; margin-top: 2px; }
+    .staff { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+    .agent { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+    .agent.soon { opacity: .6; }
+    .agent-top { display: flex; align-items: center; gap: 10px; }
+    .agent-icon { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: rgba(34,197,94,.12); color: var(--brand); flex: none; }
+    .agent.soon .agent-icon { background: rgba(143,163,189,.12); color: var(--muted); }
+    .agent-icon svg { width: 20px; height: 20px; }
+    .agent-name { font-weight: 700; font-size: 14.5px; }
+    .agent-job { font-size: 12.5px; color: var(--muted); }
+    .chip { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .chip.on { background: rgba(34,197,94,.16); color: var(--brand); }
+    .chip.off { background: rgba(248,113,113,.14); color: var(--danger); }
+    .chip.soon { background: rgba(143,163,189,.15); color: var(--muted); }
+
+    /* التقرير */
+    .report-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+    .lines { margin: 12px 0 0; padding: 0; list-style: none; counter-reset: ln; }
+    .lines li { counter-increment: ln; position: relative; padding: 9px 38px 9px 10px; margin: 0 0 6px; background: var(--field); border: 1px solid var(--line); border-radius: 12px; font-size: 14.5px; }
+    .lines li::before { content: counter(ln); position: absolute; right: 9px; top: 10px; width: 21px; height: 21px; border-radius: 50%; background: var(--brand); color: #06210f; font-size: 12px; font-weight: 800; display: grid; place-items: center; }
+    .warn-box { margin-top: 10px; padding: 9px 12px; border-radius: 12px; background: rgba(251,191,36,.1); color: var(--warn); font-size: 13px; }
+    .movers { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .mover { font-size: 12.5px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
+    .mover.good { border-color: rgba(34,197,94,.5); color: var(--brand); }
+    .mover.bad { border-color: rgba(248,113,113,.5); color: var(--danger); }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; text-align: start; padding: 6px 6px; border-bottom: 1px solid var(--line); }
+    td { padding: 7px 6px; border-bottom: 1px solid rgba(42,59,87,.5); }
+    td.n { text-align: center; font-variant-numeric: tabular-nums; }
+    th.n { text-align: center; }
+    .d-good { color: var(--brand); font-weight: 700; }
+    .d-bad { color: var(--danger); font-weight: 700; }
+    .d-flat { color: var(--muted); }
+    .todo { margin: 0; padding: 0; list-style: none; }
+    .todo li { padding: 6px 0; font-size: 13.5px; border-bottom: 1px dashed rgba(42,59,87,.7); }
+    .todo li b { color: var(--warn); margin-inline-end: 4px; }
+    .feedback { margin-top: 14px; padding: 12px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+    .feedback .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .feedback .row button { flex: 1 1 140px; }
+    .fb-done { font-size: 13.5px; }
+    .score { font-size: 13px; color: var(--muted); margin-top: 8px; }
+    .history { margin: 0; padding: 0; list-style: none; }
+    .history li { display: flex; gap: 10px; align-items: center; padding: 9px 4px; border-bottom: 1px solid rgba(42,59,87,.6); cursor: pointer; font-size: 13.5px; }
+    .history li:hover, .history li.sel { background: rgba(56,189,248,.06); }
+    .history .h-date { color: var(--muted); font-size: 12px; white-space: nowrap; min-width: 86px; }
+    .history .h-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .log { margin: 0; padding: 0; list-style: none; font-size: 12.5px; }
+    .log li { padding: 5px 0; border-bottom: 1px solid rgba(42,59,87,.5); color: var(--muted); }
+    .log .bad { color: var(--danger); }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: var(--brand); border-radius: 50%; animation: sp 1s linear infinite; vertical-align: -2px; }
+    @keyframes sp { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+    /* مسودات الرسايل */
+    .draft { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin: 10px 0 0; }
+    .draft-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .draft-name { font-weight: 700; font-size: 15px; }
+    .chip.warn { background: rgba(251,191,36,.14); color: var(--warn); }
+    .chip.danger { background: rgba(248,113,113,.14); color: var(--danger); }
+    .draft-meta { font-size: 12.5px; color: var(--muted); margin: 4px 0 8px; }
+    .draft textarea { font: inherit; font-size: 14.5px; width: 100%; min-height: 96px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); resize: vertical; line-height: 1.7; }
+    .draft .row { display: flex; gap: 8px; margin-top: 8px; }
+    .draft .row button { flex: 1; }
+    .draft .care-note { font-size: 13.5px; color: var(--warn); margin: 4px 0 8px; }
+    .draft.sending { opacity: .6; pointer-events: none; }
+    .ct-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 10px 0; }
+    .ct-controls label { font-size: 12.5px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+    select { font: inherit; font-size: 14px; padding: 9px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
+    #ct-write-btn { width: 100%; }
+    .post-img { display: block; width: 120px; height: 120px; object-fit: contain; background: #fff; border-radius: 12px; margin: 6px 0 8px; }
+    .post-tags { font-size: 13px; color: var(--info); margin: 6px 0 0; text-align: start; }
+    .post-tags bdi { unicode-bidi: isolate; display: inline-block; }
+    .post-credit { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+    details summary { cursor: pointer; color: var(--muted); font-size: 13px; margin-top: 10px; }
+    @media (max-width: 420px) { td, th { padding: 6px 3px; } table { font-size: 12.5px; } }
+
+    .socm-times { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin: 6px 0 4px; }
+    .socm-times input { width: 150px; }
+    .socm-trends { display: flex; flex-wrap: wrap; gap: 6px; }
+    .socm-trend { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+    .socm-trend small { color: var(--warn); font-size: 11px; }
+    .socm-post { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin: 10px 0 0; }
+    .socm-post.posted { opacity: .6; border-color: rgba(34,197,94,.5); }
+    .socm-post.skip { opacity: .45; }
+    .socm-post.today { border-color: var(--warn); }
+    .socm-hook { font-weight: 700; font-size: 15px; margin: 6px 0 4px; }
+    .socm-cap { white-space: pre-line; font-size: 13.5px; line-height: 1.8; margin: 0 0 6px; }
+    .socm-tags { color: var(--info); font-size: 13px; direction: ltr; text-align: right; }
+    .socm-visual { background: var(--field); border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; font-size: 13px; margin: 8px 0; }
+    .socm-visual ol { margin: 4px 0 0; padding-inline-start: 20px; }
+    .socm-prompt { direction: ltr; text-align: left; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); margin: 4px 0; }
+    .socm-why { color: var(--muted); font-size: 12.5px; }
+    .socm-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .studio { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .studio-controls { display: flex; flex-direction: column; gap: 8px; }
+    .studio-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .studio-row > * { flex: 1; }
+    .studio-file { font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+    .studio select, .studio textarea { font: inherit; width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); }
+    .studio input { margin: 0; }
+    .head-actions { display: flex; align-items: center; gap: 8px; }
+    .lang-toggle { width: auto; margin: 0; padding: 6px 12px; border-radius: 999px; background: var(--surface-2); color: var(--brand); border: 1px solid var(--line); font: 700 13px 'Cairo', sans-serif; cursor: pointer; }
+    .cl-form { display: grid; gap: 8px; margin: 10px 0 4px; }
+    .cl-form textarea { font: inherit; width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--field); color: var(--ink); resize: vertical; box-sizing: border-box; }
+    .cl-form select, .cl-form input, .cl-form textarea { margin: 0; }
+    .cl-item { border: 1px solid var(--line); background: var(--surface-2); border-radius: 12px; padding: 10px 12px; margin: 8px 0; }
+    .cl-item.sent { border-color: rgba(34, 197, 94, 0.45); }
+    .cl-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .cl-text { white-space: pre-wrap; margin: 6px 0; font-size: 14px; }
+    .cl-item .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cl-item .row button { width: auto; }
+    #cl-copy-btn { margin-top: 6px; }
+    #st-canvas { width: 100%; max-width: 360px; height: auto; border-radius: 12px; border: 1px solid var(--line); justify-self: center; background: #000; }
+    @media (min-width: 700px) { .studio { grid-template-columns: 1fr 300px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>فريق ADAM الذكي</h1>
+        <p class="sub" id="who"></p>
+      </div>
+      <div class="head-actions">
+        <button type="button" class="lang-toggle" id="team-lang-btn" aria-label="language">EN</button>
+        <a class="back" href="./">← البرنامج</a>
+      </div>
+    </header>
+
+    <!-- جاري التحميل -->
+    <div class="card" id="loading-box"><span class="spin"></span> <span class="muted">بيحمّل…</span></div>
+
+    <!-- مش داخل -->
+    <div class="card hidden" id="login-box">
+      <h2>ادخل بحسابك</h2>
+      <p class="muted">الصفحة دي لصاحب المنصة بس. نفس الإيميل والباسورد بتوع البرنامج.</p>
+      <input id="login-email" type="email" placeholder="الإيميل" dir="ltr" autocomplete="username">
+      <input id="login-pass" type="password" placeholder="الباسورد" dir="ltr" autocomplete="current-password">
+      <button type="button" id="login-btn">دخول</button>
+      <p class="msg err" id="login-msg"></p>
+    </div>
+
+    <!-- مش مسموح / مش متظبط -->
+    <div class="card hidden" id="blocked-box">
+      <h2 id="blocked-title"></h2>
+      <p class="muted" id="blocked-text"></p>
+    </div>
+
+    <div id="main" class="hidden">
+      <!-- مستني منك: كل اللي محتاج قرارك من كل الموظفين -->
+      <div class="card" id="inbox-card">
+        <h2>مستني منك</h2>
+        <ul class="inbox" id="inbox"></ul>
+        <p class="muted" id="outputs"></p>
+      </div>
+
+      <!-- صندوق «لكلود» -->
+      <div class="card" id="claude-card">
+        <h2>صندوق «لكلود»</h2>
+        <p class="muted">أي حاجة عاوز Claude يعملها في البرنامج: ميزة جديدة، حاجة بايظة، سؤال. موظف التطوير بيحط هنا لوحده أي فكرة تقول عليها «عاوزها». كل طلب جديد بيوصلك إيميل عنوانه [ADAM → Claude]، وClaude بيقرا الإيميلات دي (والـ Issues المفتوحة على GitHub) كل يوم الصبح، وبيجهّز الملفات اللي اتغيرت على Google Drive ويسيبلك إيميل فيه اللينك والخطوات. تقدر كمان تفتح أي طلب كـ Issue على GitHub بدوسة.</p>
+        <div class="cl-form">
+          <select id="cl-kind">
+            <option value="feature">ميزة جديدة</option>
+            <option value="bug">حاجة بايظة</option>
+            <option value="question">سؤال</option>
+            <option value="content">محتوى</option>
+          </select>
+          <input id="cl-title" placeholder="عنوان قصير">
+          <textarea id="cl-text" rows="3" placeholder="اشرح عاوز إيه بالظبط — ولو حاجة بايظة: بيحصل إيه وكان المفروض يحصل إيه"></textarea>
+          <button type="button" id="cl-add-btn">ضيف الطلب</button>
+        </div>
+        <p class="msg" id="cl-msg"></p>
+        <p class="muted hidden" id="cl-empty">مفيش طلبات مفتوحة.</p>
+        <div id="cl-list"></div>
+        <button type="button" class="ghost" id="cl-copy-btn">انسخ الطلبات المفتوحة لكلود</button>
+        <details id="cl-done-box" class="hidden">
+          <summary>اللي اتنفّذ</summary>
+          <ul class="log" id="cl-done"></ul>
+        </details>
+      </div>
+
+      <!-- الموظفين -->
+      <div class="card">
+        <h2>الموظفين</h2>
+        <p class="muted">كل موظف بيقرا بس — مفيش حد فيهم بيكتب في بيانات العملاء أو بيبعت لحد من غير موافقتك.</p>
+        <details class="flow">
+          <summary>الموظفين شغالين مع بعض إزاي؟</summary>
+          <ul>
+            <li>كل يوم ٧ الصبح: مساعد نجاح العملاء بيدوّر على الساكتين. السبت ٧: المحلّل. الأحد ٧: موظف التطوير.</li>
+            <li>الساعة ٨: تقرير الإيميل اليومي فيه «فريق الذكاء الاصطناعي» — كل اللي مستنيك من الكل في مكان واحد (نفس قايمة «مستني منك» هنا).</li>
+            <li>المحلّل بيشوف شغل الفريق: كام عميل ساكت رجع، كام بوست اتنشر، كام مسودة برنامج اتستخدمت.</li>
+            <li>موظف التطوير بيقرا آخر تقرير للمحلّل، فبيقترح أفكار للأرقام اللي نازلة.</li>
+            <li>رسايل نجاح العملاء بتتبعت في الشات، ولو العميل ماشافهاش بعد ساعتين ساعي البريد بيبعتهاله إيميل.</li>
+            <li>مستشار البرامج جوه صفحة العميل، والمسودات اللي بتستخدمها بتتعد في تقرير المحلّل.</li>
+          </ul>
+        </details>
+        <div class="staff" id="staff"></div>
+      </div>
+
+      <!-- محلّل الأعمال -->
+      <div class="card" id="analyst-card">
+        <div class="report-head">
+          <div>
+            <h2>محلّل الأعمال</h2>
+            <p class="muted" id="report-period"></p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="run-btn">شغّله دلوقتي</button>
+            <button type="button" class="ghost" id="toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="run-msg"></p>
+
+        <div id="report-empty" class="hidden">
+          <p class="muted">لسه مفيش تقارير. دوس «شغّله دلوقتي» عشان يعمل أول تقرير، وبعد كده هيشتغل لوحده كل سبت الصبح.</p>
+        </div>
+
+        <div id="report-body" class="hidden">
+          <ol class="lines" id="report-lines"></ol>
+          <div class="warn-box hidden" id="report-ai-err"></div>
+          <div class="movers" id="report-movers"></div>
+
+          <h3>الأرقام: الأسبوع ده قدّام اللي قبله</h3>
+          <table>
+            <thead><tr><th>الرقم</th><th class="n">الأسبوع ده</th><th class="n">اللي قبله</th><th class="n">الفرق</th></tr></thead>
+            <tbody id="report-table"></tbody>
+          </table>
+
+          <div id="todo-wrap">
+            <h3>مستني منك دلوقتي</h3>
+            <ul class="todo" id="report-todo"></ul>
+          </div>
+
+          <div class="feedback" id="feedback">
+            <strong>خدت قرار بسبب التقرير ده؟</strong>
+            <p class="muted" style="margin:2px 0 0">ده الرقم الوحيد اللي بيقول الموظف ده نافع ولا لأ.</p>
+            <div id="fb-ask">
+              <input id="fb-note" placeholder="القرار كان إيه؟ (اختياري)">
+              <div class="row">
+                <button type="button" id="fb-yes">أيوه، خدت قرار</button>
+                <button type="button" class="ghost" id="fb-no">لأ، مفيدش</button>
+              </div>
+            </div>
+            <p class="fb-done hidden" id="fb-done"></p>
+          </div>
+          <p class="score" id="score"></p>
+        </div>
+      </div>
+
+      <!-- مساعد نجاح العملاء -->
+      <div class="card" id="success-card">
+        <div class="report-head">
+          <div>
+            <h2>مساعد نجاح العملاء</h2>
+            <p class="muted">بيكتب رسالة لكل عميل ساكت. ولا رسالة بتتبعت غير لما تدوس «وافق وابعت» — وتقدر تعدّلها قبلها.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="cs-scan-btn">دوّر دلوقتي</button>
+            <button type="button" class="ghost" id="cs-toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="cs-msg"></p>
+        <p class="muted hidden" id="cs-empty">مفيش رسايل مستنياك. المساعد بيدوّر لوحده كل يوم الساعة ١٠ الصبح، والعميل مابيتكتبلوش أكتر من مرة في الأسبوع.</p>
+        <div id="cs-list"></div>
+        <p class="score" id="cs-score"></p>
+        <details id="cs-done-box" class="hidden">
+          <summary>اللي اتعمل قبل كده</summary>
+          <ul class="log" id="cs-done"></ul>
+        </details>
+      </div>
+
+      <!-- مدير المتابعة -->
+      <div class="card hidden" id="sup-card">
+        <div class="report-head">
+          <div>
+            <h2>مدير المتابعة</h2>
+            <p class="muted">كل يوم ٧ الصبح بيبعت لكل مدرب وأخصائي عنده عملاء إيميل بحالاته: مين ساكت، مين متأخر، مين مالوش برنامج، والاستشارات والإصابات المستنياه، ومستواه. وكل سبت ترتيبه بالأسامي وسط زمايله في نفس التخصص. وإنت بيوصلك كل سبت تقرير بالكل.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="sup-run-btn">احسب دلوقتي</button>
+            <button type="button" class="ghost" id="sup-toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="sup-msg"></p>
+        <p class="muted" id="sup-when"></p>
+        <p class="muted hidden" id="sup-empty">لسه ماتحسبش. دوس «احسب دلوقتي» — مابيبعتش إيميلات، بيحسب بس.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>الاسم</th><th>التخصص</th><th class="n">عملاء (نشط)</th><th class="n">النقط</th><th>المستوى</th><th class="n">الترتيب</th><th>آخر دخول</th></tr></thead>
+            <tbody id="sup-table"></tbody>
+          </table>
+        </div>
+        <div class="row hidden" id="sup-preview-row" style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <select id="sup-preview-pick"></select>
+          <button type="button" class="ghost" id="sup-preview-btn">ابعتلي نسخة من الإيميل بتاعه</button>
+        </div>
+        <h3 style="margin:18px 0 6px;font-size:15px">البونص — <span id="sup-month"></span></h3>
+        <p class="muted">اكتب مبلغ البونص للشهر، والموظف بيقسّمه على نقط كل واحد في الشهر (غير النشط مالوش). ده اقتراح — الدفع إنت اللي بتعمله.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <input id="sup-amount" type="number" min="0" placeholder="المبلغ بالجنيه" style="max-width:180px">
+          <button type="button" class="ghost" id="sup-amount-btn">احفظ المبلغ</button>
+        </div>
+        <table style="margin-top:8px">
+          <thead><tr><th>الاسم</th><th class="n">النقط</th><th class="n">نصيبه</th></tr></thead>
+          <tbody id="sup-bonus-rows"></tbody>
+        </table>
+        <p class="muted hidden" id="sup-bonus-empty">لسه مفيش نقط الشهر ده — بتتجمع كل يوم الساعة ٧.</p>
+        <button type="button" id="sup-approve-btn" style="margin-top:8px">اعتمد التوزيع</button>
+        <p class="muted" id="sup-approved"></p>
+      </div>
+
+      <!-- موظف التطوير -->
+      <div class="card hidden" id="rd-card">
+        <div class="report-head">
+          <div>
+            <h2>موظف التطوير</h2>
+            <p class="muted">كل أحد بيلم الجديد من أخبار جوجل وأبحاث PubMed وأدوات GitHub: مميزات عند المنافسين، أبحاث في التدريب والتأهيل والتغذية، مكتبات وأدوات، وأفكار تسويق ونمو. كل فكرة معاها مصادرها. إنت بتختار، واللي تقول عليه «عاوزها» بيروح لوحده لصندوق «لكلود».</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="rd-run-btn">دوّر دلوقتي</button>
+            <button type="button" class="ghost" id="rd-toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="rd-msg"></p>
+        <p class="muted hidden" id="rd-empty">مفيش أفكار مستنياك. هيدوّر لوحده يوم الأحد الساعة ١١ الصبح، أو دوس «دوّر دلوقتي».</p>
+        <div id="rd-list"></div>
+        <div class="hidden" id="rd-wanted-box">
+          <h3 style="margin:16px 0 4px;font-size:15px">اللي وافقت عليه</h3>
+          <button type="button" id="rd-copy-btn">انسخ القايمة وابعتها لـ Claude</button>
+          <div id="rd-wanted"></div>
+        </div>
+        <details id="rd-done-box" class="hidden">
+          <summary>اللي اتعمل أو اترفض</summary>
+          <ul class="log" id="rd-done"></ul>
+        </details>
+      </div>
+
+      <!-- مستشار البرامج -->
+      <div class="card hidden" id="advisor-card">
+        <div class="report-head">
+          <div>
+            <h2>مستشار البرامج</h2>
+            <p class="muted">بيشتغل من جوه صفحة العميل (تبويب التمرين): بيقترح برنامج أسبوع من مكتبة التمارين، ويتكلم معاك فيه، والاقتراح بيتحط في المحرر كمسودة لحد ما تحفظ. بيوصله بيانات العميل من غير اسم ولا تواصل.</p>
+            <p class="muted">مين يستخدمه: إنت دايمًا. ولأي متخصص — من البرنامج ← المتخصصين ← افتح كارته ← «مستشار البرامج».</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" class="ghost" id="av-toggle-btn"></button>
+          </div>
+        </div>
+        <h3 style="margin:4px 0 8px;font-size:14px">آخر ٧ أيام</h3>
+        <div class="ml-stats" id="av-stats"></div>
+        <p class="msg" id="av-msg"></p>
+      </div>
+
+      <!-- ساعي البريد -->
+      <div class="card hidden" id="mail-card">
+        <div class="report-head">
+          <div>
+            <h2>ساعي البريد</h2>
+            <p class="muted">لو عميل ماشافش رسالة أو تحديث بقاله أكتر من ساعتين، بيوصله إيميل واحد فيه كل اللي فاته وزرار يفتح ADAM. مرة واحدة في اليوم بالكتير، من ٩ الصبح لـ ١٠ بالليل، وفي آخره رابط يوقّف الإيميلات.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" class="ghost" id="ml-toggle-btn"></button>
+          </div>
+        </div>
+        <div class="ml-stats" id="ml-stats"></div>
+        <button type="button" class="ghost" id="ml-preview-btn">مين هيوصله إيميل دلوقتي؟</button>
+        <p class="msg" id="ml-msg"></p>
+        <ul class="log hidden" id="ml-preview"></ul>
+      </div>
+
+      <!-- مدير السوشيال ميديا -->
+      <div class="card hidden" id="socm-card">
+        <div class="report-head">
+          <div>
+            <h2>مدير السوشيال ميديا</h2>
+            <p class="muted">كل سبت الساعة ٩ الصبح: بيشوف التريند في مصر وأخبار الرياضة، ويعملك جدول الأسبوع — ٧ بوستات بميعادها ومكانها، أول جملة، الكلام، الهاشتاجات، والصورة أو الفيديو يتعمل إزاي. والصور بتطلع بلوجو ADAM من الاستوديو تحت.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" id="socm-run-btn">اعمل جدول دلوقتي</button>
+            <button type="button" class="ghost" id="socm-toggle-btn"></button>
+          </div>
+        </div>
+        <p class="msg" id="socm-msg"></p>
+        <div class="socm-times">
+          <label for="socm-times">أحسن مواعيد للنشر عندك (من Instagram ← Insights): </label>
+          <input id="socm-times" dir="ltr" placeholder="20:30, 21:30">
+          <button type="button" class="ghost" id="socm-times-btn">احفظ</button>
+        </div>
+        <h3>التريند في مصر دلوقتي</h3>
+        <div class="socm-trends" id="socm-trends"></div>
+        <h3>جدول الأسبوع</h3>
+        <p class="muted hidden" id="socm-empty">لسه مفيش جدول — دوس «اعمل جدول دلوقتي» أو استنى السبت الساعة ٩.</p>
+        <div id="socm-list"></div>
+
+        <h3 id="studio-head">استوديو الصور بلوجو ADAM</h3>
+        <div class="studio">
+          <div class="studio-controls">
+            <div class="studio-row">
+              <select id="st-kind">
+                <option value="tip">نصيحة</option>
+                <option value="quote">جملة تحفيزية</option>
+                <option value="stat">رقم من ADAM</option>
+                <option value="champion">بطل الأسبوع</option>
+                <option value="photo">صورتك + اللوجو</option>
+              </select>
+              <select id="st-size">
+                <option value="post">بوست ١٠٨٠×١٣٥٠</option>
+                <option value="story">ستوري/ريل ١٠٨٠×١٩٢٠</option>
+                <option value="square">مربع ١٠٨٠×١٠٨٠</option>
+              </select>
+            </div>
+            <input id="st-title" placeholder="العنوان">
+            <textarea id="st-body" rows="3" placeholder="الكلام"></textarea>
+            <label class="studio-file" id="st-file-wrap">صورة (من موبايلك أو من Gemini) <input type="file" id="st-file" accept="image/*"></label>
+            <p class="muted" id="st-champ-note">بطل الأسبوع: اكتب الاسم بس لو العميل موافق ينزل اسمه.</p>
+            <div class="studio-row">
+              <button type="button" id="st-download">نزّل الصورة</button>
+              <button type="button" class="ghost" id="st-gemini">افتح Gemini</button>
+            </div>
+          </div>
+          <canvas id="st-canvas" width="1080" height="1350"></canvas>
+        </div>
+      </div>
+
+      <!-- صانع المحتوى -->
+      <div class="card" id="content-card">
+        <div class="report-head">
+          <div>
+            <h2>صانع المحتوى</h2>
+            <p class="muted">بيكتب بوستات وسكريبتات ريلز من مكتبات ADAM نفسها. إنت اللي بتراجع وتنسخ وتنشر.</p>
+          </div>
+          <div class="toolbar">
+            <button type="button" class="ghost" id="ct-toggle-btn"></button>
+          </div>
+        </div>
+        <div class="ct-controls">
+          <label>عن إيه
+            <select id="ct-kind">
+              <option value="mix">مزيج</option>
+              <option value="exercise">تمرين وطريقته</option>
+              <option value="mistake">غلطات شائعة في تمرين</option>
+              <option value="food">معلومة أكل</option>
+              <option value="supplement">مكمل: الحقيقة والدليل</option>
+            </select>
+          </label>
+          <label>الشكل
+            <select id="ct-format">
+              <option value="post">بوست (إنستجرام/فيسبوك)</option>
+              <option value="reel">سكريبت ريلز/تيك توك</option>
+            </select>
+          </label>
+          <label>اللغة
+            <select id="ct-lang">
+              <option value="ar">مصري</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+          <label>العدد
+            <select id="ct-count">
+              <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
+            </select>
+          </label>
+        </div>
+        <button type="button" id="ct-write-btn">اكتب مسودات</button>
+        <p class="msg" id="ct-msg"></p>
+        <div id="ct-list"></div>
+        <p class="score" id="ct-score"></p>
+        <details id="ct-done-box" class="hidden">
+          <summary>اللي اتعمل قبل كده</summary>
+          <ul class="log" id="ct-done"></ul>
+        </details>
+      </div>
+
+      <!-- التقارير القديمة -->
+      <div class="card hidden" id="history-card">
+        <h2>التقارير اللي فاتت</h2>
+        <ul class="history" id="history"></ul>
+      </div>
+
+      <!-- سجل التشغيل -->
+      <div class="card" id="log-card">
+        <h2>سجل التشغيل</h2>
+        <ul class="log" id="log"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="team.js"></script>
+</body>
+</html>
