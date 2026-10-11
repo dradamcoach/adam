@@ -29881,6 +29881,19 @@ function openAnatomyViewer() {
   window.addEventListener('message', async function (e) {
     if (e.origin !== location.origin) return;
     const d = e.data;
+    if (d && d.type === 'adam-open-consult') {
+      closeAnatomyViewer();
+      try {
+        if (typeof clientEmail !== 'undefined' && clientEmail) {
+          setClientMode('consult');
+          runModeLoader('consult');
+          if (typeof d.topic === 'string' && clientConsultText && !clientConsultText.value) {
+            clientConsultText.value = (document.documentElement.lang === 'en' ? 'I would like help with: ' : 'محتاج مساعدة بخصوص: ') + d.topic.slice(0, 80);
+          }
+        }
+      } catch (err) {}
+      return;
+    }
     if (!d || d.type !== 'adam-open-ex' || typeof d.id !== 'string') return;
     try { await ensureExtraLibrary(); } catch (err) {}
     const ex = libraryEntryById(d.id);
