@@ -133,7 +133,7 @@ function muscleDetail(d){if(d.g!=='muscle')return '';const nm=d.n.toLowerCase();
  const E=LANG==='en',i=E?1:0,row=(h,t)=>t&&t[i]&&t[i]!=='—'?'<div style="margin-top:6px"><b style="color:#e9eef2">'+h+':</b> '+t[i]+'</div>':'';
  let h='<div style="margin-top:8px;border-top:1px solid #273441;padding-top:6px;line-height:1.7;font-size:12.5px;color:#c9d4dc;'+(E?'direction:ltr;text-align:left':'')+'">';
  h+=row(E?'Origin':'المنشأ',f.o)+row(E?'Insertion':'الاندغام',f.i)+row(E?'Action':'الحركة',f.a)+row(E?'Nerve':'العصب',f.n)+row(E?'Tendon / ligament':'الوتر / الأربطة',f.t);
- const ex=EXMAP[f.k];if(ex&&ex.length){h+='<div style="margin-top:8px"><b style="color:#e9eef2">'+(E?'Exercises in ADAM':'تمارين من مكتبة ADAM')+':</b><div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:5px">'+ex.map(e=>'<span style="padding:3px 9px;border:1px solid #273441;border-radius:999px;background:#0f1822;font-size:12px">'+(E?e[2]:e[1])+'</span>').join('')+'</div></div>'}
+ const ex=EXMAP[f.k];if(ex&&ex.length){h+='<div style="margin-top:8px"><b style="color:#e9eef2">'+(E?'Exercises in ADAM (tap to open)':'تمارين من مكتبة ADAM (اضغط لفتح التمرين)')+':</b><div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:5px">'+ex.map(e=>'<span data-ex="'+e[0]+'" style="padding:5px 11px;border:1px solid #3a4b5c;border-radius:999px;background:#0f1822;font-size:12px;cursor:pointer">'+(E?e[2]:e[1])+'</span>').join('')+'</div></div>'}
  return h+'<div style="margin-top:6px;font-size:11px;color:#d9a441">'+(E?'Anatomical details are pending medical review.':'التفاصيل التشريحية قيد المراجعة الطبية.')+'</div></div>'}
 function select(m){
  if(sel&&sel.material.emissive){sel.material.emissive.setHex(sel.userData.em)}
@@ -144,6 +144,7 @@ function select(m){
  const d=META[m.userData.i];const E=LANG==='en';const side=d.s==='L'?(E?'Left':'اليسار'):d.s==='R'?(E?'Right':'اليمين'):'';
  if(E){const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);info.innerHTML='<p id="ar" style="direction:ltr;text-align:left">'+cap(d.n)+'</p><div id="en" style="direction:ltr;text-align:left">'+(d.a||'')+'</div><div id="meta" style="direction:ltr;text-align:left">'+(GLE[d.g]||'')+(d.p?' (approximate schematic path)':'')+(d.r&&d.g==='muscle'?' | Region: '+d.r:'')+(side?' | Side: '+side:'')+'</div>'+muscleDetail(d);return}
  info.innerHTML='<p id="ar">'+(d.a||'اسم عربي قيد المراجعة')+'</p><div id="en">'+d.n+'</div><div id="meta">'+(GL[d.g]||'')+(d.p?' (مسار تخطيطي تقريبي)':'')+(d.r&&d.g==='muscle'?' | المنطقة: '+({head:'الرأس',neck:'الرقبة',thorax:'الصدر',abdomen:'البطن','vertebral column':'عضلات الظهر',back:'الظهر',pelvi:'الحوض',perine:'الحوض',shoulder:'الكتف','upper limb':'الطرف العلوي','lower limb':'الطرف السفلي',other:'أخرى'}[d.r]||''):'')+(side?' | الجانب: '+side:'')+'</div>'+muscleDetail(d)}
+document.getElementById('info').addEventListener('click',e=>{const t=e.target.closest('[data-ex]');if(t&&window.parent!==window)window.parent.postMessage({type:'adam-open-ex',id:t.dataset.ex},location.origin)});
 document.getElementById('hide').onclick=()=>{if(sel){sel.visible=false;select(null);document.getElementById('showall').style.display=''}};
 document.getElementById('showall').onclick=()=>{meshes.forEach(m=>m.visible=true);document.getElementById('showall').style.display='none'};
 // UI
