@@ -29,7 +29,7 @@ footer{padding:2px 12px 8px;color:var(--mut);font-size:10.5px;text-align:center;
 @media(max-width:820px){#main{flex-direction:column}#stage{flex:none;height:56vh}#side{width:auto;flex:1}}
 </style></head><body>
 <div id="app">
-<header><h1>التشريح ثلاثي الأبعاد</h1><p>اسحب للدوران، وعجلة الماوس أو القرص بإصبعين للتكبير، واضغط على أي جزء لمعرفة اسمه.</p></header>
+<header style="position:relative"><div class="chip" id="lang" style="position:absolute;top:8px;inset-inline-end:12px;padding:5px 12px;font-size:12px">EN</div><h1 id="h1">التشريح ثلاثي الأبعاد</h1><p id="hp">اسحب للدوران، وعجلة الماوس أو القرص بإصبعين للتكبير، واضغط على أي جزء لمعرفة اسمه.</p></header>
 <div id="main">
  <div id="stage"><canvas id="gl"></canvas><div id="load"><div id="lt">جاري تحميل النموذج...</div><div class="bar"><i id="lb"></i></div></div><div id="tip">اسحب: دوران | سحب بزر الماوس الأيمن أو بإصبعين: تحريك</div></div>
  <div id="side">
@@ -132,9 +132,10 @@ function select(m){
  if(sel&&sel.material.emissive){sel.material.emissive.setHex(sel.userData.em)}
  sel=m;const info=document.getElementById('info');
  document.getElementById('hide').style.display=m?'':'none';
- if(!m){info.innerHTML='<div class="hint">مفيش جزء هنا. جرّب مكان تاني.</div>';return}
+ if(!m){info.innerHTML='<div class="hint">'+(LANG==='en'?'Nothing here. Try another spot.':'مفيش جزء هنا. جرّب مكان تاني.')+'</div>';return}
  m.userData.em=m.material.emissive.getHex();m.material.emissive.setHex(0x6a5a10);
- const d=META[m.userData.i];const side=d.s==='L'?'اليسار':d.s==='R'?'اليمين':'';
+ const d=META[m.userData.i];const E=LANG==='en';const side=d.s==='L'?(E?'Left':'اليسار'):d.s==='R'?(E?'Right':'اليمين'):'';
+ if(E){const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);info.innerHTML='<p id="ar" style="direction:ltr;text-align:left">'+cap(d.n)+'</p><div id="en" style="direction:ltr;text-align:left">'+(d.a||'')+'</div><div id="meta" style="direction:ltr;text-align:left">'+(GLE[d.g]||'')+(d.p?' (approximate schematic path)':'')+(d.r&&d.g==='muscle'?' | Region: '+d.r:'')+(side?' | Side: '+side:'')+'</div>';return}
  info.innerHTML='<p id="ar">'+(d.a||'اسم عربي قيد المراجعة')+'</p><div id="en">'+d.n+'</div><div id="meta">'+(GL[d.g]||'')+(d.p?' (مسار تخطيطي تقريبي)':'')+(d.r&&d.g==='muscle'?' | المنطقة: '+({head:'الرأس',neck:'الرقبة',thorax:'الصدر',abdomen:'البطن','vertebral column':'عضلات الظهر',back:'الظهر',pelvi:'الحوض',perine:'الحوض',shoulder:'الكتف','upper limb':'الطرف العلوي','lower limb':'الطرف السفلي',other:'أخرى'}[d.r]||''):'')+(side?' | الجانب: '+side:'')+'</div>'}
 document.getElementById('hide').onclick=()=>{if(sel){sel.visible=false;select(null);document.getElementById('showall').style.display=''}};
 document.getElementById('showall').onclick=()=>{meshes.forEach(m=>m.visible=true);document.getElementById('showall').style.display='none'};
@@ -148,6 +149,27 @@ document.querySelectorAll('[data-v]').forEach(c=>c.onclick=()=>{st.yaw={f:0,b:Ma
 document.getElementById('spin').onclick=function(){auto=!auto;this.classList.toggle('on',auto)};
 document.getElementById('reset').onclick=()=>{Object.assign(st,{yaw:0,pitch:0.05,dist:330,tx:0,ty:80});applyCam()};
 function loop(){requestAnimationFrame(loop);if(auto&&pts.size==0){st.yaw+=0.006;applyCam()}R.render(scene,cam)}
+
+const GLE={bone:'Bone',cart:'Cartilage / ligament',lig:'Cartilage / ligament',muscle:'Muscle',nerve:'Nervous system',brain:'Brain',vessel:'Blood vessel'};
+let LANG='ar';
+const I18N=[['#h1','التشريح ثلاثي الأبعاد','3D Anatomy'],['#hp','اسحب للدوران، وعجلة الماوس أو القرص بإصبعين للتكبير، واضغط على أي جزء لمعرفة اسمه.','Drag to rotate, scroll or pinch to zoom, tap any part to see its name.'],
+['#lt','جاري تحميل النموذج...','Loading model...'],['#tip','اسحب: دوران | سحب بزر الماوس الأيمن أو بإصبعين: تحريك','Drag: rotate | Right-drag or two fingers: pan'],
+['[data-g=muscle]','عضلي','Muscles'],['[data-g=bone]','عظمي','Bones'],['[data-g=cart]','غضاريف وأربطة','Cartilage & ligaments'],['[data-g=nerve]','عصبي','Nerves'],['[data-g=vessel]','أوعية دموية','Blood vessels'],
+['[data-p=mus]','عضلي فقط','Muscles only'],['[data-p=bone]','عظمي فقط','Bones only'],['[data-p=nerv]','عصبي فقط','Nerves only'],['[data-p=vasc]','أوعية فقط','Vessels only'],
+['[data-v=f]','أمام','Front'],['[data-v=b]','خلف','Back'],['[data-v=s]','جنب','Side'],['#spin','دوران تلقائي','Auto-rotate'],['#reset','إعادة ضبط','Reset'],
+['#hide','إخفاء الجزء ده','Hide this part'],['#showall','إظهار الكل','Show all'],['label[for],#op+*','','']].filter(x=>x[1]);
+const H3=[['العرض','Display'],['الأجهزة','Systems'],['الجزء المحدد','Selected part']];
+const NOTE=['المحتوى تعليمي وليس بديلاً عن الطبيب. أسماء الأعصاب والأوعية الدموية وعضلات الوجه الجديدة قيد المراجعة الطبية.','Educational content, not a substitute for a physician. Names of the newer nerves, blood vessels and facial muscles are pending medical review.'];
+const HINT=['لسه مختارتش حاجة. اضغط على الجسم.','Nothing selected yet. Tap the body.'];
+function setLang(l){LANG=l;const E=l==='en';document.documentElement.lang=l;document.documentElement.dir=E?'ltr':'rtl';
+ I18N.forEach(x=>{const el=document.querySelector(x[0]);if(el)el.textContent=E?x[2]:x[1]});
+ document.querySelectorAll('.card h3').forEach(h=>{const t=H3.find(a=>a[0]===h.textContent||a[1]===h.textContent);if(t)h.textContent=E?t[1]:t[0]});
+ const lb=document.querySelector('#op').previousElementSibling;if(lb)lb.textContent=E?'Muscle opacity':'شفافية العضلات';
+ const n=document.querySelector('.card.note');if(n)n.textContent=E?NOTE[1]:NOTE[0];
+ document.getElementById('lang').textContent=E?'AR':'EN';
+ const h=document.querySelector('#info .hint');if(h)h.textContent=E?HINT[1]:HINT[0];
+ if(sel)select(sel);}
+document.getElementById('lang').onclick=()=>setLang(LANG==='ar'?'en':'ar');
 window.__ready=()=>meshes.length;
 window.__st=st;window.__apply=applyCam;window.__pick=pick;
 </script></body></html>
