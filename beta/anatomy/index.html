@@ -166,8 +166,15 @@ function select(m){
  info.innerHTML='<p id="ar">'+(d.a||'اسم عربي قيد المراجعة')+'</p><div id="en">'+d.n+'</div><div id="meta">'+(GL[d.g]||'')+(d.p?' (مسار تخطيطي تقريبي)':'')+(d.r&&d.g==='muscle'?' | المنطقة: '+({head:'الرأس',neck:'الرقبة',thorax:'الصدر',abdomen:'البطن','vertebral column':'عضلات الظهر',back:'الظهر',pelvi:'الحوض',perine:'الحوض',shoulder:'الكتف','upper limb':'الطرف العلوي','lower limb':'الطرف السفلي',other:'أخرى'}[d.r]||''):'')+(side?' | الجانب: '+side:'')+'</div>'+muscleDetail(d)}
 document.getElementById('info').addEventListener('click',e=>{const t=e.target.closest('[data-ex]');if(t&&window.parent!==window)window.parent.postMessage({type:'adam-open-ex',id:t.dataset.ex},location.origin)});
 
-document.getElementById('info').addEventListener('click',e=>{const t=e.target.closest('[data-inj]');if(!t)return;const d=INJ[t.dataset.inj],E=LANG==='en',i=E?1:0,box=document.getElementById('injbox');if(!box||!d)return;
- box.innerHTML='<div style="margin-top:8px;padding:8px;border:1px solid #6b3b35;border-radius:10px;background:#160e0e"><b>'+d.n[i]+'</b><div style="margin-top:4px">'+d.ab[i]+'</div>'+(d.ph.length?'<div style="margin-top:6px;color:#93a4b1">'+(E?'Rehab phases: ':'مراحل التأهيل: ')+d.ph.map(p=>p[i]).filter(Boolean).join(' &rarr; ')+'</div>':'')+'<div style="margin-top:6px;font-size:11px;color:#d9a441">'+(E?'Educational only. Rehab must be planned by a qualified clinician.':'للتعليم فقط. خطة التأهيل لازم يحددها مختص.')+'</div></div>'});
+document.getElementById('info').addEventListener('click',e=>{
+ const c=e.target.closest('[data-consult]');
+ if(c){if(window.parent!==window)window.parent.postMessage({type:'adam-open-consult',topic:c.dataset.consult},location.origin);return}
+ const t=e.target.closest('[data-inj]');if(!t)return;const d=INJ[t.dataset.inj],E=LANG==='en',i=E?1:0,box=document.getElementById('injbox');if(!box||!d)return;
+ const first=(d.ab[i]||'').split(/(?<=[.!؟])\s/)[0];
+ const ph=d.ph.map(p=>p[i]).filter(Boolean);
+ box.innerHTML='<div style="margin-top:8px;padding:8px;border:1px solid #6b3b35;border-radius:10px;background:#160e0e"><b>'+d.n[i]+'</b><div style="margin-top:4px">'+first+'</div>'+(ph.length?'<div style="margin-top:6px;color:#93a4b1">'+(E?'Phases: ':'المراحل: ')+ph.join(' &rarr; ')+'</div>':'')
+ +(window.parent!==window?'<div data-consult="'+d.n[i].replace(/"/g,'')+'" style="margin-top:8px;padding:8px 10px;border-radius:10px;background:#2a1a17;border:1px solid #d9a441;color:#f0d9a0;cursor:pointer;text-align:center;font-size:12.5px">'+(E?'Connect with a rehab specialist or a doctor, free, to help you':'اشترك مع متخصص تأهيل أو طبيب، مجانًا، وهيساعدك')+'</div>':'')
+ +'<div style="margin-top:6px;font-size:11px;color:#d9a441">'+(E?'Educational only. Rehab must be planned by a qualified clinician.':'للتعليم فقط. خطة التأهيل لازم يحددها مختص.')+'</div></div>'});
 document.getElementById('hide').onclick=()=>{if(sel){sel.visible=false;select(null);document.getElementById('showall').style.display=''}};
 document.getElementById('showall').onclick=()=>{meshes.forEach(m=>{if(m.userData.grp!=='att')m.visible=true});document.getElementById('showall').style.display='none'};
 // UI
