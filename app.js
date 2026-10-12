@@ -21,6 +21,7 @@ import { DRILLS_LIBRARY, DRILL_CATEGORIES, DRILL_EQUIPMENT } from './drills-libr
 import { SPORT_TEMPLATES_EXTRA } from './library/templates-extra.js';
 import { REHAB_TEMPLATES_EXTRA } from './library/rehab-extra.js';
 import { FOOD_LIBRARY_EXTRA, FOOD_SERVINGS_EXTRA } from './library/food-extra.js';
+import { foodArt, foodDetails } from './food-art.js';
 import { NUTRITION_PROGRAMS_EXTRA } from './library/programs-extra.js';
 import { SUPPLEMENT_LIBRARY_EXTRA } from './library/supplements-extra.js';
 import { MED_LIBRARY_SEED_EXTRA } from './library/med-extra.js';
@@ -2070,6 +2071,12 @@ const TEXT = {
     rest_msg: 'خد راحتك النهاردة — الجسم بيبني وهو مرتاح',
     rest_title: 'يوم راحة',
     no_plan: 'مفيش برنامج لليوم ده',
+    own_title: 'تمريني الخاص',
+    own_build: 'ابنِ تمرينك بنفسك',
+    own_edit: 'عدّل تمريني',
+    own_auto: 'جهّز لي جدول تلقائي',
+    own_hint: 'مفيش برنامج من المدرب لليوم ده؟ اعمل تمرينك لنفسك.',
+    own_today: 'تمرينك النهاردة',
     no_plan_title: 'اليوم ده لسه فاضي',
     no_rehab_title: 'مفيش برنامج تأهيل',
     ob_health_label: 'في حاجة في صحتك لازم فريقك يعرفها؟',
@@ -4701,6 +4708,12 @@ const TEXT = {
     rest_msg: 'Take it easy today — the body builds while it rests',
     rest_title: 'Rest day',
     no_plan: 'No program for this day',
+    own_title: 'My own workout',
+    own_build: 'Build your own workout',
+    own_edit: 'Edit my workout',
+    own_auto: 'Create a schedule for me',
+    own_hint: 'No coach program for this day? Make your own workout.',
+    own_today: 'Your workout today',
     no_plan_title: 'This day is still empty',
     no_rehab_title: 'No rehab program',
     ob_health_label: 'Anything about your health your team should know?',
@@ -11336,25 +11349,29 @@ function setClientMode(mode) {
   ctabStore.classList.toggle('active', mode === 'store');
   ctabConsult.classList.toggle('active', mode === 'consult');
   if (mode === 'home') renderClientHome();
-  else ensureClientBackBars();
+  ensureClientBackBars();
   paintAppbar();
   if (!clientScreen.classList.contains('hidden')) navRecord(clientScreen, mode);
   window.scrollTo(0, 0);
 }
 
-/* شريط رجوع ظاهر فوق كل قسم من أقسام العميل (الآيفون مفيهوش زرار رجوع) */
+/* زرار رجوع صغير في ركن الشاشة فوق (زي الشاشات العادية) */
 function ensureClientBackBars() {
-  ['client-training', 'client-nutrition', 'client-classes', 'client-activity', 'client-physio', 'client-rehab', 'client-consult', 'client-store'].forEach(function (id) {
-    const panel = document.getElementById(id);
-    if (!panel || panel.querySelector(':scope > .cp-back')) return;
-    const bar = document.createElement('button');
+  let bar = document.getElementById('client-back-fab');
+  if (!bar) {
+    bar = document.createElement('button');
     bar.type = 'button';
-    bar.className = 'cp-back';
-    bar.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg><span data-t="back_bar"></span>';
-    bar.querySelector('span').textContent = t('back_bar');
+    bar.id = 'client-back-fab';
+    bar.className = 'cp-back-fab hidden';
+    bar.setAttribute('aria-label', 'back');
+    bar.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg>';
     bar.addEventListener('click', function () { setClientMode('home'); });
-    panel.insertBefore(bar, panel.firstChild);
-  });
+    (clientScreen || document.body).appendChild(bar);
+  }
+  const show = clientMode && clientMode !== 'home' && clientScreen && !clientScreen.classList.contains('hidden');
+  bar.classList.toggle('hidden', !show);
+  /* نشيل أي شريط رجوع كبير قديم */
+  document.querySelectorAll('.cp-back').forEach(function (n) { n.remove(); });
 }
 ensureClientBackBars();
 
@@ -13972,6 +13989,47 @@ const STATE_ART = {
   empty: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="10" width="36" height="44" rx="5"></rect><line x1="22" y1="22" x2="42" y2="22"></line><line x1="22" y1="31" x2="36" y2="31"></line><line x1="22" y1="40" x2="30" y2="40"></line></svg>'
 };
 
+/* تمرين العميل لنفسه لما مفيش برنامج من المدرب */
+function appendOwnWorkout(parent, isToday) {
+  const box = document.createElement('div');
+  box.className = 'own-wo';
+  const head = document.createElement('div');
+  head.className = 'own-wo-head';
+  head.textContent = t('own_title');
+  box.appendChild(head);
+  const hint = document.createElement('p');
+  hint.className = 'own-wo-hint';
+  hint.textContent = t('own_hint');
+  box.appendChild(hint);
+  const list = document.createElement('div');
+  list.className = 'own-wo-list';
+  box.appendChild(list);
+  const row = document.createElement('div');
+  row.className = 'own-wo-btns';
+  const b1 = document.createElement('button');
+  b1.type = 'button'; b1.className = 'own-wo-btn primary'; b1.textContent = t('own_build');
+  b1.addEventListener('click', function () { import('./adam-plus.js').then(function (m) { m.openOwn(); }).catch(function () {}); });
+  const b2 = document.createElement('button');
+  b2.type = 'button'; b2.className = 'own-wo-btn'; b2.textContent = t('own_auto');
+  b2.addEventListener('click', function () { import('./adam-plus.js').then(function (m) { m.open('plan'); }).catch(function () {}); });
+  row.appendChild(b1); row.appendChild(b2);
+  box.appendChild(row);
+  parent.appendChild(box);
+  if (!isToday) return;
+  import('./adam-plus.js').then(function (m) { return m.todayOwn(); }).then(function (r) {
+    if (!r || !r.items || !r.items.length) return;
+    list.innerHTML = '';
+    const lh = document.createElement('div'); lh.className = 'own-wo-sub'; lh.textContent = t('own_today'); list.appendChild(lh);
+    r.items.forEach(function (it) {
+      const li = document.createElement('div'); li.className = 'own-wo-item';
+      const n = document.createElement('span'); n.textContent = it.name;
+      const e = document.createElement('em'); e.textContent = it.sets + ' × ' + it.reps;
+      li.appendChild(n); li.appendChild(e); list.appendChild(li);
+    });
+    b1.textContent = t('own_edit');
+  }).catch(function () {});
+}
+
 function clientStateCard(kind, title, text) {
   const box = document.createElement('div');
   box.className = 'state-card state-' + kind;
@@ -14400,6 +14458,7 @@ function showClientDay() {
     clientSections.appendChild(clientStateCard('rest', t('rest_title'), t('rest_msg')));
   } else if (total === 0) {
     clientSections.appendChild(clientStateCard('empty', t('no_plan_title'), t('no_plan')));
+    appendOwnWorkout(clientSections, isToday);
   } else {
     let order = 0;
     SECTION_KEYS.forEach(function (key) {
@@ -15064,6 +15123,67 @@ function fillMealPicker() {
   if (!targetMeal.value) targetMeal.value = 'breakfast';
 }
 
+/* ---------- كارت تفاصيل الصنف ---------- */
+const FD_TX = {
+  ar: { close: 'رجوع', per100: 'لكل 100 جرام', kcal: 'سعرات', protein: 'بروتين', carbs: 'كارب', fat: 'دهون', fiber: 'ألياف', sugar: 'سكر', sodium: 'صوديوم', gi: 'المؤشر الجلايسيمي', vit: 'أهم الفيتامينات والمعادن', serv: 'الحصص البيتية', prep: 'طريقة التحضير', when: 'أنسب وقت للأكل', note: 'الأرقام دي تقريبية وبتختلف حسب الطريقة والمكوّنات. استشر أخصائي التغذية لخطة دقيقة.', g: 'جم', mg: 'ملجم', kc: 'سعر', unk: '—' },
+  en: { close: 'Back', per100: 'per 100 g', kcal: 'Calories', protein: 'Protein', carbs: 'Carbs', fat: 'Fat', fiber: 'Fibre', sugar: 'Sugar', sodium: 'Sodium', gi: 'Glycemic index', vit: 'Key vitamins and minerals', serv: 'Household servings', prep: 'Preparation', when: 'Best time to eat', note: 'These numbers are approximate and vary with method and ingredients. Ask your nutrition specialist for an exact plan.', g: 'g', mg: 'mg', kc: 'kcal', unk: '—' }
+};
+
+function closeFoodDetail() {
+  const ov = document.getElementById('food-detail');
+  if (ov) ov.classList.add('hidden');
+  document.body.classList.remove('fd-lock');
+}
+
+function openFoodDetail(food) {
+  if (!food) return;
+  const tx = FD_TX[lang === 'en' ? 'en' : 'ar'];
+  const d = foodDetails(food, lang === 'en');
+  let ov = document.getElementById('food-detail');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'food-detail';
+    ov.className = 'fd-overlay hidden';
+    document.body.appendChild(ov);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeFoodDetail(); });
+  }
+  const esc = function (x) { return String(x == null ? '' : x).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  const name = food[lang] || food.ar || food.en || '';
+  const fmt = function (n) { return n == null ? tx.unk : (Math.round(Number(n) * 10) / 10).toString(); };
+  let h = '<div class="fd-top"><button type="button" class="fd-back" aria-label="' + esc(tx.close) + '"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg></button></div>';
+  h += '<div class="fd-body">';
+  h += '<div class="fd-hero"><div class="fd-art">' + foodArt(food) + '</div><div><h2>' + esc(name) + '</h2><span class="fd-chip">' + esc(foodCategoryName(food.cat)) + '</span></div></div>';
+  h += '<div class="fd-sec">' + esc(tx.per100) + '</div><div class="fd-grid4">' +
+    '<div class="fd-box k"><b>' + fmt(food.c) + '</b><span>' + esc(tx.kcal) + '</span></div>' +
+    '<div class="fd-box"><b>' + fmt(food.p) + '</b><span>' + esc(tx.protein) + '</span></div>' +
+    '<div class="fd-box"><b>' + fmt(food.cb) + '</b><span>' + esc(tx.carbs) + '</span></div>' +
+    '<div class="fd-box"><b>' + fmt(food.f) + '</b><span>' + esc(tx.fat) + '</span></div></div>';
+  h += '<div class="fd-grid4 sm">' +
+    '<div class="fd-box"><b>' + fmt(d.fiber) + '</b><span>' + esc(tx.fiber) + ' (' + esc(tx.g) + ')</span></div>' +
+    '<div class="fd-box"><b>' + fmt(d.sugar) + '</b><span>' + esc(tx.sugar) + ' (' + esc(tx.g) + ')</span></div>' +
+    '<div class="fd-box"><b>' + fmt(d.sodium) + '</b><span>' + esc(tx.sodium) + ' (' + esc(tx.mg) + ')</span></div>' +
+    '<div class="fd-box"><b>' + (d.gi == null ? tx.unk : d.gi) + '</b><span>' + esc(tx.gi) + '</span></div></div>';
+  h += '<div class="fd-sec">' + esc(tx.vit) + '</div><p class="fd-p">' + esc(d.vit) + '</p>';
+  const sv = foodServings(food).list || [];
+  if (sv.length) {
+    h += '<div class="fd-sec">' + esc(tx.serv) + '</div><div class="fd-serv">';
+    sv.forEach(function (row) {
+      const gm = Number(row[1]) || 0;
+      h += '<div class="fd-sv"><span>' + esc(unitName(row[0])) + ' <small>(' + gm + ' ' + esc(tx.g) + ')</small></span><em>' + Math.round((food.c || 0) * gm / 100) + ' ' + esc(tx.kc) + '</em></div>';
+    });
+    h += '</div>';
+  }
+  h += '<div class="fd-sec">' + esc(tx.prep) + '</div><ol class="fd-steps">' + d.steps.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>';
+  h += '<div class="fd-sec">' + esc(tx.when) + '</div><p class="fd-p">' + esc(d.when) + '</p>';
+  h += '<p class="fd-note">' + esc(tx.note) + '</p></div>';
+  ov.innerHTML = h;
+  ov.setAttribute('dir', lang === 'en' ? 'ltr' : 'rtl');
+  ov.querySelector('.fd-back').addEventListener('click', closeFoodDetail);
+  ov.classList.remove('hidden');
+  document.body.classList.add('fd-lock');
+  ov.scrollTop = 0;
+}
+
 function foodItemRow(item, list, index, editable, onChange) {
   const li = document.createElement('li');
 
@@ -15072,8 +15192,9 @@ function foodItemRow(item, list, index, editable, onChange) {
   const source = item.foodId ? foodById(item.foodId) : null;
   if (source && (source.icon || source.cat)) {
     const icon = document.createElement('span');
-    icon.className = 'meal-food-icon';
-    icon.appendChild(iconSvg(foodCategoryIcon(source.cat), 'ui-icon'));
+    icon.className = 'meal-food-icon has-art';
+    icon.innerHTML = foodArt(source);
+    icon.addEventListener('click', function (event) { event.stopPropagation(); openFoodDetail(source); });
     li.appendChild(icon);
   }
 
@@ -15714,12 +15835,11 @@ function renderFoodList() {
        */
       const iconBtn = document.createElement('button');
       iconBtn.type = 'button';
-      iconBtn.className = 'food-photo-btn food-icon-btn';
-      iconBtn.title = t('add_photo_short');
-      iconBtn.appendChild(iconSvg(foodCategoryIcon(food.cat), 'ui-icon'));
+      iconBtn.className = 'food-photo-btn food-icon-btn has-art';
+      iconBtn.innerHTML = foodArt(food);
       iconBtn.addEventListener('click', function (event) {
         event.stopPropagation();
-        pickLibraryImage(foodImageKey);
+        openFoodDetail(food);
       });
       li.appendChild(iconBtn);
     }
@@ -16157,8 +16277,9 @@ function renderPickerList() {
     li.className = 'picker-item';
 
     const icon = document.createElement('span');
-    icon.className = 'meal-food-icon';
-    icon.appendChild(iconSvg(foodCategoryIcon(food.cat), 'ui-icon'));
+    icon.className = 'meal-food-icon has-art';
+    icon.innerHTML = foodArt(food);
+    icon.addEventListener('click', function (event) { event.stopPropagation(); openFoodDetail(food); });
     li.appendChild(icon);
 
     const info = document.createElement('div');

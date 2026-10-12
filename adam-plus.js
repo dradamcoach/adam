@@ -117,6 +117,11 @@ export async function open(tab) {
   const al = { tpl: ['lib', 'tpl'], libex: ['lib', 'ex'], progs: ['lib', 'prog'] }[tab];
   if (al) { go(al[0]); sub.lt = al[1]; draw(); } else go(tab || curTab);
 }
+export async function openOwn() {
+  await open('plan');
+  if (!plus.train) plus.train = { params: { goal: 'fitness', days: 0, equip: 'gym' }, days: [], seed: 0, created: stamp(), custom: true };
+  sub.planTab = 'train'; sub.editTrain = false; sub.manual = { wd: dayIdx(new Date()) }; draw();
+}
 export function close() { const ov = document.getElementById('adam-plus'); if (ov) ov.classList.add('hidden'); document.body.classList.remove('ap-lock'); }
 
 function go(tab) {
@@ -440,7 +445,7 @@ const SLOTS = {
   full: ['chest', 'lats', 'quadriceps', 'hamstrings', 'shoulders', 'abdominals']
 };
 const SPLITS = { 2: ['full', 'full'], 3: ['full', 'full', 'full'], 4: ['upper', 'lower', 'upper', 'lower'], 5: ['push', 'pull', 'legs', 'upper', 'lower'], 6: ['push', 'pull', 'legs', 'push', 'pull', 'legs'] };
-const SPLIT_NAME = { push: ['دفع', 'Push'], pull: ['سحب', 'Pull'], legs: ['رجلين', 'Legs'], upper: ['جزء علوي', 'Upper body'], lower: ['جزء سفلي', 'Lower body'], full: ['جسم كامل', 'Full body'] };
+const SPLIT_NAME = { push: ['دفع', 'Push'], pull: ['سحب', 'Pull'], legs: ['رجلين', 'Legs'], upper: ['جزء علوي', 'Upper body'], lower: ['جزء سفلي', 'Lower body'], full: ['جسم كامل', 'Full body'], custom: ['تمريني أنا', 'My workout'] };
 const WD_SETS = { 2: [0, 3], 3: [0, 2, 4], 4: [0, 1, 3, 4], 5: [0, 1, 3, 4, 5], 6: [0, 1, 2, 3, 4, 5] };
 const SR = { muscle: [4, '8-12'], strength: [5, '4-6'], fat: [3, '12-15'], fitness: [3, '10-12'] };
 
@@ -473,9 +478,10 @@ function viewPlan(body) {
 }
 function planTrain(el) {
   const pre = sub.trainPre; if (pre) { plus.trainDraft = Object.assign({ goal: 'muscle', days: 3, equip: 'gym' }, pre); sub.trainPre = null; }
+  if (sub.manual) { planManual(el); return; }
   const d = plus.trainDraft || (plus.train && plus.train.params) || { goal: 'muscle', days: 3, equip: 'gym' };
   let h = '';
-  if (plus.train && !sub.editTrain) {
+  if (plus.train && plus.train.days.length && !sub.editTrain) {
     h += '<div class="ap-row"><b>' + esc(L('جدولك', 'Your schedule')) + '</b><button type="button" class="ap-btn small ghost" id="ap-retrain">' + esc(L('غيّر', 'Change')) + '</button></div>';
     plus.train.days.forEach((day) => {
       h += '<div class="ap-card"><div class="ap-row"><b>' + esc(L(WEEKDAYS[day.wd][0], WEEKDAYS[day.wd][1])) + '</b><span class="mu">' + esc(L(SPLIT_NAME[day.kind][0], SPLIT_NAME[day.kind][1])) + '</span></div>';
@@ -486,6 +492,7 @@ function planTrain(el) {
     h += '<div class="ap-note">' + esc(L('ابدأ بأوزان تقدر تتحكم فيها، وزود تدريجيًا. لو عندك إصابة أو حالة صحية، استشر متخصص قبل ما تبدأ.', 'Start with weights you can control and progress gradually. If you have an injury or health condition, consult a specialist before starting.')) + '</div>';
     el.innerHTML = h;
     $('#ap-retrain', el).addEventListener('click', () => { sub.editTrain = true; draw(); });
+    $('#ap-manual', el).addEventListener('click', () => { sub.manual = { wd: plus.train.days.length ? plus.train.days[0].wd : 0 }; draw(); });
     $$('[data-ex]', el).forEach((b) => b.addEventListener('click', () => openExercise(b.dataset.ex)));
     return;
   }
@@ -494,14 +501,65 @@ function planTrain(el) {
   h += '<div class="ap-q"><b>' + esc(L('2. عدد أيام التمرين', '2. Days per week')) + '</b>' + chips([2, 3, 4, 5, 6].map((n) => [n, String(n)]), d.days, 'td') + '</div>';
   h += '<div class="ap-q"><b>' + esc(L('3. المعدات', '3. Equipment')) + '</b>' + chips([['gym', L('جيم', 'Gym')], ['home', L('بيت (دمبل وشرايط)', 'Home (dumbbells, bands)')], ['bodyweight', L('وزن الجسم', 'Bodyweight')]], d.equip, 'te') + '</div>';
   h += '<button type="button" class="ap-btn" id="ap-gen">' + esc(L('جهّز لي الجدول', 'Create my schedule')) + '</button></div>';
+  h += '<div class="ap-sec"><b>' + esc(L('أو اعمل تمرينك بنفسك', 'Or build your own workout')) + '</b></div><div class="ap-card"><div class="ap-note" style="margin:0 0 10px">' + esc(L('اختار الأيام وضيف التمارين اللي تحبها من المكتبة، وحدد العدّات والتكرارات.', 'Pick your days, add exercises from the library, and set sets and reps.')) + '</div><button type="button" class="ap-btn ghost" id="ap-own">' + esc(L('ابنِ جدولي بنفسي', 'Build my own schedule')) + '</button></div>';
   el.innerHTML = h;
   const set = (attr, key, num) => $$('[data-' + attr + ']', el).forEach((b) => b.addEventListener('click', () => { const dd = Object.assign({}, plus.trainDraft || d); dd[key] = num ? Number(b.dataset[attr]) : b.dataset[attr]; plus.trainDraft = dd; planTrain(el); }));
   set('tg', 'goal'); set('td', 'days', true); set('te', 'equip');
+  $('#ap-own', el).addEventListener('click', () => { if (!plus.train) plus.train = { params: { goal: 'fitness', days: 0, equip: 'gym' }, days: [], seed: 0, created: stamp(), custom: true }; sub.editTrain = false; sub.manual = { wd: dayIdx(new Date()) }; draw(); });
   $('#ap-gen', el).addEventListener('click', () => {
     const p = Object.assign({ goal: 'muscle', days: 3, equip: 'gym' }, plus.trainDraft || d);
     const days = genTrain(p, (plus.train && plus.train.seed || 0) + 1);
     plus.train = { params: p, days: days, seed: (plus.train && plus.train.seed || 0) + 1, created: stamp() }; plus.trainDraft = null; sub.editTrain = false; persist(); toast(L('الجدول جاهز', 'Schedule ready')); draw();
   });
+}
+
+/* ---------- بناء التمرين بنفسك ---------- */
+function planManual(el) {
+  if (!plus.train) plus.train = { params: { goal: 'fitness', days: 0, equip: 'gym' }, days: [], seed: 0, created: stamp(), custom: true };
+  const wd = sub.manual.wd;
+  const dayOf = (w) => plus.train.days.find((x) => x.wd === w);
+  const cur = dayOf(wd);
+  let h = '<div class="ap-row"><b>' + esc(L('تمريني', 'My workout')) + '</b><button type="button" class="ap-btn small" id="ap-mdone">' + esc(L('تم', 'Done')) + '</button></div>';
+  h += '<div class="ap-note" style="margin-top:0">' + esc(L('اختار اليوم وضيف التمارين. بيتحفظ تلقائي.', 'Choose a day and add exercises. It saves automatically.')) + '</div>';
+  h += chips(WEEKDAYS.map((w, i) => [i, (dayOf(i) && dayOf(i).items.length ? '• ' : '') + L(w[0], w[1])]), wd, 'mwd');
+  h += '<div class="ap-card" id="ap-mday">';
+  const items = cur ? cur.items : [];
+  if (!items.length) h += '<div class="ap-note" style="margin:0">' + esc(L('اليوم ده لسه فاضي. ضيف أول تمرين من تحت.', 'This day is empty. Add your first exercise below.')) + '</div>';
+  items.forEach((it, i) => {
+    const ex = EX_BY_ID[it.id]; if (!ex) return;
+    h += '<div class="ap-exrow" style="display:flex;align-items:center;gap:8px;padding:10px 0;border-top:1px solid rgba(255,255,255,.06)">' +
+      '<span class="ap-exn" style="flex:1;min-width:0">' + esc(nameOf(ex.name)) + '</span>' +
+      '<input type="number" min="1" max="10" value="' + it.sets + '" data-ms="' + i + '" style="width:54px;margin:0;padding:8px" aria-label="sets">' +
+      '<span class="mu">×</span>' +
+      '<input type="text" value="' + esc(it.reps) + '" data-mr="' + i + '" style="width:70px;margin:0;padding:8px" aria-label="reps">' +
+      '<button type="button" class="ap-btn small danger" data-mdel="' + i + '" aria-label="delete">×</button></div>';
+  });
+  h += '</div>';
+  h += '<div class="ap-sec"><b>' + esc(L('ضيف تمرين', 'Add an exercise')) + '</b></div>';
+  h += '<input type="text" id="ap-msearch" placeholder="' + esc(L('ابحث عن تمرين...', 'Search exercises...')) + '"><div id="ap-mres"></div>';
+  h += '<div class="ap-row" style="margin-top:12px"><button type="button" class="ap-btn small danger" id="ap-mclear">' + esc(L('امسح اليوم ده', 'Clear this day')) + '</button></div>';
+  el.innerHTML = h;
+  const save = () => { plus.train.days = plus.train.days.filter((x) => x.items.length); persist(); };
+  $('#ap-mdone', el).addEventListener('click', () => { sub.manual = null; save(); draw(); });
+  $$('[data-mwd]', el).forEach((b) => b.addEventListener('click', () => { sub.manual.wd = Number(b.dataset.mwd); planManual(el); }));
+  $$('[data-ms]', el).forEach((i) => i.addEventListener('change', () => { cur.items[Number(i.dataset.ms)].sets = Math.max(1, Math.min(10, Number(i.value) || 3)); persist(); }));
+  $$('[data-mr]', el).forEach((i) => i.addEventListener('change', () => { cur.items[Number(i.dataset.mr)].reps = i.value || '10'; persist(); }));
+  $$('[data-mdel]', el).forEach((b) => b.addEventListener('click', () => { cur.items.splice(Number(b.dataset.mdel), 1); save(); planManual(el); }));
+  $('#ap-mclear', el).addEventListener('click', () => { if (cur) { cur.items = []; save(); } planManual(el); });
+  const res = $('#ap-mres', el), q = $('#ap-msearch', el);
+  const paint = () => {
+    const k = q.value.trim().toLowerCase();
+    let list = exAll.filter((e) => e.category === 'strength' || !e.category);
+    if (k) list = exAll.filter((e) => (String(e.name && e.name.ar || '') + ' ' + String(e.name && e.name.en || '')).toLowerCase().indexOf(k) !== -1);
+    list = list.slice(0, 30);
+    res.innerHTML = list.map((e) => '<button type="button" class="ap-ex" data-madd="' + esc(e.id) + '"><span>' + esc(nameOf(e.name)) + '</span><em>+ ' + esc(L('ضيف', 'Add')) + '</em></button>').join('') || '<div class="ap-note">' + esc(L('مفيش نتيجة', 'No results')) + '</div>';
+    $$('[data-madd]', res).forEach((b) => b.addEventListener('click', () => {
+      let dd = dayOf(wd); if (!dd) { dd = { kind: 'custom', wd: wd, items: [] }; plus.train.days.push(dd); plus.train.days.sort((a, b2) => a.wd - b2.wd); }
+      if (dd.items.some((x) => x.id === b.dataset.madd)) { toast(L('التمرين ده موجود في اليوم', 'Already in this day')); return; }
+      dd.items.push({ id: b.dataset.madd, sets: 3, reps: '10' }); persist(); planManual(el);
+    }));
+  };
+  q.addEventListener('input', paint); paint();
 }
 
 /* ---------- تغذية ---------- */
@@ -945,4 +1003,11 @@ export async function summary() {
   const foods = (plus.foodq && plus.foodq[td]) || [];
   return { ready: ready, todayDone: todayDone, foodCount: foods.length };
 }
-window.ADAM_PLUS = { open: open, close: close, quickCheck: quickCheck, summary: summary };
+export async function todayOwn() {
+  await Promise.all([loadState(), loadExtras()]);
+  const wd = dayIdx(new Date());
+  const day = plus.train && plus.train.days.find((x) => x.wd === wd);
+  if (!day) return { has: !!(plus.train && plus.train.days.length), items: [] };
+  return { has: true, kind: day.kind, items: day.items.map((it) => { const ex = EX_BY_ID[it.id]; return ex ? { id: it.id, name: nameOf(ex.name), sets: it.sets, reps: it.reps } : null; }).filter(Boolean) };
+}
+window.ADAM_PLUS = { todayOwn: todayOwn, openOwn: openOwn, open: open, close: close, quickCheck: quickCheck, summary: summary };
