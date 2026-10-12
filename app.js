@@ -454,6 +454,9 @@ const TEXT = {
     anatomy_insertion: 'اندغام العضلة',
     anatomy_injury_benefit: 'مدى إفادته للإصابة',
     back_generic: 'رجوع',
+    tile_preview: 'معاينة كعميل',
+    preview_exit: 'خروج من المعاينة',
+    preview_note: 'وضع المعاينة — بيانات تجريبية',
     open_calc_btn: 'الحاسبات',
     calculators_title: 'الحاسبات',
     calc_tab_bmi: 'BMI',
@@ -3097,6 +3100,9 @@ const TEXT = {
     anatomy_insertion: 'Insertion',
     anatomy_injury_benefit: 'How it helps the injury',
     back_generic: 'Back',
+    tile_preview: 'Preview as client',
+    preview_exit: 'Exit preview',
+    preview_note: 'Preview mode — demo data',
     open_calc_btn: 'Calculators',
     calculators_title: 'Calculators',
     calc_tab_bmi: 'BMI',
@@ -5961,6 +5967,7 @@ const coachScreen = document.getElementById('coach-screen');
 const libraryScreen = document.getElementById('library-screen');
 const mylibScreen = document.getElementById('mylib-screen');
 const clientScreen = document.getElementById('client-screen');
+let previewMode = false; // معاينة كعميل (للمالك فقط)
 const foodScreen = document.getElementById('food-screen');
 const supplementsScreen = document.getElementById('supplements-screen');
 const subscriptionScreen = document.getElementById('subscription-screen');
@@ -6704,6 +6711,7 @@ function showScreen(screen) {
     if (s) s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
+  if (previewMode && screen !== clientScreen) { previewMode = false; paintPreviewBar(); }
   paintNotifBell(screen);
   logoutButton.classList.toggle('hidden', screen === loginScreen || screen === welcomeScreen);
   // الزرار الثابت تحت بيظهر بعد ما زرار الهيرو يعدّي بس — قبل كده
@@ -7858,7 +7866,8 @@ const COACH_TILES = [
   { key: 'bookings',  icon: 'classes',   labelKey: 'open_bookings_btn',         btn: 'open-bookings-btn' },
   { key: 'myprofile', icon: 'profile',   labelKey: 'open_my_profile_btn',       btn: 'open-my-profile-btn' },
   { key: 'mysub',     icon: 'card',      labelKey: 'open_provider_subscription_btn', btn: 'open-provider-subscription-btn' },
-  { key: 'admin',     icon: 'gear',      labelKey: 'open_admin_btn',            btn: 'open-admin-panel-btn', badge: 'admin-leads-badge' }
+  { key: 'admin',     icon: 'gear',      labelKey: 'open_admin_btn',            btn: 'open-admin-panel-btn', badge: 'admin-leads-badge' },
+  { key: 'preview',   icon: 'profile',   labelKey: 'tile_preview',              adminOnly: true, action: 'startClientPreview' }
 ];
 
 function renderCoachTiles() {
@@ -7869,6 +7878,7 @@ function renderCoachTiles() {
     const origin = tile.btn ? document.getElementById(tile.btn) : null;
     // الزرار المخفي لحساب ده = مفيش مربع ليه
     if (tile.btn && (!origin || origin.classList.contains('hidden'))) return;
+    if (tile.adminOnly && !isFullAdminAccount()) return;
 
     const cell = document.createElement('button');
     cell.type = 'button';
@@ -7892,6 +7902,7 @@ function renderCoachTiles() {
 
     cell.addEventListener('click', function () {
       if (origin) { origin.click(); return; }
+      if (tile.action === 'startClientPreview') { startClientPreview(); return; }
       const target = document.getElementById(tile.scroll);
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -13367,10 +13378,109 @@ clientConsultSendBtn.addEventListener('click', async function () {
  * أهم رقم في المتابعة: العميل اللي وقف يفتح هو اللي بيسيب بعد كده
  */
 function touchClientActivity(email) {
+  if (previewMode) return;
   setDoc(doc(db, 'clients', email), { lastActiveAt: new Date().toISOString() }, { merge: true })
     .catch(function () {
       // مش مشكلة لو فشلت — مجرد إشارة نشاط، مش بيانات أساسية
     });
+}
+
+
+/* ---------- معاينة كعميل (للمالك / الإدارة بس) ----------
+   بتفتح شاشة العميل بحسابك انت، ولو مفيش برنامج بنعرض برنامج
+   تجريبي محلي (مابيتحفظش). مفيش أي كتابة على عملاء حقيقيين، ولا
+   بنحدّث "آخر دخول" */
+function paintPreviewBar() {
+  let bar = document.getElementById('preview-bar');
+  if (!previewMode) { if (bar) bar.style.display = 'none'; return; }
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'preview-bar';
+    bar.className = 'preview-bar';
+    bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(100px + env(safe-area-inset-bottom,0px));z-index:9999;display:flex;align-items:center;gap:10px;padding:6px 14px;border-radius:999px;background:rgba(20,20,24,.94);color:#fff;font-size:12px;white-space:nowrap';
+    const note = document.createElement('span');
+    note.className = 'preview-note';
+    bar.appendChild(note);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'preview-exit';
+    btn.style.cssText = 'width:auto;margin:0;padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;font-size:12px';
+    btn.addEventListener('click', function () { showScreen(clientsScreen); });
+    bar.appendChild(btn);
+    document.body.appendChild(bar);
+  }
+  bar.querySelector('.preview-note').textContent = t('preview_note');
+  bar.querySelector('.preview-exit').textContent = t('preview_exit');
+  bar.style.display = 'flex';
+}
+
+function demoExercise(libId, ar, en, sets, reps, rest) {
+  return makeExercise({ libId: libId, name: lang === 'en' ? en : ar, sets: sets, reps: reps, rest: rest || '60' });
+}
+
+function applyPreviewDemo() {
+  const hasWorkout = clientWeek.some(function (d) { return dayCount(d) > 0; });
+  if (!hasWorkout) {
+    const w = emptyWeek();
+    const push = normalizeDay({ title: lang === 'en' ? 'Push' : 'دفع', sections: {
+      warmup: [demoExercise('ex_cat_cow', 'قطة وبقرة', 'Cat-cow', 2, '10', '30')],
+      main: [
+        demoExercise('ex_barbell_bench_press', 'بنش برس بار', 'Barbell bench press', 4, '8', '90'),
+        demoExercise('ex_dumbbell_shoulder_press', 'ضغط كتف دمبل', 'Dumbbell shoulder press', 3, '10'),
+        demoExercise('ex_triceps_pushdown', 'ضغط ترايسبس كابل', 'Triceps pushdown', 3, '12')
+      ],
+      cardio: [demoExercise('ex_treadmill_running', 'جري على المشاية', 'Treadmill run', 1, '10 min')],
+      flexibility: [demoExercise('ex_shoulder_stretch', 'إطالة الكتف', 'Shoulder stretch', 2, '30s', '20')]
+    } });
+    const pull = normalizeDay({ title: lang === 'en' ? 'Pull' : 'سحب', sections: {
+      main: [
+        demoExercise('ex_lat_pulldown', 'سحب أمامي', 'Lat pulldown', 4, '10'),
+        demoExercise('ex_seated_cable_row', 'تجديف كابل جالس', 'Seated cable row', 3, '10'),
+        demoExercise('ex_dumbbell_curl', 'باي دمبل', 'Dumbbell curl', 3, '12')
+      ]
+    } });
+    const legs = normalizeDay({ title: lang === 'en' ? 'Legs' : 'رجل', sections: {
+      main: [
+        demoExercise('ex_barbell_back_squat', 'سكوات خلفي بار', 'Back squat', 4, '8', '120'),
+        demoExercise('ex_leg_press', 'ضغط أرجل', 'Leg press', 3, '12'),
+        demoExercise('ex_calf_raise', 'رفرفة سمانة', 'Calf raise', 3, '15', '45')
+      ]
+    } });
+    const rest = normalizeDay({ rest: true });
+    // السبت..الجمعة: 0=الأحد حسب ترتيب التطبيق، فبنوزّع على الأسبوع كله
+    const order = [push, pull, legs, rest, push, pull, rest];
+    for (let i = 0; i < 7; i++) w[i] = JSON.parse(JSON.stringify(order[i]));
+    clientWeek = w;
+    clientWeekCoach = w;
+  }
+  const hasNut = clientNutrition.week.some(function (d) { return nutritionDayCount(d) > 0; });
+  if (!hasNut) {
+    const f = function (id, ar, en, g, c, p, cb, fa) { return makeFoodItem({ id: id, ar: ar, en: en, c: c, p: p, cb: cb, f: fa }, g); };
+    const day = function () {
+      return {
+        meals: {
+          breakfast: [f('', 'بيض', 'Eggs', 150, 143, 12.6, 0.7, 9.5), f('', 'خبز بلدي', 'Baladi bread', 80, 270, 9, 55, 1.5)],
+          lunch: [f('', 'صدور فراخ مشوية', 'Grilled chicken breast', 200, 165, 31, 0, 3.6), f('', 'أرز', 'Rice', 200, 130, 2.7, 28, 0.3)],
+          dinner: [f('', 'زبادي', 'Yogurt', 200, 61, 3.5, 4.7, 3.3), f('', 'تونة', 'Tuna', 100, 116, 26, 0, 1)],
+          snack: [f('', 'موز', 'Banana', 120, 89, 1.1, 23, 0.3)]
+        }
+      };
+    };
+    const n = emptyNutrition();
+    n.targets = { kcal: 2200, protein: 150, carbs: 240, fat: 70 };
+    n.week = [0, 1, 2, 3, 4, 5, 6].map(function () { return normalizeNutritionDay(day()); });
+    clientNutrition = n;
+    clientNutritionCoach = n;
+  }
+}
+
+async function startClientPreview() {
+  const user = auth.currentUser;
+  if (!user || !user.email || !isFullAdminAccount()) return;
+  previewMode = true;
+  showScreen(clientScreen);
+  paintPreviewBar();
+  await loadClient(user.email.toLowerCase());
 }
 
 async function loadClient(email) {
@@ -13403,6 +13513,7 @@ async function loadClient(email) {
     clientNutritionCoach = clientNutrition;
     await loadSelfProgram(email);
     applySelfProgram();
+    if (previewMode) applyPreviewDemo();
     await physioLoadClient(email);
 
     // العلامات القديمة كانت أرقام تخص القائمة الواحدة؛ بنحولها لقسم "التمرين الأساسي"

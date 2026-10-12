@@ -130,6 +130,24 @@
     if (p.photo) { var img = el('img'); img.alt = name; img.loading = 'lazy'; img.src = p.photo; av.appendChild(img); } else av.textContent = name.charAt(0);
     return av;
   }
+  var GICON = {
+    coach: '<path d="M6 9v6M18 9v6M3 11v2M21 11v2M6 12h12"/>',
+    nutritionist: '<path d="M12 7c-3-2-7 0-7 5 0 4 3 8 5 8 1 0 1.5-.5 2-.5s1 .5 2 .5c2 0 5-4 5-8 0-5-4-7-7-5zM12 7c0-2 1-3 3-4"/>',
+    doctor: '<path d="M12 5v14M5 12h14"/>',
+    physio: '<circle cx="12" cy="5" r="2"/><path d="M12 8v6M8 11l4 1 4-1M9 21l3-7 3 7"/>',
+    rehab: '<path d="M4 20c4-1 6-4 8-8s4-7 8-8M4 20l4-4M9 14l-3-1M14 9l-1-3"/>',
+    psychologist: '<path d="M12 4a6 6 0 0 0-4 10.5V18h8v-3.5A6 6 0 0 0 12 4zM10 21h4M12 8v4"/>',
+    other: '<circle cx="12" cy="12" r="7"/><path d="M12 9v3l2 2"/>'
+  };
+  function gIcon(k) {
+    var s = el('span', 'av2-gi');
+    s.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (GICON[k] || GICON.other) + '</svg>';
+    return s;
+  }
+  function firstName(p) {
+    var n = String(p.name || '').replace(/^(د\.?|دكتور|دكتورة|كابتن|كوتش|Dr\.?|Coach)\s+/i, '').trim();
+    return n.split(/\s+/)[0] || String(p.name || '');
+  }
   function colLoop() {
     var root = document.getElementById('adam-v2');
     if (!root) { clearInterval(colTimer); colTimer = 0; return; }
@@ -142,7 +160,7 @@
       next.className = 'av2-sl on'; cur.className = 'av2-sl off';
       c.i = nx;
       c.nameEl.classList.add('fade');
-      setTimeout(function () { c.nameEl.textContent = String(c.list[nx].name || ''); c.nameEl.classList.remove('fade'); }, 260);
+      setTimeout(function () { c.nameEl.textContent = firstName(c.list[nx]); c.nameEl.classList.remove('fade'); }, 260);
     });
   }
   function trainersBlock(r, l, tx) {
@@ -161,12 +179,11 @@
     groups.forEach(function (x, gi) {
       if (!x.list.length) return;
       var col = el('button', 'av2-col'); col.type = 'button';
-      col.appendChild(el('span', 'av2-ch', l === 'en' ? x.g[3] : x.g[2]));
+      col.setAttribute('aria-label', l === 'en' ? x.g[3] : x.g[2]); col.title = l === 'en' ? x.g[3] : x.g[2];
       var win = el('span', 'av2-win'); win.style.setProperty('--d', gi % 2 ? '-1' : '1');
       var slides = x.list.map(function (p, i) { var sl = el('span', 'av2-sl' + (i === 0 ? ' on' : '')); sl.appendChild(slideAvatar(p, gi + i)); win.appendChild(sl); return sl; });
-      col.appendChild(win);
-      var nm = el('b', 'av2-cn', String(x.list[0].name || '')); col.appendChild(nm);
-      col.appendChild(el('small', '', String(x.list.length)));
+      var wrap = el('span', 'av2-wrap'); wrap.appendChild(win); wrap.appendChild(gIcon(x.g[0])); col.appendChild(wrap);
+      var nm = el('b', 'av2-cn', firstName(x.list[0])); col.appendChild(nm);
       col.addEventListener('click', function () { var tile = document.querySelector('.home-tile.tile-consult'); if (tile) tile.click(); });
       cols.push({ list: x.list, slides: slides, i: 0, nameEl: nm });
       strip.appendChild(col);
