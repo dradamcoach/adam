@@ -11376,23 +11376,24 @@ function setClientMode(mode) {
   window.scrollTo(0, 0);
 }
 
-/* زرار رجوع صغير في ركن الشاشة فوق (زي الشاشات العادية) */
+/* رجوع عادي (زي باقي الشاشات) فوق كل قسم من أقسام العميل */
 function ensureClientBackBars() {
-  let bar = document.getElementById('client-back-fab');
-  if (!bar) {
-    bar = document.createElement('button');
-    bar.type = 'button';
-    bar.id = 'client-back-fab';
-    bar.className = 'cp-back-fab hidden';
-    bar.setAttribute('aria-label', 'back');
-    bar.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg>';
-    bar.addEventListener('click', function () { setClientMode('home'); });
-    (clientScreen || document.body).appendChild(bar);
-  }
-  const show = clientMode && clientMode !== 'home' && clientScreen && !clientScreen.classList.contains('hidden');
-  bar.classList.toggle('hidden', !show);
-  /* نشيل أي شريط رجوع كبير قديم */
+  const old = document.getElementById('client-back-fab');
+  if (old) old.remove();
   document.querySelectorAll('.cp-back').forEach(function (n) { n.remove(); });
+  ['client-training', 'client-nutrition', 'client-classes', 'client-activity', 'client-physio', 'client-rehab', 'client-consult', 'client-store'].forEach(function (id) {
+    const panel = document.getElementById(id);
+    if (!panel) return;
+    let bar = panel.querySelector(':scope > .cp-back-link');
+    if (!bar) {
+      bar = document.createElement('button');
+      bar.type = 'button';
+      bar.className = 'link cp-back-link';
+      bar.addEventListener('click', function () { setClientMode('home'); });
+      panel.insertBefore(bar, panel.firstChild);
+    }
+    bar.textContent = '\u2039 ' + t('back_generic');
+  });
 }
 ensureClientBackBars();
 
@@ -14050,7 +14051,8 @@ function ensureOwnLinks() {
       btn.type = 'button';
       btn.className = 'own-link';
       btn.addEventListener('click', function () { openSelfBuilder(x[1]); });
-      panel.insertBefore(btn, panel.firstChild);
+      const back = panel.querySelector(':scope > .cp-back-link');
+      panel.insertBefore(btn, back ? back.nextSibling : panel.firstChild);
     }
     btn.textContent = t(x[2]);
   });

@@ -356,10 +356,16 @@ async function viewEventDetail(body) {
 
 /* ================================================================ سؤال اليوم */
 const CHECK_Q = [
-  { k: 'sleep', q: ['نمت كام ساعة؟', 'How many hours did you sleep?'], o: [['أقل من 5', 'Under 5', 25], ['5 إلى 6', '5 to 6', 55], ['7 إلى 8', '7 to 8', 100], ['أكتر من 8', 'Over 8', 90]], w: 0.35 },
-  { k: 'sore', q: ['مستوى الوجع في عضلاتك؟', 'Muscle soreness?'], o: [['مفيش', 'None', 100], ['خفيف', 'Mild', 80], ['متوسط', 'Moderate', 55], ['شديد', 'Severe', 30]], w: 0.25 },
-  { k: 'water', q: ['شربت مياه كفاية امبارح؟', 'Did you drink enough water yesterday?'], o: [['لأ', 'No', 40], ['شوية', 'A bit', 70], ['أه', 'Yes', 100]], w: 0.15 },
-  { k: 'energy', q: ['طاقتك النهاردة؟', 'Your energy today?'], o: [['ضعيفة', 'Low', 35], ['عادية', 'Normal', 70], ['عالية', 'High', 100]], w: 0.25 }
+  { k: 'sleep', q: ['نمت كام ساعة؟', 'How many hours did you sleep?'], o: [['أقل من 5', 'Under 5', 25], ['5 إلى 6', '5 to 6', 55], ['7 إلى 8', '7 to 8', 100], ['أكتر من 8', 'Over 8', 90]], w: 0.16 },
+  { k: 'sleepq', q: ['نومك كان عامل إزاي؟', 'How was your sleep quality?'], o: [['سيئ', 'Poor', 30], ['متقطّع', 'Broken', 55], ['كويس', 'Good', 85], ['عميق ومريح', 'Deep and restful', 100]], w: 0.1 },
+  { k: 'sore', q: ['مستوى الوجع في عضلاتك؟', 'Muscle soreness?'], o: [['مفيش', 'None', 100], ['خفيف', 'Mild', 80], ['متوسط', 'Moderate', 55], ['شديد', 'Severe', 30]], w: 0.12 },
+  { k: 'joint', q: ['في ألم في مفاصلك؟', 'Any joint pain?'], o: [['مفيش', 'None', 100], ['خفيف', 'Mild', 75], ['متوسط', 'Moderate', 45], ['شديد', 'Severe', 20]], w: 0.1 },
+  { k: 'water', q: ['شربت مياه كفاية امبارح؟', 'Did you drink enough water yesterday?'], o: [['لأ', 'No', 40], ['شوية', 'A bit', 70], ['أه', 'Yes', 100]], w: 0.08 },
+  { k: 'food', q: ['أكلك امبارح كان إزاي؟', 'How was your eating yesterday?'], o: [['مش منتظم', 'Irregular', 40], ['عادي', 'Okay', 70], ['كويس ومتوازن', 'Good and balanced', 100]], w: 0.08 },
+  { k: 'energy', q: ['طاقتك النهاردة؟', 'Your energy today?'], o: [['ضعيفة', 'Low', 35], ['عادية', 'Normal', 70], ['عالية', 'High', 100]], w: 0.12 },
+  { k: 'stress', q: ['مستوى التوتر؟', 'Stress level?'], o: [['عالي', 'High', 35], ['متوسط', 'Moderate', 65], ['هادي', 'Low', 100]], w: 0.07 },
+  { k: 'mood', q: ['مزاجك النهاردة؟', 'Your mood today?'], o: [['وحش', 'Low', 35], ['عادي', 'Okay', 70], ['كويس', 'Good', 100]], w: 0.07 },
+  { k: 'drive', q: ['نفسك تتمرن النهاردة؟', 'Do you feel like training today?'], o: [['لأ خالص', 'Not at all', 35], ['مش أوي', 'Not really', 60], ['أه', 'Yes', 85], ['جداً', 'Very much', 100]], w: 0.1 }
 ];
 function readiness(c) {
   let s = 0, w = 0;
@@ -373,7 +379,7 @@ function advice(score, c) {
   else if (score >= 60) a = [L('جاهزية كويسة. اتمرن عادي من غير زيادة في الحمل.', 'Good readiness. Train as planned without adding load.')];
   else if (score >= 40) a = [L('خفّف النهاردة: مشي أو تمرين خفيف ومرونة.', 'Go lighter today: a walk, light training and mobility.')];
   else a = [L('ارتاح النهاردة أو اعمل إطالات خفيفة، وركز على النوم والمياه.', 'Rest today or do gentle stretching, and focus on sleep and water.')];
-  if (c && c.sore === 3) a.push(L('لو الوجع في مفصل أو بيزيد، كلّم متخصص قبل ما تتمرن.', 'If the pain is in a joint or getting worse, talk to a specialist before training.'));
+  if (c && (c.sore === 3 || c.joint >= 2)) a.push(L('لو الوجع في مفصل أو بيزيد، كلّم متخصص قبل ما تتمرن.', 'If the pain is in a joint or getting worse, talk to a specialist before training.'));
   if (ram) a.push(L('في رمضان: تمرين خفيف قبل الفطار أو بعده بساعة، والمياه والسحور مهمين.', 'In Ramadan: train lightly before iftar or an hour after, and keep water and suhoor in check.'));
   if (plus.travel) a.push(L('وضع السفر: 20 دقيقة وزن جسم تكفي (سكوات، ضغط، بلانك)، واشرب مياه كتير وامشي قدر ما تقدر.', 'Travel mode: 20 minutes of bodyweight is enough (squats, push-ups, plank). Drink plenty of water and walk when you can.'));
   return a;
@@ -387,7 +393,7 @@ function checkStreak() {
 function viewToday(body) {
   const today = stamp(); const c = plus.checkins[today] || {};
   const score = c.score != null ? c.score : null;
-  let h = '<div class="ap-row"><b>' + esc(L('10 ثواني وتعرف جاهزيتك', '10 seconds to know your readiness')) + '</b><button type="button" class="ap-chip ' + (plus.ramadan ? 'on' : '') + '" id="ap-ram">' + esc(L('وضع رمضان', 'Ramadan mode')) + '</button><button type="button" class="ap-chip ' + (plus.travel ? 'on' : '') + '" id="ap-trv">' + esc(L('وضع السفر', 'Travel mode')) + '</button></div>';
+  let h = '<div class="ap-row"><b>' + esc(L('دقيقة وتعرف جاهزيتك', 'One minute to know your readiness')) + '</b><button type="button" class="ap-chip ' + (plus.ramadan ? 'on' : '') + '" id="ap-ram">' + esc(L('وضع رمضان', 'Ramadan mode')) + '</button><button type="button" class="ap-chip ' + (plus.travel ? 'on' : '') + '" id="ap-trv">' + esc(L('وضع السفر', 'Travel mode')) + '</button></div>';
   h += '<div class="ap-card" id="ap-q">';
   CHECK_Q.forEach((q) => {
     h += '<div class="ap-q"><b>' + esc(L(q.q[0], q.q[1])) + '</b><div class="ap-opts">' + q.o.map((o, i) => '<button type="button" data-q="' + q.k + '" data-i="' + i + '" class="' + (c[q.k] === i ? 'on' : '') + '">' + esc(L(o[0], o[1])) + '</button>').join('') + '</div></div>';
@@ -974,7 +980,7 @@ export async function quickCheck() {
   const dismiss = () => { try { sessionStorage.setItem('adam-qc-dismissed', today); } catch (e) { /* تجاهل */ } m.remove(); };
   const draw2 = () => {
     const c = plus.checkins[today] || {}; const done = CHECK_Q.every((q) => c[q.k] != null);
-    let h = '<div class="ap-qc-box"><button type="button" class="ap-x" id="ap-qc-x" aria-label="close"></button><b class="ap-qc-t">' + esc(L('سؤال اليوم', 'Daily check-in')) + '</b><p class="ap-qc-s">' + esc(L('10 ثواني وتعرف جاهزيتك النهاردة', '10 seconds to know your readiness today')) + '</p>';
+    let h = '<div class="ap-qc-box"><button type="button" class="ap-x" id="ap-qc-x" aria-label="close"></button><b class="ap-qc-t">' + esc(L('سؤال اليوم', 'Daily check-in')) + '</b><p class="ap-qc-s">' + esc(L('دقيقة وتعرف جاهزيتك النهاردة', 'One minute to know your readiness today')) + '</p>';
     if (!done) {
       CHECK_Q.forEach((q) => { h += '<div class="ap-q"><b>' + esc(L(q.q[0], q.q[1])) + '</b><div class="ap-opts">' + q.o.map((o, i) => '<button type="button" data-q="' + q.k + '" data-i="' + i + '" class="' + (c[q.k] === i ? 'on' : '') + '">' + esc(L(o[0], o[1])) + '</button>').join('') + '</div></div>'; });
     } else {

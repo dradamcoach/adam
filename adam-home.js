@@ -122,51 +122,32 @@
     card.addEventListener('click', function () { var tile = document.querySelector('.home-tile.tile-consult'); if (tile) tile.click(); });
     return card;
   }
-  /* حركة تلقائية أفقية للمدربين (بتقف لما العميل يلمس) */
-  var strips = [], stripRaf = 0;
-  function stripLoop() {
-    stripRaf = 0;
-    var root = document.getElementById('adam-v2');
-    if (!root || !root.offsetParent || document.hidden) { if (strips.length) stripRaf = requestAnimationFrame(stripLoop); return; }
-    var now = Date.now();
-    strips.forEach(function (s) {
-      var e = s.e; if (!e.isConnected) return;
-      if (now < s.pause) return;
-      var max = e.scrollWidth - e.clientWidth; if (max <= 2) return;
-      var rtl = document.documentElement.dir === 'rtl' || e.closest('[dir=rtl]');
-      s.pos += s.dir * 0.45;
-      if (s.pos >= max) { s.pos = max; s.dir = -1; } else if (s.pos <= 0) { s.pos = 0; s.dir = 1; }
-      e.scrollLeft = rtl ? -s.pos : s.pos;
-    });
-    strips = strips.filter(function (s) { return s.e.isConnected; });
-    if (strips.length) stripRaf = requestAnimationFrame(stripLoop);
-  }
-  function addStrip(e) {
-    var s = { e: e, pos: 0, dir: 1, pause: 0 };
-    var hold = function () { s.pause = Date.now() + 5000; };
-    ['touchstart', 'pointerdown', 'wheel', 'mousedown'].forEach(function (ev) { e.addEventListener(ev, hold, { passive: true }); });
-    e.addEventListener('scroll', function () { if (Date.now() < s.pause) { s.pos = Math.abs(e.scrollLeft); } }, { passive: true });
-    strips.push(s);
-    if (!stripRaf) stripRaf = requestAnimationFrame(stripLoop);
+  /* المدربين: دواير صغيرة جنب بعض بتطلع وتنزل بحركة هادية */
+  function trainerBub(p, i, l, tx) {
+    var card = el('button', 'av2-bub'); card.type = 'button';
+    card.style.setProperty('--i', String(i));
+    if (i % 2) card.className += ' dn';
+    var name = String(p.name || '');
+    var av = el('span', 'av2-bav'); av.style.background = 'linear-gradient(160deg,' + GRAD[i % GRAD.length] + ',#0a1215)';
+    if (p.photo) { var img = el('img'); img.alt = name; img.loading = 'lazy'; img.src = p.photo; av.appendChild(img); } else av.textContent = name.charAt(0);
+    card.appendChild(av);
+    card.appendChild(el('b', '', name));
+    card.appendChild(el('small', '', specLabel(p, l)));
+    card.addEventListener('click', function () { var tile = document.querySelector('.home-tile.tile-consult'); if (tile) tile.click(); });
+    return card;
   }
   function trainersBlock(r, l, tx) {
     if (!state.list.length) return;
-    var sec = el('div', 'av2-sec'); sec.appendChild(el('b', '', tx.team)); r.appendChild(sec);
-    var used = {};
-    var groups = GROUPS.map(function (g) {
-      var list = state.list.filter(function (p) { return specKeys(p).some(function (k) { return g[1].indexOf(k) !== -1; }); });
-      list.forEach(function (p) { used[p.email] = 1; });
-      return { g: g, list: list };
+    var sec = el('div', 'av2-sec'); sec.appendChild(el('b', '', tx.team)); sec.appendChild(el('span', '', String(state.list.length))); r.appendChild(sec);
+    var order = {};
+    GROUPS.forEach(function (g, gi) { g[1].forEach(function (k) { if (order[k] == null) order[k] = gi; }); });
+    var list = state.list.slice().sort(function (a, b) {
+      var oa = order[specKeys(a)[0]], ob = order[specKeys(b)[0]];
+      return (oa == null ? 99 : oa) - (ob == null ? 99 : ob);
     });
-    var rest = state.list.filter(function (p) { return !used[p.email]; });
-    if (rest.length) groups.push({ g: ['other', [], 'متخصصون آخرون', 'Other specialists'], list: rest });
-    groups.forEach(function (x) {
-      if (!x.list.length) return;
-      var h = el('div', 'av2-gh'); h.appendChild(el('b', '', l === 'en' ? x.g[3] : x.g[2])); h.appendChild(el('span', '', String(x.list.length))); r.appendChild(h);
-      var box = el('div', 'av2-list');
-      x.list.forEach(function (p, i) { box.appendChild(trainerRow(p, i, l, tx)); });
-      r.appendChild(box); addStrip(box);
-    });
+    var strip = el('div', 'av2-strip');
+    list.forEach(function (p, i) { strip.appendChild(trainerBub(p, i, l, tx)); });
+    r.appendChild(strip);
   }
 
   function render() {
@@ -174,7 +155,7 @@
     if (!r) return;
     var l = lang(), tx = T[l];
     r.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
-    r.innerHTML = ''; strips = [];
+    r.innerHTML = '';
 
     r.appendChild(ringsCard());
 
