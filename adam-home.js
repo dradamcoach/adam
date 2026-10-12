@@ -27,11 +27,15 @@
     today: '<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M8 3v4M16 3v4M9 15l2 2 4-4"/>',
     plan: '<path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/>',
     food: '<path d="M7 3v8a3 3 0 0 0 3 3v7M10 3v8M4 3v8a3 3 0 0 0 3 3M17 3c-2 2-3 5-3 8h3v10"/>',
+    lib: '<path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"/>',
+    tpl: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/>',
+    mytrain: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>',
     rehab: '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path d="M9 12h2l1-2 1.5 4 1-2H17"/>'
   };
   var TILES = [
     ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
-    ['plan', 'خطتي', 'My plan'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab']
+    ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['tpl', 'القوالب', 'Templates'],
+    ['mytrain', 'برنامج التمرين', 'My program'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab']
   ];
   function openPlus(tab) {
     import('./adam-plus.js').then(function (m) { m.open(tab); }).catch(function (e) { if (window.console) console.error(e); });
@@ -70,7 +74,10 @@
     TILES.forEach(function (t) {
       var b = el('button', 'av2-tile'); b.type = 'button';
       b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[t[0]] + '</svg><span>' + (l === 'en' ? t[2] : t[1]) + '</span>';
-      b.addEventListener('click', function () { openPlus(t[0]); });
+      b.addEventListener('click', function () {
+        if (t[0] === 'mytrain') { var tb = document.getElementById('ctab-training'); if (tb) { tb.click(); window.scrollTo(0, 0); return; } openPlus('plan'); return; }
+        openPlus(t[0]);
+      });
       grid.appendChild(b);
     });
     r.appendChild(grid);
@@ -138,8 +145,25 @@
     render();
   }
 
+  var qcDone = false;
+  function maybeQuick() {
+    if (qcDone) return;
+    var home = document.getElementById('client-home');
+    if (!home || home.offsetParent === null) return;
+    var anat = document.getElementById('anat-overlay');
+    if (anat && anat.offsetParent !== null) return;
+    qcDone = true;
+    setTimeout(function () {
+      try {
+        var h2 = document.getElementById('client-home');
+        if (!h2 || h2.offsetParent === null) { qcDone = false; return; }
+        import('./adam-plus.js').then(function (m) { if (m.quickCheck) m.quickCheck(); }).catch(function () {});
+      } catch (e) { /* تجاهل */ }
+    }, 2500);
+  }
   function tick() {
     try {
+      maybeQuick();
       var r = ensureRoot();
       if (!r) return;
       if (!r.firstChild) render();

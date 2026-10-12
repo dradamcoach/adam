@@ -5,7 +5,7 @@
  * (حقل plus) لو الحساب مسموح له. الطلعات بتحتاج قواعد events في Firestore.
  */
 import { JOURNEYS, GOVERNORATES, EVENT_TYPES, INJURY_AREAS, DIETS, GOALS, GOAL_KEYWORDS } from './adam-plus-data.js';
-import { SPORTS, SPORT_GROUPS } from './sports.js';
+import { SPORTS, SPORT_GROUPS, SPORT_TEMPLATES } from './sports.js';
 import { EXERCISE_LIBRARY } from './exercise-library.js';
 import { FOOD_LIBRARY, FOOD_SERVINGS } from './food-library.js';
 import { NUTRITION_PROGRAMS } from './nutrition-programs.js';
@@ -91,7 +91,7 @@ async function loadState() {
 /* ---------------------------------------------------------------- الإطار */
 const TABS = [
   ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
-  ['plan', 'خطتي', 'My plan'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab']
+  ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab']
 ];
 let curTab = 'journeys';
 let sub = {};
@@ -114,7 +114,8 @@ export async function open(tab) {
   document.body.classList.add('ap-lock');
   $('#ap-body').innerHTML = '<div class="ap-load">' + esc(L('جاري التحميل...', 'Loading...')) + '</div>';
   await Promise.all([loadState(), loadExtras()]);
-  go(tab || curTab);
+  const al = { tpl: ['lib', 'tpl'], libex: ['lib', 'ex'], progs: ['lib', 'prog'] }[tab];
+  if (al) { go(al[0]); sub.lt = al[1]; draw(); } else go(tab || curTab);
 }
 export function close() { const ov = document.getElementById('adam-plus'); if (ov) ov.classList.add('hidden'); document.body.classList.remove('ap-lock'); }
 
@@ -125,11 +126,12 @@ function go(tab) {
   $('#ap-title').textContent = 'ADAM+'; $('#ap-title').style.direction = 'ltr';
   $('#ap-tabs').innerHTML = TABS.map((t) => '<button type="button" data-tab="' + t[0] + '" class="' + (t[0] === tab ? 'on' : '') + '">' + esc(L(t[1], t[2])) + '</button>').join('');
   $$('#ap-tabs button').forEach((b) => b.addEventListener('click', () => go(b.dataset.tab)));
+  try { const tb = $('#ap-tabs'), on = $('#ap-tabs button.on'); if (tb && on) { const r1 = tb.getBoundingClientRect(), r2 = on.getBoundingClientRect(); tb.scrollLeft += (r2.left + r2.width / 2) - (r1.left + r1.width / 2); } } catch (e) { /* تجاهل */ }
   draw();
 }
 function draw() {
   const body = $('#ap-body'); if (!body) return;
-  const fn = { journeys: viewJourneys, events: viewEvents, today: viewToday, plan: viewPlan, food: viewFood, rehab: viewRehab }[curTab];
+  const fn = { journeys: viewJourneys, events: viewEvents, today: viewToday, plan: viewPlan, lib: viewLib, food: viewFood, rehab: viewRehab }[curTab];
   try { fn(body); } catch (e) { body.innerHTML = '<div class="ap-empty">' + esc(L('حصلت مشكلة في عرض الشاشة', 'Something went wrong showing this screen')) + '</div>'; if (window.console) console.error(e); }
   body.scrollTop = 0;
 }
@@ -729,4 +731,210 @@ function viewRehab(body) {
 }
 function gather(body, d) { const fl = {}; $$('[data-flag]', body).forEach((c) => { fl[c.dataset.flag] = c.checked; }); const l = $('#ap-pl', body); return { level: l ? Number(l.value) : d.level, flags: fl }; }
 
-window.ADAM_PLUS = { open: open, close: close };
+
+/* ================================================================ المكتبة */
+const MUS = { chest: ['صدر', 'Chest'], shoulders: ['كتف', 'Shoulders'], biceps: ['باي', 'Biceps'], triceps: ['ترايسبس', 'Triceps'], forearms: ['ساعد', 'Forearms'], abdominals: ['بطن', 'Abs'], quadriceps: ['فخذ أمامي', 'Quads'], hamstrings: ['فخذ خلفي', 'Hamstrings'], glutes: ['مؤخرة', 'Glutes'], calves: ['سمانة', 'Calves'], lats: ['ضهر عريض', 'Lats'], 'middle back': ['منتصف الضهر', 'Mid back'], 'lower back': ['أسفل الضهر', 'Lower back'], traps: ['تراباس', 'Traps'], neck: ['رقبة', 'Neck'], adductors: ['باطن الفخذ', 'Adductors'], abductors: ['خارج الفخذ', 'Abductors'] };
+const CATL = { strength: ['قوة', 'Strength'], core: ['بطن وكور', 'Core'], warmup: ['إحماء', 'Warm-up'], mobility: ['مرونة', 'Mobility'], rehab: ['تأهيل', 'Rehab'], athletic: ['أداء رياضي', 'Athletic'], functional: ['وظيفي', 'Functional'], stretching: ['إطالة', 'Stretching'], cardio: ['كارديو', 'Cardio'], plyometrics: ['بلايومترك', 'Plyometrics'], conditioning: ['تكييف', 'Conditioning'], testing: ['اختبارات', 'Testing'], tactical: ['تكتيك', 'Tactical'], speed: ['سرعة', 'Speed'] };
+const EQL = { 'body only': ['وزن الجسم', 'Bodyweight'], dumbbell: ['دمبل', 'Dumbbell'], barbell: ['بار', 'Barbell'], cable: ['كابل', 'Cable'], machine: ['جهاز', 'Machine'], bands: ['استك', 'Bands'], kettlebells: ['كيتل بيل', 'Kettlebell'], 'smith machine': ['سميث', 'Smith machine'], bench: ['بنش', 'Bench'], 'pullup bar': ['عقلة', 'Pull-up bar'], 'exercise ball': ['كورة', 'Exercise ball'], 'medicine ball': ['ميديسن بول', 'Medicine ball'], 'mini band': ['ميني باند', 'Mini band'], 'foam roll': ['فوم رولر', 'Foam roller'], other: ['أخرى', 'Other'] };
+const FCAT = { protein: ['بروتين', 'Protein'], dairy: ['ألبان', 'Dairy'], carb: ['نشويات', 'Carbs'], veg: ['خضار', 'Vegetables'], fruit: ['فاكهة', 'Fruit'], fat: ['دهون', 'Fats'], dish: ['أطباق', 'Dishes'], drink: ['مشروبات', 'Drinks'], supplement: ['مكملات', 'Supplements'] };
+const PGOAL = { lose_weight: ['تخسيس', 'Fat loss'], maintain: ['تثبيت', 'Maintain'], gain_muscle: ['زيادة عضل', 'Muscle gain'], gain: ['زيادة وزن', 'Weight gain'] };
+const SECL = { warmup: ['إحماء', 'Warm-up'], main: ['الأساسي', 'Main'], cardio: ['كارديو', 'Cardio'], mobility: ['مرونة', 'Mobility'], flexibility: ['إطالة', 'Stretching'] };
+const PHASEL = { off: ['خارج الموسم', 'Off-season'], pre: ['قبل الموسم', 'Pre-season'], in: ['أثناء الموسم', 'In-season'] };
+const tl = (m, k) => (m[k] ? L(m[k][0], m[k][1]) : k);
+let libEx = null, libMedia = {}, libPromise = null, tplAll = SPORT_TEMPLATES.slice(), tplPromise = null, libByEn = null;
+function loadLib() {
+  if (libEx) return Promise.resolve();
+  if (libPromise) return libPromise;
+  libPromise = import('./library/exercises-index.js').then((m) => {
+    libMedia = m.LOCAL_MEDIA || {};
+    const seen = {}, out = [];
+    (m.EXERCISE_INDEX || []).forEach((r) => { seen[r.id] = 1; out.push({ id: r.id, name: r.n, category: r.c, primaryMuscles: r.pm || [], equipment: r.e, m: r.m || (libMedia[r.id] ? libMedia[r.id][0] : '') }); });
+    EXERCISE_LIBRARY.forEach((e) => { if (!seen[e.id]) out.push({ id: e.id, name: e.name, category: e.category, primaryMuscles: e.primaryMuscles || [], equipment: e.equipment, m: libMedia[e.id] ? libMedia[e.id][0] : '' }); });
+    libEx = out;
+  }).catch(() => {
+    libEx = EXERCISE_LIBRARY.map((e) => ({ id: e.id, name: e.name, category: e.category, primaryMuscles: e.primaryMuscles || [], equipment: e.equipment, m: '' }));
+  });
+  return libPromise;
+}
+function loadTpl() {
+  if (tplPromise) return tplPromise;
+  tplPromise = Promise.all(['templates-extra', 'templates-sports-a', 'templates-sports-b'].map((n) => import('./library/' + n + '.js').catch(() => ({})))).then((mods) => {
+    mods.forEach((m) => { Object.keys(m).forEach((k) => { if (Array.isArray(m[k])) m[k].forEach((t) => { if (t && t.id && !tplAll.some((x) => x.id === t.id)) tplAll.push(t); }); }); });
+  });
+  return tplPromise;
+}
+function exByEn(en) {
+  if (!libEx) return null;
+  if (!libByEn) { libByEn = {}; libEx.forEach((e) => { const k = String((e.name && e.name.en) || '').toLowerCase(); if (k && !libByEn[k]) libByEn[k] = e; }); }
+  return libByEn[String(en || '').toLowerCase()] || null;
+}
+function viewLib(body) {
+  const lt = sub.lt || 'ex';
+  body.innerHTML = chips([['ex', L('التمارين', 'Exercises')], ['tpl', L('قوالب التمرين', 'Workout templates')], ['food', L('الأكل', 'Foods')], ['prog', L('برامج الأكل', 'Meal programs')]], lt, 'lt') + '<div id="ap-lib-in"></div>';
+  $$('[data-lt]', body).forEach((b) => b.addEventListener('click', () => { sub.lt = b.dataset.lt; sub.openT = null; sub.openP = null; sub.n = 30; draw(); }));
+  const el = $('#ap-lib-in', body);
+  if (lt === 'ex') libExView(el); else if (lt === 'tpl') libTplView(el); else if (lt === 'food') libFoodView(el); else libProgView(el);
+}
+function loadingBox(el) { el.innerHTML = '<div class="ap-load">' + esc(L('جاري التحميل...', 'Loading...')) + '</div>'; }
+function moreBtn(total, shown) {
+  return total > shown ? '<div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-more">' + esc(L('المزيد (' + (total - shown) + ')', 'More (' + (total - shown) + ')')) + '</button></div>' : '';
+}
+async function libExView(el) {
+  loadingBox(el); await loadLib();
+  const cats = Array.from(new Set(libEx.map((e) => e.category))).filter(Boolean);
+  const muscles = Object.keys(MUS), eqs = Array.from(new Set(libEx.map((e) => e.equipment))).filter(Boolean);
+  let h = '<div class="ap-goalbox"><input id="ap-lq" type="text" maxlength="60" placeholder="' + esc(L('دوّر على تمرين: سكوات، صدر، دمبل...', 'Search an exercise: squat, chest, dumbbell...')) + '" value="' + esc(sub.q || '') + '"></div>';
+  h += chips([['', L('كل الأنواع', 'All types')]].concat(cats.map((c) => [c, tl(CATL, c)])), sub.cat || '', 'lcat');
+  h += '<div class="ap-two"><select id="ap-lmus" class="ap-select"><option value="">' + esc(L('كل العضلات', 'All muscles')) + '</option>' + muscles.map((m) => '<option value="' + esc(m) + '"' + (sub.mus === m ? ' selected' : '') + '>' + esc(tl(MUS, m)) + '</option>').join('') + '</select><select id="ap-leq" class="ap-select"><option value="">' + esc(L('كل المعدات', 'All equipment')) + '</option>' + eqs.map((m) => '<option value="' + esc(m) + '"' + (sub.eqp === m ? ' selected' : '') + '>' + esc(tl(EQL, m)) + '</option>').join('') + '</select></div>';
+  h += '<div class="ap-note" id="ap-lcount"></div><div class="ap-card" id="ap-llist"></div><div id="ap-lmore"></div>';
+  el.innerHTML = h;
+  $$('[data-lcat]', el).forEach((b) => b.addEventListener('click', () => { sub.cat = b.dataset.lcat; sub.n = 30; libExView(el); }));
+  $('#ap-lmus', el).addEventListener('change', (e) => { sub.mus = e.target.value; sub.n = 30; paintEx(el); });
+  $('#ap-leq', el).addEventListener('change', (e) => { sub.eqp = e.target.value; sub.n = 30; paintEx(el); });
+  $('#ap-lq', el).addEventListener('input', (e) => { sub.q = e.target.value; sub.n = 30; paintEx(el); });
+  paintEx(el);
+}
+function paintEx(el) {
+  const q = (sub.q || '').trim().toLowerCase();
+  const list = libEx.filter((e) => {
+    if (sub.cat && e.category !== sub.cat) return false;
+    if (sub.mus && (e.primaryMuscles || []).indexOf(sub.mus) === -1) return false;
+    if (sub.eqp && e.equipment !== sub.eqp) return false;
+    if (q) { const nm = ((e.name && e.name.ar) || '') + ' ' + ((e.name && e.name.en) || '') + ' ' + (e.primaryMuscles || []).map((m) => tl(MUS, m)).join(' ') + ' ' + (e.primaryMuscles || []).join(' '); if (nm.toLowerCase().indexOf(q) === -1) return false; }
+    return true;
+  });
+  const n = sub.n || 30;
+  $('#ap-lcount', el).textContent = list.length + L(' تمرين', ' exercises');
+  $('#ap-llist', el).innerHTML = list.length ? list.slice(0, n).map((e) => '<button type="button" class="ap-ex ap-exrow" data-ex="' + esc(e.id) + '">' + (e.m ? '<img class="ap-th" loading="lazy" alt="" src="media/' + esc(e.m) + '.svg">' : '<span class="ap-th"></span>') + '<span class="ap-exn"><b>' + esc(nameOf(e.name || {})) + '</b><small>' + esc((e.primaryMuscles || []).slice(0, 2).map((m) => tl(MUS, m)).join(' · ') + (e.equipment ? ' · ' + tl(EQL, e.equipment) : '')) + '</small></span><em>›</em></button>').join('') : '<div class="ap-empty small">' + esc(L('مفيش تمرين مطابق.', 'No matching exercise.')) + '</div>';
+  $('#ap-lmore', el).innerHTML = moreBtn(list.length, Math.min(n, list.length));
+  $$('[data-ex]', el).forEach((b) => b.addEventListener('click', () => openExercise(b.dataset.ex)));
+  const mb = $('#ap-more', el); if (mb) mb.addEventListener('click', () => { sub.n = n + 30; paintEx(el); });
+}
+async function libTplView(el) {
+  loadingBox(el); await Promise.all([loadLib(), loadTpl()]);
+  if (sub.openT) return tplDetail(el, tplAll.find((t) => t.id === sub.openT));
+  const groups = Array.from(new Set(tplAll.map((t) => t.group))).filter(Boolean);
+  let h = '<div class="ap-goalbox"><input id="ap-lq" type="text" maxlength="60" placeholder="' + esc(L('دوّر: مبتدئ، كرة قدم، ظهر...', 'Search: beginner, football, back...')) + '" value="' + esc(sub.q || '') + '"></div>';
+  h += chips([['', L('الكل', 'All')]].concat(groups.map((g) => [g, SPORT_GROUPS[g] ? nameOf(SPORT_GROUPS[g]) : g])), sub.grp || '', 'lgrp');
+  h += '<div class="ap-note" id="ap-lcount"></div><div class="ap-card" id="ap-llist"></div><div id="ap-lmore"></div>';
+  el.innerHTML = h;
+  $$('[data-lgrp]', el).forEach((b) => b.addEventListener('click', () => { sub.grp = b.dataset.lgrp; sub.n = 30; libTplView(el); }));
+  $('#ap-lq', el).addEventListener('input', (e) => { sub.q = e.target.value; sub.n = 30; paintTpl(el); });
+  paintTpl(el);
+}
+function paintTpl(el) {
+  const q = (sub.q || '').trim().toLowerCase();
+  const list = tplAll.filter((t) => (!sub.grp || t.group === sub.grp) && (!q || (String(t.ar || '') + ' ' + String(t.en || '')).toLowerCase().indexOf(q) !== -1));
+  const n = sub.n || 30;
+  $('#ap-lcount', el).textContent = list.length + L(' قالب', ' templates');
+  $('#ap-llist', el).innerHTML = list.length ? list.slice(0, n).map((t) => '<button type="button" class="ap-ex" data-tp="' + esc(t.id) + '"><span class="ap-exn"><b>' + esc(nameOf(t)) + '</b><small>' + esc((SPORT_GROUPS[t.group] ? nameOf(SPORT_GROUPS[t.group]) : '') + (t.phase && PHASEL[t.phase] ? ' · ' + tl(PHASEL, t.phase) : '')) + '</small></span><em>›</em></button>').join('') : '<div class="ap-empty small">' + esc(L('مفيش قالب مطابق.', 'No matching template.')) + '</div>';
+  $('#ap-lmore', el).innerHTML = moreBtn(list.length, Math.min(n, list.length));
+  $$('[data-tp]', el).forEach((b) => b.addEventListener('click', () => { sub.openT = b.dataset.tp; libTplView(el); }));
+  const mb = $('#ap-more', el); if (mb) mb.addEventListener('click', () => { sub.n = n + 30; paintTpl(el); });
+}
+function tplDetail(el, t) {
+  if (!t) { sub.openT = null; return libTplView(el); }
+  let h = '<button type="button" class="ap-back" id="ap-tback">' + esc(L('رجوع', 'Back')) + '</button><div class="ap-sec"><b>' + esc(nameOf(t)) + '</b></div>';
+  if (t.note) h += '<p class="ap-p mu">' + esc(pick(t.note)) + '</p>';
+  const keys = Object.keys(SECL).filter((k) => t.sections && t.sections[k] && t.sections[k].length).concat(Object.keys(t.sections || {}).filter((k) => !SECL[k] && t.sections[k] && t.sections[k].length));
+  keys.forEach((k) => {
+    h += '<div class="ap-card"><div class="ap-row"><b>' + esc(tl(SECL, k)) + '</b></div>';
+    t.sections[k].forEach((it) => {
+      const ex = (it.libId && libEx.find((e) => e.id === it.libId)) || exByEn(it.en);
+      const nm = ex ? nameOf(ex.name || {}) : (it.en || '');
+      const meta = (it.sets ? it.sets + ' × ' : '') + (it.reps || '') + (it.rest ? ' · ' + it.rest : '');
+      h += ex ? '<button type="button" class="ap-ex" data-ex="' + esc(ex.id) + '"><span class="ap-exn"><b>' + esc(nm) + '</b></span><em>' + esc(meta) + '</em></button>' : '<div class="ap-food"><span>' + esc(nm) + '</span><em>' + esc(meta) + '</em></div>';
+    });
+    h += '</div>';
+  });
+  h += '<div class="ap-note">' + esc(L('قالب إرشادي جاهز. عدّل الأوزان والتكرارات حسب مستواك، ولو عندك إصابة اسأل متخصص قبل ما تبدأ.', 'A ready guideline template. Adjust loads and reps to your level, and ask a specialist first if you have an injury.')) + '</div><div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-task">' + esc(L('اسأل متخصص', 'Ask a specialist')) + '</button></div>';
+  el.innerHTML = h;
+  $('#ap-tback', el).addEventListener('click', () => { sub.openT = null; libTplView(el); });
+  $$('[data-ex]', el).forEach((b) => b.addEventListener('click', () => openExercise(b.dataset.ex)));
+  $('#ap-task', el).addEventListener('click', () => consult(nameOf(t)));
+}
+function libFoodView(el) {
+  const cats = Array.from(new Set(foodsAll.map((f) => f.cat))).filter(Boolean);
+  let h = '<div class="ap-goalbox"><input id="ap-lq" type="text" maxlength="60" placeholder="' + esc(L('دوّر على أكلة: فراخ، رز، فول...', 'Search a food: chicken, rice, beans...')) + '" value="' + esc(sub.q || '') + '"></div>';
+  h += chips([['', L('الكل', 'All')]].concat(cats.map((c) => [c, tl(FCAT, c)])), sub.fcat || '', 'lfc');
+  h += '<div class="ap-note" id="ap-lcount"></div><div class="ap-card" id="ap-llist"></div><div id="ap-lmore"></div><div class="ap-note">' + esc(L('القيم لكل 100 جرام تقريبًا.', 'Values are approximate per 100 g.')) + '</div>';
+  el.innerHTML = h;
+  $$('[data-lfc]', el).forEach((b) => b.addEventListener('click', () => { sub.fcat = b.dataset.lfc; sub.n = 40; libFoodView(el); }));
+  $('#ap-lq', el).addEventListener('input', (e) => { sub.q = e.target.value; sub.n = 40; paintFood(el); });
+  paintFood(el);
+}
+function paintFood(el) {
+  const q = (sub.q || '').trim().toLowerCase();
+  const list = foodsAll.filter((f) => (!sub.fcat || f.cat === sub.fcat) && (!q || (String(f.ar || '') + ' ' + String(f.en || '')).toLowerCase().indexOf(q) !== -1));
+  const n = sub.n || 40;
+  $('#ap-lcount', el).textContent = list.length + L(' صنف', ' foods');
+  $('#ap-llist', el).innerHTML = list.length ? list.slice(0, n).map((f) => '<div class="ap-food"><span class="ap-exn"><b>' + esc(nameOf(f)) + '</b><small>' + esc(L('بروتين ', 'P ') + f.p + L(' · كارب ', ' · C ') + f.cb + L(' · دهون ', ' · F ') + f.f) + '</small></span><em>' + f.c + ' ' + esc(L('سعرة', 'kcal')) + '</em></div>').join('') : '<div class="ap-empty small">' + esc(L('مفيش صنف مطابق.', 'No matching food.')) + '</div>';
+  $('#ap-lmore', el).innerHTML = moreBtn(list.length, Math.min(n, list.length));
+  const mb = $('#ap-more', el); if (mb) mb.addEventListener('click', () => { sub.n = n + 40; paintFood(el); });
+}
+function libProgView(el) {
+  if (sub.openP) return progDetail(el, programsAll.find((p) => p.id === sub.openP));
+  const goals = Array.from(new Set(programsAll.map((p) => p.goal))).filter(Boolean);
+  let h = chips([['', L('الكل', 'All')]].concat(goals.map((g) => [g, tl(PGOAL, g)])), sub.pg || '', 'lpg');
+  const list = programsAll.filter((p) => !sub.pg || p.goal === sub.pg);
+  h += '<div class="ap-note">' + list.length + esc(L(' برنامج', ' programs')) + '</div><div class="ap-card">' + list.map((p) => '<button type="button" class="ap-ex" data-pp="' + esc(p.id) + '"><span class="ap-exn"><b>' + esc(nameOf(p)) + '</b><small>' + esc(tl(PGOAL, p.goal) + ' · ' + progKcal(p) + L(' سعرة', ' kcal')) + '</small></span><em>›</em></button>').join('') + '</div>';
+  el.innerHTML = h;
+  $$('[data-lpg]', el).forEach((b) => b.addEventListener('click', () => { sub.pg = b.dataset.lpg; libProgView(el); }));
+  $$('[data-pp]', el).forEach((b) => b.addEventListener('click', () => { sub.openP = b.dataset.pp; sub.nday = 0; libProgView(el); }));
+}
+function progDetail(el, pr) {
+  if (!pr) { sub.openP = null; return libProgView(el); }
+  const di = Math.min(sub.nday || 0, pr.days.length - 1), day = pr.days[di], t = dayTotals(day, 1);
+  let h = '<button type="button" class="ap-back" id="ap-pback">' + esc(L('رجوع', 'Back')) + '</button><div class="ap-sec"><b>' + esc(nameOf(pr)) + '</b></div>';
+  if (pr.desc) h += '<p class="ap-p mu">' + esc(pick(pr.desc)) + '</p>';
+  h += '<div class="ap-card"><div class="ap-macros"><div><b>' + Math.round(t.kcal) + '</b><small>' + esc(L('سعرة', 'kcal')) + '</small></div><div><b>' + Math.round(t.p) + '</b><small>' + esc(L('بروتين', 'Protein')) + '</small></div><div><b>' + Math.round(t.c) + '</b><small>' + esc(L('كارب', 'Carbs')) + '</small></div><div><b>' + Math.round(t.f) + '</b><small>' + esc(L('دهون', 'Fat')) + '</small></div></div></div>';
+  h += chips(pr.days.map((_, i) => [i, L('يوم ', 'Day ') + (i + 1)]), di, 'pd');
+  Object.keys(day).forEach((m) => {
+    const items = day[m] || []; if (!items.length) return;
+    h += '<div class="ap-card"><div class="ap-row"><b>' + esc(MEAL_NAME[m] ? L(MEAL_NAME[m][0], MEAL_NAME[m][1]) : m) + '</b></div>' + items.map((it) => { const fd = FOOD_BY_ID[it.id]; return '<div class="ap-food"><span>' + esc(fd ? nameOf(fd) : it.id) + '</span><em>' + r5(it.g) + ' ' + esc(L('جم', 'g')) + '</em></div>'; }).join('') + '</div>';
+  });
+  h += '<div class="ap-actions"><button type="button" class="ap-btn" id="ap-padopt">' + esc(L('اعتمده كخطة أكلي', 'Use as my nutrition plan')) + '</button></div><div class="ap-note">' + esc(L('خطة إرشادية للّياقة العامة. لو عندك حالة صحية أو حساسية، استشر أخصائي تغذية.', 'A guideline plan for general fitness. If you have a health condition or allergy, consult a dietitian.')) + '</div>';
+  el.innerHTML = h;
+  $('#ap-pback', el).addEventListener('click', () => { sub.openP = null; libProgView(el); });
+  $$('[data-pd]', el).forEach((b) => b.addEventListener('click', () => { sub.nday = Number(b.dataset.pd); progDetail(el, pr); }));
+  $('#ap-padopt', el).addEventListener('click', () => {
+    plus.nutri = Object.assign({}, plus.nutri || {}, { prog: pr.id, factor: 1, target: progKcal(pr), params: (plus.nutri && plus.nutri.params) || null }); persist();
+    go('plan'); sub.planTab = 'nutri'; draw(); toast(L('اتحفظ في خطتي', 'Saved to My plan'));
+  });
+}
+
+/* ================================================================ سؤال اليوم (نافذة أول الدخول) */
+export async function quickCheck() {
+  if (document.getElementById('ap-qc')) return;
+  try { if (sessionStorage.getItem('adam-qc-dismissed') === stamp()) return; } catch (e) { /* تجاهل */ }
+  await loadState();
+  if (!EMAIL) return;
+  const today = stamp(); const c0 = plus.checkins[today];
+  if (c0 && c0.score != null) return;
+  const m = document.createElement('div'); m.id = 'ap-qc'; m.className = 'ap-qc'; m.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
+  document.body.appendChild(m);
+  const dismiss = () => { try { sessionStorage.setItem('adam-qc-dismissed', today); } catch (e) { /* تجاهل */ } m.remove(); };
+  const draw2 = () => {
+    const c = plus.checkins[today] || {}; const done = CHECK_Q.every((q) => c[q.k] != null);
+    let h = '<div class="ap-qc-box"><button type="button" class="ap-x" id="ap-qc-x" aria-label="close"></button><b class="ap-qc-t">' + esc(L('سؤال اليوم', 'Daily check-in')) + '</b><p class="ap-qc-s">' + esc(L('10 ثواني وتعرف جاهزيتك النهاردة', '10 seconds to know your readiness today')) + '</p>';
+    if (!done) {
+      CHECK_Q.forEach((q) => { h += '<div class="ap-q"><b>' + esc(L(q.q[0], q.q[1])) + '</b><div class="ap-opts">' + q.o.map((o, i) => '<button type="button" data-q="' + q.k + '" data-i="' + i + '" class="' + (c[q.k] === i ? 'on' : '') + '">' + esc(L(o[0], o[1])) + '</button>').join('') + '</div></div>'; });
+    } else {
+      const sc = c.score;
+      h += '<div class="ap-score"><div class="ap-big2" style="color:' + (sc >= 70 ? '#3ef0b0' : sc >= 45 ? '#ffab5c' : '#ff6b78') + '">' + sc + '</div>' + advice(sc, c).map((t) => '<p class="ap-p">' + esc(t) + '</p>').join('') + '</div><div class="ap-actions"><button type="button" class="ap-btn" id="ap-qc-more">' + esc(L('التفاصيل', 'Details')) + '</button><button type="button" class="ap-btn ghost" id="ap-qc-ok">' + esc(L('تمام', 'Done')) + '</button></div>';
+    }
+    m.innerHTML = h + '</div>';
+    $('#ap-qc-x', m).addEventListener('click', dismiss);
+    $$('[data-q]', m).forEach((b) => b.addEventListener('click', () => {
+      const cc = plus.checkins[today] || {}; cc[b.dataset.q] = Number(b.dataset.i);
+      const sc = readiness(cc); if (sc != null) cc.score = sc; cc.d = today; plus.checkins[today] = cc;
+      const keys = Object.keys(plus.checkins).sort(); while (keys.length > 120) delete plus.checkins[keys.shift()];
+      persist(); draw2();
+    }));
+    const ok = $('#ap-qc-ok', m); if (ok) ok.addEventListener('click', () => m.remove());
+    const more = $('#ap-qc-more', m); if (more) more.addEventListener('click', () => { m.remove(); open('today'); });
+  };
+  draw2();
+}
+
+window.ADAM_PLUS = { open: open, close: close, quickCheck: quickCheck };
