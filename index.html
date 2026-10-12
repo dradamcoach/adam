@@ -1723,7 +1723,7 @@
       <button type="button" class="chip small" id="lib-media-only"><span data-t="lib_media_only">بصورة بس</span></button>
       <button type="button" class="chip small hidden" id="lib-safe-only"><span data-t="lib_safe_only">مناسب للعميل</span></button>
       <button type="button" class="link" id="lib-credits-btn" data-t="lib_credits_link">حقوق الصور</button>
-      <button type="button" class="link" id="lib-anatomy-btn">التشريح ثلاثي الأبعاد</button>
+      <button type="button" class="link" id="lib-anatomy-btn" data-t="anat3d_title">التشريح ثلاثي الأبعاد</button>
     </div>
     <p class="message" id="lib-message"></p>
     <div class="grid" id="lib-grid"></div>
@@ -2295,8 +2295,8 @@
   <!-- تفاصيل التمرين والوصفة وحقوق الصور — شيت واحد بيتملي من الجافاسكريبت -->
   <div class="hidden" id="anat-overlay" style="position:fixed;inset:0;z-index:70;background:#0b1016;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#0b1016;border-bottom:1px solid #273441">
-      <span style="color:#e9eef2;font-size:14px">التشريح ثلاثي الأبعاد</span>
-      <button type="button" id="anat-close" style="background:#16202a;color:#e9eef2;border:1px solid #273441;border-radius:999px;padding:6px 14px;font-size:13px;width:auto;margin:0">إغلاق</button>
+      <span data-t="anat3d_title" style="color:#e9eef2;font-size:14px">التشريح ثلاثي الأبعاد</span>
+      <button type="button" id="anat-close" style="background:#16202a;color:#e9eef2;border:1px solid #273441;border-radius:999px;padding:6px 14px;font-size:13px;width:auto;margin:0" data-t="anat3d_close">إغلاق</button>
     </div>
     <iframe id="anat-frame" title="anatomy" style="border:0;width:100%;flex:1;min-height:0;background:#0b1016"></iframe>
   </div>

@@ -22,7 +22,7 @@
 
 /* كارت التشريح */
 #adam-v2 .av2-anat { display: flex; align-items: center; gap: 16px; width: 100%; text-align: start; padding: 16px; border-radius: 26px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(160deg, rgba(62,240,176,.14), rgba(255,255,255,.03) 60%); color: var(--ink); cursor: pointer; box-shadow: 0 1px 0 rgba(255,255,255,.14) inset; }
-#adam-v2 .av2-anat svg { flex: none; width: 64px; height: 100px; }
+#adam-v2 .av2-anat svg { flex: none; width: 70px; height: 133px; }
 #adam-v2 .av2-anat b { display: block; font-size: 16px; font-weight: 600; }
 #adam-v2 .av2-anat p { margin: 6px 0 8px; font-size: 13px; line-height: 1.6; color: var(--muted); }
 #adam-v2 .av2-anat em { font-style: normal; font-size: 13px; color: #3ef0b0; }
@@ -40,3 +40,30 @@
 #adam-v2 .av2-tile { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 6px 13px; border-radius: 22px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.025)); color: var(--ink); cursor: pointer; box-shadow: 0 1px 0 rgba(255,255,255,.12) inset; font-family: inherit; }
 #adam-v2 .av2-tile svg { width: 26px; height: 26px; color: #3ef0b0; }
 #adam-v2 .av2-tile span { font-size: 12.5px; }
+
+/* الدوائر الثلاث */
+#adam-v2 .av2-rings { display: flex; gap: 6px; padding: 18px 10px 14px; border-radius: 26px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.025)); box-shadow: 0 1px 0 rgba(255,255,255,.12) inset; margin-bottom: 4px; }
+#adam-v2 .av2-rg { flex: 1; background: none; border: 0; padding: 0; color: var(--ink); font-family: inherit; cursor: pointer; text-align: center; }
+#adam-v2 .av2-rgw { position: relative; width: 88px; height: 88px; margin: 0 auto; }
+#adam-v2 .av2-rgw svg { width: 88px; height: 88px; transform: rotate(-90deg); }
+#adam-v2 .av2-rgw .t { fill: none; stroke: rgba(255,255,255,.1); stroke-width: 8; }
+#adam-v2 .av2-rgw .v { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset .6s; }
+#adam-v2 .av2-rgw .n { position: absolute; inset: 0; display: grid; place-items: center; font-size: 21px; font-weight: 700; }
+#adam-v2 .av2-rg .l { margin-top: 8px; font-size: 12px; color: var(--muted); }
+
+/* المتخصصين: قوائم طولية لكل تخصص */
+#adam-v2 .av2-gh { display: flex; align-items: center; justify-content: space-between; margin: 16px 4px 8px; }
+#adam-v2 .av2-gh b { font-size: 14px; font-weight: 600; color: #3ef0b0; }
+#adam-v2 .av2-gh span { font-size: 11px; color: var(--muted); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; padding: 1px 8px; }
+#adam-v2 .av2-list { display: flex; flex-direction: column; gap: 8px; }
+#adam-v2 .av2-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02)); color: var(--ink); cursor: pointer; font-family: inherit; text-align: start; }
+#adam-v2 .av2-av { flex: none; width: 48px; height: 48px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; font-size: 20px; font-weight: 300; color: rgba(255,255,255,.7); }
+#adam-v2 .av2-av img { width: 100%; height: 100%; object-fit: cover; }
+#adam-v2 .av2-ri { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+#adam-v2 .av2-ri b { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#adam-v2 .av2-ri small { font-size: 12px; color: var(--muted); }
+#adam-v2 .av2-cta { flex: none; font-size: 12px; color: #3ef0b0; border: 1px solid rgba(62,240,176,.4); border-radius: 16px; padding: 5px 12px; }
+
+/* شريط الرجوع في أقسام العميل */
+.cp-back { display: inline-flex; align-items: center; gap: 6px; width: auto; margin: 0 0 12px; padding: 8px 14px 8px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color: var(--ink); font-size: 14px; font-family: inherit; cursor: pointer; }
+html[dir="rtl"] .cp-back svg { transform: scaleX(-1); }

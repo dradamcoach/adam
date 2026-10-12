@@ -937,4 +937,12 @@ export async function quickCheck() {
   draw2();
 }
 
-window.ADAM_PLUS = { open: open, close: close, quickCheck: quickCheck };
+export async function summary() {
+  await loadState();
+  const td = stamp(); let ready = null;
+  for (let i = 0; i < 2 && ready == null; i++) { const c = plus.checkins[addDays(td, -i)]; if (c && c.score != null) ready = c.score; }
+  const todayDone = !!(plus.checkins[td] && plus.checkins[td].score != null);
+  const foods = (plus.foodq && plus.foodq[td]) || [];
+  return { ready: ready, todayDone: todayDone, foodCount: foods.length };
+}
+window.ADAM_PLUS = { open: open, close: close, quickCheck: quickCheck, summary: summary };

@@ -13,12 +13,24 @@
     ar: { plus: 'اكتشف', team: 'متخصصينك', all: 'تواصل', chat: 'تواصل', disc: 'اكتشف جسمك', sub: 'تشريح 3D', t: 'العضلات والعظام والأربطة', p: 'اضغط على أي عضلة تشوف أصلها ومدخلها وتمارينها.', open: 'افتح التشريح ←', 'coach': 'مدرب', 'other': 'متخصص' },
     en: { plus: 'Discover', team: 'Your specialists', all: 'Contact', chat: 'Contact', disc: 'Explore your body', sub: '3D anatomy', t: 'Muscles, bones and ligaments', p: 'Tap any muscle to see its origin, insertion and exercises.', open: 'Open anatomy →', 'coach': 'Coach', 'other': 'Specialist' }
   };
+  var RL = {
+    ar: { ready: 'الجاهزية', nutri: 'التغذية', effort: 'المجهود' },
+    en: { ready: 'Readiness', nutri: 'Nutrition', effort: 'Effort' }
+  };
+  var GROUPS = [
+    ['coach', ['coach'], 'المدربون', 'Coaches'],
+    ['nutritionist', ['nutritionist'], 'أخصائيو التغذية', 'Nutritionists'],
+    ['doctor', ['doctor', 'ortho', 'radiology', 'sports_medicine'], 'الأطباء', 'Doctors'],
+    ['physio', ['physio', 'massage'], 'العلاج الطبيعي', 'Physiotherapy'],
+    ['rehab', ['rehab'], 'التأهيل', 'Rehabilitation'],
+    ['psychologist', ['psychologist'], 'الدعم النفسي', 'Psychologists']
+  ];
   var SPEC = {
-    ar: { coach: 'مدرب', nutritionist: 'أخصائي تغذية', doctor: 'طبيب', rehab: 'تأهيل رياضي', physio: 'علاج طبيعي' },
-    en: { coach: 'Coach', nutritionist: 'Nutritionist', doctor: 'Doctor', rehab: 'Sports rehab', physio: 'Physiotherapy' }
+    ar: { coach: 'مدرب', nutritionist: 'أخصائي تغذية', doctor: 'طبيب', rehab: 'تأهيل رياضي', physio: 'علاج طبيعي', ortho: 'طبيب عظام', radiology: 'طبيب أشعة', sports_medicine: 'طب رياضي', pharmacist: 'صيدلي', massage: 'مساج رياضي', psychologist: 'أخصائي نفسي رياضي' },
+    en: { coach: 'Coach', nutritionist: 'Nutritionist', doctor: 'Doctor', rehab: 'Sports rehab', physio: 'Physiotherapy', ortho: 'Orthopaedic doctor', radiology: 'Radiologist', sports_medicine: 'Sports medicine', pharmacist: 'Pharmacist', massage: 'Sports massage', psychologist: 'Sports psychologist' }
   };
   var GRAD = ['#17483d', '#274a73', '#6b4527', '#553a76', '#2c5f5a'];
-  var state = { loaded: false, loading: false, timer: null, idx: 0, list: [] };
+  var state = { loaded: false, loading: false, timer: null, idx: 0, list: [], sum: { ready: null }, sumAt: 0 };
 
 
   var ICONS = {
@@ -59,7 +71,75 @@
   }
 
   function anatSvg() {
-    return '<svg viewBox="0 0 84 130" aria-hidden="true"><g fill="#1b2229" stroke="#2c3640"><circle cx="42" cy="12" r="9"/><rect x="26" y="25" width="32" height="42" rx="10"/><rect x="12" y="27" width="11" height="42" rx="5"/><rect x="61" y="27" width="11" height="42" rx="5"/><rect x="28" y="68" width="12" height="55" rx="6"/><rect x="44" y="68" width="12" height="55" rx="6"/></g><rect x="26" y="25" width="32" height="18" rx="8" fill="#3ef0b0" opacity=".8"/><rect x="12" y="27" width="11" height="22" rx="5" fill="#ffab5c" opacity=".75"/><rect x="61" y="27" width="11" height="22" rx="5" fill="#ffab5c" opacity=".75"/></svg>';
+    var half = '<path d="M29 33C23 34 20 40 19 50C18 58 18 64 19 70L26 70C27 62 28 50 31 38Z"/><path d="M19 71C17 82 15 92 14 101L21 102C23 92 25 82 26 71Z"/><path d="M37 107C34 121 34 135 36 147L47 147C48 135 49 121 49 107Z"/><path d="M36 149C34 161 35 173 37 185L45 185C47 173 48 161 47 149Z"/>';
+    var mus = '<path d="M32 35C38 33 46 35 49 39L49 51C42 54 34 51 32 45Z" fill="#3ef0b0" opacity=".85"/><ellipse cx="27" cy="37" rx="5" ry="6" fill="#ffab5c" opacity=".85"/><path d="M20 44C19 52 19 58 20 64L25 64C26 57 27 50 28 43Z" fill="#3ef0b0" opacity=".6"/><rect x="40" y="56" width="9" height="7" rx="2.5" fill="#3ef0b0" opacity=".5"/><rect x="40" y="65" width="9" height="7" rx="2.5" fill="#3ef0b0" opacity=".4"/><rect x="40" y="74" width="9" height="7" rx="2.5" fill="#3ef0b0" opacity=".3"/><path d="M38 112C36 123 36 133 38 142L46 142C47 133 47.5 123 47 112Z" fill="#3ef0b0" opacity=".8"/><path d="M38 152C37 161 37.500 170 39 178L44 178C45 170 45.500 161 45 152Z" fill="#ffab5c" opacity=".8"/>';
+    return '<svg viewBox="0 0 100 190" aria-hidden="true"><defs><linearGradient id="av2-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d3843"/><stop offset="1" stop-color="#151c23"/></linearGradient></defs>'
+      + '<g fill="url(#av2-bg)" stroke="#3a4753" stroke-width=".8"><ellipse cx="50" cy="13" rx="8.5" ry="10.5"/><path d="M45 22h10v8H45z"/>'
+      + '<path d="M30 31C36 28 44 29 50 30C56 29 64 28 70 31C73 40 72 52 69 64C67 72 66 80 64 88L36 88C34 80 33 72 31 64C28 52 27 40 30 31Z"/>'
+      + '<path d="M36 88L64 88C66 96 65 102 62 106L38 106C35 102 34 96 36 88Z"/>'
+      + '<g id="av2-h">' + half + '</g><use href="#av2-h" transform="translate(100 0) scale(-1 1)"/></g>'
+      + '<g id="av2-m">' + mus + '</g><use href="#av2-m" transform="translate(100 0) scale(-1 1)"/></svg>';
+  }
+
+  function ringsCard() {
+    var l = lang(), rl = RL[l], eng = null;
+    try { eng = window.__adamEng && window.__adamEng(); } catch (e) { eng = null; }
+    var ready = state.sum.ready;
+    var food = eng ? Math.round(eng.food * 100) : Math.min(100, Math.round(((state.sum.foodCount || 0) / 4) * 100));
+    var eff = eng ? Math.round(eng.train * 100) : 0;
+    var items = [
+      ['ready', ready == null ? 0 : ready, ready == null ? '--' : String(ready), '#27e3a1', 'today'],
+      ['nutri', food, food + '%', '#4aa8ff', 'food'],
+      ['effort', eff, eff + '%', '#ff9f43', 'mytrain']
+    ];
+    var c = el('div', 'av2-rings');
+    items.forEach(function (it) {
+      var b = el('button', 'av2-rg'); b.type = 'button';
+      var off = Math.round(264 * (1 - Math.max(0, Math.min(100, it[1])) / 100));
+      b.innerHTML = '<div class="av2-rgw"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="t" cx="50" cy="50" r="42"/><circle class="v" cx="50" cy="50" r="42" stroke="' + it[3] + '" stroke-dasharray="264" stroke-dashoffset="' + off + '"/></svg><div class="n">' + it[2] + '</div></div><div class="l">' + rl[it[0]] + '</div>';
+      b.addEventListener('click', function () { goTile(it[4]); });
+      c.appendChild(b);
+    });
+    return c;
+  }
+  function goTile(k) {
+    if (k === 'mytrain') { var tb = document.getElementById('ctab-training'); if (tb) { tb.click(); window.scrollTo(0, 0); return; } openPlus('plan'); return; }
+    openPlus(k);
+  }
+
+  function specKeys(p) {
+    var a = (p.specialties && p.specialties.length) ? p.specialties : [p.specialty || ''];
+    return a;
+  }
+  function trainerRow(p, i, l, tx) {
+    var card = el('button', 'av2-row'); card.type = 'button';
+    var name = String(p.name || '');
+    var av = el('span', 'av2-av'); av.style.background = 'linear-gradient(160deg,' + GRAD[i % GRAD.length] + ',#0a1215)';
+    if (p.photo) { var img = el('img'); img.alt = name; img.loading = 'lazy'; img.src = p.photo; av.appendChild(img); } else av.textContent = name.charAt(0);
+    card.appendChild(av);
+    var info = el('span', 'av2-ri'); info.appendChild(el('b', '', name)); info.appendChild(el('small', '', specLabel(p, l))); card.appendChild(info);
+    card.appendChild(el('span', 'av2-cta', tx.chat));
+    card.addEventListener('click', function () { var tile = document.querySelector('.home-tile.tile-consult'); if (tile) tile.click(); });
+    return card;
+  }
+  function trainersBlock(r, l, tx) {
+    if (!state.list.length) return;
+    var sec = el('div', 'av2-sec'); sec.appendChild(el('b', '', tx.team)); r.appendChild(sec);
+    var used = {};
+    var groups = GROUPS.map(function (g) {
+      var list = state.list.filter(function (p) { return specKeys(p).some(function (k) { return g[1].indexOf(k) !== -1; }); });
+      list.forEach(function (p) { used[p.email] = 1; });
+      return { g: g, list: list };
+    });
+    var rest = state.list.filter(function (p) { return !used[p.email]; });
+    if (rest.length) groups.push({ g: ['other', [], 'متخصصون آخرون', 'Other specialists'], list: rest });
+    groups.forEach(function (x) {
+      if (!x.list.length) return;
+      var h = el('div', 'av2-gh'); h.appendChild(el('b', '', l === 'en' ? x.g[3] : x.g[2])); h.appendChild(el('span', '', String(x.list.length))); r.appendChild(h);
+      var box = el('div', 'av2-list');
+      x.list.forEach(function (p, i) { box.appendChild(trainerRow(p, i, l, tx)); });
+      r.appendChild(box);
+    });
   }
 
   function render() {
@@ -69,65 +149,36 @@
     r.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
     r.innerHTML = '';
 
+    r.appendChild(ringsCard());
+
     var secT = el('div', 'av2-sec'); secT.appendChild(el('b', '', tx.plus)); var pl = el('span', '', 'ADAM+'); pl.setAttribute('dir', 'ltr'); secT.appendChild(pl); r.appendChild(secT);
     var grid = el('div', 'av2-grid');
     TILES.forEach(function (t) {
       var b = el('button', 'av2-tile'); b.type = 'button';
       b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[t[0]] + '</svg><span>' + (l === 'en' ? t[2] : t[1]) + '</span>';
-      b.addEventListener('click', function () {
-        if (t[0] === 'mytrain') { var tb = document.getElementById('ctab-training'); if (tb) { tb.click(); window.scrollTo(0, 0); return; } openPlus('plan'); return; }
-        openPlus(t[0]);
-      });
+      b.addEventListener('click', function () { goTile(t[0]); });
       grid.appendChild(b);
     });
     r.appendChild(grid);
 
-    if (state.list.length) {
-      var sec = el('div', 'av2-sec'); sec.appendChild(el('b', '', tx.team)); r.appendChild(sec);
-      var car = el('div', 'av2-car'); car.id = 'av2-car';
-      state.list.forEach(function (p, i) {
-        var card = el('button', 'av2-tr'); card.type = 'button';
-        card.style.background = 'linear-gradient(160deg,' + GRAD[i % GRAD.length] + ',#0a1215)';
-        var name = String(p.name || '');
-        if (p.photo) { var img = el('img'); img.alt = name; img.loading = 'lazy'; img.src = p.photo; card.appendChild(img); }
-        else card.appendChild(el('div', 'av2-init', name.charAt(0)));
-        card.appendChild(el('div', 'av2-go', tx.chat));
-        var info = el('div', 'av2-info'); info.appendChild(el('b', '', name)); info.appendChild(el('small', '', specLabel(p, l)));
-        card.appendChild(info);
-        card.addEventListener('click', function () { var tile = document.querySelector('.home-tile.tile-consult'); if (tile) tile.click(); });
-        car.appendChild(card);
-      });
-      r.appendChild(car);
-      var dots = el('div', 'av2-dots'); dots.id = 'av2-dots';
-      state.list.forEach(function (_, i) { dots.appendChild(el('i', i === 0 ? 'on' : '')); });
-      r.appendChild(dots);
-      car.addEventListener('scroll', function () {
-        var kids = car.children, cr = car.getBoundingClientRect(), c = cr.left + cr.width / 2, best = 0, bd = 1e9;
-        for (var i = 0; i < kids.length; i++) { var k = kids[i].getBoundingClientRect(); var m = Math.abs(k.left + k.width / 2 - c); if (m < bd) { bd = m; best = i; } }
-        state.idx = best; var d = dots.children; for (var j = 0; j < d.length; j++) d[j].className = j === best ? 'on' : '';
-      }, { passive: true });
-      startAuto(car);
-    }
-
-    var sec2 = el('div', 'av2-sec'); var b = el('b', '', tx.disc); sec2.appendChild(b); sec2.appendChild(el('span', '', tx.sub)); r.appendChild(sec2);
+    var sec2 = el('div', 'av2-sec'); sec2.appendChild(el('b', '', tx.disc)); sec2.appendChild(el('span', '', tx.sub)); r.appendChild(sec2);
     var a = el('button', 'av2-anat'); a.type = 'button';
     a.innerHTML = anatSvg() + '<div><b>' + tx.t + '<span class="av2-chip">3D</span></b><p>' + tx.p + '</p><em>' + tx.open + '</em></div>';
     a.addEventListener('click', function () { var o = document.getElementById('lib-anatomy-btn'); if (o) o.click(); });
     r.appendChild(a);
+
+    trainersBlock(r, l, tx);
   }
 
-  function startAuto(car) {
-    if (state.timer) clearInterval(state.timer);
-    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (state.list.length < 2) return;
-    var paused = false;
-    ['touchstart', 'mousedown'].forEach(function (e) { car.addEventListener(e, function () { paused = true; setTimeout(function () { paused = false; }, 6000); }, { passive: true }); });
-    state.timer = setInterval(function () {
-      if (paused || !car.isConnected || car.offsetParent === null) return;
-      var n = (state.idx + 1) % car.children.length, t = car.children[n];
-      var cr = car.getBoundingClientRect(), tr = t.getBoundingClientRect();
-      car.scrollBy({ left: (tr.left + tr.width / 2) - (cr.left + cr.width / 2), behavior: 'smooth' });
-    }, 3500);
+  function refreshSum() {
+    var now = Date.now();
+    if (now - state.sumAt < 30000) return;
+    state.sumAt = now;
+    import('./adam-plus.js').then(function (m) { return m.summary ? m.summary() : null; }).then(function (sm) {
+      if (!sm) return;
+      var changed = sm.ready !== state.sum.ready || sm.foodCount !== state.sum.foodCount;
+      state.sum = sm; if (changed) render();
+    }).catch(function () {});
   }
 
   async function load() {
@@ -138,7 +189,7 @@
       var db = F.getFirestore(A.getApp());
       var snap = await F.getDocs(F.collection(db, 'providerPublic'));
       state.list = snap.docs.map(function (d) { var x = d.data(); x.email = d.id; return x; })
-        .filter(function (p) { return p.name; }).slice(0, 8);
+        .filter(function (p) { return p.name; }).slice(0, 60);
       state.loaded = true;
     } catch (e) { /* مفيش متخصصين = القسم مايظهرش */ }
     state.loading = false;
@@ -168,6 +219,11 @@
       if (!r) return;
       if (!r.firstChild) render();
       if (r.offsetParent !== null && !state.loaded && !state.loading) load();
+      if (r.offsetParent !== null) {
+        refreshSum();
+        var e = window.__adamEng && window.__adamEng(); var sig = e ? [e.train, e.food].join('/') : '';
+        if (sig !== state.sig) { state.sig = sig; render(); }
+      }
     } catch (e) { /* تجاهل */ }
   }
 

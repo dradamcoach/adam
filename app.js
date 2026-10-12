@@ -112,6 +112,10 @@ const EXERCISE_IMAGE_MAX_SIDE = 360;
 const TEXT = {
   ar: {
     tagline: 'منصة التدريب والتأهيل والتغذية',
+    anat3d_title: 'التشريح ثلاثي الأبعاد',
+    anat3d_close: 'إغلاق',
+    back_bar: 'رجوع',
+    spec_group_coach: 'المدربون', spec_group_nutritionist: 'أخصائيو التغذية', spec_group_doctor: 'الأطباء', spec_group_physio: 'العلاج الطبيعي', spec_group_rehab: 'التأهيل', spec_group_psychologist: 'الدعم النفسي', spec_group_other: 'متخصصون آخرون',
     login_title: 'تسجيل الدخول',
     login_btn: 'دخول',
     forgot_password: 'نسيت كلمة السر؟',
@@ -2739,6 +2743,10 @@ const TEXT = {
 
   en: {
     tagline: 'Training, Rehab & Nutrition Platform',
+    anat3d_title: '3D Anatomy',
+    anat3d_close: 'Close',
+    back_bar: 'Back',
+    spec_group_coach: 'Coaches', spec_group_nutritionist: 'Nutritionists', spec_group_doctor: 'Doctors', spec_group_physio: 'Physiotherapy', spec_group_rehab: 'Rehabilitation', spec_group_psychologist: 'Psychologists', spec_group_other: 'Other specialists',
     login_title: 'Sign In',
     login_btn: 'Sign in',
     forgot_password: 'Forgot your password?',
@@ -11328,10 +11336,27 @@ function setClientMode(mode) {
   ctabStore.classList.toggle('active', mode === 'store');
   ctabConsult.classList.toggle('active', mode === 'consult');
   if (mode === 'home') renderClientHome();
+  else ensureClientBackBars();
   paintAppbar();
   if (!clientScreen.classList.contains('hidden')) navRecord(clientScreen, mode);
   window.scrollTo(0, 0);
 }
+
+/* شريط رجوع ظاهر فوق كل قسم من أقسام العميل (الآيفون مفيهوش زرار رجوع) */
+function ensureClientBackBars() {
+  ['client-training', 'client-nutrition', 'client-classes', 'client-activity', 'client-physio', 'client-rehab', 'client-consult', 'client-store'].forEach(function (id) {
+    const panel = document.getElementById(id);
+    if (!panel || panel.querySelector(':scope > .cp-back')) return;
+    const bar = document.createElement('button');
+    bar.type = 'button';
+    bar.className = 'cp-back';
+    bar.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg><span data-t="back_bar"></span>';
+    bar.querySelector('span').textContent = t('back_bar');
+    bar.addEventListener('click', function () { setClientMode('home'); });
+    panel.insertBefore(bar, panel.firstChild);
+  });
+}
+ensureClientBackBars();
 
 ctabTraining.addEventListener('click', function () {
   setClientMode('training');
@@ -25795,7 +25820,7 @@ async function loadInjuryHistory() {
 
       const parts = document.createElement('div');
       parts.className = 'client-name';
-      parts.textContent = (report.bodyParts || []).map(bodyPartName).join('، ');
+      parts.textContent = (report.bodyParts || []).map(bodyPartName).join(lang === 'ar' ? '، ' : ', ');
       item.appendChild(parts);
 
       if (report.description) {
@@ -25845,7 +25870,7 @@ document.getElementById('injury-submit-btn').addEventListener('click', async fun
     notify(teamEmailsOf(clientRecord), 'injury_new', {
       target: 'client', about: clientEmail, aboutName: clientName || '',
       params: function () {
-        return { name: clientName || clientEmail, parts: reportedParts.map(bodyPartName).join('، ') };
+        return { name: clientName || clientEmail, parts: reportedParts.map(bodyPartName).join(lang === 'ar' ? '، ' : ', ') };
       }
     });
     resetInjuryForm();
@@ -25916,7 +25941,7 @@ async function loadCoachInjuryReports() {
 
       const parts = document.createElement('div');
       parts.className = 'client-name';
-      parts.textContent = (report.bodyParts || []).map(bodyPartName).join('، ');
+      parts.textContent = (report.bodyParts || []).map(bodyPartName).join(lang === 'ar' ? '، ' : ', ');
       item.appendChild(parts);
 
       if (report.createdAt) {
@@ -27679,7 +27704,7 @@ async function loadMyStoreOrders() {
 
   orders.forEach(function (order) {
     const row = document.createElement('li');
-    const itemsText = (order.items || []).map(function (item) { return item.name + ' ×' + item.qty; }).join('، ');
+    const itemsText = (order.items || []).map(function (item) { return item.name + ' ×' + item.qty; }).join(lang === 'ar' ? '، ' : ', ');
     row.textContent = itemsText + ' — ' + order.total + ' ' + t('currency_egp') + ' — ' + storeOrderStatusLabel(order.status);
     storeOrdersList.appendChild(row);
   });
@@ -27934,7 +27959,7 @@ async function loadStoreOrdersAdmin() {
     name.textContent = (order.clientName || order.clientEmail) + ' — ' + order.total + ' ' + t('currency_egp');
     card.appendChild(name);
 
-    const itemsText = (order.items || []).map(function (item) { return item.name + ' ×' + item.qty; }).join('، ');
+    const itemsText = (order.items || []).map(function (item) { return item.name + ' ×' + item.qty; }).join(lang === 'ar' ? '، ' : ', ');
     const meta = document.createElement('div');
     meta.className = 'ex-meta';
     meta.textContent = itemsText + ' — ' + t(
@@ -28214,7 +28239,7 @@ async function loadLeadsAdmin() {
       wa.target = '_blank';
       wa.rel = 'noopener';
       wa.className = 'lead-link';
-      wa.textContent = 'واتساب';
+      wa.textContent = 'WhatsApp';
       contactRow.appendChild(wa);
     }
     if (email) {
@@ -29499,6 +29524,7 @@ function ensureExtraLibrary() {
   extraLibPromise = import('./library/exercises-index.js').then(function (mod) {
     extraLocalMedia = Object.assign({}, MEDIA_EXTRA, mod.LOCAL_MEDIA || {});
     extraLib = (mod.EXERCISE_INDEX || []).map(expandIndexRow);
+    trDict = null;
     // التمارين القديمة ممكن تكون اتجهّزت قبل ما رسومها توصل
     EXERCISE_LIBRARY.forEach(function (ex) { delete ex._media; delete ex._prepped; });
     rebuildLibraryData();
@@ -29700,9 +29726,9 @@ async function openExerciseSheet(ex) {
   const clientKeys = clientCautionKeys();
   const hits = cautions.filter(function (k) { return clientKeys.indexOf(k) !== -1; });
   if (hits.length) {
-    body.appendChild(el('div', 'exs-caution danger', fill('exs_caution_client', { list: hits.map(cautionName).join('، ') })));
+    body.appendChild(el('div', 'exs-caution danger', fill('exs_caution_client', { list: hits.map(cautionName).join(lang === 'ar' ? '، ' : ', ') })));
   } else if (cautions.length) {
-    body.appendChild(el('div', 'exs-caution', fill('exs_caution_general', { list: cautions.map(cautionName).join('، ') })));
+    body.appendChild(el('div', 'exs-caution', fill('exs_caution_general', { list: cautions.map(cautionName).join(lang === 'ar' ? '، ' : ', ') })));
   }
 
   if ((ex.primaryMuscles || []).length || (ex._rehab && ex._rehab.muscles)) {
@@ -29994,7 +30020,7 @@ function buildTrDict() {
     if (typeof node.body === 'string' && typeof node.bodyEn === 'string') add(node.body, node.bodyEn);
     Object.keys(node).forEach(function (k) { if (node[k] && typeof node[k] === 'object') walk(node[k], depth + 1); });
   };
-  [REHAB_TEMPLATES, SUPPLEMENT_LIBRARY, MODALITIES, MODALITY_PROTOCOLS, SPORT_TEMPLATES, NUTRITION_PROGRAMS, MED_LIBRARY_SEED, EXERCISE_LIBRARY]
+  [REHAB_TEMPLATES, SUPPLEMENT_LIBRARY, MODALITIES, MODALITY_PROTOCOLS, SPORT_TEMPLATES, NUTRITION_PROGRAMS, MED_LIBRARY_SEED, EXERCISE_LIBRARY, FOOD_LIBRARY, (typeof extraLib !== 'undefined' && extraLib) || []]
     .forEach(function (lib) { walk(lib, 0); });
   // مراحل التأهيل: "اسم التمرين — ٣ × ١٠" وغيره بيتكتب من الحقول دي بالظبط
   Object.keys(MODALITY_VALUES_EN).forEach(function (ar) { add(ar, MODALITY_VALUES_EN[ar]); });
@@ -30008,6 +30034,59 @@ function tr(text) {
   if (lang === 'en') return trDict.ar[key] || text;
   return trDict.en[key] || text;
 }
+
+/* ===== عرض محتوى المدرب بلغة العميل =====
+   أي نص في شاشات العميل مطابق لنص من المكتبات (تمارين، أكل، قوالب، تأهيل)
+   بيتبدّل لنسخة لغة العميل الحالية، حتى لو المدرب حفظه بلغة تانية */
+const TR_SKIP = { INPUT: 1, TEXTAREA: 1, SCRIPT: 1, STYLE: 1, SELECT: 1, OPTION: 1 };
+let trBusy = false;
+function trSmart(text) {
+  const raw = String(text);
+  const core = raw.trim();
+  if (core.length < 2 || core.length > 160) return raw;
+  let out = tr(core);
+  if (out === core) {
+    const parts = core.split(/(\s[—–\-·•|]\s|،\s|,\s)/);
+    if (parts.length > 1) out = parts.map(function (x, i) { return i % 2 ? x : tr(x.trim()) || x; }).join('');
+  }
+  if (out === core) return raw;
+  return raw.replace(core, out);
+}
+function trDomPass(root) {
+  if (!root || trBusy) return;
+  trBusy = true;
+  try {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        const p = n.parentNode;
+        if (!p || TR_SKIP[p.nodeName] || (p.closest && p.closest('[data-notr]'))) return NodeFilter.FILTER_REJECT;
+        return /[A-Za-z\u0600-\u06FF]/.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function (n) {
+      const v = trSmart(n.nodeValue);
+      if (v !== n.nodeValue) n.nodeValue = v;
+    });
+  } catch (e) { /* مش مشكلة */ }
+  trBusy = false;
+}
+(function initTrObserver() {
+  let timer = 0;
+  const roots = ['client-screen', 'adam-plus', 'adam-v2'];
+  const run = function () {
+    timer = 0;
+    roots.forEach(function (id) { const el = document.getElementById(id); if (el) trDomPass(el); });
+  };
+  const queue = function () { if (!timer) timer = setTimeout(run, 60); };
+  const mo = new MutationObserver(function () { if (!trBusy) queue(); });
+  const start = function () {
+    mo.observe(document.body, { childList: true, subtree: true, characterData: true });
+    queue();
+  };
+  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+})();
 
 function modalityValueText(value) {
   if (lang !== 'en' || !value) return value;
@@ -30467,7 +30546,7 @@ function advisorDraftCard(msg) {
           ul.appendChild(li);
         });
       });
-      const label = dp.days.length === 7 ? t('adv_days_all') : dp.days.map(function (d) { return dayNames[d]; }).join('، ');
+      const label = dp.days.length === 7 ? t('adv_days_all') : dp.days.map(function (d) { return dayNames[d]; }).join(lang === 'ar' ? '، ' : ', ');
       card.appendChild(advisorDetails(label, ul));
     });
     if (n.supplements.length) {
@@ -31914,6 +31993,8 @@ let engDoc = null;
 let engReady = false;
 let engFirstRun = false;
 let engStats = null;
+/* الرئيسية الجديدة بتقرا نسب النهاردة من هنا (تمرين / أكل / مياه) */
+window.__adamEng = function () { try { return (engStats && engStats.today && engStats.today.frac) ? { train: engStats.today.frac[1] || 0, food: engStats.today.frac[2] || 0, water: engStats.today.frac[4] || 0, a: engStats.today.a || 0 } : null; } catch (e) { return null; } };
 let engWearDays = {};
 let engRehabHistory = [];
 let engPrevToday = null;
@@ -31942,7 +32023,7 @@ function engHash(text) {
 /* ٣–١٠ أيام، غير كده يوم */
 function engDaysWord(n) {
   if (lang !== 'ar') return n === 1 ? 'day' : t('eng_days_unit');
-  return (n >= 3 && n <= 10) ? 'أيام' : 'يوم';
+  return (n >= 3 && n <= 10) ? (lang === 'en' ? 'days' : 'أيام') : (lang === 'en' ? 'day' : 'يوم');
 }
 function engDaysBetween(a, b) { return Math.round((engDate(b) - engDate(a)) / 86400000); }
 
@@ -34814,7 +34895,7 @@ function chalFormFill(src) {
   f('ch-metric').value = src.metric || 'stars';
   f('ch-target').value = src.target || 5;
   f('ch-days').value = src.days || 7;
-  f('ch-teams').value = (src.teams || []).join('، ');
+  f('ch-teams').value = (src.teams || []).join(lang === 'ar' ? '، ' : ', ');
   f('ch-prize-ar').value = src.prizeAr || '';
   f('ch-prize-en').value = src.prizeEn || '';
   f('ch-bonus').value = src.bonusXp || 0;
@@ -35549,13 +35630,13 @@ function renderNutFoodPrefs() {
   if (likes.length) {
     const pLike = document.createElement('p');
     pLike.className = 'fp-line like';
-    pLike.append(glyphEl('heart', 'fp-icon'), document.createTextNode(' ' + t('fp_likes_short') + ': ' + likes.map(foodPrefName).join('، ')));
+    pLike.append(glyphEl('heart', 'fp-icon'), document.createTextNode(' ' + t('fp_likes_short') + ': ' + likes.map(foodPrefName).join(lang === 'ar' ? '، ' : ', ')));
     box.appendChild(pLike);
   }
   if (dislikes.length) {
     const pDis = document.createElement('p');
     pDis.className = 'fp-line dislike';
-    pDis.append(glyphEl('close', 'fp-icon'), document.createTextNode(' ' + t('fp_dislikes_short') + ': ' + dislikes.map(foodPrefName).join('، ')));
+    pDis.append(glyphEl('close', 'fp-icon'), document.createTextNode(' ' + t('fp_dislikes_short') + ': ' + dislikes.map(foodPrefName).join(lang === 'ar' ? '، ' : ', ')));
     box.appendChild(pDis);
   }
 }
@@ -38636,7 +38717,7 @@ function renderHubList() {
 document.getElementById('hub-more').addEventListener('click', function () { hubPage++; renderHubList(); });
 
 function hubMeta(kind, it) {
-  const sp = it.sports ? (it.sports.indexOf('all') !== -1 ? t('hub_all_sports') : it.sports.slice(0, 3).map(sportName).join('، ')) : sportName(it.sport);
+  const sp = it.sports ? (it.sports.indexOf('all') !== -1 ? t('hub_all_sports') : it.sports.slice(0, 3).map(sportName).join(lang === 'ar' ? '، ' : ', ')) : sportName(it.sport);
   if (kind === 'tests') {
     const bits = [hubCatName(kind, it.category), sp];
     if (it.norms && it.norms.length) bits.push(t('hub_has_norms'));
