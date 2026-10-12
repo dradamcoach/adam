@@ -858,7 +858,7 @@ const TEXT = {
     my_food: 'بتاعي',
     all_foods: 'كل الأصناف',
     all_supps: 'كل المكملات',
-    hero2_badge: '30 يوم مجانًا — من غير بطاقة',
+    hero2_badge: 'مجاني بالكامل — سجّل بإيميلك وابدأ',
     team_strip_title: 'فريق كامل وراك',
     orbit_rating_line: '{avg} من {n} تقييم',
     faq_badge: 'سؤال شائع',
@@ -2244,7 +2244,7 @@ const TEXT = {
     welcome_feature_medical_desc: 'مكتبة طبية معتمدة من متخصصين، وحجز جلسات مع دكاترة وأخصائيين',
     welcome_pillars_title: 'كل حاجة في مكان واحد',
     welcome_pillars_sub: 'دوس على أي جزء تشوف تفاصيله',
-    welcome_pillars_note: 'الأجزاء دي كلها بتتفعّل مع اشتراكك، وبتتابعها مع مدربينا ومتخصصينا الفعليين — مش برنامج جاهز وخلاص',
+    welcome_pillars_note: 'الأجزاء دي كلها مجانية، وتقدر تتابعها مع مدربينا ومتخصصينا الفعليين — مش برنامج جاهز وخلاص',
     welcome_pillar_training_week_title: 'أسبوعك هيتقسم كده',
     welcome_pillar_training_line_1: 'يوم 1 — تمرين الجزء العلوي (دفع وسحب)',
     welcome_pillar_training_line_2: 'يوم 2 — تمرين الجزء السفلي (أرجل وكور)',
@@ -2345,8 +2345,8 @@ const TEXT = {
     faq_q5: 'بياناتي وتقييماتي الطبية آمنة؟',
     faq_a5: 'بياناتك وأي تقييم أو تقرير طبي بتضيفه بيبقى متاح بس ليك وللمتخصصين المتابعين حالتك.',
     welcome_cta_title: 'جاهز تبدأ؟',
-    welcome_cta_note: '30 يوم تجربة مجانية كاملة — من غير أي بطاقة ائتمان',
-    welcome_start_btn: 'ابدأ تجربتك المجانية',
+    welcome_cta_note: 'مجاني بالكامل — سجّل بإيميلك وابدأ',
+    welcome_start_btn: 'ابدأ مجانًا',
     welcome_login_hint: 'عندك حساب بالفعل؟',
     welcome_login_link: 'سجّل دخول',
     back_to_welcome: '‹ الرئيسية',
@@ -3485,7 +3485,7 @@ const TEXT = {
     my_food: 'mine',
     all_foods: 'All foods',
     all_supps: 'All supplements',
-    hero2_badge: '30 days free — no card needed',
+    hero2_badge: 'Completely free — sign up with your email and start',
     team_strip_title: 'A full team behind you',
     orbit_rating_line: '{avg} from {n} reviews',
     faq_badge: 'Common question',
@@ -4871,7 +4871,7 @@ const TEXT = {
     welcome_feature_medical_desc: 'A medical library reviewed by specialists, and booking with doctors and specialists',
     welcome_pillars_title: 'Everything in one place',
     welcome_pillars_sub: 'Tap any pillar to see what is inside',
-    welcome_pillars_note: 'All of this is unlocked with your subscription, and you follow it with our real coaches and specialists — not just a ready-made plan',
+    welcome_pillars_note: 'All of this is free, and you can follow it with our real coaches and specialists — not just a ready-made plan',
     welcome_pillar_training_week_title: 'Here\'s how your week is split',
     welcome_pillar_training_line_1: 'Day 1 — Upper body (push & pull)',
     welcome_pillar_training_line_2: 'Day 2 — Lower body (legs & core)',
@@ -4972,8 +4972,8 @@ const TEXT = {
     faq_q5: 'Is my data and medical information safe?',
     faq_a5: 'Your data and any medical assessment or report you add is only available to you and the specialists following your case.',
     welcome_cta_title: 'Ready to start?',
-    welcome_cta_note: 'A full 30-day free trial — no credit card needed',
-    welcome_start_btn: 'Start your free trial',
+    welcome_cta_note: 'Completely free — sign up with your email and start',
+    welcome_start_btn: 'Start for free',
     welcome_login_hint: 'Already have an account?',
     welcome_login_link: 'Log in',
     back_to_welcome: '‹ Home',
@@ -6849,8 +6849,11 @@ function rehabHasContent(data) {
  * الكوتش ضايفه بنفسه فده اتفاق مباشر بينهم ومش خاضع للتجربة.
  */
 const TRIAL_DAYS = 30;
+const FREE_MODE = true;
 
 function trialDaysLeft(clientData) {
+  /* الموقع مجاني دلوقتي: مفيش تجربة 30 يوم ولا قفل. لما نفعّل الاشتراك بعدين نقفل المفتاح ده */
+  if (FREE_MODE) return null;
   if (!clientData || !clientData.trialStartedAt) return null;
   const start = new Date(clientData.trialStartedAt);
   if (isNaN(start.getTime())) return null;
@@ -7455,11 +7458,26 @@ async function loadAdherence() {
       const stats = adherenceFor(progressData, logData, dates);
       /* الحالات الخاصة بتتعلّم في القايمة — المدرب بيتعامل معاها بشكل مختلف */
       const health = await loadHealthFor(email);
+      /* ADAM+: جاهزية يومية وألم من checkins/{email}.plus (قراءة بس، أي خطأ يتبلع) */
+      let plusInfo = null;
+      try {
+        const pd = await getDoc(doc(db, 'checkins', email));
+        const pl = pd.exists() ? (pd.data() || {}).plus : null;
+        if (pl && pl.checkins) {
+          const cks = Object.keys(pl.checkins).sort();
+          const recent = cks.filter(function (k) { return dates.indexOf(k) !== -1; });
+          const last = cks.length ? pl.checkins[cks[cks.length - 1]] : null;
+          const pains = Array.isArray(pl.pain) ? pl.pain : [];
+          const lastPain = pains.length ? pains[pains.length - 1] : null;
+          plusInfo = { days: recent.length, last: last && last.score != null ? last.score : null, lastDate: cks.length ? cks[cks.length - 1] : '', pain: lastPain ? lastPain.level : null };
+        }
+      } catch (e) { plusInfo = null; }
       rows.push({
         email: email,
         name: clientDoc.data().name || email,
         sport: clientDoc.data().sport || '',
         waiting: waiting[email] || 0,
+        plusInfo: plusInfo,
         health: health,
         stats: stats
       });
@@ -7628,6 +7646,19 @@ function adherenceCard(row) {
       ? fill('adh_waiting_many', { n: row.waiting })
       : t('adh_waiting');
     item.appendChild(flag);
+  }
+
+  if (row.plusInfo) {
+    const en = document.documentElement.lang === 'en';
+    const pi = row.plusInfo;
+    const ln = document.createElement('div');
+    ln.className = 'adh-sub';
+    const parts = [(en ? 'Daily check-ins: ' : 'تقييم يومي: ') + pi.days + '/' + ADH_DAYS];
+    if (pi.last != null) parts.push((en ? 'last readiness ' : 'آخر جاهزية ') + pi.last + (pi.lastDate ? ' (' + pi.lastDate + ')' : ''));
+    if (pi.pain != null) parts.push((en ? 'last pain ' : 'آخر ألم ') + pi.pain + '/10');
+    ln.textContent = parts.join(' · ');
+    if ((pi.pain != null && pi.pain >= 7) || (pi.last != null && pi.last < 40)) ln.style.color = '#ff6b78';
+    item.appendChild(ln);
   }
 
   const metrics = document.createElement('div');

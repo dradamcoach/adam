@@ -1,0 +1,42 @@
+/* ADAM — طبقة الرئيسية الجديدة (مرحلة 1): كاروسيل المتخصصين + كارت التشريح + لمسات بريميم.
+   شكل بس، مابتغيرش وظيفة. لو اتشالت من index.html الموقع يرجع زي ما كان. */
+
+#adam-v2 { margin: 6px 0 16px; text-align: start; }
+#adam-v2 .av2-sec { display: flex; align-items: baseline; justify-content: space-between; margin: 20px 4px 10px; }
+#adam-v2 .av2-sec b { font-size: 15px; font-weight: 600; color: var(--ink); }
+#adam-v2 .av2-sec span { font-size: 11px; letter-spacing: 1.4px; color: var(--muted); text-transform: uppercase; }
+
+/* كاروسيل المتخصصين */
+#adam-v2 .av2-car { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 2px 2px 4px; -webkit-overflow-scrolling: touch; }
+#adam-v2 .av2-car::-webkit-scrollbar { display: none; }
+#adam-v2 .av2-tr { flex: 0 0 74%; max-width: 300px; scroll-snap-align: center; height: 220px; border-radius: 26px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.1); box-shadow: 0 1px 0 rgba(255,255,255,.12) inset, 0 18px 30px -22px rgba(0,0,0,.9); cursor: pointer; padding: 0; background: #10202a; color: #fff; }
+#adam-v2 .av2-tr img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+#adam-v2 .av2-tr .av2-init { position: absolute; inset: 0; display: grid; place-items: center; font-size: 84px; font-weight: 200; color: rgba(255,255,255,.16); }
+#adam-v2 .av2-tr .av2-info { position: absolute; inset-inline: 0; bottom: 0; padding: 56px 16px 15px; background: linear-gradient(transparent, rgba(0,0,0,.82)); text-align: start; }
+#adam-v2 .av2-tr b { display: block; font-size: 17px; font-weight: 600; }
+#adam-v2 .av2-tr small { font-size: 12px; color: #c3ccd6; }
+#adam-v2 .av2-tr .av2-go { position: absolute; top: 13px; inset-inline-end: 13px; background: rgba(0,0,0,.42); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.14); border-radius: 18px; padding: 6px 13px; font-size: 12px; }
+#adam-v2 .av2-dots { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
+#adam-v2 .av2-dots i { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.2); transition: all .3s; }
+#adam-v2 .av2-dots i.on { width: 20px; border-radius: 3px; background: #3ef0b0; }
+
+/* كارت التشريح */
+#adam-v2 .av2-anat { display: flex; align-items: center; gap: 16px; width: 100%; text-align: start; padding: 16px; border-radius: 26px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(160deg, rgba(62,240,176,.14), rgba(255,255,255,.03) 60%); color: var(--ink); cursor: pointer; box-shadow: 0 1px 0 rgba(255,255,255,.14) inset; }
+#adam-v2 .av2-anat svg { flex: none; width: 64px; height: 100px; }
+#adam-v2 .av2-anat b { display: block; font-size: 16px; font-weight: 600; }
+#adam-v2 .av2-anat p { margin: 6px 0 8px; font-size: 13px; line-height: 1.6; color: var(--muted); }
+#adam-v2 .av2-anat em { font-style: normal; font-size: 13px; color: #3ef0b0; }
+#adam-v2 .av2-chip { display: inline-block; font-size: 10px; letter-spacing: 1.2px; padding: 3px 9px; border-radius: 20px; border: 1px solid rgba(217,184,108,.5); color: #d9b86c; margin-inline-start: 8px; vertical-align: middle; }
+
+/* لمسات بريميم على عناصر الرئيسية الموجودة */
+#client-home .home-hello { font-weight: 300; letter-spacing: .2px; }
+.card button.home-card, .card button.home-tile { border-radius: 24px; }
+.card button.home-card .home-card-value { font-weight: 400; }
+
+@media (prefers-reduced-motion: reduce) { #adam-v2 .av2-car { scroll-behavior: auto; } }
+
+/* مربعات ADAM+ */
+#adam-v2 .av2-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+#adam-v2 .av2-tile { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 6px 13px; border-radius: 22px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.025)); color: var(--ink); cursor: pointer; box-shadow: 0 1px 0 rgba(255,255,255,.12) inset; font-family: inherit; }
+#adam-v2 .av2-tile svg { width: 26px; height: 26px; color: #3ef0b0; }
+#adam-v2 .av2-tile span { font-size: 12.5px; }

@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ADAM</title>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="glass.css">
+  <link rel="stylesheet" href="adam-home.css">
+  <link rel="stylesheet" href="adam-plus.css">
   <!-- ملف التطبيق: من غيره الآيفون مش بيسمح بإشعارات خالص -->
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -34,7 +37,7 @@
            موجات للنفسي... بتتغيّر مع الشاشة والمحطة -->
       <div class="hero-bg" id="hero-bg" aria-hidden="true"></div>
 
-      <span class="hero2-badge"><svg class="ui-icon badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.4" y="8.4" width="17.2" height="4.2" rx="1"></rect><path d="M5 12.6V20h14v-7.4"></path><line x1="12" y1="8.4" x2="12" y2="20"></line><path d="M12 8.4C10.8 5.6 9.4 4 7.8 4a2.2 2.2 0 0 0 0 4.4z"></path><path d="M12 8.4C13.2 5.6 14.6 4 16.2 4a2.2 2.2 0 0 1 0 4.4z"></path></svg><span data-t="hero2_badge">30 يوم مجانًا — من غير بطاقة</span></span>
+      <span class="hero2-badge"><svg class="ui-icon badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.4" y="8.4" width="17.2" height="4.2" rx="1"></rect><path d="M5 12.6V20h14v-7.4"></path><line x1="12" y1="8.4" x2="12" y2="20"></line><path d="M12 8.4C10.8 5.6 9.4 4 7.8 4a2.2 2.2 0 0 0 0 4.4z"></path><path d="M12 8.4C13.2 5.6 14.6 4 16.2 4a2.2 2.2 0 0 1 0 4.4z"></path></svg><span data-t="hero2_badge">مجاني بالكامل — سجّل بإيميلك وابدأ</span></span>
 
       <h2 class="hero2-title" data-t="hero2_title">برنامجك. من متخصص حقيقي.</h2>
       <p class="hero2-sub" data-t="hero2_sub">تمرين · تأهيل · تغذية · استشارة طبية</p>
@@ -68,7 +71,7 @@
       </div>
 
       <div class="hero2-cta">
-        <button type="button" id="hero2-start-btn" data-t="welcome_start_btn">ابدأ تجربتك المجانية</button>
+        <button type="button" id="hero2-start-btn" data-t="welcome_start_btn">ابدأ مجانًا</button>
         <button type="button" id="hero2-demo-btn" class="secondary" data-t="hero2_demo_btn">شوف برنامج نموذجي ↓</button>
       </div>
 
@@ -193,8 +196,8 @@
 
     <div class="welcome-cta">
       <h3 class="welcome-section-title" data-t="welcome_cta_title">جاهز تبدأ؟</h3>
-      <p class="welcome-cta-note" data-t="welcome_cta_note">30 يوم تجربة مجانية كاملة — من غير أي بطاقة ائتمان</p>
-      <button type="button" id="welcome-start-btn" data-t="welcome_start_btn">ابدأ تجربتك المجانية</button>
+      <p class="welcome-cta-note" data-t="welcome_cta_note">مجاني بالكامل — سجّل بإيميلك وابدأ</p>
+      <button type="button" id="welcome-start-btn" data-t="welcome_start_btn">ابدأ مجانًا</button>
       <p class="welcome-login-row">
         <span data-t="welcome_login_hint">عندك حساب بالفعل؟</span>
         <button type="button" id="welcome-login-btn" class="link" data-t="welcome_login_link">سجّل دخول</button>
@@ -206,7 +209,7 @@
   <nav class="appbar hidden" id="client-appbar"></nav>
 
   <div class="welcome-sticky-cta hidden" id="welcome-sticky-cta">
-    <button type="button" id="welcome-sticky-start-btn" data-t="welcome_start_btn">ابدأ تجربتك المجانية</button>
+    <button type="button" id="welcome-sticky-start-btn" data-t="welcome_start_btn">ابدأ مجانًا</button>
   </div>
 
   <div class="card hidden" id="login-screen">
@@ -2466,5 +2469,6 @@
   </div>
 
   <script type="module" src="app.js"></script>
+  <script src="adam-home.js"></script>
 </body>
 </html>

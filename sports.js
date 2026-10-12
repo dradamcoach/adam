@@ -148,6 +148,18 @@ export const SPORTS = [
   { id: 'shooting',     group: 'other',     metric: 'score',         ar: 'رماية',             en: 'Shooting' },
   { id: 'skating',      group: 'other',     metric: 'session',       ar: 'تزلج بعجل',         en: 'Skateboarding' },
   { id: 'parkour',      group: 'other',     metric: 'session',       ar: 'باركور',            en: 'Parkour' },
+  { id: 'kungfu',        group: 'combat',    metric: 'rounds',        ar: 'كونغ فو',           en: 'Kung fu' },
+  { id: 'muaythai',      group: 'combat',    metric: 'rounds',        ar: 'مواي تاي',          en: 'Muay Thai' },
+  { id: 'bjj',           group: 'combat',    metric: 'rounds',        ar: 'جوجيتسو برازيلي',   en: 'Brazilian jiu-jitsu' },
+  { id: 'wushu',         group: 'combat',    metric: 'rounds',        ar: 'ووشو',              en: 'Wushu' },
+  { id: 'beach_volley',  group: 'team',      metric: 'score',         ar: 'كرة طائرة شاطئية',  en: 'Beach volleyball' },
+  { id: 'cricket',       group: 'team',      metric: 'score',         ar: 'كريكيت',            en: 'Cricket' },
+  { id: 'kitesurf',      group: 'water',     metric: 'session',       ar: 'كايت سيرف',         en: 'Kitesurfing' },
+  { id: 'freediving',    group: 'water',     metric: 'session',       ar: 'غطس حر',            en: 'Freediving' },
+  { id: 'snooker',       group: 'other',     metric: 'score',         ar: 'سنوكر وبلياردو',    en: 'Snooker & billiards' },
+  { id: 'bowling',       group: 'other',     metric: 'score',         ar: 'بولينج',            en: 'Bowling' },
+  { id: 'para_sports',   group: 'other',     metric: 'session',       ar: 'رياضات ذوي الهمم',  en: 'Para sports' },
+  { id: 'kids_sports',   group: 'other',     metric: 'session',       ar: 'رياضات الأطفال',    en: 'Kids sports' },
   { id: 'other_sport',  group: 'other',     metric: 'session',       ar: 'رياضة أخرى',        en: 'Other sport' }
 ];
 
