@@ -126,3 +126,9 @@ html[dir="rtl"] .cp-back-fab svg { transform: scaleX(-1); }
 .fd-sv em { font-style: normal; color: #3ef0b0; flex: none; }
 .fd-steps { margin: 0; padding-inline-start: 22px; font-size: 14px; line-height: 1.8; }
 .fd-note { margin-top: 22px; font-size: 12px; color: #9aa7b3; line-height: 1.7; }
+
+/* شاشة بناء البرنامج الخاص للعميل (نفس شاشة المدرب من غير أدوات المدرب) */
+body.self-build #open-calc-coach-btn, body.self-build #open-progress-coach-btn, body.self-build #open-chat-coach-btn, body.self-build #open-plan-coach-btn,
+body.self-build #coach-health, body.self-build #coach-basics, body.self-build #tab-rehab, body.self-build #tab-physio, body.self-build #tab-consult, body.self-build #tab-injuries,
+body.self-build #advisor-box, body.self-build .playlist-box, body.self-build .my-tpl-box, body.self-build #open-mylib-btn { display: none !important; }
+.own-link { display: block; width: auto; margin: 0 0 12px; padding: 8px 14px; border-radius: 18px; border: 1px solid rgba(62,240,176,.4); background: rgba(62,240,176,.08); color: #3ef0b0; font-size: 13px; font-family: inherit; cursor: pointer; }

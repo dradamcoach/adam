@@ -2071,6 +2071,12 @@ const TEXT = {
     rest_msg: 'خد راحتك النهاردة — الجسم بيبني وهو مرتاح',
     rest_title: 'يوم راحة',
     no_plan: 'مفيش برنامج لليوم ده',
+    self_title: 'برنامجي الخاص',
+    own_link_train: 'صمّم تمرينك بنفسك',
+    own_link_nut: 'صمّم خطة أكلك بنفسك',
+    own_hint_nut: 'مفيش خطة أكل من المختص؟ اعمل خطتك بنفسك.',
+    own_build_nut: 'ابنِ خطة أكلك بنفسك',
+    own_note: 'الأيام اللي مدربك مجهّزها بتفضل زي ما هي، وبرنامجك الخاص بيظهر في الأيام الفاضية بس. بيتحفظ لما ترجع.',
     own_title: 'تمريني الخاص',
     own_build: 'ابنِ تمرينك بنفسك',
     own_edit: 'عدّل تمريني',
@@ -4708,6 +4714,12 @@ const TEXT = {
     rest_msg: 'Take it easy today — the body builds while it rests',
     rest_title: 'Rest day',
     no_plan: 'No program for this day',
+    self_title: 'My own program',
+    own_link_train: 'Build your own workout',
+    own_link_nut: 'Build your own meal plan',
+    own_hint_nut: 'No meal plan from a specialist? Make your own.',
+    own_build_nut: 'Build your own meal plan',
+    own_note: 'Days your coach prepared stay as they are; your own program shows only on empty days. It saves when you go back.',
     own_title: 'My own workout',
     own_build: 'Build your own workout',
     own_edit: 'Edit my workout',
@@ -8869,11 +8881,13 @@ function applyCoachScopeTabs() {
 }
 
 document.getElementById('back-btn').addEventListener('click', function () {
+  if (selfMode) { exitSelfBuilder(); return; }
   showScreen(clientsScreen);
   loadClients();
 });
 
 async function openCoachScreen(email, name, sport) {
+  resetSelfMode();
   currentClient = email;
   currentClientName = name;
   currentClientSport = sport || '';
@@ -9351,6 +9365,7 @@ function docTooBig(data, messageEl) {
 
 document.getElementById('save-btn').addEventListener('click', async function () {
   saveCurrentDay();
+  if (selfMode) { await persistSelf(true); return; }
   if (docTooBig({ week: coachWeek }, coachMessage)) return;
   coachMessage.textContent = t('saving');
   try {
@@ -11283,6 +11298,11 @@ let clientSession = 0;
 let clientEmail = '';
 let clientRecord = null;
 let clientSport = '';
+let selfMode = false;
+let selfWeekData = null;
+let selfNutData = null;
+let clientWeekCoach = null;
+let clientNutritionCoach = null;
 let clientName = '';
 let doneToday = [];
 let actualSetsToday = {};
@@ -11350,6 +11370,7 @@ function setClientMode(mode) {
   ctabConsult.classList.toggle('active', mode === 'consult');
   if (mode === 'home') renderClientHome();
   ensureClientBackBars();
+  ensureOwnLinks();
   paintAppbar();
   if (!clientScreen.classList.contains('hidden')) navRecord(clientScreen, mode);
   window.scrollTo(0, 0);
@@ -13377,6 +13398,10 @@ async function loadClient(email) {
     renderClientPlanCard().catch(function () {});
     clientRehab = normalizeRehab(rehabDoc.exists() ? rehabDoc.data() : null);
     clientNutrition = normalizeNutrition(nutritionDoc.exists() ? nutritionDoc.data() : null);
+    clientWeekCoach = clientWeek;
+    clientNutritionCoach = clientNutrition;
+    await loadSelfProgram(email);
+    applySelfProgram();
     await physioLoadClient(email);
 
     // العلامات القديمة كانت أرقام تخص القائمة الواحدة؛ بنحولها لقسم "التمرين الأساسي"
@@ -13432,7 +13457,7 @@ async function loadClient(email) {
     const hasRehab = rehabHasContent(clientRehab);
     const hasNutrition = nutritionHasContent(clientNutrition);
     ctabRehab.classList.toggle('hidden', !hasRehab);
-    ctabNutrition.classList.toggle('hidden', !hasNutrition);
+    ctabNutrition.classList.toggle('hidden', false);
     const ctabPhysioEl = document.getElementById('ctab-physio');
     if (ctabPhysioEl) ctabPhysioEl.classList.toggle('hidden', !physioHasContent(clientPhysio));
     // شريط التابات نفسه كان بيتخفي بالكامل لو مفيش تأهيل أو تغذية —
@@ -13989,8 +14014,8 @@ const STATE_ART = {
   empty: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="10" width="36" height="44" rx="5"></rect><line x1="22" y1="22" x2="42" y2="22"></line><line x1="22" y1="31" x2="36" y2="31"></line><line x1="22" y1="40" x2="30" y2="40"></line></svg>'
 };
 
-/* تمرين العميل لنفسه لما مفيش برنامج من المدرب */
-function appendOwnWorkout(parent, isToday) {
+/* العميل يبني برنامجه بنفسه (تمرين / أكل) بنفس شاشة المدرب */
+function appendOwnBuilder(parent, kind) {
   const box = document.createElement('div');
   box.className = 'own-wo';
   const head = document.createElement('div');
@@ -13999,35 +14024,138 @@ function appendOwnWorkout(parent, isToday) {
   box.appendChild(head);
   const hint = document.createElement('p');
   hint.className = 'own-wo-hint';
-  hint.textContent = t('own_hint');
+  hint.textContent = t(kind === 'nutrition' ? 'own_hint_nut' : 'own_hint');
   box.appendChild(hint);
-  const list = document.createElement('div');
-  list.className = 'own-wo-list';
-  box.appendChild(list);
   const row = document.createElement('div');
   row.className = 'own-wo-btns';
   const b1 = document.createElement('button');
-  b1.type = 'button'; b1.className = 'own-wo-btn primary'; b1.textContent = t('own_build');
-  b1.addEventListener('click', function () { import('./adam-plus.js').then(function (m) { m.openOwn(); }).catch(function () {}); });
-  const b2 = document.createElement('button');
-  b2.type = 'button'; b2.className = 'own-wo-btn'; b2.textContent = t('own_auto');
-  b2.addEventListener('click', function () { import('./adam-plus.js').then(function (m) { m.open('plan'); }).catch(function () {}); });
-  row.appendChild(b1); row.appendChild(b2);
+  b1.type = 'button'; b1.className = 'own-wo-btn primary';
+  b1.textContent = t(kind === 'nutrition' ? 'own_build_nut' : 'own_build');
+  b1.addEventListener('click', function () { openSelfBuilder(kind); });
+  row.appendChild(b1);
   box.appendChild(row);
   parent.appendChild(box);
-  if (!isToday) return;
-  import('./adam-plus.js').then(function (m) { return m.todayOwn(); }).then(function (r) {
-    if (!r || !r.items || !r.items.length) return;
-    list.innerHTML = '';
-    const lh = document.createElement('div'); lh.className = 'own-wo-sub'; lh.textContent = t('own_today'); list.appendChild(lh);
-    r.items.forEach(function (it) {
-      const li = document.createElement('div'); li.className = 'own-wo-item';
-      const n = document.createElement('span'); n.textContent = it.name;
-      const e = document.createElement('em'); e.textContent = it.sets + ' × ' + it.reps;
-      li.appendChild(n); li.appendChild(e); list.appendChild(li);
-    });
-    b1.textContent = t('own_edit');
-  }).catch(function () {});
+}
+
+function appendOwnWorkout(parent) { appendOwnBuilder(parent, 'training'); }
+
+/* زرار ثابت فوق قسم التمرين والتغذية يفتح شاشة بناء البرنامج الخاص */
+function ensureOwnLinks() {
+  [['client-training', 'training', 'own_link_train'], ['client-nutrition', 'nutrition', 'own_link_nut']].forEach(function (x) {
+    const panel = document.getElementById(x[0]);
+    if (!panel) return;
+    let btn = panel.querySelector(':scope > .own-link');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'own-link';
+      btn.addEventListener('click', function () { openSelfBuilder(x[1]); });
+      panel.insertBefore(btn, panel.firstChild);
+    }
+    btn.textContent = t(x[2]);
+  });
+}
+
+/* ---------- برنامج العميل الخاص (بيتحفظ في checkins/{email}) ---------- */
+
+async function loadSelfProgram(email) {
+  selfWeekData = null; selfNutData = null;
+  try {
+    const snap = await getDoc(doc(db, 'checkins', email));
+    if (snap.exists()) {
+      selfWeekData = snap.data().selfWeek || null;
+      selfNutData = snap.data().selfNutrition || null;
+    }
+  } catch (error) { /* مش مشكلة — البرنامج الخاص اختياري */ }
+}
+
+/* أيام المدرب الفاضية بتتملي من برنامج العميل الخاص */
+function applySelfProgram() {
+  const sw = normalizeWeek(selfWeekData);
+  clientWeek = clientWeekCoach.map(function (day, i) {
+    if (dayHasPlan(day) || !dayHasPlan(sw[i])) return day;
+    sw[i].own = true;
+    return sw[i];
+  });
+  const sn = normalizeNutrition(selfNutData);
+  const base = clientNutritionCoach;
+  const merged = normalizeNutrition(base);
+  for (let i = 0; i < 7; i++) {
+    if (nutritionDayCount(base.week[i]) === 0 && nutritionDayCount(sn.week[i]) > 0) merged.week[i] = sn.week[i];
+  }
+  if (!(base.targets.kcal || base.targets.protein)) merged.targets = sn.targets;
+  if (!base.supplements.length) merged.supplements = sn.supplements;
+  clientNutrition = merged;
+}
+
+function resetSelfMode() {
+  selfMode = false;
+  document.body.classList.remove('self-build');
+  const bb = document.getElementById('back-btn');
+  if (bb) { bb.setAttribute('data-t', 'back_clients'); bb.textContent = t('back_clients'); }
+}
+
+async function openSelfBuilder(mode) {
+  if (!clientEmail) return;
+  selfMode = true;
+  document.body.classList.add('self-build');
+  currentClient = clientEmail;
+  currentClientName = clientName || '';
+  currentClientSport = clientSport || '';
+  coachTitle.textContent = t('self_title');
+  const bb = document.getElementById('back-btn');
+  if (bb) { bb.setAttribute('data-t', 'back_generic'); bb.textContent = '‹ ' + t('back_generic'); }
+  coachWeek = normalizeWeek(selfWeekData);
+  coachNutrition = normalizeNutrition(selfNutData);
+  coachRehab = emptyRehab();
+  showScreen(coachScreen);
+  tabTraining.classList.remove('hidden');
+  tabNutrition.classList.remove('hidden');
+  setCoachMode(mode === 'nutrition' ? 'nutrition' : 'training');
+  coachDay = todayIndex;
+  coachSession = 0;
+  nutDay = todayIndex;
+  fillSectionPicker();
+  fillBodyParts();
+  fillTemplatePicker();
+  fillSportSelect(coachSport, true);
+  fillCoachMuscleSelect();
+  coachSport.value = currentClientSport;
+  fillSportTemplatePicker();
+  showCoachDay();
+  showNutrition();
+  coachMessage.textContent = t('own_note');
+}
+
+async function persistSelf(showMsg) {
+  saveCurrentDay();
+  if (coachMode === 'nutrition') readTargets();
+  const payload = { selfWeek: coachWeek, selfNutrition: coachNutrition };
+  if (docTooBig(payload, coachMessage)) return false;
+  if (showMsg) coachMessage.textContent = t('saving');
+  try {
+    await setDoc(doc(db, 'checkins', clientEmail), payload, { merge: true });
+    selfWeekData = JSON.parse(JSON.stringify(coachWeek));
+    selfNutData = JSON.parse(JSON.stringify(coachNutrition));
+    applySelfProgram();
+    if (showMsg) setStatusMessage(coachMessage, t('saved'), 'success');
+    return true;
+  } catch (error) {
+    coachMessage.textContent = t('problem') + error.message;
+    return false;
+  }
+}
+
+async function exitSelfBuilder() {
+  const mode = coachMode === 'nutrition' ? 'nutrition' : 'training';
+  await persistSelf(false);
+  resetSelfMode();
+  currentClient = '';
+  showScreen(clientScreen);
+  renderAppbar();
+  showClientDay();
+  showClientNutrition();
+  setClientMode(mode);
 }
 
 function clientStateCard(kind, title, text) {
@@ -14458,7 +14586,7 @@ function showClientDay() {
     clientSections.appendChild(clientStateCard('rest', t('rest_title'), t('rest_msg')));
   } else if (total === 0) {
     clientSections.appendChild(clientStateCard('empty', t('no_plan_title'), t('no_plan')));
-    appendOwnWorkout(clientSections, isToday);
+    appendOwnWorkout(clientSections);
   } else {
     let order = 0;
     SECTION_KEYS.forEach(function (key) {
@@ -15417,6 +15545,7 @@ function showNutrition() {
 
 document.getElementById('save-nutrition-btn').addEventListener('click', async function () {
   readTargets();
+  if (selfMode) { await persistSelf(true); return; }
   coachMessage.textContent = t('saving');
   try {
     await setDoc(doc(db, 'nutrition', currentClient), coachNutrition);
@@ -16617,6 +16746,7 @@ function showClientNutrition() {
     if (waterCard) waterCard.classList.add('hidden');
     cnutMeals.innerHTML = '';
     cnutMeals.appendChild(clientStateCard('empty', t('no_nutrition_title'), t('no_nutrition')));
+    appendOwnBuilder(cnutMeals, 'nutrition');
     return;
   }
 
