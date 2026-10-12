@@ -122,32 +122,57 @@
     card.addEventListener('click', function () { var tile = document.querySelector('.home-tile.tile-consult'); if (tile) tile.click(); });
     return card;
   }
-  /* المدربين: دواير صغيرة جنب بعض بتطلع وتنزل بحركة هادية */
-  function trainerBub(p, i, l, tx) {
-    var card = el('button', 'av2-bub'); card.type = 'button';
-    card.style.setProperty('--i', String(i));
-    if (i % 2) card.className += ' dn';
+  /* التخصصات جنب بعض، وتحت كل تخصص دايرة بصورة المتخصص بتتقلّب (طالع/نازل) */
+  var cols = [], colTimer = 0, colTick = 0;
+  function slideAvatar(p, gi) {
     var name = String(p.name || '');
-    var av = el('span', 'av2-bav'); av.style.background = 'linear-gradient(160deg,' + GRAD[i % GRAD.length] + ',#0a1215)';
+    var av = el('span', 'av2-bav'); av.style.background = 'linear-gradient(160deg,' + GRAD[gi % GRAD.length] + ',#0a1215)';
     if (p.photo) { var img = el('img'); img.alt = name; img.loading = 'lazy'; img.src = p.photo; av.appendChild(img); } else av.textContent = name.charAt(0);
-    card.appendChild(av);
-    card.appendChild(el('b', '', name));
-    card.appendChild(el('small', '', specLabel(p, l)));
-    card.addEventListener('click', function () { var tile = document.querySelector('.home-tile.tile-consult'); if (tile) tile.click(); });
-    return card;
+    return av;
+  }
+  function colLoop() {
+    var root = document.getElementById('adam-v2');
+    if (!root) { clearInterval(colTimer); colTimer = 0; return; }
+    if (!root.offsetParent || document.hidden) return;
+    colTick++;
+    cols.forEach(function (c, ci) {
+      if (c.list.length < 2 || (colTick + ci) % 3 !== 0) return;
+      var cur = c.slides[c.i], nx = (c.i + 1) % c.list.length, next = c.slides[nx];
+      next.style.transition = 'none'; next.className = 'av2-sl'; void next.offsetWidth; next.style.transition = '';
+      next.className = 'av2-sl on'; cur.className = 'av2-sl off';
+      c.i = nx;
+      c.nameEl.classList.add('fade');
+      setTimeout(function () { c.nameEl.textContent = String(c.list[nx].name || ''); c.nameEl.classList.remove('fade'); }, 260);
+    });
   }
   function trainersBlock(r, l, tx) {
     if (!state.list.length) return;
+    cols = [];
     var sec = el('div', 'av2-sec'); sec.appendChild(el('b', '', tx.team)); sec.appendChild(el('span', '', String(state.list.length))); r.appendChild(sec);
-    var order = {};
-    GROUPS.forEach(function (g, gi) { g[1].forEach(function (k) { if (order[k] == null) order[k] = gi; }); });
-    var list = state.list.slice().sort(function (a, b) {
-      var oa = order[specKeys(a)[0]], ob = order[specKeys(b)[0]];
-      return (oa == null ? 99 : oa) - (ob == null ? 99 : ob);
+    var used = {};
+    var groups = GROUPS.map(function (g) {
+      var list = state.list.filter(function (p) { return specKeys(p).some(function (k) { return g[1].indexOf(k) !== -1; }); });
+      list.forEach(function (p) { used[p.email] = 1; });
+      return { g: g, list: list };
     });
-    var strip = el('div', 'av2-strip');
-    list.forEach(function (p, i) { strip.appendChild(trainerBub(p, i, l, tx)); });
+    var rest = state.list.filter(function (p) { return !used[p.email]; });
+    if (rest.length) groups.push({ g: ['other', [], 'متخصصون آخرون', 'Other specialists'], list: rest });
+    var strip = el('div', 'av2-cols');
+    groups.forEach(function (x, gi) {
+      if (!x.list.length) return;
+      var col = el('button', 'av2-col'); col.type = 'button';
+      col.appendChild(el('span', 'av2-ch', l === 'en' ? x.g[3] : x.g[2]));
+      var win = el('span', 'av2-win'); win.style.setProperty('--d', gi % 2 ? '-1' : '1');
+      var slides = x.list.map(function (p, i) { var sl = el('span', 'av2-sl' + (i === 0 ? ' on' : '')); sl.appendChild(slideAvatar(p, gi + i)); win.appendChild(sl); return sl; });
+      col.appendChild(win);
+      var nm = el('b', 'av2-cn', String(x.list[0].name || '')); col.appendChild(nm);
+      col.appendChild(el('small', '', String(x.list.length)));
+      col.addEventListener('click', function () { var tile = document.querySelector('.home-tile.tile-consult'); if (tile) tile.click(); });
+      cols.push({ list: x.list, slides: slides, i: 0, nameEl: nm });
+      strip.appendChild(col);
+    });
     r.appendChild(strip);
+    if (!colTimer) colTimer = setInterval(colLoop, 1000);
   }
 
   function render() {
