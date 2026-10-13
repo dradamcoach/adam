@@ -115,6 +115,7 @@ const TEXT = {
     tagline: 'منصة التدريب والتأهيل والتغذية',
     anat3d_title: 'التشريح ثلاثي الأبعاد',
     anat3d_close: 'إغلاق',
+    biomech_title: 'مكتبة البيوميكانيك',
     back_bar: 'رجوع',
     spec_group_coach: 'المدربون', spec_group_nutritionist: 'أخصائيو التغذية', spec_group_doctor: 'الأطباء', spec_group_physio: 'العلاج الطبيعي', spec_group_rehab: 'التأهيل', spec_group_psychologist: 'الدعم النفسي', spec_group_other: 'متخصصون آخرون',
     login_title: 'تسجيل الدخول',
@@ -2796,6 +2797,7 @@ const TEXT = {
     tagline: 'Training, Rehab & Nutrition Platform',
     anat3d_title: '3D Anatomy',
     anat3d_close: 'Close',
+    biomech_title: 'Biomechanics library',
     back_bar: 'Back',
     spec_group_coach: 'Coaches', spec_group_nutritionist: 'Nutritionists', spec_group_doctor: 'Doctors', spec_group_physio: 'Physiotherapy', spec_group_rehab: 'Rehabilitation', spec_group_psychologist: 'Psychologists', spec_group_other: 'Other specialists',
     login_title: 'Sign In',
@@ -30838,6 +30840,35 @@ async function openMediaCredits() {
 document.getElementById('ex-sheet-close').addEventListener('click', closeExSheet);
 
 /* ---------- التشريح ثلاثي الأبعاد: فتح التمرين من العضلة ---------- */
+/* مكتبة البيوميكانيك: صفحة منفصلة (biomech/) جوه شاشة كاملة زي التشريح.
+   تمارينها بتفتح شيت التمرين هنا عن طريق رسالة adam-open-ex (نفس رسالة التشريح). */
+function openBiomechViewer(target) {
+  const ov = document.getElementById('bio-overlay');
+  const fr = document.getElementById('bio-frame');
+  if (!ov || !fr) return;
+  /* target = صفحة معينة جوه المكتبة (زي m-hamstrings أو squat) */
+  const clean = (typeof target === 'string' && /^[a-z0-9_-]{1,40}$/.test(target)) ? target : '';
+  if (clean) fr.setAttribute('src', 'biomech/#' + clean);
+  else if (!fr.getAttribute('src')) fr.setAttribute('src', 'biomech/');
+  ov.classList.remove('hidden');
+  ov.style.display = 'flex';
+  ensureExtraLibrary();
+}
+function closeBiomechViewer() {
+  const ov = document.getElementById('bio-overlay');
+  if (ov) { ov.classList.add('hidden'); ov.style.display = ''; }
+}
+(function () {
+  const openBtn = document.getElementById('lib-biomech-btn');
+  const closeBtn = document.getElementById('bio-close');
+  if (openBtn) openBtn.addEventListener('click', function () { openBiomechViewer(); });
+  window.addEventListener('message', function (e) {
+    if (e.origin !== location.origin) return;
+    const d = e.data;
+    if (d && d.type === 'adam-open-biomech') openBiomechViewer(d.target);
+  });
+  if (closeBtn) closeBtn.addEventListener('click', closeBiomechViewer);
+})();
 function closeAnatomyViewer() {
   const ov = document.getElementById('anat-overlay');
   if (ov) { ov.classList.add('hidden'); ov.style.display = ''; }

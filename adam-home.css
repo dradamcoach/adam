@@ -211,3 +211,7 @@ body.self-build #advisor-box, body.self-build .playlist-box, body.self-build .my
 .push-compat-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .card button.push-compat-fix { width: auto; margin: 0; padding: 9px 16px; }
 .card button.push-compat-later { width: auto; margin: 0; }
+
+/* كارت مكتبة البيوميكانيك تحت التشريح */
+#adam-v2 .av2-bio { margin-top: 12px; background: linear-gradient(160deg, rgba(255,178,77,.12), rgba(255,255,255,.03) 60%); }
+#adam-v2 .av2-bio svg { width: 70px; height: 90px; color: var(--ink); }

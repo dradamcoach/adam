@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="../icon-192.png">
+<title>ADAM - مكتبة البيوميكانيك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Readex+Pro:wght@500;700&display=swap">
+<style>
+html, body { margin: 0; }
+/* Layout: مكتبة على شكل تطبيق — شريط فوق، تبويبين، فلتر بالمفصل، كروت برسمة، وصفحة تفاصيل لكل موضوع */
+:root {
+  --bg: #f3f6f5; --surface: #ffffff; --surface2: #eaf0ee; --ink: #10201c; --muted: #586a65; --line: #d7e2de;
+  --accent: #0d8f6c; --accent-soft: #dff3ec; --arm: #b85f06; --bad: #c93c3c; --fig: #1c2d29; --fig2: #9fb3ad;
+  --display: 'Readex Pro', 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+  --body: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+  --r: 18px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0a100f; --surface: #111a18; --surface2: #17221f; --ink: #e6f0ed; --muted: #93a6a0; --line: #22312d;
+  --accent: #3ee6ab; --accent-soft: #123a2f; --arm: #ffb24d; --bad: #ff6f7a; --fig: #dbe7e3; --fig2: #5d726c; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0a100f; --surface: #111a18; --surface2: #17221f; --ink: #e6f0ed; --muted: #93a6a0; --line: #22312d;
+  --accent: #3ee6ab; --accent-soft: #123a2f; --arm: #ffb24d; --bad: #ff6f7a; --fig: #dbe7e3; --fig2: #5d726c; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--ink); }
+body { font-family: var(--body); font-size: 15px; line-height: 1.8; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 0 48px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.35; text-wrap: balance; margin: 0; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.top-in { max-width: 1040px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
+.mark { font-family: var(--display); font-weight: 700; letter-spacing: .12em; font-size: 13px; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 8px; padding: 1px 7px; }
+.top h1 { font-size: 17px; flex: 1; min-width: 0; }
+.lang { border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 4px 14px; cursor: pointer; font-weight: 700; font-size: 13px; }
+
+.hero { padding-block: 26px 8px; display: grid; gap: 10px; }
+.hero h2 { font-size: clamp(24px, 4.5vw, 34px); }
+.hero p { margin: 0; color: var(--muted); max-width: 62ch; }
+.draft { display: flex; gap: 10px; align-items: flex-start; background: var(--surface2); border: 1px dashed var(--line); border-radius: 14px; padding: 10px 14px; font-size: 13.5px; color: var(--muted); }
+.draft b { color: var(--ink); }
+
+.tabs { display: flex; gap: 6px; background: var(--surface2); padding: 5px; border-radius: 99px; width: fit-content; max-width: 100%; margin-top: 18px; }
+.tabs button { border: 0; background: transparent; padding: 7px 16px; border-radius: 99px; cursor: pointer; font-weight: 700; color: var(--muted); }
+.tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.gdesc { color: var(--muted); margin: 12px 0 4px; font-size: 14px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0 18px; }
+.filters .lbl { font-size: 13px; color: var(--muted); }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 4px 12px; cursor: pointer; font-size: 13px; }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); font-weight: 700; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.card { text-align: start; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r); padding: 0; cursor: pointer; overflow: hidden; display: flex; flex-direction: column; transition: transform .15s, border-color .15s; }
+.card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+.card .thumb { background: var(--surface2); padding: 8px 10px 0; }
+.card .tx { padding: 12px 14px 14px; display: grid; gap: 4px; min-width: 0; }
+.card h3 { font-size: 16.5px; }
+.card p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.7; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.tag { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 0 8px; }
+.empty { color: var(--muted); padding: 24px 0; }
+
+/* التفاصيل */
+.back { border: 0; background: none; color: var(--accent); font-weight: 700; cursor: pointer; padding: 18px 0 6px; }
+.det-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 22px; align-items: center; padding-bottom: 8px; }
+.det-head .figbox { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 10px; }
+.det-head h2 { font-size: clamp(24px, 4vw, 32px); }
+.det-head .sum { color: var(--muted); margin: 8px 0 0; font-size: 16px; }
+.kicker { font-size: 12px; letter-spacing: .08em; color: var(--accent); font-weight: 700; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 18px 0; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; min-width: 0; }
+.fact h4 { margin: 0 0 4px; font-family: var(--display); font-size: 13px; color: var(--muted); font-weight: 500; }
+.fact p { margin: 0; }
+.fact.hard { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--arm) 45%, var(--line)); }
+.fact.hard h4 { color: var(--arm); }
+.sec { margin-top: 22px; }
+.sec h3 { font-size: 18px; margin-bottom: 8px; }
+.prose { display: grid; gap: 12px; max-width: 70ch; }
+.prose h4 { margin: 0; font-family: var(--display); font-size: 15px; }
+.prose p { margin: 2px 0 0; }
+.cues { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.cues li { display: flex; gap: 10px; align-items: flex-start; }
+.cues svg { flex: none; width: 20px; height: 20px; margin-top: 4px; color: var(--accent); }
+.mist { display: grid; gap: 10px; }
+.mist div { border-inline-start: 3px solid var(--bad); padding: 2px 12px; }
+.mist b { display: block; }
+.mist span { color: var(--muted); font-size: 14px; }
+.tw { display: grid; gap: 8px; }
+.tw div { display: flex; gap: 10px; align-items: baseline; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
+.tw .j { flex: none; font-size: 12px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 99px; padding: 0 9px; }
+.exs { display: flex; flex-wrap: wrap; gap: 8px; }
+.exs span { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 4px 10px; font-size: 13.5px; }
+.nav2 { display: flex; justify-content: space-between; gap: 10px; margin-top: 30px; flex-wrap: wrap; }
+.nav2 button { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 8px 14px; cursor: pointer; max-width: 100%; }
+.foot { margin-top: 34px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 14px; }
+
+/* الرسومات */
+svg.bf { width: 100%; height: auto; display: block; }
+.bf line, .bf path { stroke-linecap: round; stroke-linejoin: round; }
+.bf-limb { stroke: var(--fig); stroke-width: 5; fill: none; }
+.bf-limb2 { stroke: var(--fig2); stroke-width: 5; fill: none; }
+.bf-limb-bad { stroke: var(--bad); stroke-width: 4; stroke-dasharray: 5 5; fill: none; opacity: .8; }
+.bf-trunk { stroke: var(--fig); stroke-width: 7; fill: none; }
+.bf-head { fill: var(--fig); }
+.bf-torso { fill: var(--surface2); stroke: var(--fig); stroke-width: 2.5; }
+.bf-joint { fill: var(--surface); stroke: var(--fig); stroke-width: 2; }
+.bf-joint-big { fill: var(--surface); stroke: var(--fig); stroke-width: 3; }
+.bf-ground { stroke: var(--line); stroke-width: 3; }
+.bf-guide { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 5; fill: none; }
+.bf-arm { stroke: var(--arm); stroke-width: 2.5; fill: none; }
+.bf-arm-head { fill: var(--arm); }
+.bf-call { stroke: var(--accent); stroke-width: 2.5; fill: none; }
+.bf-call-head { fill: var(--accent); }
+.bf-plate { fill: var(--accent); fill-opacity: .25; stroke: var(--accent); stroke-width: 2.5; }
+.bf-plate-in { fill: var(--accent); }
+.bf-barbell { stroke: var(--accent); stroke-width: 4; }
+.bf-beam { stroke: var(--fig); stroke-width: 4; }
+.bf-fulcrum { fill: var(--fig); }
+.bf-load { fill: var(--accent); fill-opacity: .3; stroke: var(--accent); stroke-width: 2; }
+.bf-axis { stroke: var(--muted); stroke-width: 1.5; }
+.bf-curve { stroke: var(--accent); stroke-width: 3; fill: none; }
+.bf-curve2 { stroke: var(--arm); stroke-width: 2.5; fill: none; stroke-dasharray: 6 5; }
+.bf-peak { fill: var(--arm); }
+.bf-s1 { stroke: var(--fig2); stroke-width: 3; fill: none; }
+.bf-s2 { stroke: var(--arm); stroke-width: 3; fill: none; }
+.bf-s3 { stroke: var(--accent); stroke-width: 3; fill: none; }
+.bf-ok { stroke: var(--accent); stroke-width: 3; fill: none; }
+.bf-no { stroke: var(--bad); stroke-width: 3; fill: none; }
+.bf-hold { fill: var(--accent); }
+.bf-orbit { stroke: var(--accent); stroke-width: 2; fill: none; stroke-dasharray: 4 4; }
+.bf-com { fill: var(--arm); }
+.bf-base { fill: var(--accent); fill-opacity: .55; }
+.bf-t { fill: var(--ink); font-family: var(--body); font-size: 12px; font-weight: 600; }
+.bf-small { font-size: 10.5px; fill: var(--muted); font-weight: 600; }
+.bf-arm-t { fill: var(--arm); font-size: 10.5px; font-weight: 700; }
+
+@media (max-width: 680px) {
+  .det-head { grid-template-columns: minmax(0, 1fr); }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .top h1 { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
+
+.exs button { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 4px 10px; font-size: 13.5px; cursor: pointer; color: var(--ink); }
+.exs button:hover { border-color: var(--accent); }
+.exhint { margin: 0 0 8px; color: var(--muted); font-size: 13px; }
+a.mark { text-decoration: none; }
+
+.mcard .tx { padding-top: 14px; }
+.mk { font-size: 11.5px; color: var(--accent); font-weight: 700; }
+.tag-strong { border-color: var(--accent); color: var(--ink); }
+.figcap { margin: 8px 4px 2px; font-size: 13px; color: var(--muted); }
+.linkb { border: 0; background: none; color: var(--accent); font-weight: 700; cursor: pointer; padding: 0; }
+.exs button[data-open] { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 4px 10px; font-size: 13.5px; cursor: pointer; color: var(--ink); }
+</style>
+
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <a class="mark" href="../" id="home-link">ADAM</a>
+  <h1 id="ttl">مكتبة البيوميكانيك</h1>
+  <button type="button" class="lang" id="lang">English</button>
+</div></header>
+<main class="wrap" id="app"></main>
+
+<script src="figs.js"></script>
+<script>
+window.startBiomech = function (BIOMECH, MUS, MG, EXN) {
+  'use strict';
+  var B = BIOMECH;
+  MUS = MUS || []; MG = MG || []; EXN = EXN || {};
+  var lang = 'ar';
+  try { lang = localStorage.getItem('bm-lang') || localStorage.getItem('adam-lang') || 'ar'; } catch (e) { lang = 'ar'; }
+  if (lang !== 'en') lang = 'ar';
+  var state = { tab: 'basics', joint: '', mg: '' };
+  var app = document.getElementById('app');
+  var inApp = window.parent && window.parent !== window;
+  var T = function (pair) { return pair ? (lang === 'en' ? pair[1] : pair[0]) : ''; };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var JN = {}; B.joints.forEach(function (j) { JN[j[0]] = [j[1], j[2]]; });
+  var MUS_TAB = { id: 'muscles', t: ['العضلات', 'Muscles'], d: ['كل عضلة: بتعدّي على أنهي مفاصل، بتشتغل إزاي في التمرين، وإزاي تركّز عليها.', 'Each muscle: which joints it crosses, how it works in training, and how to target it.'] };
+  var GROUPS = B.groups.concat(MUS.length ? [MUS_TAB] : []);
+  var UI = {
+    title: ['مكتبة البيوميكانيك', 'Biomechanics library'],
+    hero: ['اتمرن وانت فاهم جسمك', 'Train with an understanding of your body'],
+    draft: ['<b>مسودة للمراجعة.</b> الكوتش أحمد بيراجع المحتوى ده قبل ما ينزل للعملاء.', '<b>Draft for review.</b> Coach Ahmed is reviewing this content before it goes live for clients.'],
+    filter: ['مهتم بـ:', 'Focus on:'], all: ['الكل', 'All'],
+    back: ['رجوع للمكتبة', 'Back to the library'],
+    work: ['إيه اللي شغال', 'What is working'], joints: ['المفاصل', 'Joints'], muscles: ['العضلات', 'Muscles'],
+    hard: ['أصعب نقطة', 'Hardest point'], more: ['افهمها أكتر', 'Go deeper'], cues: ['قولها لنفسك وانت بتتمرن', 'Cues to tell yourself'],
+    mist: ['أخطاء شائعة وتأثيرها', 'Common mistakes and their effect'], tweaks: ['لو عندك وجع', 'If something hurts'],
+    exs: ['تمارين من مكتبة ADAM', 'Exercises in the ADAM library'], exHint: ['دوس على أي تمرين تشوف طريقته.', 'Tap any exercise to see how to do it.'], prev: ['السابق', 'Previous'], next: ['التالي', 'Next'],
+    none: ['مفيش مواضيع للمفصل ده في القسم ده.', 'No topics for this joint in this section.'],
+    two: ['عضلة مفصلين', 'Two-joint muscle'], one: ['عضلة مفصل واحد', 'One-joint muscle'],
+    act: ['شغلها في التمرين', 'In training'], plane: ['المستوى', 'Plane'], long: ['بتبقى مشدودة على الآخر', 'Most stretched when'],
+    bias: ['تركّز عليها إزاي', 'How to target it'], exL: ['تمارين بتحمّلها وهي مشدودة', 'Exercises that load it while stretched'], exS: ['تمارين بتحمّلها وهي مقبوضة', 'Exercises that load it while shortened'],
+    related: ['الحركة المرتبطة', 'Related movement'], keyMus: ['العضلات الأساسية في الحركة دي', 'Key muscles in this movement'],
+    crosses: ['بتعدّي على', 'Crosses'],
+    foot: ['الرسومات أصلية لـ ADAM. المحتوى تعليمي ومش بديل عن تقييم أخصائي.', 'Illustrations are original to ADAM. Content is educational and does not replace a specialist assessment.']
+  };
+  var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/></svg>';
+
+  function applyLang() {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+    document.getElementById('ttl').textContent = T(UI.title);
+    document.getElementById('lang').textContent = lang === 'en' ? 'عربي' : 'English';
+    document.title = T(UI.title);
+  }
+  function topics(g) { return B.topics.filter(function (t) { return t.g === g; }); }
+  function byId(id) { return B.topics.find(function (t) { return t.id === id; }); }
+  function musById(id) { return MUS.find(function (m) { return m.id === id; }); }
+  function exChips(ids) {
+    return (ids || []).map(function (id) {
+      if (!EXN[id]) return '';
+      return inApp ? '<button type="button" data-ex="' + id + '">' + esc(T(EXN[id])) + '</button>' : '<span>' + esc(T(EXN[id])) + '</span>';
+    }).join('');
+  }
+  function bindCommon() {
+    app.querySelectorAll('[data-open]').forEach(function (b) { b.addEventListener('click', function () { location.hash = b.dataset.open; }); });
+    app.querySelectorAll('[data-ex]').forEach(function (b) { b.addEventListener('click', function () { try { window.parent.postMessage({ type: 'adam-open-ex', id: b.dataset.ex }, location.origin); } catch (e) { /* تجاهل */ } }); });
+  }
+
+  function list() {
+    var g = GROUPS.find(function (x) { return x.id === state.tab; }) || GROUPS[0];
+    var h = '<section class="hero"><h2>' + esc(T(UI.hero)) + '</h2><p>' + esc(T(B.note)) + '</p>' +
+      (B.reviewed ? '' : '<div class="draft">' + T(UI.draft) + '</div>') + '</section>';
+    h += '<div class="tabs" role="tablist">' + GROUPS.map(function (x) {
+      return '<button type="button" role="tab" data-tab="' + x.id + '" aria-selected="' + (x.id === g.id) + '">' + esc(T(x.t)) + '</button>';
+    }).join('') + '</div>';
+    h += '<p class="gdesc">' + esc(T(g.d)) + '</p>';
+    if (g.id === 'muscles') {
+      h += '<div class="filters"><button type="button" class="chip" data-mg="" aria-pressed="' + (!state.mg) + '">' + esc(T(UI.all)) + '</button>' +
+        MG.map(function (x) { return '<button type="button" class="chip" data-mg="' + x[0] + '" aria-pressed="' + (state.mg === x[0]) + '">' + esc(lang === 'en' ? x[2] : x[1]) + '</button>'; }).join('') + '</div>';
+      var ms = MUS.filter(function (m) { return !state.mg || m.g === state.mg; });
+      h += '<div class="grid">' + ms.map(musCard).join('') + '</div>';
+    } else {
+      var items = topics(g.id).filter(function (t) { return !state.joint || (t.joints || []).indexOf(state.joint) !== -1; });
+      var used = {}; topics(g.id).forEach(function (t) { (t.joints || []).forEach(function (j) { used[j] = 1; }); });
+      var js = B.joints.filter(function (j) { return used[j[0]]; });
+      if (js.length) {
+        h += '<div class="filters"><span class="lbl">' + esc(T(UI.filter)) + '</span><button type="button" class="chip" data-j="" aria-pressed="' + (!state.joint) + '">' + esc(T(UI.all)) + '</button>' +
+          js.map(function (j) { return '<button type="button" class="chip" data-j="' + j[0] + '" aria-pressed="' + (state.joint === j[0]) + '">' + esc(lang === 'en' ? j[2] : j[1]) + '</button>'; }).join('') + '</div>';
+      }
+      h += items.length ? '<div class="grid">' + items.map(card).join('') + '</div>' : '<p class="empty">' + esc(T(UI.none)) + '</p>';
+    }
+    h += '<p class="foot">' + esc(T(UI.foot)) + '</p>';
+    app.innerHTML = h;
+    app.querySelectorAll('[data-tab]').forEach(function (b) { b.addEventListener('click', function () { state.tab = b.dataset.tab; state.joint = ''; state.mg = ''; list(); }); });
+    app.querySelectorAll('[data-j]').forEach(function (b) { b.addEventListener('click', function () { state.joint = b.dataset.j; list(); }); });
+    app.querySelectorAll('[data-mg]').forEach(function (b) { b.addEventListener('click', function () { state.mg = b.dataset.mg; list(); }); });
+    bindCommon();
+  }
+  function card(t) {
+    return '<button type="button" class="card" data-open="' + t.id + '"><div class="thumb">' + BIOFIG.draw(t.fig, lang) + '</div><div class="tx"><h3>' + esc(T(t.t)) + '</h3><p>' + esc(T(t.s)) + '</p>' +
+      (t.joints && t.joints.length ? '<div class="tags">' + t.joints.map(function (j) { return '<span class="tag">' + esc(T(JN[j])) + '</span>'; }).join('') + '</div>' : '') + '</div></button>';
+  }
+  function musCard(m) {
+    var gn = MG.find(function (x) { return x[0] === m.g; });
+    return '<button type="button" class="card mcard" data-open="m-' + m.id + '"><div class="tx"><span class="mk">' + esc(gn ? (lang === 'en' ? gn[2] : gn[1]) : '') + '</span><h3>' + esc(T(m.t)) + '</h3><p>' + esc(T(m.act)) + '</p>' +
+      '<div class="tags"><span class="tag tag-strong">' + esc(T(m.two ? UI.two : UI.one)) + '</span>' + (m.joints || []).map(function (j) { return '<span class="tag">' + esc(T(JN[j])) + '</span>'; }).join('') + '</div></div></button>';
+  }
+
+  function detail(t) {
+    var same = topics(t.g); var i = same.indexOf(t);
+    var h = '<button type="button" class="back" id="back">' + (lang === 'en' ? '← ' : '→ ') + esc(T(UI.back)) + '</button>';
+    h += '<div class="det-head"><div class="figbox">' + BIOFIG.draw(t.fig, lang) + '</div><div><div class="kicker">' + esc(T(B.groups.find(function (g) { return g.id === t.g; }).t)) + '</div><h2>' + esc(T(t.t)) + '</h2><p class="sum">' + esc(T(t.s)) + '</p></div></div>';
+    if (t.work || t.hard) {
+      h += '<div class="facts">';
+      if (t.work) h += '<div class="fact"><h4>' + esc(T(UI.joints)) + '</h4><p>' + esc(T(t.work[0])) + '</p></div><div class="fact"><h4>' + esc(T(UI.muscles)) + '</h4><p>' + esc(T(t.work[1])) + '</p></div>';
+      if (t.hard) h += '<div class="fact hard"><h4>' + esc(T(UI.hard)) + '</h4><p>' + esc(T(t.hard)) + '</p></div>';
+      h += '</div>';
+    }
+    if (t.body && t.body.length) h += '<section class="sec"><h3>' + esc(T(UI.more)) + '</h3><div class="prose">' + t.body.map(function (b) { return '<div><h4>' + esc(T(b[0])) + '</h4><p>' + esc(T(b[1])) + '</p></div>'; }).join('') + '</div></section>';
+    if (t.cues) h += '<section class="sec"><h3>' + esc(T(UI.cues)) + '</h3><ul class="cues">' + t.cues.map(function (c) { return '<li>' + CHECK + '<span>' + esc(T(c)) + '</span></li>'; }).join('') + '</ul></section>';
+    if (t.mistakes) h += '<section class="sec"><h3>' + esc(T(UI.mist)) + '</h3><div class="mist">' + t.mistakes.map(function (m) { return '<div><b>' + esc(T(m[0])) + '</b><span>' + esc(T(m[1])) + '</span></div>'; }).join('') + '</div></section>';
+    if (t.tweaks) h += '<section class="sec"><h3>' + esc(T(UI.tweaks)) + '</h3><div class="tw">' + t.tweaks.map(function (w) { return '<div><span class="j">' + esc(T(JN[w[0]])) + '</span><span>' + esc(T(w[1])) + '</span></div>'; }).join('') + '</div></section>';
+    var km = MUS.filter(function (m) { return m.topic === t.id; });
+    if (km.length) h += '<section class="sec"><h3>' + esc(T(UI.keyMus)) + '</h3><div class="exs">' + km.map(function (m) { return '<button type="button" data-open="m-' + m.id + '">' + esc(T(m.t)) + '</button>'; }).join('') + '</div></section>';
+    if (t.ex && t.ex.length) h += '<section class="sec"><h3>' + esc(T(UI.exs)) + '</h3>' + (inApp ? '<p class="exhint">' + esc(T(UI.exHint)) + '</p>' : '') + '<div class="exs">' + exChips(t.ex) + '</div></section>';
+    h += '<div class="nav2">' + (i > 0 ? '<button type="button" data-open="' + same[i - 1].id + '">' + esc(T(UI.prev)) + ': ' + esc(T(same[i - 1].t)) + '</button>' : '<span></span>') +
+      (i < same.length - 1 ? '<button type="button" data-open="' + same[i + 1].id + '">' + esc(T(UI.next)) + ': ' + esc(T(same[i + 1].t)) + '</button>' : '') + '</div>';
+    h += '<p class="foot">' + esc(T(UI.foot)) + '</p>';
+    app.innerHTML = h;
+    document.getElementById('back').addEventListener('click', function () { state.tab = t.g; location.hash = ''; });
+    bindCommon();
+    window.scrollTo(0, 0);
+  }
+
+  function musDetail(m) {
+    var i = MUS.indexOf(m);
+    var topic = m.topic && byId(m.topic);
+    var h = '<button type="button" class="back" id="back">' + (lang === 'en' ? '← ' : '→ ') + esc(T(UI.back)) + '</button>';
+    h += '<div class="det-head">' + (topic ? '<div class="figbox">' + BIOFIG.draw(topic.fig, lang) + '<p class="figcap">' + esc(T(UI.related)) + ': <button type="button" class="linkb" data-open="' + topic.id + '">' + esc(T(topic.t)) + '</button></p></div>' : '<div></div>') +
+      '<div><div class="kicker">' + esc(T(MUS_TAB.t)) + '</div><h2>' + esc(T(m.t)) + '</h2><p class="sum">' + esc(T(m.act)) + '</p>' +
+      '<div class="tags" style="margin-top:10px"><span class="tag tag-strong">' + esc(T(m.two ? UI.two : UI.one)) + '</span>' + (m.joints || []).map(function (j) { return '<span class="tag">' + esc(T(UI.crosses)) + ' ' + esc(T(JN[j])) + '</span>'; }).join('') + '</div></div></div>';
+    h += '<div class="facts"><div class="fact"><h4>' + esc(T(UI.plane)) + '</h4><p>' + esc(T(m.plane)) + '</p></div>';
+    if (m.long && m.long[0] !== '—') h += '<div class="fact"><h4>' + esc(T(UI.long)) + '</h4><p>' + esc(T(m.long)) + '</p></div>';
+    h += '</div>';
+    if (m.bias && m.bias.length) h += '<section class="sec"><h3>' + esc(T(UI.bias)) + '</h3><ul class="cues">' + m.bias.map(function (c) { return '<li>' + CHECK + '<span>' + esc(T(c)) + '</span></li>'; }).join('') + '</ul></section>';
+    var cl = exChips(m.exL), cs = exChips(m.exS);
+    if (cl || cs) h += inApp ? '<p class="exhint" style="margin-top:22px">' + esc(T(UI.exHint)) + '</p>' : '';
+    if (cl) h += '<section class="sec"><h3>' + esc(T(UI.exL)) + '</h3><div class="exs">' + cl + '</div></section>';
+    if (cs) h += '<section class="sec"><h3>' + esc(T(UI.exS)) + '</h3><div class="exs">' + cs + '</div></section>';
+    h += '<div class="nav2">' + (i > 0 ? '<button type="button" data-open="m-' + MUS[i - 1].id + '">' + esc(T(UI.prev)) + ': ' + esc(T(MUS[i - 1].t)) + '</button>' : '<span></span>') +
+      (i < MUS.length - 1 ? '<button type="button" data-open="m-' + MUS[i + 1].id + '">' + esc(T(UI.next)) + ': ' + esc(T(MUS[i + 1].t)) + '</button>' : '') + '</div>';
+    h += '<p class="foot">' + esc(T(UI.foot)) + '</p>';
+    app.innerHTML = h;
+    document.getElementById('back').addEventListener('click', function () { state.tab = 'muscles'; location.hash = ''; });
+    bindCommon();
+    window.scrollTo(0, 0);
+  }
+
+  function route() {
+    var id = (location.hash || '').replace('#', '');
+    if (id.indexOf('m-') === 0) { var m = musById(id.slice(2)); if (m) { state.tab = 'muscles'; musDetail(m); return; } }
+    var t = id && byId(id);
+    if (t) { state.tab = t.g; detail(t); } else list();
+  }
+  document.getElementById('lang').addEventListener('click', function () {
+    lang = lang === 'en' ? 'ar' : 'en';
+    try { localStorage.setItem('bm-lang', lang); } catch (e) { /* تجاهل */ }
+    applyLang(); route();
+  });
+  window.addEventListener('hashchange', route);
+  applyLang(); route();
+};
+</script>
+<script type="module">
+import { BIOMECH } from '../library/biomech.js';
+import { BIOMECH_MUSCLES, MUSCLE_GROUPS } from '../library/biomech-muscles.js';
+import { BIOMECH_EXN } from '../library/biomech-exnames.js';
+window.startBiomech(BIOMECH, BIOMECH_MUSCLES, MUSCLE_GROUPS, BIOMECH_EXN);
+</script>
+</body>
+</html>
