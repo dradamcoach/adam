@@ -147,6 +147,7 @@ function muscleDetail(d){if(d.g==='lig')return ligDetail(d);if(d.g!=='muscle')re
  const E=LANG==='en',i=E?1:0,row=(h,t)=>t&&t[i]&&t[i]!=='—'?'<div style="margin-top:6px"><b style="color:#e9eef2">'+h+':</b> '+t[i]+'</div>':'';
  let h='<div style="margin-top:8px;border-top:1px solid #273441;padding-top:6px;line-height:1.7;font-size:12.5px;color:#c9d4dc;'+(E?'direction:ltr;text-align:left':'')+'">';
  h+=row(E?'Origin':'المنشأ',f.o)+row(E?'Insertion':'الاندغام',f.i)+row(E?'Action':'الحركة',f.a)+row(E?'Nerve':'العصب',f.n)+row(E?'Tendon / ligament':'الوتر / الأربطة',f.t);
+ h+=(window.bioBlock?window.bioBlock(nm,E):'');
  let hd=null;for(const x of EXHEAD){if(x[0].test(nm)){hd=x;break}}const ex=hd?hd[1]:EXMAP[f.k];if(ex&&ex.length){h+='<div style="margin-top:8px"><b style="color:#e9eef2">'+(hd?(E?'Exercises for this part: ':'تمارين تستهدف: ')+(E?hd[3]:hd[2])+(E?' (tap to open)':' (اضغط لفتح التمرين)'):(E?'Exercises in ADAM (tap to open)':'تمارين من مكتبة ADAM (اضغط لفتح التمرين)'))+':</b><div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:5px">'+ex.map(e=>'<span data-ex="'+e[0]+'" style="padding:5px 11px;border:1px solid #3a4b5c;border-radius:999px;background:#0f1822;font-size:12px;cursor:pointer">'+(E?e[2]:e[1])+'</span>').join('')+'</div></div>'}
 
  if(d.at){h+='<div style="margin-top:8px"><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#2ecc71;margin-inline-end:5px"></span>'+(E?'Origin':'المنشأ')+' &nbsp; <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#ff3b3b;margin-inline-end:5px"></span>'+(E?'Insertion (highlighted on the bones)':'الاندغام (مظلّلين على العظام)')+'</div>'}
@@ -217,4 +218,32 @@ function setLang(l){LANG=l;const E=l==='en';document.documentElement.lang=l;docu
 document.getElementById('lang').onclick=()=>setLang(LANG==='ar'?'en':'ar');
 window.__ready=()=>meshes.length;
 window.__st=st;window.__apply=applyCam;window.__pick=pick;
-</script></body></html>
+</script><script>
+/* بيوميكانيك العضلة (library/biomech-muscles.js) — بيتعرض تحت المنشأ والاندغام.
+   التمارين بتفتح شيت التمرين في التطبيق (adam-open-ex)، والزرار بيفتح صفحة العضلة
+   في مكتبة البيوميكانيك (adam-open-biomech). */
+window.bioBlock=function(nm,E){
+ const L=window.BIOMECH_MUSCLES,N=window.BIOMECH_EXN||{};if(!L)return '';
+ const m=L.find(x=>new RegExp(x.m).test(nm));if(!m)return '';
+ const i=E?1:0,T=p=>p&&p[i]&&p[i]!=='—'?p[i]:'';
+ const row=(h,t)=>t?'<div style="margin-top:6px"><b style="color:#e9eef2">'+h+':</b> '+t+'</div>':'';
+ const chips=(ids)=>ids.filter(id=>N[id]).map(id=>'<span data-ex="'+id+'" style="padding:5px 11px;border:1px solid #3a4b5c;border-radius:999px;background:#0f1822;font-size:12px;cursor:pointer">'+N[id][i]+'</span>').join('');
+ let h='<div style="margin-top:10px;border-top:1px solid #273441;padding-top:8px;line-height:1.7;font-size:12.5px;color:#c9d4dc;'+(E?'direction:ltr;text-align:left':'')+'">';
+ h+='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="color:#3ee6ab;font-size:13.5px">'+(E?'Biomechanics':'البيوميكانيك')+'</b><span style="font-size:11px;border:1px solid #3a4b5c;border-radius:999px;padding:0 8px">'+(m.two?(E?'Two-joint muscle':'عضلة مفصلين'):(E?'One-joint muscle':'عضلة مفصل واحد'))+'</span></div>';
+ h+=row(E?'In training':'شغلها في التمرين',T(m.act))+row(E?'Plane':'المستوى',T(m.plane))+row(E?'Most stretched when':'بتبقى مشدودة على الآخر',T(m.long));
+ if(m.bias&&m.bias.length)h+='<div style="margin-top:6px"><b style="color:#e9eef2">'+(E?'How to target it':'تركّز عليها إزاي')+':</b><ul style="margin:4px 0 0;padding-inline-start:18px">'+m.bias.map(b=>'<li>'+b[i]+'</li>').join('')+'</ul></div>';
+ const cl=chips(m.exL),cs=chips(m.exS);
+ if(cl)h+='<div style="margin-top:8px"><b style="color:#e9eef2">'+(E?'Loads it while stretched':'بتحمّلها وهي مشدودة')+':</b><div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:5px">'+cl+'</div></div>';
+ if(cs)h+='<div style="margin-top:8px"><b style="color:#e9eef2">'+(E?'Loads it while shortened':'بتحمّلها وهي مقبوضة')+':</b><div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:5px">'+cs+'</div></div>';
+ h+='<button type="button" data-bio="m-'+m.id+'" style="margin-top:10px;background:#123a2f;color:#3ee6ab;border:1px solid #2a6b57;border-radius:999px;padding:6px 14px;font:inherit;font-size:12.5px;cursor:pointer">'+(E?'Open in the biomechanics library':'افتح في مكتبة البيوميكانيك')+'</button>';
+ return h+'</div>';
+};
+document.getElementById('info').addEventListener('click',e=>{const b=e.target.closest('[data-bio]');if(!b)return;
+ if(window.parent!==window)window.parent.postMessage({type:'adam-open-biomech',target:b.dataset.bio},location.origin);else location.href='../biomech/#'+b.dataset.bio;});
+</script>
+<script type="module">
+import { BIOMECH_MUSCLES } from '../library/biomech-muscles.js';
+import { BIOMECH_EXN } from '../library/biomech-exnames.js';
+window.BIOMECH_MUSCLES = BIOMECH_MUSCLES; window.BIOMECH_EXN = BIOMECH_EXN;
+</script>
+</body></html>
