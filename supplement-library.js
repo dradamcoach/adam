@@ -282,7 +282,10 @@ export const SUPPLEMENT_LIBRARY = [
     dose: { ar: '300–600 مجم', en: '300–600 mg' },
     when: { ar: 'بالليل', en: 'At night' },
     use: { ar: 'بيساعد في التعامل مع الضغط العصبي وجودة النوم', en: 'Helps with stress load and sleep quality' },
-    care: { ar: '⚠️ ممنوع في الحمل، واللي عنده مشاكل غدة درقية يسأل طبيبه.', en: '⚠️ Not for pregnancy; anyone with a thyroid condition should ask their doctor.' }
+    care: {
+      ar: 'تحذير: ممنوع تمامًا في الحمل (ممكن يزوّد خطر الإجهاض)، ولأي ست بتخطط للحمل، وأثناء الرضاعة. اللي عنده مشكلة في الغدة الدرقية أو مرض مناعي أو مرض في الكبد، أو بياخد مهدئات أو أدوية نوم أو أدوية غدة أو سكر أو ضغط أو مثبطات مناعة، ما يبدأش غير بموافقة الطبيب المشرف. يتوقف قبل أي عملية بأسبوعين، ويتوقف فورًا ويكلّم الطبيب لو ظهر اصفرار في العين أو البول بقى غامق.',
+      en: 'Warning: not to be used at all in pregnancy (it may raise the risk of miscarriage), when trying to conceive, or while breastfeeding. Anyone with a thyroid condition, an autoimmune disease or liver disease, or taking sedatives, sleep medication, thyroid, diabetes or blood-pressure medication, or immunosuppressants, should only start with the supervising doctor\'s approval. Stop two weeks before any surgery, and stop at once and call the doctor if the eyes turn yellow or the urine turns dark.'
+    }
   },
   {
     id: 'sup_melatonin', cat: 'recovery', icon: '😴', grade: 'moderate',

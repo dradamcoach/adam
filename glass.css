@@ -239,19 +239,18 @@ select optgroup {
   bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   padding: 6px;
   border-radius: 28px;
-  /* خلفية مصمتة تقريباً من غير تغبيش: التغبيش على عنصر ثابت هو اللي كان
-     بيخلّي الشريط يطلع لنص الشاشة مع سكرول الآيفون */
-  background: rgba(16, 24, 42, 0.96);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+  background: rgba(16, 24, 42, 0.55);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  backdrop-filter: blur(26px) saturate(180%);
   border: 1px solid var(--glass-edge);
   border-top: 1px solid var(--glass-edge);
   box-shadow: 0 1px 0 0 var(--glass-hi) inset, 0 20px 40px -12px rgba(0, 0, 0, 0.75);
   max-width: 520px;
   margin: 0 auto;
-  transform: none;
-  -webkit-transform: none;
-  will-change: auto;
+  /* طبقة لوحدها — بتمنع الشريط يتهز مع سكرول الآيفون */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
 }
 
 .appbar-btn {
@@ -1357,28 +1356,74 @@ button.hub-card:hover { background: rgba(255, 255, 255, 0.08); }
 #plan-sheet .hub-form input, #plan-sheet .hub-form textarea, #plan-sheet .hub-form select { width: 100%; }
 .plan-tpl .hub-st { display: inline-block; margin: 2px 0 4px; }
 
-/* ---------- كارت المياه: إجمالي المل وحجم الكوباية ---------- */
+/* ===== وضع التمرين: مؤقت الراحة · بديل التمرين · بعد التمرين ===== */
+.focus-swap { text-align: center; margin: -8px 0 16px; }
+.focus .fs-link {
+  width: auto; margin: 0 auto; padding: 8px 14px; border-radius: 999px;
+  border: 1px dashed var(--line); background: transparent; color: var(--muted);
+  font-size: 12.5px; font-weight: 700; box-shadow: none;
+}
+.fs-note { margin: 8px 0; font-size: 12.5px; line-height: 1.8; color: var(--muted); }
+.fs-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 6px 0 10px; }
+.focus .fs-chip {
+  width: auto; margin: 0; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, .04); color: var(--ink);
+  font-size: 12px; font-weight: 700; box-shadow: none;
+}
+.focus .fs-chip.on { border-color: var(--sec, var(--brand)); background: color-mix(in srgb, var(--sec, var(--brand)) 22%, transparent); }
+.fs-list { display: grid; gap: 6px; text-align: start; }
+.focus .fs-item {
+  width: 100%; margin: 0; padding: 10px 12px; border-radius: 14px; display: flex; flex-direction: column; gap: 2px;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, .03); color: var(--ink); text-align: start; box-shadow: none;
+}
+.fs-item strong { font-size: 13.5px; }
+.fs-item span { font-size: 11.5px; color: var(--muted); }
 
-.water-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
+.focus-rest {
+  margin: 0 0 14px; padding: 12px 14px; border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--sec, var(--brand)) 45%, transparent);
+  background: color-mix(in srgb, var(--sec, var(--brand)) 10%, transparent);
+}
+.fr-top { display: flex; align-items: center; gap: 10px; }
+.fr-title { font-size: 13px; color: var(--muted); font-weight: 700; }
+.fr-time { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; margin-inline-start: auto; direction: ltr; }
+.focus .fr-mute {
+  width: 38px; height: 38px; margin: 0; padding: 0; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, .04); color: var(--ink); box-shadow: none;
+}
+.focus .fr-mute.is-off { color: var(--muted); }
+.fr-mute .ui-icon { width: 20px; height: 20px; }
+.fr-bar { height: 6px; border-radius: 6px; background: rgba(255, 255, 255, .1); margin: 10px 0; overflow: hidden; }
+.fr-bar i { display: block; height: 100%; background: var(--sec, var(--brand)); transition: width 1s linear; }
+.fr-row { display: flex; gap: 8px; }
+.focus .fr-btn {
+  flex: 1; margin: 0; padding: 9px; border-radius: 12px; border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .04); color: var(--ink); font-size: 12.5px; font-weight: 700; box-shadow: none;
 }
 
-.water-total { font-size: 13px; font-weight: 700; color: #38bdf8; }
+.focus-after {
+  margin: 0 0 14px; padding: 14px; border-radius: 18px; text-align: start;
+  border: 1px solid rgba(56, 189, 248, .38); background: rgba(56, 189, 248, .08);
+}
+.fa-title { display: block; font-size: 15px; margin-bottom: 4px; }
+.fa-lead { margin: 0 0 8px; font-size: 13px; line-height: 1.8; color: var(--muted); }
+.fa-meal { display: flex; flex-direction: column; gap: 2px; padding: 8px 0; border-top: 1px solid var(--line); }
+.fa-meal b { font-size: 13px; }
+.fa-meal span { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.focus .fa-go { width: 100%; margin: 8px 0 0; padding: 10px; border-radius: 12px; }
 
-.water-cup { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
-
-.water-cup select {
-  background: var(--field);
-  color: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 6px 8px;
-  font: inherit;
-  font-size: 16px;
+/* لوجو ADAM على صورة وضع التمرين وصورة تفاصيل الأكل (زي صور التمارين والتأهيل) */
+.focus-media, .fd-art { position: relative; }
+.focus-media::after,
+.fd-art::after {
+  content: '';
+  position: absolute;
+  inset-inline-end: 8px;
+  bottom: 8px;
+  width: 24px;
+  height: 24px;
+  background: url('icon-192.png') center / contain no-repeat;
+  border-radius: 6px;
+  opacity: 0.88;
+  pointer-events: none;
 }
