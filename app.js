@@ -11894,7 +11894,7 @@ window.__adamFb = {
     return out;
   },
   /* موظف التصميم الذكي: بيشتغل من Apps Script (action: brand_ai). لو لسه مش متضاف بيرجع خطأ والواجهة بتتعامل معاه */
-  aiBrand: function (payload) { return advisorCall('brand_ai', payload); },
+  aiBrand: function (payload) { return advisorCall('adv_brand', payload); },
   askTeam: async function (text, name) {
     const made = await notify(COACH_EMAIL, 'brand_help', { target: 'brand_help', params: function () { return { name: name || currentProviderEmail || '', text: String(text).slice(0, 110) }; } });
     if (!made) throw new Error('send');
