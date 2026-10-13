@@ -185,7 +185,7 @@ export const BIOMECH_MUSCLES = [
     plane: ['المستوى الأمامي الخلفي.', 'Sagittal plane.'],
     long: ['لما الضهر مثني لقدام.', 'With the spine bent forward.'],
     bias: [['الديدلفت والرومانيان بيقوّوها ثابتة. الباك إكستنشن والسوبرمان بيشغّلوها وهي بتتحرك.', 'Deadlifts and Romanian deadlifts strengthen them isometrically. Back extensions and supermans work them through movement.']],
-    exL: ['ek_hyperextensions'], exS: ['ex_superman', 'ex_bird_dog', 'ex_romanian_deadlift']
+    exL: ['ek_hyperextensions'], exS: ['ex_superman', 'ex_bird_dog']
   },
   {
     id: 'neck', m: 'sternocleidomastoid|splenius|scalenus|longus colli|longus capitis|levator scapulae', g: 'trunk', joints: ['back'], two: false, topic: 'core',
