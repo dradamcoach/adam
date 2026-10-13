@@ -2435,6 +2435,7 @@
   <div class="focus hidden" id="focus-mode">
     <div class="focus-bar">
       <button type="button" class="focus-close" id="focus-close" data-t-title="focus_close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      <button type="button" class="focus-close focus-min" id="focus-min" data-t-title="fx_min" aria-label="min"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
       <div class="focus-steps" id="focus-steps"></div>
       <div class="focus-count" id="focus-count"></div>
     </div>
@@ -2449,6 +2450,44 @@
         <div class="beads-note" id="focus-beads-note"></div>
       </div>
 
+      <div class="fx-tools">
+        <button type="button" class="fx-tool" id="fx-timer-btn" data-t="fx_timer">مؤقت</button>
+        <button type="button" class="fx-tool" id="fx-music-btn" data-t="fx_music">أغاني</button>
+        <button type="button" class="fx-tool" id="fx-watch-btn" data-t="fx_watch">ساعة</button>
+      </div>
+      <div class="fx-panel hidden" id="fx-timer">
+        <div class="fx-time" id="fx-time">00:00</div>
+        <div class="fx-row">
+          <button type="button" class="fx-tool" id="fx-rest" data-t="fx_rest">ابدأ راحة</button>
+          <button type="button" class="fx-tool" id="fx-work" data-t="fx_work">ابدأ تمرين</button>
+          <button type="button" class="fx-tool" id="fx-stop" data-t="fx_stop">إيقاف</button>
+        </div>
+        <label class="fx-auto"><input type="checkbox" id="fx-auto"><span data-t="fx_auto">ابدأ الراحة تلقائي بعد كل مجموعة</span></label>
+      </div>
+      <div class="fx-panel hidden" id="fx-watch">
+        <div class="fx-bpm"><b id="fw-bpm">--</b><small>BPM</small></div>
+        <div class="fx-zone" id="fw-zone"></div>
+        <div class="fx-stats">
+          <div><b id="fw-avg">--</b><small data-t="fw_avg">متوسط</small></div>
+          <div><b id="fw-max">--</b><small data-t="fw_max">أعلى</small></div>
+          <div><b id="fw-kcal">0</b><small data-t="fw_kcal">سعرة</small></div>
+          <div><b id="fw-time">00:00</b><small data-t="fw_time">مدة</small></div>
+        </div>
+        <div class="fx-note" id="fw-note"></div>
+        <div class="fx-row">
+          <button type="button" class="fx-tool" id="fw-connect" data-t="fw_connect">وصّل الساعة</button>
+          <button type="button" class="fx-tool" id="fw-save" data-t="fw_save">إنهاء وحفظ</button>
+        </div>
+      </div>
+      <div class="fx-panel hidden" id="fx-music">
+        <div id="fx-frame"></div>
+        <div class="fx-row">
+          <input type="url" id="fx-link" dir="ltr" placeholder="Spotify / YouTube / SoundCloud">
+          <button type="button" class="fx-tool" id="fx-link-save" data-t="fx_save">حفظ</button>
+        </div>
+        <a class="fx-open hidden" id="fx-open" target="_blank" rel="noopener noreferrer" data-t="fx_open_ext">افتح في التطبيق</a>
+      </div>
+
       <button type="button" class="focus-log-toggle" id="focus-log-toggle" data-t="log_actual_btn">سجّل اللي عملته فعلًا</button>
       <div class="per-set-box hidden" id="focus-log-box"></div>
     </div>
@@ -2457,6 +2496,12 @@
       <button type="button" class="focus-prev" id="focus-prev" data-t="focus_prev">‹ السابق</button>
       <button type="button" class="focus-next" id="focus-next" data-t="focus_next">التالي ›</button>
     </div>
+  </div>
+
+  <div class="fx-mini hidden" id="focus-mini">
+    <div class="fx-mini-info"><b id="fx-mini-name"></b><small id="fx-mini-sets"></small></div>
+    <span class="fx-mini-time hidden" id="fx-mini-time"></span>
+    <button type="button" class="fx-mini-go" id="fx-mini-go" data-t="fx_expand">كمّل التمرين</button>
   </div>
 
   <div class="lightbox hidden" id="lightbox">

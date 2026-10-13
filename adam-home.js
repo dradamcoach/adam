@@ -10,8 +10,8 @@
   var FB_APP = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
   var FB_FS = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
   var T = {
-    ar: { plus: 'اكتشف', team: 'متخصصينك', all: 'تواصل', chat: 'تواصل', disc: 'اكتشف جسمك', sub: 'تشريح 3D', t: 'العضلات والعظام والأربطة', p: 'اضغط على أي عضلة تشوف أصلها ومدخلها وتمارينها.', open: 'افتح التشريح ←', 'coach': 'مدرب', 'other': 'متخصص' },
-    en: { plus: 'Discover', team: 'Your specialists', all: 'Contact', chat: 'Contact', disc: 'Explore your body', sub: '3D anatomy', t: 'Muscles, bones and ligaments', p: 'Tap any muscle to see its origin, insertion and exercises.', open: 'Open anatomy →', 'coach': 'Coach', 'other': 'Specialist' }
+    ar: { plus: 'اكتشف', team: 'متخصصينك', all: 'تواصل', chat: 'تواصل', disc: 'اكتشف جسمك', sub: 'تشريح 3D', t: 'العضلات والعظام والأربطة', p: 'اضغط على أي عضلة تشوف أصلها ومدخلها وتمارينها.', open: 'افتح التشريح ←', 'coach': 'مدرب', 'other': 'متخصص', fb: 'ابعتلنا ملاحظاتك' },
+    en: { plus: 'Discover', team: 'Your specialists', all: 'Contact', chat: 'Contact', disc: 'Explore your body', sub: '3D anatomy', t: 'Muscles, bones and ligaments', p: 'Tap any muscle to see its origin, insertion and exercises.', open: 'Open anatomy →', 'coach': 'Coach', 'other': 'Specialist', fb: 'Send us feedback' }
   };
   var RL = {
     ar: { ready: 'الجاهزية', nutri: 'التغذية', effort: 'المجهود' },
@@ -34,6 +34,7 @@
 
 
   var ICONS = {
+    daysum: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
     journeys: '<path d="M8 4h8v6a4 4 0 0 1-8 0zM8 6H4c0 3 1 4 4 5M16 6h4c0 3-1 4-4 5M12 14v4M8 20h8"/>',
     events: '<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/>',
     today: '<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M8 3v4M16 3v4M9 15l2 2 4-4"/>',
@@ -47,7 +48,7 @@
   var TILES = [
     ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
     ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['tpl', 'القوالب', 'Templates'],
-    ['mytrain', 'برنامج التمرين', 'My program'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab']
+    ['mytrain', 'برنامج التمرين', 'My program'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab'], ['daysum', 'ملخص يومي', 'Daily summary']
   ];
   function openPlus(tab) {
     import('./adam-plus.js').then(function (m) { m.open(tab); }).catch(function (e) { if (window.console) console.error(e); });
@@ -103,6 +104,7 @@
     return c;
   }
   function goTile(k) {
+    if (k === 'daysum') { if (window.adamDaySummary) window.adamDaySummary(); return; }
     if (k === 'mytrain') { var tb = document.getElementById('ctab-training'); if (tb) { tb.click(); window.scrollTo(0, 0); return; } openPlus('plan'); return; }
     openPlus(k);
   }
@@ -218,6 +220,9 @@
     r.appendChild(a);
 
     trainersBlock(r, l, tx);
+
+    var fb = el('a', 'av2-fb', tx.fb); fb.href = 'https://docs.google.com/forms/d/e/1FAIpQLSd3stkXiUZxdfU2vY5c3N9uGk5nHiArkjec5mNKBgAu4oYL7w/viewform'; fb.target = '_blank'; fb.rel = 'noopener';
+    r.appendChild(fb);
   }
 
   function refreshSum() {

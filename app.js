@@ -274,6 +274,55 @@ const TEXT = {
     pl_ph: 'لينك Spotify أو يوتيوب أو أنغامي',
     pl_save: 'احفظ',
     pl_open: 'شغّل أغاني التمرين',
+    ds_title: 'ملخص يومي',
+    ds_train: 'التمرين',
+    ds_rest_day: 'يوم راحة',
+    ds_sets: '{a} من {b} مجموعة · {c} من {d} تمرين',
+    ds_food: 'الأكل',
+    ds_kcal_of: '{a} من {b} سعرة',
+    ds_kcal_only: '{a} سعرة',
+    ds_protein: 'بروتين {n} جم',
+    ds_water: 'المية',
+    ds_cups: '{a} من {b} كوب',
+    ds_sleep: 'النوم والجاهزية',
+    ds_sleep_none: 'لسه مجاوبتش على سؤال اليوم',
+    ds_ready: 'الجاهزية {n}%',
+    ds_watch: 'الساعة',
+    ds_watch_none: 'مفيش قياس من الساعة النهاردة',
+    ds_watch_val: 'نبض {a} متوسط · {m} أعلى · حرق {k} سعرة · {t} دقيقة',
+    ds_note: 'الأرقام دي من اللي سجّلته في التطبيق. القياس طول اليوم من الساعة محتاج تطبيق موبايل.',
+    ds_close: 'اقفل',
+
+    fx_watch: 'ساعة',
+    fw_avg: 'متوسط',
+    fw_max: 'أعلى',
+    fw_kcal: 'سعرة',
+    fw_time: 'مدة',
+    fw_connect: 'وصّل الساعة',
+    fw_reconnect: 'أعد التوصيل',
+    fw_save: 'إنهاء وحفظ',
+    fw_unsupported: 'التوصيل بالساعة بيشتغل على أندرويد + كروم بس. على الآيفون محتاجين تطبيق.',
+    fw_hint: 'فعّل «بث النبض» في ساعتك أو استخدم سوار نبض بلوتوث، وبعدين دوس وصّل.',
+    fw_live: 'متوصّل — بيتسجّل النبض',
+    fw_lost: 'الاتصال اتقطع',
+    fw_saved: 'اتحفظ: متوسط نبض {a} · حرق {k} سعرة',
+    fw_nodata: 'مفيش بيانات نبض لسه',
+    fw_zone: 'منطقة {z}',
+
+    fx_min: 'صغّر التمرين',
+    fx_expand: 'كمّل التمرين',
+    fx_timer: 'مؤقت',
+    fx_music: 'أغاني',
+    fx_rest: 'ابدأ راحة',
+    fx_work: 'ابدأ تمرين',
+    fx_stop: 'إيقاف',
+    fx_auto: 'ابدأ الراحة تلقائي بعد كل مجموعة',
+    fx_save: 'حفظ',
+    fx_open_ext: 'افتح في التطبيق',
+    fx_rest_done: 'خلصت الراحة — كمّل المجموعة اللي بعدها',
+    fx_remind: 'متنساش تسجّل تمرينك',
+    fx_set_n: 'المجموعات: {a} من {b}',
+
     pl_bad: 'ده مش لينك قايمة أغاني — الزق لينك من Spotify أو يوتيوب أو أنغامي أو SoundCloud.',
     pl_saved: 'اتحفظت — العميل هيلاقي زرار الأغاني فوق تمرينه.',
     pl_removed: 'اتشالت القايمة.',
@@ -455,6 +504,7 @@ const TEXT = {
     anatomy_injury_benefit: 'مدى إفادته للإصابة',
     back_generic: 'رجوع',
     tile_preview: 'معاينة كعميل',
+    tile_feedback: 'ملاحظات',
     preview_exit: 'خروج من المعاينة',
     preview_note: 'وضع المعاينة — بيانات تجريبية',
     open_calc_btn: 'الحاسبات',
@@ -2920,6 +2970,55 @@ const TEXT = {
     pl_ph: 'Spotify, YouTube or Anghami link',
     pl_save: 'Save',
     pl_open: 'Play workout music',
+    ds_title: 'Daily summary',
+    ds_train: 'Training',
+    ds_rest_day: 'Rest day',
+    ds_sets: '{a} of {b} sets · {c} of {d} exercises',
+    ds_food: 'Food',
+    ds_kcal_of: '{a} of {b} kcal',
+    ds_kcal_only: '{a} kcal',
+    ds_protein: 'Protein {n} g',
+    ds_water: 'Water',
+    ds_cups: '{a} of {b} glasses',
+    ds_sleep: 'Sleep & readiness',
+    ds_sleep_none: "You haven't answered today's check-in yet",
+    ds_ready: 'Readiness {n}%',
+    ds_watch: 'Watch',
+    ds_watch_none: 'No watch reading today',
+    ds_watch_val: 'HR {a} avg · {m} max · {k} kcal burned · {t} min',
+    ds_note: 'These numbers come from what you logged in the app. All-day tracking from the watch needs a mobile app.',
+    ds_close: 'Close',
+
+    fx_watch: 'Watch',
+    fw_avg: 'Avg',
+    fw_max: 'Max',
+    fw_kcal: 'kcal',
+    fw_time: 'Time',
+    fw_connect: 'Connect watch',
+    fw_reconnect: 'Reconnect',
+    fw_save: 'Finish & save',
+    fw_unsupported: 'Watch pairing works on Android + Chrome only. iPhone needs a native app.',
+    fw_hint: 'Turn on "heart-rate broadcast" on your watch or use a Bluetooth HR strap, then tap Connect.',
+    fw_live: 'Connected — recording heart rate',
+    fw_lost: 'Connection lost',
+    fw_saved: 'Saved: avg HR {a} · {k} kcal',
+    fw_nodata: 'No heart-rate data yet',
+    fw_zone: 'Zone {z}',
+
+    fx_min: 'Minimise',
+    fx_expand: 'Back to exercise',
+    fx_timer: 'Timer',
+    fx_music: 'Music',
+    fx_rest: 'Start rest',
+    fx_work: 'Start work',
+    fx_stop: 'Stop',
+    fx_auto: 'Auto-start rest after each set',
+    fx_save: 'Save',
+    fx_open_ext: 'Open in app',
+    fx_rest_done: 'Rest is over — start your next set',
+    fx_remind: "Don't forget to log your exercise",
+    fx_set_n: 'Sets: {a} of {b}',
+
     pl_bad: 'That is not a playlist link — paste a Spotify, YouTube, Anghami or SoundCloud link.',
     pl_saved: 'Saved — the client will see a music button above their workout.',
     pl_removed: 'Playlist removed.',
@@ -3101,6 +3200,7 @@ const TEXT = {
     anatomy_injury_benefit: 'How it helps the injury',
     back_generic: 'Back',
     tile_preview: 'Preview as client',
+    tile_feedback: 'Feedback',
     preview_exit: 'Exit preview',
     preview_note: 'Preview mode — demo data',
     open_calc_btn: 'Calculators',
@@ -7867,6 +7967,7 @@ const COACH_TILES = [
   { key: 'myprofile', icon: 'profile',   labelKey: 'open_my_profile_btn',       btn: 'open-my-profile-btn' },
   { key: 'mysub',     icon: 'card',      labelKey: 'open_provider_subscription_btn', btn: 'open-provider-subscription-btn' },
   { key: 'admin',     icon: 'gear',      labelKey: 'open_admin_btn',            btn: 'open-admin-panel-btn', badge: 'admin-leads-badge' },
+  { key: 'feedback',  icon: 'chat',      labelKey: 'tile_feedback',             action: 'openFeedback' },
   { key: 'preview',   icon: 'profile',   labelKey: 'tile_preview',              adminOnly: true, action: 'startClientPreview' }
 ];
 
@@ -7902,6 +8003,7 @@ function renderCoachTiles() {
 
     cell.addEventListener('click', function () {
       if (origin) { origin.click(); return; }
+      if (tile.action === 'openFeedback') { window.open('https://docs.google.com/forms/d/e/1FAIpQLSd3stkXiUZxdfU2vY5c3N9uGk5nHiArkjec5mNKBgAu4oYL7w/viewform', '_blank', 'noopener'); return; }
       if (tile.action === 'startClientPreview') { startClientPreview(); return; }
       const target = document.getElementById(tile.scroll);
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -13539,6 +13641,9 @@ async function loadClient(email) {
       return (typeof entry === 'number') ? ('main:' + entry) : String(entry);
     });
 
+    clientWatchToday = (progressDoc.exists() && progressDoc.data().watchToday && progressDoc.data().watchToday.date === today)
+      ? progressDoc.data().watchToday : null;
+
     actualSetsToday = (progressDoc.exists() && progressDoc.data().date === today && progressDoc.data().actualSets)
       ? progressDoc.data().actualSets : {};
 
@@ -14526,6 +14631,7 @@ function renderFocus() {
   renderBeads(beads, totalSets, doneCount, function (next) {
     setsDoneToday[entry.key] = next;
     syncFocusToList(entry.key, next >= totalSets);
+    fxOnSet(next, doneCount, totalSets, exercise);
     renderFocus();
     updateProgress();
     saveProgress();
@@ -14542,6 +14648,7 @@ function renderFocus() {
   next.classList.toggle('ready', left === 0);
 
   renderFocusLogBox();
+  fxAfterRender(entry, totalSets, doneCount);
 }
 
 /* نخلّي كارت التمرين في القايمة تحت متماشي مع اللي اتعمل في وضع التمرين */
@@ -14561,12 +14668,15 @@ function openFocus(startIndex) {
   focusIndex = Math.max(0, Math.min(focusList.length - 1, startIndex || 0));
   document.getElementById('focus-log-box').classList.add('hidden');
   document.getElementById('focus-log-toggle').textContent = t('log_actual_btn');
+  fxHideMini();
   focusMode.classList.remove('hidden');
   document.body.classList.add('focus-open');
   renderFocus();
 }
 
 function closeFocus() {
+  fxStopAll();
+  fxHideMini();
   focusMode.classList.add('hidden');
   document.body.classList.remove('focus-open');
   showClientDay();
@@ -14589,6 +14699,501 @@ document.getElementById('focus-log-toggle').addEventListener('click', function (
   this.textContent = open ? t('log_actual_btn') : t('hide_actual_btn');
   if (!open) renderFocusLogBox();
 });
+
+
+/* ============================================================
+   أدوات وضع التمرين: تصغير، مؤقت راحة، تذكير بالتسجيل، أغاني
+   كلها اختيارية ومابتغيّرش بيانات البرنامج
+   ============================================================ */
+const fx = { restEnd: 0, workStart: 0, tick: 0, remind: 0, mini: false };
+
+function fxGet(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+function fxSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+function fxToast(msg) {
+  let el = document.getElementById('fx-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'fx-toast';
+    el.className = 'fx-toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(fxToast.t);
+  fxToast.t = setTimeout(function () { el.classList.remove('on'); }, 4500);
+}
+
+/* تنبيه: رسالة جوه التطبيق + اهتزاز + إشعار نظام لو الصفحة في الخلفية والإذن متاح */
+function fxNotify(msg) {
+  fxToast(msg);
+  try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch (e) {}
+  try {
+    if (document.hidden && 'Notification' in window && Notification.permission === 'granted') {
+      const opts = { body: msg, icon: './icon-192.png', tag: 'adam-fx' };
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistration().then(function (reg) {
+          if (reg) reg.showNotification('ADAM', opts); else new Notification('ADAM', opts);
+        }).catch(function () {});
+      } else new Notification('ADAM', opts);
+    }
+  } catch (e) {}
+}
+
+function fxAskPermission() {
+  try {
+    if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+  } catch (e) {}
+}
+
+function fxBeep() {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 880; g.gain.value = 0.15;
+    o.start(); o.stop(ctx.currentTime + 0.25);
+  } catch (e) {}
+}
+
+/* ---------- تصغير / تكبير ---------- */
+function fxHideMini() {
+  fx.mini = false;
+  const m = document.getElementById('focus-mini');
+  if (m) m.classList.add('hidden');
+}
+
+function fxMinimize() {
+  if (!focusEntry()) return;
+  fx.mini = true;
+  focusMode.classList.add('hidden');
+  document.body.classList.remove('focus-open');
+  showClientDay();
+  fxPaintMini();
+  document.getElementById('focus-mini').classList.remove('hidden');
+}
+
+function fxExpand() {
+  fxHideMini();
+  focusMode.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+  renderFocus();
+}
+
+function fxPaintMini() {
+  const entry = focusEntry();
+  if (!entry) return;
+  const total = exerciseSetCount(entry.exercise) || 1;
+  document.getElementById('fx-mini-name').textContent = exerciseDisplayName(entry.exercise);
+  document.getElementById('fx-mini-sets').textContent =
+    fill('fx_set_n', { a: setsDoneFor(setsDoneToday, entry.key, total), b: total });
+}
+
+/* ---------- المؤقت ---------- */
+function fxFmt(sec) {
+  sec = Math.max(0, Math.round(sec));
+  return String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0');
+}
+
+/* "60" "90s" "1:30" "2 min" "دقيقتين" -> ثواني (الافتراضي 60) */
+function fxRestSeconds(exercise) {
+  const raw = String((exercise && exercise.rest) || '').toLowerCase();
+  let m = raw.match(/(\d+)\s*[:٫.]\s*(\d{1,2})/);
+  if (m) return Number(m[1]) * 60 + Number(m[2]);
+  m = raw.match(/(\d+(?:\.\d+)?)/);
+  if (m) {
+    const n = parseFloat(m[1]);
+    if (/min|د|m\b/.test(raw) && !/sec|s\b|ث/.test(raw)) return Math.round(n * 60);
+    return Math.round(n);
+  }
+  return 60;
+}
+
+function fxTimerLoop() {
+  const out = document.getElementById('fx-time');
+  const mini = document.getElementById('fx-mini-time');
+  let text = '';
+  if (fx.restEnd) {
+    const left = (fx.restEnd - Date.now()) / 1000;
+    if (left <= 0) {
+      fx.restEnd = 0;
+      fxBeep();
+      fxNotify(t('fx_rest_done'));
+      text = '00:00';
+    } else text = fxFmt(left);
+  } else if (fx.workStart) {
+    text = fxFmt((Date.now() - fx.workStart) / 1000);
+  }
+  if (out && text) out.textContent = text;
+  if (mini) {
+    const running = !!(fx.restEnd || fx.workStart);
+    mini.textContent = text;
+    mini.classList.toggle('hidden', !running);
+  }
+  if (!fx.restEnd && !fx.workStart) { clearInterval(fx.tick); fx.tick = 0; }
+}
+
+function fxEnsureTick() {
+  if (!fx.tick) fx.tick = setInterval(fxTimerLoop, 500);
+}
+
+function fxStartRest(seconds) {
+  fx.workStart = 0;
+  fx.restEnd = Date.now() + seconds * 1000;
+  fxEnsureTick(); fxTimerLoop();
+}
+
+function fxStartWork() {
+  fx.restEnd = 0;
+  fx.workStart = Date.now();
+  fxEnsureTick(); fxTimerLoop();
+}
+
+function fxStopTimer() {
+  fx.restEnd = 0; fx.workStart = 0;
+  const out = document.getElementById('fx-time');
+  if (out) out.textContent = '00:00';
+  fxTimerLoop();
+}
+
+/* ---------- تذكير بالتسجيل ---------- */
+function fxClearRemind() { clearTimeout(fx.remind); fx.remind = 0; }
+
+function fxScheduleRemind() {
+  fxClearRemind();
+  fx.remind = setTimeout(function () {
+    const entry = focusEntry();
+    if (!entry || focusMode.classList.contains('hidden') && !fx.mini) return;
+    const total = exerciseSetCount(entry.exercise) || 1;
+    if (setsDoneFor(setsDoneToday, entry.key, total) < total) fxNotify(t('fx_remind'));
+  }, 4 * 60 * 1000);
+}
+
+function fxOnSet(next, prev, total, exercise) {
+  fxScheduleRemind();
+  const auto = document.getElementById('fx-auto');
+  if (auto && auto.checked && next > prev && next < total) fxStartRest(fxRestSeconds(exercise));
+}
+
+function fxAfterRender(entry) {
+  fxPaintMini();
+  if (!fx.remind) fxScheduleRemind();
+}
+
+function fxStopAll() {
+  fxWatchFinish(false);
+  fxClearRemind();
+  fxStopTimer();
+}
+
+/* ---------- الأغاني ---------- */
+function fxEmbed(url) {
+  try {
+    const u = new URL(url);
+    const h = u.hostname.replace(/^www\./, '');
+    if (h === 'open.spotify.com') {
+      const m = u.pathname.match(/\/(playlist|album|track|artist|show|episode)\/([A-Za-z0-9]+)/);
+      if (m) return { src: 'https://open.spotify.com/embed/' + m[1] + '/' + m[2], h: 152 };
+    }
+    if (/(^|\.)youtube\.com$/.test(h) || h === 'youtu.be') {
+      const list = u.searchParams.get('list');
+      if (list) return { src: 'https://www.youtube.com/embed/videoseries?list=' + encodeURIComponent(list), h: 200 };
+      const id = h === 'youtu.be' ? u.pathname.slice(1) : u.searchParams.get('v');
+      if (id) return { src: 'https://www.youtube.com/embed/' + encodeURIComponent(id), h: 200 };
+    }
+    if (/soundcloud\.com$/.test(h)) {
+      return { src: 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(url), h: 166 };
+    }
+  } catch (e) {}
+  return null;
+}
+
+/* لينك المدرب لو موجود، وإلا لينك العميل المحفوظ عنده */
+function fxMusicLink() {
+  const a = document.getElementById('client-playlist');
+  const coach = a && !a.classList.contains('hidden') ? a.getAttribute('href') : '';
+  return coach || fxGet('adamMusicLink');
+}
+
+function fxRenderMusic() {
+  const frame = document.getElementById('fx-frame');
+  const open = document.getElementById('fx-open');
+  const input = document.getElementById('fx-link');
+  const link = playlistClean(fxMusicLink());
+  const a = document.getElementById('client-playlist');
+  const fromCoach = !!(a && !a.classList.contains('hidden'));
+  if (input && !input.value) input.value = link;
+  if (input) input.disabled = false;
+  const prev = frame.getAttribute('data-src') || '';
+  if (!link) { frame.innerHTML = ''; frame.removeAttribute('data-src'); open.classList.add('hidden'); return; }
+  const emb = fxEmbed(link);
+  if (emb) {
+    if (prev !== emb.src) {
+      frame.innerHTML = '';
+      const f = document.createElement('iframe');
+      f.src = emb.src;
+      f.height = String(emb.h);
+      f.setAttribute('allow', 'autoplay; encrypted-media; clipboard-write; fullscreen');
+      f.setAttribute('loading', 'lazy');
+      f.className = 'fx-iframe';
+      frame.appendChild(f);
+      frame.setAttribute('data-src', emb.src);
+    }
+    open.classList.add('hidden');
+  } else {
+    frame.innerHTML = ''; frame.removeAttribute('data-src');
+    open.href = link;
+    open.classList.remove('hidden');
+  }
+  void fromCoach;
+}
+
+function fxWire() {
+  const q = function (id) { return document.getElementById(id); };
+  q('focus-min').addEventListener('click', fxMinimize);
+  q('fx-mini-go').addEventListener('click', fxExpand);
+  q('fx-timer-btn').addEventListener('click', function () {
+    const p = q('fx-timer');
+    p.classList.toggle('hidden');
+    if (!p.classList.contains('hidden')) fxAskPermission();
+  });
+  q('fx-music-btn').addEventListener('click', function () {
+    const p = q('fx-music');
+    p.classList.toggle('hidden');
+    if (!p.classList.contains('hidden')) fxRenderMusic();
+  });
+  q('fx-rest').addEventListener('click', function () {
+    const e = focusEntry();
+    fxStartRest(fxRestSeconds(e && e.exercise));
+  });
+  q('fx-work').addEventListener('click', fxStartWork);
+  q('fx-stop').addEventListener('click', fxStopTimer);
+  const auto = q('fx-auto');
+  auto.checked = fxGet('adamAutoRest') === '1';
+  auto.addEventListener('change', function () { fxSet('adamAutoRest', auto.checked ? '1' : '0'); fxAskPermission(); });
+  q('fx-link-save').addEventListener('click', function () {
+    const clean = playlistClean(q('fx-link').value.trim());
+    fxSet('adamMusicLink', clean);
+    q('fx-link').value = clean;
+    fxRenderMusic();
+  });
+}
+fxWire();
+
+/* ============================================================
+   ملخص يومي: تمرين + أكل + مية + نوم/جاهزية + قياس الساعة
+   بيجمع اللي العميل سجّله فعلًا في التطبيق
+   ============================================================ */
+const DS_SLEEP = {
+  ar: { sleep: ['أقل من 5 ساعات', '5 إلى 6 ساعات', '7 إلى 8 ساعات', 'أكتر من 8 ساعات'], q: ['سيئ', 'متقطّع', 'كويس', 'عميق ومريح'] },
+  en: { sleep: ['Under 5 h', '5 to 6 h', '7 to 8 h', 'Over 8 h'], q: ['Poor', 'Broken', 'Good', 'Deep and restful'] }
+};
+
+async function openDaySummary() {
+  let ov = document.getElementById('day-summary');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'day-summary';
+    ov.className = 'ds-overlay';
+    document.body.appendChild(ov);
+  }
+  ov.innerHTML = '';
+  ov.classList.remove('hidden');
+  document.body.classList.add('focus-open');
+
+  const head = document.createElement('div');
+  head.className = 'ds-head';
+  const title = document.createElement('b');
+  title.textContent = t('ds_title');
+  const close = document.createElement('button');
+  close.type = 'button'; close.className = 'ds-close'; close.textContent = t('ds_close');
+  close.addEventListener('click', function () { ov.classList.add('hidden'); document.body.classList.remove('focus-open'); });
+  head.appendChild(title); head.appendChild(close);
+  ov.appendChild(head);
+
+  const body = document.createElement('div');
+  body.className = 'ds-body';
+  ov.appendChild(body);
+
+  function card(label, main, sub) {
+    const c = document.createElement('div');
+    c.className = 'ds-card';
+    const l = document.createElement('small'); l.textContent = label;
+    const m = document.createElement('b'); m.textContent = main;
+    c.appendChild(l); c.appendChild(m);
+    if (sub) { const s2 = document.createElement('span'); s2.textContent = sub; c.appendChild(s2); }
+    body.appendChild(c);
+  }
+
+  /* التمرين */
+  const wd = clientWeek[sessionDay];
+  let totalSets = 0, doneSets = 0, exTotal = 0, exDone = 0;
+  if (wd && !wd.rest) {
+    daySessions(wd).forEach(function (ses, si) {
+      const pre = sessionKeyPrefix(si);
+      SECTION_KEYS.forEach(function (k) {
+        ((ses.sections || {})[k] || []).forEach(function (ex, i) {
+          const n = exerciseSetCount(ex) || 1;
+          const d = setsDoneFor(setsDoneToday, pre + k + ':' + i, n);
+          totalSets += n; doneSets += Math.min(d, n); exTotal += 1; if (d >= n) exDone += 1;
+        });
+      });
+    });
+  }
+  card(t('ds_train'),
+    (wd && wd.rest) ? t('ds_rest_day') : fill('ds_sets', { a: doneSets, b: totalSets, c: exDone, d: exTotal }),
+    '');
+
+  /* الأكل والمية */
+  const planDay = clientNutrition && clientNutrition.week && clientNutrition.week[todayIndex];
+  const eaten = eatenTotals(planDay);
+  const target = Math.round((clientNutrition && clientNutrition.targets && clientNutrition.targets.kcal) || 0);
+  card(t('ds_food'),
+    target ? fill('ds_kcal_of', { a: Math.round(eaten.kcal), b: target }) : fill('ds_kcal_only', { a: Math.round(eaten.kcal) }),
+    fill('ds_protein', { n: Math.round(eaten.protein) }));
+  card(t('ds_water'), fill('ds_cups', { a: logDay().water || 0, b: waterGoal() }), '');
+
+  /* النوم والجاهزية من سؤال اليوم */
+  let chk = null;
+  try {
+    const snap = await getDoc(doc(db, 'checkins', clientEmail));
+    const plus = snap.exists() ? snap.data().plus : null;
+    const key = new Date().toISOString().slice(0, 10);
+    chk = plus && plus.checkins ? (plus.checkins[key] || plus.checkins[todayStamp] || null) : null;
+  } catch (e) { chk = null; }
+  const L = DS_SLEEP[lang === 'en' ? 'en' : 'ar'];
+  if (chk && chk.sleep != null) {
+    card(t('ds_sleep'), L.sleep[chk.sleep] || '',
+      [chk.sleepq != null ? L.q[chk.sleepq] : '', chk.score != null ? fill('ds_ready', { n: Math.round(chk.score) }) : ''].filter(Boolean).join(' · '));
+  } else {
+    card(t('ds_sleep'), t('ds_sleep_none'), '');
+  }
+
+  /* الساعة */
+  const w = clientWatchToday;
+  card(t('ds_watch'),
+    w ? fill('ds_watch_val', { a: w.avgHr, m: w.maxHr, k: w.kcal, t: Math.round((w.sec || 0) / 60) }) : t('ds_watch_none'), '');
+
+  const note = document.createElement('p');
+  note.className = 'ds-note';
+  note.textContent = t('ds_note');
+  body.appendChild(note);
+}
+window.adamDaySummary = openDaySummary;
+
+
+/* ---------- الساعة / سوار النبض (Web Bluetooth) ---------- */
+let clientWatchToday = null;
+const fw = { dev: null, sum: 0, n: 0, max: 0, kcal: 0, last: 0, start: 0, bpm: 0, tick: 0 };
+
+function fwProfile() {
+  const r = clientRecord || {};
+  const age = (r.dob && r.dob.year) ? Math.max(15, new Date().getFullYear() - Number(r.dob.year)) : 30;
+  return { w: Number(r.weight) || 75, age: age, male: String(r.gender || 'male') !== 'female' };
+}
+
+/* معادلة Keytel: سعرات/دقيقة من النبض — تقدير مش قياس معملي */
+function fwKcalPerMin(hr) {
+  const p = fwProfile();
+  const v = p.male
+    ? (-55.0969 + 0.6309 * hr + 0.1988 * p.w + 0.2017 * p.age) / 4.184
+    : (-20.4022 + 0.4472 * hr - 0.1263 * p.w + 0.074 * p.age) / 4.184;
+  return Math.max(0, v);
+}
+
+function fwZone(hr) {
+  const max = 220 - fwProfile().age;
+  const pct = hr / max;
+  return pct < 0.6 ? 1 : pct < 0.7 ? 2 : pct < 0.8 ? 3 : pct < 0.9 ? 4 : 5;
+}
+
+function fwPaint() {
+  const q = function (id) { return document.getElementById(id); };
+  q('fw-bpm').textContent = fw.bpm || '--';
+  q('fw-avg').textContent = fw.n ? Math.round(fw.sum / fw.n) : '--';
+  q('fw-max').textContent = fw.max || '--';
+  q('fw-kcal').textContent = Math.round(fw.kcal);
+  q('fw-time').textContent = fw.start ? fxFmt((Date.now() - fw.start) / 1000) : '00:00';
+  q('fw-zone').textContent = fw.bpm ? fill('fw_zone', { z: fwZone(fw.bpm) }) : '';
+}
+
+function fwOnData(event) {
+  const dv = event.target.value;
+  const hr = (dv.getUint8(0) & 1) ? dv.getUint16(1, true) : dv.getUint8(1);
+  if (!hr || hr < 30 || hr > 230) return;
+  const now = Date.now();
+  if (fw.last) fw.kcal += fwKcalPerMin(hr) * Math.min(5, (now - fw.last) / 1000) / 60;
+  fw.last = now;
+  fw.bpm = hr; fw.sum += hr; fw.n += 1; fw.max = Math.max(fw.max, hr);
+  fwPaint();
+}
+
+async function fwConnect() {
+  const note = document.getElementById('fw-note');
+  if (!navigator.bluetooth) { note.textContent = t('fw_unsupported'); return; }
+  try {
+    const dev = await navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] });
+    const server = await dev.gatt.connect();
+    const service = await server.getPrimaryService('heart_rate');
+    const ch = await service.getCharacteristic('heart_rate_measurement');
+    await ch.startNotifications();
+    ch.addEventListener('characteristicvaluechanged', fwOnData);
+    dev.addEventListener('gattserverdisconnected', function () {
+      note.textContent = t('fw_lost');
+      document.getElementById('fw-connect').textContent = t('fw_reconnect');
+    });
+    fw.dev = dev;
+    if (!fw.start) fw.start = Date.now();
+    fw.last = 0;
+    if (!fw.tick) fw.tick = setInterval(fwPaint, 1000);
+    note.textContent = t('fw_live');
+  } catch (e) {
+    if (e && e.name !== 'NotFoundError') note.textContent = t('fw_lost');
+  }
+}
+
+function fwReset() {
+  try { if (fw.dev && fw.dev.gatt && fw.dev.gatt.connected) fw.dev.gatt.disconnect(); } catch (e) {}
+  clearInterval(fw.tick);
+  fw.dev = null; fw.sum = 0; fw.n = 0; fw.max = 0; fw.kcal = 0; fw.last = 0; fw.start = 0; fw.bpm = 0; fw.tick = 0;
+}
+
+/* بيحفظ ملخص الجلسة في مستند التقدم بتاع العميل نفسه */
+function fxWatchFinish(showMsg) {
+  if (!fw.n) { if (showMsg) document.getElementById('fw-note').textContent = t('fw_nodata'); fwReset(); fwPaint(); return; }
+  const summary = {
+    date: today,
+    avgHr: Math.round(fw.sum / fw.n),
+    maxHr: fw.max,
+    kcal: Math.round(fw.kcal),
+    sec: Math.round((Date.now() - fw.start) / 1000)
+  };
+  if (clientEmail && !previewMode) {
+    clientWatchToday = summary;
+    setDoc(doc(db, 'progress', clientEmail), { watchToday: summary }, { merge: true }).catch(function () {});
+  }
+  if (showMsg) fxToast(fill('fw_saved', { a: summary.avgHr, k: summary.kcal }));
+  fwReset();
+  fwPaint();
+}
+
+function fwWire() {
+  const q = function (id) { return document.getElementById(id); };
+  q('fx-watch-btn').addEventListener('click', function () {
+    const p = q('fx-watch');
+    p.classList.toggle('hidden');
+    if (!p.classList.contains('hidden')) {
+      q('fw-note').textContent = navigator.bluetooth ? t('fw_hint') : t('fw_unsupported');
+      fwPaint();
+    }
+  });
+  q('fw-connect').addEventListener('click', fwConnect);
+  q('fw-save').addEventListener('click', function () { fxWatchFinish(true); });
+}
+fwWire();
 
 document.getElementById('start-session-btn').addEventListener('click', function () {
   /* بيبدأ من أول تمرين لسه مخلصش — مش من الأول دايمًا */
