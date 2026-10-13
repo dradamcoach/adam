@@ -356,3 +356,149 @@ export const BIOMECH = {
     }
   ]
 };
+
+/* ===== توسيع المرحلة 19: منحنيات + تكنيك + مفاصل ===== */
+BIOMECH.groups = [
+  BIOMECH.groups[0],
+  { id: 'joints', t: ['المفاصل', 'Joints'], d: ['٦ مفاصل أساسية: بتتحرك إزاي، المدى الطبيعي، العضلات الشغالة، وإزاي تحميها.', '6 key joints: how they move, normal range, the muscles at work and how to protect them.'] },
+  BIOMECH.groups[1],
+  { id: 'curves', t: ['منحنيات وتحميل', 'Curves and loading'], d: ['ليه التمرين بيبقى أصعب في نقطة معينة: منحنى الطول والقوة، العزم، ونوع المقاومة.', 'Why an exercise is hardest at one point: length-tension, torque and resistance type.'] },
+  { id: 'form', t: ['تكنيك وأوضاع', 'Form and positions'], d: ['٣ أوضاع بتفرق بين تمرين آمن وتمرين مجهد: الكتف، الركبة، والضهر.', '3 positions that separate a safe lift from a stressful one: shoulder, knee and back.'] }
+];
+BIOMECH.topics.push(
+  { id: 'lt', g: 'curves', fig: 'lt', joints: ['elbow', 'knee'],
+    t: ['منحنى الطول والقوة', 'Length-tension curve'],
+    s: ['العضلة بتبقى أقوى عند طول معيّن، وبتضعف لو قصرت أو طالت أوي.', 'A muscle is strongest at one length and weaker when too short or too long.'],
+    body: [
+      [['إيه اللي بيحصل جوه العضلة', 'What happens inside the muscle'], ['القوة بتيجي من تلامس خيوط الأكتين والميوسين. عند الطول المتوسط التلامس بيبقى أكبر ما يمكن فالقوة النشطة بتبقى في القمة. لو العضلة قصرت أوي الخيوط بتتداخل، ولو طالت أوي التلامس بيقل، وفي الحالتين القوة النشطة بتقل.', 'Force comes from actin and myosin overlap. At a mid length the overlap is greatest, so active force peaks. When the muscle is very short the filaments crowd; when very long the overlap drops; either way active force falls.']],
+      [['القوة السلبية', 'Passive tension'], ['لما العضلة تتمدد أكتر، النسيج الضام بيشد (القوة السلبية) وبيضيف قوة. عشان كده المجموع (الخط المتقطع) بيفضل عالي في الطول الكبير رغم إن القوة النشطة بتقل.', 'As the muscle stretches, connective tissue tightens (passive tension) and adds force. That is why the total (dashed line) stays high at long lengths even as active force drops.']],
+      [['في التمرين', 'In training'], ['تمارين زي الكيرل المائل والرومانيان بتحمّل العضلة وهي مشدودة، والكيرل بالكابل بيحمّلها وهي مقبوضة. الاتنين مفيدين، والأفضل تغطي الطولين مش واحد بس. العضلة اللي بتعدّي على مفصلين (زي الهامسترينج) ممكن تقصر أوي لو الاتنين اتحركوا مع بعض.', 'Incline curls and Romanian deadlifts load the muscle stretched; cable curls load it shortened. Both help, so cover both ends rather than one. A two-joint muscle (like the hamstrings) can run out of length when both joints move together.']]
+    ],
+    cues: [['متقتصرش على نص المدى طول الوقت', 'Do not live in half range all the time'], ['اتحكم في الجزء المشدود من الحركة', 'Control the stretched part of the rep'], ['غيّر تمرينك بين مشدود ومقبوض', 'Rotate stretched and shortened variations']],
+    ex: ['ex_single_leg_rdl', 'ex_skull_crusher', 'wg_chest_supported_row'] },
+  { id: 'torque', g: 'curves', fig: 'torque', joints: ['elbow', 'knee', 'hip'],
+    t: ['العزم والزاوية ونقطة الالتصاق', 'Torque, angle and the sticking point'],
+    s: ['صعوبة التمرين = حمل المفصل مقابل قدرته في الزاوية دي.', 'Difficulty = joint load versus its capacity at that angle.'],
+    body: [
+      [['الفكرة', 'The idea'], ['حمل المفصل (العزم) = الوزن × المسافة الأفقية بينه وبين المفصل. وقدرة المفصل نفسها بتتغير حسب الزاوية لأن طول العضلة وذراع عزمها بيتغيروا. النقطة اللي بيكون فيها الحمل أعلى من القدرة بنسبة هي نقطة الالتصاق.', 'Joint load (torque) = weight × the horizontal distance to the joint. The joint capacity changes with angle because muscle length and moment arm change. The point where load is highest relative to capacity is the sticking point.']],
+      [['مثال: كيرل بالدمبل', 'Example: dumbbell curl'], ['الحمل بيوصل لأقصاه لما الساعد يبقى أفقي (حوالي ٩٠°) لأن الدمبل بعيد أوي عن الكوع. قبل وبعد النقطة دي الحمل بيقل رغم إن الوزن ثابت.', 'The load peaks when the forearm is horizontal (about 90°) because the dumbbell is farthest from the elbow. Before and after that point the load drops even though the weight is the same.']],
+      [['إزاي تستفيد', 'How to use it'], ['وقّف ثانية عند أصعب نقطة، أو استخدم كابل أو أستك بيغطي الأجزاء السهلة، أو غيّر وضع الجسم عشان تقرّب الوزن من المفصل. السكوات والبنش ليهم نقطة التصاق قريبة من أسفل-منتصف المدى.', 'Pause at the hardest point, add a cable or band to cover the easy parts, or change body position to bring the weight closer to the joint. Squat and bench have a sticking region around the lower-middle of the range.']]
+    ],
+    cues: [['اعرف أصعب نقطة في تمرينك', 'Know the hardest point of your lift'], ['قرّب الوزن من المفصل لو عايزه أخف', 'Bring the weight closer to the joint to make it lighter'], ['ثبّت الوزن في أصعب نقطة قبل ما تزوّده', 'Own the hardest point before adding load']],
+    ex: ['ex_triceps_pushdown', 'wg_overhead_press', 'wg_cable_lateral_raise'] },
+  { id: 'resist', g: 'curves', fig: 'resist', joints: [],
+    t: ['منحنى المقاومة: دمبل وكابل وأستك وجهاز', 'Resistance profile: dumbbell, cable, band, machine'],
+    s: ['كل أداة بتحمّل المدى بطريقة مختلفة.', 'Each tool loads the range of motion differently.'],
+    body: [
+      [['الأوزان الحرة', 'Free weights'], ['الجاذبية دايمًا لتحت، فالصعوبة بتتبع المسافة الأفقية: بتبقى في القمة في نص المدى تقريبًا (زي الكيرل واللاتيرال ريز) وبتقل في الآخر.', 'Gravity always pulls down, so difficulty follows the horizontal distance: peak around mid-range (as in curls and lateral raises) and lower at the end.']],
+      [['الكابل والأستك', 'Cable and bands'], ['الكابل مقاومته ثابتة تقريبًا في الحبل، فبيحمّل الأجزاء اللي الدمبل بيسيبها. الأستك بيزيد كل ما اتمدد فبيبقى أصعب في آخر الحركة.', 'A cable keeps near-constant tension in the line, so it loads parts a dumbbell leaves easy. A band gets harder as it stretches, so the end of the rep is hardest.']],
+      [['الأجهزة', 'Machines'], ['جهاز الكام (الترس غير الدائري) بيحاول يطابق قدرتك في كل زاوية، بس النتيجة بتعتمد على تصميم الجهاز وطول جسمك.', 'A cam machine tries to match your strength curve at each angle, but the result depends on the machine design and your body size.']],
+      [['إيه الأفضل؟', 'Which is best?'], ['مفيش أداة أحسن من الباقي. الأذكى إنك تجمع: دمبل للأساس وكابل أو أستك لتغطية الأجزاء الضعيفة.', 'No tool is best. The smart move is to combine them: dumbbells as the base, cable or bands to cover weak parts.']]
+    ],
+    cues: [['اختار الأداة حسب الجزء اللي عايز تحمّله', 'Pick the tool by the part of the range you want loaded'], ['بدّل الأدوات بين الحصص', 'Rotate tools between sessions']],
+    ex: ['wg_cable_lateral_raise', 'wg_banded_monster_walk', 'wg_pallof_press'] },
+
+  { id: 'rhythm', g: 'form', fig: 'rhythm', joints: ['shoulder', 'back'],
+    t: ['إيقاع الكتف ولوح الكتف', 'Shoulder rhythm and the shoulder blade'],
+    s: ['رفع الدراع فوق الراس شغل مشترك بين مفصل الكتف ولوح الكتف.', 'Raising the arm overhead is shared work between the shoulder joint and the shoulder blade.'],
+    work: [['مفصل الكتف، لوح الكتف، الصدر العلوي', 'Shoulder joint, shoulder blade, upper back'], ['الدالية، الكفة المدورة، المسننة الأمامية، الترابيس', 'Deltoid, rotator cuff, serratus anterior, trapezius']],
+    hard: ['لما الدراع يعدّي مستوى الكتف، ولو لوح الكتف مش بيدور لفوق.', 'Once the arm passes shoulder level, if the blade does not rotate upward.'],
+    body: [
+      [['القاعدة', 'The rule'], ['كل ٣ درجات رفع تقريبًا: درجتين من مفصل الكتف ودرجة من لوح الكتف (٢ : ١). يعني رفع كامل ١٨٠° = حوالي ١٢٠° مفصل + ٦٠° لوح.', 'For every 3 degrees of lift about 2 come from the shoulder joint and 1 from the blade (2:1). A full 180° lift is about 120° joint + 60° blade.']],
+      [['ليه ده مهم', 'Why it matters'], ['لو اللوح اتحرك بدري أوي أو متأخر، المساحة تحت الأكروميون بتضيق وده بيلبس الأوتار. ضغط الأكتاف فوق الراس محتاج كمان صدر علوي مفرود.', 'If the blade moves too early or too late the space under the acromion narrows and tendons get irritated. Overhead pressing also needs an extended upper back.']]
+    ],
+    cues: [['اطلع بالدراع واللوح مع بعض', 'Lift with arm and blade together'], ['متكتفش كتفك لفوق ناحية ودنك', 'Do not shrug toward your ears'], ['افرد صدرك العلوي قبل الضغط', 'Open the upper back before pressing']],
+    mistakes: [[['رفع الكتف لدودة الودن', 'Shrugging toward the ears'], ['بيقلل شغل المسننة ويضغط الرقبة والترابيس العلوي.', 'Reduces serratus work and loads the neck and upper traps.']], [['ضهر مقوّس في الضغط', 'Arched back in pressing'], ['بيعوّض نقص مرونة الصدر العلوي ويحمّل أسفل الضهر.', 'Compensates for a stiff upper back and loads the lower back.']]],
+    tweaks: [['shoulder', ['لو الرفع فوق الراس بيوجّع، جرّب الضغط المائل (لاندماين) أو قبضة محايدة.', 'If overhead lifting hurts try a landmine press or a neutral grip.']]],
+    ex: ['wg_overhead_press', 'wg_scapular_push_up', 'wg_cable_lateral_raise'] },
+  { id: 'valgus', g: 'form', fig: 'valgus', joints: ['knee', 'hip', 'ankle'],
+    t: ['الركبة الداخلة (فالجس)', 'Knee valgus (knees caving in)'],
+    s: ['الركبة بتنزل ناحية الداخل وانت بتنزل أو بتنط.', 'The knee drifts inward as you squat or land.'],
+    work: [['الركبة، الحوض، الكاحل، القدم', 'Knee, hip, ankle, foot'], ['الألوية الوسطى والكبرى، الجزء الداخلي للفخذ، عضلات القدم', 'Gluteus medius and maximus, adductors, foot muscles']],
+    hard: ['في نزول السكوات وعند الهبوط من نطة، لما التعب يزيد.', 'In the bottom of a squat and on landing, especially when fatigued.'],
+    body: [
+      [['إيه اللي بيسبّبها', 'What causes it'], ['ضعف عضلات الحوض الجانبية والدوران الخارجي، محدودية ثني الكاحل لفوق، وقدم مسطحة. وغالبًا الاتنين مع بعض.', 'Weak lateral hip and external rotators, limited ankle dorsiflexion, and a collapsed foot arch. Often several together.']],
+      [['ليه تهتم', 'Why care'], ['الركبة الداخلة مع حمل أو هبوط بتزوّد الضغط على الرباط الصليبي الأمامي وعلى مفصل الرضفة. شوية ميل داخلي طبيعي، المشكلة في الانهيار الواضح.', 'Inward knee collapse under load or landing raises stress on the ACL and the kneecap joint. A little inward drift is normal; marked collapse is the problem.']],
+      [['إزاي تصلحها', 'How to fix it'], ['قوّي الألوية بأستك صغير، وحسّن مرونة الكاحل، وقول لنفسك "ادفع الأرض للجنب". ابدأ بوزن خفيف وراقب نفسك من الأمام.', 'Strengthen glutes with mini bands, improve ankle mobility and think "spread the floor". Start light and watch yourself from the front.']]
+    ],
+    cues: [['الركبة فوق الصباع التاني', 'Knee over the second toe'], ['ادفع الأرض بالجنب', 'Spread the floor'], ['القدم كلها على الأرض', 'Keep the whole foot planted']],
+    mistakes: [[['أستك صغير بيشد الركبة', 'Letting a band pull the knees in'], ['قاوم الأستك مش تسيبه يشدك.', 'Resist the band, do not let it pull you in.']]],
+    tweaks: [['knee', ['لو وجع قدام الركبة، قلل العمق والوزن وقوّي الألوية الأول.', 'If the front of the knee hurts, reduce depth and load and build the glutes first.']]],
+    ex: ['wg_banded_monster_walk', 'wg_clamshell', 'wg_heel_elevated_goblet_squat'] },
+  { id: 'spine', g: 'form', fig: 'spine', joints: ['back', 'hip'],
+    t: ['العمود الفقري تحت الحمل', 'The spine under load'],
+    s: ['خلي انحناءات ضهرك الطبيعية وانت شايل وزن تقيل.', 'Keep your natural spinal curves when lifting heavy.'],
+    work: [['الضهر والحوض', 'Back and hips'], ['عضلات الجذع الجانبية والعميقة، الضهر الطويلة، الألوية', 'Deep and lateral trunk muscles, back extensors, glutes']],
+    hard: ['في الديدلفت والسكوات التقيل وآخر التكرارات.', 'In heavy deadlifts and squats and the last reps.'],
+    body: [
+      [['إيه المقصود بالوضع المحايد', 'What neutral means'], ['مش خط مستقيم، دي الانحناءات الطبيعية: الرقبة والقطنية لجوه والصدر لبره. المقصود تحافظ عليها وانت تحت الحمل بدل ما تتحول لتقوّس أو تدوير كبير.', 'Not a straight line: natural curves, neck and lower back inward, upper back outward. The aim is to keep them under load instead of collapsing into big rounding or arching.']],
+      [['شوية حركة عادي', 'A little motion is normal'], ['العمود الفقري مش هش، وتحرك بسيط طبيعي. الخطر في التدوير الكبير تحت وزن تقيل أو مع تعب شديد، خصوصًا لو متكرر.', 'The spine is not fragile and small motion is normal. The risk is large rounding under heavy load or severe fatigue, especially when repeated.']],
+      [['الثبات', 'Bracing'], ['خد نفس لبطنك، شد بطنك من كل الجوانب، وحرّك من الحوض مش من الضهر.', 'Breathe into your belly, tighten the trunk all around and move from the hips, not the back.']]
+    ],
+    cues: [['صدرك لفوق وضلوعك لتحت', 'Chest up, ribs down'], ['اتحرك من الحوض', 'Move from the hips'], ['وقف التكرار لو الضهر بدأ يدوّر', 'Stop the set when the back starts to round']],
+    mistakes: [[['تدوير أسفل الضهر في أول السحب', 'Rounding the lower back off the floor'], ['بيزوّد الحمل على الفقرات والأربطة. خفّف الوزن وركّز على الحوض.', 'Raises load on discs and ligaments. Reduce load and focus on the hips.']]],
+    tweaks: [['back', ['لو عندك ألم ضهر، ابدأ بأوزان خفيفة ومدى أصغر وكلّم الأخصائي لو استمر.', 'With back pain start with lighter loads and a smaller range and see a specialist if it persists.']]],
+    ex: ['ex_side_plank', 'ex_superman', 'wg_hanging_knee_raise'] },
+
+  { id: 'j_knee', g: 'joints', fig: 'j_knee', joints: ['knee'],
+    t: ['الركبة', 'Knee'], s: ['مفصلة: ثني وفرد، وشوية لف وهي مثنية.', 'A hinge: flexion and extension, plus a little rotation when bent.'],
+    work: [['الركبة والرضفة', 'Knee and kneecap'], ['الفخذ الأمامي (رباعية)، الهامسترينج، السمانة', 'Quadriceps, hamstrings, calf']],
+    hard: ['في أسفل السكوات والهبوط من نطة.', 'In the bottom of a squat and landing from a jump.'],
+    body: [
+      [['المدى الطبيعي', 'Normal range'], ['فرد كامل ٠° وثني حوالي ١٣٥°. ولما الركبة تتثنى بيبقى فيه لف بسيط بين الفخذ والساق.', 'Full extension 0° to flexion of about 135°. When bent, a little rotation is available between thigh and shin.']],
+      [['الثبات', 'Stability'], ['الأربطة (الصليبي الأمامي والخلفي والجانبيين) والغضاريف بتثبّت، والعضلات بتحميها. عضلات الفخذ الأمامية والخلفية والألوية كلها بتشارك.', 'Ligaments (ACL, PCL, collaterals) and menisci stabilise, and muscles protect them. Quads, hamstrings and glutes all share the job.']],
+      [['إزاي تحميها', 'Protecting it'], ['ركبتك فوق قدمك، القدم كلها على الأرض، وتقدّم تدريجي في الوزن والمدى.', 'Keep the knee tracking over the foot, the foot planted and progress load and depth gradually.']]
+    ],
+    cues: [['ركبتك في اتجاه صوابعك', 'Knees in line with toes'], ['انزل بتحكم وطلّع بقوة', 'Lower under control, drive up with power']],
+    ex: ['wg_sissy_squat', 'ex_walking_lunge', 'ex_step_up'] },
+  { id: 'j_hip', g: 'joints', fig: 'j_hip', joints: ['hip'],
+    t: ['الحوض', 'Hip'], s: ['مفصل كروي: بيتحرك في كل الاتجاهات وبيشيل جسمك.', 'A ball-and-socket: moves in every direction and carries your body.'],
+    work: [['الحوض', 'Hip'], ['الألوية، الفخذ الخلفي والداخلي، ثانيات الحوض', 'Glutes, hamstrings, adductors, hip flexors']],
+    hard: ['في أسفل السكوات وعند رفع الرجل عالي.', 'At the bottom of a squat and lifting the leg high.'],
+    body: [
+      [['المدى', 'Range'], ['ثني حوالي ١٢٠° وفرد حوالي ٢٠°، وفتح للجنب حوالي ٤٥° وتقريب حوالي ٣٠° (تقريبية). عمق السكوات بيتحدد غالبًا بشكل عظمة الحوض الشخصي.', 'Flexion about 120°, extension about 20°, abduction about 45° and adduction about 30° (approximate). Squat depth is often set by your own hip bone shape.']],
+      [['في التمرين', 'In training'], ['الحوض هو محرّك الديدلفت والسكوات والجري. ضعف الألوية بيخلي الركبة والضهر يعوّضوا.', 'The hip drives deadlifts, squats and running. Weak glutes make the knee and the back compensate.']]
+    ],
+    cues: [['ابدأ الحركة بالحوض', 'Start the move with the hips'], ['وسّع وقفتك لو الحوض بيضيق', 'Widen your stance if the hips feel pinched']],
+    ex: ['ex_single_leg_rdl', 'wg_side_lying_hip_abduction', 'wg_banded_monster_walk'] },
+  { id: 'j_back', g: 'joints', fig: 'j_back', joints: ['back'],
+    t: ['الضهر', 'Back'], s: ['الحركة موزعة على فقرات كتير، وعضلات الجذع بتثبّتها.', 'Motion is shared across many vertebrae and trunk muscles stabilise it.'],
+    work: [['الفقرات القطنية والصدرية والرقبة', 'Lumbar, thoracic and neck vertebrae'], ['الضهر الطويلة، البطن، المربعة القطنية', 'Back extensors, abdominals, quadratus lumborum']],
+    hard: ['في الديدلفت والتجديف المنحني.', 'In deadlifts and bent-over rows.'],
+    body: [
+      [['المدى', 'Range'], ['القطنية: ثني حوالي ٦٠° وفرد حوالي ٢٥°. الصدرية بتدور أكتر من القطنية، والرقبة أكتر المناطق حركة.', 'Lumbar: flexion about 60°, extension about 25°. The upper back rotates more than the lower back and the neck is the most mobile region.']],
+      [['الدور', 'The role'], ['أسفل الضهر دوره الأساسي الثبات، والحركة الكبيرة المفروض تيجي من الحوض والصدر. شوف "العمود الفقري تحت الحمل".', 'The lower back mainly stabilises; big motion should come from the hips and upper back. See "The spine under load".']]
+    ],
+    cues: [['ثبّت الوسط وحرّك الحوض والصدر', 'Brace the middle, move the hips and upper back']],
+    ex: ['ex_superman', 'ex_side_plank', 'wg_pallof_press'] },
+  { id: 'j_shoulder', g: 'joints', fig: 'j_shoulder', joints: ['shoulder'],
+    t: ['الكتف', 'Shoulder'], s: ['أكتر مفصل حركة وأقل ثبات، فمحتاج عضلات تثبيت قوية.', 'The most mobile and least stable joint, so it needs strong stabilisers.'],
+    work: [['مفصل الكتف ولوح الكتف', 'Shoulder joint and blade'], ['الكفة المدورة، الدالية، الصدر، الضهر العلوي', 'Rotator cuff, deltoid, chest, upper back']],
+    hard: ['عند الرفع فوق الراس وفي أسفل الضغط.', 'Overhead and at the bottom of pressing.'],
+    body: [
+      [['المدى', 'Range'], ['رفع لقدام أو للجنب حتى ١٨٠° (مع لوح الكتف)، فرد لورا حوالي ٥٠°، ودوران داخلي وخارجي.', 'Raising forward or sideways up to 180° (with the blade), extension about 50° and inward and outward rotation.']],
+      [['إزاي تحميه', 'Protecting it'], ['قوّي الكفة المدورة ولوح الكتف، وازن السحب والدفع (سحب = دفع تقريبًا)، وتجنب الألم الحاد فوق الراس.', 'Strengthen the cuff and blade muscles, balance pulling and pushing, and avoid sharp pain overhead.']]
+    ],
+    cues: [['لوح الكتف لتحت وورا', 'Blades down and back'], ['اسحب بقدر ما تدفع', 'Pull as much as you push']],
+    ex: ['wg_scapular_push_up', 'wg_chest_supported_row', 'wg_cable_lateral_raise'] },
+  { id: 'j_ankle', g: 'joints', fig: 'j_ankle', joints: ['ankle'],
+    t: ['الكاحل', 'Ankle'], s: ['مدى بسيط لكن عمق السكوات والجري بيتحددوا بيه.', 'A small range, but squat depth and running depend on it.'],
+    work: [['الكاحل والقدم', 'Ankle and foot'], ['السمانة، وتر أخيل، العضلة الظنبوبية', 'Calf, Achilles tendon, tibialis anterior']],
+    hard: ['في أسفل السكوات وعند الدفع في الجري.', 'At the bottom of a squat and the push-off in running.'],
+    body: [
+      [['المدى', 'Range'], ['ثني ظهري (القدم لفوق) حوالي ٢٠° وثني أخمصي (الصوابع لتحت) حوالي ٥٠°.', 'Dorsiflexion (toes up) about 20° and plantarflexion (toes down) about 50°.']],
+      [['ليه مهم', 'Why it matters'], ['لو الثني الظهري قليل، الكعب بيطلع أو الركبة بتنهار لجوه أو الضهر بيتقوس عشان تنزل. شد السمانة وعمل ثني للركبة قدام بيحسّن.', 'With limited dorsiflexion the heels lift, knees cave or the back rounds to reach depth. Calf stretching and knee-over-toe drills help.']]
+    ],
+    cues: [['اضغط الأرض بالكعب والصوابع', 'Press the floor with heel and toes']],
+    ex: ['ex_standing_calf_raise_machine', 'wg_heel_elevated_goblet_squat'] },
+  { id: 'j_elbow', g: 'joints', fig: 'j_elbow', joints: ['elbow'],
+    t: ['الكوع والرسغ', 'Elbow and wrist'], s: ['مفصلة بحركة واحدة، والساعد بيلف (كب وبسط الكف).', 'A one-plane hinge, and the forearm rotates (palm up and down).'],
+    work: [['الكوع والساعد', 'Elbow and forearm'], ['البايسبس، البراكياليس، الترايسبس، عضلات الساعد', 'Biceps, brachialis, triceps, forearm muscles']],
+    hard: ['في الكيرل عند ٩٠° وفي ضغط الترايسبس في أول النزول.', 'In curls at 90° and at the start of the lowering phase in triceps work.'],
+    body: [
+      [['المدى', 'Range'], ['ثني حوالي ١٤٥° وفرد كامل. الساعد بيلف الكف لفوق أو لتحت حوالي ٨٠-٩٠° لكل اتجاه.', 'Flexion about 145° and full extension. The forearm turns the palm up or down about 80-90° each way.']],
+      [['إزاي تحميه', 'Protecting it'], ['متقفلش الكوع بقوة تحت وزن، وزوّد الحمل بالتدريج لأن أوتار الكوع بتحب التدرج.', 'Do not slam the elbow into lockout under load and increase load gradually; elbow tendons like gradual progression.']]
+    ],
+    cues: [['الكوع ثابت جنب الجسم في الكيرل', 'Keep the elbow still at your side in curls']],
+    ex: ['ex_triceps_pushdown', 'ex_skull_crusher', 'wg_wrist_curl'] }
+);
