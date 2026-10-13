@@ -214,3 +214,42 @@ a.ap-chip { text-decoration: none; display: inline-block; }
 .ap-player.ap-xl .ap-pcue { font-size: clamp(16px, 4vw, 26px); max-width: 90vw; }
 .ap-player.ap-xl .ap-pimg { display: none; }
 .ap-ptop { flex-wrap: wrap; gap: 6px; } #ap-pcount { white-space: nowrap; }
+
+/* ===== stage 18: ميكانيكا الحركة + البحث + المكتبة الطبية ===== */
+.bio-romrow { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; font-size: 12px; color: #9aa7b3; }
+.bio-romrow b { flex: none; direction: ltr; font-weight: 600; color: #3ef0b0; }
+.bio-rom { flex: 1; height: 8px; border-radius: 6px; background: rgba(255,255,255,.08); overflow: hidden; display: block; }
+.bio-rom i { display: block; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #1d5a8a, #3ef0b0); }
+.bio-ul { margin: 6px 0; padding: 0 18px; font-size: 14px; line-height: 1.8; color: #dfe6ec; }
+.bio-ul li { margin: 4px 0; }
+.bio-mu { cursor: pointer; font-family: inherit; }
+.bio-hot { font-style: normal; font-size: 11px; color: #3ef0b0; border: 1px solid rgba(62,240,176,.4); border-radius: 10px; padding: 1px 7px; margin-inline-start: 6px; }
+.ap-det { border: 1px solid rgba(255,255,255,.1); border-radius: 16px; background: rgba(255,255,255,.04); margin: 8px 0; padding: 0 14px; }
+.ap-det > summary { cursor: pointer; padding: 13px 0; font-weight: 600; font-size: 15px; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ap-det > summary::-webkit-details-marker { display: none; }
+.ap-det > summary::after { content: '+'; color: #3ef0b0; font-size: 20px; flex: none; }
+.ap-det[open] > summary::after { content: '\2212'; }
+.ap-det[open] { padding-bottom: 10px; }
+.ap-det .ap-actions { margin-top: 8px; }
+#bio-q, #bio-exq, #gs-q { width: 100%; box-sizing: border-box; margin: 0 0 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color: inherit; font: inherit; font-size: 15px; }
+.ap-ex small.mu { display: block; font-size: 12px; color: #8b97a3; }
+
+/* المكتبة الطبية: كل مقال ينفتح ويقفل */
+#med-library-list > li.ml-art { display: block; list-style: none; padding: 0; margin: 0 0 10px; border-radius: 16px; border: 1px solid rgba(128,138,150,.28); overflow: hidden; }
+#med-library-list > li.ml-art.status-draft, #med-library-list > li.ml-art.status-review { border-style: dashed; }
+.ml-det { display: block; width: 100%; }
+.ml-sum { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 14px; cursor: pointer; list-style: none; }
+.ml-sum::-webkit-details-marker { display: none; }
+.ml-sum::after { content: '+'; flex: none; font-size: 20px; line-height: 1; opacity: .7; }
+.ml-det[open] > .ml-sum::after { content: '\2212'; }
+.ml-sumtxt { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; text-align: start; }
+.ml-title { font-size: 15px; font-weight: 600; line-height: 1.5; }
+.ml-badge { flex: none; font-size: 11px; border-radius: 10px; padding: 2px 8px; border: 1px solid rgba(128,138,150,.4); }
+.ml-st-approved { color: #1f9d6b; border-color: rgba(31,157,107,.5); }
+.ml-body { padding: 0 14px 14px; }
+.ml-text { margin: 4px 0 10px; font-size: 14px; line-height: 1.9; white-space: pre-line; text-align: start; }
+.ml-foot { font-size: 11px; opacity: .6; margin: 6px 0; text-align: start; }
+.ml-body .med-thumb-btn { display: block; margin: 0 0 10px; }
+.ml-body .med-thumb-btn img { max-width: 100%; max-height: 220px; border-radius: 12px; }
+.exs-bio-btn { margin: 8px 0; }
+.ap-card.ap-tmb, button.ap-card { width: 100%; box-sizing: border-box; text-align: start; }

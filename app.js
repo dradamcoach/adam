@@ -2095,6 +2095,8 @@ const TEXT = {
     seeding_library: 'جاري التحميل...',
     seed_done: 'اتحمل {n} مقال جديد كمسودة — محتاجين مراجعة متخصص قبل ما يشوفهم العميل',
     seed_author_label: 'محتوى مبدئي — محتاج مراجعة متخصص',
+    biomech_btn: 'ميكانيكا الحركة',
+    ml_starter_badge: 'محتوى مبدئي',
     class_members: 'أعضاء الكلاس',
     add_member: '+ إضافة عضو',
     class_exercises_title: 'تمارين الكلاس',
@@ -4794,6 +4796,8 @@ const TEXT = {
     seeding_library: 'Loading...',
     seed_done: '{n} new draft articles loaded — need a specialist’s review before clients can see them',
     seed_author_label: 'Starter content — needs specialist review',
+    biomech_btn: 'Movement mechanics',
+    ml_starter_badge: 'Starter',
     class_members: 'Class members',
     add_member: '+ Add member',
     class_exercises_title: 'Class exercises',
@@ -26159,17 +26163,34 @@ function renderMedLibraryList() {
 
   items.forEach(function (item) {
     const card = document.createElement('li');
-    card.className = 'med-article-card status-' + (item.status || 'draft');
+    card.className = 'med-article-card ml-art status-' + (item.status || 'draft');
+    card.setAttribute('data-id', item.id || '');
 
-    const tag = document.createElement('div');
+    const det = document.createElement('details');
+    det.className = 'ml-det';
+    const sum = document.createElement('summary');
+    sum.className = 'ml-sum';
+    const sumText = document.createElement('span');
+    sumText.className = 'ml-sumtxt';
+    const tag = document.createElement('span');
     tag.className = 'sport-tag';
     tag.textContent = medCategoryName(item.category);
-    card.appendChild(tag);
-
-    const title = document.createElement('div');
-    title.className = 'client-name';
+    const title = document.createElement('b');
+    title.className = 'ml-title';
     title.textContent = medItemTitle(item);
-    card.appendChild(title);
+    sumText.appendChild(tag);
+    sumText.appendChild(title);
+    sum.appendChild(sumText);
+    if (author) {
+      const badge = document.createElement('span');
+      badge.className = 'ml-badge ml-st-' + (item.status || 'draft');
+      badge.textContent = medStatusName(item.status || 'draft');
+      sum.appendChild(badge);
+    }
+    det.appendChild(sum);
+
+    const inner = document.createElement('div');
+    inner.className = 'ml-body';
 
     if (item.image) {
       const thumbBtn = document.createElement('button');
@@ -26185,18 +26206,20 @@ function renderMedLibraryList() {
         addShot(item.image, '');
         lightbox.classList.remove('hidden');
       });
-      card.appendChild(thumbBtn);
+      inner.appendChild(thumbBtn);
     }
 
     const body = document.createElement('p');
-    body.className = 'ex-meta';
+    body.className = 'ml-text';
     body.textContent = medItemBody(item);
-    card.appendChild(body);
+    inner.appendChild(body);
 
-    const author2 = document.createElement('div');
-    author2.className = 'client-email';
+    const foot = document.createElement('div');
+    foot.className = 'ml-foot';
+    const author2 = document.createElement('span');
     setSpecialtyLabel(author2, providerSpecialties(item), item.authorName || '');
-    card.appendChild(author2);
+    foot.appendChild(author2);
+    inner.appendChild(foot);
 
     if (author) {
       const statusRow = document.createElement('div');
@@ -26207,16 +26230,20 @@ function renderMedLibraryList() {
         try {
           await setDoc(doc(db, 'medLibrary', item.id), { status: statusSelect.value }, { merge: true });
           item.status = statusSelect.value;
-          card.className = 'med-article-card status-' + statusSelect.value;
+          card.className = 'med-article-card ml-art status-' + statusSelect.value;
+          const bd = sum.querySelector('.ml-badge');
+          if (bd) { bd.className = 'ml-badge ml-st-' + statusSelect.value; bd.textContent = medStatusName(statusSelect.value); }
           setStatusMessage(medLibraryMessage, t('status_update_saved'), 'success');
         } catch (error) {
           medLibraryMessage.textContent = t('problem') + error.message;
         }
       });
       statusRow.appendChild(statusSelect);
-      card.appendChild(statusRow);
+      inner.appendChild(statusRow);
     }
 
+    det.appendChild(inner);
+    card.appendChild(det);
     medLibraryList.appendChild(card);
   });
 }
@@ -26261,6 +26288,35 @@ document.getElementById('ph-open-medlib-btn').addEventListener('click', function
   showScreen(medLibraryScreen);
   loadMedLibrary();
 });
+
+window.__adamOpenAnatomy = function () { libraryContext = 'coach'; openAnatomyViewer(); };
+window.__adamMed = {
+  items: async function () {
+    if (!medLibraryItems.length) {
+      try {
+        const snap = isMedicalAuthor()
+          ? await getDocs(collection(db, 'medLibrary'))
+          : await getDocs(query(collection(db, 'medLibrary'), where('status', '==', 'approved')));
+        medLibraryItems = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
+      } catch (err) { return []; }
+    }
+    return medLibraryItems.filter(function (it) { return isMedicalAuthor() || it.status === 'approved'; }).map(function (it) {
+      return { id: it.id, title: medItemTitle(it), cat: medCategoryName(it.category), body: medItemBody(it) };
+    });
+  },
+  open: async function (id) {
+    medLibraryReturnScreen = (typeof currentProviderEmail !== 'undefined' && currentProviderEmail) ? providerHomeScreen : clientScreen;
+    showScreen(medLibraryScreen);
+    await loadMedLibrary();
+    if (!id) return;
+    const li = medLibraryList.querySelector('li[data-id="' + String(id).replace(/"/g, '') + '"]');
+    if (li) {
+      const d = li.querySelector('details');
+      if (d) d.open = true;
+      li.scrollIntoView({ block: 'start' });
+    }
+  }
+};
 
 document.getElementById('med-library-back-btn').addEventListener('click', function () {
   showScreen(medLibraryReturnScreen || clientScreen);
@@ -30758,6 +30814,12 @@ async function openExerciseSheet(ex) {
    libLevelText(ex.level), ex.equipment ? equipName(ex.equipment) : '', t('type_' + ex._type)]
     .filter(Boolean).forEach(function (txt) { chips.appendChild(el('span', 'exs-chip', txt)); });
   body.appendChild(chips);
+  if (typeof window.adamBio === 'function') {
+    const bioBtn = el('button', 'link exs-bio-btn', t('biomech_btn'));
+    bioBtn.type = 'button';
+    bioBtn.addEventListener('click', function () { const id = ex.id; closeExSheet(); window.adamBio(id); });
+    body.appendChild(bioBtn);
+  }
 
   // الاحتياطات أول حاجة — قبل الخطوات، زي أجهزة العلاج الطبيعي
   const cautions = ex.cautions || [];

@@ -50,6 +50,8 @@
     recipes: '<path d="M5 11h14a0 0 0 0 1 0 0v1a7 7 0 0 1-14 0zM8 8c0-1.5 1-1.5 1-3M12 8c0-1.5 1-1.5 1-3M16 8c0-1.5 1-1.5 1-3"/>',
     stretch: '<circle cx="12" cy="5" r="2"/><path d="M12 8v6M12 10l-6-3M12 10l6-3M12 14l-4 6M12 14l4 6"/>',
     circ: '<path d="M17 4l3 3-3 3M20 7H9a4 4 0 0 0-4 4M7 20l-3-3 3-3M4 17h11a4 4 0 0 0 4-4"/>',
+    biomech: '<circle cx="7" cy="6" r="2"/><circle cx="12" cy="13" r="2"/><circle cx="17" cy="20" r="2"/><path d="M8.4 7.6l2.2 3.8M13.4 14.6l2.2 3.8M17 4c2 1 3 3 3 5"/>',
+    search: '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
     fast: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/>',
     nutri: '<path d="M12 21c-5 0-8-4-8-9 3 0 5 1 6 2 0-4 1-7 2-9 1 2 2 5 2 9 1-1 3-2 6-2 0 5-3 9-8 9z"/>',
     rehab: '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path d="M9 12h2l1-2 1.5 4 1-2H17"/>'
@@ -57,7 +59,7 @@
   var TILES = [
     ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
     ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['tpl', 'القوالب', 'Templates'],
-    ['mytrain', 'برنامج التمرين', 'My program'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab'], ['chal', 'تحديات', 'Challenges'], ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['circ', 'محطات وجروب', 'Circuits and group'], ['fast', 'صيام', 'Fasting'], ['nutri', 'برامج تغذية', 'Nutrition'], ['music', 'أغاني', 'Music'], ['me', 'ملفي', 'My profile'], ['watch', 'الساعة', 'Watch'], ['daysum', 'ملخص يومي', 'Daily summary']
+    ['mytrain', 'برنامج التمرين', 'My program'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab'], ['chal', 'تحديات', 'Challenges'], ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['circ', 'محطات وجروب', 'Circuits and group'], ['biomech', 'ميكانيكا الحركة', 'Movement mechanics'], ['fast', 'صيام', 'Fasting'], ['nutri', 'برامج تغذية', 'Nutrition'], ['music', 'أغاني', 'Music'], ['me', 'ملفي', 'My profile'], ['watch', 'الساعة', 'Watch'], ['daysum', 'ملخص يومي', 'Daily summary']
   ];
   function openPlus(tab) {
     import('./adam-plus.js').then(function (m) { m.open(tab); }).catch(function (e) { if (window.console) console.error(e); });
@@ -210,6 +212,10 @@
     r.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
     r.innerHTML = '';
 
+    var sp = el('button', 'av2-search'); sp.type = 'button'; sp.setAttribute('data-adam-open', 'search');
+    sp.setAttribute('aria-label', l === 'en' ? 'Search' : 'بحث');
+    sp.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">' + ICONS.search + '</svg><span>' + (l === 'en' ? 'Search exercises, food, joints, articles...' : 'ابحث في كل حاجة: تمرين، أكلة، مفصل، مقال...') + '</span>';
+    r.appendChild(sp);
     r.appendChild(ringsCard());
 
     var secT = el('div', 'av2-sec'); secT.appendChild(el('b', '', tx.plus)); var pl = el('span', '', 'ADAM+'); pl.setAttribute('dir', 'ltr'); secT.appendChild(pl); r.appendChild(secT);
@@ -227,6 +233,9 @@
     a.innerHTML = anatSvg() + '<div><b>' + tx.t + '<span class="av2-chip">3D</span></b><p>' + tx.p + '</p><em>' + tx.open + '</em></div>';
     a.addEventListener('click', function () { var o = document.getElementById('lib-anatomy-btn'); if (o) o.click(); });
     r.appendChild(a);
+    var bm = el('button', 'av2-anat av2-bio'); bm.type = 'button'; bm.setAttribute('data-adam-open', 'biomech');
+    bm.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="46" height="46">' + ICONS.biomech + '</svg><div><b>' + (l === 'en' ? 'Movement mechanics' : 'ميكانيكا الحركة') + '</b><p>' + (l === 'en' ? 'Joints, muscles and the mechanics of every exercise, running and injuries.' : 'المفاصل والعضلات وميكانيكا كل تمرين والجري والإصابات.') + '</p><em>' + (l === 'en' ? 'Open mechanics →' : 'افتح الميكانيكا ←') + '</em></div>';
+    r.appendChild(bm);
 
     trainersBlock(r, l, tx);
 
@@ -306,6 +315,13 @@
       setTimeout(function () { openPlus('circ'); }, 1800);
     }
   } catch (e) { /* تجاهل */ }
+  document.addEventListener('click', function (e) {
+    var t = e.target && e.target.closest ? e.target.closest('[data-adam-open]') : null;
+    if (!t) return;
+    e.preventDefault();
+    openPlus(t.getAttribute('data-adam-open'));
+  });
+  window.adamBio = function (id) { import('./adam-plus.js').then(function (m) { m.openBio(id); }).catch(function (e) { if (window.console) console.error(e); }); };
   window.__adamHome = { render: render, setList: function (l) { state.list = l; state.loaded = true; render(); } };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();

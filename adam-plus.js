@@ -11,6 +11,7 @@ import { FOOD_LIBRARY, FOOD_SERVINGS } from './food-library.js';
 import { NUTRITION_PROGRAMS } from './nutrition-programs.js';
 import { CHALLENGES, WEEKLY, TENMIN, STRETCH_MOVES, STRETCH_ROUTINES, RECIPES } from './adam-plus-data2.js';
 import { foodArt } from './food-art.js';
+import { MU, JOINTS, PATTERNS, GAIT, POSTURE, INJURIES, PRINCIPLES, PLANES, derive, bioIndex, norm, jointById, patternById } from './adam-biomech.js';
 
 const FB_APP = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 const FB_FS = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
@@ -100,7 +101,8 @@ async function loadState() {
 const TABS = [
   ['me', 'ملفي', 'My profile'], ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
   ['chal', 'تحديات', 'Challenges'], ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['food', 'أكلي', 'My food'],
-  ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['circ', 'محطات وجروب', 'Circuits and group'], ['music', 'أغاني', 'Music'], ['rehab', 'تأهيلي', 'My rehab']
+  ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['circ', 'محطات وجروب', 'Circuits and group'], ['music', 'أغاني', 'Music'], ['rehab', 'تأهيلي', 'My rehab'],
+  ['biomech', 'ميكانيكا', 'Mechanics'], ['search', 'بحث', 'Search']
 ];
 let curTab = 'journeys';
 let sub = {};
@@ -116,7 +118,7 @@ function ensureOverlay() {
 }
 function toast(msg) { const t = $('#ap-toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('on'), 2600); }
 
-export async function open(tab) {
+export async function open(tab, arg) {
   const ov = ensureOverlay();
   ov.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
   ov.classList.remove('hidden');
@@ -125,6 +127,7 @@ export async function open(tab) {
   await Promise.all([loadState(), loadExtras()]);
   if (tab === 'watch') { go('me'); setTimeout(() => { const e = $('#ap-php'); if (e) e.scrollIntoView({ block: 'center' }); }, 120); return; }
   if (tab === 'guest') { go(plus.profile || plus.skipProfile ? 'journeys' : 'me'); if (curTab === 'me') { sub.first = true; draw(); } return; }
+  if (tab === 'bio') tab = 'biomech';
   if (tab === 'circ' || tab === 'circuit' || tab === 'group') { go('circ'); const g = takeGrp(); if (g) { sub.join = g; draw(); } return; }
   const al = { tpl: ['lib', 'lt', 'tpl'], libex: ['lib', 'lt', 'ex'], progs: ['lib', 'lt', 'prog'], fast: ['food', 'ftab', 'fast'], nutri: ['plan', 'planTab', 'nutri'], challenges: ['chal'], chal: ['chal'], weekly: ['chal'] }[tab];
   if (al) { go(al[0]); if (al[1]) { sub[al[1]] = al[2]; draw(); } } else go(tab || curTab);
@@ -149,7 +152,7 @@ function go(tab) {
 }
 function draw() {
   const body = $('#ap-body'); if (!body) return;
-  const fn = { music: viewMusic, me: viewMe, journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, circ: viewCirc, rehab: viewRehab }[curTab];
+  const fn = { music: viewMusic, me: viewMe, journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, circ: viewCirc, rehab: viewRehab, biomech: viewBio, search: viewSearch }[curTab];
   try { if (PL && !PL.min) viewPlayer(body); else { fn(body); if (curTab !== 'me') { const gb = guestBanner(); if (gb && body.firstElementChild) { body.insertAdjacentHTML('afterbegin', gb); wireGuest(body); } } } } catch (e) { body.innerHTML = '<div class="ap-empty">' + esc(L('حصلت مشكلة في عرض الشاشة', 'Something went wrong showing this screen')) + '</div>'; if (window.console) console.error(e); }
   body.scrollTop = 0;
 }
@@ -1533,6 +1536,241 @@ function viewJoin(body) {
     const st = stateOf(); if (st === 'run') go2(Math.max(0, (Date.now() - J.t0) / 1000)); else { armed = true; toast(L('تمام، هيبدأ لوحده عند الميعاد. سيب الشاشة مفتوحة.', 'Ready. It will start by itself; keep the screen on.')); }
   });
   $('#jn-solo', body).addEventListener('click', () => { clearInterval(viewJoin._t); const steps = J.steps; sub.join = null; startSteps(steps, J.title, { big: true }); });
+}
+
+/* ================================================================ ميكانيكا الحركة */
+const MU2LIB = { quads: 'quadriceps', vastus: 'quadriceps', rect_fem: 'quadriceps', hams: 'hamstrings', glute_max: 'glutes', glute_med: 'glutes', glute_min: 'glutes', gastroc: 'calves', soleus: 'calves', biceps_b: 'biceps', brachialis: 'biceps', brachiorad: 'forearms', triceps_b: 'triceps', pec_maj: 'chest', pec_clav: 'chest', pec_min: 'chest', lat: 'lats', teres_maj: 'lats', delt_a: 'shoulders', delt_l: 'shoulders', delt_p: 'shoulders', supra: 'shoulders', infra: 'shoulders', teres_min: 'shoulders', subscap: 'shoulders', trap_u: 'traps', trap_m: 'middle back', trap_l: 'middle back', rhomb: 'middle back', erector: 'lower back', multifidus: 'lower back', quad_lumb: 'lower back', rect_ab: 'abdominals', obliques: 'abdominals', tva: 'abdominals', adductors: 'adductors', wrist_flex: 'forearms', wrist_ext: 'forearms', neck_ext: 'neck', scm: 'neck' };
+const muN = (k) => (MU[k] ? L(MU[k][0], MU[k][1]) : k);
+const muChip = (k) => '<button type="button" class="ap-chip bio-mu" data-bmu="' + k + '">' + esc(muN(k)) + '</button>';
+const planeL = (p) => (PLANES[p] ? L(PLANES[p][0], PLANES[p][1]) : '');
+const romBar = (deg) => '<span class="bio-rom"><i style="width:' + Math.max(4, Math.min(100, deg / 180 * 100)) + '%"></i></span><b>0 – ' + deg + '°</b>';
+const bio = () => { sub.bio = sub.bio || { tab: 'joints', h: [] }; return sub.bio; };
+const bioL = (a) => esc(L(a[0], a[1]));
+const bioUl = (arr) => '<ul class="bio-ul">' + arr.map((a) => '<li>' + bioL(a) + '</li>').join('') + '</ul>';
+const bioSec = (ar, en) => '<div class="ap-sec"><b>' + esc(L(ar, en)) + '</b></div>';
+function openAnat() { close(); try { if (window.__adamOpenAnatomy) window.__adamOpenAnatomy(); } catch (e) { /* تجاهل */ } }
+function bioNav(d) { const b = bio(); if (b.d) b.h.push(b.d); b.d = d; b.q = ''; draw(); }
+function bioBack() { const b = bio(); b.d = b.h.pop() || null; draw(); }
+function bioGo(it) {
+  const b = bio();
+  if (it.t === 'joint') bioNav({ k: 'joint', id: it.id });
+  else if (it.t === 'move') bioNav({ k: 'joint', id: it.id, mv: it.mv });
+  else if (it.t === 'muscle') bioNav({ k: 'muscle', id: it.id });
+  else if (it.t === 'pattern') bioNav({ k: 'pattern', id: it.id });
+  else { b.tab = { gait: 'gait', posture: 'posture', injury: 'injury', principle: 'principles' }[it.t] || 'joints'; b.open = it.id; b.q = ''; draw(); }
+}
+function bioWire(body) {
+  $$('[data-bj]', body).forEach((x) => x.addEventListener('click', () => bioNav({ k: 'joint', id: x.dataset.bj })));
+  $$('[data-bp]', body).forEach((x) => x.addEventListener('click', () => bioNav({ k: 'pattern', id: x.dataset.bp })));
+  $$('[data-bmu]', body).forEach((x) => x.addEventListener('click', () => bioNav({ k: 'muscle', id: x.dataset.bmu })));
+  $$('[data-bex]', body).forEach((x) => x.addEventListener('click', () => bioNav({ k: 'ex', id: x.dataset.bex })));
+  $$('[data-bopenex]', body).forEach((x) => x.addEventListener('click', () => openExercise(x.dataset.bopenex)));
+  $$('[data-banat]', body).forEach((x) => x.addEventListener('click', openAnat));
+  $$('[data-binj]', body).forEach((x) => x.addEventListener('click', () => { const a = x.dataset.binj; go('rehab'); sub.rd = { area: a, level: 3, since: 'week', flags: {} }; draw(); }));
+  $$('[data-bask]', body).forEach((x) => x.addEventListener('click', () => consult(x.dataset.bask)));
+  const bk = $('#ap-back', body); if (bk) bk.addEventListener('click', bioBack);
+}
+const exRow = (e) => '<button type="button" class="ap-ex" data-bex="' + esc(e.id) + '"><span>' + esc(nameOf(e.name)) + '</span><em>' + esc(tl(CATL, e.category)) + '</em></button>';
+function viewBio(body) {
+  const b = bio();
+  if (b.d) return bioDetail(body, b.d);
+  const tabs = [['joints', L('المفاصل', 'Joints')], ['patterns', L('أنماط الحركة', 'Movement patterns')], ['ex', L('ميكانيكا تمرين', 'An exercise')], ['gait', L('جري ومشي وسبرنت', 'Run, walk, sprint')], ['posture', L('الوضعية', 'Posture')], ['injury', L('آليات الإصابة', 'Injury mechanisms')], ['principles', L('مبادئ', 'Principles')]];
+  let h = '<div class="ap-note" style="margin-top:0">' + esc(L('إزاي الجسم بيتحرك: المفاصل والعضلات وميكانيكا كل تمرين، ومربوطة بالمكتبة والتشريح والتأهيل.', 'How the body moves: joints, muscles and the mechanics of each exercise, linked to the library, anatomy and rehab.')) + '</div>';
+  h += '<input type="text" id="bio-q" maxlength="60" placeholder="' + esc(L('ابحث: ركبة، سكوات، هامسترينج، سبرنت...', 'Search: knee, squat, hamstrings, sprint...')) + '" value="' + esc(b.q || '') + '">';
+  const q = norm(b.q || '').trim();
+  if (q.length >= 2) {
+    const toks = q.split(/\s+/); const idx = bioIndex();
+    const hits = idx.filter((it) => { const hay = norm(it.ar + ' ' + it.en + ' ' + it.kw); return toks.every((t) => hay.indexOf(t) !== -1); }).slice(0, 40);
+    const TL = { joint: L('مفصل', 'Joint'), move: L('حركة', 'Movement'), muscle: L('عضلة', 'Muscle'), pattern: L('نمط', 'Pattern'), gait: L('جري ومشي', 'Gait'), posture: L('وضعية', 'Posture'), injury: L('إصابة', 'Injury'), principle: L('مبدأ', 'Principle') };
+    h += hits.length ? '<div class="ap-card">' + hits.map((it, i) => '<button type="button" class="ap-ex" data-bres="' + i + '"><span>' + esc(L(it.ar, it.en)) + '</span><em>' + esc(TL[it.t]) + '</em></button>').join('') + '</div>' : '<div class="ap-note">' + esc(L('مفيش نتيجة', 'No results')) + '</div>';
+    body.innerHTML = h;
+    $$('[data-bres]', body).forEach((x) => x.addEventListener('click', () => bioGo(hits[Number(x.dataset.bres)])));
+  } else {
+    h += chips(tabs, b.tab, 'btab');
+    if (b.tab === 'joints') h += JOINTS.map((j) => '<button type="button" class="ap-card ap-tmb" data-bj="' + j.id + '"><b>' + esc(L(j.ar, j.en)) + '</b><small class="mu">' + esc(j.mv.length + L(' حركات', ' movements') + ' · ' + j.mv.slice(0, 3).map((m) => L(m[1], m[2])).join('، ')) + '</small></button>').join('');
+    else if (b.tab === 'patterns') h += PATTERNS.map((p) => '<button type="button" class="ap-card ap-tmb" data-bp="' + p.id + '"><b>' + esc(L(p.ar, p.en)) + '</b><small class="mu">' + esc(p.joints.map((j) => nameOf({ ar: jointById(j[0]) ? jointById(j[0]).ar : j[0], en: jointById(j[0]) ? jointById(j[0]).en : j[0] })).join(' · ')) + '</small></button>').join('');
+    else if (b.tab === 'ex') h += '<input type="text" id="bio-exq" maxlength="60" placeholder="' + esc(L('اكتب اسم تمرين: سكوات، بنش، ديدلفت...', 'Type an exercise: squat, bench, deadlift...')) + '"><div id="bio-exres"></div>';
+    else if (b.tab === 'gait') h += GAIT.map((g) => '<details class="ap-det"' + (b.open === g.id || (!b.open && g.hot) ? ' open' : '') + '><summary>' + esc(L(g.ar, g.en)) + (g.hot ? ' <em class="bio-hot">' + esc(L('للجري والـ400م', 'for running and 400 m')) + '</em>' : '') + '</summary>' + bioUl(g.body) + '</details>').join('');
+    else if (b.tab === 'posture') h += POSTURE.map((p) => '<details class="ap-det"' + (b.open === p.id ? ' open' : '') + '><summary>' + esc(L(p.ar, p.en)) + '</summary><p class="ap-p">' + bioL(p.desc) + '</p>' + (p.tight.length ? '<small class="mu">' + esc(L('مشدودة غالبًا:', 'Often tight:')) + '</small><div class="ap-chips">' + p.tight.map(muChip).join('') + '</div>' : '') + (p.weak.length ? '<small class="mu">' + esc(L('ضعيفة غالبًا:', 'Often weak:')) + '</small><div class="ap-chips">' + p.weak.map(muChip).join('') + '</div>' : '') + bioUl(p.fix) + '<div class="ap-actions"><button type="button" class="ap-btn small ghost" data-bask="' + esc(L(p.ar, p.en)) + '">' + esc(L('اسأل أخصائي', 'Ask a specialist')) + '</button></div></details>').join('');
+    else if (b.tab === 'injury') h += INJURIES.map((x) => '<details class="ap-det"' + (b.open === x.id ? ' open' : '') + '><summary>' + esc(L(x.ar, x.en)) + '</summary><small class="mu">' + esc(L('إزاي بتحصل', 'Mechanism')) + '</small><p class="ap-p">' + bioL(x.mech) + '</p><small class="mu">' + esc(L('عوامل الخطر', 'Risk factors')) + '</small><p class="ap-p">' + bioL(x.risk) + '</p><small class="mu">' + esc(L('الوقاية', 'Prevention')) + '</small><p class="ap-p">' + bioL(x.prevent) + '</p><div class="ap-actions"><button type="button" class="ap-btn small" data-binj="' + x.area + '">' + esc(L('افتح التأهيل', 'Open rehab')) + '</button></div></details>').join('');
+    else if (b.tab === 'principles') h += PRINCIPLES.map((x) => '<details class="ap-det"' + (b.open === x.id ? ' open' : '') + '><summary>' + esc(L(x.ar, x.en)) + '</summary>' + bioUl(x.body) + '</details>').join('');
+    h += '<div class="ap-actions"><button type="button" class="ap-btn ghost" data-banat="1">' + esc(L('شوف في التشريح 3D', 'See it in 3D anatomy')) + '</button></div>';
+    h += '<div class="ap-note">' + esc(L('محتوى تعليمي عام ومحتاج مراجعة متخصص قبل الاعتماد النهائي. القيم المرجعية لشخص سليم والأفراد بيختلفوا. لو عندك وجع أو إصابة اسأل أخصائي.', 'General educational content, pending specialist review. Reference values are for a healthy person and vary between individuals. If you have pain or an injury, ask a specialist.')) + '</div>';
+    body.innerHTML = h;
+    $$('[data-btab]', body).forEach((x) => x.addEventListener('click', () => { b.tab = x.dataset.btab; b.open = ''; draw(); }));
+    if (b.tab === 'ex') bioExSearch(body);
+  }
+  const qi = $('#bio-q', body);
+  if (qi) qi.addEventListener('input', (e) => { b.q = e.target.value; const pos = e.target.selectionStart; draw(); const n = $('#bio-q'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (x) { /* تجاهل */ } } });
+  bioWire(body);
+}
+function bioExSearch(body) {
+  const q = $('#bio-exq', body), res = $('#bio-exres', body);
+  const paint = () => {
+    const k = norm(q.value).trim(); const pool = libEx || exAll;
+    const list = k ? pool.filter((e) => norm((e.name && e.name.ar || '') + ' ' + (e.name && e.name.en || '')).indexOf(k) !== -1).slice(0, 30) : pool.filter((e) => e.category === 'strength').slice(0, 14);
+    res.innerHTML = '<div class="ap-card">' + (list.map(exRow).join('') || '<div class="ap-note">' + esc(L('مفيش نتيجة', 'No results')) + '</div>') + '</div>';
+    $$('[data-bex]', res).forEach((x) => x.addEventListener('click', () => bioNav({ k: 'ex', id: x.dataset.bex })));
+  };
+  q.addEventListener('input', paint); paint(); loadLib().then(paint);
+}
+function bioExList(fn, title) {
+  return '<div class="ap-sec"><b>' + esc(title) + '</b></div><div class="ap-card" id="bio-exl"><div class="ap-load">' + esc(L('جاري التحميل...', 'Loading...')) + '</div></div>';
+}
+function bioExFill(body, fn) {
+  loadLib().then(() => {
+    const el = $('#bio-exl', body); if (!el) return;
+    const list = (libEx || []).filter(fn).slice(0, 40);
+    el.innerHTML = list.map(exRow).join('') || '<div class="ap-note">' + esc(L('مفيش تمارين مرتبطة', 'No linked exercises')) + '</div>';
+    $$('[data-bex]', el).forEach((x) => x.addEventListener('click', () => bioNav({ k: 'ex', id: x.dataset.bex })));
+  });
+}
+function bioDetail(body, d) {
+  const back = '<button type="button" class="ap-back" id="ap-back">' + esc(L('رجوع', 'Back')) + '</button>';
+  const anat = '<div class="ap-actions"><button type="button" class="ap-btn ghost" data-banat="1">' + esc(L('شوف في التشريح 3D', 'See it in 3D anatomy')) + '</button></div>';
+  if (d.k === 'joint') {
+    const j = jointById(d.id); if (!j) { bio().d = null; return viewBio(body); }
+    let h = back + '<div class="ap-sec"><b>' + esc(L(j.ar, j.en)) + '</b></div><div class="ap-card"><p class="ap-p">' + bioL(j.type) + '</p></div>';
+    h += bioSec('الحركات والمدى والعضلات', 'Movements, range and muscles');
+    j.mv.forEach((m) => { h += '<div class="ap-card' + (d.mv === m[0] ? ' ap-win' : '') + '"><div class="ap-row"><b>' + esc(L(m[1], m[2])) + '</b><span class="mu">' + esc(planeL(m[4])) + '</span></div><div class="bio-romrow">' + romBar(m[3]) + '</div><div class="ap-chips">' + m[5].map(muChip).join('') + '</div></div>'; });
+    h += bioSec('نقاط مهمة', 'Key points') + '<div class="ap-card">' + bioUl(j.key) + '</div>';
+    h += bioSec('أخطاء شائعة في التمرين', 'Common training errors') + '<div class="ap-card">' + bioUl(j.err) + '</div>';
+    h += bioSec('إصابات شائعة', 'Common injuries') + j.inj.map((i) => '<div class="ap-card"><b>' + esc(L(i[0], i[1])) + '</b><p class="ap-p">' + esc(L(i[2], i[3])) + '</p></div>').join('');
+    h += '<div class="ap-actions"><button type="button" class="ap-btn" data-binj="' + j.area + '">' + esc(L('افتح التأهيل', 'Open rehab')) + '</button><button type="button" class="ap-btn ghost" data-bask="' + esc(L(j.ar, j.en)) + '">' + esc(L('اسأل أخصائي', 'Ask a specialist')) + '</button></div>' + anat;
+    h += bioExList(null, L('تمارين بتشغّل المفصل ده', 'Exercises that load this joint'));
+    body.innerHTML = h; bioWire(body);
+    bioExFill(body, (e) => derive(e).joints.some((x) => x[0] === j.id));
+    return;
+  }
+  if (d.k === 'muscle') {
+    const m = MU[d.id]; if (!m) { bio().d = null; return viewBio(body); }
+    let h = back + '<div class="ap-sec"><b>' + esc(L(m[0], m[1])) + '</b></div>';
+    const moves = []; JOINTS.forEach((j) => j.mv.forEach((mv) => { if (mv[5].indexOf(d.id) !== -1) moves.push([j, mv]); }));
+    h += bioSec('بتحرّك إيه', 'What it moves') + '<div class="ap-card">' + (moves.map((x) => '<button type="button" class="ap-ex" data-bj="' + x[0].id + '"><span>' + esc(L(x[1][1], x[1][2])) + '</span><em>' + esc(L(x[0].ar, x[0].en)) + '</em></button>').join('') || '<div class="ap-note">' + esc(L('عضلة ثبات', 'Stabiliser')) + '</div>') + '</div>';
+    h += anat;
+    if (MU2LIB[d.id]) { h += bioExList(null, L('تمارين لها', 'Exercises for it')); }
+    body.innerHTML = h; bioWire(body);
+    if (MU2LIB[d.id]) bioExFill(body, (e) => (e.primaryMuscles || []).indexOf(MU2LIB[d.id]) !== -1);
+    return;
+  }
+  if (d.k === 'pattern') {
+    const p = patternById(d.id); if (!p) { bio().d = null; return viewBio(body); }
+    let h = back + '<div class="ap-sec"><b>' + esc(L(p.ar, p.en)) + '</b></div>';
+    h += bioSec('المفاصل المشاركة', 'Joints involved') + '<div class="ap-card">' + p.joints.map((x) => { const j = jointById(x[0]); return '<button type="button" class="ap-ex" data-bj="' + x[0] + '"><span>' + esc(j ? L(j.ar, j.en) : x[0]) + '</span><em>' + esc(L(x[1], x[2])) + '</em></button>'; }).join('') + '</div>';
+    h += bioSec('العضلات الأساسية', 'Prime movers') + '<div class="ap-chips">' + p.mus.map(muChip).join('') + '</div>';
+    h += bioSec('فين الحمل أكبر؟', 'Where is the load highest?') + '<div class="ap-card"><p class="ap-p">' + bioL(p.load) + '</p></div>';
+    h += bioSec('نقاط تكنيك', 'Technique cues') + '<div class="ap-card">' + bioUl(p.cues) + '</div>';
+    h += bioSec('أخطاء شائعة', 'Common errors') + '<div class="ap-card">' + bioUl(p.err) + '</div>' + anat;
+    h += bioExList(null, L('تمارين من النمط ده', 'Exercises in this pattern'));
+    body.innerHTML = h; bioWire(body);
+    bioExFill(body, (e) => { const v = derive(e); return v.pat && v.pat.id === p.id; });
+    return;
+  }
+  if (d.k === 'ex') {
+    loadingBox(body);
+    loadLib().then(() => {
+      if (!(bio().d && bio().d.k === 'ex' && bio().d.id === d.id)) return;
+      const e = (libEx || []).find((x) => x.id === d.id) || EX_BY_ID[d.id];
+      if (!e) { body.innerHTML = back + '<div class="ap-empty">' + esc(L('التمرين مش موجود', 'Exercise not found')) + '</div>'; bioWire(body); return; }
+      const v = derive(e); const p = v.pat;
+      let h = back + '<div class="ap-sec"><b>' + esc(nameOf(e.name)) + '</b><span>' + esc(tl(CATL, e.category) + (e.equipment ? ' · ' + tl(EQL, e.equipment) : '')) + '</span></div>';
+      if (p) h += '<div class="ap-card"><div class="ap-row"><b>' + esc(L('النمط: ', 'Pattern: ') + L(p.ar, p.en)) + '</b><button type="button" class="ap-btn small ghost" data-bp="' + p.id + '">' + esc(L('التفاصيل', 'Details')) + '</button></div></div>';
+      h += bioSec('المفاصل المشاركة', 'Joints involved');
+      h += v.joints.length ? '<div class="ap-card">' + v.joints.map((x) => { const j = jointById(x[0]); return '<button type="button" class="ap-ex" data-bj="' + x[0] + '"><span>' + esc(j ? L(j.ar, j.en) : x[0]) + '</span><em>' + esc(L(x[1], x[2])) + '</em></button>'; }).join('') + '</div>' : '<div class="ap-note">' + esc(L('مفيش تحليل تلقائي للتمرين ده.', 'No automatic analysis for this exercise.')) + '</div>';
+      const mk = []; (e.primaryMuscles || []).forEach((m) => { const ar = MUS[m]; if (ar) mk.push('<span class="ap-chip bio-mu">' + esc(L(ar[0], ar[1])) + '</span>'); });
+      if (p) p.mus.forEach((k) => { mk.push(muChip(k)); });
+      if (mk.length) h += bioSec('العضلات', 'Muscles') + '<div class="ap-chips">' + mk.join('') + '</div>';
+      if (p) {
+        h += bioSec('فين الحمل أكبر؟', 'Where is the load highest?') + '<div class="ap-card"><p class="ap-p">' + bioL(p.load) + '</p></div>';
+        h += bioSec('نقاط تكنيك', 'Technique cues') + '<div class="ap-card">' + bioUl(p.cues) + '</div>';
+        h += bioSec('أخطاء شائعة', 'Common errors') + '<div class="ap-card">' + bioUl(p.err) + '</div>';
+      }
+      if (v.equip) h += '<div class="ap-card"><b>' + esc(L('عن الأداة', 'About the equipment')) + '</b><p class="ap-p">' + bioL(v.equip) + '</p></div>';
+      h += '<div class="ap-actions"><button type="button" class="ap-btn" data-bopenex="' + esc(e.id) + '">' + esc(L('افتح التمرين', 'Open the exercise')) + '</button><button type="button" class="ap-btn ghost" data-banat="1">' + esc(L('التشريح 3D', '3D anatomy')) + '</button></div>';
+      h += '<div class="ap-note">' + esc(L('التحليل بيتولّد تلقائي من اسم التمرين وعضلاته، وممكن يختلف في بعض الأداءات.', 'This analysis is generated automatically from the exercise name and muscles and may differ for some variations.')) + '</div>';
+      body.innerHTML = h; bioWire(body);
+    });
+    return;
+  }
+  bio().d = null; viewBio(body);
+}
+export async function openBio(exId) {
+  await open('biomech');
+  if (exId) { const b = bio(); b.h = []; b.d = { k: 'ex', id: exId }; draw(); }
+}
+
+/* ================================================================ بحث شامل */
+const GS_SEC = [
+  ['journeys', 'الرحلات', 'Journeys', 'رحلة هدف خطة journey plan'], ['events', 'الطلعات', 'Events', 'طلعة فعالية ماراثون سباق event race'], ['today', 'سؤال اليوم', 'Daily check-in', 'جاهزية نوم checkin readiness'],
+  ['chal', 'التحديات', 'Challenges', 'تحدي 30 يوم challenge'], ['plan', 'خطتي (تمرين وتغذية)', 'My plan', 'جدول تمرين برنامج plan workout'], ['lib', 'المكتبة (تمارين وقوالب وأكل)', 'Library', 'تمارين مكتبة قوالب library exercises templates'],
+  ['food', 'أكلي', 'My food', 'اكل سعرات تسجيل food calories log'], ['recipes', 'الوصفات', 'Recipes', 'وصفات اكل صحي recipe'], ['stretch', 'الإطالة', 'Stretch', 'اطاله مرونه stretching flexibility'],
+  ['circ', 'محطات وجروب', 'Circuits and group', 'محطات كروس فيت تاباتا tabata emom amrap circuit group class'], ['music', 'الأغاني', 'Music', 'موسيقى اغاني music playlist spotify'],
+  ['rehab', 'تأهيلي', 'My rehab', 'تاهيل الم وجع اصابه rehab pain injury'], ['biomech', 'ميكانيكا الحركة', 'Movement mechanics', 'بيوميكانيكس بيوميكانيك biomechanics مفاصل حركة'], ['me', 'ملفي وبياناتي', 'My profile', 'بيانات وزن طول ساعه بلوتوث صوت profile watch bluetooth'],
+  ['anat', 'التشريح ثلاثي الأبعاد', '3D anatomy', 'عضلات عظام اربطه تشريح anatomy muscles bones'], ['medlib', 'المكتبة الطبية', 'Medical library', 'مقالات طبيه صحه medical articles'],
+  ['fast', 'الصيام المتقطع', 'Fasting', 'صيام fasting intermittent'], ['nutri', 'برامج التغذية', 'Nutrition programs', 'تغذيه دايت nutrition diet'], ['tpl', 'قوالب التمرين', 'Workout templates', 'قوالب تمرين templates'],
+  ['daysum', 'الملخص اليومي', 'Daily summary', 'ملخص يومي summary'], ['consult', 'استشارة متخصص', 'Ask a specialist', 'دكتور مدرب استشاره متخصص consult doctor coach']
+];
+let gsMed = null;
+function gsSection(k) {
+  if (k === 'anat') { openAnat(); return; }
+  if (k === 'medlib') { close(); try { if (window.__adamMed) window.__adamMed.open(''); } catch (e) { /* تجاهل */ } return; }
+  if (k === 'consult') { consult(''); return; }
+  if (k === 'daysum') { close(); try { if (window.adamDaySummary) window.adamDaySummary(); } catch (e) { /* تجاهل */ } return; }
+  if (['fast', 'nutri', 'tpl'].indexOf(k) !== -1) { open(k); return; }
+  go(k);
+}
+function gsBuild() {
+  const g = [];
+  const add = (grp, ar, en, kw, act, subt) => g.push({ g: grp, ar: ar, en: en, kw: kw || '', act: act, sub: subt || '' });
+  GS_SEC.forEach((s) => add('sec', s[1], s[2], s[3], () => gsSection(s[0])));
+  bioIndex().forEach((it) => add('bio', it.ar, it.en, it.kw, () => { go('biomech'); bioGo(it); }));
+  JOURNEYS.forEach((j) => add('jou', pick(j.title), L(j.title.ar, j.title.en), pick(j.sub) + ' ' + j.title.ar + ' ' + j.title.en, () => { go('journeys'); sub.openJ = j.id; draw(); }, pick(j.sub)));
+  CHALLENGES.forEach((c) => add('cha', c.ar, c.en, pick(c.sub), () => { go('chal'); sub.openC = c.id; draw(); }, pick(c.sub)));
+  RECIPES.forEach((r) => add('rec', nameOf(r), nameOf(r), '', () => { go('recipes'); sub.openRc = r.id; sub.srv = 0; draw(); }));
+  STRETCH_ROUTINES.forEach((r) => add('str', r.ar, r.en, pick(r.sub), () => { go('stretch'); sub.openR = r.id; draw(); }, pick(r.sub)));
+  SPORTS.forEach((s) => add('spo', nameOf(s), nameOf(s), (s.ar || '') + ' ' + (s.en || ''), () => { go('journeys'); sub.facet = 'sport'; sub.val = s.id; draw(); }));
+  INJURY_AREAS.forEach((a) => add('inj', 'تأهيل ' + a[1], 'Rehab: ' + a[2], a[1] + ' ' + a[2] + ' وجع الم pain', () => { go('rehab'); sub.rd = { area: a[0], level: 3, since: 'week', flags: {} }; draw(); }));
+  foodsAll.forEach((f) => add('foo', nameOf(f), nameOf(f), (f.ar || '') + ' ' + (f.en || ''), () => { go('lib'); sub.lt = 'food'; sub.q = nameOf(f); draw(); }, f.c + L(' سعر · بروتين ', ' kcal · protein ') + f.p));
+  return g;
+}
+const GS_NAMES = { sec: ['أقسام التطبيق', 'App sections'], ex: ['تمارين', 'Exercises'], bio: ['ميكانيكا الحركة', 'Movement mechanics'], foo: ['أكل', 'Foods'], rec: ['وصفات', 'Recipes'], jou: ['رحلات', 'Journeys'], cha: ['تحديات', 'Challenges'], str: ['إطالة', 'Stretching'], spo: ['رياضات', 'Sports'], inj: ['تأهيل وإصابات', 'Rehab and injuries'], med: ['المكتبة الطبية', 'Medical library'] };
+const GS_ORDER = ['sec', 'ex', 'bio', 'foo', 'rec', 'jou', 'cha', 'str', 'spo', 'inj', 'med'];
+let gsIdx = null;
+function viewSearch(body) {
+  if (!gsIdx) gsIdx = gsBuild();
+  const st = sub.gs = sub.gs || { q: '', all: {} };
+  body.innerHTML = '<input type="text" id="gs-q" maxlength="60" autocomplete="off" placeholder="' + esc(L('ابحث في كل ADAM: تمرين، أكلة، مفصل، رحلة...', 'Search all of ADAM: exercise, food, joint, journey...')) + '" value="' + esc(st.q) + '"><div id="gs-res"></div>';
+  const inp = $('#gs-q', body), res = $('#gs-res', body);
+  let exList = [];
+  const paint = () => {
+    const q = norm(st.q).trim();
+    if (q.length < 2) { res.innerHTML = '<div class="ap-note">' + esc(L('اكتب حرفين على الأقل. هتلاقي التمارين والأكل والوصفات والرحلات والتحديات والمفاصل والإصابات والمقالات الطبية وأقسام التطبيق.', 'Type at least two letters. You will find exercises, foods, recipes, journeys, challenges, joints, injuries, medical articles and app sections.')) + '</div>'; return; }
+    const toks = q.split(/\s+/);
+    const match = (hay) => { const h = norm(hay); return toks.every((t) => h.indexOf(t) !== -1) ? h.indexOf(toks[0]) : -1; };
+    const groups = {};
+    gsIdx.forEach((it) => { const s = match(it.ar + ' ' + it.en + ' ' + it.kw); if (s >= 0) (groups[it.g] = groups[it.g] || []).push({ s: s, it: it }); });
+    const exs = (libEx || []).map((e) => { const s = match((e.name && e.name.ar || '') + ' ' + (e.name && e.name.en || '') + ' ' + (e.primaryMuscles || []).map((m) => tl(MUS, m)).join(' ') + ' ' + (e.equipment ? tl(EQL, e.equipment) : '')); return s >= 0 ? { s: s, it: { g: 'ex', ar: nameOf(e.name), en: nameOf(e.name), sub: tl(CATL, e.category), act: () => openExercise(e.id), id: e.id } } : null; }).filter(Boolean);
+    if (exs.length) groups.ex = exs;
+    (gsMed || []).forEach((a) => { const s = match(a.title + ' ' + (a.cat || '') + ' ' + (a.body || '').slice(0, 400)); if (s >= 0) (groups.med = groups.med || []).push({ s: s, it: { g: 'med', ar: a.title, en: a.title, sub: a.cat || '', act: () => { close(); try { window.__adamMed.open(a.id); } catch (e) { /* تجاهل */ } } } }); });
+    let h = '', n = 0; exList = [];
+    GS_ORDER.forEach((k) => {
+      const arr = groups[k]; if (!arr || !arr.length) return;
+      arr.sort((a, b) => a.s - b.s);
+      const lim = st.all[k] ? 60 : 5; const shown = arr.slice(0, lim);
+      h += '<div class="ap-sec"><b>' + esc(L(GS_NAMES[k][0], GS_NAMES[k][1])) + '</b><span>' + arr.length + '</span></div><div class="ap-card">';
+      shown.forEach((x) => { exList.push(x.it); h += '<button type="button" class="ap-ex" data-gs="' + (exList.length - 1) + '"><span>' + esc(L(x.it.ar, x.it.en)) + (x.it.sub ? '<small class="mu">' + esc(x.it.sub) + '</small>' : '') + '</span><em>›</em></button>'; n++; });
+      if (arr.length > lim) h += '<button type="button" class="ap-btn small ghost" data-gsall="' + k + '">' + esc(L('عرض الكل (' + arr.length + ')', 'Show all (' + arr.length + ')')) + '</button>';
+      h += '</div>';
+    });
+    res.innerHTML = n ? h : '<div class="ap-note">' + esc(L('مفيش نتيجة. جرّب كلمة تانية.', 'No results. Try another word.')) + '</div>';
+    $$('[data-gs]', res).forEach((x) => x.addEventListener('click', () => exList[Number(x.dataset.gs)].act()));
+    $$('[data-gsall]', res).forEach((x) => x.addEventListener('click', () => { st.all[x.dataset.gsall] = true; paint(); }));
+  };
+  inp.addEventListener('input', () => { st.q = inp.value; st.all = {}; paint(); });
+  paint();
+  loadLib().then(() => { if ($('#gs-q')) paint(); });
+  if (gsMed === null) { gsMed = []; try { if (window.__adamMed) window.__adamMed.items().then((l) => { gsMed = l || []; if ($('#gs-q')) paint(); }).catch(() => {}); } catch (e) { /* تجاهل */ } }
+  setTimeout(() => { try { inp.focus(); } catch (e) { /* تجاهل */ } }, 80);
 }
 
 /* ================================================================ الوصفات */
