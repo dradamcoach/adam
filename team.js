@@ -554,7 +554,7 @@ function buildItem(kind, LIB, lang, used) {
     const src = LIB.sources[x.src];
     return {
       id: x.id + ':' + kind, kind,
-      title: (kind === 'mistake' ? 'غلطات: ' : 'تمرين: ') + x.n.ar,
+      title: (kind === 'mistake' ? (en ? 'Mistakes: ' : 'غلطات: ') : (en ? 'Exercise: ' : 'تمرين: ')) + (en ? (x.n.en || x.n.ar) : x.n.ar),
       image: 'media/' + x.m + '.svg',
       credit: src ? (en ? 'Illustration & exercise notes: ' + src.name + ' — ' + src.license : 'الرسم وخطوات التمرين: ' + src.name + ' — ' + src.license) : '',
       facts: {
@@ -568,7 +568,7 @@ function buildItem(kind, LIB, lang, used) {
     if (!pool.length) return null;
     const f = pickRandom(pool);
     return {
-      id: 'food:' + f.id, kind, title: 'أكل: ' + f.ar, image: '', credit: '',
+      id: 'food:' + f.id, kind, title: (en ? 'Food: ' + (f.en || f.ar) : 'أكل: ' + f.ar), image: '', credit: '',
       facts: { name: en ? f.en : f.ar, per100g: { kcal: f.c, protein_g: f.p, carbs_g: f.cb, fat_g: f.f } }
     };
   }
@@ -577,7 +577,7 @@ function buildItem(kind, LIB, lang, used) {
     if (!pool.length) return null;
     const x = pickRandom(pool);
     return {
-      id: 'sup:' + x.id, kind, title: 'مكمل: ' + x.ar, image: '', credit: '',
+      id: 'sup:' + x.id, kind, title: (en ? 'Supplement: ' + (x.en || x.ar) : 'مكمل: ' + x.ar), image: '', credit: '',
       facts: {
         name: en ? x.en : x.ar, evidence: tx(LIB.grades[x.grade], lang),
         use: tx(x.use, lang), dose: tx(x.dose, lang), when: tx(x.when, lang), caution: tx(x.care, lang)

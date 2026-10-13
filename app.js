@@ -639,6 +639,14 @@ const TEXT = {
     exs_cues: 'نصايح الأداء',
     exs_mistakes: 'أخطاء شائعة',
     exs_alternatives: 'بدائل',
+    exs_biomech: 'البيوميكانيك',
+    exs_bio_action: 'المفاصل والحركة',
+    exs_bio_resist: 'المقاومة',
+    exs_bio_hard: 'أصعب نقطة',
+    exs_bio_long: 'بيحمّل وهي مشدودة',
+    exs_bio_short: 'بيحمّل وهي مقبوضة',
+    exs_bio_open_move: 'افتح صفحة الحركة',
+    exs_bio_open_muscle: 'العضلة: {m}',
     exs_primary: 'العضلات الأساسية',
     exs_secondary: 'مساعدة',
     exs_caution_client: 'انتبه — العميل عنده: {list}. راجع الاحتياطات قبل ما تضيفه.',
@@ -3321,6 +3329,14 @@ const TEXT = {
     exs_cues: 'Coaching cues',
     exs_mistakes: 'Common mistakes',
     exs_alternatives: 'Alternatives',
+    exs_biomech: 'Biomechanics',
+    exs_bio_action: 'Joints and movement',
+    exs_bio_resist: 'Resistance',
+    exs_bio_hard: 'Hardest point',
+    exs_bio_long: 'Loads it while stretched',
+    exs_bio_short: 'Loads it while shortened',
+    exs_bio_open_move: 'Open the movement page',
+    exs_bio_open_muscle: 'Muscle: {m}',
     exs_primary: 'Primary muscles',
     exs_secondary: 'Secondary',
     exs_caution_client: 'Careful — this client has: {list}. Check the precautions before adding it.',
@@ -30614,11 +30630,56 @@ function libLevelText(level) {
   return level ? t('level_' + level) : '';
 }
 
+/* بيوميكانيك التمرين (library/biomech-exercise.js) — بيتحمّل أول مرة يتفتح فيها شيت تمرين */
+let bioExPromise = null;
+function loadBioEx() {
+  if (!bioExPromise) bioExPromise = import('./library/biomech-exercise.js').catch(function () { bioExPromise = null; return null; });
+  return bioExPromise;
+}
+function renderExBiomech(body, ex, mod) {
+  let b = null;
+  try { b = mod && mod.exerciseBiomech ? mod.exerciseBiomech(ex) : null; } catch (e) { b = null; }
+  if (!b) return;
+  const P = function (pair) { return pair ? (lang === 'en' ? pair[1] : pair[0]) : ''; };
+  const box = el('div', 'exs-bio');
+  box.appendChild(el('h4', 'exs-h', t('exs_biomech')));
+  const chips = el('div', 'exs-chips');
+  [P(b.patternName), b.chain && mod.CHAIN_NAMES ? P(mod.CHAIN_NAMES[b.chain]) : '', P(b.plane)].filter(Boolean)
+    .forEach(function (txt) { chips.appendChild(el('span', 'exs-chip', txt)); });
+  box.appendChild(chips);
+  function line(key, text) {
+    if (!text) return;
+    const p = el('p', 'exs-line');
+    p.appendChild(el('strong', '', t(key) + ': '));
+    p.appendChild(document.createTextNode(text));
+    box.appendChild(p);
+  }
+  line('exs_bio_action', P(b.action));
+  line('exs_bio_resist', P(b.resist));
+  line('exs_bio_hard', P(b.hard));
+  (b.loads || []).forEach(function (l) { line(l.how === 'long' ? 'exs_bio_long' : 'exs_bio_short', P(l.t)); });
+  const row = el('div', 'exs-bio-actions');
+  if (b.topic) {
+    const mv = el('button', 'exs-alt', t('exs_bio_open_move'));
+    mv.type = 'button';
+    mv.addEventListener('click', function () { closeExSheet(); openBiomechViewer(b.topic); });
+    row.appendChild(mv);
+  }
+  if (b.muscle && b.muscleName) {
+    const mu = el('button', 'exs-alt', fill('exs_bio_open_muscle', { m: P(b.muscleName) }));
+    mu.type = 'button';
+    mu.addEventListener('click', function () { closeExSheet(); openBiomechViewer('m-' + b.muscle); });
+    row.appendChild(mu);
+  }
+  if (row.childNodes.length) box.appendChild(row);
+  body.appendChild(box);
+}
+
 async function openExerciseSheet(ex) {
   prepLibEntry(ex);
   const body = openExSheetShell();
   body.appendChild(el('p', 'hint-text', t('exs_loading')));
-  await ensureExerciseDetails();
+  const bioMod = (await Promise.all([ensureExerciseDetails(), loadBioEx()]))[1];
   const det = libDetailsOf(ex);
   body.innerHTML = '';
   body.setAttribute('data-id', ex.id);
@@ -30679,6 +30740,7 @@ async function openExerciseSheet(ex) {
   section('exs_cues', det.cues);
   section('exs_mistakes', det.mistakes);
   section('anatomy_injury_benefit', det.benefit);
+  renderExBiomech(body, ex, bioMod);
 
   const alts = libAlternatives(ex);
   if (alts.length) {

@@ -1438,3 +1438,8 @@ button.hub-card:hover { background: rgba(255, 255, 255, 0.08); }
   border: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
 }
 .feedback-link:hover { text-decoration: none; filter: brightness(1.08); }
+
+/* كارت البيوميكانيك في شيت التمرين */
+.exs-bio { margin-top: 14px; padding: 12px 14px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--line)); background: color-mix(in srgb, var(--brand) 6%, transparent); }
+.exs-bio .exs-h { margin-top: 0; }
+.exs-bio-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
