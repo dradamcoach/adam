@@ -196,3 +196,21 @@ body.ap-lock { overflow: hidden; }
 .apd-chip { padding: 10px 16px; border-radius: 20px; border: 1px solid rgba(62,240,176,.45); background: rgba(14,19,23,.94); color: #3ef0b0; font: inherit; font-size: 13px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
 .ap-pmus-on { color: #3ef0b0; }
 a.ap-chip { text-decoration: none; display: inline-block; }
+
+/* ---------- سوبر سيت / محطات / جروب ---------- */
+.ap-ssl { border-inline-start: 3px solid #3ef0b0; padding-inline-start: 8px; }
+.ap-ssh { font-size: 12px; font-weight: 700; color: #3ef0b0; margin: 10px 0 2px; }
+.ap-lnk { display: block; margin-top: 4px; padding: 3px 10px; border-radius: 12px; border: 1px dashed rgba(255,255,255,.25); background: transparent; color: #aab5bf; font: inherit; font-size: 11.5px; cursor: pointer; }
+.ap-lnk.on { border-style: solid; border-color: #3ef0b0; color: #3ef0b0; }
+.ap-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ap-tmb { text-align: start; cursor: pointer; font: inherit; color: inherit; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.ap-form textarea { width: 100%; box-sizing: border-box; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; color: inherit; font: inherit; padding: 10px; }
+.ap-bigcd { font-size: 54px; font-weight: 200; margin: 8px 0; letter-spacing: 1px; }
+.ap-player.ap-xl { gap: 14px; }
+.ap-player.ap-xl .ap-pring { width: min(82vw, 52vh); height: min(82vw, 52vh); }
+.ap-player.ap-xl .ap-pring b { font-size: clamp(64px, 24vw, 190px); }
+.ap-player.ap-xl .ap-pname { font-size: clamp(30px, 8vw, 54px); font-weight: 700; }
+.ap-player.ap-xl .ap-plabel { font-size: clamp(16px, 4vw, 26px); }
+.ap-player.ap-xl .ap-pcue { font-size: clamp(16px, 4vw, 26px); max-width: 90vw; }
+.ap-player.ap-xl .ap-pimg { display: none; }
+.ap-ptop { flex-wrap: wrap; gap: 6px; } #ap-pcount { white-space: nowrap; }
