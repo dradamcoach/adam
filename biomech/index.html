@@ -157,6 +157,7 @@ a.mark { text-decoration: none; }
 .figcap { margin: 8px 4px 2px; font-size: 13px; color: var(--muted); }
 .linkb { border: 0; background: none; color: var(--accent); font-weight: 700; cursor: pointer; padding: 0; }
 .exs button[data-open] { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 4px 10px; font-size: 13.5px; cursor: pointer; color: var(--ink); }
+.cnt { font-family: var(--body); font-size: 13px; color: var(--muted); font-weight: 600; }
 </style>
 
 </head>
@@ -201,6 +202,8 @@ window.startBiomech = function (BIOMECH, MUS, MG, EXN) {
     bias: ['تركّز عليها إزاي', 'How to target it'], exL: ['تمارين بتحمّلها وهي مشدودة', 'Exercises that load it while stretched'], exS: ['تمارين بتحمّلها وهي مقبوضة', 'Exercises that load it while shortened'],
     related: ['الحركة المرتبطة', 'Related movement'], keyMus: ['العضلات الأساسية في الحركة دي', 'Key muscles in this movement'],
     crosses: ['بتعدّي على', 'Crosses'],
+    allEx: ['كل تمارين المكتبة من النمط ده', 'Every library exercise with this pattern'], loading: ['بيحمّل…', 'Loading…'],
+    showAll: ['اعرض الكل', 'Show all'], anyEq: ['أي أداة', 'Any equipment'], count: ['تمرين', 'exercises'],
     foot: ['الرسومات أصلية لـ ADAM. المحتوى تعليمي ومش بديل عن تقييم أخصائي.', 'Illustrations are original to ADAM. Content is educational and does not replace a specialist assessment.']
   };
   var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/></svg>';
@@ -282,6 +285,7 @@ window.startBiomech = function (BIOMECH, MUS, MG, EXN) {
     if (t.tweaks) h += '<section class="sec"><h3>' + esc(T(UI.tweaks)) + '</h3><div class="tw">' + t.tweaks.map(function (w) { return '<div><span class="j">' + esc(T(JN[w[0]])) + '</span><span>' + esc(T(w[1])) + '</span></div>'; }).join('') + '</div></section>';
     var km = MUS.filter(function (m) { return m.topic === t.id; });
     if (km.length) h += '<section class="sec"><h3>' + esc(T(UI.keyMus)) + '</h3><div class="exs">' + km.map(function (m) { return '<button type="button" data-open="m-' + m.id + '">' + esc(T(m.t)) + '</button>'; }).join('') + '</div></section>';
+    if (t.g === 'moves') h += '<section class="sec" id="allex"><h3>' + esc(T(UI.allEx)) + '</h3><p class="exhint">' + esc(T(UI.loading)) + '</p></section>';
     if (t.ex && t.ex.length) h += '<section class="sec"><h3>' + esc(T(UI.exs)) + '</h3>' + (inApp ? '<p class="exhint">' + esc(T(UI.exHint)) + '</p>' : '') + '<div class="exs">' + exChips(t.ex) + '</div></section>';
     h += '<div class="nav2">' + (i > 0 ? '<button type="button" data-open="' + same[i - 1].id + '">' + esc(T(UI.prev)) + ': ' + esc(T(same[i - 1].t)) + '</button>' : '<span></span>') +
       (i < same.length - 1 ? '<button type="button" data-open="' + same[i + 1].id + '">' + esc(T(UI.next)) + ': ' + esc(T(same[i + 1].t)) + '</button>' : '') + '</div>';
@@ -290,6 +294,47 @@ window.startBiomech = function (BIOMECH, MUS, MG, EXN) {
     document.getElementById('back').addEventListener('click', function () { state.tab = t.g; location.hash = ''; });
     bindCommon();
     window.scrollTo(0, 0);
+    if (t.g === 'moves') fillAllEx(t);
+  }
+
+  /* كل التمارين من نفس النمط — من مكتبة التمارين نفسها، بتتحمّل بس لما تفتح صفحة حركة */
+  var EQN = { 'body only': ['وزن الجسم', 'Bodyweight'], dumbbell: ['دمبل', 'Dumbbell'], barbell: ['بار', 'Barbell'], bands: ['أستك مقاومة', 'Bands'], machine: ['جهاز', 'Machine'], cable: ['كابل', 'Cable'], kettlebells: ['كيتل بيل', 'Kettlebell'], 'smith machine': ['سميث', 'Smith machine'], 'medicine ball': ['كرة طبية', 'Medicine ball'], 'pullup bar': ['عقلة', 'Pull-up bar'], bench: ['بنش', 'Bench'], box: ['بوكس', 'Box'], 'mini band': ['أستك صغير', 'Mini band'], other: ['أخرى', 'Other'], wall: ['حيطة', 'Wall'], cones: ['أقماع', 'Cones'], ladder: ['سلم رشاقة', 'Agility ladder'], sled: ['سلِد', 'Sled'], rower: ['جهاز تجديف', 'Rower'], bike: ['عجلة', 'Bike'], skierg: ['SkiErg', 'SkiErg'], treadmill: ['مشاية', 'Treadmill'], 'jump rope': ['حبل نط', 'Jump rope'], 'battle rope': ['حبال باتل', 'Battle rope'], sandbag: ['ساند باج', 'Sandbag'], suspension: ['TRX', 'Suspension trainer'], plate: ['طارة', 'Plate'], hurdles: ['حواجز', 'Hurdles'], 'weight vest': ['سترة أوزان', 'Weight vest'], landmine: ['لاند ماين', 'Landmine'], step: ['استيب', 'Step'], bosu: ['بوسو', 'BOSU'], 'balance board': ['لوح اتزان', 'Balance board'], 'e-z curl bar': ['بار متعرج', 'EZ curl bar'], 'exercise ball': ['كرة سويسرية', 'Exercise ball'], 'foam roll': ['فوم رول', 'Foam roller'] };
+  var libPromise = null;
+  function loadLib() {
+    if (!libPromise) libPromise = Promise.all([import('../library/biomech-exercise.js'), import('../library/exercises-index.js'), import('../exercise-library.js'), import('../drills-library.js')]).then(function (r) {
+      var bio = r[0];
+      var rows = (r[1].EXERCISE_INDEX || []).map(function (x) { return { id: x.id, name: x.n, category: x.c, primaryMuscles: x.pm || [], equipment: x.e, pattern: x.p }; });
+      var all = (r[2].EXERCISE_LIBRARY || []).concat(r[3].DRILLS_LIBRARY || [], rows);
+      var by = {}; var seen = {};
+      all.forEach(function (ex) { if (!ex || seen[ex.id]) return; seen[ex.id] = 1; var tp = bio.topicOf(ex); if (tp) (by[tp] = by[tp] || []).push(ex); });
+      return by;
+    }).catch(function () { libPromise = null; return {}; });
+    return libPromise;
+  }
+  function exName(ex) { var n = ex.name; return (n && typeof n === 'object') ? (lang === 'en' ? (n.en || n.ar) : (n.ar || n.en)) : (n || ''); }
+  function fillAllEx(t) {
+    var sec = document.getElementById('allex'); if (!sec) return;
+    var st = { eq: '', all: false };
+    loadLib().then(function (by) {
+      if (!document.getElementById('allex') || (location.hash || '').replace('#', '') !== t.id) return;
+      var list = (by[t.id] || []).slice().sort(function (a, b) { return exName(a).localeCompare(exName(b), lang); });
+      function draw() {
+        var eqs = []; list.forEach(function (ex) { if (ex.equipment && eqs.indexOf(ex.equipment) === -1) eqs.push(ex.equipment); });
+        var f = list.filter(function (ex) { return !st.eq || ex.equipment === st.eq; });
+        var shown = st.all ? f : f.slice(0, 40);
+        var h = '<h3>' + esc(T(UI.allEx)) + ' <span class="cnt">' + f.length + ' ' + esc(T(UI.count)) + '</span></h3>';
+        if (inApp) h += '<p class="exhint">' + esc(T(UI.exHint)) + '</p>';
+        h += '<div class="filters"><button type="button" class="chip" data-eq="" aria-pressed="' + (!st.eq) + '">' + esc(T(UI.anyEq)) + '</button>' + eqs.map(function (e) { return '<button type="button" class="chip" data-eq="' + esc(e) + '" aria-pressed="' + (st.eq === e) + '">' + esc(EQN[e] ? T(EQN[e]) : e) + '</button>'; }).join('') + '</div>';
+        h += '<div class="exs">' + shown.map(function (ex) { return inApp ? '<button type="button" data-ex="' + esc(ex.id) + '">' + esc(exName(ex)) + '</button>' : '<span>' + esc(exName(ex)) + '</span>'; }).join('') + '</div>';
+        if (!st.all && f.length > shown.length) h += '<button type="button" class="chip" id="allex-more" style="margin-top:10px">' + esc(T(UI.showAll)) + ' (' + f.length + ')</button>';
+        sec.innerHTML = h;
+        sec.querySelectorAll('[data-eq]').forEach(function (b) { b.addEventListener('click', function () { st.eq = b.dataset.eq; st.all = false; draw(); }); });
+        var more = document.getElementById('allex-more'); if (more) more.addEventListener('click', function () { st.all = true; draw(); });
+        sec.querySelectorAll('[data-ex]').forEach(function (b) { b.addEventListener('click', function () { try { window.parent.postMessage({ type: 'adam-open-ex', id: b.dataset.ex }, location.origin); } catch (e) { /* تجاهل */ } }); });
+      }
+      if (!list.length) { sec.remove(); return; }
+      draw();
+    });
   }
 
   function musDetail(m) {
