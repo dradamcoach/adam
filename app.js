@@ -275,6 +275,8 @@ const TEXT = {
     pl_save: 'احفظ',
     pl_open: 'شغّل أغاني التمرين',
     ds_title: 'ملخص يومي',
+    ds_btn: 'ملخص اليوم',
+
     ds_train: 'التمرين',
     ds_rest_day: 'يوم راحة',
     ds_sets: '{a} من {b} مجموعة · {c} من {d} تمرين',
@@ -2971,6 +2973,7 @@ const TEXT = {
     pl_save: 'Save',
     pl_open: 'Play workout music',
     ds_title: 'Daily summary',
+    ds_btn: "Today's summary",
     ds_train: 'Training',
     ds_rest_day: 'Rest day',
     ds_sets: '{a} of {b} sets · {c} of {d} exercises',
@@ -14992,7 +14995,7 @@ const DS_SLEEP = {
   en: { sleep: ['Under 5 h', '5 to 6 h', '7 to 8 h', 'Over 8 h'], q: ['Poor', 'Broken', 'Good', 'Deep and restful'] }
 };
 
-async function openDaySummary() {
+function renderDaySummary(ctx) {
   let ov = document.getElementById('day-summary');
   if (!ov) {
     ov = document.createElement('div');
@@ -15007,7 +15010,7 @@ async function openDaySummary() {
   const head = document.createElement('div');
   head.className = 'ds-head';
   const title = document.createElement('b');
-  title.textContent = t('ds_title');
+  title.textContent = t('ds_title') + (ctx.name ? ' — ' + ctx.name : '');
   const close = document.createElement('button');
   close.type = 'button'; close.className = 'ds-close'; close.textContent = t('ds_close');
   close.addEventListener('click', function () { ov.classList.add('hidden'); document.body.classList.remove('focus-open'); });
@@ -15028,42 +15031,14 @@ async function openDaySummary() {
     body.appendChild(c);
   }
 
-  /* التمرين */
-  const wd = clientWeek[sessionDay];
-  let totalSets = 0, doneSets = 0, exTotal = 0, exDone = 0;
-  if (wd && !wd.rest) {
-    daySessions(wd).forEach(function (ses, si) {
-      const pre = sessionKeyPrefix(si);
-      SECTION_KEYS.forEach(function (k) {
-        ((ses.sections || {})[k] || []).forEach(function (ex, i) {
-          const n = exerciseSetCount(ex) || 1;
-          const d = setsDoneFor(setsDoneToday, pre + k + ':' + i, n);
-          totalSets += n; doneSets += Math.min(d, n); exTotal += 1; if (d >= n) exDone += 1;
-        });
-      });
-    });
-  }
   card(t('ds_train'),
-    (wd && wd.rest) ? t('ds_rest_day') : fill('ds_sets', { a: doneSets, b: totalSets, c: exDone, d: exTotal }),
-    '');
-
-  /* الأكل والمية */
-  const planDay = clientNutrition && clientNutrition.week && clientNutrition.week[todayIndex];
-  const eaten = eatenTotals(planDay);
-  const target = Math.round((clientNutrition && clientNutrition.targets && clientNutrition.targets.kcal) || 0);
+    ctx.rest ? t('ds_rest_day') : fill('ds_sets', { a: ctx.doneSets, b: ctx.totalSets, c: ctx.exDone, d: ctx.exTotal }), '');
   card(t('ds_food'),
-    target ? fill('ds_kcal_of', { a: Math.round(eaten.kcal), b: target }) : fill('ds_kcal_only', { a: Math.round(eaten.kcal) }),
-    fill('ds_protein', { n: Math.round(eaten.protein) }));
-  card(t('ds_water'), fill('ds_cups', { a: logDay().water || 0, b: waterGoal() }), '');
+    ctx.target ? fill('ds_kcal_of', { a: Math.round(ctx.kcal), b: ctx.target }) : fill('ds_kcal_only', { a: Math.round(ctx.kcal) }),
+    fill('ds_protein', { n: Math.round(ctx.protein) }));
+  card(t('ds_water'), fill('ds_cups', { a: ctx.water || 0, b: ctx.goal }), '');
 
-  /* النوم والجاهزية من سؤال اليوم */
-  let chk = null;
-  try {
-    const snap = await getDoc(doc(db, 'checkins', clientEmail));
-    const plus = snap.exists() ? snap.data().plus : null;
-    const key = new Date().toISOString().slice(0, 10);
-    chk = plus && plus.checkins ? (plus.checkins[key] || plus.checkins[todayStamp] || null) : null;
-  } catch (e) { chk = null; }
+  const chk = ctx.chk;
   const L = DS_SLEEP[lang === 'en' ? 'en' : 'ar'];
   if (chk && chk.sleep != null) {
     card(t('ds_sleep'), L.sleep[chk.sleep] || '',
@@ -15072,17 +15047,99 @@ async function openDaySummary() {
     card(t('ds_sleep'), t('ds_sleep_none'), '');
   }
 
-  /* الساعة */
-  const w = clientWatchToday;
+  const w = ctx.watch;
   card(t('ds_watch'),
     w ? fill('ds_watch_val', { a: w.avgHr, m: w.maxHr, k: w.kcal, t: Math.round((w.sec || 0) / 60) }) : t('ds_watch_none'), '');
 
-  const note = document.createElement('p');
-  note.className = 'ds-note';
-  note.textContent = t('ds_note');
-  body.appendChild(note);
+  if (!ctx.name) {
+    const note = document.createElement('p');
+    note.className = 'ds-note';
+    note.textContent = t('ds_note');
+    body.appendChild(note);
+  }
+}
+
+function dsCheckinToday(snapData) {
+  const plus = snapData ? snapData.plus : null;
+  if (!plus || !plus.checkins) return null;
+  return plus.checkins[new Date().toISOString().slice(0, 10)] || plus.checkins[todayStamp] || null;
+}
+
+function dsTrainingCounts(week, dayIndex, setsDone) {
+  const r = { rest: false, totalSets: 0, doneSets: 0, exTotal: 0, exDone: 0 };
+  const wd = week && week[dayIndex];
+  if (!wd) return r;
+  if (wd.rest) { r.rest = true; return r; }
+  daySessions(wd).forEach(function (ses, si) {
+    const pre = sessionKeyPrefix(si);
+    SECTION_KEYS.forEach(function (k) {
+      ((ses.sections || {})[k] || []).forEach(function (ex, i) {
+        const n = exerciseSetCount(ex) || 1;
+        const d = setsDoneFor(setsDone || {}, pre + k + ':' + i, n);
+        r.totalSets += n; r.doneSets += Math.min(d, n); r.exTotal += 1; if (d >= n) r.exDone += 1;
+      });
+    });
+  });
+  return r;
+}
+
+async function openDaySummary() {
+  let chk = null;
+  try {
+    const snap = await getDoc(doc(db, 'checkins', clientEmail));
+    chk = dsCheckinToday(snap.exists() ? snap.data() : null);
+  } catch (e) { chk = null; }
+  const planDay = clientNutrition && clientNutrition.week && clientNutrition.week[todayIndex];
+  const eaten = eatenTotals(planDay);
+  const ctx = Object.assign(dsTrainingCounts(clientWeek, sessionDay, setsDoneToday), {
+    kcal: eaten.kcal, protein: eaten.protein,
+    target: Math.round((clientNutrition && clientNutrition.targets && clientNutrition.targets.kcal) || 0),
+    water: logDay().water || 0, goal: waterGoal(), chk: chk, watch: clientWatchToday
+  });
+  renderDaySummary(ctx);
+}
+
+/* نفس الملخص للمدرب — عن العميل المفتوح قدامه (قراءة بس) */
+async function openCoachDaySummary() {
+  if (!currentClient) return;
+  const email = currentClient;
+  const get = async function (col) {
+    try { const s2 = await getDoc(doc(db, col, email)); return s2.exists() ? s2.data() : null; } catch (e) { return null; }
+  };
+  const res = await Promise.all([get('progress'), get('foodlog'), get('checkins'), get('nutrition')]);
+  const prog = res[0], flog = res[1], chkDoc = res[2], nutDoc = res[3];
+  const sameDay = !!(prog && prog.date === today);
+  const nut = normalizeNutrition(nutDoc);
+  const day = (flog && flog.days && flog.days[todayStamp]) || {};
+  const eatenKeys = Array.isArray(day.eaten) ? day.eaten : [];
+  const planDay = nut.week[todayIndex];
+  let kcal = 0, protein = 0;
+  MEAL_KEYS.forEach(function (key) {
+    (planDay.meals[key] || []).forEach(function (item, index) {
+      if (eatenKeys.indexOf(key + ':' + index) === -1) return;
+      const m = itemMacros(item); kcal += m.kcal; protein += m.protein;
+    });
+  });
+  (Array.isArray(day.extra) ? day.extra : []).forEach(function (item) {
+    const m = itemMacros(item); kcal += m.kcal; protein += m.protein;
+  });
+  const sd = (sameDay && typeof prog.day === 'number') ? prog.day : todayIndex;
+  const ctx = Object.assign(dsTrainingCounts(coachWeek, sd, sameDay ? (prog.setsDone || {}) : {}), {
+    name: currentClientName || email,
+    kcal: kcal, protein: protein,
+    target: Math.round((nut.targets && nut.targets.kcal) || 0),
+    water: Number(day.water) || 0,
+    goal: Number(nut.targets && nut.targets.water) || WATER_GOAL_DEFAULT,
+    chk: dsCheckinToday(chkDoc),
+    watch: (prog && prog.watchToday && prog.watchToday.date === today) ? prog.watchToday : null
+  });
+  renderDaySummary(ctx);
 }
 window.adamDaySummary = openDaySummary;
+{
+  const cb = document.getElementById('open-daysum-coach-btn');
+  if (cb) cb.addEventListener('click', openCoachDaySummary);
+}
 
 
 /* ---------- الساعة / سوار النبض (Web Bluetooth) ---------- */
