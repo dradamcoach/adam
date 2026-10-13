@@ -138,11 +138,12 @@ function go(tab) {
   try { const tb = $('#ap-tabs'), on = $('#ap-tabs button.on'); if (tb && on) { const r1 = tb.getBoundingClientRect(), r2 = on.getBoundingClientRect(); tb.scrollLeft += (r2.left + r2.width / 2) - (r1.left + r1.width / 2); } } catch (e) { /* تجاهل */ }
   draw();
 }
-function draw() {
+function draw(keep) {
   const body = $('#ap-body'); if (!body) return;
+  const keepTop = keep ? body.scrollTop : 0;
   const fn = { journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, rehab: viewRehab }[curTab];
   try { if (sub.player) viewPlayer(body); else fn(body); } catch (e) { body.innerHTML = '<div class="ap-empty">' + esc(L('حصلت مشكلة في عرض الشاشة', 'Something went wrong showing this screen')) + '</div>'; if (window.console) console.error(e); }
-  body.scrollTop = 0;
+  body.scrollTop = keepTop;
 }
 function chips(items, cur, attr) {
   return '<div class="ap-chips">' + items.map((i) => '<button type="button" class="' + (String(i[0]) === String(cur) ? 'on' : '') + '" data-' + attr + '="' + esc(i[0]) + '">' + esc(i[1]) + '</button>').join('') + '</div>';
@@ -414,10 +415,10 @@ function viewToday(body) {
     const cc = plus.checkins[today] || {}; cc[b.dataset.q] = Number(b.dataset.i);
     const sc = readiness(cc); if (sc != null) cc.score = sc; cc.d = today; plus.checkins[today] = cc;
     const keys = Object.keys(plus.checkins).sort(); while (keys.length > 120) delete plus.checkins[keys.shift()];
-    persist(); draw();
+    persist(); draw(true);
   }));
-  $('#ap-ram', body).addEventListener('click', () => { plus.ramadan = !plus.ramadan; persist(); draw(); });
-  $('#ap-trv', body).addEventListener('click', () => { plus.travel = !plus.travel; persist(); draw(); });
+  $('#ap-ram', body).addEventListener('click', () => { plus.ramadan = !plus.ramadan; persist(); draw(true); });
+  $('#ap-trv', body).addEventListener('click', () => { plus.travel = !plus.travel; persist(); draw(true); });
   $('#ap-story', body).addEventListener('click', () => makeStory(body));
 }
 function makeStory(body) {

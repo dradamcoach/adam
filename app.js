@@ -2263,6 +2263,9 @@ const TEXT = {
     adh_open: 'افتح برنامجه',
     water_title: 'المياه',
     water_count: '{a} من {b} أكواب',
+    water_total: 'شربت {a} مل من {b} مل',
+    water_cup_size: 'الكوباية',
+    water_ml: 'مل',
     picker_title: 'ضيف صنف',
     picker_search_ph: 'دوّر على صنف...',
     picker_add: 'ضيفه',
@@ -4960,6 +4963,9 @@ const TEXT = {
     adh_open: 'Open program',
     water_title: 'Water',
     water_count: '{a} of {b} cups',
+    water_total: 'Drank {a} ml of {b} ml',
+    water_cup_size: 'Cup size',
+    water_ml: 'ml',
     picker_title: 'Add food',
     picker_search_ph: 'Search for a food...',
     picker_add: 'Add it',
@@ -16968,6 +16974,8 @@ function renderFuelCard(box, totals, targets, planned) {
 /* foodlog/{email} = { days: { 'YYYY-MM-DD': { eaten:[], extra:[], water:0 } } } */
 let clientFoodLog = {};
 const WATER_GOAL_DEFAULT = 8;
+const WATER_CUP_DEFAULT = 250;
+const WATER_CUP_SIZES = [150, 200, 250, 300, 330, 350, 400, 500, 750];
 const LOG_KEEP_DAYS = 60;
 
 function blankLogDay() {
@@ -17048,6 +17056,29 @@ function waterGoal() {
   return Number(target) || WATER_GOAL_DEFAULT;
 }
 
+/* حجم الكوباية: المسجّل في اليوم، وإلا آخر حجم اختاره العميل، وإلا 250 مل */
+function waterCupMl(log) {
+  const own = Number(log && log.cupMl);
+  if (own > 0) return own;
+  try {
+    const saved = Number(localStorage.getItem('adam_cup_ml'));
+    if (saved > 0) return saved;
+  } catch (error) { /* تجاهل */ }
+  return WATER_CUP_DEFAULT;
+}
+
+(function () {
+  const cupSel = document.getElementById('water-cup-ml');
+  if (!cupSel) return;
+  cupSel.addEventListener('change', function () {
+    const ml = Number(cupSel.value) || WATER_CUP_DEFAULT;
+    logDay().cupMl = ml;
+    try { localStorage.setItem('adam_cup_ml', String(ml)); } catch (error) { /* تجاهل */ }
+    saveFoodLog();
+    renderWaterCard();
+  });
+})();
+
 function renderWaterCard() {
   const card = document.getElementById('cnut-water');
   const beads = document.getElementById('water-beads');
@@ -17064,6 +17095,23 @@ function renderWaterCard() {
 
   count.textContent = fill('water_count', { a: drunk, b: goal });
   count.classList.toggle('all-done', drunk >= goal);
+
+  /* حجم الكوباية بالمل + إجمالي اللي اتشرب النهاردة */
+  const cupMl = waterCupMl(log);
+  const totalEl = document.getElementById('water-total');
+  if (totalEl) totalEl.textContent = fill('water_total', { a: drunk * cupMl, b: goal * cupMl });
+  const cupSel = document.getElementById('water-cup-ml');
+  if (cupSel) {
+    const sizes = WATER_CUP_SIZES.indexOf(cupMl) === -1 ? WATER_CUP_SIZES.concat([cupMl]).sort(function (x, y) { return x - y; }) : WATER_CUP_SIZES;
+    cupSel.innerHTML = '';
+    sizes.forEach(function (ml) {
+      const opt = document.createElement('option');
+      opt.value = String(ml);
+      opt.textContent = ml + ' ' + t('water_ml');
+      cupSel.appendChild(opt);
+    });
+    cupSel.value = String(cupMl);
+  }
 
   renderBeads(beads, goal, drunk, function (next) {
     logDay().water = next;
