@@ -45,8 +45,8 @@ button { font: inherit; color: inherit; }
 .draft { display: flex; gap: 10px; align-items: flex-start; background: var(--surface2); border: 1px dashed var(--line); border-radius: 14px; padding: 10px 14px; font-size: 13.5px; color: var(--muted); }
 .draft b { color: var(--ink); }
 
-.tabs { display: flex; gap: 6px; background: var(--surface2); padding: 5px; border-radius: 99px; width: fit-content; max-width: 100%; margin-top: 18px; }
-.tabs button { border: 0; background: transparent; padding: 7px 16px; border-radius: 99px; cursor: pointer; font-weight: 700; color: var(--muted); }
+.tabs { overflow-x: auto; scrollbar-width: none; display: flex; gap: 6px; background: var(--surface2); padding: 5px; border-radius: 99px; width: fit-content; max-width: 100%; margin-top: 18px; }
+.tabs button { flex: none; white-space: nowrap; border: 0; background: transparent; padding: 7px 16px; border-radius: 99px; cursor: pointer; font-weight: 700; color: var(--muted); }
 .tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
 .gdesc { color: var(--muted); margin: 12px 0 4px; font-size: 14px; }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0 18px; }
@@ -204,6 +204,7 @@ window.startBiomech = function (BIOMECH, MUS, MG, EXN) {
     crosses: ['بتعدّي على', 'Crosses'],
     allEx: ['كل تمارين المكتبة من النمط ده', 'Every library exercise with this pattern'], loading: ['بيحمّل…', 'Loading…'],
     showAll: ['اعرض الكل', 'Show all'], anyEq: ['أي أداة', 'Any equipment'], count: ['تمرين', 'exercises'],
+    inApp: ['الشرح الكامل والتمارين في ميكانيكا الحركة', 'Full explanation and exercises in Movement mechanics'],
     foot: ['الرسومات أصلية لـ ADAM. المحتوى تعليمي ومش بديل عن تقييم أخصائي.', 'Illustrations are original to ADAM. Content is educational and does not replace a specialist assessment.']
   };
   var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/></svg>';
@@ -226,7 +227,7 @@ window.startBiomech = function (BIOMECH, MUS, MG, EXN) {
   }
   function bindCommon() {
     app.querySelectorAll('[data-open]').forEach(function (b) { b.addEventListener('click', function () { location.hash = b.dataset.open; }); });
-    app.querySelectorAll('[data-ex]').forEach(function (b) { b.addEventListener('click', function () { try { window.parent.postMessage({ type: 'adam-open-ex', id: b.dataset.ex }, location.origin); } catch (e) { /* تجاهل */ } }); });
+    app.querySelectorAll('[data-ex]').forEach(function (b) { b.addEventListener('click', function () { try { window.parent.postMessage({ type: 'adam-open-ex', id: b.dataset.ex }, location.origin); } catch (e) { /* تجاهل */ } }); });    app.querySelectorAll('[data-bio]').forEach(function (b) { b.addEventListener('click', function () { var p = b.dataset.bio.split(':'); try { window.parent.postMessage({ type: 'adam-open-bio', kind: p[0], id: p[1] }, location.origin); } catch (e) { /* تجاهل */ } }); });
   }
 
   function list() {
@@ -287,6 +288,8 @@ window.startBiomech = function (BIOMECH, MUS, MG, EXN) {
     if (km.length) h += '<section class="sec"><h3>' + esc(T(UI.keyMus)) + '</h3><div class="exs">' + km.map(function (m) { return '<button type="button" data-open="m-' + m.id + '">' + esc(T(m.t)) + '</button>'; }).join('') + '</div></section>';
     if (t.g === 'moves') h += '<section class="sec" id="allex"><h3>' + esc(T(UI.allEx)) + '</h3><p class="exhint">' + esc(T(UI.loading)) + '</p></section>';
     if (t.ex && t.ex.length) h += '<section class="sec"><h3>' + esc(T(UI.exs)) + '</h3>' + (inApp ? '<p class="exhint">' + esc(T(UI.exHint)) + '</p>' : '') + '<div class="exs">' + exChips(t.ex) + '</div></section>';
+    var BL = { squat: ['pattern', 'squat'], lunge: ['pattern', 'lunge'], hinge: ['pattern', 'hinge'], hpush: ['pattern', 'hpush'], vpush: ['pattern', 'vpush'], hpull: ['pattern', 'hpull'], vpull: ['pattern', 'vpull'], run: ['pattern', 'run'], jump: ['pattern', 'plyo'], throw: ['pattern', 'rotation'], core: ['pattern', 'coreAnti'], j_knee: ['joint', 'knee'], j_hip: ['joint', 'hip'], j_back: ['joint', 'lumbar'], j_shoulder: ['joint', 'shoulder'], j_ankle: ['joint', 'ankle'], j_elbow: ['joint', 'elbow'] };
+    if (inApp && BL[t.id]) h += '<section class="sec"><button type="button" class="chip" data-bio="' + BL[t.id][0] + ':' + BL[t.id][1] + '">' + esc(T(UI.inApp)) + '</button></section>';
     h += '<div class="nav2">' + (i > 0 ? '<button type="button" data-open="' + same[i - 1].id + '">' + esc(T(UI.prev)) + ': ' + esc(T(same[i - 1].t)) + '</button>' : '<span></span>') +
       (i < same.length - 1 ? '<button type="button" data-open="' + same[i + 1].id + '">' + esc(T(UI.next)) + ': ' + esc(T(same[i + 1].t)) + '</button>' : '') + '</div>';
     h += '<p class="foot">' + esc(T(UI.foot)) + '</p>';

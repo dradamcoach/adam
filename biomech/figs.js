@@ -10,7 +10,7 @@ var BIOFIG = (function () {
   function S(a) { return Math.sin(a * R); }
   function C(a) { return Math.cos(a * R); }
   function f(n) { return Math.round(n * 10) / 10; }
-  function L2(lang, ar, en) { return lang === 'en' ? en : ar; }
+  function L2(lang, ar, en) { return lang === 'en' ? en : ar + (/°/.test(ar) ? '\u200F' : ''); }
 
   function line(a, b, cls) { return '<line class="' + cls + '" x1="' + f(a[0]) + '" y1="' + f(a[1]) + '" x2="' + f(b[0]) + '" y2="' + f(b[1]) + '"/>'; }
   function dot(p, r, cls) { return '<circle class="' + cls + '" cx="' + f(p[0]) + '" cy="' + f(p[1]) + '" r="' + r + '"/>'; }
@@ -353,9 +353,123 @@ var BIOFIG = (function () {
       L2(lang, 'القوة والسرعة', 'Force–velocity'));
   };
 
+
+  /* ---------------- منحنيات ---------------- */
+  function axes(x0, x1, y0, top) { return line([x0, y0], [x1, y0], 'bf-axis') + line([x0, y0], [x0, top - 6], 'bf-axis'); }
+  function yLab(lang, ar, en, y0) { return '<text class="bf-t bf-small" transform="translate(22 ' + f((y0 + 28) / 2) + ') rotate(-90)" text-anchor="middle">' + L2(lang, ar, en) + '</text>'; }
+  function pathOf(fn, x0, x1, n) { var d = ''; for (var i = 0; i <= n; i++) { var v = i / n; var p = fn(v); d += (i ? ' L' : 'M') + f(x0 + (x1 - x0) * v) + ' ' + f(p); } return d; }
+
+  F.lt = function (lang) {
+    var x0 = 40, x1 = 230, y0 = 168, top = 36, H = y0 - top;
+    function act(v) { var k = (v - 0.5) / 0.42; return Math.max(0, 1 - k * k); }
+    function pas(v) { return v < 0.58 ? 0 : 0.85 * Math.pow((v - 0.58) / 0.42, 2.2); }
+    return svg(260, 214, axes(x0, x1, y0, top) +
+      '<path class="bf-s3" d="' + pathOf(function (v) { return y0 - H * act(v); }, x0, x1, 40) + '"/>' +
+      '<path class="bf-s1" d="' + pathOf(function (v) { return y0 - H * pas(v); }, x0, x1, 40) + '"/>' +
+      '<path class="bf-curve2" d="' + pathOf(function (v) { return y0 - H * Math.min(1.05, act(v) + pas(v)); }, x0, x1, 40) + '"/>' +
+      dot([x0 + (x1 - x0) * 0.5, y0 - H], 4, 'bf-peak') + text([x0 + (x1 - x0) * 0.5, top - 12], L2(lang, 'أقوى طول', 'Best length'), 'bf-t bf-small') +
+      text([x0 + 40, y0 - 14], L2(lang, 'نشطة', 'Active'), 'bf-t bf-small') + text([x1 - 12, y0 - 32], L2(lang, 'سلبية', 'Passive'), 'bf-t bf-small') +
+      text([x1 - 12, top + 14], L2(lang, 'المجموع', 'Total'), 'bf-t bf-arm-t') +
+      text([(x0 + x1) / 2, y0 + 18], L2(lang, 'قصيرة  ←  طول العضلة  →  طويلة', 'Short  ←  muscle length  →  long'), 'bf-t bf-small') + yLab(lang, 'القوة', 'Force', y0),
+      L2(lang, 'الطول والقوة', 'Length-tension'));
+  };
+
+  F.torque = function (lang) {
+    var x0 = 40, x1 = 230, y0 = 168, top = 36, H = y0 - top;
+    function cap(a) { return Math.exp(-Math.pow((a - 75) / 48, 2)) * 0.95 + 0.05; }
+    function dem(a) { return Math.sin(a * R) * 0.82 + 0.04; }
+    var bestA = 0, bestR = 0; for (var a = 5; a <= 150; a += 5) { var r = dem(a) / cap(a); if (r > bestR) { bestR = r; bestA = a; } }
+    var px = x0 + (x1 - x0) * bestA / 150;
+    return svg(260, 214, axes(x0, x1, y0, top) +
+      '<path class="bf-s3" d="' + pathOf(function (v) { return y0 - H * cap(v * 150); }, x0, x1, 50) + '"/>' +
+      '<path class="bf-curve2" d="' + pathOf(function (v) { return y0 - H * dem(v * 150); }, x0, x1, 50) + '"/>' +
+      line([px, y0], [px, top + 10], 'bf-guide') + dot([px, y0 - H * dem(bestA)], 4, 'bf-peak') +
+      text([px, top], L2(lang, 'نقطة الالتصاق', 'Sticking point'), 'bf-t bf-small') +
+      text([x0 + 26, top + 22], L2(lang, 'قدرة المفصل', 'Joint capacity'), 'bf-t bf-small', 'start') +
+      text([x1 - 6, y0 - 24], L2(lang, 'حمل الدمبل', 'Dumbbell demand'), 'bf-t bf-arm-t', 'end') +
+      text([(x0 + x1) / 2, y0 + 18], L2(lang, 'زاوية المفصل (٠° ← ١٥٠°)', 'Joint angle (0° → 150°)'), 'bf-t bf-small') + yLab(lang, 'العزم', 'Torque', y0),
+      L2(lang, 'العزم والزاوية', 'Torque-angle'));
+  };
+
+  F.resist = function (lang) {
+    var x0 = 40, x1 = 230, y0 = 168, top = 36, H = y0 - top;
+    function P(fn, cls) { return '<path class="' + cls + '" d="' + pathOf(function (v) { return y0 - H * fn(v); }, x0, x1, 40) + '"/>'; }
+    return svg(260, 214, axes(x0, x1, y0, top) +
+      P(function (v) { return 0.15 + 0.8 * Math.sin(v * Math.PI); }, 'bf-s3') +
+      P(function () { return 0.55; }, 'bf-s1') +
+      P(function (v) { return 0.15 + 0.75 * v; }, 'bf-s2') +
+      P(function (v) { return 0.3 + 0.55 * Math.sin(Math.pow(v, 0.7) * Math.PI * 0.95); }, 'bf-curve2') +
+      text([x0 + 70, top + 4], L2(lang, 'دمبل', 'Dumbbell'), 'bf-t bf-small') + text([x1 - 6, y0 - H * 0.55 - 6], L2(lang, 'كابل', 'Cable'), 'bf-t bf-small', 'end') +
+      text([x1 - 6, y0 - H * 0.9 - 6], L2(lang, 'أستك', 'Band'), 'bf-t bf-arm-t', 'end') + text([x1 - 10, y0 - H * 0.18], L2(lang, 'جهاز كام', 'Cam machine'), 'bf-t bf-arm-t', 'end') +
+      text([(x0 + x1) / 2, y0 + 18], L2(lang, 'مدى الحركة (من البداية للنهاية)', 'Range of motion (start → end)'), 'bf-t bf-small') + yLab(lang, 'المقاومة', 'Resistance', y0),
+      L2(lang, 'منحنى المقاومة', 'Resistance profile'));
+  };
+
+  F.rhythm = function (lang) {
+    var P0 = [110, 96], arm = 66;
+    function end(a, r) { return [P0[0] + S(a) * r, P0[1] + C(a) * r]; }
+    function arc(a1, a2, r, cls) { var s = end(a1, r), e = end(a2, r); return '<path class="' + cls + '" d="M' + f(s[0]) + ' ' + f(s[1]) + ' A' + r + ' ' + r + ' 0 0 0 ' + f(e[0]) + ' ' + f(e[1]) + '"/>'; }
+    var tip = end(150, arm);
+    return svg(260, 214,
+      line([P0[0], P0[1] - 38], [P0[0], 190], 'bf-trunk') + '<circle class="bf-head" cx="' + P0[0] + '" cy="' + (P0[1] - 50) + '" r="10"/>' +
+      line(P0, tip, 'bf-limb') + line(P0, end(0, arm), 'bf-limb2') + dot(P0, 4, 'bf-joint-big') +
+      arc(0, 100, 30, 'bf-ok') + arc(100, 150, 44, 'bf-curve2') +
+      text([P0[0] + 46, P0[1] + 28], L2(lang, 'مفصل الكتف', 'Shoulder joint'), 'bf-t bf-small', 'start') + text([P0[0] + 46, P0[1] + 42], '≈ 100°', 'bf-t bf-small', 'start') +
+      text([P0[0] + 62, P0[1] - 26], L2(lang, 'لوح الكتف', 'Shoulder blade'), 'bf-t bf-arm-t', 'start') + text([P0[0] + 62, P0[1] - 12], '≈ 50°', 'bf-t bf-arm-t', 'start') +
+      text([70, 40], '2 : 1', 'bf-t') + text([70, 56], L2(lang, 'نسبة الشغل', 'Work ratio'), 'bf-t bf-small'),
+      L2(lang, 'إيقاع الكتف', 'Scapulohumeral rhythm'));
+  };
+
+  F.valgus = function (lang) {
+    function panel(cx, bad) {
+      var hl = [cx - 16, 78], hr = [cx + 16, 78], dk = bad ? 20 : 4, kl = [cx - 16 + (bad ? 18 : -6), 124], kr = [cx + 16 - (bad ? 18 : -6), 124];
+      var al = [cx - 22, 176], ar = [cx + 22, 176];
+      kl = [cx - 16 + (bad ? 11 : -6), 126]; kr = [cx + 16 - (bad ? 11 : -6), 126];
+      return line([cx, 38], [cx, 76], 'bf-trunk') + '<circle class="bf-head" cx="' + cx + '" cy="30" r="9"/>' + line(hl, hr, 'bf-limb') +
+        line(hl, kl, bad ? 'bf-limb-bad' : 'bf-limb') + line(kl, al, bad ? 'bf-limb-bad' : 'bf-limb') + line(hr, kr, bad ? 'bf-limb-bad' : 'bf-limb') + line(kr, ar, bad ? 'bf-limb-bad' : 'bf-limb') +
+        dot(kl, 3.4, 'bf-joint') + dot(kr, 3.4, 'bf-joint') + line([al[0], 84], [al[0], 176], 'bf-guide') + line([ar[0], 84], [ar[0], 176], 'bf-guide');
+    }
+    return svg(260, 214, ground(14, 246) + panel(70, false) + panel(190, true) + okMark([70, 196]) + noMark([190, 196]) +
+      text([70, 14], L2(lang, 'الركبة فوق القدم', 'Knee tracks over foot'), 'bf-t bf-small') + text([190, 14], L2(lang, 'الركبة داخلة (فالجس)', 'Knee collapses (valgus)'), 'bf-t bf-small'),
+      L2(lang, 'فالجس الركبة', 'Knee valgus'));
+  };
+
+  F.spine = function (lang) {
+    function neutral(cx) { return '<path class="bf-trunk" d="M' + cx + ' 58 C' + (cx - 20) + ' 80 ' + (cx - 20) + ' 104 ' + cx + ' 122 C' + (cx + 16) + ' 138 ' + (cx + 14) + ' 154 ' + cx + ' 172" style="fill:none"/><circle class="bf-head" cx="' + (cx + 4) + '" cy="40" r="10"/>'; }
+    function flexed(cx) { return '<path class="bf-trunk" d="M' + (cx + 14) + ' 58 C' + (cx - 30) + ' 84 ' + (cx - 34) + ' 134 ' + (cx + 4) + ' 172" style="fill:none"/><circle class="bf-head" cx="' + (cx + 20) + '" cy="44" r="10"/>'; }
+    return svg(260, 214, ground(14, 246) + neutral(66) + flexed(188) +
+      text([30, 82], L2(lang, 'صدر', 'Thoracic'), 'bf-t bf-small') + text([108, 140], L2(lang, 'قطنية', 'Lumbar'), 'bf-t bf-small') + okMark([66, 190]) +
+      noMark([188, 190]) + text([188, 14], L2(lang, 'ضهر مدوّر تحت حمل', 'Rounded back under load'), 'bf-t bf-small') + text([66, 14], L2(lang, 'الانحناءات الطبيعية', 'Natural curves'), 'bf-t bf-small'),
+      L2(lang, 'العمود الفقري', 'Spine'));
+  };
+
+  /* ---------------- رسم المفاصل: وضع محايد + أقصى مدى ---------------- */
+  function jointFig(lang, c) {
+    var P0 = c.p || [112, 100], o = '';
+    function end(a, r) { return [P0[0] + S(a) * r, P0[1] + C(a) * r]; }
+    o += line(P0, end(c.fa, c.fl), c.fcls || 'bf-trunk');
+    if (c.head) { var hp = end(c.fa, c.fl + 12); o += '<circle class="bf-head" cx="' + f(hp[0]) + '" cy="' + f(hp[1]) + '" r="9"/>'; }
+    c.poses.forEach(function (ps, i) {
+      var tip = end(ps[0], c.ml), r = 20 + i * 9, s = end(c.na, r), e = end(ps[0], r), d = ps[0] - c.na;
+      o += line(P0, tip, 'bf-limb2') +
+        '<path class="' + (i % 2 ? 'bf-curve2' : 'bf-ok') + '" d="M' + f(s[0]) + ' ' + f(s[1]) + ' A' + r + ' ' + r + ' 0 ' + (Math.abs(d) > 180 ? 1 : 0) + ' ' + (d > 0 ? 0 : 1) + ' ' + f(e[0]) + ' ' + f(e[1]) + '"/>';
+      var lp = end(ps[0], c.ml + 16);
+      o += text([lp[0], lp[1] + 4], ps[1], 'bf-t bf-small', lp[0] > P0[0] + 4 ? 'start' : lp[0] < P0[0] - 4 ? 'end' : 'middle');
+    });
+    o += line(P0, end(c.na, c.ml), 'bf-limb') + dot(P0, 4.5, 'bf-joint-big');
+    return svg(260, 214, o + text([130, 206], c.title, 'bf-t'), c.title);
+  }
+  F.j_knee = function (lang) { return jointFig(lang, { p: [130, 86], fa: 180, fl: 50, na: 0, ml: 62, poses: [[-60, '60°'], [-135, L2(lang, 'ثني ١٣٥°', 'Flexion 135°')]], title: L2(lang, 'الركبة: مفصل مفصلي (مفصلة)', 'Knee: a hinge joint') }); };
+  F.j_hip = function (lang) { return jointFig(lang, { p: [110, 104], fa: 180, fl: 56, na: 0, ml: 62, head: true, poses: [[120, L2(lang, 'ثني ١٢٠°', 'Flexion 120°')], [-20, L2(lang, 'فرد ٢٠°', 'Ext. 20°')]], title: L2(lang, 'الحوض: مفصل كروي (كل الاتجاهات)', 'Hip: ball-and-socket') }); };
+  F.j_back = function (lang) { return jointFig(lang, { p: [112, 126], fa: 0, fl: 56, fcls: 'bf-limb', na: 180, ml: 62, poses: [[120, L2(lang, 'ثني ٦٠°', 'Flexion 60°')], [205, L2(lang, 'فرد ٢٥°', 'Ext. 25°')]], title: L2(lang, 'الضهر: حركة موزعة على فقرات', 'Back: motion shared across vertebrae') }); };
+  F.j_shoulder = function (lang) { return jointFig(lang, { p: [100, 104], fa: 0, fl: 72, na: 0, ml: 58, poses: [[90, '90°'], [175, L2(lang, 'رفع ١٨٠°', 'Elevation 180°')], [-50, L2(lang, 'ورا ٥٠°', 'Ext. 50°')]], title: L2(lang, 'الكتف: أكتر مفصل حركة وأقل ثبات', 'Shoulder: most mobile, least stable') }); };
+  F.j_ankle = function (lang) { return jointFig(lang, { p: [100, 84], fa: 180, fl: 60, na: 90, ml: 46, poses: [[110, L2(lang, 'ثني ظهري ٢٠°', 'Dorsiflexion 20°')], [40, L2(lang, 'ثني أخمصي ٥٠°', 'Plantarflexion 50°')]], title: L2(lang, 'الكاحل: مدى بسيط ودوره كبير', 'Ankle: small range, big job') }); };
+  F.j_elbow = function (lang) { return jointFig(lang, { p: [100, 78], fa: 0, fl: 60, na: 0, ml: 54, poses: [[90, '90°'], [145, L2(lang, 'ثني ١٤٥°', 'Flexion 145°')]], title: L2(lang, 'الكوع: مفصلة بحركة واحدة', 'Elbow: a one-plane hinge') }); };
+
   return {
     draw: function (id, lang) { return F[id] ? F[id](lang || 'ar') : ''; },
     has: function (id) { return !!F[id]; }
   };
 })();
+if (typeof window !== 'undefined') window.BIOFIG = BIOFIG;
 if (typeof module !== 'undefined') module.exports = BIOFIG;
