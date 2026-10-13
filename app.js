@@ -513,7 +513,14 @@ const TEXT = {
     anatomy_injury_benefit: 'مدى إفادته للإصابة',
     back_generic: 'رجوع',
     tile_preview: 'معاينة كعميل',
+    tile_preview_coach: 'معاينة كمدرب',
+    cpv_pick: 'اختار مدرب تشوف التطبيق بعينه',
+    cpv_plain: 'مدرب جديد (من غير براند)',
+    cpv_note: 'معاينة كمدرب. متعدلش حاجة هنا',
+    cpv_exit: 'خروج',
     tile_feedback: 'ملاحظات',
+    tile_brand: 'براندي',
+    tile_brand_admin: 'براند المدربين',
     preview_exit: 'خروج من المعاينة',
     preview_note: 'وضع المعاينة — بيانات تجريبية',
     open_calc_btn: 'الحاسبات',
@@ -3258,7 +3265,14 @@ const TEXT = {
     anatomy_injury_benefit: 'How it helps the injury',
     back_generic: 'Back',
     tile_preview: 'Preview as client',
+    tile_preview_coach: 'Preview as coach',
+    cpv_pick: 'Pick a coach to see the app as they do',
+    cpv_plain: 'A new coach (no brand)',
+    cpv_note: 'Coach preview. Do not edit here',
+    cpv_exit: 'Exit',
     tile_feedback: 'Feedback',
+    tile_brand: 'My brand',
+    tile_brand_admin: 'Coach brands',
     preview_exit: 'Exit preview',
     preview_note: 'Preview mode — demo data',
     open_calc_btn: 'Calculators',
@@ -6166,6 +6180,7 @@ const coachScreen = document.getElementById('coach-screen');
 const libraryScreen = document.getElementById('library-screen');
 const mylibScreen = document.getElementById('mylib-screen');
 const clientScreen = document.getElementById('client-screen');
+let coachPreviewOn = false; // معاينة كمدرب (للمالك فقط)
 let previewMode = false; // معاينة كعميل (للمالك فقط)
 const foodScreen = document.getElementById('food-screen');
 const supplementsScreen = document.getElementById('supplements-screen');
@@ -7212,6 +7227,7 @@ logoutButton.addEventListener('click', function () {
   // لو كان بيعدّل بروفايله وخرج، الوضع ما يفضلش متعلّق لحد بعده
   onboardingEditMode = false;
   stopNotifListener();
+  brandCall('reset');
   signOut(auth);
 });
 
@@ -7224,6 +7240,7 @@ async function routeUser(user) {
     currentProviderSpecialties = [];
     currentProviderData = null;
     stopNotifListener();
+    brandCall('reset');
     showScreen(welcomeScreen);
     return;
   }
@@ -7267,6 +7284,7 @@ async function routeUser(user) {
     currentProviderSpecialty = 'coach';
     currentProviderSpecialties = isLegacyCoach ? ['coach'] : loginSpecs;
     currentProviderData = providerData;
+    brandCall('apply', email);
     showScreen(clientsScreen);
     loadClients();
     // مهم: منستدعيش touchProviderActivity هنا لو الكوتش ده "قديم"
@@ -8066,8 +8084,11 @@ const COACH_TILES = [
   { key: 'myprofile', icon: 'profile',   labelKey: 'open_my_profile_btn',       btn: 'open-my-profile-btn' },
   { key: 'mysub',     icon: 'card',      labelKey: 'open_provider_subscription_btn', btn: 'open-provider-subscription-btn' },
   { key: 'admin',     icon: 'gear',      labelKey: 'open_admin_btn',            btn: 'open-admin-panel-btn', badge: 'admin-leads-badge' },
+  { key: 'brand',     icon: 'profile',   labelKey: 'tile_brand',                action: 'openBrand' },
+  { key: 'brandadm',  icon: 'gear',      labelKey: 'tile_brand_admin',          adminOnly: true, action: 'openBrandAdmin' },
   { key: 'feedback',  icon: 'chat',      labelKey: 'tile_feedback',             action: 'openFeedback' },
-  { key: 'preview',   icon: 'profile',   labelKey: 'tile_preview',              adminOnly: true, action: 'startClientPreview' }
+  { key: 'previewcoach', icon: 'team',   labelKey: 'tile_preview_coach',        adminOnly: true, action: 'startCoachPreview' },
+  { key: 'preview',   icon: 'profile',   labelKey: 'tile_preview',              action: 'startClientPreview' }
 ];
 
 function renderCoachTiles() {
@@ -8104,6 +8125,9 @@ function renderCoachTiles() {
       if (origin) { origin.click(); return; }
       if (tile.action === 'openFeedback') { window.open('https://docs.google.com/forms/d/e/1FAIpQLSd3stkXiUZxdfU2vY5c3N9uGk5nHiArkjec5mNKBgAu4oYL7w/viewform', '_blank', 'noopener'); return; }
       if (tile.action === 'startClientPreview') { startClientPreview(); return; }
+      if (tile.action === 'startCoachPreview') { startCoachPreview(); return; }
+      if (tile.action === 'openBrand') { brandCall('openEditor', currentProviderEmail, { self: currentProviderEmail }); return; }
+      if (tile.action === 'openBrandAdmin') { brandCall('openAdminList', currentProviderEmail); return; }
       const target = document.getElementById(tile.scroll);
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -11764,6 +11788,114 @@ const UI_ICONS = {
   brain:      '<path d="M9 4.5c-2 0-3.5 1.5-3.5 3.3 0 .6.2 1.1.4 1.6-1 .5-1.7 1.6-1.7 2.8 0 1 .5 1.9 1.3 2.4-.2.4-.3.9-.3 1.4 0 2 1.7 3.5 3.7 3.3"/><path d="M9 4.5c0-1.3 1.1-2.5 2.5-2.5S14 3.2 14 4.5"/><path d="M15 4.5c2 0 3.5 1.5 3.5 3.3 0 .6-.2 1.1-.4 1.6 1 .5 1.7 1.6 1.7 2.8 0 1-.5 1.9-1.3 2.4.2.4.3.9.3 1.4 0 2-1.7 3.5-3.7 3.3"/><line x1="12" y1="4.5" x2="12" y2="19.5"/>'
 };
 
+/* ---------- معاينة كمدرب (للمالك): واجهة المدرب العادي بدون صلاحيات الإدارة ---------- */
+async function startCoachPreview() {
+  if (!isFullAdminAccount()) return;
+  let list = [];
+  try { list = await window.__adamFb.listCoaches(); } catch (e) { list = []; }
+  const ov = document.createElement('div');
+  ov.className = 'brand-ov';
+  const sheet = document.createElement('div');
+  sheet.className = 'brand-sheet';
+  ov.appendChild(sheet);
+  const h = document.createElement('h3');
+  h.textContent = t('cpv_pick');
+  sheet.appendChild(h);
+  function add(label, sub, email) {
+    const row = document.createElement('div');
+    row.className = 'brand-li';
+    const nm = document.createElement('div');
+    nm.className = 'brand-li-t';
+    const a = document.createElement('strong');
+    a.textContent = label;
+    nm.appendChild(a);
+    if (sub) { const b = document.createElement('span'); b.textContent = sub; nm.appendChild(b); }
+    const bt = document.createElement('button');
+    bt.type = 'button';
+    bt.className = 'brand-btn';
+    bt.textContent = '>';
+    row.appendChild(nm);
+    row.appendChild(bt);
+    row.addEventListener('click', function () { ov.remove(); enterCoachPreview(email); });
+    sheet.appendChild(row);
+  }
+  add(t('cpv_plain'), '', '');
+  list.forEach(function (c) { if (c.email !== currentProviderEmail) add(c.brandName || c.name || c.email, c.email, c.email); });
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'brand-btn ghost';
+  close.textContent = t('cpv_exit');
+  close.addEventListener('click', function () { ov.remove(); });
+  sheet.appendChild(close);
+  document.body.appendChild(ov);
+}
+function enterCoachPreview(email) {
+  coachPreviewOn = true;
+  if (email) brandCall('apply', email, { welcome: false }); else brandCall('reset');
+  let bar = document.getElementById('coach-preview-bar');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'coach-preview-bar';
+    bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:9999;display:flex;align-items:center;gap:10px;background:#7c3aed;color:#fff;padding:8px 14px;border-radius:999px;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.4)';
+    const note = document.createElement('span');
+    note.className = 'cpv-note';
+    bar.appendChild(note);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cpv-exit';
+    btn.style.cssText = 'width:auto;margin:0;padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;font-size:12px;cursor:pointer';
+    btn.addEventListener('click', exitCoachPreview);
+    bar.appendChild(btn);
+    document.body.appendChild(bar);
+  }
+  bar.querySelector('.cpv-note').textContent = t('cpv_note');
+  bar.querySelector('.cpv-exit').textContent = t('cpv_exit');
+  bar.style.display = 'flex';
+  showScreen(clientsScreen);
+  loadClients();
+}
+function exitCoachPreview() {
+  coachPreviewOn = false;
+  const bar = document.getElementById('coach-preview-bar');
+  if (bar) bar.style.display = 'none';
+  brandCall('apply', currentProviderEmail, { welcome: false });
+  showScreen(clientsScreen);
+  loadClients();
+}
+
+/* ---------- البراند (adam-brand.js) ---------- */
+window.__adamFb = {
+  getBrand: async function (email) {
+    const d = await getDoc(doc(db, 'providers', String(email).toLowerCase()));
+    if (!d.exists()) return null;
+    const v = d.data();
+    return { brand: v.brand || null, admin: v.brandAdmin || null };
+  },
+  setBrand: async function (email, brand, admin) {
+    const payload = { email: String(email).toLowerCase() };
+    payload.brand = brand ? brand : deleteField();
+    if (admin) payload.brandAdmin = admin;
+    await setDoc(doc(db, 'providers', String(email).toLowerCase()), payload, { merge: true });
+  },
+  listCoaches: async function () {
+    const snap = await getDocs(collection(db, 'providers'));
+    const out = [];
+    snap.docs.forEach(function (d) {
+      const v = d.data() || {};
+      const specs = (typeof providerSpecialties === 'function') ? providerSpecialties(v) : [];
+      if (specs.indexOf('coach') === -1) return;
+      out.push({ email: d.id, name: v.name || '', brandName: (v.brand && (v.brand.name_ar || v.brand.name_en)) || '' });
+    });
+    return out;
+  }
+};
+let brandModP = null;
+function brandCall(fn) {
+  const args = Array.prototype.slice.call(arguments, 1);
+  if (!brandModP) brandModP = import('./adam-brand.js');
+  return brandModP.then(function (m) { return m[fn].apply(null, args); }).catch(function () { /* البراند اختياري */ });
+}
+
 function iconSvg(key, cls) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('viewBox', '0 0 24 24');
@@ -13769,7 +13901,7 @@ function applyPreviewDemo() {
 
 async function startClientPreview() {
   const user = auth.currentUser;
-  if (!user || !user.email || !isFullAdminAccount()) return;
+  if (!user || !user.email || !currentProviderEmail) return;
   previewMode = true;
   showScreen(clientScreen);
   paintPreviewBar();
@@ -13792,8 +13924,9 @@ async function loadClient(email) {
     clientName = (meDoc.exists() && meDoc.data().name) ? meDoc.data().name : '';
     // بيانات العميل الأساسية — الرئيسية والمساعد الذكي بيقروا منها
     clientRecord = meDoc.exists() ? meDoc.data() : null;
+    brandCall('apply', previewMode ? currentProviderEmail : ((clientRecord && clientRecord.coachEmail) || COACH_EMAIL).toLowerCase());
     /* لغة العميل بتتحفظ عشان فريق الذكاء الاصطناعي يكتبله بلغته */
-    if (clientRecord && clientRecord.lang !== lang) saveClientLang(email);
+    if (!previewMode && clientRecord && clientRecord.lang !== lang) saveClientLang(email);
     clientActivity = (activityDoc.exists() && Array.isArray(activityDoc.data().entries))
       ? activityDoc.data().entries : [];
 
@@ -24079,6 +24212,7 @@ function isLegacyCoachAccount() {
  * فعلاً يقدر يحطها لغيره
  */
 function isFullAdminAccount() {
+  if (coachPreviewOn) return false;
   return isLegacyCoachAccount() || !!(currentProviderData && currentProviderData.isAdminTeam);
 }
 

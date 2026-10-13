@@ -272,3 +272,43 @@ body.self-build #advisor-box, body.self-build .playlist-box, body.self-build .my
 /* كارت مكتبة البيوميكانيك تحت التشريح */
 #adam-v2 .av2-bio { margin-top: 12px; background: linear-gradient(160deg, rgba(255,178,77,.12), rgba(255,255,255,.03) 60%); }
 #adam-v2 .av2-bio svg { width: 70px; height: 90px; color: var(--ink); }
+
+/* ---------- البراند (adam-brand.js) ---------- */
+.brand-logo { display:block; width:72px; height:72px; border-radius:22px; object-fit:cover; margin:0 auto 8px; border:1px solid var(--line); box-shadow:0 6px 22px rgba(0,0,0,.35); }
+.brand-powered { text-align:center; font-size:11px; color:var(--muted); opacity:.7; margin:26px 0 4px; letter-spacing:.3px; }
+.brand-welcome { position:fixed; left:12px; right:12px; top:14px; z-index:90; background:var(--surface); border:1px solid var(--brand); border-radius:16px; padding:12px 14px; display:flex; flex-direction:column; gap:4px; text-align:start; box-shadow:0 10px 30px rgba(0,0,0,.45); }
+.brand-welcome strong { color:var(--brand); }
+.brand-welcome span { font-size:14px; color:var(--ink); }
+.brand-welcome-x { align-self:flex-end; background:none; border:0; color:var(--brand); font:inherit; font-weight:700; cursor:pointer; padding:2px 6px; }
+.brand-ov { position:fixed; inset:0; z-index:85; background:rgba(3,7,14,.78); overflow:auto; padding:16px; display:flex; justify-content:center; }
+.brand-sheet { width:100%; max-width:460px; margin:auto 0; background:var(--surface); border:1px solid var(--line); border-radius:22px; padding:16px; text-align:start; color:var(--ink); }
+.brand-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.brand-head h3 { margin:0; font-size:18px; }
+.brand-x { background:none; border:0; color:var(--muted); font-size:28px; line-height:1; cursor:pointer; padding:0 6px; }
+.brand-note { color:var(--muted); font-size:13px; margin:4px 0 12px; }
+.brand-f { display:block; margin-bottom:10px; }
+.brand-f span, .brand-lbl { display:block; font-size:12px; color:var(--muted); margin:10px 0 4px; }
+.brand-f input { width:100%; box-sizing:border-box; background:var(--field,#0e1729); color:var(--ink); border:1px solid var(--line); border-radius:12px; padding:10px 12px; font:inherit; }
+.brand-logo-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:6px 0; }
+.brand-logo-prev { width:56px; height:56px; border-radius:16px; object-fit:cover; border:1px solid var(--line); }
+.brand-btn { background:var(--field,#0e1729); color:var(--ink); border:1px solid var(--line); border-radius:12px; padding:9px 14px; font:inherit; cursor:pointer; }
+.brand-btn.primary { background:var(--brand); color:#06101c; border-color:var(--brand); font-weight:700; }
+.brand-btn.ghost { background:none; color:var(--muted); }
+.brand-btn:disabled { opacity:.5; }
+.brand-sw { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.brand-chip { display:flex; align-items:center; gap:8px; background:var(--b); color:var(--ink); border:2px solid var(--line); border-radius:12px; padding:8px 10px; font:inherit; font-size:13px; cursor:pointer; }
+.brand-chip i { width:16px; height:16px; border-radius:50%; background:var(--c); flex:none; }
+.brand-chip.on { border-color:var(--c); }
+.brand-prev { background:var(--b); border:1px solid var(--line); border-radius:16px; padding:14px; text-align:center; }
+.brand-prev-logo { width:52px; height:52px; border-radius:16px; object-fit:cover; display:block; margin:0 auto 6px; }
+.brand-prev-name { font-weight:800; font-size:20px; color:var(--c); }
+.brand-prev-w { font-size:13px; color:#cfd9e6; margin:6px 0; }
+.brand-prev-btn { background:var(--c); color:#06101c; border-radius:12px; padding:9px; font-weight:700; margin:10px 0 4px; }
+.brand-prev-pw { font-size:10px; color:#8fa3bd; opacity:.75; }
+.brand-adm { border-top:1px solid var(--line); margin-top:12px; }
+.brand-chk { display:flex; align-items:center; gap:8px; margin:8px 0; font-size:14px; }
+.brand-msg { min-height:18px; color:var(--brand); font-size:13px; margin:8px 0 0; }
+.brand-actions { display:flex; gap:8px; margin-top:6px; }
+.brand-li { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 0; border-top:1px solid var(--line); }
+.brand-li-t { display:flex; flex-direction:column; min-width:0; }
+.brand-li-t span { font-size:12px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; }
