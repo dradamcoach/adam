@@ -41,7 +41,8 @@ footer{padding:2px 12px 8px;color:var(--mut);font-size:10.5px;text-align:center;
    <label id="opbl">شفافية العظام</label><input type="range" id="opb" min="8" max="100" value="100">
    <div class="row" style="margin-top:8px"><div class="chip" data-v="f">أمام</div><div class="chip" data-v="b">خلف</div><div class="chip" data-v="s">جنب</div></div>
    <div class="row" style="margin-top:6px"><div class="chip" id="spin">دوران تلقائي</div><div class="chip" id="reset">إعادة ضبط</div></div></div>
-  <div class="card"><h3>الجزء المحدد</h3><div id="info"><div class="hint">لسه مختارتش حاجة. اضغط على الجسم.</div></div>
+  <div class="card" id="mscard"><h3 id="msh">ابحث عن عضلة</h3><input type="search" id="msq" autocomplete="off" placeholder="اكتب اسم العضلة… مثلًا اللاتس" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--bd);background:#0f1822;color:var(--tx);font:inherit;font-size:13px"><div class="chips" id="msr" style="margin-top:8px"></div></div>
+   <div class="card"><h3>الجزء المحدد</h3><div id="info"><div class="hint">لسه مختارتش حاجة. اضغط على الجسم.</div></div>
    <div class="row" style="margin-top:8px"><div class="chip" id="hide" style="display:none">إخفاء الجزء ده</div><div class="chip" id="showall" style="display:none">إظهار الكل</div></div></div>
   <div class="card note">المحتوى تعليمي وليس بديلاً عن الطبيب.</div>
  </div>
@@ -240,6 +241,72 @@ window.bioBlock=function(nm,E){
 };
 document.getElementById('info').addEventListener('click',e=>{const b=e.target.closest('[data-bio]');if(!b)return;
  if(window.parent!==window)window.parent.postMessage({type:'adam-open-biomech',target:b.dataset.bio},location.origin);else location.href='../biomech/#'+b.dataset.bio;});
+</script>
+<script>
+/* ابحث عن عضلة: كل العضلات اللي في الموديل + عضلات مالهاش مجسّم في الموديل
+   (اللاتس، البطن المستقيمة، الجانبية الداخلية، العضلة العميقة). اللي مالهاش مجسّم
+   بيظهر شرحها وبيتلوّن مكان اتصالها بالعضم. */
+(function(){
+ const SYN=[
+  {n:'latissimus dorsi',a:'الظهرية العريضة (اللاتس)',att:'latissimus dorsi muscle'},
+  {n:'rectus abdominis',a:'البطن المستقيمة',att:'rectus abdominis muscle'},
+  {n:'internal oblique',a:'البطن الجانبية الداخلية',att:'internal abdominal oblique muscle'},
+  {n:'transversus abdominis',a:'المستعرضة البطنية (العضلة العميقة)',att:'transversus abdominis muscle'}
+ ];
+ const POP=['latissimus dorsi','rectus abdominis','sternocostal part of pectoralis major','acromial part of deltoid','long head of biceps brachii','gluteus maximus','long head of biceps femoris','vastus lateralis'];
+ let LIST=null,curSyn=null;
+ const norm=t=>String(t||'').toLowerCase().replace(/[ًٌٍَُِّْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').trim();
+ function build(){
+  if(LIST||typeof META==='undefined')return LIST;
+  const seen={};LIST=[];
+  META.forEach((d,i)=>{if(d.g!=='muscle')return;const k=d.n.toLowerCase();if(seen[k])return;seen[k]=1;LIST.push({n:d.n,a:d.a||'',i:i})});
+  SYN.forEach(x=>{const at=[];META.forEach((d,i)=>{if(d.g==='att'&&d.n.toLowerCase()===x.att)at.push(i)});LIST.push({n:x.n,a:x.a,syn:true,at:at})});
+  const B=window.BIOMECH_MUSCLES||[];
+  LIST.forEach(o=>{o.k=norm(o.n+' '+o.a);const bm=B.find(m=>new RegExp(m.m).test(o.n.toLowerCase()));if(bm)o.k+=' '+norm(bm.t[0]+' '+bm.t[1])});
+  return LIST;
+ }
+ function focusOn(idxs){
+  const box=new THREE.Box3();let ok=false;
+  idxs.forEach(i=>{const m=meshes[i];if(m&&m.geometry){m.geometry.computeBoundingBox();box.union(m.geometry.boundingBox);ok=true}});
+  if(!ok)return;const c=box.getCenter(new THREE.Vector3());
+  st.tx=c.x;st.ty=c.y;st.yaw=c.z<0?Math.PI:0;st.pitch=0.05;st.dist=Math.min(st.dist,190);applyCam();
+ }
+ function showSyn(o){
+  if(sel&&sel.material&&sel.material.emissive)sel.material.emissive.setHex(sel.userData.em);
+  sel=null;curSyn=o;const E=LANG==='en';
+  const d={n:o.n,a:o.a,g:'muscle',at:o.at};showAtt(d);
+  const info=document.getElementById('info');
+  const note='<div style="margin-top:6px;font-size:11.5px;color:#d9a441">'+(E?'This muscle has no 3D mesh in the model yet; its attachment areas are highlighted on the bones.':'العضلة دي مالهاش مجسّم في الموديل لسه، أماكن اتصالها بالعضم متلوّنة.')+'</div>';
+  info.innerHTML=E?'<p id="ar" style="direction:ltr;text-align:left">'+o.n.charAt(0).toUpperCase()+o.n.slice(1)+'</p><div id="en" style="direction:ltr;text-align:left">'+o.a+'</div>'+note+muscleDetail(d)
+   :'<p id="ar">'+o.a+'</p><div id="en">'+o.n+'</div>'+note+muscleDetail(d);
+  focusOn(o.at);
+ }
+ function pickItem(o){
+  curSyn=null;
+  if(o.syn){showSyn(o);return}
+  const idx=[];META.forEach((d,i)=>{if(d.n===o.n)idx.push(i)});
+  const m=meshes[idx[0]];if(!m)return;
+  if(!m.visible||(m.parent&&!m.parent.visible)){m.visible=true;if(m.parent)m.parent.visible=true}
+  select(m);focusOn(idx);
+ }
+ function render(){
+  const L=build();const box=document.getElementById('msr');if(!L||!box)return;
+  const q=norm(document.getElementById('msq').value);const E=LANG==='en';
+  let res=q?L.filter(o=>o.k.indexOf(q)!==-1).sort((x,y)=>(norm(x.n+' '+x.a).indexOf(q)===-1)-(norm(y.n+' '+y.a).indexOf(q)===-1)):POP.map(n=>L.find(o=>o.n.toLowerCase()===n)).filter(Boolean);
+  res=res.slice(0,14);
+  box.innerHTML=res.length?res.map((o,j)=>'<div class="chip" data-ms="'+L.indexOf(o)+'">'+(E?o.n.charAt(0).toUpperCase()+o.n.slice(1):(o.a||o.n))+'</div>').join(''):'<div class="hint">'+(E?'No muscle with this name.':'مفيش عضلة بالاسم ده.')+'</div>';
+ }
+ document.getElementById('msq').addEventListener('input',render);
+ document.getElementById('msr').addEventListener('click',e=>{const c=e.target.closest('[data-ms]');if(!c)return;const o=build()[+c.dataset.ms];if(o)pickItem(o)});
+ const _sl=setLang;
+ setLang=function(l){_sl(l);const E=l==='en';
+  document.getElementById('msh').textContent=E?'Find a muscle':'ابحث عن عضلة';
+  document.getElementById('msq').placeholder=E?'Type a muscle name, e.g. lats':'اكتب اسم العضلة… مثلًا اللاتس';
+  render();if(curSyn&&!sel)showSyn(curSyn)};
+ const _sel=select;
+ select=function(m){if(m)curSyn=null;return _sel(m)};
+ let tries=0;(function wait(){if(typeof meshes!=='undefined'&&meshes.length&&window.BIOMECH_MUSCLES){render();return}if(++tries<120)setTimeout(wait,250);else render()})();
+})();
 </script>
 <script type="module">
 import { BIOMECH_MUSCLES } from '../library/biomech-muscles.js';
