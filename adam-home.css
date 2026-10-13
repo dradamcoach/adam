@@ -299,7 +299,6 @@ body.self-build #advisor-box, body.self-build .playlist-box, body.self-build .my
 .brand-chip { display:flex; align-items:center; gap:8px; background:var(--b); color:var(--ink); border:2px solid var(--line); border-radius:12px; padding:8px 10px; font:inherit; font-size:13px; cursor:pointer; }
 .brand-chip i { width:16px; height:16px; border-radius:50%; background:var(--c); flex:none; }
 .brand-chip.on { border-color:var(--c); }
-.brand-prev { background:var(--b); border:1px solid var(--line); border-radius:16px; padding:14px; text-align:center; }
 .brand-prev-logo { width:52px; height:52px; border-radius:16px; object-fit:cover; display:block; margin:0 auto 6px; }
 .brand-prev-name { font-weight:800; font-size:20px; color:var(--c); }
 .brand-prev-w { font-size:13px; color:#cfd9e6; margin:6px 0; }
@@ -312,3 +311,59 @@ body.self-build #advisor-box, body.self-build .playlist-box, body.self-build .my
 .brand-li { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 0; border-top:1px solid var(--line); }
 .brand-li-t { display:flex; flex-direction:column; min-width:0; }
 .brand-li-t span { font-size:12px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; }
+
+/* ---------- براند: أشكال وخلفيات وخطوط (بتتفعّل بـ data-br-* على html) ---------- */
+html[data-br-f] body, html[data-br-f] button, html[data-br-f] input, html[data-br-f] select, html[data-br-f] textarea { font-family: var(--brand-font), 'Cairo', sans-serif; }
+html[data-br-r="sharp"] .card, html[data-br-r="sharp"] .card button.home-tile, html[data-br-r="sharp"] .card button.home-card, html[data-br-r="sharp"] #adam-v2 .av2-anat { border-radius: 6px !important; }
+html[data-br-r="sharp"] button, html[data-br-r="sharp"] input, html[data-br-r="sharp"] select, html[data-br-r="sharp"] textarea { border-radius: 4px !important; }
+html[data-br-r="round"] .card { border-radius: 30px !important; }
+html[data-br-r="round"] .card button.home-tile, html[data-br-r="round"] .card button.home-card, html[data-br-r="round"] #adam-v2 .av2-anat { border-radius: 30px !important; }
+html[data-br-r="round"] input, html[data-br-r="round"] select, html[data-br-r="round"] textarea { border-radius: 18px !important; }
+html[data-br-k="glass"] .card { background-color: color-mix(in srgb, var(--surface) 62%, transparent); border-color: color-mix(in srgb, var(--brand) 22%, var(--line)); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+html[data-br-k="outline"] .card { background-color: transparent; border: 1.5px solid color-mix(in srgb, var(--brand) 55%, var(--line)); box-shadow: none; }
+html[data-br-k="flat"] .card { border-color: transparent; box-shadow: none; }
+html[data-br-g] body { background-attachment: fixed; background-color: var(--bg); }
+html[data-br-g="plain"] body { background-image: none; }
+html[data-br-g="gradient"] body { background-image: radial-gradient(900px 520px at 50% -160px, color-mix(in srgb, var(--brand) 28%, transparent) 0%, transparent 70%), radial-gradient(700px 420px at 90% 100%, color-mix(in srgb, var(--brand) 14%, transparent) 0%, transparent 70%); }
+html[data-br-g="grid"] body { background-image: linear-gradient(color-mix(in srgb, var(--brand) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--brand) 10%, transparent) 1px, transparent 1px); background-size: 34px 34px; }
+html[data-br-g="dots"] body { background-image: radial-gradient(color-mix(in srgb, var(--brand) 22%, transparent) 1.4px, transparent 1.6px); background-size: 22px 22px; }
+html[data-br-g="stripes"] body { background-image: repeating-linear-gradient(90deg, color-mix(in srgb, var(--brand) 7%, transparent) 0 46px, transparent 46px 92px); }
+html[data-br-g="waves"] body { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Cpath d='M0 20 Q15 6 30 20 T60 20 T90 20 T120 20' fill='none' stroke='%23ffffff' stroke-opacity='.07' stroke-width='2'/%3E%3C/svg%3E"); background-size: 120px 40px; }
+html[data-br-g] .brand-logo ~ h1, html[data-br-g] body > h1 { color: var(--brand); }
+
+/* محرر البراند: خيارات الشكل */
+.brand-presets { display:flex; gap:8px; overflow-x:auto; padding:2px 0 8px; -webkit-overflow-scrolling:touch; }
+.brand-preset { flex:none; display:flex; align-items:center; gap:7px; background:var(--field,#0e1729); color:var(--ink); border:2px solid var(--line); border-radius:12px; padding:8px 12px; font:inherit; font-size:13px; cursor:pointer; white-space:nowrap; }
+.brand-preset i { width:14px; height:14px; border-radius:50%; background:var(--c); }
+.brand-preset.on { border-color:var(--c); }
+.brand-opts { display:flex; flex-wrap:wrap; gap:6px; }
+.brand-opt { background:var(--field,#0e1729); color:var(--ink); border:1.5px solid var(--line); border-radius:10px; padding:7px 12px; font:inherit; font-size:13px; cursor:pointer; }
+.brand-opt.on { border-color:var(--brand); color:var(--brand); }
+.brand-sw { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.brand-dot { width:30px; height:30px; border-radius:50%; border:2px solid var(--line); cursor:pointer; padding:0; }
+.brand-dot.on { border-color:#fff; box-shadow:0 0 0 2px var(--brand); }
+.brand-picker { width:38px; height:32px; padding:0; border:0; background:none; cursor:pointer; }
+.brand-help { display:flex; flex-direction:column; gap:8px; }
+.brand-help textarea, .brand-ai textarea { width:100%; box-sizing:border-box; background:var(--field,#0e1729); color:var(--ink); border:1px solid var(--line); border-radius:12px; padding:9px 11px; font:inherit; resize:vertical; }
+.brand-ai { display:flex; flex-direction:column; gap:6px; }
+.brand-ai-log { max-height:190px; overflow:auto; display:flex; flex-direction:column; gap:6px; }
+.brand-ai-m { padding:8px 10px; border-radius:12px; font-size:13px; display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
+.brand-ai-m.me { background:var(--field,#0e1729); align-self:flex-end; }
+.brand-ai-m.ai { background:color-mix(in srgb, var(--brand) 16%, transparent); }
+.brand-ai-m.sys { color:var(--muted); }
+/* معاينة: بتحاكي الشكل المختار */
+.brand-prev { background-color:var(--b); border:1px solid var(--l); border-radius:16px; padding:14px; text-align:center; color:#eef3f9; }
+.brand-prev[data-br-r="sharp"], .brand-prev[data-br-r="sharp"] * { border-radius:4px; }
+.brand-prev[data-br-r="round"] { border-radius:28px; }
+.brand-prev[data-br-g="grid"] { background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px); background-size:22px 22px; }
+.brand-prev[data-br-g="dots"] { background-image:radial-gradient(rgba(255,255,255,.14) 1.2px,transparent 1.4px); background-size:16px 16px; }
+.brand-prev[data-br-g="stripes"] { background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 30px,transparent 30px 60px); }
+.brand-prev[data-br-g="gradient"] { background-image:radial-gradient(300px 160px at 50% -40px,var(--c),transparent); background-blend-mode:soft-light; }
+.brand-prev[data-br-g="waves"] { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='28'%3E%3Cpath d='M0 14 Q10 4 20 14 T40 14 T60 14 T80 14' fill='none' stroke='%23ffffff' stroke-opacity='.12' stroke-width='1.6'/%3E%3C/svg%3E"); }
+.brand-prev-card { background:var(--s); border:1px solid var(--l); border-radius:14px; padding:10px; margin:8px 0; display:flex; flex-direction:column; gap:2px; text-align:start; }
+.brand-prev-card span { font-size:12px; color:#8fa3bd; }
+.brand-prev[data-br-k="glass"] .brand-prev-card { background:rgba(255,255,255,.07); backdrop-filter:blur(6px); }
+.brand-prev[data-br-k="outline"] .brand-prev-card { background:transparent; border:1.5px solid var(--c); }
+.brand-prev[data-br-k="flat"] .brand-prev-card { border-color:transparent; }
+.brand-prev[data-br-r="round"] .brand-prev-card { border-radius:22px; }
+.brand-prev-btn { color:var(--ink) !important; }

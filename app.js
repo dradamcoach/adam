@@ -2854,6 +2854,8 @@ const TEXT = {
     pt_hint: 'كل اختبار اتعمل والتقدير بتاعه حسب المعايير العالمية لسنك ونوعك',
     pt_empty: 'لسه مفيش اختبارات متسجلة',
     pt_first: 'أول قياس — القياس الجاي هيبيّن التطور',
+    notif_t_brand_help: 'طلب مساعدة في التصميم',
+    notif_b_brand_help: '{name}: {text}',
     notif_t_lib_pending: 'إضافة مستنية موافقتك',
     notif_b_lib_pending: '{name} أضاف «{item}» لمكتبة الرياضة.',
     notif_t_lib_approved: 'إضافتك اتنشرت',
@@ -5606,6 +5608,8 @@ const TEXT = {
     pt_hint: 'Every test taken, rated against international norms for your age and sex',
     pt_empty: 'No tests recorded yet',
     pt_first: 'First measurement — the next one will show progress',
+    notif_t_brand_help: 'Design help request',
+    notif_b_brand_help: '{name}: {text}',
     notif_t_lib_pending: 'An addition awaits your approval',
     notif_b_lib_pending: '{name} added "{item}" to the sports hub.',
     notif_t_lib_approved: 'Your addition was published',
@@ -7300,6 +7304,7 @@ async function routeUser(user) {
     currentProviderSpecialties = loginSpecs;
     currentProviderSpecialty = loginSpecs[0] || '';
     currentProviderData = providerData;
+    brandCall('apply', email);
     showScreen(clientsScreen);
     loadClients();
     touchProviderActivity(email);
@@ -8126,7 +8131,7 @@ function renderCoachTiles() {
       if (tile.action === 'openFeedback') { window.open('https://docs.google.com/forms/d/e/1FAIpQLSd3stkXiUZxdfU2vY5c3N9uGk5nHiArkjec5mNKBgAu4oYL7w/viewform', '_blank', 'noopener'); return; }
       if (tile.action === 'startClientPreview') { startClientPreview(); return; }
       if (tile.action === 'startCoachPreview') { startCoachPreview(); return; }
-      if (tile.action === 'openBrand') { brandCall('openEditor', currentProviderEmail, { self: currentProviderEmail }); return; }
+      if (tile.action === 'openBrand') { brandCall('openEditor', currentProviderEmail, { self: currentProviderEmail, kind: currentProviderSpecialty || 'coach' }); return; }
       if (tile.action === 'openBrandAdmin') { brandCall('openAdminList', currentProviderEmail); return; }
       const target = document.getElementById(tile.scroll);
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -11883,10 +11888,16 @@ window.__adamFb = {
     snap.docs.forEach(function (d) {
       const v = d.data() || {};
       const specs = (typeof providerSpecialties === 'function') ? providerSpecialties(v) : [];
-      if (specs.indexOf('coach') === -1) return;
+      if (!specs.length) return;
       out.push({ email: d.id, name: v.name || '', brandName: (v.brand && (v.brand.name_ar || v.brand.name_en)) || '' });
     });
     return out;
+  },
+  /* موظف التصميم الذكي: بيشتغل من Apps Script (action: brand_ai). لو لسه مش متضاف بيرجع خطأ والواجهة بتتعامل معاه */
+  aiBrand: function (payload) { return advisorCall('brand_ai', payload); },
+  askTeam: async function (text, name) {
+    const made = await notify(COACH_EMAIL, 'brand_help', { target: 'brand_help', params: function () { return { name: name || currentProviderEmail || '', text: String(text).slice(0, 110) }; } });
+    if (!made) throw new Error('send');
   }
 };
 let brandModP = null;
