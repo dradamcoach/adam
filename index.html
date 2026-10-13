@@ -11,6 +11,42 @@
   <link rel="stylesheet" href="glass.css">
   <link rel="stylesheet" href="adam-home.css">
   <link rel="stylesheet" href="adam-plus.css">
+  <!-- تسريع التحميل: بنطلب ملفات التطبيق كلها مع بعض بدل ما تتحمل ورا بعض -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+  <link rel="modulepreload" href="app.js">
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js" crossorigin>
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js" crossorigin>
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js" crossorigin>
+  <link rel="modulepreload" href="firebase-config.js">
+  <link rel="modulepreload" href="rehab-templates.js">
+  <link rel="modulepreload" href="food-library.js">
+  <link rel="modulepreload" href="nutrition-programs.js">
+  <link rel="modulepreload" href="modalities-library.js">
+  <link rel="modulepreload" href="health-conditions.js">
+  <link rel="modulepreload" href="supplement-library.js">
+  <link rel="modulepreload" href="sports.js">
+  <link rel="modulepreload" href="providers.js">
+  <link rel="modulepreload" href="med-library-seed.js">
+  <link rel="modulepreload" href="exercise-library.js">
+  <link rel="modulepreload" href="drills-library.js">
+  <link rel="modulepreload" href="library/templates-extra.js">
+  <link rel="modulepreload" href="library/rehab-extra.js">
+  <link rel="modulepreload" href="library/food-extra.js">
+  <link rel="modulepreload" href="food-art.js">
+  <link rel="modulepreload" href="library/programs-extra.js">
+  <link rel="modulepreload" href="library/supplements-extra.js">
+  <link rel="modulepreload" href="library/med-extra.js">
+  <link rel="modulepreload" href="library/modalities-extra.js">
+  <link rel="modulepreload" href="library/modalities-en.js">
+  <link rel="modulepreload" href="library/templates-sports-a.js">
+  <link rel="modulepreload" href="library/templates-sports-b.js">
+  <link rel="modulepreload" href="library/programs-sports.js">
+  <link rel="modulepreload" href="library/med-rd.js">
+  <link rel="modulepreload" href="library/media-extra.js">
+  <link rel="modulepreload" href="library/chat-stickers.js">
+  <link rel="modulepreload" href="library/plan-defs.js">
+  <link rel="modulepreload" href="library/hub-defs.js">
   <!-- ملف التطبيق: من غيره الآيفون مش بيسمح بإشعارات خالص -->
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -198,6 +234,8 @@
       <h3 class="welcome-section-title" data-t="welcome_cta_title">جاهز تبدأ؟</h3>
       <p class="welcome-cta-note" data-t="welcome_cta_note">مجاني بالكامل — سجّل بإيميلك وابدأ</p>
       <button type="button" id="welcome-start-btn" data-t="welcome_start_btn">ابدأ مجانًا</button>
+      <button type="button" id="welcome-guest-btn" class="welcome-guest-btn" data-t="welcome_guest_btn">جرّب من غير حساب</button>
+      <p class="welcome-guest-note" data-t="welcome_guest_note">اتفرّج وجرّب وبياناتك على جهازك — الإيميل بعدين لو حبيت</p>
       <p class="welcome-login-row">
         <span data-t="welcome_login_hint">عندك حساب بالفعل؟</span>
         <button type="button" id="welcome-login-btn" class="link" data-t="welcome_login_link">سجّل دخول</button>
@@ -210,6 +248,7 @@
 
   <div class="welcome-sticky-cta hidden" id="welcome-sticky-cta">
     <button type="button" id="welcome-sticky-start-btn" data-t="welcome_start_btn">ابدأ مجانًا</button>
+    <button type="button" id="welcome-sticky-guest-btn" class="welcome-guest-btn small" data-t="welcome_guest_btn">جرّب من غير حساب</button>
   </div>
 
   <div class="card hidden" id="login-screen">
@@ -1345,6 +1384,7 @@
     <button id="open-progress-coach-btn" class="link icon-link"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 6"></polyline><polyline points="15 6 21 6 21 12"></polyline></svg><span data-t="open_progress_btn">المتابعة</span></button>
     <button id="open-chat-coach-btn" class="link icon-link"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v10.5H9l-4 3.5v-3.5H4z"></path><line x1="8" y1="9.5" x2="16" y2="9.5"></line><line x1="8" y1="12.5" x2="13" y2="12.5"></line></svg><span data-t="coach_chat_btn">كلّمه</span></button>
     <button id="open-plan-coach-btn" class="link icon-link"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"></path><rect x="4" y="12" width="3" height="6" rx="1"></rect><rect x="9" y="8" width="3" height="10" rx="1"></rect><rect x="14" y="10" width="3" height="8" rx="1"></rect><path d="M4 7l5-3 5 2 6-3"></path></svg><span data-t="plan_open_btn">المخطط الموسمي</span></button>
+    <button id="open-daysum-coach-btn" class="link icon-link"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg><span data-t="ds_btn">ملخص اليوم</span></button>
     <h2 id="coach-title">برنامج العميل</h2>
 
     <!-- ====== كارت الحالة الصحية: أول حاجة المدرب يشوفها ====== -->
@@ -1724,7 +1764,6 @@
       <button type="button" class="chip small hidden" id="lib-safe-only"><span data-t="lib_safe_only">مناسب للعميل</span></button>
       <button type="button" class="link" id="lib-credits-btn" data-t="lib_credits_link">حقوق الصور</button>
       <button type="button" class="link" id="lib-anatomy-btn" data-t="anat3d_title">التشريح ثلاثي الأبعاد</button>
-      <button type="button" class="link" id="lib-biomech-btn" data-t="biomech_title">مكتبة البيوميكانيك</button>
     </div>
     <p class="message" id="lib-message"></p>
     <div class="grid" id="lib-grid"></div>
@@ -1837,7 +1876,6 @@
       <div class="home-hello" id="home-hello"></div>
       <!-- حلقات ADAM: تمرين · أكل · ماية + السلسلة والمستوى -->
       <div class="first4 hidden" id="first4-card"></div>
-      <div class="push-compat hidden" id="push-compat-home"></div>
       <div class="sq-home hidden" id="squad-home"></div>
       <div class="eng-card hidden" id="eng-card"></div>
       <div class="eng-recap hidden" id="eng-recap"></div>
@@ -1857,7 +1895,6 @@
       <div class="home-tiles" id="home-tiles"></div>
       <div class="home-extra-links">
         <button type="button" class="link tour-replay" id="tour-replay-client"><span class="glyph-slot" data-glyph="compass"></span><span data-t="tour_replay">جولة سريعة في البرنامج</span></button>
-        <a class="feedback-link" id="feedback-link" href="https://forms.gle/WBHT9jmdH14nnj756" target="_blank" rel="noopener"><span class="glyph-slot" data-glyph="mail"></span><span data-t="feedback_btn">ابعت رأيك في ADAM</span></a>
       </div>
     </div>
 
@@ -2303,14 +2340,6 @@
     </div>
     <iframe id="anat-frame" title="anatomy" style="border:0;width:100%;flex:1;min-height:0;background:#0b1016"></iframe>
   </div>
-  <!-- مكتبة البيوميكانيك (biomech/) — نفس فكرة شاشة التشريح -->
-  <div class="hidden" id="bio-overlay" style="position:fixed;inset:0;z-index:70;background:#0b1016;flex-direction:column">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#0b1016;border-bottom:1px solid #273441">
-      <span data-t="biomech_title" style="color:#e9eef2;font-size:14px">مكتبة البيوميكانيك</span>
-      <button type="button" id="bio-close" style="background:#16202a;color:#e9eef2;border:1px solid #273441;border-radius:999px;padding:6px 14px;font-size:13px;width:auto;margin:0" data-t="anat3d_close">إغلاق</button>
-    </div>
-    <iframe id="bio-frame" title="biomechanics" style="border:0;width:100%;flex:1;min-height:0;background:#0b1016"></iframe>
-  </div>
   <div class="ex-sheet-overlay hidden" id="ex-sheet">
     <div class="ex-sheet" role="dialog" aria-modal="true">
       <button type="button" class="ex-sheet-close" id="ex-sheet-close" data-t-title="exs_close" title="إغلاق" aria-label="إغلاق"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg></button>
@@ -2446,6 +2475,7 @@
   <div class="focus hidden" id="focus-mode">
     <div class="focus-bar">
       <button type="button" class="focus-close" id="focus-close" data-t-title="focus_close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      <button type="button" class="focus-close focus-min" id="focus-min" data-t-title="fx_min" aria-label="min"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
       <div class="focus-steps" id="focus-steps"></div>
       <div class="focus-count" id="focus-count"></div>
     </div>
@@ -2454,14 +2484,49 @@
       <div class="focus-media" id="focus-media"></div>
       <div class="focus-name" id="focus-name"></div>
       <div class="focus-chips" id="focus-chips"></div>
-      <div class="focus-swap" id="focus-swap"></div>
 
       <div class="beads-wrap">
         <div class="beads beads-lg" id="focus-beads"></div>
         <div class="beads-note" id="focus-beads-note"></div>
       </div>
-      <div class="focus-rest hidden" id="focus-rest" aria-live="polite"></div>
-      <div class="focus-after hidden" id="focus-after"></div>
+
+      <div class="fx-tools">
+        <button type="button" class="fx-tool" id="fx-timer-btn" data-t="fx_timer">مؤقت</button>
+        <button type="button" class="fx-tool" id="fx-music-btn" data-t="fx_music">أغاني</button>
+        <button type="button" class="fx-tool" id="fx-watch-btn" data-t="fx_watch">ساعة</button>
+      </div>
+      <div class="fx-panel hidden" id="fx-timer">
+        <div class="fx-time" id="fx-time">00:00</div>
+        <div class="fx-row">
+          <button type="button" class="fx-tool" id="fx-rest" data-t="fx_rest">ابدأ راحة</button>
+          <button type="button" class="fx-tool" id="fx-work" data-t="fx_work">ابدأ تمرين</button>
+          <button type="button" class="fx-tool" id="fx-stop" data-t="fx_stop">إيقاف</button>
+        </div>
+        <label class="fx-auto"><input type="checkbox" id="fx-auto"><span data-t="fx_auto">ابدأ الراحة تلقائي بعد كل مجموعة</span></label>
+      </div>
+      <div class="fx-panel hidden" id="fx-watch">
+        <div class="fx-bpm"><b id="fw-bpm">--</b><small>BPM</small></div>
+        <div class="fx-zone" id="fw-zone"></div>
+        <div class="fx-stats">
+          <div><b id="fw-avg">--</b><small data-t="fw_avg">متوسط</small></div>
+          <div><b id="fw-max">--</b><small data-t="fw_max">أعلى</small></div>
+          <div><b id="fw-kcal">0</b><small data-t="fw_kcal">سعرة</small></div>
+          <div><b id="fw-time">00:00</b><small data-t="fw_time">مدة</small></div>
+        </div>
+        <div class="fx-note" id="fw-note"></div>
+        <div class="fx-row">
+          <button type="button" class="fx-tool" id="fw-connect" data-t="fw_connect">وصّل الساعة</button>
+          <button type="button" class="fx-tool" id="fw-save" data-t="fw_save">إنهاء وحفظ</button>
+        </div>
+      </div>
+      <div class="fx-panel hidden" id="fx-music">
+        <div id="fx-frame"></div>
+        <div class="fx-row">
+          <input type="url" id="fx-link" dir="ltr" placeholder="Spotify / YouTube / SoundCloud">
+          <button type="button" class="fx-tool" id="fx-link-save" data-t="fx_save">حفظ</button>
+        </div>
+        <a class="fx-open hidden" id="fx-open" target="_blank" rel="noopener noreferrer" data-t="fx_open_ext">افتح في التطبيق</a>
+      </div>
 
       <button type="button" class="focus-log-toggle" id="focus-log-toggle" data-t="log_actual_btn">سجّل اللي عملته فعلًا</button>
       <div class="per-set-box hidden" id="focus-log-box"></div>
@@ -2471,6 +2536,12 @@
       <button type="button" class="focus-prev" id="focus-prev" data-t="focus_prev">‹ السابق</button>
       <button type="button" class="focus-next" id="focus-next" data-t="focus_next">التالي ›</button>
     </div>
+  </div>
+
+  <div class="fx-mini hidden" id="focus-mini">
+    <div class="fx-mini-info"><b id="fx-mini-name"></b><small id="fx-mini-sets"></small></div>
+    <span class="fx-mini-time hidden" id="fx-mini-time"></span>
+    <button type="button" class="fx-mini-go" id="fx-mini-go" data-t="fx_expand">كمّل التمرين</button>
   </div>
 
   <div class="lightbox hidden" id="lightbox">

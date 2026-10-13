@@ -10,8 +10,8 @@
   var FB_APP = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
   var FB_FS = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
   var T = {
-    ar: { plus: 'اكتشف', team: 'متخصصينك', all: 'تواصل', chat: 'تواصل', disc: 'اكتشف جسمك', sub: 'تشريح 3D', bt: 'إزاي جسمك بيتحرك', bp: 'البيوميكانيك ببساطة: ليه التمرين بيصعب، والتكنيك الصح، والأخطاء اللي بتوجع.', bo: 'افتح المكتبة ←', t: 'العضلات والعظام والأربطة', p: 'اضغط على أي عضلة تشوف أصلها ومدخلها وتمارينها.', open: 'افتح التشريح ←', 'coach': 'مدرب', 'other': 'متخصص' },
-    en: { plus: 'Discover', team: 'Your specialists', all: 'Contact', chat: 'Contact', disc: 'Explore your body', sub: '3D anatomy', bt: 'How your body moves', bp: 'Biomechanics made simple: why exercises get hard, good technique, and the mistakes that hurt.', bo: 'Open the library →', t: 'Muscles, bones and ligaments', p: 'Tap any muscle to see its origin, insertion and exercises.', open: 'Open anatomy →', 'coach': 'Coach', 'other': 'Specialist' }
+    ar: { plus: 'اكتشف', team: 'متخصصينك', all: 'تواصل', chat: 'تواصل', disc: 'اكتشف جسمك', sub: 'تشريح 3D', t: 'العضلات والعظام والأربطة', p: 'اضغط على أي عضلة تشوف أصلها ومدخلها وتمارينها.', open: 'افتح التشريح ←', 'coach': 'مدرب', 'other': 'متخصص', fb: 'ابعتلنا ملاحظاتك' },
+    en: { plus: 'Discover', team: 'Your specialists', all: 'Contact', chat: 'Contact', disc: 'Explore your body', sub: '3D anatomy', t: 'Muscles, bones and ligaments', p: 'Tap any muscle to see its origin, insertion and exercises.', open: 'Open anatomy →', 'coach': 'Coach', 'other': 'Specialist', fb: 'Send us feedback' }
   };
   var RL = {
     ar: { ready: 'الجاهزية', nutri: 'التغذية', effort: 'المجهود' },
@@ -34,6 +34,7 @@
 
 
   var ICONS = {
+    daysum: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
     journeys: '<path d="M8 4h8v6a4 4 0 0 1-8 0zM8 6H4c0 3 1 4 4 5M16 6h4c0 3-1 4-4 5M12 14v4M8 20h8"/>',
     events: '<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/>',
     today: '<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M8 3v4M16 3v4M9 15l2 2 4-4"/>',
@@ -42,12 +43,20 @@
     lib: '<path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"/>',
     tpl: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/>',
     mytrain: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>',
+    music: '<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>',
+    me: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/>',
+    watch: '<rect x="7" y="6" width="10" height="12" rx="3"/><path d="M9 6l.8-3h4.4L15 6M9 18l.8 3h4.4L15 18M12 10v2.5l1.5 1"/>',
+    chal: '<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 2 1 2 0-3 1-5 2-8z"/>',
+    recipes: '<path d="M5 11h14a0 0 0 0 1 0 0v1a7 7 0 0 1-14 0zM8 8c0-1.5 1-1.5 1-3M12 8c0-1.5 1-1.5 1-3M16 8c0-1.5 1-1.5 1-3"/>',
+    stretch: '<circle cx="12" cy="5" r="2"/><path d="M12 8v6M12 10l-6-3M12 10l6-3M12 14l-4 6M12 14l4 6"/>',
+    fast: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/>',
+    nutri: '<path d="M12 21c-5 0-8-4-8-9 3 0 5 1 6 2 0-4 1-7 2-9 1 2 2 5 2 9 1-1 3-2 6-2 0 5-3 9-8 9z"/>',
     rehab: '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path d="M9 12h2l1-2 1.5 4 1-2H17"/>'
   };
   var TILES = [
     ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
     ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['tpl', 'القوالب', 'Templates'],
-    ['mytrain', 'برنامج التمرين', 'My program'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab']
+    ['mytrain', 'برنامج التمرين', 'My program'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab'], ['chal', 'تحديات', 'Challenges'], ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['fast', 'صيام', 'Fasting'], ['nutri', 'برامج تغذية', 'Nutrition'], ['music', 'أغاني', 'Music'], ['me', 'ملفي', 'My profile'], ['watch', 'الساعة', 'Watch'], ['daysum', 'ملخص يومي', 'Daily summary']
   ];
   function openPlus(tab) {
     import('./adam-plus.js').then(function (m) { m.open(tab); }).catch(function (e) { if (window.console) console.error(e); });
@@ -103,6 +112,7 @@
     return c;
   }
   function goTile(k) {
+    if (k === 'daysum') { if (window.adamDaySummary) window.adamDaySummary(); return; }
     if (k === 'mytrain') { var tb = document.getElementById('ctab-training'); if (tb) { tb.click(); window.scrollTo(0, 0); return; } openPlus('plan'); return; }
     openPlus(k);
   }
@@ -216,19 +226,11 @@
     a.innerHTML = anatSvg() + '<div><b>' + tx.t + '<span class="av2-chip">3D</span></b><p>' + tx.p + '</p><em>' + tx.open + '</em></div>';
     a.addEventListener('click', function () { var o = document.getElementById('lib-anatomy-btn'); if (o) o.click(); });
     r.appendChild(a);
-    var bm = el('button', 'av2-anat av2-bio'); bm.type = 'button';
-    bm.innerHTML = bioSvg() + '<div><b>' + tx.bt + '</b><p>' + tx.bp + '</p><em>' + tx.bo + '</em></div>';
-    bm.addEventListener('click', function () { var o = document.getElementById('lib-biomech-btn'); if (o) o.click(); });
-    r.appendChild(bm);
 
     trainersBlock(r, l, tx);
-  }
 
-  /* أيقونة كارت البيوميكانيك: شخص في وضع سكوات مع خط البار */
-  function bioSvg() {
-    return '<svg viewBox="0 0 70 90" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-      '<circle cx="44" cy="18" r="7" fill="currentColor" stroke="none"/><path d="M40 27 L24 48 L44 58 L34 80 L48 80"/><path d="M38 31 L52 40"/>' +
-      '<path d="M34 8 V84" stroke="#3ef0b0" stroke-width="2" stroke-dasharray="3 4"/><circle cx="34" cy="29" r="6" stroke="#3ef0b0" stroke-width="3"/></svg>';
+    var fb = el('a', 'av2-fb', tx.fb); fb.href = 'https://docs.google.com/forms/d/e/1FAIpQLSd3stkXiUZxdfU2vY5c3N9uGk5nHiArkjec5mNKBgAu4oYL7w/viewform'; fb.target = '_blank'; fb.rel = 'noopener';
+    r.appendChild(fb);
   }
 
   function refreshSum() {

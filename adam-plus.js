@@ -9,6 +9,8 @@ import { SPORTS, SPORT_GROUPS, SPORT_TEMPLATES } from './sports.js';
 import { EXERCISE_LIBRARY } from './exercise-library.js';
 import { FOOD_LIBRARY, FOOD_SERVINGS } from './food-library.js';
 import { NUTRITION_PROGRAMS } from './nutrition-programs.js';
+import { CHALLENGES, WEEKLY, TENMIN, STRETCH_MOVES, STRETCH_ROUTINES, RECIPES } from './adam-plus-data2.js';
+import { foodArt } from './food-art.js';
 
 const FB_APP = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 const FB_FS = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
@@ -70,7 +72,7 @@ const fb = () => window.__ADAM_FB_MOCK || real;
 
 /* ---------------------------------------------------------------- حالة */
 let EMAIL = '';
-let plus = { v: 1, ts: 0, checkins: {}, journey: null, train: null, nutri: null, pain: [], foodq: {}, fast: null, ramadan: false, travel: false, goal: '' };
+let plus = { v: 1, ts: 0, checkins: {}, journey: null, train: null, nutri: null, pain: [], foodq: {}, fast: null, ramadan: false, travel: false, goal: '', chals: {}, profile: null, set: null, sessions: [], skipProfile: false, weekly: null, weeksDone: 0, chalDone: 0, fav: {}, rswap: {}, cart: {}, stretch: { days: {} } };
 let saveTimer = null;
 const lsKey = () => 'adamplus:' + (EMAIL || 'guest');
 
@@ -85,13 +87,20 @@ async function loadState() {
   EMAIL = (await fb().email()) || '';
   try { const raw = localStorage.getItem(lsKey()); if (raw) plus = Object.assign(plus, JSON.parse(raw)); } catch (e) { /* تجاهل */ }
   if (EMAIL) { try { const r = await fb().loadPlus(EMAIL); if (r && (r.ts || 0) > (plus.ts || 0)) plus = Object.assign(plus, r); } catch (e) { /* تجاهل */ } }
-  plus.checkins = plus.checkins || {}; plus.pain = plus.pain || []; plus.foodq = plus.foodq || {};
+  if (EMAIL) {
+    try {
+      const g = localStorage.getItem('adamplus:guest');
+      if (g) { const gp = JSON.parse(g); if (!plus.ts || plus.ts < 1) plus = Object.assign(plus, gp); else if (!plus.profile && gp.profile) plus.profile = gp.profile; localStorage.removeItem('adamplus:guest'); plus.ts = Date.now(); }
+    } catch (e) { /* تجاهل */ }
+  }
+  plus.sessions = plus.sessions || []; plus.checkins = plus.checkins || {}; plus.pain = plus.pain || []; plus.foodq = plus.foodq || {}; plus.chals = plus.chals || {}; plus.fav = plus.fav || {}; plus.rswap = plus.rswap || {}; plus.cart = plus.cart || {}; plus.stretch = plus.stretch || { days: {} }; plus.stretch.days = plus.stretch.days || {};
 }
 
 /* ---------------------------------------------------------------- الإطار */
 const TABS = [
-  ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
-  ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab']
+  ['me', 'ملفي', 'My profile'], ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
+  ['chal', 'تحديات', 'Challenges'], ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['food', 'أكلي', 'My food'],
+  ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['music', 'أغاني', 'Music'], ['rehab', 'تأهيلي', 'My rehab']
 ];
 let curTab = 'journeys';
 let sub = {};
@@ -114,17 +123,20 @@ export async function open(tab) {
   document.body.classList.add('ap-lock');
   $('#ap-body').innerHTML = '<div class="ap-load">' + esc(L('جاري التحميل...', 'Loading...')) + '</div>';
   await Promise.all([loadState(), loadExtras()]);
-  const al = { tpl: ['lib', 'tpl'], libex: ['lib', 'ex'], progs: ['lib', 'prog'] }[tab];
-  if (al) { go(al[0]); sub.lt = al[1]; draw(); } else go(tab || curTab);
+  if (tab === 'watch') { go('me'); setTimeout(() => { const e = $('#ap-php'); if (e) e.scrollIntoView({ block: 'center' }); }, 120); return; }
+  if (tab === 'guest') { go(plus.profile || plus.skipProfile ? 'journeys' : 'me'); if (curTab === 'me') { sub.first = true; draw(); } return; }
+  const al = { tpl: ['lib', 'lt', 'tpl'], libex: ['lib', 'lt', 'ex'], progs: ['lib', 'lt', 'prog'], fast: ['food', 'ftab', 'fast'], nutri: ['plan', 'planTab', 'nutri'], challenges: ['chal'], chal: ['chal'], weekly: ['chal'] }[tab];
+  if (al) { go(al[0]); if (al[1]) { sub[al[1]] = al[2]; draw(); } } else go(tab || curTab);
 }
 export async function openOwn() {
   await open('plan');
   if (!plus.train) plus.train = { params: { goal: 'fitness', days: 0, equip: 'gym' }, days: [], seed: 0, created: stamp(), custom: true };
   sub.planTab = 'train'; sub.editTrain = false; sub.manual = { wd: dayIdx(new Date()) }; draw();
 }
-export function close() { const ov = document.getElementById('adam-plus'); if (ov) ov.classList.add('hidden'); document.body.classList.remove('ap-lock'); }
+export function close() { if (PL && !PL.min) { if (PL.finished) { stopPlayer(); } else PL.min = true; } dockRender(); const ov = document.getElementById('adam-plus'); if (ov) ov.classList.add('hidden'); document.body.classList.remove('ap-lock'); }
 
 function go(tab) {
+  if (PL && !PL.min) { if (PL.finished) { stopPlayer(); } else { PL.min = true; dockRender(); } }
   curTab = tab; sub = {};
   const ov = ensureOverlay();
   ov.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
@@ -136,8 +148,8 @@ function go(tab) {
 }
 function draw() {
   const body = $('#ap-body'); if (!body) return;
-  const fn = { journeys: viewJourneys, events: viewEvents, today: viewToday, plan: viewPlan, lib: viewLib, food: viewFood, rehab: viewRehab }[curTab];
-  try { fn(body); } catch (e) { body.innerHTML = '<div class="ap-empty">' + esc(L('حصلت مشكلة في عرض الشاشة', 'Something went wrong showing this screen')) + '</div>'; if (window.console) console.error(e); }
+  const fn = { music: viewMusic, me: viewMe, journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, rehab: viewRehab }[curTab];
+  try { if (PL && !PL.min) viewPlayer(body); else { fn(body); if (curTab !== 'me') { const gb = guestBanner(); if (gb && body.firstElementChild) { body.insertAdjacentHTML('afterbegin', gb); wireGuest(body); } } } } catch (e) { body.innerHTML = '<div class="ap-empty">' + esc(L('حصلت مشكلة في عرض الشاشة', 'Something went wrong showing this screen')) + '</div>'; if (window.console) console.error(e); }
   body.scrollTop = 0;
 }
 function chips(items, cur, attr) {
@@ -384,70 +396,6 @@ function advice(score, c) {
   if (plus.travel) a.push(L('وضع السفر: 20 دقيقة وزن جسم تكفي (سكوات، ضغط، بلانك)، واشرب مياه كتير وامشي قدر ما تقدر.', 'Travel mode: 20 minutes of bodyweight is enough (squats, push-ups, plank). Drink plenty of water and walk when you can.'));
   return a;
 }
-/* ---------------------------------------------------------------- عاداتي اليومية
-   عادات صغيرة بيختارها العميل (لحد ٥) وبيعلّم عليها كل يوم. بتتحفظ في نفس
-   حالة ADAM+ (على الجهاز + مستند checkins لو الحساب مسموح له). آخر ٦٠ يوم بس. */
-const HABITS = [
-  ['sleep7', 'نوم ٧ ساعات أو أكتر', 'Sleep 7+ hours'],
-  ['steps', '٨٠٠٠ خطوة', '8,000 steps'],
-  ['stretch', 'إطالة ١٠ دقايق', '10 minutes of stretching'],
-  ['veg', 'خضار في وجبتين', 'Vegetables in two meals'],
-  ['nosugar', 'من غير سكريات ولا مياه غازية', 'No sweets or soft drinks'],
-  ['outside', 'مشي برّه ١٥ دقيقة', '15-minute walk outside'],
-  ['screens', 'من غير موبايل قبل النوم بنص ساعة', 'No phone 30 minutes before bed'],
-  ['protein', 'بروتين في كل وجبة', 'Protein at every meal']
-];
-const HABIT_MAX = 5;
-const habitById = (id) => HABITS.find((x) => x[0] === id);
-function habitState() {
-  if (!plus.habits || typeof plus.habits !== 'object') plus.habits = { on: ['sleep7', 'steps', 'stretch'], log: {} };
-  if (!Array.isArray(plus.habits.on)) plus.habits.on = [];
-  if (!plus.habits.log || typeof plus.habits.log !== 'object') plus.habits.log = {};
-  return plus.habits;
-}
-function habitStreak(id, today) {
-  const st = habitState(); let n = 0; let d = today;
-  if (!(st.log[d] || []).includes(id)) d = addDays(d, -1); /* النهارده لسه ممكن يتعلّم */
-  while ((st.log[d] || []).includes(id)) { n++; d = addDays(d, -1); }
-  return n;
-}
-function habitsBlock(today) {
-  const st = habitState();
-  const done = st.log[today] || [];
-  const active = st.on.filter(habitById);
-  let h = '<div class="ap-sec"><b>' + esc(L('عاداتي اليومية', 'My daily habits')) + '</b><span>' + esc(L(done.filter((x) => active.includes(x)).length + ' من ' + active.length + ' النهارده', done.filter((x) => active.includes(x)).length + ' of ' + active.length + ' today')) + '</span></div><div class="ap-card">';
-  if (sub.hedit) {
-    h += '<p class="ap-hint">' + esc(L('اختار لحد ' + HABIT_MAX + ' عادات صغيرة تلتزم بيها كل يوم.', 'Pick up to ' + HABIT_MAX + ' small habits to keep every day.')) + '</p><div class="ap-chips">';
-    h += HABITS.map((x) => '<button type="button" data-hpick="' + x[0] + '" class="' + (st.on.includes(x[0]) ? 'on' : '') + '">' + esc(L(x[1], x[2])) + '</button>').join('');
-    h += '</div><button type="button" class="ap-btn small" data-hedit="0">' + esc(L('تمام', 'Done')) + '</button>';
-  } else if (!active.length) {
-    h += '<div class="ap-empty small"><p>' + esc(L('مفيش عادات متختارة.', 'No habits picked yet.')) + '</p><button type="button" class="ap-btn small" data-hedit="1">' + esc(L('اختار عاداتك', 'Pick your habits')) + '</button></div>';
-  } else {
-    active.forEach((id) => {
-      const x = habitById(id); const on = done.includes(id); const sk = habitStreak(id, today);
-      h += '<label class="ap-task ap-habit"><input type="checkbox" data-habit="' + id + '"' + (on ? ' checked' : '') + '><span>' + esc(L(x[1], x[2])) + (sk > 1 ? ' <small class="ap-hstreak">' + esc(L(sk + ' يوم ورا بعض', sk + ' days in a row')) + '</small>' : '') + '</span></label>';
-    });
-    h += '<button type="button" class="ap-btn ghost small" data-hedit="1">' + esc(L('عدّل عاداتي', 'Edit my habits')) + '</button>';
-  }
-  return h + '</div>';
-}
-function bindHabits(body, today) {
-  $$('[data-habit]', body).forEach((el) => el.addEventListener('change', () => {
-    const st = habitState(); const list = (st.log[today] || []).filter((x) => x !== el.dataset.habit);
-    if (el.checked) list.push(el.dataset.habit);
-    st.log[today] = list;
-    const keys = Object.keys(st.log).sort(); while (keys.length > 60) delete st.log[keys.shift()];
-    persist(); draw();
-  }));
-  $$('[data-hedit]', body).forEach((el) => el.addEventListener('click', () => { sub.hedit = el.dataset.hedit === '1'; draw(); }));
-  $$('[data-hpick]', body).forEach((el) => el.addEventListener('click', () => {
-    const st = habitState(); const id = el.dataset.hpick;
-    if (st.on.includes(id)) st.on = st.on.filter((x) => x !== id);
-    else if (st.on.length < HABIT_MAX) st.on.push(id);
-    persist(); draw();
-  }));
-}
-
 function checkStreak() {
   let n = 0, d = stamp();
   if (!plus.checkins[d]) d = addDays(d, -1);
@@ -468,7 +416,6 @@ function viewToday(body) {
   }
   const days = []; for (let i = 6; i >= 0; i--) { const d = addDays(today, -i); days.push([d, plus.checkins[d] ? plus.checkins[d].score : null]); }
   h += '<div class="ap-sec"><b>' + esc(L('آخر 7 أيام', 'Last 7 days')) + '</b><span>' + esc(L('سلسلة ', 'Streak ') + checkStreak()) + '</span></div><div class="ap-card"><div class="ap-bars">' + days.map((x) => '<div class="ap-barcol"><i style="height:' + (x[1] == null ? 4 : Math.max(8, x[1])) + '%;opacity:' + (x[1] == null ? 0.25 : 1) + '"></i><small>' + esc(lang() === 'en' ? WEEKDAYS[dayIdx(new Date(x[0] + 'T12:00:00'))][1].slice(0, 3) : SHORT_AR[dayIdx(new Date(x[0] + 'T12:00:00'))]) + '</small></div>').join('') + '</div></div>';
-  h += habitsBlock(today);
   h += '<div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-story">' + esc(L('اعمل قصة الأسبوع', 'Make my weekly story')) + '</button></div><canvas id="ap-canvas" width="1080" height="1350" class="hidden"></canvas>';
   body.innerHTML = h;
   $$('[data-q]', body).forEach((b) => b.addEventListener('click', () => {
@@ -480,7 +427,6 @@ function viewToday(body) {
   $('#ap-ram', body).addEventListener('click', () => { plus.ramadan = !plus.ramadan; persist(); draw(); });
   $('#ap-trv', body).addEventListener('click', () => { plus.travel = !plus.travel; persist(); draw(); });
   $('#ap-story', body).addEventListener('click', () => makeStory(body));
-  bindHabits(body, today);
 }
 function makeStory(body) {
   const cv = $('#ap-canvas', body); const x = cv.getContext('2d'); const W = 1080, H = 1350;
@@ -557,8 +503,8 @@ function planTrain(el) {
     h += '<div class="ap-row"><b>' + esc(L('جدولك', 'Your schedule')) + '</b><button type="button" class="ap-btn small ghost" id="ap-retrain">' + esc(L('غيّر', 'Change')) + '</button></div>';
     plus.train.days.forEach((day) => {
       h += '<div class="ap-card"><div class="ap-row"><b>' + esc(L(WEEKDAYS[day.wd][0], WEEKDAYS[day.wd][1])) + '</b><span class="mu">' + esc(L(SPLIT_NAME[day.kind][0], SPLIT_NAME[day.kind][1])) + '</span></div>';
-      day.items.forEach((it) => { const ex = EX_BY_ID[it.id]; if (!ex) return; h += '<button type="button" class="ap-ex" data-ex="' + esc(it.id) + '"><span>' + esc(nameOf(ex.name)) + '</span><em>' + it.sets + ' × ' + esc(it.reps) + '</em></button>'; });
-      h += '</div>';
+      day.items.forEach((it) => { if (it.blk) { h += '<div class="ap-ex"><span>' + esc(it.blk === 'warm' ? L('إحماء', 'Warm-up') : L('إطالة ختام', 'Cool-down')) + '</span></div>'; return; } const ex = EX_BY_ID[it.id]; if (!ex) return; h += '<button type="button" class="ap-ex" data-ex="' + esc(it.id) + '"><span>' + esc(nameOf(ex.name)) + '</span><em>' + it.sets + ' × ' + esc(it.reps) + '</em></button>'; });
+      h += '<div class="ap-actions"><button type="button" class="ap-btn small" data-run="' + day.wd + '">' + esc(L('ابدأ التمرين', 'Start workout')) + '</button><button type="button" class="ap-btn small ghost" data-edit="' + day.wd + '">' + esc(L('رتّب وعدّل', 'Edit and reorder')) + '</button></div></div>';
     });
     if (plus.train.params.goal === 'fat') h += '<div class="ap-note">' + esc(L('أضف 15 إلى 20 دقيقة كارديو خفيف بعد كل تمرين.', 'Add 15 to 20 minutes of easy cardio after each session.')) + '</div>';
     h += '<div class="ap-note">' + esc(L('ابدأ بأوزان تقدر تتحكم فيها، وزود تدريجيًا. لو عندك إصابة أو حالة صحية، استشر متخصص قبل ما تبدأ.', 'Start with weights you can control and progress gradually. If you have an injury or health condition, consult a specialist before starting.')) + '</div>';
@@ -566,6 +512,8 @@ function planTrain(el) {
     $('#ap-retrain', el).addEventListener('click', () => { sub.editTrain = true; draw(); });
     $('#ap-manual', el).addEventListener('click', () => { sub.manual = { wd: plus.train.days.length ? plus.train.days[0].wd : 0 }; draw(); });
     $$('[data-ex]', el).forEach((b) => b.addEventListener('click', () => openExercise(b.dataset.ex)));
+    $$('[data-run]', el).forEach((b) => b.addEventListener('click', async () => { const day = plus.train.days.find((x) => x.wd === Number(b.dataset.run)); if (!day) return; await loadLib(); startDay(day.items, L(WEEKDAYS[day.wd][0], WEEKDAYS[day.wd][1]) + ' · ' + L(SPLIT_NAME[day.kind][0], SPLIT_NAME[day.kind][1]), { warm: cfg().warm }); }));
+    $$('[data-edit]', el).forEach((b) => b.addEventListener('click', () => { sub.manual = { wd: Number(b.dataset.edit) }; draw(); }));
     return;
   }
   h += '<div class="ap-sec"><b>' + esc(L('اعمل جدول تمرينك في 3 خطوات', 'Build your training in 3 steps')) + '</b></div><div class="ap-card ap-form">';
@@ -598,17 +546,19 @@ function planManual(el) {
   const items = cur ? cur.items : [];
   if (!items.length) h += '<div class="ap-note" style="margin:0">' + esc(L('اليوم ده لسه فاضي. ضيف أول تمرين من تحت.', 'This day is empty. Add your first exercise below.')) + '</div>';
   items.forEach((it, i) => {
-    const ex = EX_BY_ID[it.id]; if (!ex) return;
-    h += '<div class="ap-exrow" style="display:flex;align-items:center;gap:8px;padding:10px 0;border-top:1px solid rgba(255,255,255,.06)">' +
-      '<span class="ap-exn" style="flex:1;min-width:0">' + esc(nameOf(ex.name)) + '</span>' +
-      '<input type="number" min="1" max="10" value="' + it.sets + '" data-ms="' + i + '" style="width:54px;margin:0;padding:8px" aria-label="sets">' +
-      '<span class="mu">×</span>' +
-      '<input type="text" value="' + esc(it.reps) + '" data-mr="' + i + '" style="width:70px;margin:0;padding:8px" aria-label="reps">' +
+    const ex = it.blk ? null : EX_BY_ID[it.id]; if (!it.blk && !ex) return;
+    const nm = it.blk ? (it.blk === 'warm' ? L('إحماء 5 دقايق', 'Warm-up (5 min)') : L('إطالة ختام', 'Cool-down stretch')) : nameOf(ex.name);
+    h += '<div class="ap-exrow ap-mrow"><span class="ap-mord"><button type="button" data-mup="' + i + '" aria-label="up"' + (i === 0 ? ' disabled' : '') + '>&#8593;</button><button type="button" data-mdn="' + i + '" aria-label="down"' + (i === items.length - 1 ? ' disabled' : '') + '>&#8595;</button></span>' +
+      '<span class="ap-exn" style="flex:1;min-width:0">' + esc(nm) + '</span>' +
+      (it.blk ? '' : '<input type="number" min="1" max="10" value="' + it.sets + '" data-ms="' + i + '" style="width:54px;margin:0;padding:8px" aria-label="sets"><span class="mu">×</span><input type="text" value="' + esc(it.reps) + '" data-mr="' + i + '" style="width:70px;margin:0;padding:8px" aria-label="reps">') +
       '<button type="button" class="ap-btn small danger" data-mdel="' + i + '" aria-label="delete">×</button></div>';
   });
   h += '</div>';
   h += '<div class="ap-sec"><b>' + esc(L('ضيف تمرين', 'Add an exercise')) + '</b></div>';
+  h += '<label class="ap-q"><b>' + esc(L('مكان الإضافة', 'Insert position')) + '</b><select id="ap-mpos" class="ap-select"><option value="end">' + esc(L('في آخر اليوم', 'At the end')) + '</option><option value="start"' + (sub.mpos === 'start' ? ' selected' : '') + '>' + esc(L('في أول اليوم', 'At the start')) + '</option>' + items.map((it, i) => { const nm = it.blk ? (it.blk === 'warm' ? L('الإحماء', 'the warm-up') : L('الإطالة', 'the cool-down')) : (EX_BY_ID[it.id] ? nameOf(EX_BY_ID[it.id].name) : ''); return nm ? '<option value="b' + i + '"' + (sub.mpos === 'b' + i ? ' selected' : '') + '>' + esc(L('قبل: ', 'Before: ') + nm) + '</option>' : ''; }).join('') + '</select></label>';
+  h += '<div class="ap-chips"><button type="button" id="ap-mwarm">+ ' + esc(L('إحماء', 'Warm-up')) + '</button><button type="button" id="ap-mcool">+ ' + esc(L('إطالة ختام', 'Cool-down')) + '</button></div>';
   h += '<input type="text" id="ap-msearch" placeholder="' + esc(L('ابحث عن تمرين...', 'Search exercises...')) + '"><div id="ap-mres"></div>';
+  h += '<div class="ap-actions" style="margin-top:12px"><button type="button" class="ap-btn" id="ap-mrun">' + esc(L('ابدأ التمرين', 'Start workout')) + '</button></div>';
   h += '<div class="ap-row" style="margin-top:12px"><button type="button" class="ap-btn small danger" id="ap-mclear">' + esc(L('امسح اليوم ده', 'Clear this day')) + '</button></div>';
   el.innerHTML = h;
   const save = () => { plus.train.days = plus.train.days.filter((x) => x.items.length); persist(); };
@@ -618,6 +568,18 @@ function planManual(el) {
   $$('[data-mr]', el).forEach((i) => i.addEventListener('change', () => { cur.items[Number(i.dataset.mr)].reps = i.value || '10'; persist(); }));
   $$('[data-mdel]', el).forEach((b) => b.addEventListener('click', () => { cur.items.splice(Number(b.dataset.mdel), 1); save(); planManual(el); }));
   $('#ap-mclear', el).addEventListener('click', () => { if (cur) { cur.items = []; save(); } planManual(el); });
+  const posSel = $('#ap-mpos', el); if (posSel) posSel.addEventListener('change', () => { sub.mpos = posSel.value; });
+  const insertAt = (item) => {
+    let dd = dayOf(wd); if (!dd) { dd = { kind: 'custom', wd: wd, items: [] }; plus.train.days.push(dd); plus.train.days.sort((a, b2) => a.wd - b2.wd); }
+    const pv = (posSel && posSel.value) || 'end'; let at = dd.items.length;
+    if (pv === 'start') at = 0; else if (pv.charAt(0) === 'b') at = Math.min(dd.items.length, Number(pv.slice(1)));
+    dd.items.splice(at, 0, item); sub.mpos = 'end'; persist(); planManual(el);
+  };
+  $$('[data-mup]', el).forEach((b) => b.addEventListener('click', () => { const i = Number(b.dataset.mup); if (i > 0) { const t = cur.items[i]; cur.items[i] = cur.items[i - 1]; cur.items[i - 1] = t; persist(); planManual(el); } }));
+  $$('[data-mdn]', el).forEach((b) => b.addEventListener('click', () => { const i = Number(b.dataset.mdn); if (i < cur.items.length - 1) { const t = cur.items[i]; cur.items[i] = cur.items[i + 1]; cur.items[i + 1] = t; persist(); planManual(el); } }));
+  $('#ap-mwarm', el).addEventListener('click', () => insertAt({ blk: 'warm' }));
+  $('#ap-mcool', el).addEventListener('click', () => insertAt({ blk: 'cool' }));
+  $('#ap-mrun', el).addEventListener('click', async () => { if (!cur || !cur.items.length) { toast(L('اليوم ده فاضي', 'This day is empty')); return; } await loadLib(); startDay(cur.items, L(WEEKDAYS[wd][0], WEEKDAYS[wd][1]), { warm: cfg().warm }); });
   const res = $('#ap-mres', el), q = $('#ap-msearch', el);
   const paint = () => {
     const k = q.value.trim().toLowerCase();
@@ -626,9 +588,9 @@ function planManual(el) {
     list = list.slice(0, 30);
     res.innerHTML = list.map((e) => '<button type="button" class="ap-ex" data-madd="' + esc(e.id) + '"><span>' + esc(nameOf(e.name)) + '</span><em>+ ' + esc(L('ضيف', 'Add')) + '</em></button>').join('') || '<div class="ap-note">' + esc(L('مفيش نتيجة', 'No results')) + '</div>';
     $$('[data-madd]', res).forEach((b) => b.addEventListener('click', () => {
-      let dd = dayOf(wd); if (!dd) { dd = { kind: 'custom', wd: wd, items: [] }; plus.train.days.push(dd); plus.train.days.sort((a, b2) => a.wd - b2.wd); }
-      if (dd.items.some((x) => x.id === b.dataset.madd)) { toast(L('التمرين ده موجود في اليوم', 'Already in this day')); return; }
-      dd.items.push({ id: b.dataset.madd, sets: 3, reps: '10' }); persist(); planManual(el);
+      const dd = dayOf(wd);
+      if (dd && dd.items.some((x) => x.id === b.dataset.madd)) { toast(L('التمرين ده موجود في اليوم', 'Already in this day')); return; }
+      insertAt({ id: b.dataset.madd, sets: 3, reps: '10' });
     }));
   };
   q.addEventListener('input', paint); paint();
@@ -662,7 +624,7 @@ function planNutri(el) {
   const n = plus.nutri;
   const preId = sub.progPre; if (preId && programsAll.some((p) => p.id === preId)) { const pr = programsAll.find((p) => p.id === preId); plus.nutri = Object.assign({}, n || {}, { prog: pr.id, factor: 1, target: progKcal(pr), params: (n && n.params) || null }); sub.progPre = null; persist(); return planNutri(el); }
   if (n && n.prog && !sub.editNutri) return showNutri(el);
-  const d = sub.nd || (n && n.params) || { sex: 'm', age: 28, weight: 80, height: 175, act: 1.375, goal: 'lose', pref: '' };
+  const pf = plus.profile; const d = sub.nd || (n && n.params) || (pf ? { sex: pf.sex, age: pf.age, weight: pf.weight, height: pf.height, act: pf.act, goal: pf.goal, pref: '' } : { sex: 'm', age: 28, weight: 80, height: 175, act: 1.375, goal: 'lose', pref: '' });
   let h = '<div class="ap-sec"><b>' + esc(L('خطة أكل على قدك', 'A meal plan for you')) + '</b></div><div class="ap-card ap-form">';
   h += '<div class="ap-q"><b>' + esc(L('الجنس', 'Sex')) + '</b>' + chips([['m', L('ذكر', 'Male')], ['f', L('أنثى', 'Female')]], d.sex, 'ns') + '</div>';
   h += '<div class="ap-three"><label>' + esc(L('السن', 'Age')) + '<input id="n-age" type="number" min="14" max="80" value="' + d.age + '"></label><label>' + esc(L('الوزن (كجم)', 'Weight (kg)')) + '<input id="n-w" type="number" min="35" max="250" value="' + d.weight + '"></label><label>' + esc(L('الطول (سم)', 'Height (cm)')) + '<input id="n-h" type="number" min="120" max="230" value="' + d.height + '"></label></div>';
@@ -695,16 +657,20 @@ function showNutri(el) {
   if (pr.desc) h += '<p class="ap-p mu">' + esc(pick(pr.desc)) + '</p>';
   h += '<div class="ap-card"><div class="ap-macros"><div><b>' + Math.round(t.kcal) + '</b><small>' + esc(L('سعرة', 'kcal')) + '</small></div><div><b>' + Math.round(t.p) + '</b><small>' + esc(L('بروتين', 'Protein')) + '</small></div><div><b>' + Math.round(t.c) + '</b><small>' + esc(L('كارب', 'Carbs')) + '</small></div><div><b>' + Math.round(t.f) + '</b><small>' + esc(L('دهون', 'Fat')) + '</small></div></div>' + (n.target ? '<small class="mu">' + esc(L('هدفك التقريبي: ', 'Your estimated target: ') + n.target + L(' سعرة', ' kcal')) + '</small>' : '') + '</div>';
   h += chips(pr.days.map((_, i) => [i, L('يوم ', 'Day ') + (i + 1)]), di, 'nd');
-  Object.keys(day).forEach((m) => {
-    const items = day[m] || []; if (!items.length) return;
+  const mc = n.meals || 0;
+  h += '<div class="ap-q"><b>' + esc(L('عدد الوجبات في اليوم', 'Meals per day')) + '</b>' + chips([[0, L('زي الخطة', 'As planned')], [3, '3'], [2, '2'], [1, '1']], mc, 'nm') + (mc === 2 ? '<div class="ap-note">' + esc(L('وجبتين في اليوم مناسبين لنظام الصيام المتقطع (نافذة أكل حوالي 8 ساعات). السعرات بتفضل زي ما هي.', 'Two meals a day suit intermittent fasting (an eating window of about 8 hours). Total calories stay the same.')) + ' <button type="button" class="ap-btn small ghost" id="ap-tofast">' + esc(L('تايمر الصيام', 'Fasting timer')) + '</button></div>' : '') + (mc === 1 ? '<div class="ap-warn">' + esc(L('وجبة واحدة في اليوم صعبة على ناس كتير وممكن تقلل البروتين والطاقة. استشر أخصائي تغذية لو عندك حالة صحية أو بتتمرن بكثافة.', 'One meal a day is hard for many people and can lower protein and energy. Consult a dietitian if you have a health condition or train hard.')) + '</div>' : '') + '</div>';
+  mealGroups(day, mc).forEach((g) => {
+    const items = g.items || []; if (!items.length) return;
     const mt = dayTotals({ x: items }, f);
-    h += '<div class="ap-card"><div class="ap-row"><b>' + esc(MEAL_NAME[m] ? L(MEAL_NAME[m][0], MEAL_NAME[m][1]) : m) + '</b><span class="mu">' + Math.round(mt.kcal) + ' ' + esc(L('سعرة', 'kcal')) + '</span></div>' + items.map((it) => { const fd = FOOD_BY_ID[it.id]; return '<div class="ap-food"><span>' + esc(fd ? nameOf(fd) : it.id) + '</span><em>' + r5(it.g * f) + ' ' + esc(L('جم', 'g')) + '</em></div>'; }).join('') + '</div>';
+    h += '<div class="ap-card"><div class="ap-row"><b>' + esc(g.name) + '</b><span class="mu">' + Math.round(mt.kcal) + ' ' + esc(L('سعرة', 'kcal')) + '</span></div>' + items.map((it) => { const fd = FOOD_BY_ID[it.id]; return '<div class="ap-food"><span>' + esc(fd ? nameOf(fd) : it.id) + '</span><em>' + r5(it.g * f) + ' ' + esc(L('جم', 'g')) + '</em></div>'; }).join('') + '</div>';
   });
   h += '<div class="ap-actions"><button type="button" class="ap-btn" id="ap-grocery">' + esc(L('قايمة المشتريات', 'Grocery list')) + '</button></div>';
   h += '<div class="ap-note">' + esc(L('خطة إرشادية للّياقة العامة. لو عندك حالة صحية أو حساسية، استشر أخصائي تغذية.', 'A guideline plan for general fitness. If you have a health condition or allergy, consult a dietitian.')) + '</div>';
   el.innerHTML = h;
   $('#ap-renutri', el).addEventListener('click', () => { sub.editNutri = true; draw(); });
   $$('[data-nd]', el).forEach((b) => b.addEventListener('click', () => { sub.nday = Number(b.dataset.nd); showNutri(el); }));
+  $$('[data-nm]', el).forEach((b) => b.addEventListener('click', () => { plus.nutri.meals = Number(b.dataset.nm); persist(); showNutri(el); }));
+  const tf = $('#ap-tofast', el); if (tf) tf.addEventListener('click', () => { go('food'); sub.ftab = 'fast'; draw(); });
   $('#ap-grocery', el).addEventListener('click', () => showGrocery(el, pr, f));
 }
 function groceryList(pr, f) {
@@ -818,6 +784,700 @@ function fastView(el) {
     };
     tick(); fastTimer = setInterval(tick, 30000);
   }
+}
+
+
+/* ================================================================ تحديات الـ30 يوم */
+const CH_BY_ID = {}; CHALLENGES.forEach((c) => { CH_BY_ID[c.id] = c; });
+const UNIT_L = { sec: ['ثانية', 'sec'], reps: ['تكرار', 'reps'], jumps: ['نطة', 'jumps'], steps: ['خطوة', 'steps'] };
+const noRestOf = (c) => !!(c.noRest || c.stretch);
+const isRestDay = (c, d) => !noRestOf(c) && d % 7 === 0 && d < 30;
+function chTarget(c, d) {
+  if (c.routine || isRestDay(c, d)) return 0;
+  const raw = c.from + (c.to - c.from) * (d - 1) / 29;
+  return Math.min(c.to, Math.max(c.from, Math.round(raw / c.step) * c.step));
+}
+function chFmt(c, n) {
+  if (c.unit === 'sec') return n >= 60 ? Math.floor(n / 60) + ':' + String(n % 60).padStart(2, '0') + ' ' + L('دقيقة', 'min') : n + ' ' + L('ثانية', 'sec');
+  const u = UNIT_L[c.unit]; return Number(n).toLocaleString(lang() === 'en' ? 'en-US' : 'en-US') + ' ' + (u ? L(u[0], u[1]) : '');
+}
+function tenRoutine(c, d) {
+  const idx = Math.max(0, d - 1 - Math.floor((d - 1) / 7));
+  return TENMIN[idx % TENMIN.length];
+}
+function chDay(st) { return Math.max(1, daysBetween(st.start, stamp()) + 1); }
+function chStats(c, st) {
+  const day = chDay(st); const last = Math.min(30, day);
+  let active = 0, done = 0, streak = 0, broke = false;
+  for (let d = 1; d <= 30; d++) { if (isRestDay(c, d)) continue; active++; if (st.done && st.done[d]) done++; }
+  for (let d = last; d >= 1; d--) {
+    if (isRestDay(c, d)) continue;
+    if (st.done && st.done[d]) { if (!broke) streak++; } else if (d === day) { /* النهاردة لسه */ } else broke = true;
+  }
+  return { day: day, active: active, done: done, pct: Math.round(done / active * 100), streak: streak, over: day > 30, complete: done >= active };
+}
+function weekStart() { const d = new Date(); return addDays(stamp(), -dayIdx(d)); }
+function ensureWeek() {
+  const key = weekStart();
+  if (plus.weekly && plus.weekly.key === key) return plus.weekly;
+  if (plus.weekly) { const pw = WEEKLY.find((w) => w.id === plus.weekly.id); if (pw && plus.weekly.val >= pw.goal) plus.weeksDone = (plus.weeksDone || 0) + 1; }
+  const idx = Math.floor(daysBetween('2024-01-06', key) / 7);
+  const w = WEEKLY[((idx % WEEKLY.length) + WEEKLY.length) % WEEKLY.length];
+  plus.weekly = { key: key, id: w.id, val: 0, days: {}, log: [] };
+  persist(); return plus.weekly;
+}
+function weeklyCard() {
+  const wk = ensureWeek(); const w = WEEKLY.find((x) => x.id === wk.id);
+  const val = w.kind === 'days' ? Object.keys(wk.days || {}).length : wk.val;
+  const pct = Math.min(100, Math.round(val / w.goal * 100));
+  const done = val >= w.goal;
+  let h = '<div class="ap-card ap-week"><div class="ap-row"><b>' + esc(L('تحدي الأسبوع', 'This week\'s challenge')) + '</b>' + (done ? '<span class="ap-ok">' + esc(L('خلص', 'Done')) + '</span>' : '<span class="mu">' + esc(L('بيتجدد كل سبت', 'Renews every Saturday')) + '</span>') + '</div>';
+  h += '<div class="ap-wtitle">' + esc(L(w.ar, w.en)) + '</div><div class="ap-bar"><i style="width:' + pct + '%"></i></div><small class="mu">' + Number(val).toLocaleString('en-US') + ' / ' + Number(w.goal).toLocaleString('en-US') + ' ' + esc(L(w.unit.ar, w.unit.en)) + '</small>';
+  if (w.kind === 'sum') h += '<div class="ap-chips">' + w.quick.map((q) => '<button type="button" data-wadd="' + q + '">+' + q.toLocaleString('en-US') + '</button>').join('') + '<button type="button" data-wundo="1" class="ghost">' + esc(L('تراجع', 'Undo')) + '</button></div>';
+  else h += '<div class="ap-chips"><button type="button" data-wday="1" class="' + (wk.days[stamp()] ? 'on' : '') + '">' + esc(wk.days[stamp()] ? L('النهاردة تمّ', 'Done today') : L('سجّل النهاردة', 'Log today')) + '</button></div>';
+  if (plus.weeksDone) h += '<small class="mu">' + esc(L('أسابيع خلصتها: ', 'Weeks completed: ') + plus.weeksDone) + '</small>';
+  return h + '</div>';
+}
+function chShare(c) {
+  const text = L('تعالى نعمل ' + c.ar + ' 30 يوم سوا على تطبيق ADAM: adamxfit.com', 'Join me for the ' + c.en + ' (30 days) on ADAM: adamxfit.com');
+  try { if (navigator.share) navigator.share({ title: 'ADAM', text: text }).catch(() => {}); else if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast(L('اتنسخت الدعوة', 'Invite copied'))); } catch (e) { /* ألغى */ }
+}
+function chCard(c, st) {
+  const s = st ? chStats(c, st) : null;
+  return '<button type="button" class="ap-jc" data-c="' + c.id + '" style="background:linear-gradient(150deg,' + c.color + ',#0a1013 82%)"><span class="ap-big">' + esc(c.big) + '</span><b>' + esc(L(c.ar, c.en)) + '</b><small>' + esc(pick(c.sub)) + '</small><span class="ap-meta"><i>' + esc(L('30 يوم', '30 days')) + '</i>' + (s ? '<i class="hot">' + esc(s.complete ? L('اكتمل', 'Completed') : L('اليوم ', 'Day ') + Math.min(30, s.day)) + '</i>' : '') + '</span>' + (s ? '<span class="ap-bar" style="margin-top:10px"><i style="width:' + s.pct + '%"></i></span>' : '') + '</button>';
+}
+function viewChal(body) {
+  if (sub.openC) return viewChalDetail(body, CH_BY_ID[sub.openC]);
+  let h = weeklyCard();
+  const mine = CHALLENGES.filter((c) => plus.chals[c.id]);
+  if (mine.length) h += '<div class="ap-sec"><b>' + esc(L('تحدياتي', 'My challenges')) + '</b></div><div class="ap-list">' + mine.map((c) => chCard(c, plus.chals[c.id])).join('') + '</div>';
+  h += '<div class="ap-sec"><b>' + esc(L('تحديات 30 يوم', '30-day challenges')) + '</b></div><div class="ap-list">' + CHALLENGES.filter((c) => !plus.chals[c.id]).map((c) => chCard(c, null)).join('') + '</div>';
+  h += '<div class="ap-note">' + esc(L('الأرقام إرشادية للّياقة العامة. اسمع جسمك ولو حسيت بوجع وقف. تقدر تبعت دعوة لصحابك من جوه كل تحدي.', 'Targets are guidelines for general fitness. Listen to your body and stop if you feel pain. You can send an invite to friends from inside each challenge.')) + '</div>';
+  body.innerHTML = h;
+  $$('[data-c]', body).forEach((b) => b.addEventListener('click', () => { sub.openC = b.dataset.c; draw(); }));
+  $$('[data-wadd]', body).forEach((b) => b.addEventListener('click', () => { const wk = ensureWeek(); const n = Number(b.dataset.wadd); wk.val += n; wk.log = wk.log || []; wk.log.push(n); persist(); draw(); }));
+  $$('[data-wundo]', body).forEach((b) => b.addEventListener('click', () => { const wk = ensureWeek(); const n = (wk.log || []).pop(); if (n) { wk.val = Math.max(0, wk.val - n); persist(); draw(); } }));
+  $$('[data-wday]', body).forEach((b) => b.addEventListener('click', () => { const wk = ensureWeek(); if (wk.days[stamp()]) delete wk.days[stamp()]; else wk.days[stamp()] = 1; persist(); draw(); }));
+}
+function markChalDay(id, d, on) {
+  const st = plus.chals[id]; if (!st) return;
+  st.done = st.done || {};
+  if (on === false) delete st.done[d]; else st.done[d] = 1;
+  const c = CH_BY_ID[id]; const s = chStats(c, st);
+  if (s.complete && !st.completed) { st.completed = stamp(); plus.chalDone = (plus.chalDone || 0) + 1; toast(L('مبروك! خلصت التحدي كله.', 'Congratulations! You finished the whole challenge.')); }
+  persist();
+}
+function viewChalDetail(body, c) {
+  if (!c) { sub.openC = ''; return viewChal(body); }
+  const st = plus.chals[c.id]; const nm = L(c.ar, c.en);
+  let h = '<button type="button" class="ap-back" id="ap-back">' + esc(L('رجوع', 'Back')) + '</button>';
+  h += '<div class="ap-hero" style="background:linear-gradient(150deg,' + c.color + ',#0a1013 85%)"><span class="ap-big">' + esc(c.big) + '</span><h2>' + esc(nm) + '</h2><p>' + esc(pick(c.sub)) + '</p></div>';
+  if (!st) {
+    h += '<div class="ap-card"><p class="ap-p">' + esc(pick(c.tip)) + '</p></div>';
+    if (!c.routine) {
+      h += '<div class="ap-sec"><b>' + esc(L('الهدف اليومي', 'Daily target')) + '</b></div><div class="ap-card ap-trow">' + [1, 8, 15, 22, 30].map((d) => '<div><small>' + esc(L('يوم ', 'Day ') + d) + '</small><b>' + esc(chFmt(c, chTarget(c, d))) + '</b></div>').join('') + '</div>';
+    } else h += '<div class="ap-card"><p class="ap-p">' + esc(c.stretch ? L('كل يوم روتين إطالة بتايمر بيرشدك حركة حركة.', 'Each day a guided stretching routine with a timer.') : L('كل يوم تمرين 10 دقايق مختلف (جسم كامل، بطن، رجلين، جزء علوي، كارديو، مرونة).', 'Each day a different 10-minute workout (full body, abs, legs, upper body, cardio, mobility).')) + '</p></div>';
+    h += '<div class="ap-note">' + esc(L('فيه يوم راحة كل أسبوع. لو فاتك يوم تقدر تسجله بعدين.', 'There is a rest day every week. If you miss a day you can log it later.')) + '</div>';
+    h += '<div class="ap-actions"><button type="button" class="ap-btn" id="ap-cstart">' + esc(L('ابدأ التحدي', 'Start challenge')) + '</button><button type="button" class="ap-btn ghost" id="ap-cshare">' + esc(L('ابعت دعوة لصاحبك', 'Invite a friend')) + '</button></div>';
+    body.innerHTML = h;
+    $('#ap-back', body).addEventListener('click', () => { sub.openC = ''; draw(); });
+    $('#ap-cstart', body).addEventListener('click', () => { plus.chals[c.id] = { start: stamp(), done: {} }; persist(); draw(); });
+    $('#ap-cshare', body).addEventListener('click', () => chShare(c));
+    return;
+  }
+  const s = chStats(c, st); const d = Math.min(30, s.day);
+  const rest = isRestDay(c, d); const doneToday = !!(st.done && st.done[d]);
+  if (s.over && !s.complete) h += '<div class="ap-warn">' + esc(L('الـ30 يوم خلصوا. سجّلت ' + s.done + ' من ' + s.active + ' يوم. تقدر تبدأ من جديد.', 'The 30 days are over. You logged ' + s.done + ' of ' + s.active + ' days. You can start again.')) + '</div>';
+  if (s.complete) h += '<div class="ap-card ap-win"><b>' + esc(L('اكتمل التحدي', 'Challenge completed')) + '</b><small class="mu">' + esc(L('أحسنت. دي حاجة تستاهل تفتخر بيها.', 'Well done. That is something to be proud of.')) + '</small></div>';
+  h += '<div class="ap-card ap-today"><div class="ap-row"><b>' + esc(L('اليوم ', 'Day ') + d + L(' من 30', ' of 30')) + '</b><span class="mu">' + esc(L('سلسلتك: ', 'Streak: ') + s.streak) + '</span></div>';
+  if (rest) h += '<div class="ap-bigt">' + esc(L('يوم راحة', 'Rest day')) + '</div><small class="mu">' + esc(L('العضلات بتتبني وانت مرتاح. اتحرك خفيف لو حبيت.', 'Muscles grow while you rest. Light movement is fine.')) + '</small>';
+  else if (c.routine) {
+    const rt = c.stretch ? STRETCH_ROUTINES[0] : tenRoutine(c, d);
+    h += '<div class="ap-bigt">' + esc(c.stretch ? L(rt.ar, rt.en) : nameOf(rt)) + '</div><small class="mu">' + esc(c.stretch ? pick(rt.sub) : L('10 دقايق · 5 حركات · جولتين', '10 minutes · 5 moves · 2 rounds')) + '</small>';
+    if (!c.stretch) h += '<div class="ap-mv">' + rt.moves.map((m, i) => '<span>' + (i + 1) + '. ' + esc(nameOf(m)) + '</span>').join('') + '</div>';
+    h += '<div class="ap-actions"><button type="button" class="ap-btn" id="ap-cplay">' + esc(L('ابدأ بالتايمر', 'Start with timer')) + '</button></div>';
+  } else h += '<div class="ap-bigt">' + esc(chFmt(c, chTarget(c, d))) + '</div><small class="mu">' + esc(pick(c.tip)) + '</small>';
+  if (!rest) h += '<div class="ap-actions"><button type="button" class="ap-btn' + (doneToday ? ' ghost' : '') + '" id="ap-cdone">' + esc(doneToday ? L('تمّ النهاردة (إلغاء)', 'Done today (undo)') : L('خلّصت النهاردة', 'Mark today done')) + '</button></div>';
+  h += '</div>';
+  h += '<div class="ap-card"><div class="ap-row"><b>' + esc(L('تقدمك', 'Your progress')) + '</b><span>' + s.pct + '%</span></div><div class="ap-bar"><i style="width:' + s.pct + '%"></i></div><div class="ap-cgrid">';
+  for (let k = 1; k <= 30; k++) {
+    const r = isRestDay(c, k), dn = !!(st.done && st.done[k]); const cls = (dn ? 'dn ' : '') + (r ? 'rs ' : '') + (k === s.day ? 'td ' : '') + (k > s.day ? 'fu' : '');
+    h += '<button type="button" class="' + cls + '" data-cd="' + k + '"' + (r || k > s.day ? ' disabled' : '') + '>' + k + '</button>';
+  }
+  h += '</div><small class="mu">' + esc(L('اضغط على أي يوم فات لتسجيله أو إلغائه.', 'Tap a past day to log or undo it.')) + '</small></div>';
+  h += '<div class="ap-card"><p class="ap-p">' + esc(pick(c.tip)) + '</p></div>';
+  h += '<div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-cshare">' + esc(L('ابعت دعوة لصاحبك', 'Invite a friend')) + '</button>' + (s.over ? '<button type="button" class="ap-btn" id="ap-crestart">' + esc(L('ابدأ من جديد', 'Start again')) + '</button>' : '') + '<button type="button" class="ap-btn danger" id="ap-cquit">' + esc(L('سيب التحدي', 'Leave challenge')) + '</button></div>';
+  body.innerHTML = h;
+  $('#ap-back', body).addEventListener('click', () => { sub.openC = ''; draw(); });
+  const dn = $('#ap-cdone', body); if (dn) dn.addEventListener('click', () => { markChalDay(c.id, d, !doneToday); draw(); });
+  $$('[data-cd]', body).forEach((b) => b.addEventListener('click', () => { const k = Number(b.dataset.cd); markChalDay(c.id, k, !(st.done && st.done[k])); draw(); }));
+  const pl = $('#ap-cplay', body);
+  if (pl) pl.addEventListener('click', async () => {
+    await loadLib();
+    if (c.stretch) startPlayer(stretchSteps(STRETCH_ROUTINES[0]), { title: L(STRETCH_ROUTINES[0].ar, STRETCH_ROUTINES[0].en), done: () => { markStretchDone(); } });
+    else { const rt = tenRoutine(c, d); startPlayer(tenSteps(rt), { title: nameOf(rt), done: () => markChalDay(c.id, d, true) }); }
+  });
+  $('#ap-cshare', body).addEventListener('click', () => chShare(c));
+  const rs = $('#ap-crestart', body); if (rs) rs.addEventListener('click', () => { plus.chals[c.id] = { start: stamp(), done: {} }; persist(); draw(); });
+  $('#ap-cquit', body).addEventListener('click', () => { if (window.confirm(L('تسيب التحدي ده؟', 'Leave this challenge?'))) { delete plus.chals[c.id]; persist(); sub.openC = ''; draw(); } });
+}
+
+/* ================================================================ مشغّل التايمر (إطالة + 10 دقايق) */
+let playT = null, wakeLock = null, actx = null;
+function libThumb(id) { if (!id || !libEx) return ''; const e = libEx.find((x) => x.id === id); return e && e.m ? 'media/' + e.m + '.svg' : ''; }
+function stretchSteps(rt) {
+  const out = []; const hold = rt.hold || 40;
+  rt.moves.forEach((k, i) => {
+    const m = STRETCH_MOVES[k]; const nm = nameOf(m); const img = libThumb(m.lib);
+    out.push({ kind: 'rest', dur: i === 0 ? 10 : 5, name: nm, label: L('استعد', 'Get ready'), cue: pick(m.cue), img: img });
+    if (m.sides) {
+      out.push({ kind: 'work', dur: Math.round(hold / 2), name: nm, label: L('الجنب اليمين', 'Right side'), cue: pick(m.cue), img: img });
+      out.push({ kind: 'rest', dur: 3, name: nm, label: L('بدّل الجنب', 'Switch sides'), cue: '', img: img });
+      out.push({ kind: 'work', dur: Math.round(hold / 2), name: nm, label: L('الجنب الشمال', 'Left side'), cue: pick(m.cue), img: img });
+    } else out.push({ kind: 'work', dur: hold, name: nm, label: pick(m.area), cue: pick(m.cue), img: img });
+  });
+  return out;
+}
+function tenSteps(rt) {
+  const out = [{ kind: 'rest', dur: 10, name: nameOf(rt.moves[0]), label: L('استعد', 'Get ready'), cue: pick(rt.moves[0].cue) }];
+  for (let r = 0; r < 2; r++) rt.moves.forEach((m, i) => {
+    out.push({ kind: 'work', dur: 40, name: nameOf(m), label: L('الجولة ', 'Round ') + (r + 1), cue: pick(m.cue) });
+    const last = r === 1 && i === rt.moves.length - 1;
+    if (!last) { const nx = rt.moves[(i + 1) % rt.moves.length]; out.push({ kind: 'rest', dur: 20, name: nameOf(nx), label: L('راحة، الجاي:', 'Rest, next:'), cue: '' }); }
+  });
+  return out;
+}
+function markStretchDone() {
+  plus.stretch = plus.stretch || { days: {} }; plus.stretch.days[stamp()] = 1;
+  const st = plus.chals['stretch30']; if (st) { const d = chDay(st); if (d <= 30) markChalDay('stretch30', d, true); }
+  const wk = ensureWeek(); if (wk.id === 'w_stretch') wk.days[stamp()] = 1;
+  persist();
+}
+/* ---------- صوت + اهتزاز + صوت التشجيع ---------- */
+const SET_DEF = { snd: 'chime', vib: true, rest: 60, warm: false };
+const cfg = () => Object.assign({}, SET_DEF, plus.set || {});
+function tone(f, ms, when) {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const t0 = actx.currentTime + (when || 0); const o = actx.createOscillator(), g = actx.createGain();
+    o.frequency.value = f; g.gain.value = 0.08; o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0 + ms / 1000);
+  } catch (e) { /* مفيش صوت */ }
+}
+function speak(text) {
+  try {
+    if (!window.speechSynthesis || !text) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text); u.lang = lang() === 'en' ? 'en-US' : 'ar-EG'; u.rate = 1.05; window.speechSynthesis.speak(u);
+  } catch (e) { /* تجاهل */ }
+}
+function buzz(p) { try { if (cfg().vib && navigator.vibrate) navigator.vibrate(p); } catch (e) { /* تجاهل */ } }
+function cue(kind) {
+  const s = cfg();
+  if (s.snd !== 'off') {
+    if (kind === 'tick') tone(660, 90);
+    else if (kind === 'work') { tone(880, 160); if (s.snd === 'voice') speak(L('ابدأ', 'Go')); }
+    else if (kind === 'rest') { tone(520, 160); if (s.snd === 'voice') speak(L('راحة', 'Rest')); }
+    else if (kind === 'set') tone(740, 120);
+    else if (kind === 'done') { tone(660, 140); tone(880, 140, 0.16); tone(1100, 260, 0.32); if (s.snd === 'voice') setTimeout(() => speak(L('أحسنت', 'Nice work')), 650); }
+  }
+  if (kind === 'done') buzz([200, 100, 200, 100, 300]); else if (kind !== 'tick') buzz(60);
+}
+
+/* ---------- ساعة / حزام نبض بالبلوتوث (Web Bluetooth) ---------- */
+const hr = { on: false, name: '', bpm: 0, max: 0, sum: 0, n: 0, dev: null };
+const hrOk = () => !!(navigator.bluetooth && navigator.bluetooth.requestDevice);
+async function connectHR() {
+  if (!hrOk()) { toast(L('المتصفح ده مش بيدعم البلوتوث. استخدم Chrome على أندرويد أو الكمبيوتر.', 'This browser does not support Bluetooth. Use Chrome on Android or desktop.')); return false; }
+  try {
+    const dev = await navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] });
+    const srv = await dev.gatt.connect();
+    const svc = await srv.getPrimaryService('heart_rate');
+    const ch = await svc.getCharacteristic('heart_rate_measurement');
+    await ch.startNotifications();
+    ch.addEventListener('characteristicvaluechanged', (e) => {
+      const v = e.target.value; const bpm = (v.getUint8(0) & 1) ? v.getUint16(1, true) : v.getUint8(1);
+      if (!bpm) return;
+      hr.bpm = bpm; hr.max = Math.max(hr.max, bpm); hr.sum += bpm; hr.n++;
+      const el = document.getElementById('ap-php'); if (el) el.innerHTML = hrHtml();
+      const el2 = document.getElementById('ap-hrnow'); if (el2) el2.textContent = bpm;
+    });
+    dev.addEventListener('gattserverdisconnected', () => { hr.on = false; hr.bpm = 0; const el = document.getElementById('ap-php'); if (el) el.innerHTML = hrHtml(); toast(L('الساعة اتفصلت', 'Watch disconnected')); });
+    hr.dev = dev; hr.on = true; hr.name = dev.name || ''; hr.max = 0; hr.sum = 0; hr.n = 0;
+    toast(L('اتوصّلت: ', 'Connected: ') + (dev.name || ''));
+    return true;
+  } catch (e) {
+    if (!e || e.name !== 'NotFoundError') toast(L('معرفتش أوصّل. اتأكد إن الساعة بتبث النبض.', 'Could not connect. Make sure the watch is broadcasting heart rate.'));
+    return false;
+  }
+}
+function disconnectHR() { try { if (hr.dev && hr.dev.gatt.connected) hr.dev.gatt.disconnect(); } catch (e) { /* تجاهل */ } hr.on = false; hr.bpm = 0; }
+function hrMaxEst() { const a = (plus.profile && Number(plus.profile.age)) || (plus.nutri && plus.nutri.params && Number(plus.nutri.params.age)) || 30; return 220 - a; }
+function hrZone(b) { const p = b / hrMaxEst(); return p < 0.6 ? [L('خفيف', 'Light'), '#6ec1ff'] : p < 0.7 ? [L('حرق دهون', 'Fat burn'), '#3ef0b0'] : p < 0.8 ? [L('لياقة', 'Aerobic'), '#ffd166'] : p < 0.9 ? [L('شدة عالية', 'Hard'), '#ffab5c'] : [L('أقصى', 'Max'), '#ff6b78']; }
+function hrHtml() {
+  if (!hr.on) return '<button type="button" class="ap-chip" id="ap-phr">' + esc(L('وصّل الساعة', 'Connect watch')) + '</button>';
+  const z = hrZone(hr.bpm || 0);
+  return '<span class="ap-hrb"><i style="background:' + z[1] + '"></i><b>' + (hr.bpm || '--') + '</b><small>' + esc(L('نبضة/د', 'bpm')) + (hr.bpm ? ' · ' + esc(z[0]) : '') + '</small></span>';
+}
+
+/* ---------- تحضير جلسة تمرين من يوم في الجدول ---------- */
+function warmSteps() {
+  const rt = TENMIN.find((r) => r.id === 'flow') || TENMIN[0];
+  const out = [{ kind: 'rest', dur: 5, name: nameOf(rt.moves[0]), label: L('إحماء', 'Warm-up'), cue: pick(rt.moves[0].cue) }];
+  rt.moves.forEach((m, i) => out.push({ kind: 'work', dur: 35, name: nameOf(m), label: L('إحماء', 'Warm-up') + ' ' + (i + 1) + '/' + rt.moves.length, cue: pick(m.cue) }));
+  return out;
+}
+function coolSteps() { const rt = Object.assign({}, STRETCH_ROUTINES[2] || STRETCH_ROUTINES[0], { hold: 30 }); rt.moves = rt.moves.slice(0, 5); return stretchSteps(rt); }
+function daySteps(items, opt) {
+  opt = opt || {}; const rest = cfg().rest || 60; const out = [];
+  if (opt.warm) warmSteps().forEach((s) => out.push(s));
+  const list = items.filter((it) => it.blk || EX_BY_ID[it.id]);
+  list.forEach((it, idx) => {
+    if (it.blk === 'warm') { warmSteps().forEach((s) => out.push(s)); return; }
+    if (it.blk === 'cool') { coolSteps().forEach((s) => out.push(s)); return; }
+    const ex = EX_BY_ID[it.id]; const nm = nameOf(ex.name); const img = libThumb(it.id);
+    const sets = Math.max(1, Number(it.sets) || 3);
+    for (let s = 1; s <= sets; s++) {
+      out.push({ kind: 'work', manual: true, reps: String(it.reps || '10'), name: nm, label: L('سيت ', 'Set ') + s + '/' + sets, cue: L('عدد التكرارات: ', 'Target reps: ') + (it.reps || '10'), img: img });
+      const lastEx = list.map((x) => !x.blk).lastIndexOf(true);
+      if (!(idx === lastEx && s === sets)) {
+        const nextEx = list.slice(idx + 1).find((x) => !x.blk);
+        const nxt = s < sets ? nm : (nextEx ? nameOf(EX_BY_ID[nextEx.id].name) : '');
+        out.push({ kind: 'rest', dur: rest, name: nxt || nm, label: L('راحة، الجاي:', 'Rest, next:'), cue: '', img: img });
+      }
+    }
+  });
+  if (opt.cool) coolSteps().forEach((s) => out.push(s));
+  return out;
+}
+function startDay(items, title, opt) {
+  const steps = daySteps(items, opt);
+  if (!steps.length) { toast(L('اليوم ده فاضي', 'This day is empty')); return; }
+  startPlayer(steps, { title: title, done: () => { /* السجل بيتسجل تلقائي */ } });
+}
+
+/* ---------- المشغّل (بيفضل شغال لو صغّرته) ---------- */
+let PL = null;
+const sndLbl = () => ({ chime: L('نغمة', 'Chime'), voice: L('نغمة وصوت', 'Voice'), off: L('صامت', 'Muted') }[cfg().snd]);
+function startPlayer(steps, opt) {
+  PL = { steps: steps, i: 0, left: steps[0].dur || 0, paused: false, opt: opt || {}, finished: false, last: Date.now(), active: 0, min: false };
+  hr.max = 0; hr.sum = 0; hr.n = 0;
+  try { if (navigator.wakeLock) navigator.wakeLock.request('screen').then((w) => { wakeLock = w; }).catch(() => {}); } catch (e) { /* تجاهل */ }
+  cue(steps[0].kind === 'work' ? 'work' : 'rest');
+  clearInterval(playT); playT = setInterval(plTick, 200);
+  dockRender(); draw();
+}
+function stopPlayer() {
+  clearInterval(playT); playT = null; try { if (wakeLock) wakeLock.release(); } catch (e) { /* تجاهل */ } wakeLock = null;
+  PL = null; dockRender();
+}
+function finishSession(P) {
+  const avg = hr.n ? Math.round(hr.sum / hr.n) : 0;
+  P.sum = { sec: Math.round(P.active), avg: avg, max: hr.max };
+  plus.sessions = plus.sessions || [];
+  plus.sessions.unshift({ d: stamp(), t: P.opt.title || '', s: P.sum.sec, avg: avg, max: hr.max });
+  plus.sessions = plus.sessions.slice(0, 60);
+  persist();
+}
+function plNext() {
+  const P = PL; if (!P || P.finished) return;
+  P.i++;
+  if (P.i >= P.steps.length) {
+    P.finished = true; clearInterval(playT); try { if (wakeLock) wakeLock.release(); } catch (e) { /* تجاهل */ } wakeLock = null;
+    finishSession(P); try { if (P.opt.done) P.opt.done(); } catch (e) { /* تجاهل */ } cue('done');
+    if (!P.min) draw(); dockRender(); return;
+  }
+  const s = P.steps[P.i]; P.left = s.dur || 0; cue(s.kind === 'work' ? 'work' : 'rest');
+  paintPlayer(); updPlayer(); dockRender();
+}
+function plTick() {
+  const P = PL; if (!P || P.finished) { clearInterval(playT); return; }
+  const now = Date.now(); const dt = (now - P.last) / 1000; P.last = now;
+  if (P.paused) return;
+  P.active += dt;
+  const s = P.steps[P.i]; if (s.manual) { dockUpdate(); return; }
+  const before = Math.ceil(P.left);
+  P.left -= dt;
+  const after = Math.ceil(P.left);
+  if (after !== before && after >= 1 && after <= 3) cue('tick');
+  if (P.left <= 0) { P.left = 0; plNext(); } else { updPlayer(); dockUpdate(); }
+}
+function plPause() { if (!PL || PL.finished) return; PL.paused = !PL.paused; PL.last = Date.now(); paintPlayer(); dockRender(); }
+function minimizePlayer() { if (!PL) return; PL.min = true; const ov = document.getElementById('adam-plus'); if (ov) ov.classList.add('hidden'); document.body.classList.remove('ap-lock'); dockRender(); }
+function expandPlayer() {
+  if (!PL) return; PL.min = false;
+  const ov = ensureOverlay(); ov.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr'); ov.classList.remove('hidden'); document.body.classList.add('ap-lock');
+  dockRender(); draw();
+}
+function paintPlayer() {
+  const P = PL; if (!P || P.finished || !document.getElementById('ap-pname')) return;
+  const s = P.steps[P.i]; const nx = P.steps.slice(P.i + 1).find((x) => x.kind === 'work');
+  $('#ap-pcount').textContent = (P.i + 1) + ' / ' + P.steps.length;
+  $('#ap-plabel').textContent = s.label || ''; $('#ap-plabel').className = 'ap-plabel ' + s.kind;
+  $('#ap-pname').textContent = s.name;
+  $('#ap-pcue').textContent = s.cue || '';
+  $('#ap-pnext').textContent = nx && s.kind === 'work' ? L('بعد كده: ', 'Next: ') + nx.name : '';
+  $('#ap-pimg').innerHTML = s.img ? '<img alt="" src="' + esc(s.img) + '" onerror="this.style.display=\'none\'">' : '';
+  $('#ap-ppause').textContent = P.paused ? L('كمّل', 'Resume') : L('إيقاف مؤقت', 'Pause');
+  $('#ap-ppause').style.display = s.manual ? 'none' : '';
+  $('#ap-pdone').style.display = s.manual ? '' : 'none';
+  $('#ap-psnd').textContent = sndLbl(); $('#ap-psnd').classList.toggle('on', cfg().snd !== 'off');
+  $('#ap-pvib').textContent = L('اهتزاز', 'Vibrate'); $('#ap-pvib').classList.toggle('on', cfg().vib !== false);
+  $('#ap-pmus').classList.toggle('on', musicState() !== 'none');
+  const ph = $('#ap-php'); if (ph) { ph.innerHTML = hrHtml(); const b = $('#ap-phr', ph); if (b) b.addEventListener('click', async () => { await connectHR(); const el = $('#ap-php'); if (el) el.innerHTML = hrHtml(); }); }
+}
+function updPlayer() {
+  const P = PL; if (!P || P.finished || !document.getElementById('ap-psec')) return;
+  const s = P.steps[P.i]; const n = P.steps.length;
+  if (s.manual) { $('#ap-psec').textContent = s.reps; $('#ap-pv').setAttribute('stroke-dashoffset', '0'); $('#ap-psec').className = 'reps'; }
+  else { $('#ap-psec').textContent = Math.max(0, Math.ceil(P.left)); $('#ap-psec').className = ''; $('#ap-pv').setAttribute('stroke-dashoffset', String(276 * (1 - Math.max(0, Math.min(1, P.left / (s.dur || 1)))))); }
+  $('#ap-ptot').style.width = Math.min(100, ((P.i + (s.manual ? 0 : 1 - Math.max(0, P.left) / (s.dur || 1))) / n) * 100) + '%';
+}
+function viewPlayer(body) {
+  const P = PL;
+  if (P.finished) {
+    const sm = P.sum || {}; const mins = Math.max(1, Math.round((sm.sec || 0) / 60));
+    body.innerHTML = '<div class="ap-card ap-win" style="margin-top:40px"><b style="font-size:24px">' + esc(L('أحسنت! خلصت', 'Nice work! Finished')) + '</b><p class="ap-p">' + esc(P.opt.title || '') + ' · ' + mins + ' ' + esc(L('دقيقة', 'min')) + '</p>' + (sm.avg ? '<p class="ap-p">' + esc(L('متوسط النبض ', 'Average heart rate ')) + sm.avg + ' · ' + esc(L('أعلى نبض ', 'Max ')) + sm.max + '</p>' : '') + '</div><div class="ap-actions"><button type="button" class="ap-btn" id="ap-pend">' + esc(L('رجوع', 'Back')) + '</button></div>';
+    $('#ap-pend', body).addEventListener('click', () => { stopPlayer(); draw(); });
+    return;
+  }
+  body.innerHTML = '<div class="ap-player"><div class="ap-ptop"><span class="ap-pbtns"><button type="button" class="ap-chip on" id="ap-pmin">' + esc(L('تصغير', 'Minimize')) + '</button><button type="button" class="ap-chip" id="ap-pclose">' + esc(L('إنهاء', 'End')) + '</button></span><span class="mu" id="ap-pcount"></span><span class="ap-pbtns"><button type="button" class="ap-chip" id="ap-pmus">' + esc(L('أغاني', 'Music')) + '</button><button type="button" class="ap-chip" id="ap-psnd"></button><button type="button" class="ap-chip" id="ap-pvib"></button></span></div><div id="ap-php" class="ap-php"></div><div class="ap-pimg" id="ap-pimg"></div><div class="ap-plabel" id="ap-plabel"></div><div class="ap-pname" id="ap-pname"></div><div class="ap-pring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="t"/><circle cx="50" cy="50" r="44" class="v" id="ap-pv" stroke-dasharray="276" stroke-dashoffset="0"/></svg><b id="ap-psec">0</b></div><p class="ap-pcue" id="ap-pcue"></p><div class="ap-bar"><i id="ap-ptot" style="width:0%"></i></div><small class="mu" id="ap-pnext"></small><div class="ap-actions"><button type="button" class="ap-btn" id="ap-pdone" style="display:none">' + esc(L('خلّصت السيت', 'Set done')) + '</button><button type="button" class="ap-btn" id="ap-ppause"></button><button type="button" class="ap-btn ghost" id="ap-pskip">' + esc(L('تخطّي', 'Skip')) + '</button></div></div>';
+  paintPlayer(); updPlayer();
+  $('#ap-pmin', body).addEventListener('click', minimizePlayer);
+  $('#ap-pclose', body).addEventListener('click', () => { if (window.confirm(L('تنهي التمرين؟', 'End the session?'))) { stopPlayer(); draw(); } });
+  $('#ap-ppause', body).addEventListener('click', plPause);
+  $('#ap-pmus', body).addEventListener('click', () => { musicToggle(); paintPlayer(); });
+  $('#ap-psnd', body).addEventListener('click', () => { const o = ['chime', 'voice', 'off']; const c = cfg().snd; plus.set = Object.assign({}, plus.set || {}, { snd: o[(o.indexOf(c) + 1) % 3] }); persist(); if (plus.set.snd !== 'off') cue('set'); paintPlayer(); });
+  $('#ap-pvib', body).addEventListener('click', () => { plus.set = Object.assign({}, plus.set || {}, { vib: cfg().vib === false }); persist(); buzz(80); paintPlayer(); });
+  $('#ap-pskip', body).addEventListener('click', plNext);
+  $('#ap-pdone', body).addEventListener('click', () => { cue('set'); plNext(); });
+}
+
+/* ================================================================ الشريط العايم (تمرين مصغّر + أغاني) */
+const PLAYLIST_HOSTS = /^(open\.spotify\.com|spotify\.link|(www\.|m\.|music\.)?youtube\.com|youtu\.be|(play\.)?anghami\.com|(on\.)?soundcloud\.com|music\.apple\.com)$/i;
+function plClean(url) { try { const u = new URL(String(url || '').trim()); if (u.protocol !== 'https:' || !PLAYLIST_HOSTS.test(u.hostname)) return ''; return u.href; } catch (e) { return ''; } }
+function plEmbed(url) {
+  try {
+    const u = new URL(url); const h = u.hostname.replace(/^www\./, '');
+    if (h === 'open.spotify.com') { const m = u.pathname.match(/\/(playlist|album|track|artist|show|episode)\/([A-Za-z0-9]+)/); if (m) return { src: 'https://open.spotify.com/embed/' + m[1] + '/' + m[2], h: 152 }; }
+    if (/(^|\.)youtube\.com$/.test(h) || h === 'youtu.be') {
+      const list = u.searchParams.get('list');
+      if (list) return { src: 'https://www.youtube.com/embed/videoseries?list=' + encodeURIComponent(list), h: 200 };
+      const id = h === 'youtu.be' ? u.pathname.slice(1) : u.searchParams.get('v');
+      if (id) return { src: 'https://www.youtube.com/embed/' + encodeURIComponent(id), h: 200 };
+    }
+    if (/soundcloud\.com$/.test(h)) return { src: 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(url), h: 166 };
+  } catch (e) { /* تجاهل */ }
+  return null;
+}
+function coachLink() { const a = document.getElementById('client-playlist'); return a && !a.classList.contains('hidden') ? (a.getAttribute('href') || '') : ''; }
+const musicLinkNow = () => plClean((plus.music && plus.music.link) || '') || plClean(coachLink());
+let musicOn = 'none'; /* none | open | min */
+const musicState = () => musicOn;
+function musicToggle() { musicOn = musicOn === 'open' ? 'min' : 'open'; if (musicOn === 'open' && !document.getElementById('apd-frame-wrap')) musicRebuild(); dockRender(); }
+
+function dockEl() {
+  let d = document.getElementById('ap-dock'); if (d) return d;
+  d = document.createElement('div'); d.id = 'ap-dock'; d.className = 'ap-dock hidden';
+  d.innerHTML = '<div class="apd-pill hidden" id="apd-pill"><div class="apd-grip" id="apd-grip"><b id="apd-name"></b><span id="apd-time"></span></div><div class="apd-btns"><button type="button" id="apd-pp"></button><button type="button" id="apd-done"></button><button type="button" id="apd-mus"></button><button type="button" id="apd-open"></button><button type="button" id="apd-x" aria-label="end">&times;</button></div></div><div class="apd-music hidden" id="apd-music"></div>';
+  document.body.appendChild(d);
+  try { const p = JSON.parse(localStorage.getItem('adamdock') || 'null'); if (p && isFinite(p.x) && isFinite(p.y)) { d.style.left = Math.max(0, Math.min(window.innerWidth - 120, p.x)) + 'px'; d.style.top = Math.max(0, Math.min(window.innerHeight - 60, p.y)) + 'px'; d.style.right = 'auto'; d.style.bottom = 'auto'; } } catch (e) { /* تجاهل */ }
+  let drag = null;
+  d.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('button, input, iframe, a')) return;
+    const r = d.getBoundingClientRect(); drag = { dx: e.clientX - r.left, dy: e.clientY - r.top, id: e.pointerId };
+    try { d.setPointerCapture(e.pointerId); } catch (er) { /* تجاهل */ }
+    d.classList.add('drag');
+  });
+  d.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const w = d.offsetWidth, h = d.offsetHeight;
+    const x = Math.max(4, Math.min(window.innerWidth - w - 4, e.clientX - drag.dx)); const y = Math.max(4, Math.min(window.innerHeight - 56, e.clientY - drag.dy));
+    d.style.left = x + 'px'; d.style.top = y + 'px'; d.style.right = 'auto'; d.style.bottom = 'auto';
+  });
+  const end = () => { if (!drag) return; drag = null; d.classList.remove('drag'); try { const r = d.getBoundingClientRect(); localStorage.setItem('adamdock', JSON.stringify({ x: r.left, y: r.top })); } catch (e) { /* تجاهل */ } };
+  d.addEventListener('pointerup', end); d.addEventListener('pointercancel', end);
+  $('#apd-pp', d).addEventListener('click', plPause);
+  $('#apd-done', d).addEventListener('click', () => { cue('set'); plNext(); });
+  $('#apd-mus', d).addEventListener('click', musicToggle);
+  $('#apd-open', d).addEventListener('click', expandPlayer);
+  $('#apd-x', d).addEventListener('click', () => { if (PL && PL.finished) { stopPlayer(); return; } if (window.confirm(L('تنهي التمرين؟', 'End the session?'))) stopPlayer(); });
+  return d;
+}
+function musicRebuild() {
+  const box = document.getElementById('apd-music'); if (!box) return;
+  const link = musicLinkNow(); const emb = link ? plEmbed(link) : null;
+  const wrap = document.getElementById('apd-frame-wrap');
+  const prev = wrap ? wrap.getAttribute('data-src') || '' : '';
+  if (box.firstChild && prev === ((emb && emb.src) || '') && document.getElementById('apd-link')) return;
+  box.innerHTML = '<div class="apd-mh"><b>' + esc(L('أغاني التمرين', 'Workout music')) + '</b><span><button type="button" id="apd-mmin">' + esc(L('تصغير', 'Hide')) + '</button><button type="button" id="apd-mx" aria-label="close">&times;</button></span></div>' +
+    '<div id="apd-frame-wrap" data-src="' + esc((emb && emb.src) || '') + '">' + (emb ? '<iframe class="apd-iframe" height="' + emb.h + '" src="' + esc(emb.src) + '" allow="autoplay; encrypted-media; clipboard-write; fullscreen" loading="lazy"></iframe>' : (link ? '<a class="ap-btn small" target="_blank" rel="noopener" href="' + esc(link) + '">' + esc(L('افتح القايمة', 'Open the playlist')) + '</a>' : '<div class="apd-empty">' + esc(L('الزق لينك قايمة من Spotify أو يوتيوب أو أنغامي أو SoundCloud.', 'Paste a playlist link from Spotify, YouTube, Anghami or SoundCloud.')) + '</div>')) + '</div>' +
+    '<div class="apd-in"><input id="apd-link" type="url" inputmode="url" placeholder="https://" value="' + esc(link) + '"><button type="button" id="apd-save">' + esc(L('شغّل', 'Play')) + '</button></div>';
+  $('#apd-mmin', box).addEventListener('click', () => { musicOn = 'min'; dockRender(); });
+  $('#apd-mx', box).addEventListener('click', () => { musicOn = 'none'; box.innerHTML = ''; dockRender(); const tab = document.getElementById('ap-body'); if (tab && curTab === 'music') draw(); });
+  $('#apd-save', box).addEventListener('click', () => {
+    const v = ($('#apd-link', box).value || '').trim(); const c = plClean(v);
+    if (!c) { toast(L('اللينك ده مش مدعوم. استخدم Spotify أو يوتيوب أو أنغامي أو SoundCloud.', 'Unsupported link. Use Spotify, YouTube, Anghami or SoundCloud.')); return; }
+    plus.music = { link: c }; persist(); box.innerHTML = ''; musicRebuild(); dockRender();
+  });
+}
+function dockRender() {
+  const d = dockEl(); const pill = $('#apd-pill', d); const mus = $('#apd-music', d);
+  const showPill = !!(PL && PL.min);
+  pill.classList.toggle('hidden', !showPill);
+  mus.classList.toggle('hidden', musicOn === 'none');
+  mus.classList.toggle('collapsed', musicOn === 'min');
+  const chip = musicOn === 'min' && !showPill;
+  d.classList.toggle('hidden', !showPill && musicOn === 'none');
+  d.classList.toggle('chip', chip);
+  let ch = $('#apd-chip', d);
+  if (chip) { if (!ch) { ch = document.createElement('button'); ch.type = 'button'; ch.id = 'apd-chip'; ch.className = 'apd-chip'; ch.addEventListener('click', () => { musicOn = 'open'; dockRender(); }); d.insertBefore(ch, d.firstChild); } ch.textContent = L('الأغاني شغّالة · افتح', 'Music is on · open'); }
+  else if (ch) ch.remove();
+  if (showPill) {
+    $('#apd-pp', d).textContent = PL.paused ? L('كمّل', 'Resume') : L('إيقاف', 'Pause');
+    $('#apd-mus', d).textContent = L('أغاني', 'Music'); $('#apd-mus', d).classList.toggle('on', musicOn !== 'none');
+    $('#apd-open', d).textContent = L('فتح', 'Open');
+    const fin = PL.finished; const man = !fin && PL.steps[PL.i].manual;
+    $('#apd-pp', d).style.display = (fin || man) ? 'none' : ''; $('#apd-done', d).style.display = man ? '' : 'none'; $('#apd-done', d).textContent = L('خلّصت السيت', 'Set done');
+    dockUpdate();
+  }
+}
+function dockUpdate() {
+  const d = document.getElementById('ap-dock'); if (!d || !PL || !PL.min) return;
+  const n = $('#apd-name', d), t = $('#apd-time', d); if (!n || !t) return;
+  if (PL.finished) { n.textContent = L('أحسنت! خلصت التمرين', 'Nice work! Workout finished'); t.textContent = ''; return; }
+  const s = PL.steps[PL.i];
+  n.textContent = s.name + (s.label ? ' · ' + s.label : '');
+  t.textContent = s.manual ? s.reps + ' ' + L('تكرار', 'reps') : String(Math.max(0, Math.ceil(PL.left))) + L(' ث', 's');
+}
+
+/* ================================================================ الأغاني */
+function viewMusic(body) {
+  const link = musicLinkNow(); const coach = plClean(coachLink());
+  let h = guestBanner();
+  h += '<div class="ap-sec"><b>' + esc(L('أغاني التمرين', 'Workout music')) + '</b></div><div class="ap-card"><p class="ap-p">' + esc(L('الزق لينك قايمة أغاني من Spotify أو يوتيوب أو أنغامي أو SoundCloud، وهتشتغل في مشغّل صغير تقدر تحركه في الشاشة وتسيبه شغال وانت بتتنقل أو بتتمرن.', 'Paste a playlist link from Spotify, YouTube, Anghami or SoundCloud. It plays in a small player you can drag around and leave running while you browse or train.')) + '</p>';
+  h += '<div class="apd-in" style="margin:10px 0"><input id="mu-link" type="url" inputmode="url" placeholder="https://" value="' + esc((plus.music && plus.music.link) || '') + '"><button type="button" id="mu-save">' + esc(L('احفظ وشغّل', 'Save and play')) + '</button></div>';
+  h += '<div class="ap-actions">' + (link ? '<button type="button" class="ap-btn" id="mu-play">' + esc(L('شغّل المشغّل', 'Open player')) + '</button>' : '') + (coach && coach !== link ? '<button type="button" class="ap-btn ghost" id="mu-coach">' + esc(L('استخدم قايمة مدربك', 'Use my coach playlist')) + '</button>' : '') + (plus.music && plus.music.link ? '<button type="button" class="ap-btn ghost danger" id="mu-clear">' + esc(L('امسح اللينك', 'Remove link')) + '</button>' : '') + '</div></div>';
+  h += '<div class="ap-sec"><b>' + esc(L('هات لينك قايمة', 'Get a playlist link')) + '</b></div><div class="ap-card"><div class="ap-chips"><a class="ap-chip" target="_blank" rel="noopener" href="https://open.spotify.com/">Spotify</a><a class="ap-chip" target="_blank" rel="noopener" href="https://music.youtube.com/">YouTube Music</a><a class="ap-chip" target="_blank" rel="noopener" href="https://play.anghami.com/">Anghami</a><a class="ap-chip" target="_blank" rel="noopener" href="https://soundcloud.com/">SoundCloud</a></div>';
+  h += '<div class="ap-step"><div class="ap-wk">1</div><div class="ap-st"><span class="ap-p">' + esc(L('افتح التطبيق واختار قايمة تمرين.', 'Open the app and pick a workout playlist.')) + '</span></div></div>';
+  h += '<div class="ap-step"><div class="ap-wk">2</div><div class="ap-st"><span class="ap-p">' + esc(L('اضغط مشاركة ثم نسخ اللينك.', 'Tap Share, then Copy link.')) + '</span></div></div>';
+  h += '<div class="ap-step"><div class="ap-wk">3</div><div class="ap-st"><span class="ap-p">' + esc(L('الزقه فوق واضغط "احفظ وشغّل".', 'Paste it above and tap "Save and play".')) + '</span></div></div>';
+  h += '<div class="ap-note">' + esc(L('الأغاني بتتشغّل من خدمتها نفسها (لازم حسابك فيها). أحيانًا الموبايل بيوقفها لما الشاشة تقفل. ADAM مش بيخزّن أي أغاني.', 'Songs play from their own service (you need your account there). Phones sometimes pause them when the screen locks. ADAM does not store any songs.')) + '</div></div>';
+  body.innerHTML = h;
+  wireGuest(body);
+  const save = (v) => { const c = plClean(v); if (!c) { toast(L('اللينك ده مش مدعوم. استخدم Spotify أو يوتيوب أو أنغامي أو SoundCloud.', 'Unsupported link. Use Spotify, YouTube, Anghami or SoundCloud.')); return; } plus.music = { link: c }; persist(); const box = document.getElementById('apd-music'); if (box) box.innerHTML = ''; musicOn = 'open'; musicRebuild(); dockRender(); draw(); };
+  $('#mu-save', body).addEventListener('click', () => save($('#mu-link', body).value));
+  const pl = $('#mu-play', body); if (pl) pl.addEventListener('click', () => { musicOn = 'open'; musicRebuild(); dockRender(); });
+  const co = $('#mu-coach', body); if (co) co.addEventListener('click', () => save(coach));
+  const cl = $('#mu-clear', body); if (cl) cl.addEventListener('click', () => { plus.music = null; persist(); const box = document.getElementById('apd-music'); if (box) box.innerHTML = ''; musicOn = 'none'; dockRender(); draw(); });
+}
+
+/* ================================================================ الإطالة */
+function stretchStreak() {
+  const days = (plus.stretch && plus.stretch.days) || {}; let n = 0, d = stamp();
+  if (!days[d]) d = addDays(d, -1);
+  while (days[d]) { n++; d = addDays(d, -1); }
+  return n;
+}
+function viewStretch(body) {
+  const days = (plus.stretch && plus.stretch.days) || {};
+  const ws = weekStart();
+  if (sub.openR) return viewStretchDetail(body, STRETCH_ROUTINES.find((r) => r.id === sub.openR));
+  let h = '<div class="ap-card"><div class="ap-row"><b>' + esc(L('أسبوعك', 'Your week')) + '</b><span class="mu">' + esc(L('سلسلة: ', 'Streak: ') + stretchStreak()) + '</span></div><div class="ap-wdots">';
+  for (let i = 0; i < 7; i++) { const dt = addDays(ws, i); h += '<div class="' + (days[dt] ? 'on' : '') + (dt === stamp() ? ' td' : '') + '"><i></i><small>' + esc(L(SHORT_AR[i], WEEKDAYS[i][1].slice(0, 3))) + '</small></div>'; }
+  h += '</div></div>';
+  h += '<div class="ap-sec"><b>' + esc(L('اختار روتين', 'Choose a routine')) + '</b></div>';
+  STRETCH_ROUTINES.forEach((r) => {
+    h += '<div class="ap-card"><div class="ap-row"><b>' + esc(L(r.ar, r.en)) + '</b><span class="mu">' + esc(r.min + ' ' + L('دقيقة', 'min')) + '</span></div><small class="mu">' + esc(pick(r.sub)) + '</small><div class="ap-actions"><button type="button" class="ap-btn" data-rplay="' + r.id + '">' + esc(L('ابدأ بالتايمر', 'Start with timer')) + '</button><button type="button" class="ap-btn ghost" data-ropen="' + r.id + '">' + esc(L('شوف الحركات', 'See the moves')) + '</button></div></div>';
+  });
+  h += '<div class="ap-note">' + esc(L('اتمدد لحد ما تحس بشد خفيف، مش وجع، وماتنطش في الحركة. لو عندك إصابة أو ألم مستمر، استشر أخصائي تأهيل الأول.', 'Stretch to a mild pull, never pain, and do not bounce. If you have an injury or ongoing pain, check with a rehab specialist first.')) + '</div><div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-sask">' + esc(L('اسأل أخصائي', 'Ask a specialist')) + '</button></div>';
+  body.innerHTML = h;
+  $$('[data-ropen]', body).forEach((b) => b.addEventListener('click', () => { sub.openR = b.dataset.ropen; draw(); }));
+  $$('[data-rplay]', body).forEach((b) => b.addEventListener('click', async () => { const r = STRETCH_ROUTINES.find((x) => x.id === b.dataset.rplay); await loadLib(); startPlayer(stretchSteps(r), { title: L(r.ar, r.en), done: markStretchDone }); }));
+  $('#ap-sask', body).addEventListener('click', () => consult(L('إطالة ومرونة', 'stretching and flexibility')));
+  loadLib();
+}
+async function viewStretchDetail(body, r) {
+  if (!r) { sub.openR = ''; return viewStretch(body); }
+  await loadLib();
+  let h = '<button type="button" class="ap-back" id="ap-back">' + esc(L('رجوع', 'Back')) + '</button><div class="ap-sec"><b>' + esc(L(r.ar, r.en)) + '</b><span>' + esc(pick(r.sub)) + '</span></div><div class="ap-card">';
+  r.moves.forEach((k, i) => { const m = STRETCH_MOVES[k]; const img = libThumb(m.lib); h += '<div class="ap-ex ap-exrow">' + (img ? '<img class="ap-th" alt="" loading="lazy" src="' + esc(img) + '">' : '<span class="ap-th ap-num">' + (i + 1) + '</span>') + '<span class="ap-exn"><b>' + esc(nameOf(m)) + (m.sides ? ' <small>(' + esc(L('الجنبين', 'both sides')) + ')</small>' : '') + '</b><small>' + esc(pick(m.cue)) + '</small></span></div>'; });
+  h += '</div><div class="ap-actions"><button type="button" class="ap-btn" id="ap-rgo">' + esc(L('ابدأ بالتايمر', 'Start with timer')) + '</button></div>';
+  body.innerHTML = h;
+  $('#ap-back', body).addEventListener('click', () => { sub.openR = ''; draw(); });
+  $('#ap-rgo', body).addEventListener('click', () => startPlayer(stretchSteps(r), { title: L(r.ar, r.en), done: markStretchDone }));
+}
+
+/* ================================================================ الوصفات */
+const R_BY_ID = {}; RECIPES.forEach((r) => { R_BY_ID[r.id] = r; });
+const R_MEALS = [['all', 'الكل', 'All'], ['breakfast', 'فطار', 'Breakfast'], ['lunch', 'غدا', 'Lunch'], ['dinner', 'عشا', 'Dinner'], ['snack', 'سناك', 'Snack'], ['fav', 'المفضلة', 'Favorites'], ['cart', 'المشتريات', 'Shopping']];
+const R_TAGS = [['protein', 'بروتين عالي', 'High protein'], ['lowcarb', 'قليل كارب', 'Low carb'], ['veg', 'نباتي', 'Vegetarian'], ['budget', 'اقتصادي', 'Budget'], ['quick', 'سريع', 'Quick']];
+const rIng = (r) => { const sw = (plus.rswap && plus.rswap[r.id]) || {}; return r.ing.map((it, i) => (sw[i] ? { id: sw[i].id, g: sw[i].g, swapped: true } : { id: it[0], g: it[1] })); };
+function rTotals(r) {
+  const t = { kcal: 0, p: 0, c: 0, f: 0, g: 0 };
+  rIng(r).forEach((it) => { const n = foodNutr(it.id, it.g); t.kcal += n.kcal; t.p += n.p; t.c += n.c; t.f += n.f; t.g += it.g; });
+  const s = r.serv || 1; return { kcal: t.kcal / s, p: t.p / s, c: t.c / s, f: t.f / s, g: t.g / s };
+}
+function rArt(r) { try { const f = FOOD_BY_ID[r.ing[0][0]]; return f ? foodArt(f) : ''; } catch (e) { return ''; } }
+function viewRecipes(body) {
+  if (sub.openRc) return viewRecipeDetail(body, R_BY_ID[sub.openRc]);
+  const meal = sub.rmeal || 'all';
+  if (meal === 'cart') return viewCart(body);
+  const tag = sub.rtag || ''; const q = normAr(sub.rq || '');
+  let list = RECIPES.filter((r) => (meal === 'all' || (meal === 'fav' ? plus.fav[r.id] : r.meal === meal)) && (!tag || r.tags.indexOf(tag) !== -1));
+  if (q) list = list.filter((r) => (normAr(r.ar) + ' ' + normAr(r.en) + ' ' + r.ing.map((i) => (FOOD_BY_ID[i[0]] ? normAr(FOOD_BY_ID[i[0]].ar) + ' ' + normAr(FOOD_BY_ID[i[0]].en) : '')).join(' ')).indexOf(q) !== -1);
+  let h = '<div class="ap-goalbox"><input id="ap-rq" type="text" maxlength="60" placeholder="' + esc(L('دوّر: فراخ، عدس، شوفان...', 'Search: chicken, lentils, oats...')) + '" value="' + esc(sub.rq || '') + '"></div>';
+  h += chips(R_MEALS.map((m) => [m[0], L(m[1], m[2]) + (m[0] === 'cart' ? ' (' + Object.keys(plus.cart || {}).length + ')' : '')]), meal, 'rm');
+  h += chips([['', L('كل الأنواع', 'All types')]].concat(R_TAGS.map((t) => [t[0], L(t[1], t[2])])), tag, 'rt');
+  h += '<div class="ap-note">' + list.length + esc(L(' وصفة', ' recipes')) + '</div>';
+  h += list.length ? '<div class="ap-card">' + list.map((r) => { const t = rTotals(r); return '<button type="button" class="ap-ex ap-exrow" data-rc="' + r.id + '"><span class="ap-th ap-fart">' + rArt(r) + '</span><span class="ap-exn"><b>' + esc(nameOf(r)) + '</b><small>' + Math.round(t.kcal) + ' ' + esc(L('سعرة', 'kcal')) + ' · ' + Math.round(t.p) + esc(L(' جم بروتين', ' g protein')) + ' · ' + r.min + esc(L(' د', ' min')) + '</small></span>' + (plus.fav[r.id] ? '<em class="ap-fav on"></em>' : '<em>›</em>') + '</button>'; }).join('') + '</div>' : '<div class="ap-empty small">' + esc(meal === 'fav' ? L('لسه مفيش وصفات في المفضلة.', 'No favorites yet.') : L('مفيش وصفة مطابقة.', 'No matching recipes.')) + '</div>';
+  h += '<div class="ap-note">' + esc(L('الأرقام الغذائية محسوبة من مكتبة ADAM وتقديرية. لو عندك حساسية أو حالة صحية استشر أخصائي تغذية.', 'Nutrition numbers are calculated from the ADAM food library and are estimates. If you have an allergy or health condition, consult a dietitian.')) + '</div>';
+  body.innerHTML = h;
+  const qi = $('#ap-rq', body); if (qi) qi.addEventListener('change', () => { sub.rq = qi.value; draw(); });
+  $$('[data-rm]', body).forEach((b) => b.addEventListener('click', () => { sub.rmeal = b.dataset.rm; draw(); }));
+  $$('[data-rt]', body).forEach((b) => b.addEventListener('click', () => { sub.rtag = b.dataset.rt; draw(); }));
+  $$('[data-rc]', body).forEach((b) => b.addEventListener('click', () => { sub.openRc = b.dataset.rc; sub.srv = 0; draw(); }));
+}
+function swapOptions(r, i) {
+  const it = rIng(r)[i]; const f = FOOD_BY_ID[it.id]; if (!f) return [];
+  const byProt = f.cat === 'protein' && f.p > 5; const key = byProt ? 'p' : 'c';
+  const base = f[key] || 0; if (!base) return [];
+  return foodsAll.filter((x) => x.cat === f.cat && x.id !== f.id && x[key] > 0 && x.cat !== 'dish').map((x) => {
+    const g = Math.min(it.g * 2.5, Math.max(it.g * 0.4, it.g * base / x[key]));
+    return { id: x.id, g: Math.max(5, Math.round(g / 5) * 5), d: Math.abs(x[key] - base) / base };
+  }).sort((a, b) => a.d - b.d).slice(0, 8);
+}
+function viewRecipeDetail(body, r) {
+  if (!r) { sub.openRc = ''; return viewRecipes(body); }
+  const sel = sub.srv || r.serv; const k = sel / r.serv; const t = rTotals(r);
+  let h = '<button type="button" class="ap-back" id="ap-back">' + esc(L('رجوع', 'Back')) + '</button>';
+  h += '<div class="ap-hero ap-rhero"><span class="ap-fart big">' + rArt(r) + '</span><h2>' + esc(nameOf(r)) + '</h2><div class="ap-meta"><i>' + esc(tl({ breakfast: ['فطار', 'Breakfast'], lunch: ['غدا', 'Lunch'], dinner: ['عشا', 'Dinner'], snack: ['سناك', 'Snack'] }, r.meal)) + '</i><i>' + r.min + esc(L(' دقيقة', ' min')) + '</i>' + r.tags.map((g) => '<i>' + esc((R_TAGS.find((x) => x[0] === g) || ['', g, g])[L(1, 2) === 1 ? 1 : 2]) + '</i>').join('') + '</div></div>';
+  h += '<div class="ap-card"><div class="ap-macros"><div><b>' + Math.round(t.kcal) + '</b><small>' + esc(L('سعرة', 'kcal')) + '</small></div><div><b>' + Math.round(t.p) + '</b><small>' + esc(L('بروتين', 'Protein')) + '</small></div><div><b>' + Math.round(t.c) + '</b><small>' + esc(L('كارب', 'Carbs')) + '</small></div><div><b>' + Math.round(t.f) + '</b><small>' + esc(L('دهون', 'Fat')) + '</small></div></div><small class="mu">' + esc(L('للحصة الواحدة', 'Per serving')) + '</small></div>';
+  h += '<div class="ap-row"><b>' + esc(L('عدد الحصص', 'Servings')) + '</b><span class="ap-step2"><button type="button" id="ap-sminus" aria-label="-">-</button><b>' + sel + '</b><button type="button" id="ap-splus" aria-label="+">+</button></span></div>';
+  h += '<div class="ap-sec"><b>' + esc(L('المكونات', 'Ingredients')) + '</b></div><div class="ap-card">';
+  rIng(r).forEach((it, i) => { const f = FOOD_BY_ID[it.id]; h += '<div class="ap-food"><span>' + esc(f ? nameOf(f) : it.id) + (it.swapped ? ' <small class="mu">(' + esc(L('بديل', 'swap')) + ')</small>' : '') + '</span><em>' + r5(it.g * k) + ' ' + esc(L('جم', 'g')) + '</em><button type="button" class="ap-btn small ghost" data-sw="' + i + '">' + esc(L('بدّل', 'Swap')) + '</button></div>'; });
+  const xs = (r.x && r.x[lang()]) || []; if (xs.length) h += '<div class="ap-food"><span class="mu">' + esc(xs.join('، ').replace(/، /g, lang() === 'en' ? ', ' : '، ')) + '</span></div>';
+  h += '</div><div id="ap-swbox"></div>';
+  h += '<div class="ap-sec"><b>' + esc(L('الطريقة', 'Method')) + '</b></div><div class="ap-card">' + r.st[lang()].map((s, i) => '<div class="ap-step"><div class="ap-wk">' + (i + 1) + '</div><div class="ap-st"><span class="ap-p">' + esc(s) + '</span></div></div>').join('') + '</div>';
+  h += '<div class="ap-actions"><button type="button" class="ap-btn" id="ap-rlog">' + esc(L('سجّلها في أكلي', 'Log in my food')) + '</button><button type="button" class="ap-btn ghost" id="ap-rcart">' + esc(L('ضيفها للمشتريات', 'Add to shopping list')) + '</button><button type="button" class="ap-btn ghost" id="ap-rfav">' + esc(plus.fav[r.id] ? L('شيلها من المفضلة', 'Remove favorite') : L('ضيفها للمفضلة', 'Add to favorites')) + '</button><button type="button" class="ap-btn ghost" id="ap-rshare">' + esc(L('شارك', 'Share')) + '</button></div>';
+  body.innerHTML = h;
+  $('#ap-back', body).addEventListener('click', () => { sub.openRc = ''; draw(); });
+  $('#ap-sminus', body).addEventListener('click', () => { sub.srv = Math.max(1, sel - 1); draw(); });
+  $('#ap-splus', body).addEventListener('click', () => { sub.srv = Math.min(8, sel + 1); draw(); });
+  $$('[data-sw]', body).forEach((b) => b.addEventListener('click', () => {
+    const i = Number(b.dataset.sw); const opts = swapOptions(r, i); const box = $('#ap-swbox', body);
+    box.innerHTML = opts.length ? '<div class="ap-card"><div class="ap-row"><b>' + esc(L('بدّل بـ', 'Swap with')) + '</b><button type="button" class="ap-btn small ghost" id="ap-swx">' + esc(L('إلغاء', 'Cancel')) + '</button></div>' + opts.map((o, n) => { const f = FOOD_BY_ID[o.id]; return '<button type="button" class="ap-ex" data-so="' + n + '"><span class="ap-exn"><b>' + esc(nameOf(f)) + '</b></span><em>' + r5(o.g * k) + ' ' + esc(L('جم', 'g')) + '</em></button>'; }).join('') + '<div class="ap-note">' + esc(L('الكمية متظبطة تقريبًا على نفس القيمة الغذائية.', 'The amount is adjusted to roughly match the nutrition.')) + '</div></div>' : '<div class="ap-empty small">' + esc(L('مفيش بدائل مناسبة للمكون ده.', 'No suitable swaps for this ingredient.')) + '</div>';
+    try { box.scrollIntoView({ block: 'nearest' }); } catch (e) { /* تجاهل */ }
+    const x = $('#ap-swx', box); if (x) x.addEventListener('click', () => { box.innerHTML = ''; });
+    $$('[data-so]', box).forEach((s) => s.addEventListener('click', () => { const o = opts[Number(s.dataset.so)]; plus.rswap = plus.rswap || {}; plus.rswap[r.id] = plus.rswap[r.id] || {}; plus.rswap[r.id][i] = { id: o.id, g: o.g }; persist(); draw(); }));
+  }));
+  $('#ap-rlog', body).addEventListener('click', () => { foodToday().push({ id: 'recipe:' + r.id, name: nameOf(r), g: Math.round(t.g), kcal: t.kcal, p: t.p }); persist(); toast(L('اتسجلت في أكلي', 'Logged in My food')); });
+  $('#ap-rcart', body).addEventListener('click', () => { plus.cart = plus.cart || {}; rIng(r).forEach((it) => { const c = plus.cart[it.id] || { g: 0, done: 0 }; c.g += it.g * k; c.done = 0; plus.cart[it.id] = c; }); persist(); toast(L('اتضافت للمشتريات', 'Added to the shopping list')); });
+  $('#ap-rfav', body).addEventListener('click', () => { if (plus.fav[r.id]) delete plus.fav[r.id]; else plus.fav[r.id] = 1; persist(); draw(); });
+  $('#ap-rshare', body).addEventListener('click', async () => {
+    const text = nameOf(r) + '\n' + rIng(r).map((it) => '- ' + (FOOD_BY_ID[it.id] ? nameOf(FOOD_BY_ID[it.id]) : it.id) + ': ' + r5(it.g * k) + L(' جم', ' g')).join('\n') + '\n\n' + r.st[lang()].map((s, i) => (i + 1) + '. ' + s).join('\n') + '\n\nADAM - adamxfit.com';
+    try { if (navigator.share) await navigator.share({ title: nameOf(r), text: text }); else if (navigator.clipboard) { await navigator.clipboard.writeText(text); toast(L('اتنسخت الوصفة', 'Recipe copied')); } } catch (e) { /* ألغى */ }
+  });
+}
+function viewCart(body) {
+  plus.cart = plus.cart || {};
+  const ids = Object.keys(plus.cart);
+  const fmt = (g) => (g >= 1000 ? (Math.round(g / 100) / 10) + ' ' + L('كجم', 'kg') : r5(g) + ' ' + L('جم', 'g'));
+  let h = chips(R_MEALS.map((m) => [m[0], L(m[1], m[2])]), 'cart', 'rm');
+  h += '<div class="ap-sec"><b>' + esc(L('قايمة مشترياتي', 'My shopping list')) + '</b></div>';
+  if (!ids.length) h += '<div class="ap-empty small">' + esc(L('القايمة فاضية. افتح أي وصفة واضغط "ضيفها للمشتريات".', 'The list is empty. Open a recipe and tap "Add to shopping list".')) + '</div>';
+  else {
+    const CATS = ['protein', 'dairy', 'carb', 'veg', 'fruit', 'fat', 'dish', 'drink', 'supplement'];
+    ids.sort((a, b) => CATS.indexOf((FOOD_BY_ID[a] || {}).cat) - CATS.indexOf((FOOD_BY_ID[b] || {}).cat));
+    h += '<div class="ap-card">' + ids.map((id) => '<label class="ap-task"><input type="checkbox" data-cg="' + esc(id) + '"' + (plus.cart[id].done ? ' checked' : '') + '><span>' + esc(FOOD_BY_ID[id] ? nameOf(FOOD_BY_ID[id]) : id) + ' — ' + esc(fmt(plus.cart[id].g)) + '</span></label>').join('') + '</div><div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-cshare2">' + esc(L('شارك القايمة', 'Share list')) + '</button><button type="button" class="ap-btn ghost" id="ap-cclean">' + esc(L('شيل اللي اشتريته', 'Remove bought items')) + '</button><button type="button" class="ap-btn danger" id="ap-cclear">' + esc(L('امسح الكل', 'Clear all')) + '</button></div>';
+  }
+  body.innerHTML = h;
+  $$('[data-rm]', body).forEach((b) => b.addEventListener('click', () => { sub.rmeal = b.dataset.rm; draw(); }));
+  $$('[data-cg]', body).forEach((c) => c.addEventListener('change', () => { plus.cart[c.dataset.cg].done = c.checked ? 1 : 0; persist(); }));
+  const sh = $('#ap-cshare2', body); if (sh) sh.addEventListener('click', async () => { const text = ids.map((id) => '- ' + (FOOD_BY_ID[id] ? nameOf(FOOD_BY_ID[id]) : id) + ': ' + fmt(plus.cart[id].g)).join('\n'); try { if (navigator.share) await navigator.share({ title: L('قايمة المشتريات', 'Shopping list'), text: text }); else if (navigator.clipboard) { await navigator.clipboard.writeText(text); toast(L('اتنسخت القايمة', 'Copied')); } } catch (e) { /* ألغى */ } });
+  const cl = $('#ap-cclean', body); if (cl) cl.addEventListener('click', () => { ids.forEach((id) => { if (plus.cart[id].done) delete plus.cart[id]; }); persist(); draw(); });
+  const ca = $('#ap-cclear', body); if (ca) ca.addEventListener('click', () => { if (window.confirm(L('تمسح القايمة كلها؟', 'Clear the whole list?'))) { plus.cart = {}; persist(); draw(); } });
+}
+
+/* ================================================================ عدد الوجبات */
+function mealGroups(day, n) {
+  const keys = Object.keys(day).filter((k) => (day[k] || []).length);
+  const mk = (list) => { const m = {}; list.forEach((it) => { m[it.id] = (m[it.id] || 0) + it.g; }); return Object.keys(m).map((id) => ({ id: id, g: m[id] })); };
+  const nm = (k) => (MEAL_NAME[k] ? L(MEAL_NAME[k][0], MEAL_NAME[k][1]) : k);
+  if (!n || n >= keys.length) return keys.map((k) => ({ name: nm(k), items: day[k] }));
+  const kc = keys.map((k) => dayTotals({ x: day[k] }, 1).kcal);
+  let best = null;
+  const cuts = [];
+  const rec = (start, left) => {
+    if (left === 0) { const b = [0].concat(cuts, [keys.length]); let mx = 0; for (let i = 0; i < b.length - 1; i++) { const s = kc.slice(b[i], b[i + 1]).reduce((a, x) => a + x, 0); if (s > mx) mx = s; } if (!best || mx < best.mx) best = { mx: mx, b: b.slice() }; return; }
+    for (let i = start; i <= keys.length - left; i++) { cuts.push(i); rec(i + 1, left - 1); cuts.pop(); }
+  };
+  rec(1, n - 1);
+  const names = n === 3 ? [nm('breakfast'), nm('lunch'), nm('dinner')] : n === 2 ? [L('الوجبة الأولى', 'First meal'), L('الوجبة التانية', 'Second meal')] : [L('وجبة واحدة', 'One meal')];
+  const out = [];
+  for (let i = 0; i < best.b.length - 1; i++) { const items = []; keys.slice(best.b[i], best.b[i + 1]).forEach((k) => items.push.apply(items, day[k])); out.push({ name: names[i], items: mk(items) }); }
+  return out;
+}
+
+/* ================================================================ ملفي (بيانات + صوت + ساعة) */
+function guestBanner() {
+  if (EMAIL || sub.noGuestBar) return '';
+  return '<div class="ap-guest"><span>' + esc(L('إنت داخل كزائر: بياناتك محفوظة على جهازك بس.', 'You are a guest: your data is saved on this device only.')) + '</span><button type="button" class="ap-btn small" id="ap-gsign">' + esc(L('سجّل عشان تتحفظ', 'Sign up to keep it')) + '</button></div>';
+}
+function wireGuest(body) {
+  const b = $('#ap-gsign', body); if (!b) return;
+  b.addEventListener('click', () => { close(); const s = document.getElementById('welcome-start-btn'); if (s) s.click(); });
+}
+function viewMe(body) {
+  const pr = plus.profile || {}; const d = Object.assign({ name: '', sex: 'm', age: 28, weight: 80, height: 175, act: 1.375, goal: 'maintain' }, pr, sub.me || {});
+  const c = cfg();
+  let h = guestBanner();
+  if (sub.first && !plus.profile) h += '<div class="ap-card ap-win"><b>' + esc(L('أهلاً بيك في ADAM', 'Welcome to ADAM')) + '</b><small class="mu">' + esc(L('عرّفنا بنفسك عشان نظبط لك الأرقام، أو اتخطّى وجرّب الأول.', 'Tell us about you to tune the numbers, or skip and look around first.')) + '</small></div>';
+  h += '<div class="ap-sec"><b>' + esc(L('بياناتك', 'About you')) + '</b></div><div class="ap-card ap-form">';
+  h += '<label>' + esc(L('الاسم', 'Name')) + '<input id="me-name" type="text" maxlength="40" value="' + esc(d.name) + '"></label>';
+  h += '<div class="ap-q"><b>' + esc(L('الجنس', 'Sex')) + '</b>' + chips([['m', L('ذكر', 'Male')], ['f', L('أنثى', 'Female')]], d.sex, 'mes') + '</div>';
+  h += '<div class="ap-three"><label>' + esc(L('السن', 'Age')) + '<input id="me-age" type="number" min="10" max="90" value="' + d.age + '"></label><label>' + esc(L('الوزن (كجم)', 'Weight (kg)')) + '<input id="me-w" type="number" min="30" max="250" value="' + d.weight + '"></label><label>' + esc(L('الطول (سم)', 'Height (cm)')) + '<input id="me-h" type="number" min="100" max="230" value="' + d.height + '"></label></div>';
+  h += '<div class="ap-q"><b>' + esc(L('مستوى النشاط', 'Activity level')) + '</b>' + chips(ACT.map((a) => [a[0], L(a[1], a[2])]), d.act, 'mea') + '</div>';
+  h += '<div class="ap-q"><b>' + esc(L('هدفك', 'Goal')) + '</b>' + chips([['lose', L('تنزيل وزن', 'Lose weight')], ['maintain', L('تثبيت', 'Maintain')], ['gain', L('زيادة عضل', 'Gain muscle')]], d.goal, 'meg') + '</div>';
+  h += '<div class="ap-actions"><button type="button" class="ap-btn" id="me-save">' + esc(L('احفظ', 'Save')) + '</button>' + (sub.first && !plus.profile ? '<button type="button" class="ap-btn ghost" id="me-skip">' + esc(L('اتخطّى', 'Skip')) + '</button>' : '') + '</div>';
+  if (plus.profile) {
+    const bmi = d.weight / Math.pow(d.height / 100, 2);
+    h += '<div class="ap-macros"><div><b>' + bmi.toFixed(1) + '</b><small>BMI</small></div><div><b>' + calcTarget(Object.assign({}, d, { weight: Number(d.weight), height: Number(d.height), age: Number(d.age) })) + '</b><small>' + esc(L('سعرة مقترحة', 'kcal target')) + '</small></div><div><b>' + (220 - Number(d.age)) + '</b><small>' + esc(L('أقصى نبض تقديري', 'est. max HR')) + '</small></div></div><small class="mu">' + esc(L('أرقام تقديرية للياقة العامة.', 'Estimates for general fitness.')) + '</small>';
+  }
+  h += '</div>';
+  h += '<div class="ap-sec"><b>' + esc(L('الصوت والاهتزاز', 'Sound and vibration')) + '</b></div><div class="ap-card">';
+  h += '<div class="ap-q"><b>' + esc(L('أثناء التمرين', 'During workouts')) + '</b>' + chips([['chime', L('نغمة', 'Chime')], ['voice', L('نغمة وصوت (أحسنت)', 'Chime and voice (Nice work)')], ['off', L('صامت', 'Muted')]], c.snd, 'mesn') + '</div>';
+  h += '<div class="ap-q"><b>' + esc(L('الاهتزاز', 'Vibration')) + '</b>' + chips([['1', L('شغّال', 'On')], ['0', L('مقفول', 'Off')]], c.vib === false ? '0' : '1', 'mevb') + '<small class="mu">' + esc(L('الاهتزاز بيشتغل على أندرويد. آيفون بيمنعه المتصفح.', 'Vibration works on Android. iPhone browsers block it.')) + '</small></div>';
+  h += '<div class="ap-q"><b>' + esc(L('راحة بين السيتات', 'Rest between sets')) + '</b>' + chips([30, 45, 60, 90, 120].map((n) => [n, n + L(' ث', 's')]), c.rest, 'mers') + '</div>';
+  h += '<div class="ap-q"><b>' + esc(L('إحماء قبل كل تمرين', 'Warm-up before every workout')) + '</b>' + chips([['1', L('أيوه', 'Yes')], ['0', L('لأ', 'No')]], c.warm ? '1' : '0', 'mewm') + '</div>';
+  h += '<div class="ap-actions"><button type="button" class="ap-btn ghost" id="me-test">' + esc(L('جرّب الصوت', 'Test sound')) + '</button></div></div>';
+  h += '<div class="ap-sec"><b>' + esc(L('ربط الساعة بالبلوتوث', 'Connect a watch via Bluetooth')) + '</b></div><div class="ap-card"><div id="ap-php" class="ap-php">' + hrHtml() + '</div>';
+  h += '<p class="ap-p">' + esc(L('هنقرا نبضك لايف أثناء التمرين ونعرض منطقة المجهود ومتوسط النبض بعد الجلسة.', 'We read your heart rate live during workouts and show the effort zone and the session average.')) + '</p>';
+  h += '<div class="ap-step"><div class="ap-wk">1</div><div class="ap-st"><span class="ap-p">' + esc(L('على الساعة فعّل "بث النبض" (Garmin: Broadcast Heart Rate، Amazfit/Zepp: مشاركة النبض، Huawei: مشاركة بيانات النبض، Polar/Wahoo وأحزمة الصدر شغالة مباشرة).', 'On the watch enable heart-rate broadcast (Garmin: Broadcast Heart Rate, Amazfit/Zepp and Huawei: share heart rate; Polar/Wahoo chest straps work directly).')) + '</span></div></div>';
+  h += '<div class="ap-step"><div class="ap-wk">2</div><div class="ap-st"><span class="ap-p">' + esc(L('افتح ADAM على Chrome في أندرويد أو الكمبيوتر، وابدأ أي تمرين واضغط "وصّل الساعة" واختار ساعتك.', 'Open ADAM in Chrome on Android or desktop, start a workout, tap "Connect watch" and pick your watch.')) + '</span></div></div>';
+  h += '<div class="ap-step"><div class="ap-wk">3</div><div class="ap-st"><span class="ap-p">' + esc(L('آيفون وSafari مش بيدعموا بلوتوث الويب. ساعة Apple مش بتبث النبض بنفسها وتحتاج تطبيق بث تاني.', 'iPhone and Safari do not support Web Bluetooth. Apple Watch does not broadcast heart rate by itself and needs a separate broadcasting app.')) + '</span></div></div>';
+  h += '<div class="ap-note">' + esc(hrOk() ? L('المتصفح ده بيدعم البلوتوث.', 'This browser supports Bluetooth.') : L('المتصفح ده مش بيدعم البلوتوث.', 'This browser does not support Bluetooth.')) + '</div></div>';
+  const ss = plus.sessions || [];
+  if (ss.length) h += '<div class="ap-sec"><b>' + esc(L('آخر جلساتي', 'My recent sessions')) + '</b></div><div class="ap-card">' + ss.slice(0, 8).map((x) => '<div class="ap-food"><span>' + esc(x.t || L('تمرين', 'Workout')) + ' <small class="mu">' + esc(x.d) + '</small></span><em>' + Math.max(1, Math.round(x.s / 60)) + esc(L(' د', ' min')) + (x.avg ? ' · ' + x.avg + ' bpm' : '') + '</em></div>').join('') + '</div>';
+  body.innerHTML = h;
+  wireGuest(body);
+  const re = () => viewMe(body);
+  const rd = () => ({ name: ($('#me-name', body) || {}).value || '', age: Number(($('#me-age', body) || {}).value) || d.age, weight: Number(($('#me-w', body) || {}).value) || d.weight, height: Number(($('#me-h', body) || {}).value) || d.height });
+  const set = (attr, key, num) => $$('[data-' + attr + ']', body).forEach((b) => b.addEventListener('click', () => { sub.me = Object.assign({}, d, rd()); sub.me[key] = num ? Number(b.dataset[attr]) : b.dataset[attr]; re(); }));
+  set('mes', 'sex'); set('mea', 'act', true); set('meg', 'goal');
+  const upd = (o) => { plus.set = Object.assign({}, plus.set || {}, o); persist(); re(); };
+  $$('[data-mesn]', body).forEach((b) => b.addEventListener('click', () => { upd({ snd: b.dataset.mesn }); cue('set'); }));
+  $$('[data-mevb]', body).forEach((b) => b.addEventListener('click', () => { upd({ vib: b.dataset.mevb === '1' }); buzz(120); }));
+  $$('[data-mers]', body).forEach((b) => b.addEventListener('click', () => upd({ rest: Number(b.dataset.mers) })));
+  $$('[data-mewm]', body).forEach((b) => b.addEventListener('click', () => upd({ warm: b.dataset.mewm === '1' })));
+  $('#me-test', body).addEventListener('click', () => { cue('done'); });
+  $('#me-save', body).addEventListener('click', () => {
+    const v = Object.assign({}, d, rd());
+    if (!(v.age >= 10 && v.weight >= 30 && v.height >= 100)) { toast(L('راجع السن والوزن والطول', 'Check age, weight and height')); return; }
+    plus.profile = { name: v.name.trim().slice(0, 40), sex: v.sex, age: v.age, weight: v.weight, height: v.height, act: v.act, goal: v.goal };
+    sub.me = null; sub.first = false; persist(); toast(L('اتحفظت بياناتك', 'Saved')); re();
+  });
+  const sk = $('#me-skip', body); if (sk) sk.addEventListener('click', () => { plus.skipProfile = true; persist(); go('journeys'); });
+  const phr = $('#ap-phr', body); if (phr) phr.addEventListener('click', async () => { await connectHR(); const el = $('#ap-php', body); if (el) el.innerHTML = hrHtml(); const dc = document.getElementById('ap-hrdc'); });
 }
 
 /* ================================================================ تأهيلي */
