@@ -43,12 +43,17 @@
     lib: '<path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"/>',
     tpl: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/>',
     mytrain: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>',
+    chal: '<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 2 1 2 0-3 1-5 2-8z"/>',
+    recipes: '<path d="M5 11h14a0 0 0 0 1 0 0v1a7 7 0 0 1-14 0zM8 8c0-1.5 1-1.5 1-3M12 8c0-1.5 1-1.5 1-3M16 8c0-1.5 1-1.5 1-3"/>',
+    stretch: '<circle cx="12" cy="5" r="2"/><path d="M12 8v6M12 10l-6-3M12 10l6-3M12 14l-4 6M12 14l4 6"/>',
+    fast: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/>',
+    nutri: '<path d="M12 21c-5 0-8-4-8-9 3 0 5 1 6 2 0-4 1-7 2-9 1 2 2 5 2 9 1-1 3-2 6-2 0 5-3 9-8 9z"/>',
     rehab: '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path d="M9 12h2l1-2 1.5 4 1-2H17"/>'
   };
   var TILES = [
     ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
     ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['tpl', 'القوالب', 'Templates'],
-    ['mytrain', 'برنامج التمرين', 'My program'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab'], ['daysum', 'ملخص يومي', 'Daily summary']
+    ['mytrain', 'برنامج التمرين', 'My program'], ['food', 'أكلي', 'My food'], ['rehab', 'تأهيلي', 'My rehab'], ['chal', 'تحديات', 'Challenges'], ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['fast', 'صيام', 'Fasting'], ['nutri', 'برامج تغذية', 'Nutrition'], ['daysum', 'ملخص يومي', 'Daily summary']
   ];
   function openPlus(tab) {
     import('./adam-plus.js').then(function (m) { m.open(tab); }).catch(function (e) { if (window.console) console.error(e); });

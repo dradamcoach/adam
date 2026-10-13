@@ -105,3 +105,45 @@ body.ap-lock { overflow: hidden; }
 .ap-qc-box .ap-x { position: absolute; top: 12px; inset-inline-end: 12px; }
 .ap-qc-t { display: block; font-size: 20px; font-weight: 600; margin-bottom: 2px; padding-inline-end: 46px; }
 .ap-qc-s { margin: 0 0 16px; color: #8b98a5; font-size: 13px; }
+
+/* ---------- تحديات / وصفات / إطالة ---------- */
+.ap-week { border-color: rgba(62,240,176,.25); background: linear-gradient(160deg, rgba(62,240,176,.08), rgba(255,255,255,.02)); }
+.ap-wtitle { font-size: 17px; font-weight: 600; margin: 8px 0 4px; }
+.ap-ok { color: #3ef0b0; font-size: 12px; font-weight: 700; }
+.ap-trow { display: flex; justify-content: space-between; gap: 6px; text-align: center; }
+.ap-trow div { flex: 1; min-width: 0; } .ap-trow small { display: block; font-size: 11px; color: #8b97a3; } .ap-trow b { font-size: 13px; font-weight: 600; }
+.ap-win { border-color: rgba(62,240,176,.4); background: rgba(62,240,176,.08); text-align: center; }
+.ap-win b { display: block; color: #3ef0b0; }
+.ap-today { border-color: rgba(62,240,176,.22); }
+.ap-bigt { font-size: 28px; font-weight: 300; margin: 10px 0 4px; line-height: 1.2; }
+.ap-mv { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; color: #b9c4cd; margin-top: 8px; }
+.ap-cgrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 10px 0 8px; }
+.ap-cgrid button { aspect-ratio: 1; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: #aab5bf; font-size: 12px; cursor: pointer; padding: 0; }
+.ap-cgrid button.dn { background: #3ef0b0; color: #032016; border-color: transparent; font-weight: 700; }
+.ap-cgrid button.rs { opacity: .45; border-style: dashed; }
+.ap-cgrid button.td { border-color: #3ef0b0; }
+.ap-cgrid button.fu, .ap-cgrid button:disabled { opacity: .35; cursor: default; }
+.ap-wdots { display: flex; justify-content: space-between; margin-top: 12px; }
+.ap-wdots div { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+.ap-wdots i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,.18); display: block; }
+.ap-wdots .on i { background: #3ef0b0; border-color: #3ef0b0; } .ap-wdots .td i { border-color: #3ef0b0; }
+.ap-wdots small { font-size: 10.5px; color: #8b97a3; }
+.ap-num { display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,.08); color: #3ef0b0; font-weight: 700; }
+.ap-fart { display: inline-flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,.06); }
+.ap-fart svg { width: 100%; height: 100%; }
+.ap-fart.big { width: 84px; height: 84px; border-radius: 22px; margin-bottom: 8px; }
+.ap-rhero { background: linear-gradient(150deg, #1d3a32, #0a1013 85%); }
+.ap-rhero h2 { margin: 6px 0 8px; }
+.ap-fav::before { content: "\2605"; color: #ffd166; font-style: normal; }
+.ap-step2 { display: inline-flex; align-items: center; gap: 12px; }
+.ap-step2 button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,.18); background: transparent; color: #e8eef3; font-size: 18px; cursor: pointer; }
+.ap-player { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding-top: 4px; }
+.ap-ptop { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+.ap-pimg { min-height: 150px; display: flex; align-items: center; justify-content: center; } .ap-pimg img { width: 180px; height: 150px; object-fit: contain; background: #fff; border-radius: 18px; }
+.ap-plabel { font-size: 13px; font-weight: 700; color: #3ef0b0; } .ap-plabel.rest { color: #ffb36b; }
+.ap-pname { font-size: 22px; font-weight: 600; }
+.ap-pring { position: relative; width: 150px; height: 150px; } .ap-pring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ap-pring circle { fill: none; stroke-width: 7; } .ap-pring .t { stroke: rgba(255,255,255,.08); } .ap-pring .v { stroke: #3ef0b0; stroke-linecap: round; transition: stroke-dashoffset .25s linear; }
+.ap-pring b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 44px; font-weight: 200; }
+.ap-pcue { color: #b9c4cd; font-size: 13px; line-height: 1.7; margin: 0; min-height: 44px; max-width: 320px; }
+.ap-player .ap-bar { width: 100%; }
