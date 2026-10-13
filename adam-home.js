@@ -10,8 +10,8 @@
   var FB_APP = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
   var FB_FS = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
   var T = {
-    ar: { plus: 'اكتشف', team: 'متخصصينك', all: 'تواصل', chat: 'تواصل', disc: 'اكتشف جسمك', sub: 'تشريح 3D', t: 'العضلات والعظام والأربطة', p: 'اضغط على أي عضلة تشوف أصلها ومدخلها وتمارينها.', open: 'افتح التشريح ←', 'coach': 'مدرب', 'other': 'متخصص', fb: 'ابعتلنا ملاحظاتك' },
-    en: { plus: 'Discover', team: 'Your specialists', all: 'Contact', chat: 'Contact', disc: 'Explore your body', sub: '3D anatomy', t: 'Muscles, bones and ligaments', p: 'Tap any muscle to see its origin, insertion and exercises.', open: 'Open anatomy →', 'coach': 'Coach', 'other': 'Specialist', fb: 'Send us feedback' }
+    ar: { plus: 'اكتشف', team: 'متخصصينك', all: 'تواصل', chat: 'تواصل', disc: 'اكتشف جسمك', sub: 'تشريح 3D', bt: 'إزاي جسمك بيتحرك', bp: 'البيوميكانيك ببساطة: ليه التمرين بيصعب، والتكنيك الصح، والأخطاء اللي بتوجع.', bo: 'افتح المكتبة ←', t: 'العضلات والعظام والأربطة', p: 'اضغط على أي عضلة تشوف أصلها ومدخلها وتمارينها.', open: 'افتح التشريح ←', 'coach': 'مدرب', 'other': 'متخصص', fb: 'ابعتلنا ملاحظاتك' },
+    en: { plus: 'Discover', team: 'Your specialists', all: 'Contact', chat: 'Contact', disc: 'Explore your body', sub: '3D anatomy', bt: 'How your body moves', bp: 'Biomechanics made simple: why exercises get hard, good technique, and the mistakes that hurt.', bo: 'Open the library →', t: 'Muscles, bones and ligaments', p: 'Tap any muscle to see its origin, insertion and exercises.', open: 'Open anatomy →', 'coach': 'Coach', 'other': 'Specialist', fb: 'Send us feedback' }
   };
   var RL = {
     ar: { ready: 'الجاهزية', nutri: 'التغذية', effort: 'المجهود' },
@@ -233,14 +233,26 @@
     a.innerHTML = anatSvg() + '<div><b>' + tx.t + '<span class="av2-chip">3D</span></b><p>' + tx.p + '</p><em>' + tx.open + '</em></div>';
     a.addEventListener('click', function () { var o = document.getElementById('lib-anatomy-btn'); if (o) o.click(); });
     r.appendChild(a);
-    var bm = el('button', 'av2-anat av2-bio'); bm.type = 'button'; bm.setAttribute('data-adam-open', 'biomech');
+    var bk = el('button', 'av2-anat av2-bio'); bk.type = 'button';
+    bk.innerHTML = bioSvg() + '<div><b>' + tx.bt + '</b><p>' + tx.bp + '</p><em>' + tx.bo + '</em></div>';
+    bk.addEventListener('click', function () { var o = document.getElementById('lib-biomech-btn'); if (o) o.click(); });
+    r.appendChild(bk);
+    var bm = el('button', 'av2-anat av2-mech'); bm.type = 'button'; bm.setAttribute('data-adam-open', 'biomech');
     bm.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="46" height="46">' + ICONS.biomech + '</svg><div><b>' + (l === 'en' ? 'Movement mechanics' : 'ميكانيكا الحركة') + '</b><p>' + (l === 'en' ? 'Joints, muscles and the mechanics of every exercise, running and injuries.' : 'المفاصل والعضلات وميكانيكا كل تمرين والجري والإصابات.') + '</p><em>' + (l === 'en' ? 'Open mechanics →' : 'افتح الميكانيكا ←') + '</em></div>';
     r.appendChild(bm);
+
 
     trainersBlock(r, l, tx);
 
     var fb = el('a', 'av2-fb', tx.fb); fb.href = 'https://docs.google.com/forms/d/e/1FAIpQLSd3stkXiUZxdfU2vY5c3N9uGk5nHiArkjec5mNKBgAu4oYL7w/viewform'; fb.target = '_blank'; fb.rel = 'noopener';
     r.appendChild(fb);
+  }
+
+  /* أيقونة كارت البيوميكانيك: شخص في وضع سكوات مع خط البار */
+  function bioSvg() {
+    return '<svg viewBox="0 0 70 90" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<circle cx="44" cy="18" r="7" fill="currentColor" stroke="none"/><path d="M40 27 L24 48 L44 58 L34 80 L48 80"/><path d="M38 31 L52 40"/>' +
+      '<path d="M34 8 V84" stroke="#3ef0b0" stroke-width="2" stroke-dasharray="3 4"/><circle cx="34" cy="29" r="6" stroke="#3ef0b0" stroke-width="3"/></svg>';
   }
 
   function refreshSum() {
@@ -315,7 +327,12 @@
       setTimeout(function () { openPlus('circ'); }, 1800);
     }
   } catch (e) { /* تجاهل */ }
-  document.addEventListener('click', function (e) {
+    window.addEventListener('message', function (e) {
+    if (e.origin !== location.origin || !e.data || e.data.type !== 'adam-open-bio') return;
+    var c = document.getElementById('bio-close'); if (c) c.click();
+    import('./adam-plus.js').then(function (m) { return m.openBioTarget(e.data.kind, e.data.id); }).catch(function () {});
+  });
+document.addEventListener('click', function (e) {
     var t = e.target && e.target.closest ? e.target.closest('[data-adam-open]') : null;
     if (!t) return;
     e.preventDefault();

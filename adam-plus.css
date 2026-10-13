@@ -253,3 +253,51 @@ a.ap-chip { text-decoration: none; display: inline-block; }
 .ml-body .med-thumb-btn img { max-width: 100%; max-height: 220px; border-radius: 12px; }
 .exs-bio-btn { margin: 8px 0; }
 .ap-card.ap-tmb, button.ap-card { width: 100%; box-sizing: border-box; text-align: start; }
+
+.bio-libcard { margin-bottom: 12px; border-color: rgba(62,240,176,.4); }
+.bio-fig-wrap { margin: 8px 0 12px; }
+.bio-fig { --surface: #111a18; --surface2: #17221f; --ink: #e6f0ed; --muted: #93a6a0; --line: #22312d; --accent: #3ee6ab; --arm: #ffb24d; --bad: #ff6f7a; --fig: #dbe7e3; --fig2: #5d726c; --body: 'Cairo', system-ui, sans-serif; background: #0f1816; border: 1px solid rgba(255,255,255,.1); border-radius: 18px; padding: 8px; margin-bottom: 8px; min-height: 40px; }
+.bio-fig .bf-t { font-family: 'Cairo', system-ui, sans-serif; }
+/* الرسومات */
+.bio-fig svg.bf { width: 100%; height: auto; display: block; }
+.bf line, .bf path { stroke-linecap: round; stroke-linejoin: round; }
+.bio-fig .bf-limb { stroke: var(--fig); stroke-width: 5; fill: none; }
+.bio-fig .bf-limb2 { stroke: var(--fig2); stroke-width: 5; fill: none; }
+.bio-fig .bf-limb-bad { stroke: var(--bad); stroke-width: 4; stroke-dasharray: 5 5; fill: none; opacity: .8; }
+.bio-fig .bf-trunk { stroke: var(--fig); stroke-width: 7; fill: none; }
+.bio-fig .bf-head { fill: var(--fig); }
+.bio-fig .bf-torso { fill: var(--surface2); stroke: var(--fig); stroke-width: 2.5; }
+.bio-fig .bf-joint { fill: var(--surface); stroke: var(--fig); stroke-width: 2; }
+.bio-fig .bf-joint-big { fill: var(--surface); stroke: var(--fig); stroke-width: 3; }
+.bio-fig .bf-ground { stroke: var(--line); stroke-width: 3; }
+.bio-fig .bf-guide { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 5; fill: none; }
+.bio-fig .bf-arm { stroke: var(--arm); stroke-width: 2.5; fill: none; }
+.bio-fig .bf-arm-head { fill: var(--arm); }
+.bio-fig .bf-call { stroke: var(--accent); stroke-width: 2.5; fill: none; }
+.bio-fig .bf-call-head { fill: var(--accent); }
+.bio-fig .bf-plate { fill: var(--accent); fill-opacity: .25; stroke: var(--accent); stroke-width: 2.5; }
+.bio-fig .bf-plate-in { fill: var(--accent); }
+.bio-fig .bf-barbell { stroke: var(--accent); stroke-width: 4; }
+.bio-fig .bf-beam { stroke: var(--fig); stroke-width: 4; }
+.bio-fig .bf-fulcrum { fill: var(--fig); }
+.bio-fig .bf-load { fill: var(--accent); fill-opacity: .3; stroke: var(--accent); stroke-width: 2; }
+.bio-fig .bf-axis { stroke: var(--muted); stroke-width: 1.5; }
+.bio-fig .bf-curve { stroke: var(--accent); stroke-width: 3; fill: none; }
+.bio-fig .bf-curve2 { stroke: var(--arm); stroke-width: 2.5; fill: none; stroke-dasharray: 6 5; }
+.bio-fig .bf-peak { fill: var(--arm); }
+.bio-fig .bf-s1 { stroke: var(--fig2); stroke-width: 3; fill: none; }
+.bio-fig .bf-s2 { stroke: var(--arm); stroke-width: 3; fill: none; }
+.bio-fig .bf-s3 { stroke: var(--accent); stroke-width: 3; fill: none; }
+.bio-fig .bf-ok { stroke: var(--accent); stroke-width: 3; fill: none; }
+.bio-fig .bf-no { stroke: var(--bad); stroke-width: 3; fill: none; }
+.bio-fig .bf-hold { fill: var(--accent); }
+.bio-fig .bf-orbit { stroke: var(--accent); stroke-width: 2; fill: none; stroke-dasharray: 4 4; }
+.bio-fig .bf-com { fill: var(--arm); }
+.bio-fig .bf-base { fill: var(--accent); fill-opacity: .55; }
+.bio-fig .bf-t { fill: var(--ink); font-family: var(--body); font-size: 12px; font-weight: 600; }
+.bio-fig .bf-small { font-size: 10.5px; fill: var(--muted); font-weight: 600; }
+.bio-fig .bf-arm-t { fill: var(--arm); font-size: 10.5px; font-weight: 700; }
+/* عاداتي اليومية */
+.ap-hint { margin: 0 0 8px; font-size: 12.5px; color: #8b97a3; line-height: 1.7; }
+.ap-habit span { flex: 1; }
+.ap-hstreak { display: inline-block; margin-inline-start: 6px; font-size: 11px; color: #3ef0b0; }

@@ -230,5 +230,45 @@ body.self-build #advisor-box, body.self-build .playlist-box, body.self-build .my
 #adam-v2 .av2-search { display: flex; align-items: center; gap: 10px; width: 100%; margin: 0 0 12px; padding: 12px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color: inherit; font: inherit; font-size: 14px; text-align: start; cursor: pointer; }
 #adam-v2 .av2-search svg { flex: none; width: 20px; height: 20px; opacity: .8; }
 #adam-v2 .av2-search span { opacity: .65; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#adam-v2 .av2-anat.av2-bio { margin-top: 12px; }
-#adam-v2 .av2-anat.av2-bio svg { width: 46px; height: 46px; flex: none; }
+#adam-v2 .av2-anat.av2-mech { margin-top: 12px; }
+#adam-v2 .av2-anat.av2-mech svg { width: 46px; height: 46px; flex: none; }
+
+#adam-v2 .av2-anat.av2-mechlib { margin-top: 12px; }
+/* زرار +1 كوباية مية في كارت الرئيسية */
+.card button.home-card.hc-water { position: relative; }
+.home-water-plus {
+  margin-inline-start: auto;
+  flex: 0 0 auto;
+  min-width: 40px;
+  height: 32px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(99,179,237,.45);
+  background: rgba(99,179,237,.14);
+  color: #63b3ed;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+}
+.home-water-plus:active { transform: scale(.94); }
+
+/* بانر توافق الإشعارات في رئيسية العميل */
+.push-compat {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(251, 191, 36, .38);
+  background: rgba(251, 191, 36, .08);
+}
+.push-compat-text { margin: 0 0 10px; font-size: 13.5px; line-height: 1.8; color: var(--ink); }
+.push-compat-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.card button.push-compat-fix { width: auto; margin: 0; padding: 9px 16px; }
+.card button.push-compat-later { width: auto; margin: 0; }
+
+/* كارت مكتبة البيوميكانيك تحت التشريح */
+#adam-v2 .av2-bio { margin-top: 12px; background: linear-gradient(160deg, rgba(255,178,77,.12), rgba(255,255,255,.03) 60%); }
+#adam-v2 .av2-bio svg { width: 70px; height: 90px; color: var(--ink); }

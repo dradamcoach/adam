@@ -1766,6 +1766,7 @@
       <button type="button" class="link" id="lib-credits-btn" data-t="lib_credits_link">حقوق الصور</button>
       <button type="button" class="link" id="lib-anatomy-btn" data-t="anat3d_title">التشريح ثلاثي الأبعاد</button>
       <button type="button" class="link" data-adam-open="biomech" data-t="biomech_btn">ميكانيكا الحركة</button>
+      <button type="button" class="link" id="lib-biomech-btn" data-t="biomech_title">مكتبة البيوميكانيك</button>
     </div>
     <p class="message" id="lib-message"></p>
     <div class="grid" id="lib-grid"></div>
@@ -1878,6 +1879,7 @@
       <div class="home-hello" id="home-hello"></div>
       <!-- حلقات ADAM: تمرين · أكل · ماية + السلسلة والمستوى -->
       <div class="first4 hidden" id="first4-card"></div>
+      <div class="push-compat hidden" id="push-compat-home"></div>
       <div class="sq-home hidden" id="squad-home"></div>
       <div class="eng-card hidden" id="eng-card"></div>
       <div class="eng-recap hidden" id="eng-recap"></div>
@@ -1897,6 +1899,7 @@
       <div class="home-tiles" id="home-tiles"></div>
       <div class="home-extra-links">
         <button type="button" class="link tour-replay" id="tour-replay-client"><span class="glyph-slot" data-glyph="compass"></span><span data-t="tour_replay">جولة سريعة في البرنامج</span></button>
+        <a class="feedback-link" id="feedback-link" href="https://forms.gle/WBHT9jmdH14nnj756" target="_blank" rel="noopener"><span class="glyph-slot" data-glyph="mail"></span><span data-t="feedback_btn">ابعت رأيك في ADAM</span></a>
       </div>
     </div>
 
@@ -2342,6 +2345,14 @@
     </div>
     <iframe id="anat-frame" title="anatomy" style="border:0;width:100%;flex:1;min-height:0;background:#0b1016"></iframe>
   </div>
+  <!-- مكتبة البيوميكانيك (biomech/) — نفس فكرة شاشة التشريح -->
+  <div class="hidden" id="bio-overlay" style="position:fixed;inset:0;z-index:78;background:#0b1016;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#0b1016;border-bottom:1px solid #273441">
+      <span data-t="biomech_title" style="color:#e9eef2;font-size:14px">مكتبة البيوميكانيك</span>
+      <button type="button" id="bio-close" style="background:#16202a;color:#e9eef2;border:1px solid #273441;border-radius:999px;padding:6px 14px;font-size:13px;width:auto;margin:0" data-t="anat3d_close">إغلاق</button>
+    </div>
+    <iframe id="bio-frame" title="biomechanics" style="border:0;width:100%;flex:1;min-height:0;background:#0b1016"></iframe>
+  </div>
   <div class="ex-sheet-overlay hidden" id="ex-sheet">
     <div class="ex-sheet" role="dialog" aria-modal="true">
       <button type="button" class="ex-sheet-close" id="ex-sheet-close" data-t-title="exs_close" title="إغلاق" aria-label="إغلاق"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg></button>
@@ -2486,11 +2497,14 @@
       <div class="focus-media" id="focus-media"></div>
       <div class="focus-name" id="focus-name"></div>
       <div class="focus-chips" id="focus-chips"></div>
+      <div class="focus-swap" id="focus-swap"></div>
 
       <div class="beads-wrap">
         <div class="beads beads-lg" id="focus-beads"></div>
         <div class="beads-note" id="focus-beads-note"></div>
       </div>
+      <div class="focus-rest hidden" id="focus-rest" aria-live="polite"></div>
+      <div class="focus-after hidden" id="focus-after"></div>
 
       <div class="fx-tools">
         <button type="button" class="fx-tool" id="fx-timer-btn" data-t="fx_timer">مؤقت</button>

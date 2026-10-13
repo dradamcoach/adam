@@ -115,6 +115,7 @@ const TEXT = {
     tagline: 'منصة التدريب والتأهيل والتغذية',
     anat3d_title: 'التشريح ثلاثي الأبعاد',
     anat3d_close: 'إغلاق',
+    biomech_title: 'مكتبة البيوميكانيك',
     back_bar: 'رجوع',
     spec_group_coach: 'المدربون', spec_group_nutritionist: 'أخصائيو التغذية', spec_group_doctor: 'الأطباء', spec_group_physio: 'العلاج الطبيعي', spec_group_rehab: 'التأهيل', spec_group_psychologist: 'الدعم النفسي', spec_group_other: 'متخصصون آخرون',
     login_title: 'تسجيل الدخول',
@@ -328,19 +329,25 @@ const TEXT = {
     pl_bad: 'ده مش لينك قايمة أغاني — الزق لينك من Spotify أو يوتيوب أو أنغامي أو SoundCloud.',
     pl_saved: 'اتحفظت — العميل هيلاقي زرار الأغاني فوق تمرينه.',
     pl_removed: 'اتشالت القايمة.',
-    f4_title: 'أول ٤ أيام معانا',
-    f4_day: 'يوم {n} من ٤',
+    f4_title: 'أول أسبوع معانا',
+    f4_day: 'يوم {n} من ٧',
     f4_s1: 'اتعرّف على برنامجك',
     f4_b1: 'افتح برنامج النهارده واتفرّج على التمارين — من غير ما تعمل حاجة لسه.',
     f4_s2: 'أول تمرين',
     f4_b2: 'اعمل أول تمرين النهارده، ولو ١٠ دقايق بس. البداية هي أهم خطوة.',
-    f4_s3: 'سجّل أكلك أو ميتك',
-    f4_b3: 'سجّل وجبة واحدة أو كوبايات الميه النهارده — عشان فريقك يعرف يساعدك.',
-    f4_s4: 'كلّم مدربك',
-    f4_b4: 'ابعت لمدربك رسالة في الشات وقوله الأيام الأولى كانت عاملة إزاي.',
+    f4_s3: 'ابعت فيديو التكنيك لمدربك',
+    f4_b3: 'صوّر نفسك ١٠–١٥ ثانية وإنت بتعمل تمرين أساسي من برنامجك، وابعته لمدربك في الشات عشان يراجع التكنيك ويظبطلك الأوزان.',
+    f4_s4: 'سجّل أكلك أو ميتك',
+    f4_b4: 'سجّل وجبة واحدة أو كوبايات الميه النهارده — عشان فريقك يعرف يساعدك.',
+    f4_s5: 'التمرين التاني',
+    f4_b5: 'اعمل تاني تمرين في برنامجك. التكرار هو اللي بيبني العادة.',
+    f4_s6: 'كلّم مدربك',
+    f4_b6: 'ابعت لمدربك رسالة في الشات وقوله أول أيام كانت عاملة إزاي، وإيه اللي صعب عليك.',
+    f4_s7: 'شوف أسبوعك',
+    f4_b7: 'افتح صفحة تقدّمك وشوف عملت إيه في أول أسبوع.',
     f4_go: 'يلا بينا',
     f4_tomorrow: 'برافو — خطوة بكرة: {next}',
-    f4_all_done: 'خلصت أول ٤ أيام — إنت كده بدأت فعلًا.',
+    f4_all_done: 'خلصت أول أسبوع — إنت كده بدأت فعلًا.',
     other_coaches_templates_group: 'قوالب متخصصين تانيين',
     template_day_empty: 'اليوم ده فاضي — ضيف تمارين الأول وبعدين احفظه كقالب',
     template_needs_name: 'اكتب اسم للقالب',
@@ -684,6 +691,14 @@ const TEXT = {
     exs_cues: 'نصايح الأداء',
     exs_mistakes: 'أخطاء شائعة',
     exs_alternatives: 'بدائل',
+    exs_biomech: 'البيوميكانيك',
+    exs_bio_action: 'المفاصل والحركة',
+    exs_bio_resist: 'المقاومة',
+    exs_bio_hard: 'أصعب نقطة',
+    exs_bio_long: 'بيحمّل وهي مشدودة',
+    exs_bio_short: 'بيحمّل وهي مقبوضة',
+    exs_bio_open_move: 'افتح صفحة الحركة',
+    exs_bio_open_muscle: 'العضلة: {m}',
     exs_primary: 'العضلات الأساسية',
     exs_secondary: 'مساعدة',
     exs_caution_client: 'انتبه — العميل عنده: {list}. راجع الاحتياطات قبل ما تضيفه.',
@@ -735,6 +750,11 @@ const TEXT = {
     notif_push_denied: 'الإشعارات مقفولة من المتصفح. افتحها من إعدادات الموقع (علامة القفل جنب العنوان) وارجع دوس تاني.',
     notif_push_ios: 'على الآيفون: دوس زرار المشاركة تحت، واختار "إضافة إلى الشاشة الرئيسية"، وافتح ADAM من الأيقونة الجديدة — وفعّل الإشعارات من هناك.',
     notif_push_unsupported: 'المتصفح ده مش بيدعم الإشعارات — جرّب Chrome',
+    push_compat_ios: 'على الآيفون مش هتوصلك إشعارات من مدربك وإنت فاتح ADAM من المتصفح. ضيفه للشاشة الرئيسية وافتحه من الأيقونة.',
+    push_compat_unsupported: 'المتصفح ده مش بيستقبل إشعارات، فممكن تفوتك رسايل مدربك. جرّب تفتح ADAM من Chrome.',
+    push_compat_denied: 'الإشعارات مقفولة على الجهاز ده، فممكن تفوتك رسايل مدربك.',
+    push_compat_fix: 'ظبط الإشعارات',
+    push_compat_later: 'مش دلوقتي',
     notif_push_failed: 'ما قدرناش نفعّل الإشعارات: {reason}',
     notif_now: 'دلوقتي',
     notif_min: 'من {n} دقيقة',
@@ -838,6 +858,7 @@ const TEXT = {
     home_today_training: 'تمرين النهاردة',
     home_today_food: 'أكل النهاردة',
     home_today_water: 'المية',
+    home_water_add: 'زوّد كوباية مية',
     home_today_rehab: 'التأهيل',
     home_open_rehab: 'افتح برنامجك',
     home_rest_day: 'راحة النهاردة',
@@ -1370,6 +1391,7 @@ const TEXT = {
     story_end_title: "معاك طول العمر",
     story_end_text: "من أول نفَس لآخر العمر… تمرين، تغذية، علاج، ودعم نفسي في مكان واحد. ابدأ حكايتك النهارده.",
  tour_replay: "جولة سريعة في البرنامج",
+    feedback_btn: 'ابعت رأيك في ADAM',
     tour_start: "يلا نبدأ",
     tour_next: "التالي",
     tour_back: "رجوع",
@@ -2288,6 +2310,28 @@ const TEXT = {
     focus_of: 'تمرين {a} من {b}',
     focus_sets_left: 'فاضل {n} مجموعة — دوس على الخرزة بعد كل مجموعة',
     focus_sets_done: 'خلّصت كل المجموعات',
+    rest_timer_title: 'راحة',
+    rest_add15: '+١٥ ثانية',
+    rest_skip: 'تخطّي الراحة',
+    rest_voice_off: 'اكتم الصوت',
+    rest_voice_on: 'شغّل الصوت',
+    rest_cue_start: 'برافو. خد راحتك، فاضل {n} مجموعات',
+    rest_cue_start_1: 'برافو. خد راحتك، فاضل مجموعة واحدة',
+    rest_cue_10: 'فاضل عشر ثواني، جهّز نفسك',
+    rest_cue_go: 'يلا، المجموعة الجاية',
+    rest_cue_ex_done: 'عاش، خلّصت التمرين ده',
+    swap_btn: 'الأداة مش متاحة؟ بدّل التمرين',
+    swap_close: 'اقفل البدائل',
+    swap_hint: 'بدائل لنفس العضلة. اختار الأداة اللي عندك:',
+    swap_any_equip: 'أي أداة',
+    swap_none: 'مفيش بديل مناسب في المكتبة للتمرين ده. اسأل مدربك في الشات.',
+    swap_using: 'إنت بتعمل بديل النهارده بدل "{name}". المجموعات بتتسجل على التمرين الأصلي.',
+    swap_back: 'رجّع التمرين الأصلي',
+    after_title: 'بعد التمرين',
+    after_protein_left: 'فاضلك حوالي {n} جم بروتين النهارده. دي وجبات من خطتك لسه ما اتسجلتش:',
+    after_lead: 'دي وجبات من خطتك لسه ما اتسجلتش:',
+    after_meal_protein: '{n} جم بروتين',
+    after_open_food: 'افتح أكلي',
     fab_toggle_title: 'أدوات',
     no_meals_title: 'اليوم ده من غير وجبات',
     no_nutrition_title: 'لسه مفيش تغذية',
@@ -2817,6 +2861,7 @@ const TEXT = {
     tagline: 'Training, Rehab & Nutrition Platform',
     anat3d_title: '3D Anatomy',
     anat3d_close: 'Close',
+    biomech_title: 'Biomechanics library',
     back_bar: 'Back',
     spec_group_coach: 'Coaches', spec_group_nutritionist: 'Nutritionists', spec_group_doctor: 'Doctors', spec_group_physio: 'Physiotherapy', spec_group_rehab: 'Rehabilitation', spec_group_psychologist: 'Psychologists', spec_group_other: 'Other specialists',
     login_title: 'Sign In',
@@ -3029,19 +3074,25 @@ const TEXT = {
     pl_bad: 'That is not a playlist link — paste a Spotify, YouTube, Anghami or SoundCloud link.',
     pl_saved: 'Saved — the client will see a music button above their workout.',
     pl_removed: 'Playlist removed.',
-    f4_title: 'Your first 4 days',
-    f4_day: 'Day {n} of 4',
+    f4_title: 'Your first week',
+    f4_day: 'Day {n} of 7',
     f4_s1: 'Meet your program',
     f4_b1: 'Open today\'s program and look through the exercises — no need to do anything yet.',
     f4_s2: 'First session',
     f4_b2: 'Do your first session today, even just 10 minutes. Starting is the most important step.',
-    f4_s3: 'Log food or water',
-    f4_b3: 'Log one meal or your glasses of water today so your team can help you.',
-    f4_s4: 'Talk to your coach',
-    f4_b4: 'Send your coach a message in the chat and tell them how the first days went.',
+    f4_s3: 'Send your coach a technique video',
+    f4_b3: 'Film yourself for 10–15 seconds doing a main exercise from your program and send it to your coach in the chat, so they can check your technique and set your weights.',
+    f4_s4: 'Log food or water',
+    f4_b4: 'Log one meal or your glasses of water today so your team can help you.',
+    f4_s5: 'Second session',
+    f4_b5: 'Do the second session of your program. Repetition is what builds the habit.',
+    f4_s6: 'Talk to your coach',
+    f4_b6: 'Send your coach a message in the chat and tell them how the first days went and what felt hard.',
+    f4_s7: 'Look back at your week',
+    f4_b7: 'Open your progress page and see what you did in your first week.',
     f4_go: 'Let\'s go',
     f4_tomorrow: 'Well done — tomorrow\'s step: {next}',
-    f4_all_done: 'You finished your first 4 days — you have really started.',
+    f4_all_done: 'You finished your first week — you have really started.',
     other_coaches_templates_group: 'Other specialists\' templates',
     template_day_empty: 'This day is empty — add exercises first, then save it as a template',
     template_needs_name: 'Enter a name for the template',
@@ -3385,6 +3436,14 @@ const TEXT = {
     exs_cues: 'Coaching cues',
     exs_mistakes: 'Common mistakes',
     exs_alternatives: 'Alternatives',
+    exs_biomech: 'Biomechanics',
+    exs_bio_action: 'Joints and movement',
+    exs_bio_resist: 'Resistance',
+    exs_bio_hard: 'Hardest point',
+    exs_bio_long: 'Loads it while stretched',
+    exs_bio_short: 'Loads it while shortened',
+    exs_bio_open_move: 'Open the movement page',
+    exs_bio_open_muscle: 'Muscle: {m}',
     exs_primary: 'Primary muscles',
     exs_secondary: 'Secondary',
     exs_caution_client: 'Careful — this client has: {list}. Check the precautions before adding it.',
@@ -3436,6 +3495,11 @@ const TEXT = {
     notif_push_denied: 'Notifications are blocked by the browser. Allow them in the site settings (the lock next to the address) and tap again.',
     notif_push_ios: 'On iPhone: tap the Share button, choose "Add to Home Screen", open ADAM from the new icon — and turn notifications on from there.',
     notif_push_unsupported: 'This browser does not support notifications — try Chrome',
+    push_compat_ios: 'On iPhone you will not get notifications from your coach while ADAM is open in the browser. Add it to your Home Screen and open it from the icon.',
+    push_compat_unsupported: 'This browser cannot receive notifications, so you may miss messages from your coach. Try opening ADAM in Chrome.',
+    push_compat_denied: 'Notifications are blocked on this device, so you may miss messages from your coach.',
+    push_compat_fix: 'Set up notifications',
+    push_compat_later: 'Not now',
     notif_push_failed: 'Could not turn on notifications: {reason}',
     notif_now: 'just now',
     notif_min: '{n} min ago',
@@ -3539,6 +3603,7 @@ const TEXT = {
     home_today_training: "Today's training",
     home_today_food: "Today's food",
     home_today_water: 'Water',
+    home_water_add: 'Add a glass of water',
     home_today_rehab: 'Rehab',
     home_open_rehab: 'Open your program',
     home_rest_day: 'Rest day',
@@ -4071,6 +4136,7 @@ const TEXT = {
     story_end_title: "With you for life",
     story_end_text: "From first breath to the last chapter… training, nutrition, treatment and emotional support in one place. Start your story today.",
  tour_replay: "Quick tour of the app",
+    feedback_btn: 'Send us your feedback',
     tour_start: "Let’s go",
     tour_next: "Next",
     tour_back: "Back",
@@ -4989,6 +5055,28 @@ const TEXT = {
     focus_of: 'Exercise {a} of {b}',
     focus_sets_left: '{n} sets left — tap a bead after each set',
     focus_sets_done: 'All sets done',
+    rest_timer_title: 'Rest',
+    rest_add15: '+15 sec',
+    rest_skip: 'Skip rest',
+    rest_voice_off: 'Mute voice',
+    rest_voice_on: 'Turn voice on',
+    rest_cue_start: 'Nice work. Take your rest, {n} sets to go',
+    rest_cue_start_1: 'Nice work. Take your rest, one set to go',
+    rest_cue_10: 'Ten seconds left, get ready',
+    rest_cue_go: 'Go, next set',
+    rest_cue_ex_done: 'Great, this exercise is done',
+    swap_btn: 'Equipment not available? Swap the exercise',
+    swap_close: 'Close alternatives',
+    swap_hint: 'Alternatives for the same muscle. Pick the equipment you have:',
+    swap_any_equip: 'Any equipment',
+    swap_none: 'No suitable alternative in the library for this exercise. Ask your coach in the chat.',
+    swap_using: 'You are doing an alternative today instead of "{name}". Your sets are logged on the original exercise.',
+    swap_back: 'Back to the original exercise',
+    after_title: 'After your workout',
+    after_protein_left: 'You have about {n} g of protein left today. These meals from your plan are not logged yet:',
+    after_lead: 'These meals from your plan are not logged yet:',
+    after_meal_protein: '{n} g protein',
+    after_open_food: 'Open my food',
     fab_toggle_title: 'Tools',
     no_meals_title: 'No meals for this day',
     no_nutrition_title: 'No nutrition yet',
@@ -11879,11 +11967,35 @@ function renderHomeSummary() {
     const goal = waterGoal();
     const drunk = logDay().water || 0;
     if (goal) {
-      homeCards.appendChild(homeCard(
+      const waterCard = homeCard(
         'water', t('home_today_water'),
         fill('home_water_of', { done: drunk, total: goal }), '',
         function () { goClientMode('nutrition'); }, 'water'
-      ));
+      );
+      /* زرار +1 كوباية من الرئيسية على طول (من غير ما يفتح شاشة الأكل) */
+      if (drunk < goal) {
+        const plus = document.createElement('span');
+        plus.className = 'home-water-plus';
+        plus.setAttribute('role', 'button');
+        plus.setAttribute('tabindex', '0');
+        plus.setAttribute('aria-label', t('home_water_add'));
+        plus.textContent = '+1';
+        const addCup = function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          const today = logDay();
+          today.water = Math.min(goal, (Number(today.water) || 0) + 1);
+          saveFoodLog();
+          renderHomeSummary();
+          if (typeof renderWaterCard === 'function') renderWaterCard();
+        };
+        plus.addEventListener('click', addCup);
+        plus.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') addCup(event);
+        });
+        waterCard.appendChild(plus);
+      }
+      homeCards.appendChild(waterCard);
     }
   }
 
@@ -11902,6 +12014,7 @@ function renderHomeSummary() {
 
 function renderClientHome() {
   renderFirst4();
+  renderPushCompatHome();
   renderSquadHome();
   renderEngCard();
   renderSocBar();
@@ -13209,15 +13322,21 @@ document.getElementById('coach-playlist-save').addEventListener('click', async f
   }
 });
 
-/* ---------- أول ٤ أيام: خطوة صغيرة كل يوم للعميل الجديد ----------
-   الكارت بيظهر في الرئيسية من يوم التسجيل لحد اليوم الرابع بس.
-   التمرين الأول بيتعلّم لوحده من سجل التمرين، والباقي بيتعلّم لما يدوس. */
+/* ---------- أول أسبوع: خطوة صغيرة كل يوم للعميل الجديد ----------
+   الكارت بيظهر في الرئيسية من يوم التسجيل لحد اليوم السابع بس.
+   التمرين الأول والتاني بيتعلّموا لوحدهم من سجل التمرين، والباقي بيتعلّم لما يدوس.
+   يوم ٣ = "ابعت فيديو التكنيك لمدربك" (المتابعة بإشراف مباشر) — بيروح على الشات
+   الموجود، فمفيش رفع فيديو جديد ولا Storage. */
 const FIRST4_STEPS = [
   { icon: 'calendar', go: 'training' },
-  { icon: 'dumbbell', go: 'training', auto: 'trained' },
+  { icon: 'dumbbell', go: 'training', auto: 1 },
+  { icon: 'camera', go: 'chat' },
   { icon: 'bowl', go: 'nutrition' },
-  { icon: 'mail', go: 'chat' }
+  { icon: 'dumbbell', go: 'training', auto: 2 },
+  { icon: 'mail', go: 'chat' },
+  { icon: 'trophy', go: 'progress' }
 ];
+const FIRST4_DAYS = FIRST4_STEPS.length;
 
 function first4Day() {
   const r = clientRecord || {};
@@ -13226,17 +13345,17 @@ function first4Day() {
   const d0 = new Date(String(start).slice(0, 10) + 'T12:00:00');
   const now = new Date(); now.setHours(12, 0, 0, 0);
   const d = Math.round((now - d0) / 86400000) + 1;
-  return d >= 1 && d <= 4 ? d : 0;
+  return d >= 1 && d <= FIRST4_DAYS ? d : 0;
 }
 
 function first4Done() {
-  try { return JSON.parse(localStorage.getItem('adam-first4-' + clientEmail) || '{}') || {}; } catch (e) { return {}; }
+  try { return JSON.parse(localStorage.getItem('adam-first7-' + clientEmail) || '{}') || {}; } catch (e) { return {}; }
 }
 
 function first4Mark(i) {
   const done = first4Done();
   done[i] = true;
-  try { localStorage.setItem('adam-first4-' + clientEmail, JSON.stringify(done)); } catch (e) { /* تجاهل */ }
+  try { localStorage.setItem('adam-first7-' + clientEmail, JSON.stringify(done)); } catch (e) { /* تجاهل */ }
 }
 
 function renderFirst4() {
@@ -13246,7 +13365,8 @@ function renderFirst4() {
   box.classList.toggle('hidden', !day);
   if (!day) return;
   const done = first4Done();
-  if ((progressHistory || []).length) done[1] = true;
+  const trainedDays = (progressHistory || []).length;
+  FIRST4_STEPS.forEach(function (st, k) { if (st.auto && trainedDays >= st.auto) done[k] = true; });
   const i = day - 1;
   const step = FIRST4_STEPS[i];
   const finished = !!done[i];
@@ -13258,7 +13378,7 @@ function renderFirst4() {
   titles.className = 'f4-titles';
   const kicker = document.createElement('div');
   kicker.className = 'f4-kicker';
-  kicker.textContent = t('f4_title') + ' · ' + fill('f4_day', { n: lang === 'ar' ? '١٢٣٤'.charAt(day - 1) : day });
+  kicker.textContent = t('f4_title') + ' · ' + fill('f4_day', { n: lang === 'ar' ? '١٢٣٤٥٦٧'.charAt(day - 1) : day });
   const title = document.createElement('strong');
   title.textContent = t('f4_s' + day);
   titles.append(kicker, title);
@@ -13272,7 +13392,7 @@ function renderFirst4() {
   });
   const text = document.createElement('p');
   text.className = 'f4-text';
-  text.textContent = finished ? (day < 4 ? fill('f4_tomorrow', { next: t('f4_s' + (day + 1)) }) : t('f4_all_done')) : t('f4_b' + day);
+  text.textContent = finished ? (day < FIRST4_DAYS ? fill('f4_tomorrow', { next: t('f4_s' + (day + 1)) }) : t('f4_all_done')) : t('f4_b' + day);
   box.append(head, dots, text);
   if (!finished) {
     const go = document.createElement('button');
@@ -13282,9 +13402,69 @@ function renderFirst4() {
     go.addEventListener('click', function () {
       if (!step.auto) first4Mark(i);
       if (step.go === 'chat') openChatInbox();
+      else if (step.go === 'progress') openProgress(clientEmail, clientScreen, false);
       else setClientMode(step.go);
     });
     box.appendChild(go);
+  }
+}
+
+/* ---------- بانر توافق الإشعارات في رئيسية العميل ----------
+   بيظهر بس لو الجهاز ده مش هيستقبل إشعارات: آيفون فاتح من المتصفح
+   (مش من الشاشة الرئيسية)، أو متصفح مش داعم، أو الإشعارات مقفولة.
+   مش بيظهر خالص لو الإدارة لسه ما فعّلتش الإشعارات. "مش دلوقتي" بيخفيه
+   ١٤ يوم على الجهاز ده. مفيش مكتبة خارجية — بنفحص خصائص المتصفح نفسها. */
+const PUSH_COMPAT_SNOOZE_DAYS = 14;
+
+function pushCompatSnoozeKey() {
+  return 'adam-pushc-' + (clientEmail || '');
+}
+
+function pushCompatReason() {
+  if (isIosDevice() && !isStandaloneApp()) return 'ios';
+  if (!pushSupported()) return 'unsupported';
+  try {
+    if (Notification.permission === 'denied') return 'denied';
+  } catch (e) { return 'unsupported'; }
+  return '';
+}
+
+async function renderPushCompatHome() {
+  const box = document.getElementById('push-compat-home');
+  if (!box) return;
+  try {
+    box.classList.add('hidden');
+    let until = 0;
+    try { until = Number(localStorage.getItem(pushCompatSnoozeKey())) || 0; } catch (e) { until = 0; }
+    if (until && Date.now() < until) return;
+    const reason = pushCompatReason();
+    if (!reason) return;
+    if (!welcomeSettings) await fetchWelcomeSettings();
+    if (!pushConfigured()) return;
+    box.innerHTML = '';
+    const text = document.createElement('p');
+    text.className = 'push-compat-text';
+    text.textContent = t('push_compat_' + reason);
+    const row = document.createElement('div');
+    row.className = 'push-compat-row';
+    const fix = document.createElement('button');
+    fix.type = 'button';
+    fix.className = 'push-compat-fix';
+    fix.textContent = t('push_compat_fix');
+    fix.addEventListener('click', openNotifScreen);
+    const later = document.createElement('button');
+    later.type = 'button';
+    later.className = 'link push-compat-later';
+    later.textContent = t('push_compat_later');
+    later.addEventListener('click', function () {
+      try { localStorage.setItem(pushCompatSnoozeKey(), String(Date.now() + PUSH_COMPAT_SNOOZE_DAYS * 86400000)); } catch (e) { /* تجاهل */ }
+      box.classList.add('hidden');
+    });
+    row.append(fix, later);
+    box.append(text, row);
+    box.classList.remove('hidden');
+  } catch (error) {
+    box.classList.add('hidden');
   }
 }
 
@@ -14602,9 +14782,11 @@ function renderFocus() {
     steps.appendChild(seg);
   });
 
+  if (focusSwapKey !== entry.key) { focusSwapOpen = false; focusSwapKey = entry.key; }
+  const shown = focusShownExercise(entry);
   const media = document.getElementById('focus-media');
   media.innerHTML = '';
-  const src = thumbSrc(exercise);
+  const src = thumbSrc(shown);
   if (src) {
     const img = document.createElement('img');
     img.src = src;
@@ -14618,7 +14800,8 @@ function renderFocus() {
     media.appendChild(exerciseFallbackArt(entry.section));
   }
 
-  document.getElementById('focus-name').textContent = exerciseDisplayName(exercise);
+  document.getElementById('focus-name').textContent = exerciseDisplayName(shown);
+  renderFocusSwap(entry);
 
   const chips = document.getElementById('focus-chips');
   chips.innerHTML = '';
@@ -14640,6 +14823,8 @@ function renderFocus() {
   const doneCount = setsDoneFor(setsDoneToday, entry.key, totalSets);
 
   renderBeads(beads, totalSets, doneCount, function (next) {
+    if (next > doneCount && next < totalSets) startRestTimer(exercise, totalSets - next);
+    else if (next >= totalSets && doneCount < totalSets) { stopRestTimer(); sayCue(t('rest_cue_ex_done'), false); }
     setsDoneToday[entry.key] = next;
     syncFocusToList(entry.key, next >= totalSets);
     fxOnSet(next, doneCount, totalSets, exercise);
@@ -14657,6 +14842,12 @@ function renderFocus() {
   prev.disabled = focusIndex === 0;
   next.textContent = (focusIndex === total - 1) ? t('focus_finish') : t('focus_next');
   next.classList.toggle('ready', left === 0);
+
+  const dayDone = focusList.every(function (row) {
+    const n = exerciseSetCount(row.exercise) || 1;
+    return setsDoneFor(setsDoneToday, row.key, n) >= n;
+  });
+  try { renderFocusAfter(dayDone); } catch (e) { /* الاقتراح إضافة — مايوقفش التمرين */ }
 
   renderFocusLogBox();
   fxAfterRender(entry, totalSets, doneCount);
@@ -14688,6 +14879,8 @@ function openFocus(startIndex) {
 function closeFocus() {
   fxStopAll();
   fxHideMini();
+  stopRestTimer();
+  try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) { /* تجاهل */ }
   focusMode.classList.add('hidden');
   document.body.classList.remove('focus-open');
   showClientDay();
@@ -15270,6 +15463,388 @@ document.getElementById('start-session-btn').addEventListener('click', function 
   }
   openFocus(start);
 });
+
+/* ============================================================
+   وضع التمرين — إضافات: مؤقت الراحة الصوتي · بديل التمرين حسب الأداة ·
+   اقتراح أكلة بعد التمرين
+   ------------------------------------------------------------
+   - مؤقت الراحة بيبدأ لوحده لما العميل يعلّم مجموعة (ولسه فاضل مجموعات)،
+     مدته من خانة "الراحة" اللي المدرب كتبها (٦٠ ثانية لو فاضية).
+     الصوت من المتصفح نفسه (speechSynthesis) — مجاني ومن غير ملفات.
+     لو مفيش صوت عربي على الموبايل بنكتفي بصفارة واهتزاز. فيه زرار كتم.
+   - البديل للعرض بس: التسجيل بيفضل على التمرين الأصلي عشان سجل المدرب
+     ما يتلخبطش. البديل بيتحفظ على الجهاز لليوم ده بس.
+   - اقتراح الأكل من خطة أكل العميل نفسها (مش من برّه) ومن غير تسجيل تلقائي.
+   ============================================================ */
+
+const REST_DEFAULT_SEC = 60;
+let restTimer = null;   /* { total, left, interval, said10 } */
+
+function parseRestSeconds(text) {
+  if (!text) return 0;
+  const s = String(text).replace(/[٠-٩]/g, function (d) { return String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)); }).toLowerCase();
+  const clock = s.match(/(\d+)\s*:\s*(\d{1,2})/);
+  if (clock) return Number(clock[1]) * 60 + Number(clock[2]);
+  const num = s.match(/(\d+(?:\.\d+)?)/);
+  if (!num) return 0;
+  const n = Number(num[1]);
+  if (/min|دق|د\b|'/.test(s)) return Math.round(n * 60);
+  return Math.round(n);
+}
+
+function voiceOff() {
+  try { return localStorage.getItem('adam-voice-off') === '1'; } catch (e) { return false; }
+}
+
+function setVoiceOff(off) {
+  try { localStorage.setItem('adam-voice-off', off ? '1' : '0'); } catch (e) { /* تجاهل */ }
+  if (off) { try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) { /* تجاهل */ } }
+}
+
+function pickVoice() {
+  try {
+    if (!('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices() || [];
+    const want = lang === 'ar' ? 'ar' : 'en';
+    const exact = voices.filter(function (v) { return /^ar[-_]EG/i.test(v.lang); });
+    if (want === 'ar' && exact.length) return exact[0];
+    const any = voices.filter(function (v) { return String(v.lang || '').toLowerCase().indexOf(want) === 0; });
+    return any[0] || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function restBeep() {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.frequency.value = 880;
+    gain.gain.value = 0.08;
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.18);
+    osc.onended = function () { try { ctx.close(); } catch (e) { /* تجاهل */ } };
+  } catch (e) { /* تجاهل */ }
+}
+
+/* بننطق بس لو فيه صوت بنفس لغة الواجهة — عشان مايقراش عربي بصوت إنجليزي */
+function sayCue(text, beepIfSilent) {
+  if (voiceOff()) return;
+  const voice = pickVoice();
+  if (!voice) { if (beepIfSilent) restBeep(); return; }
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.voice = voice;
+    u.lang = voice.lang;
+    u.rate = 1;
+    window.speechSynthesis.speak(u);
+  } catch (e) {
+    if (beepIfSilent) restBeep();
+  }
+}
+
+function fmtClock(sec) {
+  const m = Math.floor(Math.max(0, sec) / 60);
+  const s = Math.max(0, sec) % 60;
+  return m + ':' + String(s).padStart(2, '0');
+}
+
+function stopRestTimer() {
+  if (restTimer) clearInterval(restTimer.interval);
+  restTimer = null;
+  const box = document.getElementById('focus-rest');
+  if (box) { box.classList.add('hidden'); box.innerHTML = ''; }
+}
+
+function paintRestTimer() {
+  const box = document.getElementById('focus-rest');
+  if (!box || !restTimer) return;
+  const label = box.querySelector('.fr-time');
+  const bar = box.querySelector('.fr-bar i');
+  if (label) label.textContent = fmtClock(restTimer.left);
+  if (bar) bar.style.width = Math.round(100 * restTimer.left / Math.max(1, restTimer.total)) + '%';
+}
+
+function buildRestBox(box) {
+  box.innerHTML = '';
+  const top = document.createElement('div');
+  top.className = 'fr-top';
+  const title = document.createElement('span');
+  title.className = 'fr-title';
+  title.textContent = t('rest_timer_title');
+  const time = document.createElement('strong');
+  time.className = 'fr-time';
+  const mute = document.createElement('button');
+  mute.type = 'button';
+  mute.className = 'fr-mute';
+  const paintMute = function () {
+    const off = voiceOff();
+    mute.setAttribute('aria-label', off ? t('rest_voice_on') : t('rest_voice_off'));
+    mute.title = mute.getAttribute('aria-label');
+    mute.classList.toggle('is-off', off);
+    mute.innerHTML = off
+      ? '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>'
+      : '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+  };
+  paintMute();
+  mute.addEventListener('click', function () { setVoiceOff(!voiceOff()); paintMute(); });
+  top.append(title, time, mute);
+  const bar = document.createElement('div');
+  bar.className = 'fr-bar';
+  bar.appendChild(document.createElement('i'));
+  const row = document.createElement('div');
+  row.className = 'fr-row';
+  const plus = document.createElement('button');
+  plus.type = 'button';
+  plus.className = 'fr-btn';
+  plus.textContent = t('rest_add15');
+  plus.addEventListener('click', function () {
+    if (!restTimer) return;
+    restTimer.left += 15; restTimer.total += 15; restTimer.said10 = false;
+    paintRestTimer();
+  });
+  const skip = document.createElement('button');
+  skip.type = 'button';
+  skip.className = 'fr-btn';
+  skip.textContent = t('rest_skip');
+  skip.addEventListener('click', stopRestTimer);
+  row.append(plus, skip);
+  box.append(top, bar, row);
+}
+
+function startRestTimer(exercise, setsLeft) {
+  stopRestTimer();
+  const box = document.getElementById('focus-rest');
+  if (!box) return;
+  const sec = parseRestSeconds(exercise && exercise.rest) || REST_DEFAULT_SEC;
+  restTimer = { total: sec, left: sec, interval: 0, said10: sec <= 12 };
+  buildRestBox(box);
+  box.classList.remove('hidden');
+  paintRestTimer();
+  sayCue(setsLeft === 1 ? t('rest_cue_start_1') : fill('rest_cue_start', { n: setsLeft }), false);
+  restTimer.interval = setInterval(function () {
+    if (!restTimer) return;
+    restTimer.left -= 1;
+    if (!restTimer.said10 && restTimer.left === 10) { restTimer.said10 = true; sayCue(t('rest_cue_10'), false); }
+    if (restTimer.left <= 0) {
+      sayCue(t('rest_cue_go'), true);
+      try { if (navigator.vibrate) navigator.vibrate([180, 80, 180]); } catch (e) { /* تجاهل */ }
+      stopRestTimer();
+      return;
+    }
+    paintRestTimer();
+  }, 1000);
+}
+
+/* ---------- بديل التمرين حسب الأداة المتاحة ---------- */
+
+let focusSwapOpen = false;
+let focusSwapKey = '';
+let focusSwapEquip = '';
+
+function swapStoreKey() {
+  return 'adam-swap-' + (clientEmail || '') + '-' + todayStamp;
+}
+
+function swapsToday() {
+  try { return JSON.parse(localStorage.getItem(swapStoreKey()) || '{}') || {}; } catch (e) { return {}; }
+}
+
+function setSwapToday(key, libId) {
+  const all = swapsToday();
+  if (libId) all[key] = libId; else delete all[key];
+  try { localStorage.setItem(swapStoreKey(), JSON.stringify(all)); } catch (e) { /* تجاهل */ }
+}
+
+function libEntryForExercise(exercise) {
+  if (!exercise) return null;
+  if (exercise.libId) {
+    const byId = libraryEntryById(exercise.libId);
+    if (byId) return byId;
+  }
+  const en = (exercise.i18n && exercise.i18n.en && exercise.i18n.en.name) || exercise.en || '';
+  const raw = en || (typeof exercise.name === 'string' ? exercise.name : '');
+  if (!raw) return null;
+  const key = normaliseName(raw);
+  const list = libraryData || EXERCISE_LIBRARY;
+  for (let i = 0; i < list.length; i++) {
+    const ex = list[i];
+    const n = ex && ex.name && (typeof ex.name === 'object' ? ex.name.en : ex.name);
+    if (n && normaliseName(n) === key) return ex;
+  }
+  return null;
+}
+
+function swapCandidates(base) {
+  if (!base || !(base.primaryMuscles || []).length) return [];
+  const main = base.primaryMuscles[0];
+  const baseType = base._type || base.type || '';
+  return (libraryData || EXERCISE_LIBRARY).filter(function (ex) {
+    if (!ex || ex.id === base.id || ex.src === 'rehab') return false;
+    if ((ex.primaryMuscles || [])[0] !== main) return false;
+    if ((ex.cautions || []).length) return false;
+    const type = ex._type || ex.type || '';
+    return !baseType || !type || type === baseType || (baseType !== 'time' && type !== 'time' && type !== 'distance' && type !== 'distance_time');
+  }).sort(function (a, b) {
+    const pa = a.pattern && a.pattern === base.pattern ? 0 : 1;
+    const pb = b.pattern && b.pattern === base.pattern ? 0 : 1;
+    if (pa !== pb) return pa - pb;
+    return Math.abs((a.level || 2) - (base.level || 2)) - Math.abs((b.level || 2) - (base.level || 2));
+  });
+}
+
+function renderFocusSwap(entry) {
+  const box = document.getElementById('focus-swap');
+  if (!box) return;
+  box.innerHTML = '';
+  const base = libEntryForExercise(entry.exercise);
+  const chosenId = swapsToday()[entry.key] || '';
+  const chosen = chosenId ? libraryEntryById(chosenId) : null;
+
+  if (chosen) {
+    const note = document.createElement('p');
+    note.className = 'fs-note';
+    note.textContent = fill('swap_using', { name: exerciseDisplayName(entry.exercise) });
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'fs-link';
+    back.textContent = t('swap_back');
+    back.addEventListener('click', function () { setSwapToday(entry.key, ''); focusSwapOpen = false; renderFocus(); });
+    box.append(note, back);
+    return;
+  }
+  if (!base || !(base.primaryMuscles || []).length) return;
+
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'fs-link';
+  toggle.textContent = focusSwapOpen ? t('swap_close') : t('swap_btn');
+  toggle.addEventListener('click', function () {
+    focusSwapOpen = !focusSwapOpen;
+    focusSwapEquip = '';
+    if (focusSwapOpen) ensureExtraLibrary().then(function () { if (focusSwapOpen) renderFocusSwap(focusEntry()); });
+    renderFocusSwap(entry);
+  });
+  box.appendChild(toggle);
+  if (!focusSwapOpen) return;
+
+  const all = swapCandidates(base);
+  if (!all.length) {
+    const none = document.createElement('p');
+    none.className = 'fs-note';
+    none.textContent = t('swap_none');
+    box.appendChild(none);
+    return;
+  }
+  const hint = document.createElement('p');
+  hint.className = 'fs-note';
+  hint.textContent = t('swap_hint');
+  box.appendChild(hint);
+
+  const equips = [];
+  all.forEach(function (ex) { if (ex.equipment && equips.indexOf(ex.equipment) === -1) equips.push(ex.equipment); });
+  const chips = document.createElement('div');
+  chips.className = 'fs-chips';
+  [''].concat(equips.slice(0, 10)).forEach(function (key) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'fs-chip' + (focusSwapEquip === key ? ' on' : '');
+    chip.textContent = key ? equipName(key) : t('swap_any_equip');
+    chip.addEventListener('click', function () { focusSwapEquip = key; renderFocusSwap(entry); });
+    chips.appendChild(chip);
+  });
+  box.appendChild(chips);
+
+  const list = document.createElement('div');
+  list.className = 'fs-list';
+  all.filter(function (ex) { return !focusSwapEquip || ex.equipment === focusSwapEquip; }).slice(0, 8).forEach(function (ex) {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'fs-item';
+    const name = document.createElement('strong');
+    name.textContent = exerciseLibName(ex);
+    const sub = document.createElement('span');
+    sub.textContent = equipName(ex.equipment);
+    item.append(name, sub);
+    item.addEventListener('click', function () {
+      setSwapToday(entry.key, ex.id);
+      focusSwapOpen = false;
+      renderFocus();
+    });
+    list.appendChild(item);
+  });
+  box.appendChild(list);
+}
+
+/* التمرين المعروض فعلًا (البديل لو اتختار) — التسجيل بيفضل على الأصلي */
+function focusShownExercise(entry) {
+  const id = swapsToday()[entry.key];
+  const alt = id ? libraryEntryById(id) : null;
+  if (!alt) return entry.exercise;
+  const copy = Object.assign({}, entry.exercise, { libId: alt.id, image: '', imageUrl: '', i18n: null, name: exerciseLibName(alt) });
+  const media = libMediaUrl(alt);
+  if (media) copy.imageUrl = media;
+  return copy;
+}
+
+/* ---------- اقتراح أكلة بعد التمرين ---------- */
+
+function renderFocusAfter(allDone) {
+  const box = document.getElementById('focus-after');
+  if (!box) return;
+  box.innerHTML = '';
+  box.classList.add('hidden');
+  if (!allDone || !ctabNutrition || ctabNutrition.classList.contains('hidden')) return;
+  const planDay = clientNutrition && clientNutrition.week && clientNutrition.week[todayIndex];
+  const target = Number(clientNutrition && clientNutrition.targets && clientNutrition.targets.protein) || 0;
+  const eaten = eatenTotals(planDay);
+  const left = target ? Math.max(0, Math.round(target - eaten.protein)) : 0;
+  const log = logDay();
+
+  const meals = [];
+  if (planDay && planDay.meals) {
+    MEAL_KEYS.forEach(function (key) {
+      const items = (planDay.meals[key] || []).filter(function (item, index) { return log.eaten.indexOf(key + ':' + index) === -1; });
+      if (!items.length) return;
+      const tot = mealTotals(items);
+      meals.push({ key: key, items: items, protein: Math.round(tot.protein) });
+    });
+  }
+  meals.sort(function (a, b) { return b.protein - a.protein; });
+  const picks = meals.filter(function (m) { return m.protein > 0; }).slice(0, 2);
+  if (!left && !picks.length) return;
+
+  const title = document.createElement('strong');
+  title.className = 'fa-title';
+  title.textContent = t('after_title');
+  box.appendChild(title);
+  const lead = document.createElement('p');
+  lead.className = 'fa-lead';
+  lead.textContent = left ? fill('after_protein_left', { n: left }) : t('after_lead');
+  box.appendChild(lead);
+  picks.forEach(function (m) {
+    const row = document.createElement('div');
+    row.className = 'fa-meal';
+    const head = document.createElement('b');
+    head.textContent = mealName(m.key) + ' · ' + fill('after_meal_protein', { n: m.protein });
+    const names = document.createElement('span');
+    names.textContent = m.items.map(foodDisplayName).filter(Boolean).slice(0, 4).join(lang === 'ar' ? '، ' : ', ');
+    row.append(head, names);
+    box.appendChild(row);
+  });
+  const go = document.createElement('button');
+  go.type = 'button';
+  go.className = 'fa-go';
+  go.textContent = t('after_open_food');
+  go.addEventListener('click', function () { closeFocus(); goClientMode('nutrition'); });
+  box.appendChild(go);
+  box.classList.remove('hidden');
+}
 
 /* زرار النقط تحت: بيفتح ويقفل شريط الأدوات بدل ما يفضل فوق الكلام */
 const fabRow = document.getElementById('client-fab-row');
@@ -30785,11 +31360,56 @@ function libLevelText(level) {
   return level ? t('level_' + level) : '';
 }
 
+/* بيوميكانيك التمرين (library/biomech-exercise.js) — بيتحمّل أول مرة يتفتح فيها شيت تمرين */
+let bioExPromise = null;
+function loadBioEx() {
+  if (!bioExPromise) bioExPromise = import('./library/biomech-exercise.js').catch(function () { bioExPromise = null; return null; });
+  return bioExPromise;
+}
+function renderExBiomech(body, ex, mod) {
+  let b = null;
+  try { b = mod && mod.exerciseBiomech ? mod.exerciseBiomech(ex) : null; } catch (e) { b = null; }
+  if (!b) return;
+  const P = function (pair) { return pair ? (lang === 'en' ? pair[1] : pair[0]) : ''; };
+  const box = el('div', 'exs-bio');
+  box.appendChild(el('h4', 'exs-h', t('exs_biomech')));
+  const chips = el('div', 'exs-chips');
+  [P(b.patternName), b.chain && mod.CHAIN_NAMES ? P(mod.CHAIN_NAMES[b.chain]) : '', P(b.plane)].filter(Boolean)
+    .forEach(function (txt) { chips.appendChild(el('span', 'exs-chip', txt)); });
+  box.appendChild(chips);
+  function line(key, text) {
+    if (!text) return;
+    const p = el('p', 'exs-line');
+    p.appendChild(el('strong', '', t(key) + ': '));
+    p.appendChild(document.createTextNode(text));
+    box.appendChild(p);
+  }
+  line('exs_bio_action', P(b.action));
+  line('exs_bio_resist', P(b.resist));
+  line('exs_bio_hard', P(b.hard));
+  (b.loads || []).forEach(function (l) { line(l.how === 'long' ? 'exs_bio_long' : 'exs_bio_short', P(l.t)); });
+  const row = el('div', 'exs-bio-actions');
+  if (b.topic) {
+    const mv = el('button', 'exs-alt', t('exs_bio_open_move'));
+    mv.type = 'button';
+    mv.addEventListener('click', function () { closeExSheet(); openBiomechViewer(b.topic); });
+    row.appendChild(mv);
+  }
+  if (b.muscle && b.muscleName) {
+    const mu = el('button', 'exs-alt', fill('exs_bio_open_muscle', { m: P(b.muscleName) }));
+    mu.type = 'button';
+    mu.addEventListener('click', function () { closeExSheet(); openBiomechViewer('m-' + b.muscle); });
+    row.appendChild(mu);
+  }
+  if (row.childNodes.length) box.appendChild(row);
+  body.appendChild(box);
+}
+
 async function openExerciseSheet(ex) {
   prepLibEntry(ex);
   const body = openExSheetShell();
   body.appendChild(el('p', 'hint-text', t('exs_loading')));
-  await ensureExerciseDetails();
+  const bioMod = (await Promise.all([ensureExerciseDetails(), loadBioEx()]))[1];
   const det = libDetailsOf(ex);
   body.innerHTML = '';
   body.setAttribute('data-id', ex.id);
@@ -30856,6 +31476,7 @@ async function openExerciseSheet(ex) {
   section('exs_cues', det.cues);
   section('exs_mistakes', det.mistakes);
   section('anatomy_injury_benefit', det.benefit);
+  renderExBiomech(body, ex, bioMod);
 
   const alts = libAlternatives(ex);
   if (alts.length) {
@@ -31017,6 +31638,35 @@ async function openMediaCredits() {
 document.getElementById('ex-sheet-close').addEventListener('click', closeExSheet);
 
 /* ---------- التشريح ثلاثي الأبعاد: فتح التمرين من العضلة ---------- */
+/* مكتبة البيوميكانيك: صفحة منفصلة (biomech/) جوه شاشة كاملة زي التشريح.
+   تمارينها بتفتح شيت التمرين هنا عن طريق رسالة adam-open-ex (نفس رسالة التشريح). */
+function openBiomechViewer(target) {
+  const ov = document.getElementById('bio-overlay');
+  const fr = document.getElementById('bio-frame');
+  if (!ov || !fr) return;
+  /* target = صفحة معينة جوه المكتبة (زي m-hamstrings أو squat) */
+  const clean = (typeof target === 'string' && /^[a-z0-9_-]{1,40}$/.test(target)) ? target : '';
+  if (clean) fr.setAttribute('src', 'biomech/#' + clean);
+  else if (!fr.getAttribute('src')) fr.setAttribute('src', 'biomech/');
+  ov.classList.remove('hidden');
+  ov.style.display = 'flex';
+  ensureExtraLibrary();
+}
+function closeBiomechViewer() {
+  const ov = document.getElementById('bio-overlay');
+  if (ov) { ov.classList.add('hidden'); ov.style.display = ''; }
+}
+(function () {
+  const openBtn = document.getElementById('lib-biomech-btn');
+  const closeBtn = document.getElementById('bio-close');
+  if (openBtn) openBtn.addEventListener('click', function () { openBiomechViewer(); });
+  window.addEventListener('message', function (e) {
+    if (e.origin !== location.origin) return;
+    const d = e.data;
+    if (d && d.type === 'adam-open-biomech') openBiomechViewer(d.target);
+  });
+  if (closeBtn) closeBtn.addEventListener('click', closeBiomechViewer);
+})();
 function closeAnatomyViewer() {
   const ov = document.getElementById('anat-overlay');
   if (ov) { ov.classList.add('hidden'); ov.style.display = ''; }

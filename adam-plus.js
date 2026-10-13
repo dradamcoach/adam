@@ -128,6 +128,7 @@ export async function open(tab, arg) {
   if (tab === 'watch') { go('me'); setTimeout(() => { const e = $('#ap-php'); if (e) e.scrollIntoView({ block: 'center' }); }, 120); return; }
   if (tab === 'guest') { go(plus.profile || plus.skipProfile ? 'journeys' : 'me'); if (curTab === 'me') { sub.first = true; draw(); } return; }
   if (tab === 'bio') tab = 'biomech';
+  if (tab === 'biolib') { go('biomech'); openBioLib(); return; }
   if (tab === 'circ' || tab === 'circuit' || tab === 'group') { go('circ'); const g = takeGrp(); if (g) { sub.join = g; draw(); } return; }
   const al = { tpl: ['lib', 'lt', 'tpl'], libex: ['lib', 'lt', 'ex'], progs: ['lib', 'lt', 'prog'], fast: ['food', 'ftab', 'fast'], nutri: ['plan', 'planTab', 'nutri'], challenges: ['chal'], chal: ['chal'], weekly: ['chal'] }[tab];
   if (al) { go(al[0]); if (al[1]) { sub[al[1]] = al[2]; draw(); } } else go(tab || curTab);
@@ -400,6 +401,70 @@ function advice(score, c) {
   if (plus.travel) a.push(L('وضع السفر: 20 دقيقة وزن جسم تكفي (سكوات، ضغط، بلانك)، واشرب مياه كتير وامشي قدر ما تقدر.', 'Travel mode: 20 minutes of bodyweight is enough (squats, push-ups, plank). Drink plenty of water and walk when you can.'));
   return a;
 }
+/* ---------------------------------------------------------------- عاداتي اليومية
+   عادات صغيرة بيختارها العميل (لحد ٥) وبيعلّم عليها كل يوم. بتتحفظ في نفس
+   حالة ADAM+ (على الجهاز + مستند checkins لو الحساب مسموح له). آخر ٦٠ يوم بس. */
+const HABITS = [
+  ['sleep7', 'نوم ٧ ساعات أو أكتر', 'Sleep 7+ hours'],
+  ['steps', '٨٠٠٠ خطوة', '8,000 steps'],
+  ['stretch', 'إطالة ١٠ دقايق', '10 minutes of stretching'],
+  ['veg', 'خضار في وجبتين', 'Vegetables in two meals'],
+  ['nosugar', 'من غير سكريات ولا مياه غازية', 'No sweets or soft drinks'],
+  ['outside', 'مشي برّه ١٥ دقيقة', '15-minute walk outside'],
+  ['screens', 'من غير موبايل قبل النوم بنص ساعة', 'No phone 30 minutes before bed'],
+  ['protein', 'بروتين في كل وجبة', 'Protein at every meal']
+];
+const HABIT_MAX = 5;
+const habitById = (id) => HABITS.find((x) => x[0] === id);
+function habitState() {
+  if (!plus.habits || typeof plus.habits !== 'object') plus.habits = { on: ['sleep7', 'steps', 'stretch'], log: {} };
+  if (!Array.isArray(plus.habits.on)) plus.habits.on = [];
+  if (!plus.habits.log || typeof plus.habits.log !== 'object') plus.habits.log = {};
+  return plus.habits;
+}
+function habitStreak(id, today) {
+  const st = habitState(); let n = 0; let d = today;
+  if (!(st.log[d] || []).includes(id)) d = addDays(d, -1); /* النهارده لسه ممكن يتعلّم */
+  while ((st.log[d] || []).includes(id)) { n++; d = addDays(d, -1); }
+  return n;
+}
+function habitsBlock(today) {
+  const st = habitState();
+  const done = st.log[today] || [];
+  const active = st.on.filter(habitById);
+  let h = '<div class="ap-sec"><b>' + esc(L('عاداتي اليومية', 'My daily habits')) + '</b><span>' + esc(L(done.filter((x) => active.includes(x)).length + ' من ' + active.length + ' النهارده', done.filter((x) => active.includes(x)).length + ' of ' + active.length + ' today')) + '</span></div><div class="ap-card">';
+  if (sub.hedit) {
+    h += '<p class="ap-hint">' + esc(L('اختار لحد ' + HABIT_MAX + ' عادات صغيرة تلتزم بيها كل يوم.', 'Pick up to ' + HABIT_MAX + ' small habits to keep every day.')) + '</p><div class="ap-chips">';
+    h += HABITS.map((x) => '<button type="button" data-hpick="' + x[0] + '" class="' + (st.on.includes(x[0]) ? 'on' : '') + '">' + esc(L(x[1], x[2])) + '</button>').join('');
+    h += '</div><button type="button" class="ap-btn small" data-hedit="0">' + esc(L('تمام', 'Done')) + '</button>';
+  } else if (!active.length) {
+    h += '<div class="ap-empty small"><p>' + esc(L('مفيش عادات متختارة.', 'No habits picked yet.')) + '</p><button type="button" class="ap-btn small" data-hedit="1">' + esc(L('اختار عاداتك', 'Pick your habits')) + '</button></div>';
+  } else {
+    active.forEach((id) => {
+      const x = habitById(id); const on = done.includes(id); const sk = habitStreak(id, today);
+      h += '<label class="ap-task ap-habit"><input type="checkbox" data-habit="' + id + '"' + (on ? ' checked' : '') + '><span>' + esc(L(x[1], x[2])) + (sk > 1 ? ' <small class="ap-hstreak">' + esc(L(sk + ' يوم ورا بعض', sk + ' days in a row')) + '</small>' : '') + '</span></label>';
+    });
+    h += '<button type="button" class="ap-btn ghost small" data-hedit="1">' + esc(L('عدّل عاداتي', 'Edit my habits')) + '</button>';
+  }
+  return h + '</div>';
+}
+function bindHabits(body, today) {
+  $$('[data-habit]', body).forEach((el) => el.addEventListener('change', () => {
+    const st = habitState(); const list = (st.log[today] || []).filter((x) => x !== el.dataset.habit);
+    if (el.checked) list.push(el.dataset.habit);
+    st.log[today] = list;
+    const keys = Object.keys(st.log).sort(); while (keys.length > 60) delete st.log[keys.shift()];
+    persist(); draw();
+  }));
+  $$('[data-hedit]', body).forEach((el) => el.addEventListener('click', () => { sub.hedit = el.dataset.hedit === '1'; draw(); }));
+  $$('[data-hpick]', body).forEach((el) => el.addEventListener('click', () => {
+    const st = habitState(); const id = el.dataset.hpick;
+    if (st.on.includes(id)) st.on = st.on.filter((x) => x !== id);
+    else if (st.on.length < HABIT_MAX) st.on.push(id);
+    persist(); draw();
+  }));
+}
+
 function checkStreak() {
   let n = 0, d = stamp();
   if (!plus.checkins[d]) d = addDays(d, -1);
@@ -420,6 +485,7 @@ function viewToday(body) {
   }
   const days = []; for (let i = 6; i >= 0; i--) { const d = addDays(today, -i); days.push([d, plus.checkins[d] ? plus.checkins[d].score : null]); }
   h += '<div class="ap-sec"><b>' + esc(L('آخر 7 أيام', 'Last 7 days')) + '</b><span>' + esc(L('سلسلة ', 'Streak ') + checkStreak()) + '</span></div><div class="ap-card"><div class="ap-bars">' + days.map((x) => '<div class="ap-barcol"><i style="height:' + (x[1] == null ? 4 : Math.max(8, x[1])) + '%;opacity:' + (x[1] == null ? 0.25 : 1) + '"></i><small>' + esc(lang() === 'en' ? WEEKDAYS[dayIdx(new Date(x[0] + 'T12:00:00'))][1].slice(0, 3) : SHORT_AR[dayIdx(new Date(x[0] + 'T12:00:00'))]) + '</small></div>').join('') + '</div></div>';
+  h += habitsBlock(today);
   h += '<div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-story">' + esc(L('اعمل قصة الأسبوع', 'Make my weekly story')) + '</button></div><canvas id="ap-canvas" width="1080" height="1350" class="hidden"></canvas>';
   body.innerHTML = h;
   $$('[data-q]', body).forEach((b) => b.addEventListener('click', () => {
@@ -431,6 +497,7 @@ function viewToday(body) {
   $('#ap-ram', body).addEventListener('click', () => { plus.ramadan = !plus.ramadan; persist(); draw(); });
   $('#ap-trv', body).addEventListener('click', () => { plus.travel = !plus.travel; persist(); draw(); });
   $('#ap-story', body).addEventListener('click', () => makeStory(body));
+  bindHabits(body, today);
 }
 function makeStory(body) {
   const cv = $('#ap-canvas', body); const x = cv.getContext('2d'); const W = 1080, H = 1350;
@@ -1560,6 +1627,7 @@ function bioGo(it) {
   else { b.tab = { gait: 'gait', posture: 'posture', injury: 'injury', principle: 'principles' }[it.t] || 'joints'; b.open = it.id; b.q = ''; draw(); }
 }
 function bioWire(body) {
+  $$('[data-biolib]', body).forEach((x) => x.addEventListener('click', () => openBioLib(x.dataset.biolib === '1' ? '' : x.dataset.biolib)));
   $$('[data-bj]', body).forEach((x) => x.addEventListener('click', () => bioNav({ k: 'joint', id: x.dataset.bj })));
   $$('[data-bp]', body).forEach((x) => x.addEventListener('click', () => bioNav({ k: 'pattern', id: x.dataset.bp })));
   $$('[data-bmu]', body).forEach((x) => x.addEventListener('click', () => bioNav({ k: 'muscle', id: x.dataset.bmu })));
@@ -1575,7 +1643,8 @@ function viewBio(body) {
   const b = bio();
   if (b.d) return bioDetail(body, b.d);
   const tabs = [['joints', L('المفاصل', 'Joints')], ['patterns', L('أنماط الحركة', 'Movement patterns')], ['ex', L('ميكانيكا تمرين', 'An exercise')], ['gait', L('جري ومشي وسبرنت', 'Run, walk, sprint')], ['posture', L('الوضعية', 'Posture')], ['injury', L('آليات الإصابة', 'Injury mechanisms')], ['principles', L('مبادئ', 'Principles')]];
-  let h = '<div class="ap-note" style="margin-top:0">' + esc(L('إزاي الجسم بيتحرك: المفاصل والعضلات وميكانيكا كل تمرين، ومربوطة بالمكتبة والتشريح والتأهيل.', 'How the body moves: joints, muscles and the mechanics of each exercise, linked to the library, anatomy and rehab.')) + '</div>';
+  let h = '<button type="button" class="ap-card ap-tmb bio-libcard" data-biolib="1"><b>' + esc(L('مكتبة البيوميكانيك: رسومات ومنحنيات', 'Biomechanics library: drawings and curves')) + '</b><small class="mu">' + esc(L('رسومات أصلية للسكوات والديدلفت والروافع وذراع العزم ومنحنيات القوة والسرعة والاتزان والعضلات.', 'Original drawings: squat, hinge, levers, moment arms, force-velocity curves, balance and muscles.')) + '</small></button>';
+  h += '<div class="ap-note" style="margin-top:0">' + esc(L('إزاي الجسم بيتحرك: المفاصل والعضلات وميكانيكا كل تمرين، ومربوطة بالمكتبة والتشريح والتأهيل.', 'How the body moves: joints, muscles and the mechanics of each exercise, linked to the library, anatomy and rehab.')) + '</div>';
   h += '<input type="text" id="bio-q" maxlength="60" placeholder="' + esc(L('ابحث: ركبة، سكوات، هامسترينج، سبرنت...', 'Search: knee, squat, hamstrings, sprint...')) + '" value="' + esc(b.q || '') + '">';
   const q = norm(b.q || '').trim();
   if (q.length >= 2) {
@@ -1630,7 +1699,7 @@ function bioDetail(body, d) {
   const anat = '<div class="ap-actions"><button type="button" class="ap-btn ghost" data-banat="1">' + esc(L('شوف في التشريح 3D', 'See it in 3D anatomy')) + '</button></div>';
   if (d.k === 'joint') {
     const j = jointById(d.id); if (!j) { bio().d = null; return viewBio(body); }
-    let h = back + '<div class="ap-sec"><b>' + esc(L(j.ar, j.en)) + '</b></div><div class="ap-card"><p class="ap-p">' + bioL(j.type) + '</p></div>';
+    let h = back + '<div class="ap-sec"><b>' + esc(L(j.ar, j.en)) + '</b></div>' + bioFigBox(JOINT2LIB[j.id], JOINT2LIB[j.id]) + '<div class="ap-card"><p class="ap-p">' + bioL(j.type) + '</p></div>';
     h += bioSec('الحركات والمدى والعضلات', 'Movements, range and muscles');
     j.mv.forEach((m) => { h += '<div class="ap-card' + (d.mv === m[0] ? ' ap-win' : '') + '"><div class="ap-row"><b>' + esc(L(m[1], m[2])) + '</b><span class="mu">' + esc(planeL(m[4])) + '</span></div><div class="bio-romrow">' + romBar(m[3]) + '</div><div class="ap-chips">' + m[5].map(muChip).join('') + '</div></div>'; });
     h += bioSec('نقاط مهمة', 'Key points') + '<div class="ap-card">' + bioUl(j.key) + '</div>';
@@ -1638,7 +1707,7 @@ function bioDetail(body, d) {
     h += bioSec('إصابات شائعة', 'Common injuries') + j.inj.map((i) => '<div class="ap-card"><b>' + esc(L(i[0], i[1])) + '</b><p class="ap-p">' + esc(L(i[2], i[3])) + '</p></div>').join('');
     h += '<div class="ap-actions"><button type="button" class="ap-btn" data-binj="' + j.area + '">' + esc(L('افتح التأهيل', 'Open rehab')) + '</button><button type="button" class="ap-btn ghost" data-bask="' + esc(L(j.ar, j.en)) + '">' + esc(L('اسأل أخصائي', 'Ask a specialist')) + '</button></div>' + anat;
     h += bioExList(null, L('تمارين بتشغّل المفصل ده', 'Exercises that load this joint'));
-    body.innerHTML = h; bioWire(body);
+    body.innerHTML = h; bioWire(body); bioFigSlot(body, JOINT2LIB[j.id]);
     bioExFill(body, (e) => derive(e).joints.some((x) => x[0] === j.id));
     return;
   }
@@ -1655,14 +1724,14 @@ function bioDetail(body, d) {
   }
   if (d.k === 'pattern') {
     const p = patternById(d.id); if (!p) { bio().d = null; return viewBio(body); }
-    let h = back + '<div class="ap-sec"><b>' + esc(L(p.ar, p.en)) + '</b></div>';
+    let h = back + '<div class="ap-sec"><b>' + esc(L(p.ar, p.en)) + '</b></div>' + bioFigBox(PAT2LIB[p.id], PAT2LIB[p.id]);
     h += bioSec('المفاصل المشاركة', 'Joints involved') + '<div class="ap-card">' + p.joints.map((x) => { const j = jointById(x[0]); return '<button type="button" class="ap-ex" data-bj="' + x[0] + '"><span>' + esc(j ? L(j.ar, j.en) : x[0]) + '</span><em>' + esc(L(x[1], x[2])) + '</em></button>'; }).join('') + '</div>';
     h += bioSec('العضلات الأساسية', 'Prime movers') + '<div class="ap-chips">' + p.mus.map(muChip).join('') + '</div>';
     h += bioSec('فين الحمل أكبر؟', 'Where is the load highest?') + '<div class="ap-card"><p class="ap-p">' + bioL(p.load) + '</p></div>';
     h += bioSec('نقاط تكنيك', 'Technique cues') + '<div class="ap-card">' + bioUl(p.cues) + '</div>';
     h += bioSec('أخطاء شائعة', 'Common errors') + '<div class="ap-card">' + bioUl(p.err) + '</div>' + anat;
     h += bioExList(null, L('تمارين من النمط ده', 'Exercises in this pattern'));
-    body.innerHTML = h; bioWire(body);
+    body.innerHTML = h; bioWire(body); bioFigSlot(body, PAT2LIB[p.id]);
     bioExFill(body, (e) => { const v = derive(e); return v.pat && v.pat.id === p.id; });
     return;
   }
@@ -1694,6 +1763,32 @@ function bioDetail(body, d) {
   }
   bio().d = null; viewBio(body);
 }
+
+
+const JOINT2LIB = { knee: 'j_knee', hip: 'j_hip', lumbar: 'j_back', thoracic: 'j_back', cervical: 'j_back', shoulder: 'j_shoulder', scapula: 'rhythm', ankle: 'j_ankle', foot: 'j_ankle', elbow: 'j_elbow', forearm: 'j_elbow', wrist: 'j_elbow' };
+const PAT2LIB = { squat: 'squat', lunge: 'lunge', hinge: 'hinge', hpush: 'hpush', vpush: 'vpush', hpull: 'hpull', vpull: 'vpull', run: 'run', plyo: 'jump', coreAnti: 'core', coreFlex: 'core', rotation: 'throw', curl: 'curve', triext: 'curve', sraise: 'resist', legiso: 'chains' };
+let figsP = null;
+function loadFigs() {
+  if (window.BIOFIG) return Promise.resolve(window.BIOFIG);
+  if (!figsP) figsP = new Promise((res) => { const s = document.createElement('script'); s.src = 'biomech/figs.js'; s.onload = () => res(window.BIOFIG || null); s.onerror = () => { figsP = null; res(null); }; document.head.appendChild(s); });
+  return figsP;
+}
+function bioFigSlot(body, id) {
+  if (!id) return;
+  loadFigs().then((F) => { const el = $('#bio-fig', body); if (el && F && F.has(id)) el.innerHTML = F.draw(id, lang()); });
+}
+function bioFigBox(id, libId) {
+  return '<div class="bio-fig-wrap"><div class="bio-fig" id="bio-fig"></div>' + (libId ? '<button type="button" class="ap-btn ghost" data-biolib="' + libId + '">' + esc(L('اشرح بالرسم والمنحنيات', 'Explain with drawings and curves')) + '</button>' : '') + '</div>';
+}
+/* مكتبة البيوميكانيك (رسومات ومنحنيات): بتتفتح في نافذة المكتبة بتاعة app.js */
+export function openBioLib(topic) {
+  const t = String(topic || '').replace(/[^a-z0-9_-]/gi, '').slice(0, 40);
+  try { window.postMessage({ type: 'adam-open-biomech', target: t }, location.origin); } catch (e) { /* تجاهل */ }
+}
+export async function openBioTarget(kind, id) {
+  await open('biomech');
+  bioNav({ k: kind === 'joint' ? 'joint' : 'pattern', id: String(id) });
+}
 export async function openBio(exId) {
   await open('biomech');
   if (exId) { const b = bio(); b.h = []; b.d = { k: 'ex', id: exId }; draw(); }
@@ -1723,6 +1818,7 @@ function gsBuild() {
   const g = [];
   const add = (grp, ar, en, kw, act, subt) => g.push({ g: grp, ar: ar, en: en, kw: kw || '', act: act, sub: subt || '' });
   GS_SEC.forEach((s) => add('sec', s[1], s[2], s[3], () => gsSection(s[0])));
+  add('bio', 'مكتبة البيوميكانيك رسومات ومنحنيات', 'Biomechanics library drawings and curves', 'بيوميكانيكس منحنى قوة سرعة روافع ذراع العزم اتزان رسم biomechanics curve lever moment arm force velocity', () => { go('biomech'); openBioLib(); });
   bioIndex().forEach((it) => add('bio', it.ar, it.en, it.kw, () => { go('biomech'); bioGo(it); }));
   JOURNEYS.forEach((j) => add('jou', pick(j.title), L(j.title.ar, j.title.en), pick(j.sub) + ' ' + j.title.ar + ' ' + j.title.en, () => { go('journeys'); sub.openJ = j.id; draw(); }, pick(j.sub)));
   CHALLENGES.forEach((c) => add('cha', c.ar, c.en, pick(c.sub), () => { go('chal'); sub.openC = c.id; draw(); }, pick(c.sub)));
