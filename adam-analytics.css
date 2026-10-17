@@ -1,0 +1,61 @@
+/*
+ * ADAM Progress analytics - styles (Phase 4, beta only)
+ * Builds on adam-explore.css (.ax shell + tokens) and adam-tasks.css (form helpers); also reuses a few .axb-bar rules from adam-builder.css.
+ * Scoped under .axa. Logical properties so RTL and LTR share one sheet.
+ */
+.axa .axb-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-block: 10px; }
+.axa-range { background: var(--axs1); border: 1px solid var(--axline); border-radius: 16px; padding: 14px; margin-block: 12px; }
+.axa-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 6px; }
+.axa-sum { margin: 6px 0 0; font-weight: 800; color: var(--axink); }
+.axa-days { color: var(--axmuted); font-weight: 600; }
+.axa-cust { margin-block-start: 8px; }
+.axa-kpis { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); }
+.axa-kpi { background: var(--axs1); border: 1px solid var(--axline); border-radius: 16px; padding: 14px; display: grid; gap: 4px; align-content: start; min-inline-size: 0; }
+.axa-kl { display: flex; gap: 8px; align-items: center; color: var(--axink2); font-weight: 700; font-size: 14px; }
+.axa-kl .axi { color: var(--axbrandtext); }
+.axa-kv { font-size: 30px; font-weight: 800; line-height: 1.2; display: flex; align-items: baseline; gap: 6px; }
+.axa-kn { color: var(--axmuted); }
+.axa-ku { font-size: 14px; color: var(--axmuted); font-weight: 700; }
+.axa-kd { margin: 0; display: flex; gap: 6px; align-items: center; font-weight: 700; font-size: 14px; }
+.axa-kd .axi { width: 18px; height: 18px; flex: none; }
+.axa-kd.good { color: var(--axbrandtext); }
+.axa-kd.attention { color: var(--axwarn); }
+.axa-kd.flat { color: var(--axink2); }
+.axa-kp, .axa-kn2 { margin: 0; font-size: 13px; color: var(--axmuted); }
+.axa-q { background: var(--axs1); border: 1px solid var(--axline); border-inline-start: 4px solid var(--axline2); border-radius: 16px; padding: 16px; margin-block: 14px; display: grid; gap: 10px; min-inline-size: 0; grid-template-columns: minmax(0, 1fr); }
+.axa-q.good { border-inline-start-color: var(--axbrand); }
+.axa-q.attention, .axa-q.mixed { border-inline-start-color: var(--axwarn); }
+.axa-qh { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; }
+.axa-qh h2 { margin: 0; font-size: 18px; font-weight: 800; }
+.axa-st { display: inline-flex; gap: 6px; align-items: center; padding: 3px 12px; border-radius: 999px; font-weight: 800; font-size: 13px; background: var(--axs3); color: var(--axink2); }
+.axa-st .axi { width: 16px; height: 16px; }
+.axa-st.good { background: var(--axbrandsoft); color: var(--axbrandtext); }
+.axa-st.attention, .axa-st.mixed { background: color-mix(in srgb, var(--axwarn) 16%, transparent); color: var(--axwarn); }
+.axa-ans { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.6; }
+.axa-figs { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1000px) { .axa-figs { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); } }
+.axa-fig { margin: 0; display: grid; gap: 8px; min-inline-size: 0; }
+.axa-fc { font-weight: 800; font-size: 14.5px; color: var(--axink2); }
+.axa-ch { border: 1px solid var(--axline); border-radius: 12px; background: var(--axs2); padding: 4px; cursor: crosshair; touch-action: pan-y; }
+.axa-svg { display: block; inline-size: 100%; block-size: auto; direction: ltr; }
+.axa-grid { stroke: var(--axline); stroke-width: 1; }
+.axa-tick { fill: var(--axmuted); font-size: 12px; font-family: inherit; }
+.axa-vl { fill: var(--axink); font-size: 12px; font-weight: 700; font-family: inherit; }
+.axa-line { fill: none; stroke: var(--axbrand); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.axa-dot { fill: var(--axbrand); stroke: var(--axs2); stroke-width: 2; }
+.axa-bar { fill: var(--axbrand); }
+.axa-plan { fill: transparent; stroke: var(--axmuted); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.axa-guide { stroke: var(--axink2); stroke-width: 1; stroke-dasharray: 4 3; }
+.axa-ring { fill: none; stroke: var(--axink); stroke-width: 2.5; }
+.axa-read { margin: 0; min-block-size: 24px; font-size: 14px; font-weight: 700; color: var(--axink2); direction: inherit; }
+.axa-none { margin: 0; }
+.axa-tgl { justify-self: start; }
+.axa-tgl .axi { width: 18px; height: 18px; }
+.axa-tw { max-block-size: 320px; overflow: auto; }
+.axa-tw .ax-table { min-inline-size: 0; }
+.axa-tw[hidden] { display: none; }
+.axa-how { color: var(--axink2); }
+.axa-how summary { cursor: pointer; font-weight: 700; min-block-size: 44px; display: flex; align-items: center; }
+.axa-how p { margin: 0 0 6px; }
+@media (prefers-reduced-motion: reduce) { .axa * { transition: none !important; animation: none !important; } }
+.axa-fig { max-inline-size: 760px; }

@@ -1,0 +1,96 @@
+/*
+ * ADAM Task Center - styles (Phase 2, beta only)
+ * Builds on the .ax shell and tokens from adam-explore.css (must be loaded first).
+ * Everything here is scoped under .axt so nothing touches the rest of the app.
+ */
+.axt-switch { margin: 0 0 16px; padding: 12px 14px; border-radius: 14px; border: 1px dashed var(--axline2); background: var(--axs1); }
+.axt-swl { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font-weight: 700; }
+.axt-switch .ax-note { margin: 6px 0 0; }
+.axt-warn { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 16px; padding: 10px 14px; border-radius: 12px; background: color-mix(in srgb, var(--axwarn) 14%, transparent); border: 1px solid color-mix(in srgb, var(--axwarn) 50%, transparent); font-size: 13.5px; }
+.axt-warn .axi { color: var(--axwarn); margin-block-start: 2px; }
+.axt-rolel { margin: 10px 0 0; color: var(--axink2); font-size: 14px; }
+.axt-rolel b { color: var(--axbrandtext); }
+
+.axt-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 20px 0 0; padding: 0; }
+@media (min-width: 640px) { .axt-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.axt-stat { padding: 12px 14px; border-radius: 14px; background: var(--axs1); border: 1px solid var(--axline); }
+.axt-stat dt { color: var(--axmuted); font-size: 13px; font-weight: 700; }
+.axt-stat dd { margin: 2px 0 0; font-size: 24px; font-weight: 800; line-height: 1.2; }
+.axt-stat.axt-hot { border-color: color-mix(in srgb, var(--axdanger) 55%, transparent); }
+.axt-stat.axt-hot dd { color: var(--axdanger); }
+
+.axt-bar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 16px; margin-block-start: 6px; }
+.axt-tabs { flex: 1 1 320px; min-inline-size: 0; }
+.axt-bar > .ax-btn { margin-block-end: 6px; }
+
+.axt-list { margin-block-start: 8px; display: grid; gap: 22px; }
+.axt-gh { margin: 0 0 10px; font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+.axt-ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .axt-ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.axt-card { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 16px; background: var(--axs1); border: 1px solid var(--axline); min-inline-size: 0; }
+.axt-card:hover { border-color: var(--axline2); }
+.axt-card.is-done { opacity: .85; }
+.axt-card.is-done .axt-name { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--axink2); }
+.axt-name { margin: 0; font-size: 16px; line-height: 1.5; font-weight: 800; overflow-wrap: anywhere; }
+.axt-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.axt-due { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; color: var(--axink2); }
+.axt-due .axi { width: 18px; height: 18px; }
+.axt-due.od { color: var(--axdanger); }
+.axt-due.td { color: var(--axbrandtext); }
+.axt-pri.hi { background: color-mix(in srgb, var(--axwarn) 18%, transparent); color: var(--axink); border: 1px solid color-mix(in srgb, var(--axwarn) 55%, transparent); gap: 4px; }
+.axt-pri .axi { width: 14px; height: 14px; color: var(--axwarn); }
+.axt-pri.lo { background: transparent; border: 1px solid var(--axline2); color: var(--axmuted); }
+.axt-opt { background: var(--axbrandsoft); color: var(--axbrandtext); }
+.axt-mine { background: transparent; border: 1px solid var(--axline2); }
+.axt-nt { margin: 0; color: var(--axink2); font-size: 13.5px; }
+.axt-res { margin: 0; display: flex; gap: 8px; align-items: flex-start; color: var(--axbrandtext); font-weight: 700; font-size: 13.5px; }
+.axt-res .axi { width: 18px; height: 18px; margin-block-start: 3px; }
+.axt-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-block-start: auto; padding-block-start: 8px; border-block-start: 1px solid var(--axline); }
+.axt-acts .ax-btn .axi { width: 18px; height: 18px; }
+.axt-sk { gap: 10px; }
+.axt-sk .ax-bar { display: block; }
+
+.axt-form { display: grid; gap: 8px; align-content: start; }
+.axt-ft { margin: 0 0 4px; font-weight: 700; overflow-wrap: anywhere; }
+.axt-lab { font-weight: 700; font-size: 14px; margin-block-start: 6px; display: block; }
+.axt-in, .axt-in2 { padding-inline: 14px !important; }
+.axt-in2 { inline-size: 100%; }
+.ax-sw .axt-in2 { padding-inline: 14px 34px !important; inline-size: 100%; }
+.axt-date { min-block-size: 48px; }
+.axt-row { display: grid; gap: 10px 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 520px) { .axt-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.axt-row > div > .ax-sw { display: block; }
+.axt-ta { block-size: auto; min-block-size: 84px; padding: 10px 14px !important; resize: vertical; line-height: 1.5; }
+.axt-fs { margin: 6px 0 0; padding: 0; border: 0; display: grid; gap: 6px; }
+.axt-fs legend { font-weight: 700; padding: 0; margin-block-end: 6px; }
+.axt-radio { display: flex; align-items: center; gap: 12px; min-block-size: 48px; padding: 6px 14px; border-radius: 12px; border: 1px solid var(--axline); background: var(--axs2); cursor: pointer; }
+.axt-radio:has(input:checked) { border-color: var(--axbrand); background: var(--axbrandsoft); }
+.axt-radio input { inline-size: 22px; block-size: 22px; accent-color: var(--axbrand); flex: none; }
+.axt-radio small { color: var(--axmuted); }
+.axt-err { margin: 0; min-block-size: 22px; color: var(--axdanger); font-weight: 700; font-size: 13.5px; }
+.ax [aria-invalid=true] { border-color: var(--axdanger) !important; }
+.axt-snz { display: grid; gap: 10px; }
+.axt-snz .ax-btn { justify-content: space-between; min-block-size: 52px; }
+.axt-snz small { color: var(--axmuted); font-weight: 600; }
+
+.axt-toast { display: flex; align-items: center; gap: 12px; }
+.axt-toast.has-undo { pointer-events: auto; padding-inline-end: 6px; }
+.axt-undo { min-block-size: 44px; padding: 0 14px; border-radius: 10px; border: 0; background: color-mix(in srgb, var(--axbg) 18%, transparent); color: var(--axbg); font-weight: 800; text-decoration: underline; }
+.axt-toast { inset-block-end: 24px; }
+
+/* launcher and entry badge inside the app */
+.axt-fab {
+  position: fixed; z-index: 80; inset-inline-end: 16px; inset-block-end: max(16px, env(safe-area-inset-bottom));
+  display: inline-flex; align-items: center; gap: 8px; min-block-size: 48px; padding: 0 16px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18); background: #0F1626; color: #EAF0F8; font: 700 14px/1 'Cairo', system-ui, sans-serif;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,.7); cursor: pointer;
+}
+body.on-client .axt-fab { inset-block-end: calc(76px + env(safe-area-inset-bottom)); }
+.axt-fab:hover { border-color: rgba(34,197,94,.6); }
+.axt-fab:focus-visible { outline: 3px solid #86EFAC; outline-offset: 2px; }
+.axt-fab[hidden] { display: none; }
+.axt-fab .axi { width: 22px; height: 22px; color: #4ADE80; }
+.axt-badge { min-inline-size: 22px; block-size: 22px; padding: 0 6px; border-radius: 999px; background: #F87171; color: #1A0505; font-size: 12.5px; font-weight: 800; display: inline-grid; place-items: center; }
+.axt-badge.axt-inline { margin-inline-end: 4px; }
+@media (max-width: 420px) { .axt-fab .axt-fl { display: none; } .axt-fab { padding: 0 14px; } }
+@media (prefers-reduced-motion: reduce) { .axt-fab { transition: none; } }

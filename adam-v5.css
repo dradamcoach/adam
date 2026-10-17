@@ -1,0 +1,41 @@
+/* ADAM V5 home refresh + tools hub (beta). Uses the app's own tokens (--surface, --ink, --brand ...) with fallbacks. Logical properties for RTL/LTR. */
+.v5-visitor { position: relative; margin: 18px 0; padding: 20px 16px 18px; border-radius: 22px; color: var(--ink, #eef3f9);
+  background: radial-gradient(120% 90% at 100% 0%, rgba(34,197,94,.18), transparent 60%), radial-gradient(100% 80% at 0% 100%, rgba(80,140,255,.14), transparent 60%), var(--surface, #151f33);
+  border: 1px solid color-mix(in srgb, var(--brand, #22c55e) 35%, var(--line, #2a3b57)); box-shadow: 0 18px 50px -28px rgba(0,0,0,.8); overflow: hidden; }
+.v5-vh h2 { margin: 8px 0 6px; font-size: clamp(20px, 5vw, 26px); line-height: 1.4; font-weight: 800; }
+.v5-vh p { margin: 0; color: var(--muted, #8fa3bd); font-size: 14.5px; line-height: 1.7; }
+.v5-new, .v5-tag { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; background: color-mix(in srgb, var(--brand, #22c55e) 18%, transparent); color: #4ade80; border: 1px solid color-mix(in srgb, var(--brand, #22c55e) 40%, transparent); }
+.v5-vg { list-style: none; margin: 16px 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 700px) { .v5-vg { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.v5-vg li { background: color-mix(in srgb, var(--surface-2, #1c2942) 80%, transparent); border: 1px solid var(--line, #2a3b57); border-radius: 16px; padding: 12px; display: grid; gap: 4px; align-content: start; min-inline-size: 0; }
+.v5-vi { display: grid; place-items: center; inline-size: 38px; block-size: 38px; border-radius: 12px; background: color-mix(in srgb, var(--brand, #22c55e) 16%, transparent); color: #4ade80; }
+.v5i { inline-size: 22px; block-size: 22px; flex: none; }
+.v5-vg b { font-size: 15px; } .v5-vg small { color: var(--muted, #8fa3bd); font-size: 12.5px; line-height: 1.5; }
+.v5-try { display: flex; align-items: center; justify-content: center; gap: 10px; inline-size: 100%; min-block-size: 52px; border: 0; border-radius: 14px; cursor: pointer; font: inherit; font-weight: 800; font-size: 16px; color: #04210f; background: linear-gradient(135deg, #4ade80, #22c55e); box-shadow: 0 12px 28px -14px rgba(34,197,94,.8); }
+.v5-try:hover { filter: brightness(1.05); } .v5-try:active { transform: translateY(1px); }
+.v5-try:focus-visible, .v5-card:focus-visible { outline: 3px solid #86efac; outline-offset: 2px; }
+.v5-vn { margin: 10px 0 0; text-align: center; color: var(--muted, #8fa3bd); font-size: 13px; }
+.v5-hub { margin: 14px 0; padding: 14px; border-radius: 20px; background: var(--surface, #151f33); border: 1px solid var(--line, #2a3b57); color: var(--ink, #eef3f9); }
+.v5-hhd { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.v5-hhd h2 { margin: 0; font-size: 18px; font-weight: 800; }
+.v5-hp { margin: 6px 0 12px; color: var(--muted, #8fa3bd); font-size: 13px; line-height: 1.6; }
+.v5-hg { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 760px) { .v5-hg { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.v5-card { display: flex; gap: 10px; align-items: center; inline-size: 100%; min-block-size: 64px; padding: 10px 12px; border-radius: 16px; border: 1px solid var(--line, #2a3b57); background: var(--surface-2, #1c2942); color: inherit; text-decoration: none; font: inherit; text-align: start; cursor: pointer; min-inline-size: 0; }
+.v5-card:hover { border-color: color-mix(in srgb, var(--brand, #22c55e) 55%, var(--line, #2a3b57)); }
+.v5-ci { display: grid; place-items: center; flex: none; inline-size: 40px; block-size: 40px; border-radius: 12px; background: color-mix(in srgb, var(--brand, #22c55e) 16%, transparent); color: #4ade80; }
+.v5-ct { display: grid; gap: 1px; min-inline-size: 0; } .v5-ct b { font-size: 14.5px; } .v5-ct small { color: var(--muted, #8fa3bd); font-size: 12px; line-height: 1.4; }
+@media (prefers-reduced-motion: reduce) { .v5-try:active { transform: none; } }
+.v5-hg li { min-inline-size: 0; }
+.v5-ct, .v5-ct b, .v5-ct small { white-space: normal; overflow-wrap: anywhere; min-inline-size: 0; max-inline-size: 100%; }
+.v5-ct small { display: block; }
+.v5-hub, .v5-visitor { box-sizing: border-box; max-inline-size: 100%; }
+/* the app styles bare buttons/links inside screens; reset them inside the hub so the cards look the same everywhere */
+#adam-v5-hub .v5-card { all: unset; box-sizing: border-box; display: flex; gap: 10px; align-items: center; inline-size: 100%; min-block-size: 64px; padding: 10px 12px; border-radius: 16px; border: 1px solid var(--line, #2a3b57); background: var(--surface-2, #1c2942); color: var(--ink, #eef3f9); font-family: inherit; font-size: 14px; line-height: 1.4; text-align: start; cursor: pointer; }
+#adam-v5-hub .v5-card:hover { border-color: color-mix(in srgb, var(--brand, #22c55e) 55%, var(--line, #2a3b57)); }
+#adam-v5-hub .v5-card:focus-visible, .v5-try:focus-visible { outline: 3px solid #86efac; outline-offset: 2px; }
+#adam-v5-hub .v5-ci { background: color-mix(in srgb, var(--brand, #22c55e) 16%, transparent); color: #4ade80; }
+#adam-v5-hub .v5-ct b { display: block; font-size: 14.5px; font-weight: 800; color: var(--ink, #eef3f9); background: none; margin: 0; padding: 0; }
+#adam-v5-hub .v5-ct small { display: block; font-size: 12px; color: var(--muted, #8fa3bd); margin: 0; }
+#adam-v5-hub .v5-ct { display: grid; gap: 1px; flex: 1; min-inline-size: 0; }
+.v5-visitor .v5-try { all: unset; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 10px; inline-size: 100%; min-block-size: 52px; border-radius: 14px; cursor: pointer; font-family: inherit; font-weight: 800; font-size: 16px; color: #04210f; background: linear-gradient(135deg, #4ade80, #22c55e); box-shadow: 0 12px 28px -14px rgba(34,197,94,.8); }

@@ -1,0 +1,103 @@
+/*
+ * ADAM Program Builder - styles (Phase 3, beta only)
+ * Builds on adam-explore.css (.ax shell + tokens) and adam-tasks.css (form helpers).
+ * Scoped under .axb / #axb-print. Logical properties so RTL and LTR share one sheet.
+ */
+.axb-eh { margin-block: 4px 0; }
+.axb-hero { margin-block-end: 8px; }
+.axb-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-block: 10px; }
+.axb-bar .ax-btn .axi { width: 18px; height: 18px; }
+.axb-plist { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.axb-st.published { background: var(--axbrandsoft); color: var(--axbrandtext); }
+.axb-st.pending_review { background: color-mix(in srgb, var(--axwarn) 16%, transparent); color: var(--axwarn); }
+.axb-st.approved { background: color-mix(in srgb, var(--axbrand) 10%, transparent); color: var(--axbrandtext); border: 1px solid var(--axbrand); }
+.axb-st.draft { background: transparent; border: 1px solid var(--axline2); color: var(--axmuted); }
+.axb-rehab { background: color-mix(in srgb, var(--axwarn) 14%, transparent); color: var(--axwarn); }
+.axb-hi { background: color-mix(in srgb, var(--axdanger) 14%, transparent); color: var(--axdanger); display: inline-flex; gap: 4px; align-items: center; }
+.axb-hi .axi { width: 14px; height: 14px; }
+.axb-panel { margin-block-start: 14px; }
+.axb-weeks { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 6px; }
+.axb-weeks .ax-chip { min-block-size: 44px; }
+.axb-sec { margin-block: 0 18px; }
+.axb-day { background: var(--axs1); border: 1px solid var(--axline); border-radius: 16px; padding: 14px; margin-block: 12px; display: grid; gap: 10px; }
+.axb-dh { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; justify-content: space-between; }
+.axb-dt { display: grid; gap: 4px; flex: 1 1 220px; min-inline-size: 0; }
+.axb-dn { color: var(--axmuted); font-size: 13px; font-weight: 700; }
+.axb-dti { inline-size: 100%; padding-inline: 14px; }
+.axb-da, .axb-ia, .axb-ba { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.axb-ia { flex: none; }
+.axb-blk { border: 1px solid var(--axline); border-inline-start: 4px solid var(--axline2); border-radius: 12px; padding: 10px 12px; background: var(--axs2); display: grid; gap: 8px; }
+.axb-blk.superset { border-inline-start-color: var(--axbrand); }
+.axb-blk.stations { border-inline-start-color: var(--axwarn); }
+.axb-bh { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.axb-bk, .axb-pk { font-weight: 800; font-size: 13.5px; color: var(--axbrandtext); margin: 0; }
+.axb-bopts { display: flex; flex-wrap: wrap; gap: 10px; }
+.axb-bopts .axt-lab { display: grid; gap: 4px; margin: 0; }
+.axb-num { inline-size: 96px; padding-inline: 12px; }
+.axb-items, .axb-pul, .axb-people, .axb-checks, .axb-pk, .axb-roster { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.axb-item { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding-block: 6px; border-block-start: 1px dashed var(--axline); }
+.axb-item:first-child { border-block-start: 0; }
+.axb-it { display: grid; gap: 2px; min-inline-size: 0; }
+.axb-itn { overflow-wrap: anywhere; }
+.axb-ps { color: var(--axink2); font-size: 14px; }
+.axb-how { display: block; color: var(--axmuted); font-size: 13px; font-weight: 400; }
+.axb-extra { font-style: normal; }
+.axb-addrow { display: flex; flex-wrap: wrap; gap: 8px; }
+.axb-scope { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: end; margin-block: 8px; }
+.axb-scope .axt-lab { margin: 0; }
+.axb-sl { margin: 8px 0; font-weight: 800; color: var(--axink2); }
+.axb-wh { margin: 14px 0 4px; font-size: 16px; font-weight: 800; }
+.axb-pday { background: var(--axs1); border: 1px solid var(--axline); border-radius: 14px; padding: 12px 14px; margin-block: 10px; break-inside: avoid; }
+.axb-pday h4 { margin: 0 0 8px; font-size: 15px; }
+.axb-pblk { margin-block: 8px; }
+.axb-pul li { padding-inline-start: 4px; }
+.axb-preview { margin-block-start: 6px; }
+.axb-rot { inline-size: 100%; }
+.axb-rt { margin: 6px 0 2px; font-weight: 700; font-size: 13.5px; }
+.axb-checks li { display: flex; gap: 8px; align-items: flex-start; }
+.axb-checks li.ok .axi { color: var(--axbrandtext); }
+.axb-checks li.bad .axi { color: var(--axwarn); }
+.axb-rehabbox { border: 1px solid color-mix(in srgb, var(--axwarn) 50%, transparent); border-radius: 14px; padding: 12px 14px; background: color-mix(in srgb, var(--axwarn) 7%, transparent); }
+.axb-apst { display: flex; gap: 8px; align-items: center; font-weight: 800; margin: 8px 0; }
+.axb-apst.ok { color: var(--axbrandtext); }
+.axb-apst.bad { color: var(--axwarn); }
+.axb-acts { align-items: flex-start; }
+.axb-actw { display: grid; gap: 4px; max-inline-size: 280px; }
+.axb-why { color: var(--axmuted); font-size: 13px; }
+.ax-btn[aria-disabled=true] { opacity: .6; cursor: not-allowed; }
+.axb-phrow { display: grid; grid-template-columns: minmax(0, 2fr) 1fr 1fr auto; gap: 8px; align-items: end; margin-block: 8px; }
+.axb-phrow .axb-num { inline-size: 100%; }
+.axb-pkrow { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 0; border-block-end: 1px solid var(--axline); }
+.axb-pkrow > div { min-inline-size: 0; display: grid; gap: 2px; }
+.axb-rrow { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+.axb-rn { flex: 1; min-inline-size: 0; overflow-wrap: anywhere; }
+.axb-sheet { max-block-size: 90vh; overflow: auto; }
+.axb-people { grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); }
+.ax-ib:disabled { opacity: .35; cursor: default; }
+@media (max-width: 560px) { .axb-phrow { grid-template-columns: 1fr 1fr; } .axb-phrow label:first-child { grid-column: 1 / -1; } }
+
+/* printing: only the program region is shown, in black on white */
+.axb-print { display: none; }
+@media print {
+  html.axb-printing body > *:not(#axb-print) { display: none !important; }
+  html.axb-printing .axb-print { display: block !important; position: static; color: #111; background: #fff; font-family: 'Cairo', Calibri, Arial, sans-serif; padding: 0; }
+  html.axb-printing { background: #fff !important; }
+  .axb-print h1 { color: #15803D; margin: 0 0 6px; }
+  .axb-print .axb-pday { background: #fff; border: 1px solid #999; color: #111; }
+  .axb-print .axb-pk, .axb-print .axb-bk { color: #14532D; }
+  .axb-print .axb-how { color: #444; }
+  .axb-print table { border-collapse: collapse; inline-size: 100%; }
+  .axb-print th, .axb-print td { border: 1px solid #888; padding: 4px 6px; text-align: start; }
+  .axb-print .ax-state { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .axb * { transition: none !important; animation: none !important; } }
+.axb .ax-badge { gap: .3em; }
+.axb-scope .ax-sw { display: inline-block; inline-size: auto; }
+.axb-scope { align-items: center; }
+.axb-day { grid-template-columns: minmax(0, 1fr); }
+.axb-dti { min-inline-size: 0; }
+.axb .axt-tabs, .axb #axb-tabs { flex-wrap: wrap; }
+.axb-blk, .axb-item, .axb-pkrow { min-inline-size: 0; }
+.axb-blk { grid-template-columns: minmax(0, 1fr); }
+.axb-bh, .axb-item, .axb-pkrow, .axb-rrow { flex-wrap: wrap; }
+.axb-it { flex: 1 1 160px; }

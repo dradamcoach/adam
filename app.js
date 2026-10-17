@@ -6950,7 +6950,33 @@ function showScreen(screen) {
   let navMode = '';
   if (screen === clientScreen) { try { navMode = clientMode; } catch (e) { navMode = ''; } }
   navRecord(screen, navMode);
+  try { announceRole(screen); } catch (e) { /* مركز المهام اختياري — أي خطأ هنا ما يوقفش التنقل */ }
   window.scrollTo(0, 0);
+}
+
+/*
+ * (بيتا — المرحلة 2) بتبلّغ مركز المهام مين المسجَّل دخوله دلوقتي.
+ * بيتبعت نوع الدور (client / coach / specialist / admin) ومعرّف المستخدم بس،
+ * والمركز بيعمل له hash باتجاه واحد قبل ما يستخدمه كمفتاح تخزين.
+ * مفيش قراءة ولا كتابة في Firestore ولا أي استدعاء شبكة هنا.
+ * بتتبعت بس لما الدور يتغير.
+ */
+function announceRole(screen) {
+  let kind = null;
+  const uid = (auth && auth.currentUser) ? auth.currentUser.uid : '';
+  const loggedOutScreen = (screen === loginScreen || screen === welcomeScreen || screen === signupScreen || screen === onboardingScreen);
+  if (uid && !loggedOutScreen && !previewMode && !coachPreviewOn) {
+    if (currentProviderEmail) {
+      kind = isFullAdminAccount() ? 'admin' : ((currentProviderSpecialties || []).indexOf('coach') > -1 ? 'coach' : 'specialist');
+    } else {
+      kind = 'client';
+    }
+  }
+  const prev = window.adamRole || {};
+  const next = kind ? { kind: kind, uid: uid } : { kind: null, uid: '' };
+  if (prev.kind === next.kind && prev.uid === next.uid) return;
+  window.adamRole = next;
+  window.dispatchEvent(new CustomEvent('adam:role', { detail: next }));
 }
 
 /* ---------- شكل البيانات + تحويل البرامج القديمة ---------- */
