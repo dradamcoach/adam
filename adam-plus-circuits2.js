@@ -1,0 +1,19 @@
+// ADAM+ — ready-made stations / group-class circuits (extra). Merged into CIRC_PRE in adam-plus.js
+const S = (ar, en) => ({ n: { ar, en } });
+const C = (id, ar, en, work, rest, rounds, rrest, st) => ({ id, pre: true, name: { ar, en }, work, rest, rounds, rrest, st });
+export const CIRC_EXTRA = [
+  C('p_upper', 'جزء علوي (وزن الجسم)', 'Upper body (bodyweight)', 40, 20, 3, 60, [S('ضغط', 'Push-ups'), S('ضغط ترايسبس على كرسي', 'Chair dips'), S('سوبرمان', 'Superman'), S('ضغط ألماس', 'Diamond push-ups'), S('بلانك لمس الكتف', 'Plank shoulder taps'), S('ضغط بايك', 'Pike push-ups')]),
+  C('p_lower', 'جزء سفلي (وزن الجسم)', 'Lower body (bodyweight)', 40, 20, 3, 60, [S('سكوات', 'Squats'), S('اندفاع خلفي بالتبادل', 'Reverse lunges'), S('جسر الأرداف', 'Glute bridge'), S('سكوات قفز', 'Jump squats'), S('رفع كعب', 'Calf raises'), S('جلسة حائط', 'Wall sit')]),
+  C('p_core', 'محطات بطن وكور', 'Core stations', 40, 15, 3, 45, [S('بلانك', 'Plank'), S('كرنش', 'Crunches'), S('دراجة هوائية', 'Bicycle crunch'), S('رفع الرجلين', 'Leg raises'), S('بلانك جانبي يمين', 'Side plank right'), S('بلانك جانبي شمال', 'Side plank left'), S('تسلّق الجبل', 'Mountain climbers')]),
+  C('p_hiit', 'HIIT حرق دهون', 'Fat-burn HIIT', 30, 30, 4, 60, [S('بربي', 'Burpees'), S('ركبة عالية', 'High knees'), S('سكوات قفز', 'Jump squats'), S('تسلّق الجبل', 'Mountain climbers'), S('نطّ جانبي (سكيتر)', 'Skater jumps')]),
+  C('p_begin', 'مبتدئين — خفيف', 'Beginner — easy', 30, 30, 2, 60, [S('سكوات على كرسي', 'Chair squats'), S('ضغط ركب', 'Knee push-ups'), S('مشي مكانك', 'March in place'), S('جسر الأرداف', 'Glute bridge'), S('بلانك على الركب', 'Knee plank')]),
+  C('p_tabata_full', 'محطات تاباتا — جسم كامل', 'Tabata stations — full body', 20, 10, 2, 60, [S('سكوات قفز', 'Jump squats'), S('ضغط', 'Push-ups'), S('بربي', 'Burpees'), S('تسلّق الجبل', 'Mountain climbers')]),
+  C('p_dumbbell', 'محطات دمبل', 'Dumbbell stations', 45, 15, 3, 75, [S('سكوات جوبلت', 'Goblet squat'), S('تجديف دمبل', 'Dumbbell row'), S('ضغط كتف', 'Shoulder press'), S('رومانيان ديدلفت', 'Romanian deadlift'), S('اندفاع بدمبل', 'Dumbbell lunges'), S('كيرل', 'Biceps curl')]),
+  C('p_kettle', 'محطات كيتل بيل', 'Kettlebell stations', 40, 20, 4, 60, [S('كيتل بيل سوينج', 'Kettlebell swing'), S('سكوات جوبلت', 'Goblet squat'), S('كلين وضغط', 'Clean and press'), S('مشي المزارع', 'Farmer carry'), S('رفع تركي نص', 'Half get-up')]),
+  C('p_crossfit', 'محطات كروس فيت', 'CrossFit-style stations', 60, 30, 3, 90, [S('ثروسترز', 'Thrusters'), S('سحب بار / تجديف', 'Pull-ups / rows'), S('بوكس جمب', 'Box jumps'), S('كيتل بيل سوينج', 'Kettlebell swing'), S('رمي الكرة على الحيط', 'Wall balls')]),
+  C('p_hyrox', 'تحضير هايروكس', 'Hyrox prep', 60, 30, 3, 90, [S('جري / ماكينة تجديف', 'Run / row machine'), S('دفع سلة', 'Sled push'), S('مشي المزارع', 'Farmer carry'), S('اندفاع بوزن', 'Weighted lunges'), S('رمي كرة', 'Wall balls'), S('سكي إرج', 'Ski erg')]),
+  C('p_boxing', 'ملاكمة وكارديو', 'Boxing cardio', 45, 15, 4, 60, [S('جاب وكروس', 'Jab-cross'), S('هوك وأبركت', 'Hook and uppercut'), S('نطّ الحبل', 'Jump rope'), S('سبرول', 'Sprawls'), S('ركبة عالية', 'High knees')]),
+  C('p_mobility', 'تسخين وحركية', 'Warm-up and mobility', 30, 10, 2, 30, [S('دوران الكتف', 'Arm circles'), S('دوران الورك', 'Hip circles'), S('قطة وجمل', 'Cat-cow'), S('اندفاع مع لف', 'Lunge with twist'), S('سكوات عميق ثابت', 'Deep squat hold'), S('نطّ جاك خفيف', 'Light jumping jacks')]),
+  C('p_seniors', 'لياقة آمنة لكبار السن', 'Safe fitness for seniors', 30, 30, 2, 60, [S('وقوف وجلوس من كرسي', 'Sit-to-stand'), S('رفع ذراع جانبي', 'Side arm raise'), S('مشي مكانك', 'March in place'), S('ضغط على الحيط', 'Wall push-ups'), S('وقوف على رجل (بمسك)', 'Single-leg stand (holding)')]),
+  C('p_legs_burn', 'حرق أرجل وأرداف', 'Legs and glutes burn', 40, 20, 4, 60, [S('سكوات سومو', 'Sumo squat'), S('اندفاع جانبي', 'Side lunge'), S('رفعة الحمار', 'Donkey kick'), S('جسر بساق واحدة', 'Single-leg bridge'), S('خطوة على الدرج', 'Step-ups')])
+];

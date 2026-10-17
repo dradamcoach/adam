@@ -164,6 +164,10 @@
     return out;
   }
 
+  function isWide(doc) {
+    return (doc.blocks || []).some(function (b) { return b && b.t === 'table' && (b.head || []).length >= 9; });
+  }
+
   function fullHtml(doc, target) {
     var rtl = (doc.lang || 'ar') === 'ar';
     var head = '<meta charset="utf-8"><title>' + esc(doc.title || 'ADAM') + '</title>';
@@ -173,7 +177,7 @@
         '<style>' + css(rtl) + '</style></head><body dir="' + (rtl ? 'rtl' : 'ltr') + '">' + render(doc, 'word') + '</body></html>';
     }
     return '<!doctype html><html lang="' + (rtl ? 'ar' : 'en') + '" dir="' + (rtl ? 'rtl' : 'ltr') + '"><head>' + head +
-      '<meta name="viewport" content="width=device-width,initial-scale=1"><style>' + css(rtl) + 'html{background:#e9edf0}body{width:794px;margin:0 auto;padding:18px 22px;min-height:1000px;box-shadow:0 0 6px rgba(0,0,0,.15)}@media print{html{zoom:1!important;background:#fff}body{width:auto;padding:0;margin:0;min-height:0;box-shadow:none}}</style></head><body>' + render(doc, 'print') + '</body></html>';
+      '<meta name="viewport" content="width=device-width,initial-scale=1"><style>' + css(rtl) + (isWide(doc) ? '@page{size:A4 landscape;margin:12mm 10mm}' : '') + 'html{background:#e9edf0}body{width:' + (isWide(doc) ? 1123 : 794) + 'px;margin:0 auto;padding:18px 22px;min-height:1000px;box-shadow:0 0 6px rgba(0,0,0,.15)}@media print{html{zoom:1!important;background:#fff}body{width:auto;padding:0;margin:0;min-height:0;box-shadow:none}}</style></head><body data-w="' + (isWide(doc) ? 1123 : 794) + '">' + render(doc, 'print') + '</body></html>';
   }
 
   /* ---------- Excel: SpreadsheetML 2003 (من غير مكتبة) ---------- */
@@ -552,7 +556,8 @@
     };
     frame.addEventListener('load', function () {
       var w = frame.clientWidth || 794;
-      fit = Math.min(1, (w - 2) / 794);
+      var pw = 794; try { pw = Number(frame.contentDocument.body.getAttribute('data-w')) || 794; } catch (e) {}
+      fit = Math.min(1, (w - 2) / pw);
       zoomK = 1;
       applyZoom();
     });

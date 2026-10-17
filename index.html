@@ -1295,6 +1295,8 @@
 
     <label class="field-label" data-t="provider_bio_label">نبذة عنك</label>
     <textarea id="ph-bio" rows="3" data-t-ph="provider_bio_ph"></textarea>
+    <label class="field-label" data-t="provider_bio_en_label">النبذة بالإنجليزي (اختياري)</label>
+    <textarea id="ph-bio-en" rows="3" maxlength="600" dir="ltr" data-t-ph="provider_bio_en_ph"></textarea>
 
     <label class="field-label" data-t="provider_certs_label">شهاداتك وإنجازاتك</label>
     <textarea id="ph-certs" rows="3" data-t-ph="provider_certs_ph"></textarea>
@@ -1463,6 +1465,7 @@
         <select id="coach-sport"></select>
         <label class="field-label" data-t="use_sport_template">قالب تحضير بدني</label>
         <select id="sport-template-pick"></select>
+        <label class="check-row" style="display:flex;gap:8px;align-items:center;margin:6px 0"><input type="checkbox" id="tpl-show-client"><span data-t="tpl_show_client">اعرض اسم البرنامج للعميل (اختياري)</span></label>
         <button id="apply-sport-template" class="secondary" data-t="apply_template">تحميل القالب لليوم ده</button>
 
         <div class="my-tpl-box">

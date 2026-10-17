@@ -469,6 +469,7 @@ const TEXT = {
     section_empty: 'مفيش تمارين هنا',
     use_template: 'استخدم قالب جاهز',
     apply_template: 'تحميل القالب',
+    tpl_show_client: 'اعرض اسم البرنامج للعميل (اختياري)',
     template_note: 'القوالب مسودة مبدئية مبنية على مبادئ التأهيل العامة — راجعها وعدّلها حسب حالة العميل قبل ما تسندها.',
     pick_template: '— اختر قالب —',
     confirm_template: 'ده هيستبدل برنامج التأهيل الحالي بالكامل. تكمل؟',
@@ -1225,6 +1226,8 @@ const TEXT = {
     need_client_profile_fields: 'اكتب اسمك ووزنك وطولك الأول',
     provider_bio_label: 'نبذة عنك',
     provider_bio_ph: 'اكتب نبذة قصيرة عن خبرتك وأسلوبك في الشغل...',
+    provider_bio_en_label: 'النبذة بالإنجليزي (اختياري)',
+    provider_bio_en_ph: 'Short bio in English — shown to clients who use the English interface',
     provider_certs_label: 'شهاداتك وإنجازاتك',
     provider_certs_ph: 'مثال: بكالوريوس تربية رياضية، كورس تأهيل إصابات، بطل مصر سابقًا...',
     save_profile: 'حفظ البروفايل',
@@ -3231,6 +3234,7 @@ const TEXT = {
     section_empty: 'No exercises here',
     use_template: 'Use a ready template',
     apply_template: 'Load template',
+    tpl_show_client: 'Show the program name to the client (optional)',
     template_note: 'Templates are starting-point drafts based on general rehab principles — review and adapt them to the client before assigning.',
     pick_template: '— Choose a template —',
     confirm_template: 'This will replace the current rehab program entirely. Continue?',
@@ -3987,6 +3991,8 @@ const TEXT = {
     need_client_profile_fields: 'Fill in your name, weight, and height first',
     provider_bio_label: 'About you',
     provider_bio_ph: 'Write a short bio about your experience and approach...',
+    provider_bio_en_label: 'English bio (optional)',
+    provider_bio_en_ph: 'Short bio in English — shown to clients who use the English interface',
     provider_certs_label: 'Certifications & achievements',
     provider_certs_ph: 'e.g. Sports science degree, injury rehab course, former national champion...',
     save_profile: 'Save profile',
@@ -6255,6 +6261,12 @@ const phPhotoLabel = document.querySelector('#ph-photo-label span');
 const phPhotoBox = document.getElementById('ph-photo-box');
 const phPhotoPreview = document.getElementById('ph-photo-preview');
 const phBio = document.getElementById('ph-bio');
+const phBioEn = document.getElementById('ph-bio-en');
+/* النبذة بلغة الواجهة: لو مفيش نسخة بلغتك بنعرض اللي موجود */
+function providerBioText(p) {
+  if (!p) return '';
+  return lang === 'en' ? (p.bioEn || p.bio || '') : (p.bio || p.bioEn || '');
+}
 const phCerts = document.getElementById('ph-certs');
 const phRatingSummary = document.getElementById('ph-rating-summary');
 const phReviewsList = document.getElementById('ph-reviews-list');
@@ -7007,6 +7019,7 @@ function normalizeDay(day) {
    */
   if (day && day.time) clean.time = String(day.time);
   if (day && day.sport) clean.sport = String(day.sport);
+  if (day && day.tpl && day.tpl.id) clean.tpl = normalizeTplTag(day.tpl);
   if (day && Array.isArray(day.extraSessions) && day.extraSessions.length) {
     clean.extraSessions = day.extraSessions.slice(0, MAX_DAY_SESSIONS - 1).map(normalizeSession);
   }
@@ -7016,6 +7029,11 @@ function normalizeDay(day) {
 
 const MAX_DAY_SESSIONS = 3;
 
+/* اسم القالب اللي اتحمّل على اليوم — بيتحفظ بس لو المدرب اختار يعرضه للعميل */
+function normalizeTplTag(t0) {
+  return { id: String(t0.id || '').slice(0, 80), ar: String(t0.ar || '').slice(0, 120), en: String(t0.en || '').slice(0, 120), origin: ['intl', 'local', 'coach'].indexOf(t0.origin) !== -1 ? t0.origin : 'local' };
+}
+
 function normalizeSession(session) {
   const clean = {
     title: (session && session.title) || '',
@@ -7023,6 +7041,7 @@ function normalizeSession(session) {
     sport: (session && session.sport) || '',
     sections: blankSections()
   };
+  if (session && session.tpl && session.tpl.id) clean.tpl = normalizeTplTag(session.tpl);
   if (session && session.sections) {
     SECTION_KEYS.forEach(function (key) {
       if (Array.isArray(session.sections[key])) clean.sections[key] = session.sections[key];
@@ -7038,7 +7057,7 @@ function normalizeSession(session) {
  */
 function daySessions(day) {
   if (!day) return [];
-  const first = { title: day.title || '', rest: !!day.rest, sections: day.sections || {}, time: day.time || '', sport: day.sport || '' };
+  const first = { title: day.title || '', rest: !!day.rest, sections: day.sections || {}, time: day.time || '', sport: day.sport || '', tpl: day.tpl || null };
   return [first].concat(Array.isArray(day.extraSessions) ? day.extraSessions : []);
 }
 
@@ -7450,7 +7469,7 @@ function paintClientsList() {
   clientsList.innerHTML = '';
   const list = clientsFiltered();
   list.slice(0, clientsShown).forEach(function (c) {
-    showClientRow(c.email, c.name, c.sport, c.injury);
+    showClientRow(c.email, c.name, c.sport, c.injury, c.photo);
   });
   const more = document.getElementById('clients-more');
   const left = list.length - Math.min(clientsShown, list.length);
@@ -7572,6 +7591,7 @@ async function loadClients() {
         sport: data.sport || '',
         gender: data.gender || '',
         dob: data.dob || null,
+        photo: (typeof data.photo === 'string' && /^(data:image\/|https:\/\/)/.test(data.photo)) ? data.photo : '',
         injury: injuryCounts[clientDoc.id] || 0,
         createdAt: String(data.createdAt || data.trialStartedAt || '')
       };
@@ -8161,7 +8181,7 @@ function renderCoachTiles() {
   });
 }
 
-async function showClientRow(email, name, sport, injuryCount) {
+async function showClientRow(email, name, sport, injuryCount, photo) {
   /*
    * كانت سطور طويلة تحت بعض، والمدرب بينزل كتير عشان يلاقي عميل.
    * بقت مربعات: الحروف الأولى في دايرة، الاسم، رياضته، وحالة
@@ -8177,7 +8197,16 @@ async function showClientRow(email, name, sport, injuryCount) {
   const avatar = document.createElement('span');
   avatar.className = 'cc-avatar';
   avatar.style.setProperty('--cc', providerTint(email));
-  avatar.textContent = providerInitials(name || email);
+  if (photo) {
+    const pic = document.createElement('img');
+    pic.src = photo;
+    pic.alt = '';
+    pic.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block';
+    avatar.style.overflow = 'hidden';
+    avatar.appendChild(pic);
+  } else {
+    avatar.textContent = providerInitials(name || email);
+  }
   item.appendChild(avatar);
 
   const nameLine = document.createElement('div');
@@ -10311,6 +10340,13 @@ function templateById(id) {
   return myTemplates.filter(function (item) { return item.id === id; })[0] || null;
 }
 
+/* أصل القالب: عالمي = أنظمة متعارف عليها (PPL، فول بدي، علوي/سفلي، 5x5، HIIT...)، محلي = قوالب ADAM الخاصة بالرياضة والمرحلة */
+const INTL_TPL_RE = /(^|_)(ppl|fullbody|upper|lower|5x5|kettlebell|hiit)(_|$)|^tpl_(strength|strength_hypertrophy|strength_power|beginner_full|upper_day|lower_day|t_strength_beginner|t_strength_intermediate|t_hypertrophy_upper|t_hypertrophy_lower)$/;
+function tplOrigin(tpl) {
+  if (tpl && tpl.custom) return 'coach';
+  return tpl && INTL_TPL_RE.test(tpl.id || '') ? 'intl' : 'local';
+}
+
 function addTemplateGroup(label, list) {
   if (!list.length) return;
   const group = document.createElement('optgroup');
@@ -10318,7 +10354,7 @@ function addTemplateGroup(label, list) {
   list.forEach(function (tpl) {
     const option = document.createElement('option');
     option.value = tpl.id;
-    option.textContent = templateTitle(tpl)
+    option.textContent = (tplOrigin(tpl) === 'intl' ? '🌍 ' : '') + templateTitle(tpl)
       + (tpl.custom && !isMyTemplate(tpl) && tpl.ownerName ? ' — ' + tpl.ownerName : '');
     group.appendChild(option);
   });
@@ -10338,7 +10374,11 @@ function fillSportTemplatePicker() {
   const others = myTemplates.filter(function (tpl) { return !isMyTemplate(tpl); });
 
   addTemplateGroup(t('my_templates_group'), mine);
-  templateSectionsForSport(coachSport.value).forEach(function (sec) { addTemplateGroup(sec.label, sec.list); });
+  addTemplateGroup(lang === 'en' ? 'International programs' : 'برامج عالمية معروفة', SPORT_TEMPLATES.filter(function (tpl) { return tplOrigin(tpl) === 'intl'; }));
+  templateSectionsForSport(coachSport.value).forEach(function (sec) {
+    const rest = sec.list.filter(function (tpl) { return tplOrigin(tpl) !== 'intl'; });
+    addTemplateGroup(sec.label, rest);
+  });
   addTemplateGroup(t('other_coaches_templates_group'), others);
 
   sportTemplatePick.value = keep;
@@ -10537,6 +10577,14 @@ document.getElementById('apply-sport-template').addEventListener('click', async 
 
   if (!coachTarget().title) {
     coachTarget().title = templateTitle(tpl);
+  }
+
+  /* اختياري: العميل يشوف اسم البرنامج وتصنيفه (عالمي/محلي). لو مش متعلّم بنشيل أي اسم قديم */
+  const showTplBox = document.getElementById('tpl-show-client');
+  if (showTplBox && showTplBox.checked) {
+    coachTarget().tpl = normalizeTplTag({ id: tpl.id, ar: tpl.ar || '', en: tpl.en || '', origin: tplOrigin(tpl) });
+  } else {
+    delete coachTarget().tpl;
   }
 
   showCoachDay();
@@ -12873,9 +12921,11 @@ function sqBuildReportDoc() {
       if (hrl.length > 1) b.push({ t: 'chart', kind: 'line', title: ar ? 'منحنى النبض' : 'Heart-rate curve', labels: hrl.map(function (l) { return String(l.date).slice(5); }), series: [{ name: ar ? 'النبض' : 'HR', color: '#2a6fdb', values: hrl.map(function (l) { return Number(l.hr); }) }] });
     }
     b.push({ t: 'table', title: ar ? 'كل وحدة تدريبية' : 'Every session',
-      head: [ar ? 'التاريخ' : 'Date', ar ? 'الحالة' : 'Status', ar ? 'السبب' : 'Reason', ar ? 'إنجاز %' : 'Done %', 'RPE', ar ? 'دقايق' : 'Min', ar ? 'حرق' : 'kcal', ar ? 'نبض' : 'HR', ar ? 'الحمل' : 'Load', ar ? 'التقييم' : 'Rating', ar ? 'ملاحظة المدرب' : 'Coach note', ar ? 'ملاحظة اللاعب' : 'Player note'],
-      rows: x.logs.map(function (l) { const st = sqLogStatus(l); return [l.date, sqRepStatusName(st), st === 'absent' ? sqAbsenceName(l.absenceReason) : '', (!l.coachOnly && Number(l.total) > 0) ? Math.round((Number(l.doneCount) || 0) / Number(l.total) * 100) : '', l.rpe || '', l.minutes || '', l.kcal || '', l.hr || '', l.load || '', Number(l.coachRating) > 0 ? l.coachRating : '', l.coachNote || '', l.playerNote || '']; }),
-      colors: x.logs.map(function (l) { return sqLogStatus(l) === 'absent' ? ['', '#fdd', '#fdd', '', '', '', '', '', '', '', '', ''] : []; }) });
+      head: [ar ? 'التاريخ' : 'Date', ar ? 'الحالة' : 'Status', ar ? 'السبب' : 'Reason', ar ? 'إنجاز %' : 'Done %', 'RPE', ar ? 'دقايق' : 'Min', ar ? 'حرق' : 'kcal', ar ? 'نبض' : 'HR', ar ? 'الحمل' : 'Load', ar ? 'التقييم' : 'Rating'],
+      rows: x.logs.map(function (l) { const st = sqLogStatus(l); return [l.date, sqRepStatusName(st), st === 'absent' ? sqAbsenceName(l.absenceReason) : '', (!l.coachOnly && Number(l.total) > 0) ? Math.round((Number(l.doneCount) || 0) / Number(l.total) * 100) : '', l.rpe || '', l.minutes || '', l.kcal || '', l.hr || '', l.load || '', Number(l.coachRating) > 0 ? l.coachRating : '']; }),
+      colors: x.logs.map(function (l) { return sqLogStatus(l) === 'absent' ? ['', '#fdd', '#fdd', '', '', '', '', '', '', ''] : []; }) });
+    const pnotes = x.logs.filter(function (l) { return l.coachNote || l.playerNote; });
+    if (pnotes.length) b.push({ t: 'table', title: ar ? 'الملاحظات' : 'Notes', head: [ar ? 'التاريخ' : 'Date', ar ? 'ملاحظة المدرب' : 'Coach note', ar ? 'ملاحظة اللاعب' : 'Player note'], rows: pnotes.map(function (l) { return [l.date, l.coachNote || '', l.playerNote || '']; }) });
     /* نتايج الاختبارات في الفترة */
     const trows = [], tcols = [];
     sqTests(sq).forEach(function (tt) {
@@ -12892,7 +12942,11 @@ function sqBuildReportDoc() {
     if (trows.length) b.push({ t: 'table', title: ar ? 'نتايج الاختبارات' : 'Test results', head: [ar ? 'الاختبار' : 'Test', ar ? 'الوحدة' : 'Unit', ar ? 'الأول' : 'First', ar ? 'الأخير' : 'Latest', ar ? 'الأفضل' : 'Best', ar ? 'التغيّر' : 'Change', ar ? 'المرات' : 'Times', ar ? 'المستوى' : 'Level'], rows: trows, colors: tcols });
   } else {
     b.push({ t: 'h', level: 2, text: ar ? 'ملخص اللاعبين' : 'Players summary' });
-    b.push({ t: 'table', head: ['#'].concat(hdr), rows: rankO.sorted.map(function (x) { return [rankO.rank[x.email]].concat(rowOf(x)); }) });
+    /* جدولين بدل جدول واحد 12 عمود: الحضور / الأداء */
+    b.push({ t: 'table', title: ar ? 'الحضور' : 'Attendance', head: ['#', hdr[0], hdr[1], hdr[2], hdr[3], hdr[4]],
+      rows: rankO.sorted.map(function (x) { const r0 = rowOf(x); return [rankO.rank[x.email], r0[0], r0[1], r0[2], r0[3], r0[4]]; }) });
+    b.push({ t: 'table', title: ar ? 'الأداء والحمل' : 'Performance & load', head: ['#', hdr[0], hdr[5], hdr[6], hdr[7], hdr[8], hdr[9], hdr[10]],
+      rows: rankO.sorted.map(function (x) { const r0 = rowOf(x); return [rankO.rank[x.email], r0[0], r0[5], r0[6], r0[7], r0[8], r0[9], r0[10]]; }) });
     b.push({ t: 'chart', kind: 'bars', title: ar ? 'نسبة الحضور %' : 'Attendance %', max: 100, labels: rankA.sorted.map(function (x) { return nameOf(x.email); }), series: [{ name: ar ? 'الحضور %' : 'Attendance %', color: '#0b6b5c', values: rankA.sorted.map(function (x) { return x.attPct; }) }] });
     [[ar ? 'ترتيب الحضور والغياب' : 'Attendance ranking', rankA, 'attPct', ar ? 'نسبة الحضور %' : 'Attendance %'], [ar ? 'ترتيب الأداء' : 'Performance ranking', rankP, 'perf', ar ? 'درجة الأداء' : 'Performance'], [ar ? 'الترتيب العام' : 'Overall ranking', rankO, 'overall', ar ? 'الدرجة العامة' : 'Overall']].forEach(function (g) {
       b.push({ t: 'table', title: g[0], head: ['#', ar ? 'اللاعب' : 'Player', g[3], ar ? 'حضور / غياب' : 'Present / Absent'],
@@ -13668,12 +13722,47 @@ function renderSquadToday(pane) {
   renderSquadBoard();
 }
 
+/* عنوان المجموعة (سوبر سيت / دايرة / محطات) فوق أول تمرين فيها */
+function sqGroupHead(it, prev) {
+  if (!it || !it.grp || (prev && prev.grp === it.grp)) return null;
+  const h = document.createElement('div');
+  h.className = 'sq-grp-head';
+  h.textContent = it.gsum || it.grp;
+  return h;
+}
+
+/* دوس على صورة التمرين → تتكبّر */
+function sqOpenMedia(src, title, line) {
+  const old = document.getElementById('sq-lb'); if (old) old.remove();
+  const lb = document.createElement('div');
+  lb.id = 'sq-lb'; lb.className = 'sq-lb';
+  lb.setAttribute('role', 'dialog');
+  const box = document.createElement('div'); box.className = 'sq-lb-box';
+  const im = document.createElement('img'); im.src = src; im.alt = title || '';
+  const cap = document.createElement('div'); cap.className = 'sq-lb-cap'; cap.textContent = [title, line].filter(Boolean).join(' — ');
+  const x = document.createElement('button'); x.type = 'button'; x.className = 'sq-lb-x'; x.textContent = '✕'; x.setAttribute('aria-label', sqL('إغلاق', 'Close'));
+  box.append(x, im, cap); lb.appendChild(box);
+  const close = function () { lb.remove(); };
+  lb.addEventListener('click', function (e) { if (e.target === lb || e.target === x) close(); });
+  document.body.appendChild(lb);
+}
+function sqMediaImg(it) {
+  const img = document.createElement('img');
+  img.src = it.media; img.alt = ''; img.loading = 'lazy';
+  img.className = 'sq-zoomable';
+  img.addEventListener('click', function (e) { e.stopPropagation(); sqOpenMedia(it.media, it.name, it.line ? it.reps : ''); });
+  return img;
+}
+
 function sqItemsPreview(items) {
   const ul = document.createElement('ul');
   ul.className = 'sq-items';
-  items.forEach(function (it) {
+  items.forEach(function (it, ii) {
+    const gh = sqGroupHead(it, items[ii - 1]);
+    if (gh) { const gl = document.createElement('li'); gl.className = 'sq-grp-li'; gl.appendChild(gh); ul.appendChild(gl); }
     const li = document.createElement('li');
-    if (it.media) { const img = document.createElement('img'); img.src = it.media; img.alt = ''; img.loading = 'lazy'; li.appendChild(img); }
+    if (it.grp) li.classList.add('in-grp');
+    if (it.media) li.appendChild(sqMediaImg(it));
     const txt = document.createElement('span');
     txt.textContent = it.name + ' — ' + (it.line ? it.reps : (it.sets + ' × ' + it.reps + (it.rest ? ' · ' + it.rest : '')));
     li.appendChild(txt);
@@ -13726,9 +13815,11 @@ function sqMyLogForm(items) {
   box.appendChild(runBar);
   sqPaintRun();
   items.forEach(function (it, i) {
+    const gh = sqGroupHead(it, items[i - 1]);
+    if (gh) box.appendChild(gh);
     const row = document.createElement('div');
-    row.className = 'sq-log-row' + (squadMyLog.items[i].done ? ' done' : '');
-    if (it.media) { const img = document.createElement('img'); img.src = it.media; img.alt = ''; img.loading = 'lazy'; row.appendChild(img); }
+    row.className = 'sq-log-row' + (it.grp ? ' in-grp' : '') + (squadMyLog.items[i].done ? ' done' : '');
+    if (it.media) row.appendChild(sqMediaImg(it));
     const main = document.createElement('div');
     main.className = 'sq-log-main';
     const nm = document.createElement('div');
@@ -17164,6 +17255,24 @@ function showClientDay() {
     : (tr(day.title) || (clientDay === todayIndex ? t('today_workout') : days()[clientDay]));
   clientSections.innerHTML = '';
 
+  let tplLine = document.getElementById('client-tpl-line');
+  if (!tplLine) {
+    tplLine = document.createElement('p');
+    tplLine.id = 'client-tpl-line';
+    tplLine.className = 'hint-text';
+    dayName.insertAdjacentElement('afterend', tplLine);
+  }
+  if (day.tpl && day.tpl.id) {
+    const en = lang === 'en';
+    const nm = en ? (day.tpl.en || day.tpl.ar) : (day.tpl.ar || day.tpl.en);
+    const og = day.tpl.origin === 'intl' ? (en ? 'International program' : 'برنامج عالمي') : (day.tpl.origin === 'coach' ? (en ? 'Your coach\'s program' : 'برنامج المدرب') : (en ? 'ADAM program' : 'برنامج ADAM'));
+    tplLine.textContent = (en ? 'Based on: ' : 'مبني على: ') + nm + ' · ' + og;
+    tplLine.classList.remove('hidden');
+  } else {
+    tplLine.textContent = '';
+    tplLine.classList.add('hidden');
+  }
+
   const badge = document.getElementById('sess-badge');
   if (badge) {
     if (clientDay === todayIndex) badge.textContent = t('sess_badge_today');
@@ -17656,6 +17765,11 @@ function normalizeNutrition(data) {
     for (let i = 0; i < 7; i++) clean.week[i] = normalizeNutritionDay(data.week[i]);
   }
 
+  // اسم البرنامج الجاهز اللي اتطبّق (لو فيه) — عشان العميل والمدرب يعرفوه
+  if (data.program && typeof data.program === 'object' && data.program.id) {
+    clean.program = { id: String(data.program.id).slice(0, 60), ar: String(data.program.ar || '').slice(0, 120), en: String(data.program.en || '').slice(0, 120), origin: data.program.origin === 'intl' ? 'intl' : 'eg' };
+  }
+
   // خطة المكملات — بتتحفظ جنب الوجبات في نفس المستند
   if (Array.isArray(data.supplements)) {
     clean.supplements = data.supplements.filter(function (item) {
@@ -18072,9 +18186,18 @@ function buildProgramDay(pattern) {
 }
 
 /* أنماط الأيام بتتوزّع على السبعة بالدور */
+/* أصل البرنامج: مصري (أكل بلدنا) أو عالمي (نظام متعارف عليه) */
+const INTL_NUT_PROGRAMS = ['fasting_2meals', 'dash_lower_sodium', 'low_gi_style', 'diabetes_t2_friendly', 'endurance_high_carb_day', 'recomp_60kg', 'recomp_85kg', 'strength_power_athlete', 'combat_camp_weight'];
+function nutProgramOrigin(program) {
+  if (program.origin) return program.origin;
+  return INTL_NUT_PROGRAMS.indexOf(program.id) !== -1 ? 'intl' : 'eg';
+}
+let nutLibOrigin = 'all';
+
 function applyNutritionProgram(program) {
   const patterns = program.days || [];
   if (!patterns.length) return;
+  coachNutrition.program = { id: program.id, ar: program.ar || '', en: program.en || '', origin: nutProgramOrigin(program) };
   coachNutrition.targets = {
     kcal: program.targets.kcal,
     protein: program.targets.protein,
@@ -18091,7 +18214,20 @@ function renderNutProgramLibrary() {
   if (!grid) return;
   grid.innerHTML = '';
 
-  NUTRITION_PROGRAMS.forEach(function (program) {
+  const bar = document.createElement('div');
+  bar.className = 'nutprog-filter';
+  bar.style.cssText = 'grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap';
+  [['all', 'الكل', 'All'], ['eg', 'أكل مصري', 'Egyptian'], ['intl', 'أنظمة عالمية', 'International']].forEach(function (o) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip' + (nutLibOrigin === o[0] ? ' on active' : '');
+    b.textContent = (document.documentElement.lang === 'en') ? o[2] : o[1];
+    b.addEventListener('click', function () { nutLibOrigin = o[0]; renderNutProgramLibrary(); });
+    bar.appendChild(b);
+  });
+  grid.appendChild(bar);
+
+  NUTRITION_PROGRAMS.filter(function (pr) { return nutLibOrigin === 'all' || nutProgramOrigin(pr) === nutLibOrigin; }).forEach(function (program) {
     const cell = document.createElement('button');
     cell.type = 'button';
     cell.className = 'nutprog';
@@ -18116,6 +18252,8 @@ function renderNutProgramLibrary() {
     cell.appendChild(desc);
 
     cell.addEventListener('click', function () {
+      const hasFood = coachNutrition.week.some(function (d) { return d && d.meals && MEAL_KEYS.some(function (k) { return Array.isArray(d.meals[k]) && d.meals[k].length; }); });
+      if (hasFood && !window.confirm(document.documentElement.lang === 'en' ? 'This replaces the current week. Continue?' : 'ده هيستبدل الأسبوع الحالي. تكمل؟')) return;
       applyNutritionProgram(program);
       showNutrition();
       setStatusMessage(
@@ -19360,6 +19498,13 @@ function showClientNutrition() {
   renderTotals(cnutTotals, shown, clientNutrition.targets);
   renderWaterCard();
   renderClientMeals(cnutMeals, day);
+  if (clientNutrition.program) {
+    const from = document.createElement('p');
+    from.className = 'hint-text np-from';
+    const pn = (document.documentElement.lang === 'en' ? (clientNutrition.program.en || clientNutrition.program.ar) : (clientNutrition.program.ar || clientNutrition.program.en));
+    from.textContent = (document.documentElement.lang === 'en' ? 'Based on program: ' : 'مبني على برنامج: ') + pn + ' · ' + (clientNutrition.program.origin === 'intl' ? (document.documentElement.lang === 'en' ? 'International' : 'عالمي') : (document.documentElement.lang === 'en' ? 'Egyptian' : 'مصري'));
+    cnutMeals.insertBefore(from, cnutMeals.firstChild);
+  }
 
   renderDial('cnut-ring', 'cnut-dc-day', 'cnut-dc-sub', clientNutrition.week, cNutDay, function (index) {
     cNutDay = index;
@@ -20534,6 +20679,7 @@ function showProviderHome(data) {
   fillSpecialtyCheckboxes(phSpecialtyMulti, specs, isLegacyCoachAccount() ? ['coach'] : []);
 
   phBio.value = data.bio || '';
+  if (phBioEn) phBioEn.value = data.bioEn || '';
   phCerts.value = data.certifications || '';
   pwFill(data);
   phPickedImage = data.photo || '';
@@ -21152,6 +21298,7 @@ document.getElementById('ph-save-btn').addEventListener('click', async function 
   const updated = {
     name: phName.value.trim(),
     bio: phBio.value.trim(),
+    bioEn: phBioEn ? phBioEn.value.trim().slice(0, 600) : '',
     certifications: phCerts.value.trim(),
     photo: phPickedImage
   };
@@ -24909,6 +25056,20 @@ function renderCoachBasics() {
   const data = coachBasicsData;
   if (!data) { coachBasics.classList.add('hidden'); return; }
   const bits = [];
+  const en0 = lang === 'en';
+  /* بيانات العميل الأساسية — الصورة والسن والجنس والوزن والطول والهدف والرقم وملاحظة الإصابة */
+  const who = [];
+  if (data.gender) who.push(data.gender === 'f' || data.gender === 'female' ? (en0 ? 'Female' : 'أنثى') : (data.gender === 'm' || data.gender === 'male' ? (en0 ? 'Male' : 'ذكر') : ''));
+  if (Number(data.age) > 0) who.push(Number(data.age) + (en0 ? ' y' : ' سنة'));
+  const body = [];
+  if (Number(data.weight) > 0) body.push(Number(data.weight) + (en0 ? ' kg' : ' كجم'));
+  if (Number(data.height) > 0) body.push(Number(data.height) + (en0 ? ' cm' : ' سم'));
+  const goalKeys = Array.isArray(data.goals) && data.goals.length ? data.goals : (data.goal ? [data.goal] : []);
+  const goalTxt = goalKeys.map(function (g) { const nm = goalName(g); return nm && nm !== 'goal_' + g ? nm : g; }).join(' · ');
+  if (who.filter(Boolean).length || body.length) bits.push({ icon: 'sparkle', label: en0 ? 'Client' : 'العميل', value: who.filter(Boolean).concat(body).join(' · ') });
+  if (goalTxt) bits.push({ icon: 'sparkle', label: en0 ? 'Goal' : 'الهدف', value: String(goalTxt).slice(0, 80) });
+  if (data.phone) bits.push({ icon: 'sparkle', label: en0 ? 'Phone' : 'رقم التليفون', value: String(data.phone).slice(0, 24) });
+  if (data.painFlag && data.painNote) bits.push({ icon: 'sparkle', label: en0 ? 'Pain / injury note' : 'ملاحظة وجع أو إصابة', value: String(data.painNote).slice(0, 160), warn: true });
   if (data.trainingDaysPref) {
     bits.push({ icon: 'classes', label: t('cb_days'), value: trainingDaysName(String(data.trainingDaysPref)) });
   }
@@ -28535,16 +28696,16 @@ function openProviderSheet(provider, specialty) {
   });
   body.appendChild(numbers);
 
-  if (provider.bio) {
+  if (providerBioText(provider)) {
     const bio = document.createElement('p');
     bio.className = 'ps-bio';
-    bio.textContent = provider.bio;
+    bio.textContent = providerBioText(provider);
     body.appendChild(bio);
   }
   const workSheet = providerWorkEl(provider);
   if (workSheet) body.appendChild(workSheet);
 
-  if (provider.certs) {
+  if ((provider.certifications || provider.certs)) {
     const certs = document.createElement('div');
     certs.className = 'ps-certs';
     const certTitle = document.createElement('div');
@@ -28552,7 +28713,7 @@ function openProviderSheet(provider, specialty) {
     certTitle.textContent = t('ps_certs');
     certs.appendChild(certTitle);
     const certText = document.createElement('p');
-    certText.textContent = provider.certs;
+    certText.textContent = provider.certifications || provider.certs;
     certs.appendChild(certText);
     body.appendChild(certs);
   }
@@ -29136,10 +29297,10 @@ async function loadTeamView() {
       meta.textContent = specialtyName(specialty, lang);
       card.appendChild(meta);
 
-      if (provider.bio) {
+      if (providerBioText(provider)) {
         const bio = document.createElement('p');
         bio.className = 'or';
-        bio.textContent = provider.bio;
+        bio.textContent = providerBioText(provider);
         card.appendChild(bio);
       }
 
@@ -40524,7 +40685,8 @@ function planSessionItems(sess) {
       sec: (it.kind === 'warmup') ? 'warmup' : (it.kind === 'mobility' ? 'mobility' : 'main'),
       libId: it.libId || '', name: (planGroupLabel(sess, it) ? planGroupLabel(sess, it) + ') ' : '') + planItemName(it), media: planItemMedia(it),
       sets: Number(it.sets) || 1, reps: planItemLine(it), rest: '', rpe: '', line: true,
-      purpose: pv(it.purpose), component: it.component || ''
+      purpose: pv(it.purpose), component: it.component || '',
+      grp: (it.grp && sess.groups && sess.groups[it.grp]) ? it.grp : '', gsum: (it.grp && sess.groups && sess.groups[it.grp]) ? planGroupSummary(sess, it.grp) : ''
     };
   });
 }
@@ -42403,6 +42565,20 @@ async function openDirectoryManage(host) {
   try { const snap = await getDocs(collection(db, 'directory')); docs = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); }); }
   catch (e) { host.appendChild(planEl('p', 'message', e.message)); return; }
   if (!docs.length) host.appendChild(planEl('p', 'hint-text', ar ? 'مفيش صفحات في الدليل لسه.' : 'No directory pages yet.'));
+  const hiddenDocs = docs.filter(function (d) { return d.status !== 'live'; });
+  if (hiddenDocs.length > 1) {
+    const all = document.createElement('button'); all.type = 'button';
+    all.textContent = (ar ? 'انشر كل الصفحات المخفية (' : 'Publish all hidden pages (') + hiddenDocs.length + ')';
+    all.addEventListener('click', async function () {
+      if (!window.confirm(ar ? 'هتنشر ' + hiddenDocs.length + ' صفحة للعامة في "استكشف". متأكد؟' : 'Publish ' + hiddenDocs.length + ' pages publicly in Explore?')) return;
+      all.disabled = true;
+      try {
+        for (let i = 0; i < hiddenDocs.length; i++) await setDoc(doc(db, 'directory', hiddenDocs[i].id), { status: 'live', updatedAt: new Date().toISOString() }, { merge: true });
+        openDirectoryManage(host);
+      } catch (e) { msg.textContent = e.message; all.disabled = false; }
+    });
+    host.appendChild(all);
+  }
   docs.forEach(function (d) {
     const row = planEl('div', 'dir-mine-row');
     row.appendChild(planEl('span', '', ((d.name && (d.name[lang] || d.name.ar)) || '—') + ' · ' + d.kind + ' · ' + (d.status === 'live' ? (ar ? 'منشور' : 'live') : (ar ? 'مخفي' : 'hidden'))));

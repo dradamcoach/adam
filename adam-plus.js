@@ -7,9 +7,16 @@
 import { JOURNEYS, GOVERNORATES, EVENT_TYPES, INJURY_AREAS, DIETS, GOALS, GOAL_KEYWORDS } from './adam-plus-data.js';
 import { SPORTS, SPORT_GROUPS, SPORT_TEMPLATES } from './sports.js';
 import { EXERCISE_LIBRARY } from './exercise-library.js';
-import { FOOD_LIBRARY, FOOD_SERVINGS } from './food-library.js';
+import { FOOD_LIBRARY, FOOD_SERVINGS, FOOD_CATEGORIES } from './food-library.js';
 import { NUTRITION_PROGRAMS } from './nutrition-programs.js';
 import { CHALLENGES, WEEKLY, TENMIN, STRETCH_MOVES, STRETCH_ROUTINES, RECIPES } from './adam-plus-data2.js';
+import { TIMER_GUIDE } from './adam-plus-guide.js';
+import { RECIPES_EXTRA } from './adam-plus-recipes2.js';
+import { CIRC_EXTRA } from './adam-plus-circuits2.js';
+import { STRETCH_MOVES_EXTRA, STRETCH_ROUTINES_EXTRA } from './adam-plus-stretch2.js';
+const ALL_MOVES = Object.assign({}, STRETCH_MOVES, STRETCH_MOVES_EXTRA);
+const ALL_ROUTINES = STRETCH_ROUTINES.concat(STRETCH_ROUTINES_EXTRA);
+const ALL_RECIPES = RECIPES.concat(RECIPES_EXTRA);
 import { foodArt } from './food-art.js';
 import { MU, JOINTS, PATTERNS, GAIT, POSTURE, INJURIES, PRINCIPLES, PLANES, derive, bioIndex, norm, jointById, patternById } from './adam-biomech.js';
 
@@ -786,18 +793,33 @@ function showGrocery(el, pr, f) {
 
 /* ================================================================ أكلي */
 const normAr = (s) => String(s || '').toLowerCase().replace(/[ً-ْـ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[^ء-يa-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
-function matchFoods(q) {
+/* مرادفات: اللي يكتب كلمة منهم يلاقي الباقي (دجاج = فراخ ...) */
+const FOOD_SYN = [
+  ['دجاج', 'فراخ', 'فرخه', 'chicken'], ['لحم', 'لحمه', 'بقري', 'كندوز', 'beef', 'meat'], ['ضاني', 'خروف', 'lamb'],
+  ['رز', 'ارز', 'rice'], ['عيش', 'خبز', 'رغيف', 'bread'], ['بيض', 'بيضه', 'egg'], ['سمك', 'fish'], ['جمبري', 'جمبري', 'روبيان', 'shrimp'],
+  ['لبن', 'حليب', 'milk'], ['زبادي', 'روب', 'yogurt'], ['جبنه', 'جبن', 'cheese'], ['بطاطس', 'بطاطا', 'potato'], ['مكرونه', 'باستا', 'معكرونه', 'pasta'],
+  ['شوفان', 'oats'], ['فول', 'fava'], ['عدس', 'lentil'], ['تونه', 'tuna'], ['زيت', 'oil'], ['سمن', 'زبده', 'butter'], ['عسل', 'honey'], ['سكر', 'sugar'],
+  ['موز', 'banana'], ['تفاح', 'apple'], ['برتقال', 'orange'], ['طماطم', 'قوطه', 'tomato'], ['خيار', 'cucumber'], ['كبده', 'liver'], ['فول سوداني', 'سوداني', 'peanut']
+].map((g) => g.map(normAr));
+function matchFoods(q, limit) {
   const nq = normAr(q); if (!nq) return [];
   const words = nq.split(' ').filter((w) => w.length >= 2 && !/^\d+$/.test(w));
+  const extra = [];
+  words.forEach((w) => FOOD_SYN.forEach((g) => { if (g.some((x) => x === w || (w.length >= 3 && x.indexOf(w) === 0))) g.forEach((x) => { if (x !== w && extra.indexOf(x) === -1) extra.push(x); }); }));
   const res = [];
   foodsAll.forEach((f) => {
     const names = [normAr(f.ar), normAr(f.en)];
     let sc = 0;
-    names.forEach((nm) => { if (nm.indexOf(nq) !== -1) sc += 6; words.forEach((w) => { if (w.length >= 3 && nm.split(' ').some((x) => x === w || (x.length >= 4 && x.indexOf(w) === 0))) sc += 2; }); });
+    names.forEach((nm) => {
+      const parts = nm.split(' ');
+      if (nm.indexOf(nq) !== -1) sc += 6;
+      words.forEach((w) => { if (w.length >= 3 && parts.some((x) => x === w || (w.length >= 4 && x.indexOf(w) === 0))) sc += 2; });
+      extra.forEach((w) => { if (w.length >= 3 && parts.some((x) => x === w || (w.length >= 4 && x.indexOf(w) === 0))) sc += 1; });
+    });
     if (sc > 0) res.push([sc, f]);
   });
   res.sort((a, b) => b[0] - a[0]);
-  return res.slice(0, 6).map((x) => x[1]);
+  return res.slice(0, limit || 30).map((x) => x[1]);
 }
 function guessGrams(q, f) {
   const sv = FOOD_SERVINGS[f.id] || [];
@@ -821,23 +843,27 @@ function logView(el) {
   const target = plus.nutri && plus.nutri.target;
   const SR_API = window.SpeechRecognition || window.webkitSpeechRecognition;
   let h = '<div class="ap-card"><div class="ap-macros"><div><b>' + Math.round(tot.kcal) + '</b><small>' + esc(L('سعرة اليوم', 'kcal today')) + '</small></div><div><b>' + Math.round(tot.p) + '</b><small>' + esc(L('بروتين', 'Protein')) + '</small></div>' + (target ? '<div><b>' + Math.max(0, target - Math.round(tot.kcal)) + '</b><small>' + esc(L('باقي', 'Left')) + '</small></div>' : '') + '</div></div>';
-  h += '<div class="ap-goalbox"><input id="ap-fq" type="text" placeholder="' + esc(L('اكتب أو قول: فراخ مشوية 200 جرام', 'Type or say: grilled chicken 200 g')) + '">' + (SR_API ? '<button type="button" id="ap-mic" class="ap-mic" aria-label="mic"></button>' : '') + '<button type="button" id="ap-fgo">' + esc(L('دوّر', 'Find')) + '</button></div><div id="ap-fres"></div>';
+  h += '<div class="ap-goalbox"><input id="ap-fq" type="text" placeholder="' + esc(L('دوّر في القايمة (مثلاً: فراخ، رز، تفاح)', 'Search the list (e.g. chicken, rice, apple)')) + '" autocomplete="off">' + (SR_API ? '<button type="button" id="ap-mic" class="ap-mic" aria-label="mic"></button>' : '') + '</div>' + chips([['all', L('الكل', 'All')]].concat(Object.keys(FOOD_CATEGORIES).map((k) => [k, nameOf(FOOD_CATEGORIES[k])])), sub.fcat || 'all', 'fcat') + '<div id="ap-fres"></div>';
   h += '<div class="ap-sec"><b>' + esc(L('اللي أكلته النهاردة', 'Eaten today')) + '</b></div>';
   h += list.length ? '<div class="ap-card">' + list.map((x, i) => '<div class="ap-food"><span>' + esc(x.name) + ' · ' + x.g + esc(L(' جم', ' g')) + '</span><em>' + Math.round(x.kcal) + '</em><button type="button" class="ap-del" data-fd="' + i + '" aria-label="delete"></button></div>').join('') + '</div>' : '<div class="ap-empty small">' + esc(L('لسه ماسجلتش حاجة النهاردة.', 'Nothing logged today yet.')) + '</div>';
   h += '<div class="ap-note">' + esc(L('التسجيل هنا شخصي ومستقل عن سجل التغذية الأساسي.', 'This log is personal and separate from the main nutrition log.')) + '</div>';
   el.innerHTML = h;
   const run = () => {
-    const q = $('#ap-fq', el).value; const found = matchFoods(q);
+    const q = $('#ap-fq', el).value; const cat = sub.fcat || 'all';
+    let found = q.trim() ? matchFoods(q, 60) : foodsAll.slice();
+    if (cat !== 'all') found = found.filter((f) => f.cat === cat);
+    found = found.slice(0, 60);
     const out = $('#ap-fres', el);
-    if (!found.length) { out.innerHTML = '<div class="ap-empty small">' + esc(L('مالقيتش. جرب اسم تاني.', 'Not found. Try another name.')) + '</div>'; return; }
-    out.innerHTML = '<div class="ap-card">' + found.map((f, i) => '<div class="ap-food"><span>' + esc(nameOf(f)) + '</span><input type="number" min="5" max="2000" value="' + guessGrams(q, f) + '" data-gi="' + i + '" class="ap-g"><button type="button" class="ap-btn small" data-add="' + i + '">+</button></div>').join('') + '</div>';
+    if (!found.length) { out.innerHTML = '<div class="ap-empty small">' + esc(L('مالقيتش. جرب اسم تاني أو اختار "الكل".', 'Not found. Try another name or pick "All".')) + '</div>'; return; }
+    out.innerHTML = '<div class="ap-card" style="max-height:320px;overflow:auto">' + found.map((f, i) => '<div class="ap-food"><span>' + esc(nameOf(f)) + ' <small>' + Math.round(f.c) + esc(L(' سعرة/100جم', ' kcal/100g')) + '</small></span><input type="number" min="5" max="2000" value="' + guessGrams(q, f) + '" data-gi="' + i + '" class="ap-g"><button type="button" class="ap-btn small" data-add="' + i + '">+</button></div>').join('') + '</div>';
     $$('[data-add]', out).forEach((b) => b.addEventListener('click', () => {
       const f = found[Number(b.dataset.add)]; const g = Number($('[data-gi="' + b.dataset.add + '"]', out).value) || 100; const n = foodNutr(f.id, g);
       foodToday().push({ id: f.id, name: nameOf(f), g: g, kcal: n.kcal, p: n.p }); persist(); logView(el);
     }));
   };
-  $('#ap-fgo', el).addEventListener('click', run);
-  $('#ap-fq', el).addEventListener('keydown', (e) => { if (e.key === 'Enter') run(); });
+  $$('[data-fcat]', el).forEach((b) => b.addEventListener('click', () => { sub.fcat = b.dataset.fcat; $$('[data-fcat]', el).forEach((x) => x.classList.toggle('on', x === b)); run(); }));
+  $('#ap-fq', el).addEventListener('input', run);
+  run();
   $$('[data-fd]', el).forEach((b) => b.addEventListener('click', () => { foodToday().splice(Number(b.dataset.fd), 1); persist(); logView(el); }));
   const mic = $('#ap-mic', el);
   if (mic) mic.addEventListener('click', () => {
@@ -980,7 +1006,7 @@ function viewChalDetail(body, c) {
   h += '<div class="ap-card ap-today"><div class="ap-row"><b>' + esc(L('اليوم ', 'Day ') + d + L(' من 30', ' of 30')) + '</b><span class="mu">' + esc(L('سلسلتك: ', 'Streak: ') + s.streak) + '</span></div>';
   if (rest) h += '<div class="ap-bigt">' + esc(L('يوم راحة', 'Rest day')) + '</div><small class="mu">' + esc(L('العضلات بتتبني وانت مرتاح. اتحرك خفيف لو حبيت.', 'Muscles grow while you rest. Light movement is fine.')) + '</small>';
   else if (c.routine) {
-    const rt = c.stretch ? STRETCH_ROUTINES[0] : tenRoutine(c, d);
+    const rt = c.stretch ? ALL_ROUTINES[0] : tenRoutine(c, d);
     h += '<div class="ap-bigt">' + esc(c.stretch ? L(rt.ar, rt.en) : nameOf(rt)) + '</div><small class="mu">' + esc(c.stretch ? pick(rt.sub) : L('10 دقايق · 5 حركات · جولتين', '10 minutes · 5 moves · 2 rounds')) + '</small>';
     if (!c.stretch) h += '<div class="ap-mv">' + rt.moves.map((m, i) => '<span>' + (i + 1) + '. ' + esc(nameOf(m)) + '</span>').join('') + '</div>';
     h += '<div class="ap-actions"><button type="button" class="ap-btn" id="ap-cplay">' + esc(L('ابدأ بالتايمر', 'Start with timer')) + '</button></div>';
@@ -1002,7 +1028,7 @@ function viewChalDetail(body, c) {
   const pl = $('#ap-cplay', body);
   if (pl) pl.addEventListener('click', async () => {
     await loadLib();
-    if (c.stretch) startPlayer(stretchSteps(STRETCH_ROUTINES[0]), { title: L(STRETCH_ROUTINES[0].ar, STRETCH_ROUTINES[0].en), done: () => { markStretchDone(); } });
+    if (c.stretch) startPlayer(stretchSteps(ALL_ROUTINES[0]), { title: L(ALL_ROUTINES[0].ar, ALL_ROUTINES[0].en), done: () => { markStretchDone(); } });
     else { const rt = tenRoutine(c, d); startPlayer(tenSteps(rt), { title: nameOf(rt), done: () => markChalDay(c.id, d, true) }); }
   });
   $('#ap-cshare', body).addEventListener('click', () => chShare(c));
@@ -1016,7 +1042,7 @@ function libThumb(id) { if (!id || !libEx) return ''; const e = libEx.find((x) =
 function stretchSteps(rt) {
   const out = []; const hold = rt.hold || 40;
   rt.moves.forEach((k, i) => {
-    const m = STRETCH_MOVES[k]; const nm = nameOf(m); const img = libThumb(m.lib);
+    const m = ALL_MOVES[k]; const nm = nameOf(m); const img = libThumb(m.lib);
     out.push({ kind: 'rest', dur: i === 0 ? 10 : 5, name: nm, label: L('استعد', 'Get ready'), cue: pick(m.cue), img: img });
     if (m.sides) {
       out.push({ kind: 'work', dur: Math.round(hold / 2), name: nm, label: L('الجنب اليمين', 'Right side'), cue: pick(m.cue), img: img });
@@ -1114,7 +1140,7 @@ function warmSteps() {
   rt.moves.forEach((m, i) => out.push({ kind: 'work', dur: 35, name: nameOf(m), label: L('إحماء', 'Warm-up') + ' ' + (i + 1) + '/' + rt.moves.length, cue: pick(m.cue) }));
   return out;
 }
-function coolSteps() { const rt = Object.assign({}, STRETCH_ROUTINES[2] || STRETCH_ROUTINES[0], { hold: 30 }); rt.moves = rt.moves.slice(0, 5); return stretchSteps(rt); }
+function coolSteps() { const rt = Object.assign({}, ALL_ROUTINES[2] || ALL_ROUTINES[0], { hold: 30 }); rt.moves = rt.moves.slice(0, 5); return stretchSteps(rt); }
 function daySteps(items, opt) {
   opt = opt || {}; const rest = cfg().rest || 60; const out = [];
   if (opt.warm) warmSteps().forEach((s) => out.push(s));
@@ -1389,18 +1415,18 @@ function stretchStreak() {
 function viewStretch(body) {
   const days = (plus.stretch && plus.stretch.days) || {};
   const ws = weekStart();
-  if (sub.openR) return viewStretchDetail(body, STRETCH_ROUTINES.find((r) => r.id === sub.openR));
+  if (sub.openR) return viewStretchDetail(body, ALL_ROUTINES.find((r) => r.id === sub.openR));
   let h = '<div class="ap-card"><div class="ap-row"><b>' + esc(L('أسبوعك', 'Your week')) + '</b><span class="mu">' + esc(L('سلسلة: ', 'Streak: ') + stretchStreak()) + '</span></div><div class="ap-wdots">';
   for (let i = 0; i < 7; i++) { const dt = addDays(ws, i); h += '<div class="' + (days[dt] ? 'on' : '') + (dt === stamp() ? ' td' : '') + '"><i></i><small>' + esc(L(SHORT_AR[i], WEEKDAYS[i][1].slice(0, 3))) + '</small></div>'; }
   h += '</div></div>';
   h += '<div class="ap-sec"><b>' + esc(L('اختار روتين', 'Choose a routine')) + '</b></div>';
-  STRETCH_ROUTINES.forEach((r) => {
+  ALL_ROUTINES.forEach((r) => {
     h += '<div class="ap-card"><div class="ap-row"><b>' + esc(L(r.ar, r.en)) + '</b><span class="mu">' + esc(r.min + ' ' + L('دقيقة', 'min')) + '</span></div><small class="mu">' + esc(pick(r.sub)) + '</small><div class="ap-actions"><button type="button" class="ap-btn" data-rplay="' + r.id + '">' + esc(L('ابدأ بالتايمر', 'Start with timer')) + '</button><button type="button" class="ap-btn ghost" data-ropen="' + r.id + '">' + esc(L('شوف الحركات', 'See the moves')) + '</button></div></div>';
   });
   h += '<div class="ap-note">' + esc(L('اتمدد لحد ما تحس بشد خفيف، مش وجع، وماتنطش في الحركة. لو عندك إصابة أو ألم مستمر، استشر أخصائي تأهيل الأول.', 'Stretch to a mild pull, never pain, and do not bounce. If you have an injury or ongoing pain, check with a rehab specialist first.')) + '</div><div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-sask">' + esc(L('اسأل أخصائي', 'Ask a specialist')) + '</button></div>';
   body.innerHTML = h;
   $$('[data-ropen]', body).forEach((b) => b.addEventListener('click', () => { sub.openR = b.dataset.ropen; draw(); }));
-  $$('[data-rplay]', body).forEach((b) => b.addEventListener('click', async () => { const r = STRETCH_ROUTINES.find((x) => x.id === b.dataset.rplay); await loadLib(); startPlayer(stretchSteps(r), { title: L(r.ar, r.en), done: markStretchDone }); }));
+  $$('[data-rplay]', body).forEach((b) => b.addEventListener('click', async () => { const r = ALL_ROUTINES.find((x) => x.id === b.dataset.rplay); await loadLib(); startPlayer(stretchSteps(r), { title: L(r.ar, r.en), done: markStretchDone }); }));
   $('#ap-sask', body).addEventListener('click', () => consult(L('إطالة ومرونة', 'stretching and flexibility')));
   loadLib();
 }
@@ -1408,7 +1434,7 @@ async function viewStretchDetail(body, r) {
   if (!r) { sub.openR = ''; return viewStretch(body); }
   await loadLib();
   let h = '<button type="button" class="ap-back" id="ap-back">' + esc(L('رجوع', 'Back')) + '</button><div class="ap-sec"><b>' + esc(L(r.ar, r.en)) + '</b><span>' + esc(pick(r.sub)) + '</span></div><div class="ap-card">';
-  r.moves.forEach((k, i) => { const m = STRETCH_MOVES[k]; const img = libThumb(m.lib); h += '<div class="ap-ex ap-exrow">' + (img ? '<img class="ap-th" alt="" loading="lazy" src="' + esc(img) + '">' : '<span class="ap-th ap-num">' + (i + 1) + '</span>') + '<span class="ap-exn"><b>' + esc(nameOf(m)) + (m.sides ? ' <small>(' + esc(L('الجنبين', 'both sides')) + ')</small>' : '') + '</b><small>' + esc(pick(m.cue)) + '</small></span></div>'; });
+  r.moves.forEach((k, i) => { const m = ALL_MOVES[k]; const img = libThumb(m.lib); h += '<div class="ap-ex ap-exrow">' + (img ? '<img class="ap-th" alt="" loading="lazy" src="' + esc(img) + '">' : '<span class="ap-th ap-num">' + (i + 1) + '</span>') + '<span class="ap-exn"><b>' + esc(nameOf(m)) + (m.sides ? ' <small>(' + esc(L('الجنبين', 'both sides')) + ')</small>' : '') + '</b><small>' + esc(pick(m.cue)) + '</small></span></div>'; });
   h += '</div><div class="ap-actions"><button type="button" class="ap-btn" id="ap-rgo">' + esc(L('ابدأ بالتايمر', 'Start with timer')) + '</button></div>';
   body.innerHTML = h;
   $('#ap-back', body).addEventListener('click', () => { sub.openR = ''; draw(); });
@@ -1424,6 +1450,7 @@ const CIRC_PRE = [
   { id: 'p_gym', pre: true, name: { ar: 'محطات جيم', en: 'Gym stations' }, work: 45, rest: 15, rounds: 3, rrest: 90,
     st: [{ n: { ar: 'ضغط دمبل', en: 'Dumbbell press' } }, { n: { ar: 'سحب كابل', en: 'Cable row' } }, { n: { ar: 'سكوات جوبلت', en: 'Goblet squat' } }, { n: { ar: 'رفرفة جانبي', en: 'Lateral raise' } }, { n: { ar: 'رومانيان ديدلفت', en: 'Romanian deadlift' } }, { n: { ar: 'تجديف ماكينة', en: 'Rowing machine' } }] }
 ];
+CIRC_PRE.push(...CIRC_EXTRA);
 const stName = (st) => (st && typeof st.n === 'object' ? nameOf(st.n) : (st && st.n) || '');
 const fmtT = (sec) => { sec = Math.max(0, Math.round(sec)); return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); };
 const totSec = (steps) => steps.reduce((a, x) => a + (x.dur || 0), 0);
@@ -1495,7 +1522,10 @@ function viewCirc(body) {
   h += '<div class="ap-actions"><button type="button" class="ap-btn" id="ap-cnew">' + esc(L('+ اعمل محطات جديدة', '+ Build new stations')) + '</button></div>';
   h += '<div class="ap-sec"><b>' + esc(L('تايمرات الجروب والكروس فيت', 'Group and CrossFit timers')) + '</b><span>' + esc(L('شاشة كبيرة تتشاف من بعيد', 'big screen, readable from afar')) + '</span></div><div class="ap-grid2">';
   [['tabata', 'Tabata', L('20 شغل / 10 راحة × 8', '20 on / 10 off × 8')], ['emom', 'EMOM', L('كل دقيقة تمرين', 'every minute on the minute')], ['amrap', 'AMRAP', L('أكبر عدد جولات في وقت', 'max rounds in time')], ['fortime', 'For Time', L('أسرع وقت للتمرين', 'fastest time')], ['intervals', L('فترات مخصصة', 'Custom intervals'), L('شغل وراحة وجولات', 'work, rest, rounds')]].forEach((t) => { h += '<button type="button" class="ap-card ap-tmb" data-tm="' + t[0] + '"><b>' + esc(t[1]) + '</b><small class="mu">' + esc(t[2]) + '</small></button>'; });
-  h += '</div><div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-cjoin">' + esc(L('معايا لينك جلسة جماعية', 'I have a group session link')) + '</button></div>';
+  h += '</div>';
+  h += '<div class="ap-sec"><b>' + esc(L('دليل المصطلحات للمبتدئين', 'Beginner glossary')) + '</b><span>' + esc(L('اضغط على أي مصطلح تفهمه', 'tap any term to read it')) + '</span></div>';
+  ['circuit', 'tabata', 'emom', 'amrap', 'fortime', 'chipper', 'hyrox', 'intervals', 'group'].forEach((gk) => { h += guideHtml(gk, false); });
+  h += '<div class="ap-actions"><button type="button" class="ap-btn ghost" id="ap-cjoin">' + esc(L('معايا لينك جلسة جماعية', 'I have a group session link')) + '</button></div>';
   h += '<div class="ap-note">' + esc(L('الجلسة الجماعية: المدرب يعمل لينك بوقت بداية، وكل واحد يفتحه على موبايله فيشتغل التايمر عند الكل في نفس اللحظة. مفيش حاجة بتتخزن على سيرفر.', 'Group session: the coach makes a link with a start time; everyone opens it and the timer runs in sync on every phone. Nothing is stored on a server.')) + '</div>';
   body.innerHTML = h;
   const find = (id) => circMy().find((x) => x.id === id) || CIRC_PRE.find((x) => x.id === id);
@@ -1544,10 +1574,21 @@ function viewCircEdit(body) {
   $('#ce-run', body).addEventListener('click', async () => { if (save()) { const t = JSON.parse(JSON.stringify(c)); sub.cedit = null; await loadLib(); startSteps(circSteps(t), t.name, {}); } });
   const dl = $('#ce-del', body); if (dl) dl.addEventListener('click', () => { if (!window.confirm(L('تحذف؟', 'Delete?'))) return; plus.circ.list = circMy().filter((x) => x.id !== c.id); persist(); sub.cedit = null; draw(); });
 }
+/* شرح مبسّط لأي تايمر أو صيغة تمرين — للمبتدئين */
+function guideHtml(key, open) {
+  const g = TIMER_GUIDE[key]; if (!g) return '';
+  const x = lang() === 'en' ? g.en : g.ar;
+  return '<details class="ap-guide" style="background:rgba(127,127,127,.08);border:1px solid rgba(127,127,127,.2);border-radius:12px;padding:10px 12px;margin:8px 0"' + (open ? ' open' : '') + '><summary><b>' + esc(L('إيه ده؟ ', 'What is this? ') + x.name) + '</b></summary>'
+    + '<p class="ap-p">' + esc(x.what) + '</p>'
+    + '<p class="ap-p"><b>' + esc(L('إزاي بيشتغل: ', 'How it works: ')) + '</b>' + esc(x.how) + '</p>'
+    + '<p class="ap-p"><b>' + esc(L('مثال: ', 'Example: ')) + '</b>' + esc(x.example) + '</p>'
+    + '<p class="ap-note">' + esc(x.tip) + '</p></details>';
+}
 function viewTimerCfg(body) {
   const t = sub.tm; const k = t.kind;
   const nm = { tabata: 'Tabata', emom: 'EMOM', amrap: 'AMRAP', fortime: 'For Time', intervals: L('فترات مخصصة', 'Custom intervals') }[k];
-  let h = '<button type="button" class="ap-back" id="ap-back">' + esc(L('رجوع', 'Back')) + '</button><div class="ap-sec"><b>' + esc(nm) + '</b></div><div class="ap-card ap-form">';
+  let h = '<button type="button" class="ap-back" id="ap-back">' + esc(L('رجوع', 'Back')) + '</button><div class="ap-sec"><b>' + esc(nm) + '</b></div>' + guideHtml(k, !sub.tmSeen) + '<div class="ap-card ap-form">';
+  sub.tmSeen = true;
   if (k === 'tabata' || k === 'intervals') h += '<div class="ap-three"><label>' + esc(L('شغل (ث)', 'Work (s)')) + '<input id="tm-work" type="number" min="5" max="600" value="' + t.work + '"></label><label>' + esc(L('راحة (ث)', 'Rest (s)')) + '<input id="tm-rest" type="number" min="0" max="300" value="' + t.rest + '"></label><label>' + esc(L('جولات', 'Rounds')) + '<input id="tm-rounds" type="number" min="1" max="60" value="' + t.rounds + '"></label></div>';
   if (k === 'emom' || k === 'amrap') h += '<label>' + esc(L('المدة (دقيقة)', 'Duration (min)')) + '<input id="tm-mins" type="number" min="1" max="90" value="' + t.mins + '"></label>';
   if (k === 'fortime') h += '<label>' + esc(L('الحد الأقصى بالدقايق (0 = بدون)', 'Time cap in minutes (0 = none)')) + '<input id="tm-mins" type="number" min="0" max="90" value="' + t.mins + '"></label>';
@@ -1832,8 +1873,8 @@ function gsBuild() {
   bioIndex().forEach((it) => add('bio', it.ar, it.en, it.kw, () => { go('biomech'); bioGo(it); }));
   JOURNEYS.forEach((j) => add('jou', pick(j.title), L(j.title.ar, j.title.en), pick(j.sub) + ' ' + j.title.ar + ' ' + j.title.en, () => { go('journeys'); sub.openJ = j.id; draw(); }, pick(j.sub)));
   CHALLENGES.forEach((c) => add('cha', c.ar, c.en, pick(c.sub), () => { go('chal'); sub.openC = c.id; draw(); }, pick(c.sub)));
-  RECIPES.forEach((r) => add('rec', nameOf(r), nameOf(r), '', () => { go('recipes'); sub.openRc = r.id; sub.srv = 0; draw(); }));
-  STRETCH_ROUTINES.forEach((r) => add('str', r.ar, r.en, pick(r.sub), () => { go('stretch'); sub.openR = r.id; draw(); }, pick(r.sub)));
+  ALL_RECIPES.forEach((r) => add('rec', nameOf(r), nameOf(r), '', () => { go('recipes'); sub.openRc = r.id; sub.srv = 0; draw(); }));
+  ALL_ROUTINES.forEach((r) => add('str', r.ar, r.en, pick(r.sub), () => { go('stretch'); sub.openR = r.id; draw(); }, pick(r.sub)));
   SPORTS.forEach((s) => add('spo', nameOf(s), nameOf(s), (s.ar || '') + ' ' + (s.en || ''), () => { go('journeys'); sub.facet = 'sport'; sub.val = s.id; draw(); }));
   INJURY_AREAS.forEach((a) => add('inj', 'تأهيل ' + a[1], 'Rehab: ' + a[2], a[1] + ' ' + a[2] + ' وجع الم pain', () => { go('rehab'); sub.rd = { area: a[0], level: 3, since: 'week', flags: {} }; draw(); }));
   foodsAll.forEach((f) => add('foo', nameOf(f), nameOf(f), (f.ar || '') + ' ' + (f.en || ''), () => { go('lib'); sub.lt = 'food'; sub.q = nameOf(f); draw(); }, f.c + L(' سعر · بروتين ', ' kcal · protein ') + f.p));
@@ -1880,9 +1921,9 @@ function viewSearch(body) {
 }
 
 /* ================================================================ الوصفات */
-const R_BY_ID = {}; RECIPES.forEach((r) => { R_BY_ID[r.id] = r; });
-const R_MEALS = [['all', 'الكل', 'All'], ['breakfast', 'فطار', 'Breakfast'], ['lunch', 'غدا', 'Lunch'], ['dinner', 'عشا', 'Dinner'], ['snack', 'سناك', 'Snack'], ['fav', 'المفضلة', 'Favorites'], ['cart', 'المشتريات', 'Shopping']];
-const R_TAGS = [['protein', 'بروتين عالي', 'High protein'], ['lowcarb', 'قليل كارب', 'Low carb'], ['veg', 'نباتي', 'Vegetarian'], ['budget', 'اقتصادي', 'Budget'], ['quick', 'سريع', 'Quick']];
+const R_BY_ID = {}; ALL_RECIPES.forEach((r) => { R_BY_ID[r.id] = r; });
+const R_MEALS = [['all', 'الكل', 'All'], ['breakfast', 'فطار', 'Breakfast'], ['lunch', 'غدا', 'Lunch'], ['dinner', 'عشا', 'Dinner'], ['snack', 'سناك', 'Snack'], ['drink', 'مشروبات', 'Drinks'], ['fav', 'المفضلة', 'Favorites'], ['cart', 'المشتريات', 'Shopping']];
+const R_TAGS = [['protein', 'بروتين عالي', 'High protein'], ['lowcarb', 'قليل كارب', 'Low carb'], ['veg', 'نباتي', 'Vegetarian'], ['budget', 'اقتصادي', 'Budget'], ['quick', 'سريع', 'Quick'], ['airfry', 'إيرفراير', 'Air fryer'], ['detox', 'ديتوكس', 'Detox']];
 const rIng = (r) => { const sw = (plus.rswap && plus.rswap[r.id]) || {}; return r.ing.map((it, i) => (sw[i] ? { id: sw[i].id, g: sw[i].g, swapped: true } : { id: it[0], g: it[1] })); };
 function rTotals(r) {
   const t = { kcal: 0, p: 0, c: 0, f: 0, g: 0 };
@@ -1895,12 +1936,14 @@ function viewRecipes(body) {
   const meal = sub.rmeal || 'all';
   if (meal === 'cart') return viewCart(body);
   const tag = sub.rtag || ''; const q = normAr(sub.rq || '');
-  let list = RECIPES.filter((r) => (meal === 'all' || (meal === 'fav' ? plus.fav[r.id] : r.meal === meal)) && (!tag || r.tags.indexOf(tag) !== -1));
+  let list = ALL_RECIPES.filter((r) => (meal === 'all' || (meal === 'fav' ? plus.fav[r.id] : r.meal === meal)) && (!tag || r.tags.indexOf(tag) !== -1));
   if (q) list = list.filter((r) => (normAr(r.ar) + ' ' + normAr(r.en) + ' ' + r.ing.map((i) => (FOOD_BY_ID[i[0]] ? normAr(FOOD_BY_ID[i[0]].ar) + ' ' + normAr(FOOD_BY_ID[i[0]].en) : '')).join(' ')).indexOf(q) !== -1);
   let h = '<div class="ap-goalbox"><input id="ap-rq" type="text" maxlength="60" placeholder="' + esc(L('دوّر: فراخ، عدس، شوفان...', 'Search: chicken, lentils, oats...')) + '" value="' + esc(sub.rq || '') + '"></div>';
   h += chips(R_MEALS.map((m) => [m[0], L(m[1], m[2]) + (m[0] === 'cart' ? ' (' + Object.keys(plus.cart || {}).length + ')' : '')]), meal, 'rm');
   h += chips([['', L('كل الأنواع', 'All types')]].concat(R_TAGS.map((t) => [t[0], L(t[1], t[2])])), tag, 'rt');
   h += '<div class="ap-note">' + list.length + esc(L(' وصفة', ' recipes')) + '</div>';
+  if (meal === 'drink' || tag === 'detox') h += '<div class="ap-note">' + esc(L('مشروبات الديتوكس هي مية منكّهة وعصاير طبيعية بتساعدك تشرب سوايل أكتر. مفيش مشروب بيطرد السموم من الجسم، ده شغل الكبد والكلى. ولو عندك سكر أو ضغط أو حمل أو أمراض كلى استشر طبيب قبل أي نظام غذائي.', 'Detox drinks are flavored water and natural juices that help you drink more fluids. No drink flushes toxins; that is the job of your liver and kidneys. If you have diabetes, high blood pressure, pregnancy or kidney disease, ask your doctor before changing your diet.')) + '</div>';
+  if (tag === 'airfry') h += '<div class="ap-note">' + esc(L('أزمنة وحرارة الإيرفراير تقريبية وبتختلف من جهاز للتاني. اتأكد إن الفراخ واللحمة استوت من جوه.', 'Air fryer times and temperatures are approximate and vary by model. Make sure chicken and meat are cooked through.')) + '</div>';
   h += list.length ? '<div class="ap-card">' + list.map((r) => { const t = rTotals(r); return '<button type="button" class="ap-ex ap-exrow" data-rc="' + r.id + '"><span class="ap-th ap-fart">' + rArt(r) + '</span><span class="ap-exn"><b>' + esc(nameOf(r)) + '</b><small>' + Math.round(t.kcal) + ' ' + esc(L('سعرة', 'kcal')) + ' · ' + Math.round(t.p) + esc(L(' جم بروتين', ' g protein')) + ' · ' + r.min + esc(L(' د', ' min')) + '</small></span>' + (plus.fav[r.id] ? '<em class="ap-fav on"></em>' : '<em>›</em>') + '</button>'; }).join('') + '</div>' : '<div class="ap-empty small">' + esc(meal === 'fav' ? L('لسه مفيش وصفات في المفضلة.', 'No favorites yet.') : L('مفيش وصفة مطابقة.', 'No matching recipes.')) + '</div>';
   h += '<div class="ap-note">' + esc(L('الأرقام الغذائية محسوبة من مكتبة ADAM وتقديرية. لو عندك حساسية أو حالة صحية استشر أخصائي تغذية.', 'Nutrition numbers are calculated from the ADAM food library and are estimates. If you have an allergy or health condition, consult a dietitian.')) + '</div>';
   body.innerHTML = h;
@@ -1922,7 +1965,7 @@ function viewRecipeDetail(body, r) {
   if (!r) { sub.openRc = ''; return viewRecipes(body); }
   const sel = sub.srv || r.serv; const k = sel / r.serv; const t = rTotals(r);
   let h = '<button type="button" class="ap-back" id="ap-back">' + esc(L('رجوع', 'Back')) + '</button>';
-  h += '<div class="ap-hero ap-rhero"><span class="ap-fart big">' + rArt(r) + '</span><h2>' + esc(nameOf(r)) + '</h2><div class="ap-meta"><i>' + esc(tl({ breakfast: ['فطار', 'Breakfast'], lunch: ['غدا', 'Lunch'], dinner: ['عشا', 'Dinner'], snack: ['سناك', 'Snack'] }, r.meal)) + '</i><i>' + r.min + esc(L(' دقيقة', ' min')) + '</i>' + r.tags.map((g) => '<i>' + esc((R_TAGS.find((x) => x[0] === g) || ['', g, g])[L(1, 2) === 1 ? 1 : 2]) + '</i>').join('') + '</div></div>';
+  h += '<div class="ap-hero ap-rhero"><span class="ap-fart big">' + rArt(r) + '</span><h2>' + esc(nameOf(r)) + '</h2><div class="ap-meta"><i>' + esc(tl({ breakfast: ['فطار', 'Breakfast'], lunch: ['غدا', 'Lunch'], dinner: ['عشا', 'Dinner'], snack: ['سناك', 'Snack'], drink: ['مشروبات', 'Drinks'] }, r.meal)) + '</i><i>' + r.min + esc(L(' دقيقة', ' min')) + '</i>' + r.tags.map((g) => '<i>' + esc((R_TAGS.find((x) => x[0] === g) || ['', g, g])[L(1, 2) === 1 ? 1 : 2]) + '</i>').join('') + '</div></div>';
   h += '<div class="ap-card"><div class="ap-macros"><div><b>' + Math.round(t.kcal) + '</b><small>' + esc(L('سعرة', 'kcal')) + '</small></div><div><b>' + Math.round(t.p) + '</b><small>' + esc(L('بروتين', 'Protein')) + '</small></div><div><b>' + Math.round(t.c) + '</b><small>' + esc(L('كارب', 'Carbs')) + '</small></div><div><b>' + Math.round(t.f) + '</b><small>' + esc(L('دهون', 'Fat')) + '</small></div></div><small class="mu">' + esc(L('للحصة الواحدة', 'Per serving')) + '</small></div>';
   h += '<div class="ap-row"><b>' + esc(L('عدد الحصص', 'Servings')) + '</b><span class="ap-step2"><button type="button" id="ap-sminus" aria-label="-">-</button><b>' + sel + '</b><button type="button" id="ap-splus" aria-label="+">+</button></span></div>';
   h += '<div class="ap-sec"><b>' + esc(L('المكونات', 'Ingredients')) + '</b></div><div class="ap-card">';
@@ -2005,7 +2048,9 @@ function viewMe(body) {
   let h = guestBanner();
   if (sub.first && !plus.profile) h += '<div class="ap-card ap-win"><b>' + esc(L('أهلاً بيك في ADAM', 'Welcome to ADAM')) + '</b><small class="mu">' + esc(L('عرّفنا بنفسك عشان نظبط لك الأرقام، أو اتخطّى وجرّب الأول.', 'Tell us about you to tune the numbers, or skip and look around first.')) + '</small></div>';
   h += '<div class="ap-sec"><b>' + esc(L('بياناتك', 'About you')) + '</b></div><div class="ap-card ap-form">';
+  h += '<div class="ap-q" style="display:flex;align-items:center;gap:12px"><div style="width:72px;height:72px;border-radius:50%;overflow:hidden;background:rgba(127,127,127,.2);display:flex;align-items:center;justify-content:center;font-size:30px;flex:none">' + (d.photo ? '<img src="' + esc(d.photo) + '" alt="" style="width:100%;height:100%;object-fit:cover">' : '👤') + '</div><div><button type="button" class="ap-btn ghost small" id="me-photo-b">' + esc(d.photo ? L('غيّر الصورة', 'Change photo') : L('أضف صورة', 'Add photo')) + '</button>' + (d.photo ? ' <button type="button" class="ap-btn ghost small" id="me-photo-x">' + esc(L('امسح', 'Remove')) + '</button>' : '') + '<input id="me-photo" type="file" accept="image/*" hidden></div></div>';
   h += '<label>' + esc(L('الاسم', 'Name')) + '<input id="me-name" type="text" maxlength="40" value="' + esc(d.name) + '"></label>';
+  h += '<label>' + esc(L('رقم التليفون (اختياري)', 'Phone number (optional)')) + '<input id="me-phone" type="tel" inputmode="tel" dir="ltr" maxlength="20" placeholder="01xxxxxxxxx" value="' + esc(d.phone || '') + '"></label><small class="mu">' + esc(L('الصورة والرقم محفوظين لحسابك بس ومش بيظهروا لحد تاني.', 'Photo and number are kept on your account only and are not shown to anyone else.')) + '</small>';
   h += '<div class="ap-q"><b>' + esc(L('الجنس', 'Sex')) + '</b>' + chips([['m', L('ذكر', 'Male')], ['f', L('أنثى', 'Female')]], d.sex, 'mes') + '</div>';
   h += '<div class="ap-three"><label>' + esc(L('السن', 'Age')) + '<input id="me-age" type="number" min="10" max="90" value="' + d.age + '"></label><label>' + esc(L('الوزن (كجم)', 'Weight (kg)')) + '<input id="me-w" type="number" min="30" max="250" value="' + d.weight + '"></label><label>' + esc(L('الطول (سم)', 'Height (cm)')) + '<input id="me-h" type="number" min="100" max="230" value="' + d.height + '"></label></div>';
   h += '<div class="ap-q"><b>' + esc(L('مستوى النشاط', 'Activity level')) + '</b>' + chips(ACT.map((a) => [a[0], L(a[1], a[2])]), d.act, 'mea') + '</div>';
@@ -2033,7 +2078,7 @@ function viewMe(body) {
   body.innerHTML = h;
   wireGuest(body);
   const re = () => viewMe(body);
-  const rd = () => ({ name: ($('#me-name', body) || {}).value || '', age: Number(($('#me-age', body) || {}).value) || d.age, weight: Number(($('#me-w', body) || {}).value) || d.weight, height: Number(($('#me-h', body) || {}).value) || d.height });
+  const rd = () => ({ name: ($('#me-name', body) || {}).value || '', phone: (($('#me-phone', body) || {}).value || '').replace(/[^0-9+ ]/g, '').trim(), age: Number(($('#me-age', body) || {}).value) || d.age, weight: Number(($('#me-w', body) || {}).value) || d.weight, height: Number(($('#me-h', body) || {}).value) || d.height });
   const set = (attr, key, num) => $$('[data-' + attr + ']', body).forEach((b) => b.addEventListener('click', () => { sub.me = Object.assign({}, d, rd()); sub.me[key] = num ? Number(b.dataset[attr]) : b.dataset[attr]; re(); }));
   set('mes', 'sex'); set('mea', 'act', true); set('meg', 'goal');
   const upd = (o) => { plus.set = Object.assign({}, plus.set || {}, o); persist(); re(); };
@@ -2042,10 +2087,26 @@ function viewMe(body) {
   $$('[data-mers]', body).forEach((b) => b.addEventListener('click', () => upd({ rest: Number(b.dataset.mers) })));
   $$('[data-mewm]', body).forEach((b) => b.addEventListener('click', () => upd({ warm: b.dataset.mewm === '1' })));
   $('#me-test', body).addEventListener('click', () => { cue('done'); });
+  const pb = $('#me-photo-b', body), pf2 = $('#me-photo', body), px = $('#me-photo-x', body);
+  if (pb) pb.addEventListener('click', () => pf2.click());
+  if (px) px.addEventListener('click', () => { sub.me = Object.assign({}, d, rd(), { photo: '' }); re(); });
+  if (pf2) pf2.addEventListener('change', () => {
+    const file = pf2.files && pf2.files[0]; if (!file) return;
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = () => {
+      try {
+        const S = 240, k = Math.min(img.width, img.height), cv = document.createElement('canvas'); cv.width = cv.height = S;
+        cv.getContext('2d').drawImage(img, (img.width - k) / 2, (img.height - k) / 2, k, k, 0, 0, S, S);
+        sub.me = Object.assign({}, d, rd(), { photo: cv.toDataURL('image/jpeg', 0.78) }); URL.revokeObjectURL(url); re();
+      } catch (e) { toast(L('الصورة مش متاحة', 'Could not use this photo')); }
+    };
+    img.onerror = () => toast(L('الصورة مش متاحة', 'Could not use this photo'));
+    img.src = url;
+  });
   $('#me-save', body).addEventListener('click', () => {
     const v = Object.assign({}, d, rd());
     if (!(v.age >= 10 && v.weight >= 30 && v.height >= 100)) { toast(L('راجع السن والوزن والطول', 'Check age, weight and height')); return; }
-    plus.profile = { name: v.name.trim().slice(0, 40), sex: v.sex, age: v.age, weight: v.weight, height: v.height, act: v.act, goal: v.goal };
+    plus.profile = { name: v.name.trim().slice(0, 40), sex: v.sex, age: v.age, weight: v.weight, height: v.height, act: v.act, goal: v.goal, phone: v.phone || '', photo: v.photo || '' };
     sub.me = null; sub.first = false; persist(); toast(L('اتحفظت بياناتك', 'Saved')); re();
   });
   const sk = $('#me-skip', body); if (sk) sk.addEventListener('click', () => { plus.skipProfile = true; persist(); go('journeys'); });
