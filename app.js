@@ -40936,8 +40936,53 @@ function planSessionBlocks(key, heading) {
   const kindName = function (it) { const k = planDef(PLAN_ITEM_KINDS, it.kind); return k ? k[lang] : (it.kind || ''); };
   const gKeys = Object.keys(s.groups || {});
   if (gKeys.length) out.push({ t: 'table', title: ar ? 'المجموعات (سوبر سيت / دواير / محطات)' : 'Groups (supersets / circuits / stations)', head: [ar ? 'المجموعة' : 'Group', ar ? 'التفاصيل' : 'Details'], rows: gKeys.map(function (L) { return [L, planGroupSummary(s, L)]; }) });
-  out.push({ t: 'table', head: ['#', ar ? 'المجموعة' : 'Group', ar ? 'القسم' : 'Type', ar ? 'التمرين' : 'Exercise', ar ? 'الحجم والشدة والراحة' : 'Volume · intensity · rest', ar ? 'ملاحظة' : 'Note'],
-    rows: (s.items || []).map(function (it, i) { return [i + 1, planGroupLabel(s, it), kindName(it), planItemName(it), planItemLine(it), pv(it.purpose) || pv(it.note) || '']; }) });
+  const items = s.items || [];
+  if (!items.length) return out;
+  /* كل خانة في عمود لوحدها: مجموعات / تكرار / مسافة أو مدة / زمن مستهدف / حمل-شدة / إيقاع / راحة / هدف / ملاحظة */
+  const KIND_COLORS = { strength: '#c0392b', run: '#2a6fdb', swim: '#17a2b8', timed: '#d68910', wod: '#8e44ad', drill: '#27ae60', warmup: '#95a5a6', mobility: '#16a085' };
+  const cols = [
+    { h: '#', f: function (it, i) { return i + 1; } },
+    { h: ar ? 'المجموعة' : 'Group', f: function (it) { return planGroupLabel(s, it); } },
+    { h: ar ? 'القسم' : 'Type', f: function (it) { return kindName(it); } },
+    { h: ar ? 'التمرين' : 'Exercise', f: function (it) { return planItemName(it); } },
+    { h: ar ? 'الأسيتات' : 'Sets', f: function (it) { return it.kind === 'wod' ? '' : (it.sets || ''); } },
+    { h: ar ? 'التكرار' : 'Reps', f: function (it) {
+      if (it.kind === 'wod' && it.format) { const fm = planDef(PLAN_WOD_FORMATS, it.format); return (fm ? fm[lang] : it.format) + (it.reps ? ' · ' + it.reps : ''); }
+      return it.reps || ''; } },
+    { h: ar ? 'المسافة / المدة' : 'Distance / time', f: function (it) {
+      const b = [];
+      if (it.distance) b.push(String(it.distance));
+      if (it.duration) b.push(String(it.duration));
+      if (it.stroke) { const st = planDef(PLAN_STROKES, it.stroke); b.push(st ? st[lang] : it.stroke); }
+      return b.join(' · '); } },
+    { h: ar ? 'الزمن المستهدف' : 'Target time', f: function (it) { return it.time || ''; } },
+    { h: ar ? 'الحمل / الشدة' : 'Load / intensity', f: function (it) { return planBasisText(it); } },
+    { h: ar ? 'الإيقاع' : 'Tempo', f: function (it) { return it.tempo || ''; } },
+    { h: ar ? 'الراحة' : 'Rest', f: function (it) {
+      const rt = it.restType ? planDef(PLAN_REST_TYPES, it.restType) : null;
+      const b = [];
+      if (it.rest) b.push(it.rest + (rt ? ' ' + rt[lang] : ''));
+      if (it.setRest) b.push((ar ? 'بين الأسيتات ' : 'between sets ') + it.setRest);
+      return b.join(' · '); } },
+    { h: ar ? 'الهدف' : 'Purpose', f: function (it) { return pv(it.purpose); } },
+    { h: ar ? 'ملاحظة' : 'Note', f: function (it) { return pv(it.note); } }
+  ];
+  const rows = items.map(function (it, i) { return cols.map(function (c) { const v = c.f(it, i); return v == null ? '' : v; }); });
+  /* العمود الفاضي في كل الصفوف مايتطبعش */
+  const keep = cols.map(function (c, ci) { return ci < 4 ? true : rows.some(function (r) { return String(r[ci]) !== ''; }); });
+  if (!rows.some(function (r) { return String(r[1]) !== ''; })) keep[1] = false;
+  const pick = function (arr) { return arr.filter(function (_, ci) { return keep[ci]; }); };
+  /* رسم بياني: عدد الأسيتات لكل تمرين (اللون = نوع التمرين) */
+  const sets = items.map(function (it) { return it.kind === 'wod' ? 0 : (Number(it.sets) || 0); });
+  if (sets.some(function (n) { return n > 0; })) {
+    const usedKinds = {}, legend = [];
+    items.forEach(function (it) { if (!usedKinds[it.kind]) { usedKinds[it.kind] = 1; legend.push({ name: kindName(it), color: KIND_COLORS[it.kind] || '#0b6b5c' }); } });
+    out.push({ t: 'chart', kind: 'bars', title: ar ? 'حجم الوحدة — عدد الأسيتات لكل تمرين (رقم التمرين تحت العمود)' : 'Session volume — sets per exercise (exercise # under each bar)', legend: legend,
+      labels: items.map(function (it, i) { return i + 1; }),
+      series: [{ name: ar ? 'أسيتات' : 'Sets', color: '#0b6b5c', colors: items.map(function (it) { return KIND_COLORS[it.kind] || '#0b6b5c'; }), values: sets }] });
+  }
+  out.push({ t: 'table', head: pick(cols.map(function (c) { return c.h; })), rows: rows.map(pick),
+    colors: items.map(function (it) { return pick(cols.map(function (c, ci) { return ci === 2 ? (KIND_COLORS[it.kind] || '') + '33' : ''; })); }) });
   return out;
 }
 
@@ -40959,6 +41004,11 @@ function planWeekBlocks(e, plan) {
     rows.push([dn[d], planPrintDate(plan.start, e.n * 7 + d), s ? (pv(s.title) || k) : (ar ? 'راحة' : 'Rest'), s ? 'RPE ' + (s.rpe || '-') + ' · ' + (s.duration || '-') + ' ' + (ar ? 'د' : 'min') : '']);
   }
   out.push({ t: 'table', head: [ar ? 'اليوم' : 'Day', ar ? 'التاريخ' : 'Date', ar ? 'الوحدة' : 'Session', ar ? 'الشدة والمدة' : 'RPE · duration'], rows: rows });
+  /* حمل كل يوم = RPE × المدة بالدقيقة (وحدات حمل) */
+  const dayLoad = [0, 1, 2, 3, 4, 5, 6].map(function (d) { const k = e.week.days[d]; const sx = k ? plan.sessions[k] : null; return sx ? Math.round((Number(sx.rpe) || 0) * (Number(sx.duration) || 0)) : 0; });
+  if (dayLoad.some(function (v) { return v > 0; })) {
+    out.splice(out.length - 1, 0, { t: 'chart', kind: 'bars', title: ar ? 'حمل الأسبوع (RPE × المدة) لكل يوم' : 'Weekly load (RPE × minutes) per day', labels: dn, series: [{ name: ar ? 'وحدات حمل' : 'Load units', color: '#0b6b5c', values: dayLoad }] });
+  }
   return out;
 }
 

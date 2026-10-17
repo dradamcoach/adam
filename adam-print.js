@@ -274,6 +274,12 @@
   }
   function hex6(c) {
     c = String(c || '').trim();
+    var m8 = /^#?([0-9a-f]{6})([0-9a-f]{2})$/i.exec(c);
+    if (m8) { /* لون بشفافية → نمزجه مع الأبيض */
+      var al = parseInt(m8[2], 16) / 255, o = '';
+      for (var q = 0; q < 3; q++) { var ch = parseInt(m8[1].substr(q * 2, 2), 16); o += ('0' + Math.round(ch * al + 255 * (1 - al)).toString(16)).slice(-2); }
+      return o.toUpperCase();
+    }
     var m = /^#?([0-9a-f]{6})$/i.exec(c);
     if (m) return m[1].toUpperCase();
     m = /^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i.exec(c);
