@@ -8,7 +8,7 @@
      {t:'table', title, head:[..], rows:[[..]], colors:[[لون|'' لكل خلية]]}
      {t:'chart', title, kind:'bars'|'line', labels:[..], series:[{name,color,values:[..],colors:[..]}], max, unit}
      {t:'break'}                     صفحة جديدة
-   المخرجات: طباعة/PDF (المتصفح)، Word (.doc)، Excel (.xls SpreadsheetML). */
+   المخرجات: طباعة/PDF (المتصفح)، Word (.docx حقيقي)، Excel (.xlsx حقيقي) — بنبنيهم بإيدينا من غير مكتبة. */
 (function () {
   'use strict';
   if (window.ADAM_PRINT) return;
@@ -107,7 +107,8 @@
   /* ---------- بناء المستند ---------- */
   function css(rtl) {
     return '@page{size:A4;margin:14mm 12mm}' +
-      '*{box-sizing:border-box}' +
+      '*{box-sizing:border-box}svg,img{max-width:100%;height:auto}' +
+      '@media screen and (max-width:760px){body{font-size:10.5px}th,td{padding:2px 3px!important}h1{font-size:16px}.top b{font-size:16px}}' +
       'body{font-family:Tahoma,Arial,"Segoe UI",sans-serif;color:#1b2430;font-size:11.5px;line-height:1.55;margin:0;padding:0;direction:' + (rtl ? 'rtl' : 'ltr') + ';background:#fff}' +
       '.top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid ' + BRAND + ';padding-bottom:6px;margin-bottom:10px}' +
       '.top b{font-size:19px;color:' + BRAND + '}.top small{color:#667;display:block;font-size:11px}' +
@@ -115,7 +116,7 @@
       'h1{font-size:19px;margin:12px 0 4px;color:#102a43}h2{font-size:15px;margin:14px 0 4px;color:' + BRAND + '}h3{font-size:12.5px;margin:10px 0 3px}' +
       'p{margin:4px 0}' +
       'table{border-collapse:collapse;width:100%;margin:6px 0 10px;page-break-inside:auto}tr{page-break-inside:avoid}' +
-      'th{background:#e8f1ef;color:#0a4d42;font-weight:700}th,td{border:1px solid #b9c4c9;padding:3px 6px;text-align:' + (rtl ? 'right' : 'left') + ';vertical-align:top}' +
+      'th{background:#e8f1ef;color:#0a4d42;font-weight:700}th,td{overflow-wrap:anywhere;word-break:break-word;border:1px solid #b9c4c9;padding:3px 6px;text-align:' + (rtl ? 'right' : 'left') + ';vertical-align:top}' +
       'tbody tr:nth-child(even) td{background:#f7faf9}' +
       '.kv td:first-child{width:28%;font-weight:700;background:#f1f6f5}' +
       '.cap{font-weight:700;margin:10px 0 2px}' +
@@ -238,7 +239,268 @@
     return x + '</Workbook>';
   }
 
+  /* ---------- ZIP بسيط (من غير ضغط) + CRC32 — لبناء ملفات xlsx/docx الحقيقية ---------- */
+  var CRC_T = null;
+  function crc32(u8) {
+    if (!CRC_T) { CRC_T = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1); CRC_T[n] = c >>> 0; } }
+    var crc = 0xFFFFFFFF;
+    for (var i = 0; i < u8.length; i++) crc = CRC_T[(crc ^ u8[i]) & 0xFF] ^ (crc >>> 8);
+    return (crc ^ 0xFFFFFFFF) >>> 0;
+  }
+  function zipStore(files) {
+    var enc = new TextEncoder(), chunks = [], central = [], offset = 0;
+    function u16(v) { return [v & 255, (v >>> 8) & 255]; }
+    function u32(v) { return [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255]; }
+    files.forEach(function (f) {
+      var name = enc.encode(f.name), data = enc.encode(f.data), crc = crc32(data);
+      var lh = [].concat(u32(0x04034b50), u16(20), u16(0x0800), u16(0), u16(0), u16(0x21), u32(crc), u32(data.length), u32(data.length), u16(name.length), u16(0));
+      chunks.push(new Uint8Array(lh), name, data);
+      central.push({ name: name, crc: crc, size: data.length, off: offset });
+      offset += lh.length + name.length + data.length;
+    });
+    var cdStart = offset, cdSize = 0;
+    central.forEach(function (c) {
+      var h = [].concat(u32(0x02014b50), u16(20), u16(20), u16(0x0800), u16(0), u16(0), u16(0x21), u32(c.crc), u32(c.size), u32(c.size), u16(c.name.length), u16(0), u16(0), u16(0), u16(0), u32(0), u32(c.off));
+      chunks.push(new Uint8Array(h), c.name);
+      cdSize += h.length + c.name.length;
+    });
+    chunks.push(new Uint8Array([].concat(u32(0x06054b50), u16(0), u16(0), u16(central.length), u16(central.length), u32(cdSize), u32(cdStart), u16(0))));
+    var total = 0; chunks.forEach(function (c) { total += c.length; });
+    var out = new Uint8Array(total), p = 0;
+    chunks.forEach(function (c) { out.set(c, p); p += c.length; });
+    return out;
+  }
+  function xe(s) { /* هروب XML + شيل الرموز الممنوعة */
+    return esc(s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F￾￿]/g, '');
+  }
+  function hex6(c) {
+    c = String(c || '').trim();
+    var m = /^#?([0-9a-f]{6})$/i.exec(c);
+    if (m) return m[1].toUpperCase();
+    m = /^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i.exec(c);
+    return m ? (m[1] + m[1] + m[2] + m[2] + m[3] + m[3]).toUpperCase() : '';
+  }
+  var XML_H = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+
+  /* ---------- Excel حقيقي (.xlsx) ---------- */
+  function colName(i) { var s = ''; i++; while (i > 0) { var m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+  function buildXlsx(doc) {
+    var rtl = (doc.lang || 'ar') === 'ar';
+    var used = {}, sheets = [], info = [];
+    (doc.blocks || []).forEach(function (b) {
+      if (!b) return;
+      if (b.t === 'h') info.push({ k: 'H', a: b.text });
+      else if (b.t === 'p') info.push({ k: 'P', a: b.text });
+      else if (b.t === 'kv') (b.rows || []).forEach(function (r) { if (r && r[1] !== '' && r[1] != null) info.push({ k: 'K', a: r[0], b: r[1] }); });
+      else if (b.t === 'table') sheets.push({ name: b.title || (rtl ? 'جدول' : 'Table'), head: b.head || [], rows: b.rows || [], colors: b.colors });
+      else if (b.t === 'chart') {
+        var head = [rtl ? 'البند' : 'Item'].concat((b.series || []).map(function (s) { return s.name || ''; }));
+        var rows = (b.labels || []).map(function (lb, i) { return [lb].concat((b.series || []).map(function (s) { return (s.values || [])[i]; })); });
+        sheets.push({ name: b.title || (rtl ? 'رسم' : 'Chart'), head: head, rows: rows, numeric: true });
+      }
+    });
+    /* ألوان الخلايا → أنماط (fills) */
+    var fillIdx = {}, fills = ['<fill><patternFill patternType="none"/></fill>', '<fill><patternFill patternType="gray125"/></fill>',
+      '<fill><patternFill patternType="solid"><fgColor rgb="FF0B6B5C"/><bgColor indexed="64"/></patternFill></fill>',
+      '<fill><patternFill patternType="solid"><fgColor rgb="FFE8F1EF"/><bgColor indexed="64"/></patternFill></fill>'];
+    var colorXf = {}, extraXfs = [];
+    function xfForColor(hex) {
+      if (colorXf[hex] != null) return colorXf[hex];
+      fills.push('<fill><patternFill patternType="solid"><fgColor rgb="FF' + hex + '"/><bgColor indexed="64"/></patternFill></fill>');
+      var fid = fills.length - 1;
+      extraXfs.push('<xf numFmtId="0" fontId="0" fillId="' + fid + '" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"' + (rtl ? ' readingOrder="2"' : '') + '/></xf>');
+      colorXf[hex] = 6 + extraXfs.length - 1;
+      return colorXf[hex];
+    }
+    /* خلية: s=نمط، v=قيمة */
+    function cell(r, c, v, s, isNum) {
+      var ref = colName(c) + r, st = s ? ' s="' + s + '"' : '';
+      if (v === '' || v == null) return s ? '<c r="' + ref + '"' + st + '/>' : '';
+      if (isNum && isFinite(Number(v)) && String(v).trim() !== '') return '<c r="' + ref + '"' + st + '><v>' + Number(v) + '</v></c>';
+      return '<c r="' + ref + '"' + st + ' t="inlineStr"><is><t xml:space="preserve">' + xe(v) + '</t></is></c>';
+    }
+    function widths(head, rows, min, max) {
+      var w = head.map(function (h) { return Math.min(max, Math.max(min, String(h == null ? '' : h).length + 4)); });
+      rows.forEach(function (r) { r.forEach(function (v, i) {
+        var longest = 0; String(v == null ? '' : v).split('\n').forEach(function (ln) { if (ln.length > longest) longest = ln.length; });
+        if (i < w.length) w[i] = Math.min(max, Math.max(w[i], longest + 3));
+      }); });
+      return w;
+    }
+    function sheetXml(rowsXml, colW, freeze, merges) {
+      return XML_H + '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"' + (rtl ? ' rightToLeft="1"' : '') + '>' +
+        (freeze ? '<pane ySplit="' + freeze + '" topLeftCell="A' + (freeze + 1) + '" activePane="bottomLeft" state="frozen"/>' : '') + '</sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15"/>' +
+        '<cols>' + colW.map(function (w, i) { return '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + w + '" customWidth="1"/>'; }).join('') + '</cols>' +
+        '<sheetData>' + rowsXml + '</sheetData>' +
+        (merges && merges.length ? '<mergeCells count="' + merges.length + '">' + merges.map(function (m) { return '<mergeCell ref="' + m + '"/>'; }).join('') + '</mergeCells>' : '') + '</worksheet>';
+    }
+    var sheetFiles = [], names = [];
+    /* ورقة الملخص: 1=header 2=title 3=key 4=cell */
+    var r = 1, rx = '<row r="1">' + cell(1, 0, doc.title || 'ADAM', 2) + '</row>', merges = [];
+    if (doc.subtitle) { r++; rx += '<row r="' + r + '">' + cell(r, 0, doc.subtitle, 5) + '</row>'; }
+    info.forEach(function (it) {
+      r++;
+      if (it.k === 'K') rx += '<row r="' + r + '">' + cell(r, 0, it.a, 3) + cell(r, 1, it.b, 4) + '</row>';
+      else {
+        var len = String(it.a || '').length, ht = Math.max(1, Math.ceil(len / 80)) * 15 + (it.k === 'H' ? 4 : 0);
+        rx += '<row r="' + r + '" ht="' + ht + '" customHeight="1">' + cell(r, 0, it.a, it.k === 'H' ? 3 : 5) + (it.k === 'H' ? cell(r, 1, '', 3) : '') + '</row>';
+        merges.push('A' + r + ':B' + r);
+      }
+    });
+    names.push(sheetName(rtl ? 'ملخص' : 'Summary', used));
+    sheetFiles.push(sheetXml(rx, [30, 60], 0, merges));
+    sheets.forEach(function (sh) {
+      var rows = '', rr = 1;
+      rows += '<row r="1">' + sh.head.map(function (h, ci) { return cell(1, ci, h, 1); }).join('') + '</row>';
+      sh.rows.forEach(function (row, ri) {
+        rr++;
+        rows += '<row r="' + rr + '">' + row.map(function (v, ci) {
+          var hx = sh.colors && sh.colors[ri] && hex6(sh.colors[ri][ci]);
+          var st = hx ? xfForColor(hx) : 4;
+          if (v === '' || v == null) return hx ? '<c r="' + colName(ci) + rr + '" s="' + st + '"/>' : '';
+          return cell(rr, ci, v, st, sh.numeric && ci > 0);
+        }).join('') + '</row>';
+      });
+      names.push(sheetName(sh.name, used));
+      sheetFiles.push(sheetXml(rows, widths(sh.head, sh.rows, 9, 45), 1));
+    });
+    var files = [
+      { name: '[Content_Types].xml', data: XML_H + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+        sheetFiles.map(function (_, i) { return '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'; }).join('') + '</Types>' },
+      { name: '_rels/.rels', data: XML_H + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>' },
+      { name: 'xl/workbook.xml', data: XML_H + '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' +
+        names.map(function (n, i) { return '<sheet name="' + xe(n) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>'; }).join('') + '</sheets></workbook>' },
+      { name: 'xl/_rels/workbook.xml.rels', data: XML_H + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        sheetFiles.map(function (_, i) { return '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>'; }).join('') +
+        '<Relationship Id="rId' + (sheetFiles.length + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>' },
+      { name: 'xl/styles.xml', data: XML_H + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<fonts count="4"><font><sz val="11"/><name val="Tahoma"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Tahoma"/></font><font><b/><sz val="14"/><color rgb="FF0B6B5C"/><name val="Tahoma"/></font><font><b/><sz val="11"/><name val="Tahoma"/></font></fonts>' +
+        '<fills count="' + fills.length + '">' + fills.join('') + '</fills>' +
+        '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFB9C4C9"/></left><right style="thin"><color rgb="FFB9C4C9"/></right><top style="thin"><color rgb="FFB9C4C9"/></top><bottom style="thin"><color rgb="FFB9C4C9"/></bottom><diagonal/></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="' + (6 + extraXfs.length) + '">' +
+        '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+        '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"' + (rtl ? ' readingOrder="2"' : '') + '/></xf>' +
+        '<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/>' +
+        '<xf numFmtId="0" fontId="3" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"' + (rtl ? ' readingOrder="2"' : '') + '/></xf>' +
+        '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"' + (rtl ? ' readingOrder="2"' : '') + '/></xf>' +
+        '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"' + (rtl ? ' readingOrder="2"' : '') + '/></xf>' +
+        extraXfs.join('') + '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>' }
+    ];
+    sheetFiles.forEach(function (x, i) { files.push({ name: 'xl/worksheets/sheet' + (i + 1) + '.xml', data: x }); });
+    return zipStore(files);
+  }
+
+  /* ---------- Word حقيقي (.docx) ---------- */
+  function mixWhite(hex, k) { /* يفتّح اللون عشان النص يتقري */
+    var r = parseInt(hex.slice(0, 2), 16), g = parseInt(hex.slice(2, 4), 16), b = parseInt(hex.slice(4, 6), 16);
+    function m(v) { var x = Math.round(v + (255 - v) * k); return ('0' + x.toString(16)).slice(-2); }
+    return (m(r) + m(g) + m(b)).toUpperCase();
+  }
+  function buildDocx(doc) {
+    var rtl = (doc.lang || 'ar') === 'ar';
+    var GREEN = '0B6B5C';
+    function rpr(o) {
+      o = o || {};
+      return '<w:rPr><w:rFonts w:ascii="Tahoma" w:hAnsi="Tahoma" w:cs="Tahoma"/>' + (o.b ? '<w:b/><w:bCs/>' : '') +
+        (o.color ? '<w:color w:val="' + o.color + '"/>' : '') + '<w:sz w:val="' + (o.sz || 22) + '"/><w:szCs w:val="' + (o.sz || 22) + '"/>' + (rtl ? '<w:rtl/>' : '') + '</w:rPr>';
+    }
+    function runs(text, o) {
+      var parts = String(text == null ? '' : text).split('\n');
+      return parts.map(function (ln, i) { return '<w:r>' + rpr(o) + (i ? '<w:br/>' : '') + '<w:t xml:space="preserve">' + xe(ln) + '</w:t></w:r>'; }).join('');
+    }
+    function para(text, o, ppr) {
+      return '<w:p><w:pPr>' + (rtl ? '<w:bidi/>' : '') + (ppr || '') + '</w:pPr>' + runs(text, o) + '</w:p>';
+    }
+    var BORD = '<w:tblBorders>' + ['top', 'left', 'bottom', 'right', 'insideH', 'insideV'].map(function (s) { return '<w:' + s + ' w:val="single" w:sz="4" w:space="0" w:color="B9C4C9"/>'; }).join('') + '</w:tblBorders>';
+    function table(head, rows, opt) {
+      opt = opt || {};
+      var ncol = head ? head.length : (rows[0] || []).length;
+      var x = '<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/>' + (rtl ? '<w:bidiVisual/>' : '') + BORD + '<w:tblLayout w:type="autofit"/><w:tblCellMar><w:left w:w="70" w:type="dxa"/><w:right w:w="70" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>' + new Array(ncol + 1).join('<w:gridCol w:w="' + Math.floor(10000 / Math.max(1, ncol)) + '"/>') + '</w:tblGrid>';
+      function tc(content, fill, first) {
+        return '<w:tc><w:tcPr>' + (opt.firstW && first ? '<w:tcW w:w="' + opt.firstW + '" w:type="pct"/>' : '') + (fill ? '<w:shd w:val="clear" w:color="auto" w:fill="' + fill + '"/>' : '') + '</w:tcPr>' + content + '</w:tc>';
+      }
+      if (head) x += '<w:tr><w:trPr><w:cantSplit/><w:tblHeader/></w:trPr>' + head.map(function (h) { return tc(para(h, { b: 1, sz: 20, color: GREEN }), 'E8F1EF'); }).join('') + '</w:tr>';
+      rows.forEach(function (row) {
+        x += '<w:tr><w:trPr><w:cantSplit/></w:trPr>';
+        for (var ci = 0; ci < ncol; ci++) {
+          var c = row[ci];
+          if (c && typeof c === 'object' && c.xml) x += tc(c.xml, c.fill, ci === 0);
+          else x += tc(para(c, { sz: opt.sz || 20, b: opt.keyBold && ci === 0 }), (opt.keyBold && ci === 0) ? 'F1F6F5' : (c && c.fill) || '', ci === 0);
+        }
+        x += '</w:tr>';
+      });
+      return x + '</w:tbl>' + para('', { sz: 8 });
+    }
+    var body = '', wide = false;
+    var dateStr = new Date().toLocaleDateString(rtl ? 'ar-EG' : 'en-GB');
+    body += para(doc.title || '', { b: 1, sz: 36, color: GREEN });
+    if (doc.subtitle) body += para(doc.subtitle, { sz: 22, color: '667788' });
+    body += para('ADAM · ' + dateStr, { b: 1, sz: 18, color: GREEN }, '<w:pBdr><w:bottom w:val="single" w:sz="18" w:space="4" w:color="' + GREEN + '"/></w:pBdr><w:spacing w:after="160"/>');
+    (doc.blocks || []).forEach(function (b) {
+      if (!b) return;
+      if (b.t === 'h') body += para(b.text, { b: 1, sz: b.level === 1 ? 32 : (b.level === 3 ? 24 : 28), color: b.level === 3 ? '102A43' : GREEN }, '<w:keepNext/><w:spacing w:before="200" w:after="60"/>');
+      else if (b.t === 'p') body += para(b.text, { sz: 22 }, '<w:spacing w:after="80"/>');
+      else if (b.t === 'kv') {
+        var kr = (b.rows || []).filter(function (r) { return r && r[1] !== '' && r[1] != null; }).map(function (r) { return [r[0], r[1]]; });
+        if (kr.length) body += table(null, kr, { keyBold: true, firstW: 1400 });
+      } else if (b.t === 'table') {
+        if (b.title) body += para(b.title, { b: 1, sz: 22 }, '<w:keepNext/><w:spacing w:before="160" w:after="40"/>');
+        if ((b.head || []).length >= 7) wide = true;
+        var rows = (b.rows || []).map(function (r, ri) {
+          return (b.head || r).map(function (_, ci) {
+            var hx = b.colors && b.colors[ri] && hex6(b.colors[ri][ci]);
+            var v = r[ci];
+            return hx ? { xml: para(v, { sz: 20 }), fill: hx } : v;
+          });
+        });
+        body += table(b.head || [], rows, { sz: (b.head || []).length >= 7 ? 18 : 20 });
+      } else if (b.t === 'chart') {
+        if (b.title) body += para(b.title, { b: 1, sz: 22 }, '<w:keepNext/><w:spacing w:before="160" w:after="40"/>');
+        var labels = b.labels || [], series = b.series || [], max = b.max || 0;
+        if (!max) series.forEach(function (s) { (s.values || []).forEach(function (v) { if (num(v) > max) max = num(v); }); });
+        if (!max) max = 10;
+        var head = ['#'], crow = [];
+        series.forEach(function (s) { head.push(s.name || ''); head.push(''); });
+        labels.forEach(function (lb, i) {
+          var row = [lb];
+          series.forEach(function (s) {
+            var col = hex6((s.colors && s.colors[i]) || s.color) || GREEN, v = (s.values || [])[i];
+            var len = Math.max(1, Math.round(num(v) / max * 24));
+            row.push(v);
+            row.push({ xml: para(new Array(len + 1).join('█'), { sz: 18, color: col }) });
+          });
+          crow.push(row);
+        });
+        body += table(head, crow, { sz: 20 });
+        var lg = (b.legend || []).concat(series.filter(function (s) { return !s.colors; }).map(function (s) { return { name: s.name, color: s.color }; })).filter(function (l) { return l && l.name; });
+        if (lg.length) body += '<w:p><w:pPr>' + (rtl ? '<w:bidi/>' : '') + '</w:pPr>' + lg.map(function (l) {
+          return '<w:r>' + rpr({ sz: 20, color: hex6(l.color) || GREEN }) + '<w:t xml:space="preserve">■ </w:t></w:r><w:r>' + rpr({ sz: 18 }) + '<w:t xml:space="preserve">' + xe(l.name) + '    </w:t></w:r>';
+        }).join('') + '</w:p>';
+      } else if (b.t === 'break') body += '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+    });
+    body += para(rtl ? 'طُبع من تطبيق ADAM · adamxfit.com' : 'Printed from the ADAM app · adamxfit.com', { sz: 18, color: '778899' }, '<w:pBdr><w:top w:val="single" w:sz="4" w:space="4" w:color="CCCCDD"/></w:pBdr><w:spacing w:before="240"/>');
+    var pg = wide ? '<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>' : '<w:pgSz w:w="11906" w:h="16838"/>';
+    var sect = '<w:sectPr>' + pg + '<w:pgMar w:top="800" w:right="800" w:bottom="800" w:left="800" w:header="400" w:footer="400" w:gutter="0"/>' + (rtl ? '<w:bidi/>' : '') + '</w:sectPr>';
+    return zipStore([
+      { name: '[Content_Types].xml', data: XML_H + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>' },
+      { name: '_rels/.rels', data: XML_H + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>' },
+      { name: 'word/document.xml', data: XML_H + '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' + body + sect + '</w:body></w:document>' }
+    ]);
+  }
+
   /* ---------- تنزيل ---------- */
+  function downloadBytes(name, mime, bytes) {
+    var blob = new Blob([bytes], { type: mime });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+  }
+
   function download(name, mime, content) {
     var blob = new Blob(['﻿', content], { type: mime });
     var a = document.createElement('a');
@@ -282,8 +544,8 @@
     bar.append(
       ttl,
       mk(L('طباعة / PDF', 'Print / PDF'), function () { try { frame.contentWindow.focus(); frame.contentWindow.print(); } catch (e) { window.print(); } }, true),
-      mk('Word', function () { download(base + '.doc', 'application/msword', fullHtml(doc, 'word')); }),
-      mk('Excel', function () { download(base + '.xls', 'application/vnd.ms-excel', excelXml(doc)); }),
+      mk('Word', function () { downloadBytes(base + '.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', buildDocx(doc)); }),
+      mk('Excel', function () { downloadBytes(base + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', buildXlsx(doc)); }),
       mk(L('إغلاق', 'Close'), close)
     );
     overlay.append(bar, frame);
@@ -293,5 +555,5 @@
     return overlay;
   }
 
-  window.ADAM_PRINT = { open: open, close: close, html: fullHtml, excel: excelXml, _chartSvg: chartSvg };
+  window.ADAM_PRINT = { open: open, close: close, html: fullHtml, excel: excelXml, xlsx: buildXlsx, docx: buildDocx, _chartSvg: chartSvg };
 })();
