@@ -172,6 +172,10 @@ const TEXT = {
     sq_tab_today: 'النهارده',
     sq_tab_season: 'الموسم',
     sq_tab_players: 'اللاعبين',
+    sq_tab_groups: 'المجموعات',
+    sq_tab_attendance: 'الحضور',
+    sq_tab_reports: 'التقارير',
+    sq_tab_tests: 'الاختبارات',
     sq_tab_talk: 'النقاش',
     sq_tab_staff: 'الجهاز الفني',
     sq_none_staff: 'لسه محدش ضافك في جهاز فني لفريق. أول ما مدرب رئيسي يضيفك هتلاقي الفريق هنا.',
@@ -214,7 +218,7 @@ const TEXT = {
     sq_starts_in: 'الموسم بيبدأ بعد {n} يوم',
     sq_season_over: 'الموسم خلص — ظبّط موسم جديد من تبويب الموسم.',
     sq_week_of: '{phase} — أسبوع {w} من {n} · الموسم: أسبوع {tw} من {tn}',
-    sq_change_today: 'بدّل جلسة النهارده:',
+    sq_change_today: 'جلسة النهارده (بتتبدّل لليوم ده بس):',
     sq_rest: 'راحة',
     sq_reps_done: 'عدّاتك',
     sq_load_kg: 'الوزن كجم',
@@ -475,6 +479,7 @@ const TEXT = {
     cat_hyrox: 'هايروكس',
     cat_agility: 'دريلات ملاعب',
     cat_conditioning: 'كارديو وتكييف',
+    cat_track: 'جري وألعاب قوى ومضمار',
     welcome_mail_title: 'الرسالة الترحيبية التلقائية',
     welcome_mail_hint: 'أي حد يسيب إيميله في صفحة التعريف بيوصله شرح كامل عن البرنامج فورًا. الرابط ده بتجيبه من Google Apps Script (خطوة واحدة مكتوبة في ملف الشرح).',
     welcome_url_ph: 'رابط Apps Script (بيبدأ بـ https://script.google.com/macros/s/...)',
@@ -520,6 +525,8 @@ const TEXT = {
     cpv_exit: 'خروج',
     tile_feedback: 'ملاحظات',
     tile_brand: 'براندي',
+    tile_dirreq: 'ظهوري في الدليل',
+    tile_diradm: 'اعتماد الدليل',
     tile_brand_admin: 'براند المدربين',
     preview_exit: 'خروج من المعاينة',
     preview_note: 'وضع المعاينة — بيانات تجريبية',
@@ -2501,6 +2508,7 @@ const TEXT = {
     chat_team_name: 'فريقي',
     plan_title: 'المخطط الموسمي',
     plan_open_btn: 'المخطط الموسمي',
+    client_print_btn: 'طباعة / تصدير البرنامج',
     plan_for_squad: 'فريق: {name}',
     plan_for_client: 'العميل: {name}',
     plan_new_hint: 'لسه مفيش مخطط — اختار قالب جاهز أو ابدأ تكتب بنفسك.',
@@ -2927,6 +2935,10 @@ const TEXT = {
     sq_tab_today: 'Today',
     sq_tab_season: 'Season',
     sq_tab_players: 'Players',
+    sq_tab_groups: 'Groups',
+    sq_tab_attendance: 'Attendance',
+    sq_tab_reports: 'Reports',
+    sq_tab_tests: 'Tests',
     sq_tab_talk: 'Discussion',
     sq_tab_staff: 'Staff',
     sq_none_staff: 'You are not on any squad staff yet. Once a head coach adds you, the squad shows up here.',
@@ -2969,7 +2981,7 @@ const TEXT = {
     sq_starts_in: 'The season starts in {n} days',
     sq_season_over: 'The season is over — set up a new one in the Season tab.',
     sq_week_of: '{phase} — week {w} of {n} · Season: week {tw} of {tn}',
-    sq_change_today: 'Change today\'s session:',
+    sq_change_today: 'Today\'s session (changes today only):',
     sq_rest: 'rest',
     sq_reps_done: 'Your reps',
     sq_load_kg: 'Load kg',
@@ -3229,6 +3241,7 @@ const TEXT = {
     cat_hyrox: 'HYROX',
     cat_agility: 'Field drills',
     cat_conditioning: 'Cardio & conditioning',
+    cat_track: 'Running & track',
     welcome_mail_title: 'Automatic welcome message',
     welcome_mail_hint: 'Anyone who leaves an email on the landing page instantly receives a full explanation of the program. You get this URL from Google Apps Script (one step, written in the guide).',
     welcome_url_ph: 'Apps Script URL (starts with https://script.google.com/macros/s/...)',
@@ -3274,6 +3287,8 @@ const TEXT = {
     cpv_exit: 'Exit',
     tile_feedback: 'Feedback',
     tile_brand: 'My brand',
+    tile_dirreq: 'Directory listing',
+    tile_diradm: 'Directory approvals',
     tile_brand_admin: 'Coach brands',
     preview_exit: 'Exit preview',
     preview_note: 'Preview mode — demo data',
@@ -5255,6 +5270,7 @@ const TEXT = {
     chat_team_name: 'My team',
     plan_title: 'Season plan',
     plan_open_btn: 'Season plan',
+    client_print_btn: 'Print / export program',
     plan_for_squad: 'Squad: {name}',
     plan_for_client: 'Client: {name}',
     plan_new_hint: 'No plan yet — pick a ready template or start writing your own.',
@@ -6151,7 +6167,8 @@ const CATEGORY_KEYS = {
   'crossfit': 'cat_crossfit',
   'hyrox': 'cat_hyrox',
   'agility': 'cat_agility',
-  'conditioning': 'cat_conditioning'
+  'conditioning': 'cat_conditioning',
+  'track': 'cat_track'
 };
 
 function categoryName(key) {
@@ -6950,33 +6967,7 @@ function showScreen(screen) {
   let navMode = '';
   if (screen === clientScreen) { try { navMode = clientMode; } catch (e) { navMode = ''; } }
   navRecord(screen, navMode);
-  try { announceRole(screen); } catch (e) { /* مركز المهام اختياري — أي خطأ هنا ما يوقفش التنقل */ }
   window.scrollTo(0, 0);
-}
-
-/*
- * (بيتا — المرحلة 2) بتبلّغ مركز المهام مين المسجَّل دخوله دلوقتي.
- * بيتبعت نوع الدور (client / coach / specialist / admin) ومعرّف المستخدم بس،
- * والمركز بيعمل له hash باتجاه واحد قبل ما يستخدمه كمفتاح تخزين.
- * مفيش قراءة ولا كتابة في Firestore ولا أي استدعاء شبكة هنا.
- * بتتبعت بس لما الدور يتغير.
- */
-function announceRole(screen) {
-  let kind = null;
-  const uid = (auth && auth.currentUser) ? auth.currentUser.uid : '';
-  const loggedOutScreen = (screen === loginScreen || screen === welcomeScreen || screen === signupScreen || screen === onboardingScreen);
-  if (uid && !loggedOutScreen && !previewMode && !coachPreviewOn) {
-    if (currentProviderEmail) {
-      kind = isFullAdminAccount() ? 'admin' : ((currentProviderSpecialties || []).indexOf('coach') > -1 ? 'coach' : 'specialist');
-    } else {
-      kind = 'client';
-    }
-  }
-  const prev = window.adamRole || {};
-  const next = kind ? { kind: kind, uid: uid } : { kind: null, uid: '' };
-  if (prev.kind === next.kind && prev.uid === next.uid) return;
-  window.adamRole = next;
-  window.dispatchEvent(new CustomEvent('adam:role', { detail: next }));
 }
 
 /* ---------- شكل البيانات + تحويل البرامج القديمة ---------- */
@@ -8116,6 +8107,8 @@ const COACH_TILES = [
   { key: 'mysub',     icon: 'card',      labelKey: 'open_provider_subscription_btn', btn: 'open-provider-subscription-btn' },
   { key: 'admin',     icon: 'gear',      labelKey: 'open_admin_btn',            btn: 'open-admin-panel-btn', badge: 'admin-leads-badge' },
   { key: 'brand',     icon: 'profile',   labelKey: 'tile_brand',                action: 'openBrand' },
+  { key: 'dirreq',    icon: 'medlib',    labelKey: 'tile_dirreq',               action: 'openDirReq' },
+  { key: 'diradm',    icon: 'gear',      labelKey: 'tile_diradm',               adminOnly: true, action: 'openDirAdm' },
   { key: 'brandadm',  icon: 'gear',      labelKey: 'tile_brand_admin',          adminOnly: true, action: 'openBrandAdmin' },
   { key: 'feedback',  icon: 'chat',      labelKey: 'tile_feedback',             action: 'openFeedback' },
   { key: 'previewcoach', icon: 'team',   labelKey: 'tile_preview_coach',        adminOnly: true, action: 'startCoachPreview' },
@@ -8158,6 +8151,8 @@ function renderCoachTiles() {
       if (tile.action === 'startClientPreview') { startClientPreview(); return; }
       if (tile.action === 'startCoachPreview') { startCoachPreview(); return; }
       if (tile.action === 'openBrand') { brandCall('openEditor', currentProviderEmail, { self: currentProviderEmail, kind: currentProviderSpecialty || 'coach' }); return; }
+      if (tile.action === 'openDirAdm') { openDirectoryAdmin(); return; }
+      if (tile.action === 'openDirReq') { openDirectoryRequest(); return; }
       if (tile.action === 'openBrandAdmin') { brandCall('openAdminList', currentProviderEmail); return; }
       const target = document.getElementById(tile.scroll);
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -12237,6 +12232,11 @@ function sqRole(sq) {
   return 'staff';
 }
 function sqIsLead(sq) { return sqRole(sq || squadCurrent) === 'lead'; }
+/* المدرب الرئيسي، أو عضو جهاز فني سمح له الرئيسي يعدّل الخطة والجلسة */
+function sqCanEdit(sq) {
+  const q = sq || squadCurrent;
+  return sqIsLead(q) || (sqIsCoach() && ((q && q.staffEditors) || []).indexOf(sqMe()) !== -1);
+}
 function sqStaffEmails(sq) {
   return ((sq && sq.staff) || []).map(function (x) { return String(x.email || '').toLowerCase(); }).filter(Boolean);
 }
@@ -12309,8 +12309,13 @@ function sqTemplateChoices(sq) {
   return templateSectionsForSport(sq.sport || '').concat([{ label: t('my_templates_group'), list: (myTemplates || []).filter(isMyTemplate) }]);
 }
 
-function sqTemplateSelect(sq, value) {
+function sqTemplateSelect(sq, value, planLabel) {
   const sel = document.createElement('select');
+  if (planLabel) {
+    const po = document.createElement('option');
+    po.value = '__plan'; po.textContent = planLabel;
+    sel.appendChild(po);
+  }
   const rest = document.createElement('option');
   rest.value = ''; rest.textContent = t('sq_rest_day');
   sel.appendChild(rest);
@@ -12512,8 +12517,8 @@ async function openSquad(id, returnScreen) {
   squadTalk = sqIsCoach() ? await sqLoadTalk(id) : [];
   squadPlan = await planFetch(planDocId('squad', id));
   /* لاعبين جداد اتضافوا؟ نحدّث مين يقدر يشوف المخطط */
-  if (squadPlan && sqIsLead(sq) && JSON.stringify((squadPlan.viewers || []).slice().sort()) !== JSON.stringify((sq.members || []).slice().sort())) {
-    setDoc(doc(db, 'seasonPlans', planDocId('squad', id)), { viewers: sq.members || [] }, { merge: true }).catch(function () {});
+  if (squadPlan && sqIsLead(sq) && JSON.stringify((squadPlan.viewers || []).slice().sort()) !== JSON.stringify(sqPlanViewers(sq).slice().sort())) {
+    setDoc(doc(db, 'seasonPlans', planDocId('squad', id)), { viewers: sqPlanViewers(sq) }, { merge: true }).catch(function () {});
   }
   showScreen(sqScreen());
   sqStartLive();
@@ -12553,7 +12558,7 @@ function renderSquad() {
   const tabs = document.getElementById('sq-tabs');
   tabs.innerHTML = '';
   const role = sqRole(sq);
-  const list = role === 'player' ? ['today', 'me'] : (role === 'lead' ? ['today', 'season', 'players', 'talk', 'staff'] : ['today', 'season', 'players', 'talk']);
+  const list = role === 'player' ? ['today', 'groups', 'tests', 'me'] : (role === 'lead' ? ['today', 'season', 'players', 'attendance', 'groups', 'tests', 'reports', 'talk', 'staff'] : ['today', 'season', 'players', 'attendance', 'groups', 'tests', 'reports', 'talk']);
   if (list.indexOf(squadTab) === -1) squadTab = 'today';
   const pendingN = role === 'lead' ? squadTalk.filter(function (x) { return x.kind === 'suggest' && x.status === 'pending'; }).length : 0;
   list.forEach(function (key) {
@@ -12576,9 +12581,957 @@ function renderSquad() {
   if (squadTab === 'today') renderSquadToday(pane);
   else if (squadTab === 'season') renderSquadSeasonEditor(pane);
   else if (squadTab === 'players') renderSquadPlayers(pane);
+  else if (squadTab === 'groups') renderSquadGroups(pane);
+  else if (squadTab === 'attendance') renderSquadAttendance(pane);
+  else if (squadTab === 'reports') renderSquadReports(pane);
+  else if (squadTab === 'tests') renderSquadTests(pane);
   else if (squadTab === 'talk') renderSquadTalk(pane);
   else if (squadTab === 'staff') renderSquadStaff(pane);
   else renderSquadMe(pane);
+}
+
+
+
+/* ============ الحضور والتقييم ============
+   بيتخزّن في نفس وثيقة اللوج: squads/{id}/logs/{date}__{email}
+   attendance: 'present' | 'absent' | 'late'، absenceReason، coachRating (0-10)، coachNote، playerNote
+   ============================================================ */
+const SQ_ABSENCE = [
+  { id: 'permission', ar: 'إذن', en: 'Permission' },
+  { id: 'sick', ar: 'مرض', en: 'Sick' },
+  { id: 'injury', ar: 'إصابة', en: 'Injury' },
+  { id: 'leave', ar: 'إجازة', en: 'Leave' },
+  { id: 'travel', ar: 'سفر / مهمة', en: 'Travel / duty' },
+  { id: 'none', ar: 'بدون عذر', en: 'No excuse' }
+];
+const SQ_COACH_FIELDS = ['attendance', 'absenceReason', 'coachRating', 'coachNote'];
+let squadAttDate = '';
+
+function sqAbsenceName(id) { const a = SQ_ABSENCE.filter(function (x) { return x.id === id; })[0]; return a ? a[lang] : (id || ''); }
+
+function sqAttendanceTotals(email, days) {
+  const logs = squadLogs.filter(function (l) {
+    if (l.email !== email) return false;
+    if (!days) return true;
+    const a = daysAgo(l.date);
+    return a !== null && a >= 0 && a < days;
+  });
+  const out = { present: 0, late: 0, absent: 0, byReason: {}, rated: 0, ratingSum: 0 };
+  logs.forEach(function (l) {
+    if (l.attendance === 'absent') { out.absent++; out.byReason[l.absenceReason || 'none'] = (out.byReason[l.absenceReason || 'none'] || 0) + 1; }
+    else if (l.attendance === 'late') out.late++;
+    else if (l.attendance === 'present' || (Number(l.doneCount) || 0) > 0) out.present++;
+    if (Number(l.coachRating) > 0) { out.rated++; out.ratingSum += Number(l.coachRating); }
+  });
+  out.avgRating = out.rated ? Math.round(out.ratingSum / out.rated * 10) / 10 : null;
+  out.scheduled = out.present + out.late + out.absent;
+  out.pct = out.scheduled ? Math.round((out.present + out.late) / out.scheduled * 100) : null;
+  return out;
+}
+
+function renderSquadAttendance(pane) {
+  const sq = squadCurrent;
+  const date = squadAttDate || todayStamp;
+  const nameOf = function (e) { return (sq.memberNames || {})[e] || e.split('@')[0]; };
+  const top = document.createElement('div');
+  top.className = 'sq-att-top';
+  const dl = document.createElement('label');
+  dl.className = 'plan-field';
+  dl.textContent = sqL('تاريخ الوحدة التدريبية', 'Session date');
+  const di = document.createElement('input');
+  di.type = 'date'; di.value = date; di.max = todayStamp;
+  di.addEventListener('change', function () { squadAttDate = di.value || todayStamp; renderSquad(); });
+  dl.appendChild(di);
+  top.appendChild(dl);
+  const allBtn = document.createElement('button');
+  allBtn.type = 'button'; allBtn.className = 'secondary';
+  allBtn.textContent = sqL('علّم الكل حضر', 'Mark all present');
+  top.appendChild(allBtn);
+  pane.appendChild(top);
+
+  const rowsApi = [];
+  (sq.members || []).forEach(function (email) {
+    const ex = squadLogs.filter(function (l) { return l.email === email && l.date === date; })[0] || {};
+    const state = { att: ex.attendance || (((Number(ex.doneCount) || 0) > 0 || ex.startedAt) ? 'present' : ''), reason: ex.absenceReason || '' };
+    const card = document.createElement('div');
+    card.className = 'sq-att-row';
+    const nm = document.createElement('strong');
+    nm.textContent = nameOf(email);
+    const tot = sqAttendanceTotals(email, 0);
+    const sub = document.createElement('small');
+    sub.textContent = sqL('حضر ', 'Present ') + (tot.present + tot.late) + sqL(' · غاب ', ' · Absent ') + tot.absent + (tot.avgRating !== null ? sqL(' · متوسط التقييم ', ' · Avg rating ') + tot.avgRating + '/10' : '');
+    const seg = document.createElement('div');
+    seg.className = 'sq-att-seg';
+    const reasonSel = document.createElement('select');
+    SQ_ABSENCE.forEach(function (a) { const o = document.createElement('option'); o.value = a.id; o.textContent = a[lang]; reasonSel.appendChild(o); });
+    reasonSel.value = state.reason || 'permission';
+    const paint = function () {
+      seg.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-v') === state.att); });
+      reasonSel.style.display = state.att === 'absent' ? '' : 'none';
+      card.classList.toggle('absent', state.att === 'absent');
+    };
+    [['present', sqL('حضر', 'Present')], ['late', sqL('متأخر', 'Late')], ['absent', sqL('غاب', 'Absent')]].forEach(function (o) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('data-v', o[0]); b.textContent = o[1];
+      b.addEventListener('click', function () { state.att = o[0]; paint(); });
+      seg.appendChild(b);
+    });
+    const num = function (label, val, step) {
+      const l = document.createElement('label');
+      l.className = 'sq-field';
+      const sp = document.createElement('span'); sp.textContent = label;
+      const inp = document.createElement('input');
+      inp.type = 'number'; inp.inputMode = 'decimal'; if (step) inp.step = step;
+      inp.value = val || '';
+      l.append(sp, inp);
+      return { l: l, inp: inp };
+    };
+    const rating = num(sqL('التقييم (من 10)', 'Rating (of 10)'), ex.coachRating, '0.5');
+    rating.inp.min = '0'; rating.inp.max = '10';
+    const mins = num(sqL('دقايق', 'Minutes'), ex.minutes);
+    const kcal = num(sqL('حرق (سعر)', 'Burn (kcal)'), ex.kcal);
+    const hr = num(sqL('نبض', 'HR'), ex.hr);
+    const rpe = num('RPE', ex.rpe);
+    const grid = document.createElement('div');
+    grid.className = 'sq-att-grid';
+    grid.append(rating.l, rpe.l, mins.l, kcal.l, hr.l);
+    const note = document.createElement('textarea');
+    note.rows = 2; note.placeholder = sqL('ملاحظة المدرب عن اللاعب في الوحدة دي', 'Coach note for this session'); note.value = ex.coachNote || '';
+    const pn = document.createElement('p');
+    pn.className = 'hint-text';
+    if (ex.playerNote) pn.textContent = sqL('ملاحظة اللاعب: ', 'Player note: ') + ex.playerNote; else pn.style.display = 'none';
+    const save = document.createElement('button');
+    save.type = 'button'; save.textContent = sqL('حفظ', 'Save');
+    const msg = document.createElement('span');
+    msg.className = 'sq-att-msg';
+    const doSave = async function () {
+      if (!state.att) { msg.textContent = sqL('اختار حضر أو غاب', 'Pick present or absent'); return false; }
+      const r = Math.min(10, Math.max(0, Number(rating.inp.value) || 0));
+      const rpeN = Math.min(10, Math.max(0, Number(rpe.inp.value) || 0));
+      const minN = Math.min(600, Math.max(0, Number(mins.inp.value) || 0));
+      const row = {
+        email: email, name: nameOf(email), date: date,
+        attendance: state.att, absenceReason: state.att === 'absent' ? reasonSel.value : '',
+        coachRating: state.att === 'absent' ? 0 : r, coachNote: note.value.trim().slice(0, 500),
+        rpe: state.att === 'absent' ? '' : rpe.inp.value, minutes: state.att === 'absent' ? '' : mins.inp.value,
+        kcal: state.att === 'absent' ? '' : kcal.inp.value, hr: state.att === 'absent' ? '' : hr.inp.value,
+        load: state.att === 'absent' ? 0 : Math.round(rpeN * minN),
+        attendanceBy: sqMe(), updatedAt: new Date().toISOString()
+      };
+      if (!ex.total && !ex.doneCount) { row.doneCount = 0; row.total = 1; row.coachOnly = true; }
+      try {
+        await setDoc(doc(db, 'squads', sq.id, 'logs', date + '__' + email), row, { merge: true });
+        const merged = Object.assign({}, ex, row);
+        squadLogs = squadLogs.filter(function (l) { return !(l.email === email && l.date === date); }).concat([merged]);
+        msg.textContent = sqL('اتحفظ ✓', 'Saved ✓');
+        return true;
+      } catch (error) { msg.textContent = t('problem') + error.message; return false; }
+    };
+    save.addEventListener('click', doSave);
+    rowsApi.push({ state: state, paint: paint, save: doSave });
+    const ci = document.createElement('p');
+    ci.className = 'hint-text';
+    if (ex.startedAt) {
+      const hm = function (iso) { const d = new Date(iso); return isNaN(d.getTime()) ? '' : d.toLocaleTimeString(lang === 'ar' ? 'ar-EG' : 'en-GB', { hour: '2-digit', minute: '2-digit' }); };
+      ci.textContent = sqL('اللاعب بدأ ', 'Player started ') + hm(ex.startedAt) + (ex.finishedAt ? sqL(' وخلّص ', ' and finished ') + hm(ex.finishedAt) : sqL(' ولسه ما خلّصش', ' (not finished)')) + (ex.attendance ? '' : sqL(' — في انتظار تأكيدك', ' — awaiting your confirmation'));
+    } else ci.style.display = 'none';
+    card.append(nm, sub, ci, seg, reasonSel, grid, note, pn, save, msg);
+    paint();
+    pane.appendChild(card);
+  });
+  allBtn.addEventListener('click', function () { rowsApi.forEach(function (r) { if (!r.state.att) { r.state.att = 'present'; r.paint(); } }); });
+  const hint = document.createElement('p');
+  hint.className = 'hint-text';
+  hint.textContent = sqL('التقييم والنبض والحرق بتتسجل هنا للاعب، واللاعب كمان يقدر يسجّل بنفسه من تبويب النهارده. كل ده بيدخل في التقارير والترتيب.', 'Rating, HR and burn are logged here; players can also log their own from Today. All feeds reports and rankings.');
+  pane.appendChild(hint);
+}
+
+/* ملخص حضور لاعب (يظهر في إنجازاتي) */
+function sqAttendanceSummary(email) {
+  const box = document.createElement('div');
+  box.className = 'sq-comp';
+  const h = document.createElement('h3');
+  h.textContent = sqL('حضوري وتقييمي', 'My attendance & rating');
+  box.appendChild(h);
+  const tot = sqAttendanceTotals(email, 0);
+  const line = document.createElement('p');
+  line.textContent = sqL('حضرت ', 'Present ') + (tot.present + tot.late) + sqL(' وغبت ', ', absent ') + tot.absent + (tot.pct !== null ? ' (' + tot.pct + '%)' : '') + (tot.avgRating !== null ? sqL(' · متوسط تقييمك ', ' · Avg rating ') + tot.avgRating + '/10' : '');
+  box.appendChild(line);
+  const reasons = Object.keys(tot.byReason).map(function (k) { return sqAbsenceName(k) + ' ' + tot.byReason[k]; }).join(' · ');
+  if (reasons) { const rp = document.createElement('p'); rp.className = 'hint-text'; rp.textContent = sqL('أسباب الغياب: ', 'Absence reasons: ') + reasons; box.appendChild(rp); }
+  squadLogs.filter(function (l) { return l.email === email && l.coachNote; }).sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); }).slice(0, 5).forEach(function (l) {
+    const p = document.createElement('p');
+    p.className = 'sq-comp-mem';
+    p.textContent = l.date + ' — ' + l.coachNote + (Number(l.coachRating) ? ' (' + l.coachRating + '/10)' : '');
+    box.appendChild(p);
+  });
+  return box;
+}
+
+
+/* ============ تقارير الفريق + الترتيب (طباعة / Word / Excel) ============ */
+let squadRepScope = 'team';
+let squadRepTarget = '';
+let squadRepDays = 0;
+let squadRepFrom = '';
+let squadRepTo = '';
+
+function sqRepRange() {
+  if (squadRepDays === -1 && squadRepFrom) return { from: squadRepFrom, to: squadRepTo || todayStamp };
+  if (squadRepDays > 0) return { from: dateStamp(planAddDays(todayStamp, -(squadRepDays - 1))), to: todayStamp };
+  return { from: '', to: todayStamp };
+}
+function sqRepLogs(email, r) {
+  return squadLogs.filter(function (l) { return l.email === email && (!r.from || l.date >= r.from) && l.date <= r.to; })
+    .sort(function (a, b) { return String(a.date).localeCompare(String(b.date)); });
+}
+function sqLogStatus(l) {
+  if (l.attendance === 'absent') return 'absent';
+  if (l.attendance === 'late') return 'late';
+  if (l.attendance === 'present' || (Number(l.doneCount) || 0) > 0 || l.startedAt) return 'present';
+  return 'none';
+}
+function sqRepStatusName(st) { return { present: sqL('حضر', 'Present'), late: sqL('متأخر', 'Late'), absent: sqL('غاب', 'Absent'), none: sqL('غير مسجل', 'Not recorded') }[st]; }
+
+/* إحصائيات كل لاعب في الفترة: التواريخ اللي فيها وحدة = أي تاريخ فيه سجل لأي لاعب */
+function sqRepStats(emails, r) {
+  const dates = {};
+  squadLogs.forEach(function (l) { if ((!r.from || l.date >= r.from) && l.date <= r.to && !(l.testOnly && sqLogStatus(l) === 'none') && (sqLogStatus(l) !== 'none' || l.coachOnly === false || Number(l.total) > 0)) dates[l.date] = true; });
+  const nDates = Object.keys(dates).length;
+  const rows = emails.map(function (email) {
+    const logs = sqRepLogs(email, r);
+    let present = 0, late = 0, absent = 0, mins = 0, kcal = 0, load = 0, rpeS = 0, rpeN = 0, hrS = 0, hrN = 0, rS = 0, rN = 0, cS = 0, cN = 0;
+    const reasons = {};
+    logs.forEach(function (l) {
+      const st = sqLogStatus(l);
+      if (st === 'absent') { absent++; reasons[l.absenceReason || 'none'] = (reasons[l.absenceReason || 'none'] || 0) + 1; return; }
+      if (st === 'late') late++; else if (st === 'present') present++;
+      mins += Number(l.minutes) || 0; kcal += Number(l.kcal) || 0; load += Number(l.load) || 0;
+      if (Number(l.rpe) > 0) { rpeS += Number(l.rpe); rpeN++; }
+      if (Number(l.hr) > 0) { hrS += Number(l.hr); hrN++; }
+      if (Number(l.coachRating) > 0) { rS += Number(l.coachRating); rN++; }
+      if (!l.coachOnly && Number(l.total) > 0) { cS += (Number(l.doneCount) || 0) / Number(l.total); cN++; }
+    });
+    const attended = present + late;
+    const attPct = nDates ? Math.round(attended / nDates * 100) : 0;
+    const completion = cN ? Math.round(cS / cN * 100) : 0;
+    const avgRating = rN ? Math.round(rS / rN * 10) / 10 : null;
+    const perf = avgRating !== null ? Math.round(avgRating * 10) : completion;
+    return {
+      email: email, logs: logs, attended: attended, late: late, absent: absent, unrecorded: Math.max(0, nDates - logs.filter(function (l) { return sqLogStatus(l) !== 'none'; }).length),
+      reasons: reasons, hours: Math.round(mins / 6) / 10, kcal: Math.round(kcal), load: Math.round(load),
+      avgRpe: rpeN ? Math.round(rpeS / rpeN * 10) / 10 : null, avgHr: hrN ? Math.round(hrS / hrN) : null,
+      attPct: attPct, completion: completion, avgRating: avgRating, perf: perf, overall: Math.round(attPct * 0.4 + perf * 0.6)
+    };
+  });
+  return { dates: nDates, rows: rows };
+}
+function sqRanked(rows, key) {
+  const sorted = rows.slice().sort(function (a, b) { return b[key] - a[key] || b.overall - a.overall; });
+  const rank = {};
+  sorted.forEach(function (r, i) { rank[r.email] = (i > 0 && sorted[i - 1][key] === r[key]) ? rank[sorted[i - 1].email] : i + 1; });
+  return { sorted: sorted, rank: rank };
+}
+
+function sqRepEmails() {
+  const sq = squadCurrent;
+  if (squadRepScope === 'group') { const g = sqGroups(sq).filter(function (x) { return x.id === squadRepTarget; })[0]; return g ? (g.members || []).slice() : []; }
+  if (squadRepScope === 'player') return squadRepTarget ? [squadRepTarget] : [];
+  return (sq.members || []).slice();
+}
+
+function sqBuildReportDoc() {
+  const sq = squadCurrent;
+  const r = sqRepRange();
+  const emails = sqRepEmails();
+  const nameOf = function (e) { return (sq.memberNames || {})[e] || e.split('@')[0]; };
+  const data = sqRepStats(emails, r);
+  const ar = lang === 'ar';
+  const scopeName = squadRepScope === 'player' ? nameOf(squadRepTarget) : (squadRepScope === 'group' ? ((sqGroups(sq).filter(function (x) { return x.id === squadRepTarget; })[0] || {}).name || '') : sq.name);
+  const period = (r.from || sqL('من البداية', 'From start')) + ' → ' + r.to;
+  const doc = { title: sq.name + ' — ' + (squadRepScope === 'player' ? sqL('تقرير لاعب: ', 'Player report: ') : (squadRepScope === 'group' ? sqL('تقرير مجموعة: ', 'Group report: ') : sqL('تقرير الفريق', 'Team report'))) + (squadRepScope === 'team' ? '' : scopeName), subtitle: period, lang: lang, filename: sq.name + '_' + scopeName + '_report', blocks: [] };
+  const b = doc.blocks;
+  const rankA = sqRanked(data.rows, 'attPct'), rankP = sqRanked(data.rows, 'perf'), rankO = sqRanked(data.rows, 'overall');
+  const hdr = [ar ? 'اللاعب' : 'Player', ar ? 'حضور' : 'Attended', ar ? 'غياب' : 'Absent', ar ? 'نسبة الحضور %' : 'Attendance %', ar ? 'ساعات التدريب' : 'Hours', ar ? 'الحمل' : 'Load', ar ? 'متوسط RPE' : 'Avg RPE', ar ? 'نبض متوسط' : 'Avg HR', ar ? 'حرق (سعر)' : 'Burn kcal', ar ? 'إنجاز التمارين %' : 'Completion %', ar ? 'متوسط التقييم' : 'Avg rating'];
+  const rowOf = function (x) { return [nameOf(x.email), x.attended, x.absent, x.attPct, x.hours, x.load, x.avgRpe === null ? '—' : x.avgRpe, x.avgHr === null ? '—' : x.avgHr, x.kcal, x.completion, x.avgRating === null ? '—' : x.avgRating]; };
+  b.push({ t: 'kv', rows: [
+    [ar ? 'الفريق' : 'Team', sq.name], [ar ? 'النطاق' : 'Scope', scopeName], [ar ? 'الفترة' : 'Period', period],
+    [ar ? 'عدد الوحدات المسجلة' : 'Recorded sessions', data.dates], [ar ? 'عدد اللاعبين' : 'Players', emails.length]
+  ] });
+  if (squadRepScope === 'player' && data.rows[0]) {
+    const x = data.rows[0];
+    b.push({ t: 'h', level: 2, text: ar ? 'الإجمالي' : 'Totals' });
+    b.push({ t: 'table', head: hdr.slice(1), rows: [rowOf(x).slice(1)] });
+    const rs = Object.keys(x.reasons).map(function (k) { return [sqAbsenceName(k), x.reasons[k]]; });
+    if (rs.length) b.push({ t: 'table', title: ar ? 'أسباب الغياب' : 'Absence reasons', head: [ar ? 'السبب' : 'Reason', ar ? 'المرات' : 'Times'], rows: rs });
+    const act = x.logs.filter(function (l) { return sqLogStatus(l) !== 'absent' && sqLogStatus(l) !== 'none'; });
+    if (act.length > 1) {
+      b.push({ t: 'chart', kind: 'bars', title: ar ? 'الحمل التدريبي لكل وحدة' : 'Training load per session', labels: act.map(function (l) { return String(l.date).slice(5); }), series: [{ name: ar ? 'الحمل' : 'Load', color: '#0b6b5c', values: act.map(function (l) { return Number(l.load) || 0; }) }] });
+      const rated = act.filter(function (l) { return Number(l.coachRating) > 0; });
+      if (rated.length > 1) b.push({ t: 'chart', kind: 'line', title: ar ? 'منحنى التقييم' : 'Rating curve', max: 10, labels: rated.map(function (l) { return String(l.date).slice(5); }), series: [{ name: ar ? 'التقييم' : 'Rating', color: '#c0392b', values: rated.map(function (l) { return Number(l.coachRating); }) }] });
+      const hrl = act.filter(function (l) { return Number(l.hr) > 0; });
+      if (hrl.length > 1) b.push({ t: 'chart', kind: 'line', title: ar ? 'منحنى النبض' : 'Heart-rate curve', labels: hrl.map(function (l) { return String(l.date).slice(5); }), series: [{ name: ar ? 'النبض' : 'HR', color: '#2a6fdb', values: hrl.map(function (l) { return Number(l.hr); }) }] });
+    }
+    b.push({ t: 'table', title: ar ? 'كل وحدة تدريبية' : 'Every session',
+      head: [ar ? 'التاريخ' : 'Date', ar ? 'الحالة' : 'Status', ar ? 'السبب' : 'Reason', ar ? 'إنجاز %' : 'Done %', 'RPE', ar ? 'دقايق' : 'Min', ar ? 'حرق' : 'kcal', ar ? 'نبض' : 'HR', ar ? 'الحمل' : 'Load', ar ? 'التقييم' : 'Rating', ar ? 'ملاحظة المدرب' : 'Coach note', ar ? 'ملاحظة اللاعب' : 'Player note'],
+      rows: x.logs.map(function (l) { const st = sqLogStatus(l); return [l.date, sqRepStatusName(st), st === 'absent' ? sqAbsenceName(l.absenceReason) : '', (!l.coachOnly && Number(l.total) > 0) ? Math.round((Number(l.doneCount) || 0) / Number(l.total) * 100) : '', l.rpe || '', l.minutes || '', l.kcal || '', l.hr || '', l.load || '', Number(l.coachRating) > 0 ? l.coachRating : '', l.coachNote || '', l.playerNote || '']; }),
+      colors: x.logs.map(function (l) { return sqLogStatus(l) === 'absent' ? ['', '#fdd', '#fdd', '', '', '', '', '', '', '', '', ''] : []; }) });
+    /* نتايج الاختبارات في الفترة */
+    const trows = [], tcols = [];
+    sqTests(sq).forEach(function (tt) {
+      const list = (sqTestResults(tt.id)[squadRepTarget] || []).filter(function (q) { return (!r.from || q.date >= r.from) && q.date <= r.to; });
+      if (!list.length) return;
+      let best = list[0].v;
+      list.forEach(function (q) { if (sqTestBetter(tt, q.v, best)) best = q.v; });
+      const first = list[0].v, last = list[list.length - 1].v;
+      const lv = sqTestLevel(tt, best);
+      trows.push([sqTestName(tt), tt.unit || '', first, last, best, Math.round((last - first) * 100) / 100, list.length, lv[lang]]);
+      tcols.push(['', '', '', '', '', '', '', lv.color + '55']);
+      if (list.length > 1) b.push({ t: 'chart', kind: 'line', title: (ar ? 'تطور: ' : 'Progress: ') + sqTestName(tt) + (tt.unit ? ' (' + tt.unit + ')' : ''), labels: list.map(function (q) { return String(q.date).slice(5); }), series: [{ name: sqTestName(tt), color: '#0b6b5c', values: list.map(function (q) { return q.v; }) }] });
+    });
+    if (trows.length) b.push({ t: 'table', title: ar ? 'نتايج الاختبارات' : 'Test results', head: [ar ? 'الاختبار' : 'Test', ar ? 'الوحدة' : 'Unit', ar ? 'الأول' : 'First', ar ? 'الأخير' : 'Latest', ar ? 'الأفضل' : 'Best', ar ? 'التغيّر' : 'Change', ar ? 'المرات' : 'Times', ar ? 'المستوى' : 'Level'], rows: trows, colors: tcols });
+  } else {
+    b.push({ t: 'h', level: 2, text: ar ? 'ملخص اللاعبين' : 'Players summary' });
+    b.push({ t: 'table', head: ['#'].concat(hdr), rows: rankO.sorted.map(function (x) { return [rankO.rank[x.email]].concat(rowOf(x)); }) });
+    b.push({ t: 'chart', kind: 'bars', title: ar ? 'نسبة الحضور %' : 'Attendance %', max: 100, labels: rankA.sorted.map(function (x) { return nameOf(x.email); }), series: [{ name: ar ? 'الحضور %' : 'Attendance %', color: '#0b6b5c', values: rankA.sorted.map(function (x) { return x.attPct; }) }] });
+    [[ar ? 'ترتيب الحضور والغياب' : 'Attendance ranking', rankA, 'attPct', ar ? 'نسبة الحضور %' : 'Attendance %'], [ar ? 'ترتيب الأداء' : 'Performance ranking', rankP, 'perf', ar ? 'درجة الأداء' : 'Performance'], [ar ? 'الترتيب العام' : 'Overall ranking', rankO, 'overall', ar ? 'الدرجة العامة' : 'Overall']].forEach(function (g) {
+      b.push({ t: 'table', title: g[0], head: ['#', ar ? 'اللاعب' : 'Player', g[3], ar ? 'حضور / غياب' : 'Present / Absent'],
+        rows: g[1].sorted.map(function (x) { return [g[1].rank[x.email], nameOf(x.email), x[g[2]], x.attended + ' / ' + x.absent]; }),
+        colors: g[1].sorted.map(function (x) { const k = g[1].rank[x.email]; return [k === 1 ? '#ffe9a8' : (k === 2 ? '#e6e9ee' : (k === 3 ? '#f0d3b8' : '')), '', '', '']; }) });
+    });
+    b.push({ t: 'p', text: ar ? 'طريقة الحساب: درجة الأداء = متوسط تقييم المدرب × 10 (ولو مفيش تقييم فنسبة إنجاز التمارين). الدرجة العامة = 40% حضور + 60% أداء.' : 'Method: performance = average coach rating × 10 (completion % if unrated). Overall = 40% attendance + 60% performance.' });
+    const notes = [];
+    data.rows.forEach(function (x) { x.logs.forEach(function (l) { if (l.coachNote || l.playerNote) notes.push([l.date, nameOf(x.email), l.coachNote || '', l.playerNote || '']); }); });
+    if (notes.length) b.push({ t: 'table', title: ar ? 'الملاحظات' : 'Notes', head: [ar ? 'التاريخ' : 'Date', ar ? 'اللاعب' : 'Player', ar ? 'المدرب' : 'Coach', ar ? 'اللاعب' : 'Player'], rows: notes.sort(function (a, c) { return String(c[0]).localeCompare(String(a[0])); }) });
+  }
+  return doc;
+}
+
+function renderSquadReports(pane) {
+  const sq = squadCurrent;
+  const nameOf = function (e) { return (sq.memberNames || {})[e] || e.split('@')[0]; };
+  const box = document.createElement('div');
+  box.className = 'sq-comp';
+  const h = document.createElement('h3');
+  h.textContent = sqL('التقارير والترتيب', 'Reports & rankings');
+  box.appendChild(h);
+  const mk = function (label, opts, val, cb) {
+    const l = document.createElement('label'); l.className = 'plan-field'; l.textContent = label;
+    const sel = document.createElement('select');
+    opts.forEach(function (o) { const op = document.createElement('option'); op.value = String(o[0]); op.textContent = o[1]; sel.appendChild(op); });
+    sel.value = String(val); sel.addEventListener('change', function () { cb(sel.value); });
+    l.appendChild(sel); return l;
+  };
+  box.appendChild(mk(sqL('التقرير عن', 'Report on'), [['team', sqL('الفريق كله', 'Whole team')], ['group', sqL('مجموعة', 'A group')], ['player', sqL('لاعب', 'A player')]], squadRepScope, function (v) { squadRepScope = v; squadRepTarget = ''; renderSquad(); }));
+  if (squadRepScope === 'group') {
+    const opts = sqGroups(sq).map(function (g) { return [g.id, g.name]; });
+    if (!squadRepTarget && opts.length) squadRepTarget = opts[0][0];
+    box.appendChild(opts.length ? mk(sqL('المجموعة', 'Group'), opts, squadRepTarget, function (v) { squadRepTarget = v; renderSquad(); }) : Object.assign(document.createElement('p'), { className: 'hint-text', textContent: sqL('مفيش مجموعات لسه.', 'No groups yet.') }));
+  } else if (squadRepScope === 'player') {
+    const opts = (sq.members || []).map(function (e) { return [e, nameOf(e)]; });
+    if (!squadRepTarget && opts.length) squadRepTarget = opts[0][0];
+    box.appendChild(mk(sqL('اللاعب', 'Player'), opts, squadRepTarget, function (v) { squadRepTarget = v; renderSquad(); }));
+  }
+  box.appendChild(mk(sqL('الفترة', 'Period'), [[0, sqL('من بداية الموسم', 'Since season start')], [7, sqL('آخر 7 أيام', 'Last 7 days')], [28, sqL('آخر 28 يوم', 'Last 28 days')], [90, sqL('آخر 3 شهور', 'Last 3 months')], [-1, sqL('من تاريخ لتاريخ', 'Custom range')]], squadRepDays, function (v) { squadRepDays = Number(v); renderSquad(); }));
+  if (squadRepDays === -1) {
+    const g = document.createElement('div'); g.className = 'plan-grid2';
+    [[sqL('من', 'From'), 'squadRepFrom'], [sqL('إلى', 'To'), 'squadRepTo']].forEach(function (f) {
+      const l = document.createElement('label'); l.className = 'plan-field'; l.textContent = f[0];
+      const i = document.createElement('input'); i.type = 'date'; i.value = f[1] === 'squadRepFrom' ? squadRepFrom : squadRepTo;
+      i.addEventListener('change', function () { if (f[1] === 'squadRepFrom') squadRepFrom = i.value; else squadRepTo = i.value; renderSquad(); });
+      l.appendChild(i); g.appendChild(l);
+    });
+    box.appendChild(g);
+  }
+  const go = document.createElement('button');
+  go.type = 'button'; go.textContent = sqL('معاينة وطباعة / Word / Excel', 'Preview & print / Word / Excel');
+  go.addEventListener('click', function () { if (window.ADAM_PRINT) window.ADAM_PRINT.open(sqBuildReportDoc()); });
+  box.appendChild(go);
+  pane.appendChild(box);
+
+  /* الترتيب على الشاشة */
+  const data = sqRepStats(sqRepEmails(), sqRepRange());
+  if (!data.rows.length) return;
+  [[sqL('الترتيب العام', 'Overall ranking'), 'overall', '/100'], [sqL('ترتيب الحضور', 'Attendance ranking'), 'attPct', '%'], [sqL('ترتيب الأداء', 'Performance ranking'), 'perf', '/100']].forEach(function (g) {
+    const rk = sqRanked(data.rows, g[1]);
+    const card = document.createElement('div'); card.className = 'sq-comp';
+    const hh = document.createElement('h3'); hh.textContent = g[0]; card.appendChild(hh);
+    rk.sorted.forEach(function (x) {
+      const k = rk.rank[x.email];
+      const row = document.createElement('div'); row.className = 'sq-comp-mem';
+      row.textContent = (k === 1 ? '🥇 ' : (k === 2 ? '🥈 ' : (k === 3 ? '🥉 ' : k + '. '))) + nameOf(x.email) + ' — ' + x[g[1]] + g[2] + sqL(' · حضر ', ' · present ') + x.attended + sqL(' / غاب ', ' / absent ') + x.absent;
+      card.appendChild(row);
+    });
+    pane.appendChild(card);
+  });
+}
+
+
+/* ============ اختبارات الفريق: مسطرة + نتايج + ترتيب + طباعة ============
+   squads/{id}.tests: [{ id, name, unit, better: 'high'|'low', min, max }]
+   النتيجة بتتخزن في سجل اللاعب: logs/{date}__{email}.tests = { testId: value }
+   ============================================================ */
+const SQ_TEST_TEMPLATES = [
+  { name: { ar: 'عدو 30 متر', en: '30 m sprint' }, unit: 's', better: 'low', min: 3.6, max: 5.6 },
+  { name: { ar: 'عدو 60 متر', en: '60 m sprint' }, unit: 's', better: 'low', min: 6.8, max: 9.5 },
+  { name: { ar: 'عدو 400 متر', en: '400 m run' }, unit: 's', better: 'low', min: 48, max: 85 },
+  { name: { ar: 'جري كوبر 12 دقيقة', en: 'Cooper 12-min run' }, unit: 'm', better: 'high', min: 1600, max: 3200 },
+  { name: { ar: 'الوثب العريض من الثبات', en: 'Standing long jump' }, unit: 'cm', better: 'high', min: 150, max: 300 },
+  { name: { ar: 'الوثب العمودي', en: 'Vertical jump' }, unit: 'cm', better: 'high', min: 25, max: 75 },
+  { name: { ar: 'ضغط (دقيقة)', en: 'Push-ups (1 min)' }, unit: 'reps', better: 'high', min: 10, max: 70 },
+  { name: { ar: 'بطن (دقيقة)', en: 'Sit-ups (1 min)' }, unit: 'reps', better: 'high', min: 15, max: 60 },
+  { name: { ar: 'بلانك', en: 'Plank' }, unit: 's', better: 'high', min: 30, max: 240 },
+  { name: { ar: 'سكوات 1RM', en: 'Back squat 1RM' }, unit: 'kg', better: 'high', min: 40, max: 220 },
+  { name: { ar: 'اختبار بيب (مستوى)', en: 'Beep test (level)' }, unit: 'lvl', better: 'high', min: 4, max: 14 },
+  { name: { ar: 'ظهر الاستطالة (Sit & reach)', en: 'Sit & reach' }, unit: 'cm', better: 'high', min: -5, max: 35 }
+];
+const SQ_TEST_LEVELS = [
+  { ar: 'ضعيف', en: 'Weak', color: '#ff5a5f' }, { ar: 'مقبول', en: 'Fair', color: '#ff9f43' }, { ar: 'جيد', en: 'Good', color: '#ffc94a' },
+  { ar: 'جيد جداً', en: 'Very good', color: '#8ddb5c' }, { ar: 'ممتاز', en: 'Excellent', color: '#2ee07a' }
+];
+let sqPaintRun = null;
+let squadTestId = '';
+let squadTestDate = '';
+
+function sqTests(sq) { return Array.isArray(sq && sq.tests) ? sq.tests : []; }
+function sqTestName(tt) { return pv(tt.name) || tt.id; }
+function sqTestPos(tt, v) {
+  const mn = Number(tt.min), mx = Number(tt.max);
+  if (!(mx > mn)) return 0;
+  let p = (Number(v) - mn) / (mx - mn);
+  p = Math.max(0, Math.min(1, p));
+  return tt.better === 'low' ? 1 - p : p;
+}
+function sqTestLevel(tt, v) { return SQ_TEST_LEVELS[Math.min(4, Math.floor(sqTestPos(tt, v) * 5))]; }
+function sqTestBetter(tt, a, b) { return tt.better === 'low' ? a < b : a > b; }
+
+/* كل نتايج اختبار: email → [{date, v}] بالترتيب الزمني */
+function sqTestResults(testId) {
+  const out = {};
+  squadLogs.forEach(function (l) {
+    if (!l.tests || l.tests[testId] === undefined || l.tests[testId] === '' || l.tests[testId] === null) return;
+    const v = Number(l.tests[testId]);
+    if (!isFinite(v)) return;
+    (out[l.email] = out[l.email] || []).push({ date: l.date, v: v });
+  });
+  Object.keys(out).forEach(function (e) { out[e].sort(function (a, b) { return String(a.date).localeCompare(String(b.date)); }); });
+  return out;
+}
+function sqTestBoard(tt) {
+  const res = sqTestResults(tt.id);
+  const rows = Object.keys(res).filter(function (e) { return (squadCurrent.members || []).indexOf(e) !== -1; }).map(function (e) {
+    const list = res[e];
+    let best = list[0].v;
+    list.forEach(function (x) { if (sqTestBetter(tt, x.v, best)) best = x.v; });
+    const last = list[list.length - 1];
+    const prev = list.length > 1 ? list[list.length - 2].v : null;
+    return { email: e, best: best, last: last.v, lastDate: last.date, prev: prev, delta: prev === null ? null : Math.round((last.v - prev) * 100) / 100, n: list.length, pos: sqTestPos(tt, best) };
+  }).sort(function (a, b) { return sqTestBetter(tt, a.best, b.best) ? -1 : (a.best === b.best ? 0 : 1); });
+  rows.forEach(function (r, i) { r.rank = (i > 0 && rows[i - 1].best === r.best) ? rows[i - 1].rank : i + 1; });
+  return rows;
+}
+async function sqSaveTestsData(list) {
+  const sq = squadCurrent;
+  try {
+    await setDoc(doc(db, 'squads', sq.id), { tests: list }, { merge: true });
+    sq.tests = list;
+    return true;
+  } catch (error) {
+    const m = document.getElementById('squad-msg');
+    if (m) m.textContent = t('problem') + error.message;
+    return false;
+  }
+}
+function sqRulerEl(tt, value) {
+  const wrap = document.createElement('div');
+  wrap.className = 'sq-ruler';
+  SQ_TEST_LEVELS.forEach(function (lv) { const seg = document.createElement('i'); seg.style.background = lv.color; wrap.appendChild(seg); });
+  if (value !== undefined && value !== null) {
+    const pin = document.createElement('b');
+    const pos = sqTestPos(tt, value);
+    pin.style.insetInlineStart = (pos * 100) + '%';
+    wrap.appendChild(pin);
+  }
+  return wrap;
+}
+
+function renderSquadTests(pane) {
+  const sq = squadCurrent;
+  const canEdit = sqIsCoach();
+  const tests = sqTests(sq);
+  const nameOf = function (e) { return (sq.memberNames || {})[e] || e.split('@')[0]; };
+  if (!squadTestId || !tests.some(function (x) { return x.id === squadTestId; })) squadTestId = tests[0] ? tests[0].id : '';
+  const cur = tests.filter(function (x) { return x.id === squadTestId; })[0];
+
+  const head = document.createElement('div');
+  head.className = 'sq-comp';
+  const h = document.createElement('h3');
+  h.textContent = sqL('اختبارات الفريق', 'Squad tests');
+  head.appendChild(h);
+  if (!tests.length) {
+    const p = document.createElement('p'); p.className = 'hint-text';
+    p.textContent = canEdit ? sqL('لسه مفيش اختبارات. ضيف اختبار جاهز أو اعمل واحد بمسطرتك.', 'No tests yet. Add a ready-made test or build your own ruler.') : sqL('لسه مفيش اختبارات.', 'No tests yet.');
+    head.appendChild(p);
+  } else {
+    const sel = document.createElement('select');
+    tests.forEach(function (x) { const o = document.createElement('option'); o.value = x.id; o.textContent = sqTestName(x) + ' (' + x.unit + ')'; sel.appendChild(o); });
+    sel.value = squadTestId;
+    sel.addEventListener('change', function () { squadTestId = sel.value; renderSquad(); });
+    head.appendChild(sel);
+  }
+  pane.appendChild(head);
+
+  /* النتايج والترتيب (الكل يشوف — تحدّي) */
+  if (cur) {
+    const board = document.createElement('div');
+    board.className = 'sq-comp';
+    const bh = document.createElement('h3');
+    bh.textContent = sqL('ترتيب ', 'Ranking · ') + sqTestName(cur);
+    board.appendChild(bh);
+    const rl = document.createElement('p'); rl.className = 'hint-text';
+    rl.textContent = sqL('المسطرة: من ', 'Ruler: from ') + cur.min + sqL(' إلى ', ' to ') + cur.max + ' ' + cur.unit + ' — ' + (cur.better === 'low' ? sqL('الأقل أحسن', 'lower is better') : sqL('الأعلى أحسن', 'higher is better'));
+    board.appendChild(rl);
+    const rows = sqTestBoard(cur);
+    if (!rows.length) { const p = document.createElement('p'); p.className = 'hint-text'; p.textContent = sqL('لسه مفيش نتايج.', 'No results yet.'); board.appendChild(p); }
+    rows.forEach(function (r) {
+      const row = document.createElement('div');
+      row.className = 'sq-test-row' + (r.email === sqMe() ? ' me' : '');
+      const top = document.createElement('div'); top.className = 'sq-comp-top';
+      const rk = document.createElement('span'); rk.className = 'sq-rank'; rk.textContent = r.rank === 1 ? '🥇' : (r.rank === 2 ? '🥈' : (r.rank === 3 ? '🥉' : String(r.rank)));
+      const nm = document.createElement('strong'); nm.textContent = nameOf(r.email);
+      const val = document.createElement('span'); val.className = 'sq-comp-val'; val.textContent = r.best + ' ' + cur.unit;
+      top.append(rk, nm, val);
+      const lvl = sqTestLevel(cur, r.best);
+      const sub = document.createElement('small');
+      sub.textContent = lvl[lang] + sqL(' · آخر نتيجة ', ' · last ') + r.last + (r.delta !== null ? ' (' + (r.delta > 0 ? '+' : '') + r.delta + ')' : '') + ' · ' + r.n + sqL(' محاولة', ' attempts');
+      sub.style.color = lvl.color;
+      row.append(top, sub, sqRulerEl(cur, r.best));
+      board.appendChild(row);
+    });
+    pane.appendChild(board);
+  }
+
+  if (!canEdit) return;
+
+  /* تسجيل نتايج */
+  if (cur) {
+    const rec = document.createElement('div');
+    rec.className = 'sq-comp';
+    const rh = document.createElement('h3'); rh.textContent = sqL('سجّل نتايج ', 'Record results · ') + sqTestName(cur); rec.appendChild(rh);
+    const dl = document.createElement('label'); dl.className = 'plan-field'; dl.textContent = sqL('تاريخ الاختبار', 'Test date');
+    const di = document.createElement('input'); di.type = 'date'; di.max = todayStamp; di.value = squadTestDate || todayStamp;
+    di.addEventListener('change', function () { squadTestDate = di.value || todayStamp; renderSquad(); });
+    dl.appendChild(di); rec.appendChild(dl);
+    const date = squadTestDate || todayStamp;
+    const inputs = {};
+    (sq.members || []).forEach(function (e) {
+      const ex = squadLogs.filter(function (l) { return l.email === e && l.date === date; })[0];
+      const row = document.createElement('label'); row.className = 'sq-test-in';
+      const sp = document.createElement('span'); sp.textContent = nameOf(e);
+      const inp = document.createElement('input'); inp.type = 'number'; inp.inputMode = 'decimal'; inp.step = 'any';
+      inp.value = ex && ex.tests && ex.tests[cur.id] !== undefined ? ex.tests[cur.id] : '';
+      inp.placeholder = cur.unit;
+      inputs[e] = inp;
+      row.append(sp, inp); rec.appendChild(row);
+    });
+    const save = document.createElement('button'); save.type = 'button'; save.textContent = sqL('حفظ النتايج', 'Save results');
+    const msg = document.createElement('span'); msg.className = 'sq-att-msg';
+    save.addEventListener('click', async function () {
+      let n = 0;
+      for (const e of (sq.members || [])) {
+        const raw = inputs[e].value.trim();
+        if (raw === '' || !isFinite(Number(raw))) continue;
+        const ex = squadLogs.filter(function (l) { return l.email === e && l.date === date; })[0];
+        const row = { email: e, name: nameOf(e), date: date, tests: { [cur.id]: Number(raw) }, updatedAt: new Date().toISOString(), testsBy: sqMe() };
+        if (!ex) { row.doneCount = 0; row.total = 1; row.coachOnly = true; row.testOnly = true; }
+        try {
+          await setDoc(doc(db, 'squads', sq.id, 'logs', date + '__' + e), row, { merge: true });
+          const merged = Object.assign({}, ex || {}, row, { tests: Object.assign({}, (ex && ex.tests) || {}, row.tests) });
+          squadLogs = squadLogs.filter(function (l) { return !(l.email === e && l.date === date); }).concat([merged]);
+          n++;
+        } catch (error) { msg.textContent = t('problem') + error.message; return; }
+      }
+      msg.textContent = sqL('اتحفظ ' + n + ' نتيجة ✓', n + ' saved ✓');
+      renderSquad();
+    });
+    rec.append(save, msg);
+    pane.appendChild(rec);
+  }
+
+  /* إدارة الاختبارات */
+  const mg = document.createElement('div');
+  mg.className = 'sq-comp';
+  const mh = document.createElement('h3'); mh.textContent = sqL('إضافة وإدارة الاختبارات', 'Add & manage tests'); mg.appendChild(mh);
+  const tsel = document.createElement('select');
+  const t0 = document.createElement('option'); t0.value = ''; t0.textContent = sqL('+ اختبار جاهز…', '+ Ready-made test…'); tsel.appendChild(t0);
+  SQ_TEST_TEMPLATES.forEach(function (x, i) { const o = document.createElement('option'); o.value = String(i); o.textContent = x.name[lang] + ' (' + x.unit + ')'; tsel.appendChild(o); });
+  tsel.addEventListener('change', async function () {
+    if (tsel.value === '') return;
+    const x = SQ_TEST_TEMPLATES[Number(tsel.value)];
+    const nt = { id: 't' + Math.random().toString(36).slice(2, 7), name: { ar: x.name.ar, en: x.name.en }, unit: x.unit, better: x.better, min: x.min, max: x.max };
+    if (await sqSaveTestsData(tests.concat([nt]))) { squadTestId = nt.id; renderSquad(); }
+  });
+  mg.appendChild(tsel);
+  const cust = document.createElement('details'); cust.className = 'sq-group-card';
+  const cs = document.createElement('summary'); cs.textContent = sqL('+ اختبار بمسطرتي', '+ Custom test with my own ruler'); cust.appendChild(cs);
+  const f = {};
+  [['name', sqL('اسم الاختبار', 'Test name'), 'text'], ['unit', sqL('الوحدة (ث، سم، كجم، عدّة...)', 'Unit (s, cm, kg, reps...)'), 'text'], ['min', sqL('أضعف قيمة على المسطرة', 'Weakest value on the ruler'), 'number'], ['max', sqL('أقوى قيمة على المسطرة', 'Best value on the ruler'), 'number']].forEach(function (d) {
+    const l = document.createElement('label'); l.className = 'plan-field'; l.textContent = d[1];
+    const i = document.createElement('input'); i.type = d[2]; if (d[2] === 'number') { i.step = 'any'; i.inputMode = 'decimal'; }
+    f[d[0]] = i; l.appendChild(i); cust.appendChild(l);
+  });
+  const bl = document.createElement('label'); bl.className = 'plan-field'; bl.textContent = sqL('الأحسن', 'Better is');
+  const bsel = document.createElement('select');
+  [['high', sqL('الأعلى أحسن (عدّات، مسافة، وزن)', 'Higher is better')], ['low', sqL('الأقل أحسن (زمن العدو)', 'Lower is better (time)')]].forEach(function (o) { const op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; bsel.appendChild(op); });
+  bl.appendChild(bsel); cust.appendChild(bl);
+  const addc = document.createElement('button'); addc.type = 'button'; addc.textContent = sqL('أضف الاختبار', 'Add test');
+  const cm = document.createElement('span'); cm.className = 'sq-att-msg';
+  addc.addEventListener('click', async function () {
+    const nm = f.name.value.trim(), mn = Number(f.min.value), mx = Number(f.max.value);
+    if (!nm || f.min.value === '' || f.max.value === '' || !isFinite(mn) || !isFinite(mx) || mx === mn) { cm.textContent = sqL('اكتب الاسم وقيمتين مختلفتين للمسطرة', 'Enter a name and two different ruler values'); return; }
+    const lo = Math.min(mn, mx), hi = Math.max(mn, mx);
+    const nt = { id: 't' + Math.random().toString(36).slice(2, 7), name: nm, unit: f.unit.value.trim() || '', better: bsel.value, min: lo, max: hi };
+    if (await sqSaveTestsData(tests.concat([nt]))) { squadTestId = nt.id; renderSquad(); }
+  });
+  cust.append(addc, cm);
+  mg.appendChild(cust);
+  tests.forEach(function (x) {
+    const row = document.createElement('div'); row.className = 'sq-test-manage';
+    const sp = document.createElement('span'); sp.textContent = sqTestName(x) + ' · ' + x.min + '–' + x.max + ' ' + x.unit;
+    const del = document.createElement('button'); del.type = 'button'; del.className = 'link sq-del'; del.textContent = sqL('امسح', 'Delete');
+    del.addEventListener('click', async function () {
+      if (!window.confirm(sqL('تمسح الاختبار ده؟ النتايج المسجلة هتفضل في سجلات اللاعبين لكن مش هتظهر.', 'Delete this test? Recorded results stay in logs but are hidden.'))) return;
+      if (await sqSaveTestsData(tests.filter(function (y) { return y.id !== x.id; }))) renderSquad();
+    });
+    row.append(sp, del); mg.appendChild(row);
+  });
+  if (sqIsLead(sq)) pane.appendChild(mg);
+
+  /* طباعة */
+  if (tests.length) {
+    const pr = document.createElement('div'); pr.className = 'sq-comp';
+    const ph = document.createElement('h3'); ph.textContent = sqL('طباعة الاختبارات', 'Print tests'); pr.appendChild(ph);
+    const mkb = function (label, kind, sec) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = sec ? 'secondary' : ''; b.textContent = label;
+      b.addEventListener('click', function () { if (window.ADAM_PRINT) window.ADAM_PRINT.open(sqBuildTestsDoc(kind)); });
+      pr.appendChild(b);
+    };
+    mkb(sqL('ورقة تسجيل فاضية + مسطرة (للميدان)', 'Blank score sheet + ruler (for the field)'), 'blank', true);
+    mkb(sqL('النتايج والترتيب وإجمالي النتايج', 'Results, rankings & totals'), 'results', false);
+    pane.appendChild(pr);
+  }
+}
+
+function sqBuildTestsDoc(kind) {
+  const sq = squadCurrent;
+  const tests = sqTests(sq);
+  const ar = lang === 'ar';
+  const nameOf = function (e) { return (sq.memberNames || {})[e] || e.split('@')[0]; };
+  const members = (sq.members || []).slice();
+  const doc = { title: sq.name + ' — ' + (kind === 'blank' ? sqL('ورقة تسجيل الاختبارات', 'Test score sheet') : sqL('نتائج الاختبارات', 'Test results')), lang: lang, filename: sq.name + '_tests_' + kind, blocks: [] };
+  const b = doc.blocks;
+  b.push({ t: 'h', level: 2, text: sqL('المسطرة', 'Rulers') });
+  b.push({ t: 'table', head: [ar ? 'الاختبار' : 'Test', ar ? 'الوحدة' : 'Unit', ar ? 'الأحسن' : 'Better'].concat(SQ_TEST_LEVELS.map(function (l) { return l[lang]; })),
+    rows: tests.map(function (x) {
+      const r = function (n) { return Math.round(n * 100) / 100; };
+      const cut = function (i) { const k = x.better === 'low' ? 4 - i : i; return r(x.min + (x.max - x.min) * k / 5) + ' – ' + r(x.min + (x.max - x.min) * (k + 1) / 5); };
+      return [sqTestName(x), x.unit, x.better === 'low' ? (ar ? 'الأقل' : 'Lower') : (ar ? 'الأعلى' : 'Higher')].concat([0, 1, 2, 3, 4].map(cut));
+    }),
+    colors: tests.map(function () { return ['', '', ''].concat(SQ_TEST_LEVELS.map(function (l) { return l.color + '55'; })); }) });
+  if (kind === 'blank') {
+    b.push({ t: 'h', level: 2, text: sqL('ورقة التسجيل', 'Score sheet') });
+    b.push({ t: 'table', head: ['#', ar ? 'اللاعب' : 'Player'].concat(tests.map(function (x) { return sqTestName(x) + ' (' + x.unit + ')'; })).concat([ar ? 'ملاحظات' : 'Notes']),
+      rows: members.map(function (e, i) { return [i + 1, nameOf(e)].concat(tests.map(function () { return ' '; })).concat([' ']); }) });
+    return doc;
+  }
+  const totals = {};
+  members.forEach(function (e) { totals[e] = { sum: 0, n: 0 }; });
+  tests.forEach(function (x) {
+    const rows = sqTestBoard(x);
+    b.push({ t: 'h', level: 2, text: sqTestName(x) + ' (' + x.unit + ')' });
+    if (rows.length > 1) b.push({ t: 'chart', kind: 'bars', title: sqTestName(x), labels: rows.map(function (r) { return nameOf(r.email); }), series: [{ name: x.unit, color: '#0b6b5c', colors: rows.map(function (r) { return sqTestLevel(x, r.best).color; }), values: rows.map(function (r) { return r.best; }) }], legend: SQ_TEST_LEVELS.map(function (l) { return { name: l[lang], color: l.color }; }) });
+    b.push({ t: 'table', head: ['#', ar ? 'اللاعب' : 'Player', ar ? 'أفضل نتيجة' : 'Best', ar ? 'المستوى' : 'Level', ar ? 'آخر نتيجة' : 'Last', ar ? 'التغيّر' : 'Change', ar ? 'المحاولات' : 'Attempts'],
+      rows: rows.map(function (r) { totals[r.email].sum += r.pos * 100; totals[r.email].n++; return [r.rank, nameOf(r.email), r.best, sqTestLevel(x, r.best)[lang], r.last, r.delta === null ? '—' : (r.delta > 0 ? '+' : '') + r.delta, r.n]; }),
+      colors: rows.map(function (r) { return ['', '', '', sqTestLevel(x, r.best).color + '66', '', '', '']; }) });
+  });
+  const tot = members.map(function (e) { return { e: e, score: tests.length ? Math.round(totals[e].sum / tests.length) : 0, n: totals[e].n }; }).sort(function (a, c) { return c.score - a.score; });
+  b.push({ t: 'h', level: 2, text: sqL('إجمالي النتايج', 'Overall results') });
+  b.push({ t: 'table', head: ['#', ar ? 'اللاعب' : 'Player', ar ? 'الدرجة (من 100)' : 'Score (of 100)', ar ? 'عدد الاختبارات' : 'Tests done'], rows: tot.map(function (x, i) { return [i + 1, nameOf(x.e), x.score, x.n + ' / ' + tests.length]; }) });
+  b.push({ t: 'p', text: ar ? 'الدرجة = متوسط موضع أفضل نتيجة للاعب على مسطرة كل اختبار (0 = أضعف المسطرة، 100 = أقواها)، والاختبار اللي ماتعملش بيتحسب صفر.' : 'Score = average position of the player\'s best result on each test ruler (0 = weakest end, 100 = best end) A missed test counts as 0.' });
+  return doc;
+}
+
+/* ============ مجموعات الفريق + منافسات + مين يشوف البرنامج ============
+   squads/{id}.groups: [{ id, name, color, leader, members[] }]
+   squads/{id}.visibility: { mode: 'all' | 'leaders' | 'selected', emails[] }
+   المخطط الموسمي (seasonPlans.viewers) بيتحدّث بنفس القايمة — وده مفروض من القواعد.
+   ============================================================ */
+const SQ_GROUP_COLORS = ['#2ee07a', '#5cc2ff', '#ffc94a', '#ff7a7a', '#b794ff', '#ff9f43', '#4de2d0', '#f06fb5'];
+
+function sqL(ar, en) { return lang === 'ar' ? ar : en; }
+function sqGroups(sq) { return Array.isArray(sq && sq.groups) ? sq.groups : []; }
+function sqGroupOf(sq, email) {
+  return sqGroups(sq).filter(function (g) { return (g.members || []).indexOf(email) !== -1; })[0] || null;
+}
+function sqPlanViewers(sq) {
+  const members = (sq.members || []).slice();
+  const v = sq.visibility || { mode: 'all' };
+  if (v.mode === 'leaders') {
+    const leaders = sqGroups(sq).map(function (g) { return g.leader; }).filter(Boolean);
+    return members.filter(function (e) { return leaders.indexOf(e) !== -1; });
+  }
+  if (v.mode === 'selected') return members.filter(function (e) { return (v.emails || []).indexOf(e) !== -1; });
+  return members;
+}
+function sqCanSeeProgram(sq, email) {
+  if (sqIsCoach()) return true;
+  return sqPlanViewers(sq).indexOf(email) !== -1;
+}
+async function sqSaveGroupsData(patch) {
+  const sq = squadCurrent;
+  try {
+    await setDoc(doc(db, 'squads', sq.id), patch, { merge: true });
+    Object.assign(sq, patch);
+    if (squadPlan && sqIsLead(sq)) setDoc(doc(db, 'seasonPlans', planDocId('squad', sq.id)), { viewers: sqPlanViewers(sq) }, { merge: true }).catch(function () {});
+    return true;
+  } catch (error) {
+    const m = document.getElementById('squad-msg');
+    if (m) m.textContent = t('problem') + error.message;
+    return false;
+  }
+}
+
+/* إحصائيات لاعب في فترة (أيام) — 0 يعني الموسم كله */
+function sqPeriodStats(email, days) {
+  const mine = squadLogs.filter(function (l) {
+    if (l.email !== email || l.attendance === 'absent' || (l.testOnly && sqLogStatus(l) === 'none')) return false;
+    if (!days) return true;
+    const a = daysAgo(l.date);
+    return a !== null && a >= 0 && a < days;
+  });
+  const forPct = mine.filter(function (l) { return !l.coachOnly; });
+  const pct = forPct.length ? forPct.reduce(function (s, l) { return s + (Number(l.doneCount) || 0) / Math.max(1, Number(l.total) || 1); }, 0) / forPct.length * 100 : 0;
+  return {
+    sessions: mine.length,
+    pct: Math.round(pct),
+    load: Math.round(mine.reduce(function (s, l) { return s + (Number(l.load) || 0); }, 0)),
+    minutes: Math.round(mine.reduce(function (s, l) { return s + (Number(l.minutes) || 0); }, 0))
+  };
+}
+
+let squadGroupDays = 28;
+let squadGroupMetric = 'pct';
+
+function renderSquadGroups(pane) {
+  const sq = squadCurrent;
+  const canEdit = sqIsLead(sq);
+  const groups = sqGroups(sq);
+  const nameOf = function (e) { return (sq.memberNames || {})[e] || e.split('@')[0]; };
+
+  /* ---- المنافسة ---- */
+  const comp = document.createElement('div');
+  comp.className = 'sq-comp';
+  const h = document.createElement('h3');
+  h.textContent = sqL('منافسة المجموعات', 'Group competition');
+  comp.appendChild(h);
+  const ctl = document.createElement('div');
+  ctl.className = 'sq-comp-ctl';
+  const mkSel = function (opts, val, cb) {
+    const sel = document.createElement('select');
+    opts.forEach(function (o) { const op = document.createElement('option'); op.value = String(o[0]); op.textContent = o[1]; sel.appendChild(op); });
+    sel.value = String(val);
+    sel.addEventListener('change', function () { cb(sel.value); });
+    return sel;
+  };
+  ctl.appendChild(mkSel([[7, sqL('آخر 7 أيام', 'Last 7 days')], [28, sqL('آخر 28 يوم', 'Last 28 days')], [0, sqL('الموسم كله', 'Whole season')]], squadGroupDays, function (v) { squadGroupDays = Number(v); renderSquad(); }));
+  ctl.appendChild(mkSel([['pct', sqL('نسبة إنجاز التمارين', 'Completion %')], ['sessions', sqL('الحضور (عدد الجلسات)', 'Attendance (sessions)')], ['load', sqL('الحمل التدريبي', 'Training load')]], squadGroupMetric, function (v) { squadGroupMetric = v; renderSquad(); }));
+  comp.appendChild(ctl);
+  if (!groups.length) {
+    const none = document.createElement('p');
+    none.className = 'hint-text';
+    none.textContent = canEdit ? sqL('لسه مفيش مجموعات. اعمل مجموعة من تحت وحط لها قائد.', 'No groups yet. Create one below and set a leader.') : sqL('لسه مفيش مجموعات.', 'No groups yet.');
+    comp.appendChild(none);
+  } else {
+    const rows = groups.map(function (g) {
+      const ms = (g.members || []).map(function (e) { return sqPeriodStats(e, squadGroupDays); });
+      const n = Math.max(1, ms.length);
+      const avg = function (k) { return ms.reduce(function (s, x) { return s + x[k]; }, 0) / n; };
+      return { g: g, n: ms.length, pct: Math.round(avg('pct')), sessions: Math.round(avg('sessions') * 10) / 10, load: Math.round(avg('load')) };
+    }).sort(function (a, b) { return b[squadGroupMetric] - a[squadGroupMetric]; });
+    const top = Math.max(1, rows[0][squadGroupMetric]);
+    rows.forEach(function (r, i) {
+      const row = document.createElement('div');
+      row.className = 'sq-comp-row' + (sqGroupOf(sq, sqMe()) && sqGroupOf(sq, sqMe()).id === r.g.id ? ' mine' : '');
+      const rank = document.createElement('span');
+      rank.className = 'sq-rank';
+      rank.textContent = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : String(i + 1)));
+      const nm = document.createElement('strong');
+      nm.textContent = r.g.name;
+      nm.style.borderInlineStart = '4px solid ' + (r.g.color || SQ_GROUP_COLORS[0]);
+      nm.style.paddingInlineStart = '8px';
+      const ld = document.createElement('small');
+      ld.textContent = (r.g.leader ? sqL('القائد: ', 'Leader: ') + nameOf(r.g.leader) + ' · ' : '') + r.n + ' ' + sqL('لاعب', 'players');
+      const bar = document.createElement('div');
+      bar.className = 'sq-row-bar';
+      const fl = document.createElement('i');
+      fl.style.width = Math.min(100, Math.round(r[squadGroupMetric] / top * 100)) + '%';
+      fl.style.background = r.g.color || SQ_GROUP_COLORS[0];
+      bar.appendChild(fl);
+      const val = document.createElement('span');
+      val.className = 'sq-comp-val';
+      val.textContent = squadGroupMetric === 'pct' ? r.pct + '%' : (squadGroupMetric === 'sessions' ? String(r.sessions) : String(r.load));
+      const top1 = document.createElement('div');
+      top1.className = 'sq-comp-top';
+      top1.append(rank, nm, val);
+      row.append(top1, ld, bar);
+      comp.appendChild(row);
+    });
+    const note = document.createElement('p');
+    note.className = 'hint-text';
+    note.textContent = sqL('الترتيب بالمتوسط لكل لاعب في المجموعة، فالمجموعة الأكبر مش بتكسب بس لأنها أكبر.', 'Ranking uses the per-player average so larger groups are not favoured.');
+    comp.appendChild(note);
+  }
+  pane.appendChild(comp);
+
+  /* ---- مجموعتي: اللاعبين يشوفوا بعض ---- */
+  const mine = sqGroupOf(sq, sqMe());
+  if (mine) {
+    const box = document.createElement('div');
+    box.className = 'sq-comp';
+    const h2 = document.createElement('h3');
+    h2.textContent = sqL('مجموعتي: ', 'My group: ') + mine.name;
+    box.appendChild(h2);
+    (mine.members || []).map(function (e) { return { e: e, st: sqPeriodStats(e, squadGroupDays) }; })
+      .sort(function (a, b) { return b.st.pct - a.st.pct; })
+      .forEach(function (x) {
+        const r = document.createElement('div');
+        r.className = 'sq-comp-mem' + (x.e === sqMe() ? ' me' : '');
+        r.textContent = (x.e === mine.leader ? '★ ' : '') + nameOf(x.e) + ' — ' + x.st.pct + '% · ' + x.st.sessions + ' ' + sqL('جلسة', 'sessions') + (x.st.minutes ? ' · ' + x.st.minutes + ' ' + sqL('د', 'min') : '');
+        box.appendChild(r);
+      });
+    pane.appendChild(box);
+  }
+  if (!canEdit) return;
+
+  /* ---- إدارة المجموعات ---- */
+  const mg = document.createElement('div');
+  mg.className = 'sq-comp';
+  const h3 = document.createElement('h3');
+  h3.textContent = sqL('إدارة المجموعات', 'Manage groups');
+  mg.appendChild(h3);
+  const addRow = document.createElement('div');
+  addRow.className = 'sq-group-add';
+  const gname = document.createElement('input');
+  gname.type = 'text'; gname.placeholder = sqL('اسم المجموعة (مثلاً: النمور)', 'Group name');
+  const gadd = document.createElement('button');
+  gadd.type = 'button'; gadd.textContent = sqL('+ مجموعة جديدة', '+ New group');
+  gadd.addEventListener('click', async function () {
+    const nm = gname.value.trim();
+    if (!nm) { gname.focus(); return; }
+    const list = groups.concat([{ id: 'g' + Math.random().toString(36).slice(2, 7), name: nm, color: SQ_GROUP_COLORS[groups.length % SQ_GROUP_COLORS.length], leader: '', members: [] }]);
+    if (await sqSaveGroupsData({ groups: list })) renderSquad();
+  });
+  addRow.append(gname, gadd);
+  mg.appendChild(addRow);
+
+  groups.forEach(function (g) {
+    const card = document.createElement('details');
+    card.className = 'sq-group-card';
+    const sum = document.createElement('summary');
+    sum.textContent = g.name + ' · ' + (g.members || []).length + ' ' + sqL('لاعب', 'players');
+    sum.style.borderInlineStart = '5px solid ' + (g.color || SQ_GROUP_COLORS[0]);
+    card.appendChild(sum);
+    const save = async function (mut) {
+      const list = groups.map(function (x) { return x.id === g.id ? Object.assign({}, x, mut) : x; });
+      if (await sqSaveGroupsData({ groups: list })) renderSquad();
+    };
+    const ren = document.createElement('input');
+    ren.type = 'text'; ren.value = g.name;
+    ren.addEventListener('change', function () { if (ren.value.trim()) save({ name: ren.value.trim() }); });
+    card.appendChild(ren);
+    const lsel = document.createElement('select');
+    const o0 = document.createElement('option'); o0.value = ''; o0.textContent = sqL('— اختار القائد —', '— Pick a leader —'); lsel.appendChild(o0);
+    (g.members || []).forEach(function (e) { const o = document.createElement('option'); o.value = e; o.textContent = nameOf(e); lsel.appendChild(o); });
+    lsel.value = g.leader || '';
+    lsel.addEventListener('change', function () { save({ leader: lsel.value }); });
+    const llab = document.createElement('label');
+    llab.className = 'plan-field';
+    llab.textContent = sqL('قائد المجموعة (لاعب منهم)', 'Group leader (a player from it)');
+    llab.appendChild(lsel);
+    card.appendChild(llab);
+    const pickT = document.createElement('div');
+    pickT.className = 'plan-sub';
+    pickT.textContent = sqL('اللاعبين', 'Players');
+    card.appendChild(pickT);
+    (sq.members || []).forEach(function (e) {
+      const other = sqGroupOf(sq, e);
+      const lab = document.createElement('label');
+      lab.className = 'sq-pick-row';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = (g.members || []).indexOf(e) !== -1;
+      cb.disabled = !!(other && other.id !== g.id);
+      cb.addEventListener('change', function () {
+        const ms = (g.members || []).filter(function (x) { return x !== e; });
+        if (cb.checked) ms.push(e);
+        save({ members: ms, leader: ms.indexOf(g.leader) === -1 ? '' : g.leader });
+      });
+      const sp = document.createElement('span');
+      sp.textContent = nameOf(e) + (other && other.id !== g.id ? ' (' + other.name + ')' : '');
+      lab.append(cb, sp);
+      card.appendChild(lab);
+    });
+    const del = document.createElement('button');
+    del.type = 'button'; del.className = 'link sq-del';
+    del.textContent = sqL('امسح المجموعة', 'Delete group');
+    del.addEventListener('click', async function () {
+      if (!window.confirm(sqL('تمسح المجموعة دي؟ اللاعبين مش هيتمسحوا.', 'Delete this group? Players are kept.'))) return;
+      const list = groups.filter(function (x) { return x.id !== g.id; });
+      if (await sqSaveGroupsData({ groups: list })) renderSquad();
+    });
+    card.appendChild(del);
+    mg.appendChild(card);
+  });
+  pane.appendChild(mg);
+
+  /* ---- مين يشوف البرنامج ---- */
+  const vb = document.createElement('div');
+  vb.className = 'sq-comp';
+  const vh = document.createElement('h3');
+  vh.textContent = sqL('مين يشوف البرنامج؟', 'Who can see the program?');
+  vb.appendChild(vh);
+  const vis = sq.visibility || { mode: 'all', emails: [] };
+  [['all', sqL('كل اللاعبين', 'All players')], ['leaders', sqL('قادة المجموعات بس', 'Group leaders only')], ['selected', sqL('لاعبين أحددهم', 'Selected players')]].forEach(function (m) {
+    const lab = document.createElement('label');
+    lab.className = 'sq-pick-row';
+    const r = document.createElement('input');
+    r.type = 'radio'; r.name = 'sq-vis'; r.checked = (vis.mode || 'all') === m[0];
+    r.addEventListener('change', async function () { if (await sqSaveGroupsData({ visibility: { mode: m[0], emails: vis.emails || [] } })) renderSquad(); });
+    const sp = document.createElement('span'); sp.textContent = m[1];
+    lab.append(r, sp);
+    vb.appendChild(lab);
+  });
+  if (vis.mode === 'selected') {
+    (sq.members || []).forEach(function (e) {
+      const lab = document.createElement('label');
+      lab.className = 'sq-pick-row';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.checked = (vis.emails || []).indexOf(e) !== -1;
+      cb.addEventListener('change', async function () {
+        const em = (vis.emails || []).filter(function (x) { return x !== e; });
+        if (cb.checked) em.push(e);
+        if (await sqSaveGroupsData({ visibility: { mode: 'selected', emails: em } })) renderSquad();
+      });
+      const sp = document.createElement('span'); sp.textContent = nameOf(e);
+      lab.append(cb, sp);
+      vb.appendChild(lab);
+    });
+  }
+  const vn = document.createElement('p');
+  vn.className = 'hint-text';
+  vn.textContent = sqL('الخطة الموسمية بتتقفل فعلاً عن اللي مش مسموح لهم (من قواعد قاعدة البيانات). جلسة النهارده بتتخفي من شاشتهم في التطبيق.', 'The season plan is truly locked for others (database rules). Today\'s session is hidden in the app screen.');
+  vb.appendChild(vn);
+  pane.appendChild(vb);
 }
 
 function renderSquadSeason() {
@@ -12607,12 +13560,23 @@ function renderSquadSeason() {
 /* ---------- النهارده: الجلسة + اللوحة اللايف ---------- */
 function renderSquadToday(pane) {
   const sq = squadCurrent;
+  if (!sqIsCoach() && !sqCanSeeProgram(sq, sqMe())) {
+    const lock = document.createElement('p');
+    lock.className = 'hint-text';
+    lock.textContent = sqL('المدرب لسه ما فعّلش البرنامج ليك. هيظهر أول ما يسمحلك.', 'The coach has not shared the program with you yet.');
+    pane.appendChild(lock);
+    return;
+  }
   /* فيه مخطط موسمي؟ جلسة النهارده بتيجي منه (إلا لو المدرب غيّرها النهارده بقالب) */
   const planLoc = squadPlan ? planLocate(squadPlan) : null;
-  const usePlan = !!(planLoc && planLoc.entry && !(sq.overrides || {})[todayStamp]);
+  const usePlan = !!(planLoc && planLoc.entry && (sq.overrides || {})[todayStamp] === undefined);
   const planSess = usePlan ? planLoc.session : null;
   const tplId = usePlan ? '' : sqSessionTemplateId(sq);
   const tpl = tplId ? templateById(tplId) : null;
+  const hasPlanToday = !!(planLoc && planLoc.entry);
+  const planOptLabel = hasPlanToday
+    ? (lang === 'ar' ? 'حسب خطة الموسم: ' : 'Season plan: ') + (planLoc.session ? (pv(planLoc.session.title) || t('plan_session')) : t('sq_rest_day'))
+    : '';
   const head = document.createElement('div');
   head.className = 'sq-today-head';
   const title = document.createElement('strong');
@@ -12648,36 +13612,43 @@ function renderSquadToday(pane) {
   }
   pane.appendChild(head);
 
-  if (sqIsCoach() && !sqIsLead(sq)) {
+  if (sqIsCoach() && !sqCanEdit(sq)) {
     /* المساعد مايغيّرش — بيقترح، والرئيسي يوافق */
     const row = document.createElement('div');
     row.className = 'sq-override';
     const lab = document.createElement('span');
     lab.textContent = t('sq_suggest_today');
-    const sel = sqTemplateSelect(sq, tplId);
+    const curVal = usePlan ? '__plan' : (tplId || '');
+    const sel = sqTemplateSelect(sq, curVal === '__plan' ? '__plan' : tplId, planOptLabel);
     sel.addEventListener('change', async function () {
-      if (sel.value === (tplId || '')) return;
-      const tplNew = sel.value ? templateById(sel.value) : null;
+      if (sel.value === curVal) return;
+      const tplNew = (sel.value && sel.value !== '__plan') ? templateById(sel.value) : null;
       await sqPostTalk({
         kind: 'suggest', text: t('sq_suggest_auto'),
-        change: { date: todayStamp, tpl: sel.value, tplName: tplNew ? templateTitle(tplNew) : t('sq_rest_day') }
+        change: { date: todayStamp, tpl: sel.value, tplName: sel.value === '__plan' ? planOptLabel : (tplNew ? templateTitle(tplNew) : t('sq_rest_day')) }
       });
-      sel.value = tplId || '';
+      sel.value = curVal;
       document.getElementById('squad-msg').textContent = t('sq_suggest_sent');
     });
     row.append(lab, sel);
     pane.appendChild(row);
   }
-  if (sqIsCoach() && sqIsLead(sq)) {
+  if (sqIsCoach() && sqCanEdit(sq)) {
     const row = document.createElement('div');
     row.className = 'sq-override';
     const lab = document.createElement('span');
     lab.textContent = t('sq_change_today');
-    const sel = sqTemplateSelect(sq, tplId);
+    const sel = sqTemplateSelect(sq, usePlan ? '__plan' : tplId, planOptLabel);
     sel.addEventListener('change', async function () {
       const overrides = Object.assign({}, sq.overrides || {});
-      overrides[todayStamp] = sel.value;
-      await setDoc(doc(db, 'squads', sq.id), { overrides: overrides }, { merge: true });
+      if (sel.value === '__plan') {
+        delete overrides[todayStamp];
+        await setDoc(doc(db, 'squads', sq.id), { overrides: { [todayStamp]: deleteField() } }, { merge: true });
+      } else {
+        if (hasPlanToday && !window.confirm(lang === 'ar' ? 'ده هيبدّل جلسة النهارده بس (من غير ما يغيّر خطة الموسم). تكمّل؟' : 'This replaces only today\'s session (the season plan stays unchanged). Continue?')) { sel.value = usePlan ? '__plan' : (tplId || ''); return; }
+        overrides[todayStamp] = sel.value;
+        await setDoc(doc(db, 'squads', sq.id), { overrides: overrides }, { merge: true });
+      }
       sq.overrides = overrides;
       notify(sq.members || [], 'squad_session', { target: 'squad', about: sq.id, aboutName: sq.name, params: function () { return { name: sq.name }; } });
       renderSquad();
@@ -12726,6 +13697,34 @@ function sqMyLogForm(items) {
   }
   const box = document.createElement('div');
   box.className = 'sq-log';
+  const runBar = document.createElement('div');
+  runBar.className = 'sq-run';
+  const runBtn = document.createElement('button');
+  runBtn.type = 'button';
+  const runInfo = document.createElement('span');
+  const hmOf = function (iso) { const d = new Date(iso); return isNaN(d.getTime()) ? '' : d.toLocaleTimeString(lang === 'ar' ? 'ar-EG' : 'en-GB', { hour: '2-digit', minute: '2-digit' }); };
+  sqPaintRun = function () {
+    const lg = squadMyLog;
+    if (!lg) return;
+    if (!lg.startedAt) { runBtn.textContent = sqL('▶ بدأت التمرين', '▶ Start workout'); runBtn.className = 'sq-run-btn start'; runInfo.textContent = sqL('دوس لما تبدأ عشان يتسجل حضورك ووقتك', 'Tap when you start so your attendance and time are logged'); }
+    else if (!lg.finishedAt) { runBtn.textContent = sqL('■ خلّصت التمرين', '■ Finish workout'); runBtn.className = 'sq-run-btn stop'; runInfo.textContent = sqL('بدأت ', 'Started ') + hmOf(lg.startedAt) + sqL(' — حضورك مسجّل وفي انتظار تأكيد المدرب', ' — attendance logged, awaiting coach confirmation'); }
+    else { runBtn.textContent = sqL('↺ رجّع التمرين شغّال', '↺ Reopen'); runBtn.className = 'sq-run-btn done'; const mins = Math.max(1, Math.round((new Date(lg.finishedAt) - new Date(lg.startedAt)) / 60000)); runInfo.textContent = sqL('من ', 'From ') + hmOf(lg.startedAt) + sqL(' إلى ', ' to ') + hmOf(lg.finishedAt) + ' · ' + mins + sqL(' دقيقة', ' min'); }
+  };
+  runBtn.addEventListener('click', function () {
+    const lg = squadMyLog;
+    const now = new Date().toISOString();
+    if (!lg.startedAt) lg.startedAt = now;
+    else if (!lg.finishedAt) {
+      lg.finishedAt = now;
+      const mins = Math.max(1, Math.round((new Date(now) - new Date(lg.startedAt)) / 60000));
+      if (!lg.minutes || lg.minutesAuto) { lg.minutes = String(Math.min(600, mins)); lg.minutesAuto = true; const mi = box.querySelector('.sq-session input'); if (mi) mi.value = lg.minutes; }
+    } else lg.finishedAt = '';
+    sqPaintRun();
+    sqQueueSave(true);
+  });
+  runBar.append(runBtn, runInfo);
+  box.appendChild(runBar);
+  sqPaintRun();
   items.forEach(function (it, i) {
     const row = document.createElement('div');
     row.className = 'sq-log-row' + (squadMyLog.items[i].done ? ' done' : '');
@@ -12762,6 +13761,8 @@ function sqMyLogForm(items) {
     check.innerHTML = glyph('check', '', squadMyLog.items[i].done ? '#2ee07a' : '#94a3b8');
     check.addEventListener('click', function () {
       squadMyLog.items[i].done = !squadMyLog.items[i].done;
+      squadMyLog.items[i].at = squadMyLog.items[i].done ? new Date().toISOString() : '';
+      if (squadMyLog.items[i].done && !squadMyLog.startedAt) { squadMyLog.startedAt = squadMyLog.items[i].at; if (sqPaintRun) sqPaintRun(); }
       row.classList.toggle('done', squadMyLog.items[i].done);
       check.classList.toggle('on', squadMyLog.items[i].done);
       check.innerHTML = glyph('check', '', squadMyLog.items[i].done ? '#2ee07a' : '#94a3b8');
@@ -12779,7 +13780,7 @@ function sqMyLogForm(items) {
     span.textContent = t('sq_f_' + key);
     const input = document.createElement('input');
     input.inputMode = mode || 'numeric'; input.value = val || '';
-    input.addEventListener('input', function () { squadMyLog[key] = input.value.trim(); sqQueueSave(); });
+    input.addEventListener('input', function () { squadMyLog[key] = input.value.trim(); if (key === 'minutes') squadMyLog.minutesAuto = false; sqQueueSave(); });
     lab.append(span, input);
     return lab;
   };
@@ -12787,7 +13788,12 @@ function sqMyLogForm(items) {
   const hint = document.createElement('p');
   hint.className = 'hint-text';
   hint.textContent = t('sq_rpe_hint');
-  box.append(sess, hint);
+  const pnote = document.createElement('textarea');
+  pnote.rows = 2; pnote.maxLength = 500;
+  pnote.placeholder = sqL('ملاحظتك عن الوحدة دي (إحساسك، ألم، تعب...)', 'Your note on this session (how it felt, pain, fatigue...)');
+  pnote.value = squadMyLog.playerNote || '';
+  pnote.addEventListener('input', function () { squadMyLog.playerNote = pnote.value.slice(0, 500); sqQueueSave(); });
+  box.append(sess, hint, pnote);
   return box;
 }
 
@@ -12808,7 +13814,10 @@ async function sqSaveMyLog() {
   log.volume = Math.round(log.items.reduce(function (s, x) { return s + (parseInt(x.reps, 10) || 0) * (parseFloat(x.load) || 0); }, 0));
   log.updatedAt = new Date().toISOString();
   try {
-    await setDoc(doc(db, 'squads', squadCurrent.id, 'logs', log.date + '__' + log.email), log);
+    const payload = Object.assign({}, log);
+    SQ_COACH_FIELDS.forEach(function (k) { delete payload[k]; });
+    if (payload.coachOnly && (payload.total > 1 || payload.doneCount > 0)) payload.coachOnly = false;
+    await setDoc(doc(db, 'squads', squadCurrent.id, 'logs', log.date + '__' + log.email), payload, { merge: true });
   } catch (error) {
     const msg = document.getElementById('squad-msg');
     if (msg) msg.textContent = t('problem') + error.message;
@@ -12880,7 +13889,7 @@ function renderSquadSeasonEditor(pane) {
   planBtn.className = 'sq-plan-btn';
   planBtn.textContent = squadPlan ? t('plan_open_detailed') : t('plan_create_detailed');
   planBtn.addEventListener('click', function () {
-    openPlan({ kind: 'squad', id: sq.id, name: sq.name, lead: lead, leadEmail: sq.coachEmail, viewers: sq.members || [], returnScreen: sqScreen(), sport: sq.sport || '' });
+    openPlan({ kind: 'squad', id: sq.id, name: sq.name, lead: lead || sqCanEdit(sq), leadEmail: sq.coachEmail, viewers: sqPlanViewers(sq), returnScreen: sqScreen(), sport: sq.sport || '' });
   });
   pane.appendChild(planBtn);
   if (squadPlan) {
@@ -12889,7 +13898,7 @@ function renderSquadSeasonEditor(pane) {
     hint.textContent = t('plan_squad_uses_plan');
     pane.appendChild(hint);
   }
-  if (!lead) {
+  if (!lead && !sqCanEdit(sq)) {
     const note = document.createElement('p');
     note.className = 'sq-readonly';
     note.textContent = t('sq_readonly_note');
@@ -13115,8 +14124,13 @@ async function sqDecide(item, approve) {
     /* الاقتراح فيه تغيير جلسة؟ الموافقة بتطبّقه على طول */
     if (approve && item.change && item.change.date) {
       const overrides = Object.assign({}, sq.overrides || {});
-      overrides[item.change.date] = item.change.tpl || '';
-      await setDoc(doc(db, 'squads', sq.id), { overrides: overrides }, { merge: true });
+      if (item.change.tpl === '__plan') {
+        delete overrides[item.change.date];
+        await setDoc(doc(db, 'squads', sq.id), { overrides: { [item.change.date]: deleteField() } }, { merge: true });
+      } else {
+        overrides[item.change.date] = item.change.tpl || '';
+        await setDoc(doc(db, 'squads', sq.id), { overrides: overrides }, { merge: true });
+      }
       sq.overrides = overrides;
       if (item.change.date === todayStamp) {
         notify(sq.members || [], 'squad_session', { target: 'squad', about: sq.id, aboutName: sq.name, params: function () { return { name: sq.name }; } });
@@ -13248,6 +14262,22 @@ function renderSquadTalk(pane) {
 }
 
 /* ---------- الجهاز الفني (المدرب الرئيسي بيضيف ويشيل) ---------- */
+const SQ_STAFF_ROLES = [
+  { id: 'coach', ar: 'مدرب', en: 'Coach' },
+  { id: 'assistant', ar: 'مساعد مدرب', en: 'Assistant coach' },
+  { id: 'specialist', ar: 'أخصائي', en: 'Specialist' }
+];
+function sqStaffRole(m) { return (m && SQ_STAFF_ROLES.some(function (r) { return r.id === m.role; })) ? m.role : 'assistant'; }
+function sqStaffRoleName(id) { const r = SQ_STAFF_ROLES.filter(function (x) { return x.id === id; })[0]; return r ? r[lang] : ''; }
+function sqRoleSelect(value, onChange) {
+  const sel = document.createElement('select');
+  sel.className = 'sq-role-sel';
+  SQ_STAFF_ROLES.forEach(function (r) { const o = document.createElement('option'); o.value = r.id; o.textContent = r[lang]; sel.appendChild(o); });
+  sel.value = value;
+  sel.addEventListener('change', function () { onChange(sel.value); });
+  return sel;
+}
+
 function renderSquadStaff(pane) {
   const sq = squadCurrent;
   const intro = document.createElement('p');
@@ -13260,21 +14290,58 @@ function renderSquadStaff(pane) {
   leadRow.textContent = (sq.coachName || sq.coachEmail) + ' · ' + t('sq_lead_coach');
   pane.appendChild(leadRow);
 
-  (sq.staff || []).forEach(function (m) {
+  const staffSorted = (sq.staff || []).slice().sort(function (a, b) {
+    const o = function (x) { return SQ_STAFF_ROLES.map(function (r) { return r.id; }).indexOf(sqStaffRole(x)); };
+    return o(a) - o(b);
+  });
+  staffSorted.forEach(function (m) {
     const row = document.createElement('div');
     row.className = 'sq-staff';
     const nm = document.createElement('span');
     nm.textContent = (m.name || m.email) + (m.spec ? ' · ' + specialtyName(m.spec, lang) : '');
+    const roleTag = document.createElement('em');
+    roleTag.className = 'sq-role-tag ' + sqStaffRole(m);
+    roleTag.textContent = sqStaffRoleName(sqStaffRole(m));
     const rm = document.createElement('button');
     rm.type = 'button'; rm.className = 'link sq-del';
     rm.textContent = t('sq_remove_member');
     rm.addEventListener('click', async function () {
       const staff = (sq.staff || []).filter(function (x) { return x.email !== m.email; });
-      await setDoc(doc(db, 'squads', sq.id), { staff: staff, staffEmails: staff.map(function (x) { return x.email; }) }, { merge: true });
+      const eds = (sq.staffEditors || []).filter(function (e) { return e !== m.email; });
+      await setDoc(doc(db, 'squads', sq.id), { staff: staff, staffEmails: staff.map(function (x) { return x.email; }), staffEditors: eds }, { merge: true });
+      sq.staffEditors = eds;
       sq.staff = staff; sq.staffEmails = staff.map(function (x) { return x.email; });
       renderSquad();
     });
-    row.append(nm, rm);
+    row.append(nm, roleTag);
+    if (sqIsLead(sq)) {
+      row.appendChild(sqRoleSelect(sqStaffRole(m), async function (v) {
+        const staff = (sq.staff || []).map(function (x) { return x.email === m.email ? Object.assign({}, x, { role: v }) : x; });
+        try {
+          await setDoc(doc(db, 'squads', sq.id), { staff: staff }, { merge: true });
+          sq.staff = staff;
+          renderSquad();
+        } catch (error) { document.getElementById('squad-msg').textContent = t('problem') + error.message; }
+      }));
+      const can = (sq.staffEditors || []).indexOf(m.email) !== -1;
+      const tg = document.createElement('button');
+      tg.type = 'button';
+      tg.className = 'sq-perm' + (can ? ' on' : '');
+      tg.setAttribute('aria-pressed', can ? 'true' : 'false');
+      tg.title = lang === 'ar' ? 'يسمح له يضيف أو يغيّر تمارين في الخطة' : 'Allow adding / changing exercises in the plan';
+      tg.textContent = (can ? '✎ ' : '🔒 ') + (lang === 'ar' ? (can ? 'مسموح له يعدّل' : 'مش مسموح له يعدّل') : (can ? 'Can edit' : 'View only'));
+      tg.addEventListener('click', async function () {
+        const list = (sq.staffEditors || []).filter(function (e) { return e !== m.email; });
+        if (!can) list.push(m.email);
+        try {
+          await setDoc(doc(db, 'squads', sq.id), { staffEditors: list }, { merge: true });
+          sq.staffEditors = list;
+          renderSquad();
+        } catch (error) { document.getElementById('squad-msg').textContent = t('problem') + error.message; }
+      });
+      row.appendChild(tg);
+    }
+    row.appendChild(rm);
     pane.appendChild(row);
   });
 
@@ -13286,6 +14353,12 @@ function renderSquadStaff(pane) {
   const pick = document.createElement('div');
   pick.className = 'sq-pick';
   addBox.appendChild(pick);
+  const addRoleL = document.createElement('label');
+  addRoleL.className = 'plan-field';
+  addRoleL.textContent = sqL('الدور', 'Role');
+  const addRole = sqRoleSelect('assistant', function () {});
+  addRoleL.appendChild(addRole);
+  addBox.appendChild(addRoleL);
   const addBtn = document.createElement('button');
   addBtn.type = 'button'; addBtn.textContent = t('sq_add_btn');
   addBox.appendChild(addBtn);
@@ -13313,7 +14386,7 @@ function renderSquadStaff(pane) {
     const picked = Array.prototype.slice.call(pick.querySelectorAll('input:checked'));
     if (!picked.length) return;
     const staff = (sq.staff || []).concat(picked.map(function (cb) {
-      return { email: cb.value, name: cb.getAttribute('data-name'), spec: cb.getAttribute('data-spec') };
+      return { email: cb.value, name: cb.getAttribute('data-name'), spec: cb.getAttribute('data-spec'), role: addRole.value };
     }));
     await setDoc(doc(db, 'squads', sq.id), { staff: staff, staffEmails: staff.map(function (x) { return x.email; }) }, { merge: true });
     notify(picked.map(function (cb) { return cb.value; }), 'squad_staff', { target: 'squad', about: sq.id, aboutName: sq.name, params: function () { return { name: sq.name }; } });
@@ -13399,6 +14472,7 @@ function renderSquadMe(pane) {
   flag.className = 'sq-me-flag flag-' + st.flag;
   flag.textContent = t('sq_me_flag_' + st.flag);
   pane.appendChild(flag);
+  pane.appendChild(sqAttendanceSummary(me));
   const loads = sqWeeklyLoads(squadLogs, me, 6);
   const max = Math.max.apply(null, loads.concat([1]));
   const chart = document.createElement('div');
@@ -31136,7 +32210,7 @@ var LIB_GROUP_ORDER = ['strength', 'functional', 'conditioning', 'mobility', 'wa
 
 var LEGACY_GROUP = {
   cardio: 'conditioning', stretching: 'mobility', crossfit: 'conditioning', hyrox: 'conditioning',
-  agility: 'speed', powerlifting: 'strength', 'olympic weightlifting': 'athletic', strongman: 'functional'
+  agility: 'speed', track: 'speed', powerlifting: 'strength', 'olympic weightlifting': 'athletic', strongman: 'functional'
 };
 
 var MUSCLE_TO_SUB = {
@@ -39274,7 +40348,16 @@ function planDef(list, id) {
   return list.filter(function (x) { return x.id === id; })[0] || null;
 }
 function planCompName(id) { const c = planDef(PLAN_COMPONENTS, id); return c ? c[lang] : id; }
-function planPeriodType(id) { return planDef(PLAN_PERIOD_TYPES, id) || PLAN_PERIOD_TYPES[0]; }
+function planPeriodType(id) {
+  const f = planDef(PLAN_PERIOD_TYPES, id);
+  if (f) return f;
+  /* اسم مكتوب بإيد المدرب */
+  return id ? { id: id, ar: id, en: id, color: '#8aa0b8' } : PLAN_PERIOD_TYPES[0];
+}
+function planWeekTypeInfo(id) {
+  const f = planDef(PLAN_WEEK_TYPES, id);
+  return f || (id ? { id: id, ar: id, en: id } : null);
+}
 function planLoadLevel(n) {
   const v = Number(n) || 0;
   return PLAN_LOAD_LEVELS.filter(function (l) { return v <= l.max; })[0] || PLAN_LOAD_LEVELS[PLAN_LOAD_LEVELS.length - 1];
@@ -39316,6 +40399,27 @@ function planEmpty(start) {
     periods: [{ type: 'gpp', goal: '', components: [], blocks: [{ name: '', goal: '', components: [], weeks: [planNewWeek()] }] }],
     sessions: {}
   };
+}
+
+/* بداية الأسبوع: السبت للفرق، والعميل يختار (الافتراضي السبت) — الرقم هنا هو getDay بتاع جافاسكريبت */
+function planWeekStartDay() {
+  if (!planCtx || planCtx.kind !== 'client') return 6;
+  const v = planCurrent && planCurrent.weekStart;
+  return (typeof v === 'number' && v >= 0 && v <= 6) ? v : 6;
+}
+function planAlignStart(plan) {
+  if (!plan || !plan.start) return false;
+  const want = planWeekStartDay();
+  const d = planAddDays(plan.start, 0);
+  const diff = (d.getDay() - want + 7) % 7;
+  if (!diff) return false;
+  plan.start = dateStamp(planAddDays(plan.start, -diff));
+  return true;
+}
+
+function planAlignedCheck(plan) {
+  if (!plan || !plan.start) return false;
+  return ((planAddDays(plan.start, 0).getDay() - planWeekStartDay() + 7) % 7) !== 0;
 }
 
 function planNewWeek() {
@@ -39418,7 +40522,7 @@ function planSessionItems(sess) {
   return ((sess && sess.items) || []).map(function (it) {
     return {
       sec: (it.kind === 'warmup') ? 'warmup' : (it.kind === 'mobility' ? 'mobility' : 'main'),
-      libId: it.libId || '', name: planItemName(it), media: planItemMedia(it),
+      libId: it.libId || '', name: (planGroupLabel(sess, it) ? planGroupLabel(sess, it) + ') ' : '') + planItemName(it), media: planItemMedia(it),
       sets: Number(it.sets) || 1, reps: planItemLine(it), rest: '', rpe: '', line: true,
       purpose: pv(it.purpose), component: it.component || ''
     };
@@ -39491,6 +40595,7 @@ async function openPlan(ctx) {
   const saved = await planFetch(planCtx.docId);
   planCurrent = saved || planEmpty(todayStamp);
   if (!planCurrent.sessions) planCurrent.sessions = {};
+  if (!saved) planAlignStart(planCurrent);
   if (!planCurrent.sport && ctx.sport) planCurrent.sport = ctx.sport;
   planDirty = false;
   msg.textContent = saved ? '' : t('plan_new_hint');
@@ -39579,21 +40684,74 @@ function planChips(list, onChange) {
   return box;
 }
 
+/* اختار من القايمة أو اكتب بنفسك */
+function planSelectFree(list, value, onChange) {
+  const wrap = document.createElement('div');
+  wrap.className = 'plan-free';
+  const known = list.some(function (x) { return x.id === value; });
+  const sel = document.createElement('select');
+  list.forEach(function (x) {
+    const o = document.createElement('option');
+    o.value = x.id; o.textContent = x[lang] || x.id;
+    sel.appendChild(o);
+  });
+  const co = document.createElement('option');
+  co.value = '__custom'; co.textContent = lang === 'ar' ? '✎ اكتب بنفسك…' : '✎ Write your own…';
+  sel.appendChild(co);
+  const inp = document.createElement('input');
+  inp.type = 'text';
+  inp.placeholder = lang === 'ar' ? 'اكتب الاسم' : 'Type a name';
+  const custom = !!value && !known;
+  sel.value = custom ? '__custom' : (value || list[0].id);
+  inp.value = custom ? value : '';
+  inp.style.display = custom ? '' : 'none';
+  sel.disabled = inp.disabled = !planCtx.lead;
+  sel.addEventListener('change', function () {
+    if (sel.value === '__custom') { inp.style.display = ''; inp.focus(); if (inp.value.trim()) { onChange(inp.value.trim()); planTouch(); } return; }
+    inp.style.display = 'none';
+    onChange(sel.value); planTouch();
+  });
+  inp.addEventListener('input', function () { if (inp.value.trim()) { onChange(inp.value.trim()); planTouch(); } });
+  inp.addEventListener('change', function () { if (inp.value.trim()) onChange(inp.value.trim()); });
+  wrap.append(sel, inp);
+  return wrap;
+}
+
 function planLoadSlider(value, onChange) {
   const wrap = planEl('div', 'plan-load');
+  const top = planEl('div', 'plan-load-top');
   const range = document.createElement('input');
-  range.type = 'range'; range.min = '1'; range.max = '10'; range.step = '1';
-  range.value = String(value || 5);
+  range.type = 'range'; range.min = '1'; range.max = '10'; range.step = '0.1';
+  const start = Math.min(10, Math.max(1, Number(value) || 5));
+  range.value = String(start);
   range.disabled = !planCtx.lead;
+  range.setAttribute('aria-label', t('plan_f_load'));
+  const num = document.createElement('input');
+  num.type = 'number'; num.min = '1'; num.max = '10'; num.step = '0.1'; num.inputMode = 'decimal';
+  num.className = 'plan-load-num';
+  num.value = String(start);
+  num.disabled = !planCtx.lead;
   const lab = planEl('span', 'plan-load-lab');
+  const ticks = planEl('div', 'plan-load-ticks');
+  for (let k = 1; k <= 10; k++) ticks.appendChild(planEl('span', '', String(k)));
   const paint = function () {
     const lv = planLoadLevel(range.value);
-    lab.textContent = range.value + '/10 · ' + lv[lang];
+    lab.textContent = lv[lang] + ' · ' + range.value + '/10';
     lab.style.color = lv.color;
+    range.style.accentColor = lv.color;
   };
-  range.addEventListener('input', function () { onChange(Number(range.value)); paint(); planTouch(); planPaintChart(); });
+  const apply = function (v) {
+    v = Math.min(10, Math.max(1, Math.round(Number(v) * 10) / 10));
+    if (!isFinite(v)) return;
+    range.value = String(v);
+    onChange(v); paint(); planTouch(); planPaintChart();
+  };
+  range.addEventListener('input', function () { num.value = range.value; apply(range.value); });
+  num.addEventListener('input', function () { if (num.value !== '' && isFinite(Number(num.value))) { const v = Math.min(10, Math.max(1, Number(num.value))); range.value = String(v); onChange(Math.round(v * 10) / 10); paint(); planTouch(); planPaintChart(); } });
+  num.addEventListener('change', function () { apply(num.value || range.value); num.value = range.value; });
   paint();
-  wrap.append(range, lab);
+  top.append(range, num);
+  wrap.append(top, ticks, lab);
   return wrap;
 }
 
@@ -39633,6 +40791,15 @@ function renderPlan() {
     paintPlanSaveBar();
   }
 
+  /* طباعة وتصدير (للكل، حتى لو القراية بس) */
+  const prBar = planEl('div', 'plan-savebar');
+  const prBtn = planEl('button', 'secondary', lang === 'ar' ? 'طباعة / تصدير (PDF · Word · Excel)' : 'Print / Export (PDF · Word · Excel)');
+  prBtn.type = 'button';
+  prBtn.id = 'plan-print-btn';
+  prBtn.addEventListener('click', openPlanPrint);
+  prBar.appendChild(prBtn);
+  body.appendChild(prBar);
+
   /* الموسم */
   const season = planEl('div', 'plan-card plan-season');
   season.appendChild(planEl('h3', 'plan-h', t('plan_season')));
@@ -39641,8 +40808,29 @@ function renderPlan() {
   tl.appendChild(planInput(plan.title, function (v) { plan.title = v; }));
   const st = planEl('label', 'plan-field', t('plan_f_start'));
   st.appendChild(planInput(plan.start, function (v) { plan.start = v || todayStamp; planPaintChart(); }, { type: 'date' }));
+  st.querySelector('input').addEventListener('change', function () { planAlignStart(plan); planTouch(); renderPlan(); });
   g1.append(tl, st);
   season.appendChild(g1);
+  /* بداية الأسبوع */
+  const arW = lang === 'ar';
+  if (planCtx.kind === 'client') {
+    const wsl = planEl('label', 'plan-field', arW ? 'الأسبوع يبدأ يوم' : 'Week starts on');
+    const wsel = document.createElement('select');
+    days().forEach(function (nm, idx) { const o = document.createElement('option'); o.value = String((idx + 6) % 7); o.textContent = nm; wsel.appendChild(o); });
+    wsel.value = String(planWeekStartDay());
+    wsel.disabled = !planCtx.lead;
+    wsel.addEventListener('change', function () { plan.weekStart = Number(wsel.value); planAlignStart(plan); planTouch(); renderPlan(); });
+    wsl.appendChild(wsel);
+    season.appendChild(wsl);
+  } else {
+    season.appendChild(planEl('p', 'hint-text', arW ? 'الأسبوع في الفرق بيبدأ يوم السبت.' : 'Team weeks start on Saturday.'));
+  }
+  if (planCtx.lead && planAlignedCheck(plan)) {
+    const fix = planEl('button', 'secondary', arW ? 'ظبّط بداية الموسم على يوم ' + days()[(planWeekStartDay() + 1) % 7] : 'Align season start to the week start');
+    fix.type = 'button';
+    fix.addEventListener('click', function () { planAlignStart(plan); planTouch(); renderPlan(); });
+    season.appendChild(fix);
+  }
   const gl = planEl('label', 'plan-field', t('plan_f_goal'));
   gl.appendChild(planInput(plan.goal, function (v) { plan.goal = v; }, { area: true, ph: t('plan_goal_ph') }));
   season.appendChild(gl);
@@ -39724,6 +40912,148 @@ function renderPlan() {
     body.appendChild(tip);
   }
   planPaintChart();
+}
+
+/* ---------- طباعة وتصدير الخطة (موسم / أسبوع / وحدة) ---------- */
+
+function planPrintDate(stamp, add) {
+  const d = planAddDays(stamp, add);
+  return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+}
+
+function planSessionBlocks(key, heading) {
+  const s = planCurrent.sessions[key];
+  if (!s) return [];
+  const ar = lang === 'ar';
+  const comps = (s.components || []).map(function (c) { const d = planDef(PLAN_COMPONENTS, c); return d ? d[lang] : c; }).join('، ');
+  const out = [{ t: 'h', level: 2, text: heading || pv(s.title) || key }];
+  out.push({ t: 'kv', rows: [
+    [ar ? 'الهدف' : 'Goal', pv(s.goal)],
+    [ar ? 'المكونات' : 'Components', comps],
+    ['RPE', s.rpe || ''],
+    [ar ? 'المدة (دقيقة)' : 'Duration (min)', s.duration || '']
+  ] });
+  const kindName = function (it) { const k = planDef(PLAN_ITEM_KINDS, it.kind); return k ? k[lang] : (it.kind || ''); };
+  const gKeys = Object.keys(s.groups || {});
+  if (gKeys.length) out.push({ t: 'table', title: ar ? 'المجموعات (سوبر سيت / دواير / محطات)' : 'Groups (supersets / circuits / stations)', head: [ar ? 'المجموعة' : 'Group', ar ? 'التفاصيل' : 'Details'], rows: gKeys.map(function (L) { return [L, planGroupSummary(s, L)]; }) });
+  out.push({ t: 'table', head: ['#', ar ? 'المجموعة' : 'Group', ar ? 'القسم' : 'Type', ar ? 'التمرين' : 'Exercise', ar ? 'الحجم والشدة والراحة' : 'Volume · intensity · rest', ar ? 'ملاحظة' : 'Note'],
+    rows: (s.items || []).map(function (it, i) { return [i + 1, planGroupLabel(s, it), kindName(it), planItemName(it), planItemLine(it), pv(it.purpose) || pv(it.note) || '']; }) });
+  return out;
+}
+
+function planWeekBlocks(e, plan) {
+  const ar = lang === 'ar';
+  const wt = planWeekTypeInfo(e.week.type);
+  const out = [{ t: 'h', level: 2, text: fill('plan_week_n', { n: e.n + 1 }) + ' · ' + planPrintDate(plan.start, e.n * 7) + ' → ' + planPrintDate(plan.start, e.n * 7 + 6) }];
+  out.push({ t: 'kv', rows: [
+    [ar ? 'الفترة' : 'Period', planPeriodType(e.period.type)[lang]],
+    [ar ? 'نوع الأسبوع' : 'Week type', wt ? wt[lang] : ''],
+    [ar ? 'مستوى الحمل (من 10)' : 'Load (of 10)', e.week.load],
+    [ar ? 'ملاحظة' : 'Note', e.week.note]
+  ] });
+  const dn = days();
+  const rows = [];
+  for (let d = 0; d < 7; d++) {
+    const k = e.week.days[d] || '';
+    const s = k ? plan.sessions[k] : null;
+    rows.push([dn[d], planPrintDate(plan.start, e.n * 7 + d), s ? (pv(s.title) || k) : (ar ? 'راحة' : 'Rest'), s ? 'RPE ' + (s.rpe || '-') + ' · ' + (s.duration || '-') + ' ' + (ar ? 'د' : 'min') : '']);
+  }
+  out.push({ t: 'table', head: [ar ? 'اليوم' : 'Day', ar ? 'التاريخ' : 'Date', ar ? 'الوحدة' : 'Session', ar ? 'الشدة والمدة' : 'RPE · duration'], rows: rows });
+  return out;
+}
+
+function planBuildPrintDoc(scope, wIdx, sKey) {
+  const plan = planCurrent;
+  const ar = lang === 'ar';
+  const flat = planWeeksFlat(plan);
+  const title = plan.title || (ar ? 'خطة الموسم' : 'Season plan');
+  const comps = (plan.components || []).map(function (c) { const d = planDef(PLAN_COMPONENTS, c); return d ? d[lang] : c; }).join('، ');
+  const doc = { title: title, lang: lang, filename: title, blocks: [] };
+  const head = [{ t: 'kv', rows: [
+    [ar ? 'الرياضة' : 'Sport', plan.sport], [ar ? 'الهدف' : 'Goal', plan.goal],
+    [ar ? 'بداية الموسم' : 'Start', plan.start], [ar ? 'عدد الأسابيع' : 'Weeks', flat.length], [ar ? 'المكونات' : 'Components', comps]
+  ] }];
+  if (scope === 'session') {
+    doc.subtitle = ar ? 'وحدة تدريبية' : 'Training session';
+    doc.blocks = head.concat(planSessionBlocks(sKey));
+    doc.filename = title + '_' + (pv((plan.sessions[sKey] || {}).title) || sKey);
+  } else if (scope === 'week') {
+    const e = flat[wIdx] || flat[0];
+    doc.subtitle = fill('plan_week_n', { n: e.n + 1 });
+    doc.blocks = head.concat(planWeekBlocks(e, plan));
+    const seen = {};
+    e.week.days.forEach(function (k) {
+      if (!k || seen[k] || !plan.sessions[k]) return;
+      seen[k] = 1;
+      doc.blocks = doc.blocks.concat(planSessionBlocks(k));
+    });
+    doc.filename = title + '_W' + (e.n + 1);
+  } else {
+    doc.subtitle = ar ? 'الموسم كامل' : 'Full season';
+    const colors = flat.map(function (e) { return planPeriodType(e.period.type).color; });
+    const legend = [];
+    const seenP = {};
+    plan.periods.forEach(function (p) { if (seenP[p.type]) return; seenP[p.type] = 1; const pt = planPeriodType(p.type); legend.push({ name: pt[lang], color: pt.color }); });
+    doc.blocks = head.concat([
+      { t: 'chart', kind: 'bars', title: t('plan_chart'), max: 10, legend: legend, labels: flat.map(function (e) { return e.n + 1; }),
+        series: [{ name: ar ? 'مستوى الحمل' : 'Load', color: '#0b6b5c', colors: colors, values: flat.map(function (e) { return Number(e.week.load) || 0; }) }] },
+      { t: 'table', title: ar ? 'جدول الأسابيع' : 'Weeks table',
+        head: ['#', ar ? 'من' : 'From', ar ? 'الفترة' : 'Period', ar ? 'النوع' : 'Type', ar ? 'الحمل' : 'Load'].concat(days()),
+        rows: flat.map(function (e) {
+          const wt = planWeekTypeInfo(e.week.type);
+          return [e.n + 1, planPrintDate(plan.start, e.n * 7), planPeriodType(e.period.type)[lang], wt ? wt[lang] : '', e.week.load].concat(
+            [0, 1, 2, 3, 4, 5, 6].map(function (d) { const k = e.week.days[d]; const s = k ? plan.sessions[k] : null; return s ? (pv(s.title) || k) : '—'; }));
+        }),
+        colors: flat.map(function (e) { return [planPeriodType(e.period.type).color + '33']; }) }
+    ]);
+    const used = {};
+    flat.forEach(function (e) { e.week.days.forEach(function (k) { if (k && plan.sessions[k]) used[k] = 1; }); });
+    const keys = Object.keys(used);
+    if (keys.length) {
+      doc.blocks.push({ t: 'break' });
+      doc.blocks.push({ t: 'h', level: 1, text: ar ? 'تفاصيل الوحدات' : 'Session details' });
+      keys.forEach(function (k) { doc.blocks = doc.blocks.concat(planSessionBlocks(k)); });
+    }
+  }
+  return doc;
+}
+
+function openPlanPrint() {
+  if (!planCurrent) return;
+  if (!window.ADAM_PRINT) { alert(lang === 'ar' ? 'محرك الطباعة لسه ما اتحمّلش، جرّب تاني.' : 'Print engine not loaded yet.'); return; }
+  const ar = lang === 'ar';
+  const flat = planWeeksFlat(planCurrent);
+  const body = planSheetOpen(ar ? 'طباعة وتصدير' : 'Print & export');
+  let scope = 'season';
+  const mkSel = function (opts, cb) {
+    const s = document.createElement('select');
+    opts.forEach(function (o) { const op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; s.appendChild(op); });
+    s.addEventListener('change', function () { cb(s.value); });
+    return s;
+  };
+  const group = planEl('div', 'plan-grid2');
+  const ls = planEl('label', 'plan-field', ar ? 'إيه اللي يتطبع؟' : 'What to print');
+  const wSel = mkSel(flat.map(function (e) { return [String(e.n), fill('plan_week_n', { n: e.n + 1 })]; }), function () {});
+  const keys = Object.keys(planCurrent.sessions);
+  const sSel = mkSel(keys.map(function (k) { return [k, pv(planCurrent.sessions[k].title) || k]; }), function () {});
+  const wL = planEl('label', 'plan-field', ar ? 'الأسبوع' : 'Week');
+  wL.appendChild(wSel);
+  const sL = planEl('label', 'plan-field', ar ? 'الوحدة' : 'Session');
+  sL.appendChild(sSel);
+  const sync = function () { wL.style.display = scope === 'week' ? '' : 'none'; sL.style.display = scope === 'session' ? '' : 'none'; };
+  ls.appendChild(mkSel([['season', ar ? 'الموسم كامل' : 'Full season'], ['week', ar ? 'أسبوع واحد' : 'One week'], ['session', ar ? 'وحدة تدريبية' : 'One session']], function (v) { scope = v; sync(); }));
+  group.append(ls);
+  body.append(group, wL, sL);
+  sync();
+  const go = planEl('button', '', ar ? 'معاينة وطباعة' : 'Preview & print');
+  go.type = 'button';
+  if (!keys.length) { sSel.disabled = true; }
+  go.addEventListener('click', function () {
+    if (scope === 'session' && !keys.length) return;
+    planSheetClose();
+    window.ADAM_PRINT.open(planBuildPrintDoc(scope, Number(wSel.value) || 0, sSel.value));
+  });
+  body.appendChild(go);
 }
 
 function planUsage(key) {
@@ -39809,7 +41139,7 @@ function renderPlanPeriods() {
 
     const g = planEl('div', 'plan-grid2');
     const tlab = planEl('label', 'plan-field', t('plan_f_period_type'));
-    tlab.appendChild(planSelect(PLAN_PERIOD_TYPES, p.type, function (v) { p.type = v; renderPlanPeriods(); planPaintChart(); }));
+    tlab.appendChild(planSelectFree(PLAN_PERIOD_TYPES, p.type, function (v) { p.type = v; renderPlanPeriods(); planPaintChart(); }));
     g.appendChild(tlab);
     pc.appendChild(g);
     const pg = planEl('label', 'plan-field', t('plan_f_goal'));
@@ -39880,13 +41210,18 @@ function planWeekRow(w, n, onDelete, onDup) {
   const end = planAddDays(planCurrent.start, n * 7 + 6);
   const head = planEl('div', 'plan-week-h');
   head.appendChild(planEl('strong', '', fill('plan_week_n', { n: n + 1 })));
-  head.appendChild(planEl('span', 'plan-week-dates', start.getDate() + '/' + (start.getMonth() + 1) + ' – ' + end.getDate() + '/' + (end.getMonth() + 1)));
+  const wl = planLoadLevel(w.load);
+  head.appendChild(planEl('span', 'plan-week-dates', '\u2066' + start.getDate() + '/' + (start.getMonth() + 1) + ' → ' + end.getDate() + '/' + (end.getMonth() + 1) + '\u2069'));
+  const pill = planEl('span', 'plan-week-pill', String(w.load || 5));
+  pill.style.background = wl.color;
+  pill.title = t('plan_f_load');
+  head.appendChild(pill);
   row.appendChild(head);
   const g = planEl('div', 'plan-grid2');
   const lt = planEl('label', 'plan-field', t('plan_f_week_type'));
-  lt.appendChild(planSelect(PLAN_WEEK_TYPES, w.type, function (v) { w.type = v; row.classList.toggle('deload', v === 'deload'); planPaintChart(); }));
+  lt.appendChild(planSelectFree(PLAN_WEEK_TYPES, w.type, function (v) { w.type = v; row.classList.toggle('deload', v === 'deload'); planPaintChart(); }));
   const ll = planEl('label', 'plan-field', t('plan_f_load'));
-  ll.appendChild(planLoadSlider(w.load, function (v) { w.load = v; }));
+  ll.appendChild(planLoadSlider(w.load, function (v) { w.load = v; pill.textContent = String(v); pill.style.background = planLoadLevel(v).color; }));
   g.append(lt, ll);
   row.appendChild(g);
 
@@ -39898,6 +41233,7 @@ function planWeekRow(w, n, onDelete, onDup) {
     const b = planEl('button', 'plan-day' + (sess ? ' has' : '') + (dateStamp(date) === todayStamp ? ' today' : ''));
     b.type = 'button';
     b.appendChild(planEl('span', 'plan-day-name', daysShort()[planWeekdayIndex(date)]));
+    b.appendChild(planEl('span', 'plan-day-date', date.getDate() + '/' + (date.getMonth() + 1)));
     b.appendChild(planEl('span', 'plan-day-s', sess ? (pv(sess.title) || '•') : t('plan_rest_short')));
     b.addEventListener('click', function () { openPlanDay(w, d, n); });
     daysBox.appendChild(b);
@@ -39987,13 +41323,26 @@ function openPlanDay(w, d, n) {
     const edit = planEl('button', '', t('plan_edit_this'));
     edit.type = 'button';
     edit.addEventListener('click', function () {
-      /* الجلسة مستخدمة في أيام تانية؟ تعديل اليوم ده بس = نسخة لوحدها */
-      if (planUsage(key) > 1 && !window.confirm(fill('plan_shared_confirm', { n: planUsage(key) }))) {
-        const k2 = planNewSessionKey();
-        planCurrent.sessions[k2] = JSON.parse(JSON.stringify(planCurrent.sessions[key]));
-        w.days[d] = k2;
-        planTouch();
-        openPlanSession(k2, null);
+      /* الجلسة مستخدمة في أيام تانية؟ نسأل بوضوح: اليوم ده بس ولا كل الأيام */
+      if (planUsage(key) > 1) {
+        const ar = lang === 'ar';
+        const box = planSheetOpen(ar ? 'تعدّل إيه؟' : 'What to change?');
+        box.appendChild(planEl('p', 'hint-text', ar
+          ? 'الجلسة دي مستخدمة في ' + planUsage(key) + ' أيام. تحب التعديل يمشي على أنهي؟'
+          : 'This session is used on ' + planUsage(key) + ' days. Where should the change apply?'));
+        const only = planEl('button', '', ar ? 'اليوم ده بس (نسخة لوحدها)' : 'This day only (own copy)');
+        only.type = 'button';
+        only.addEventListener('click', function () {
+          const k2 = planNewSessionKey();
+          planCurrent.sessions[k2] = JSON.parse(JSON.stringify(planCurrent.sessions[key]));
+          w.days[d] = k2;
+          planTouch();
+          openPlanSession(k2, null);
+        });
+        const all = planEl('button', 'secondary', ar ? 'كل الأيام اللي فيها الجلسة دي' : 'Every day that uses it');
+        all.type = 'button';
+        all.addEventListener('click', function () { openPlanSession(key, null); });
+        box.append(only, all);
         return;
       }
       openPlanSession(key, null);
@@ -40027,6 +41376,8 @@ function openPlanSession(key, focusIdx) {
   body.appendChild(planChips(s.components, function (l) { s.components = l; }));
 
   body.appendChild(planEl('h3', 'plan-h', fill('plan_items_n', { n: s.items.length })));
+  planNormalizeGroups(s);
+  if (Object.keys(s.groups || {}).length || planCtx.lead) body.appendChild(planGroupsEditor(s, key));
   const items = planEl('div', 'plan-items');
   s.items.forEach(function (it, i) { items.appendChild(planItemCard(s, it, i, key, focusIdx === i)); });
   body.appendChild(items);
@@ -40035,7 +41386,7 @@ function openPlanSession(key, focusIdx) {
     const adds = planEl('div', 'plan-add-row');
     const fromLib = planEl('button', '', t('plan_add_from_lib'));
     fromLib.type = 'button';
-    fromLib.addEventListener('click', function () { planOpenLibrary(key); });
+    fromLib.addEventListener('click', function () { planReplaceIdx = -1; planOpenLibrary(key); });
     adds.appendChild(fromLib);
     PLAN_ITEM_KINDS.forEach(function (k) {
       const b = planEl('button', 'secondary', '+ ' + k[lang]);
@@ -40064,6 +41415,89 @@ function openPlanSession(key, focusIdx) {
   }
 }
 
+/* ---------- مجموعات التمارين جوه الجلسة: سوبر سيت / دايرة / محطات ----------
+   session.groups = { A: { type, rounds, rest, work, transition } }  و item.grp = 'A' */
+const PLAN_GROUP_TYPES = [
+  { id: 'superset', ar: 'سوبر سيت', en: 'Superset' },
+  { id: 'triset', ar: 'ترايسيت (3 تمارين)', en: 'Tri-set' },
+  { id: 'giant', ar: 'جاينت سيت', en: 'Giant set' },
+  { id: 'circuit', ar: 'دايرة (سيركت)', en: 'Circuit' },
+  { id: 'stations', ar: 'محطات', en: 'Stations' }
+];
+const PLAN_GROUP_LETTERS = 'ABCDEFGHIJKLMNOP'.split('');
+
+function planGroupLabel(s, it) {
+  if (!it || !it.grp || !s || !s.groups || !s.groups[it.grp]) return '';
+  let n = 0;
+  for (let k = 0; k < s.items.length; k++) { if (s.items[k].grp === it.grp) n++; if (s.items[k] === it) break; }
+  return it.grp + n;
+}
+function planGroupType(g) { return planDef(PLAN_GROUP_TYPES, g && g.type) || PLAN_GROUP_TYPES[0]; }
+function planGroupSummary(s, letter) {
+  const g = s.groups && s.groups[letter];
+  if (!g) return '';
+  const ar = lang === 'ar';
+  const parts = [planGroupType(g)[lang]];
+  if (g.rounds) parts.push(g.rounds + (ar ? ' لفّات' : ' rounds'));
+  if (g.work) parts.push((ar ? 'شغل ' : 'work ') + g.work);
+  if (g.transition) parts.push((ar ? 'انتقال ' : 'move ') + g.transition);
+  if (g.rest) parts.push((ar ? 'راحة بين اللفّات ' : 'rest ') + g.rest);
+  return letter + ' · ' + parts.join(' · ');
+}
+/* بعد أي تغيير: عناصر المجموعة الواحدة تتجمّع ورا بعض (بترتيب أول ظهور) */
+function planNormalizeGroups(s) {
+  if (!s.groups) s.groups = {};
+  const used = {};
+  s.items.forEach(function (it) { if (it.grp && s.groups[it.grp]) used[it.grp] = true; else delete it.grp; });
+  Object.keys(s.groups).forEach(function (k) { if (!used[k]) delete s.groups[k]; });
+  const out = [];
+  const done = {};
+  s.items.forEach(function (it) {
+    if (!it.grp) { out.push(it); return; }
+    if (done[it.grp]) return;
+    done[it.grp] = true;
+    s.items.filter(function (x) { return x.grp === it.grp; }).forEach(function (x) { out.push(x); });
+  });
+  s.items = out;
+}
+
+function planGroupsEditor(s, key) {
+  const ar = lang === 'ar';
+  const box = planEl('div', 'plan-groups');
+  const letters = Object.keys(s.groups || {});
+  box.appendChild(planEl('h3', 'plan-h', ar ? 'سوبر سيت ودواير ومحطات' : 'Supersets, circuits & stations'));
+  if (!letters.length) box.appendChild(planEl('p', 'hint-text', ar ? 'لتجميع تمارين في سوبر سيت أو دايرة أو محطات، افتح التمرين واختار "المجموعة" منه.' : 'To group exercises into a superset, circuit or stations, open an exercise and pick its group.'));
+  letters.forEach(function (L) {
+    const g = s.groups[L];
+    const card = planEl('div', 'plan-group');
+    card.appendChild(planEl('strong', '', planGroupSummary(s, L)));
+    if (planCtx.lead) {
+      const grid = planEl('div', 'plan-grid3');
+      const tl = planEl('label', 'plan-field', ar ? 'النوع' : 'Type');
+      tl.appendChild(planSelect(PLAN_GROUP_TYPES, g.type, function (v) { g.type = v; openPlanSession(key, null); }));
+      const rl = planEl('label', 'plan-field', ar ? 'عدد اللفّات' : 'Rounds');
+      rl.appendChild(planInput(g.rounds, function (v) { g.rounds = Number(v) || ''; }, { type: 'number' }));
+      const rs = planEl('label', 'plan-field', ar ? 'راحة بين اللفّات' : 'Rest between rounds');
+      rs.appendChild(planInput(g.rest, function (v) { g.rest = v; }, { ph: '90s' }));
+      grid.append(tl, rl, rs);
+      if (g.type === 'circuit' || g.type === 'stations') {
+        const wl = planEl('label', 'plan-field', ar ? 'زمن الشغل في المحطة' : 'Work time per station');
+        wl.appendChild(planInput(g.work, function (v) { g.work = v; }, { ph: '40s' }));
+        const tr = planEl('label', 'plan-field', ar ? 'زمن الانتقال' : 'Transition');
+        tr.appendChild(planInput(g.transition, function (v) { g.transition = v; }, { ph: '20s' }));
+        grid.append(wl, tr);
+      }
+      card.appendChild(grid);
+      const un = planEl('button', 'link sq-del', ar ? 'فكّ المجموعة' : 'Ungroup');
+      un.type = 'button';
+      un.addEventListener('click', function () { s.items.forEach(function (it) { if (it.grp === L) delete it.grp; }); planNormalizeGroups(s); planTouch(); openPlanSession(key, null); });
+      card.appendChild(un);
+    }
+    box.appendChild(card);
+  });
+  return box;
+}
+
 function planItemCard(s, it, i, key, open) {
   const card = planEl('details', 'plan-item');
   if (open) card.open = true;
@@ -40077,6 +41511,8 @@ function planItemCard(s, it, i, key, open) {
   const tags = planEl('span', 'plan-item-tags');
   if (kind) tags.appendChild(planEl('i', '', kind[lang]));
   if (it.component) tags.appendChild(planEl('i', 'comp', planCompName(it.component)));
+  const gl = planGroupLabel(s, it);
+  if (gl) { const gi = planEl('i', 'grp', gl); gi.title = planGroupSummary(s, it.grp); tags.appendChild(gi); }
   txt.appendChild(tags);
   if (pv(it.purpose)) txt.appendChild(planEl('span', 'plan-item-purpose', t('plan_purpose') + ': ' + pv(it.purpose)));
   sum.appendChild(txt);
@@ -40087,6 +41523,42 @@ function planItemCard(s, it, i, key, open) {
   }
 
   const ed = planEl('div', 'plan-item-ed');
+  /* شوف التمرين / استبدله / كرّره */
+  const arL = lang === 'ar';
+  const qa = planEl('div', 'plan-item-qa');
+  if (it.libId && media) {
+    const big = document.createElement('img');
+    big.src = media; big.alt = ''; big.className = 'plan-item-big'; big.style.display = 'none';
+    const see = planEl('button', 'secondary', arL ? 'شوف التمرين' : 'View exercise');
+    see.type = 'button';
+    see.addEventListener('click', function () { const on = big.style.display === 'none'; big.style.display = on ? '' : 'none'; see.textContent = on ? (arL ? 'اخفي التمرين' : 'Hide') : (arL ? 'شوف التمرين' : 'View exercise'); });
+    qa.appendChild(see);
+    ed.appendChild(big);
+  }
+  const repBtn = planEl('button', 'secondary', arL ? 'استبدل بتمرين تاني' : 'Replace exercise');
+  repBtn.type = 'button';
+  repBtn.addEventListener('click', function () { planReplaceIdx = i; planOpenLibrary(key); });
+  qa.append(repBtn);
+  ed.insertBefore(qa, ed.firstChild);
+  const gsel = document.createElement('select');
+  const g0 = document.createElement('option'); g0.value = ''; g0.textContent = arL ? 'من غير مجموعة' : 'No group'; gsel.appendChild(g0);
+  Object.keys(s.groups || {}).forEach(function (L) { const o = document.createElement('option'); o.value = L; o.textContent = planGroupSummary(s, L); gsel.appendChild(o); });
+  const gn = document.createElement('option'); gn.value = '__new'; gn.textContent = arL ? '+ مجموعة جديدة (سوبر سيت / دايرة / محطات)' : '+ New group (superset / circuit / stations)'; gsel.appendChild(gn);
+  gsel.value = it.grp || '';
+  gsel.addEventListener('change', function () {
+    if (gsel.value === '__new') {
+      if (!s.groups) s.groups = {};
+      const L = PLAN_GROUP_LETTERS.filter(function (x) { return !s.groups[x]; })[0] || 'Z';
+      s.groups[L] = { type: 'superset', rounds: 3, rest: '90s' };
+      it.grp = L;
+    } else if (gsel.value) it.grp = gsel.value; else delete it.grp;
+    planNormalizeGroups(s);
+    planTouch();
+    openPlanSession(key, s.items.indexOf(it));
+  });
+  const gwrap = planEl('label', 'plan-field', arL ? 'المجموعة' : 'Group');
+  gwrap.appendChild(gsel);
+  ed.appendChild(gwrap);
   const k1 = planEl('label', 'plan-field', t('plan_f_kind'));
   k1.appendChild(planSelect(PLAN_ITEM_KINDS, it.kind, function (v) { it.kind = v; openPlanSession(key, i); }));
   ed.appendChild(k1);
@@ -40183,6 +41655,7 @@ function planItemCard(s, it, i, key, open) {
 /* ---------- إضافة تمرين من المكتبة ---------- */
 
 let planLibTarget = '';
+let planReplaceIdx = -1;
 
 function planOpenLibrary(key) {
   planLibTarget = key;
@@ -40204,6 +41677,16 @@ function planAddLibItem(built) {
   if (kind === 'strength') { it.reps = String(built.reps || '8'); it.rest = built.rest || '2min'; }
   if (kind === 'run') { it.distance = built.distance || ''; it.rest = built.rest || ''; }
   if (kind === 'timed') { it.duration = built.duration || built.reps || ''; it.rest = built.rest || ''; }
+  if (planReplaceIdx >= 0 && s.items[planReplaceIdx]) {
+    const old = s.items[planReplaceIdx];
+    ['component', 'purpose', 'note', 'intensity', 'basis'].forEach(function (f) { if (old[f]) it[f] = old[f]; });
+    s.items[planReplaceIdx] = it;
+    const at = planReplaceIdx;
+    planReplaceIdx = -1;
+    planTouch();
+    openPlanSession(planLibTarget, at);
+    return;
+  }
   s.items.push(it);
   planTouch();
   openPlanSession(planLibTarget, s.items.length - 1);
@@ -40372,7 +41855,660 @@ async function renderClientPlanCard() {
   } else box.appendChild(planEl('div', 'cpc-today', t('plan_rest_today')));
 }
 
+
+/* ============================================================
+   طباعة وتصدير برامج العملاء (تدريب / تأهيل / تغذية / علاج طبيعي)
+   بتستخدم نفس محرك adam-print.js: طباعة/PDF وWord وExcel
+   ============================================================ */
+function cpExLine(ex) {
+  const ar = lang === 'ar';
+  const parts = [];
+  if (ex.sets || ex.reps) parts.push((ex.sets ? ex.sets : '') + (ex.sets && ex.reps ? ' × ' : '') + (ex.reps ? localiseReps(String(ex.reps)) : ''));
+  if (ex.duration) parts.push((ar ? 'مدة ' : 'Time ') + ex.duration);
+  if (ex.distance) parts.push((ar ? 'مسافة ' : 'Dist ') + ex.distance);
+  return parts.join(' · ');
+}
+
+function cpExNotes(ex) {
+  const bits = [];
+  if (ex.tempo) bits.push((lang === 'ar' ? 'إيقاع ' : 'Tempo ') + ex.tempo);
+  if (ex.rir) bits.push('RIR ' + ex.rir);
+  if (ex.zone) bits.push(ex.zone);
+  if (Array.isArray(ex.setDetails) && ex.setDetails.length) {
+    bits.push(ex.setDetails.map(function (s, i) {
+      return (i + 1) + ': ' + [s.weight ? s.weight : '', s.reps ? '×' + s.reps : ''].join('').trim();
+    }).filter(Boolean).join(' | '));
+  }
+  if (ex.cues) bits.push(ex.cues);
+  return bits.join(' — ');
+}
+
+function cpExTable(list, title) {
+  const ar = lang === 'ar';
+  if (!list || !list.length) return null;
+  return {
+    t: 'table', title: title || '',
+    head: ['#', ar ? 'التمرين' : 'Exercise', ar ? 'الأسيت × التكرار' : 'Sets × Reps', ar ? 'الراحة' : 'Rest', ar ? 'الحمل' : 'Load', 'RPE', ar ? 'ملاحظات' : 'Notes'],
+    rows: list.map(function (ex, i) {
+      return [i + 1, exerciseDisplayName(ex), cpExLine(ex), ex.rest ? localiseReps(String(ex.rest)) : '', ex.load ? localiseReps(String(ex.load)) : '', ex.rpe || '', cpExNotes(ex)];
+    })
+  };
+}
+
+function cpDayCount(day) {
+  let n = 0, sets = 0;
+  daySessions(day).forEach(function (s) {
+    SECTION_KEYS.forEach(function (k) {
+      ((s.sections || {})[k] || []).forEach(function (ex) { n++; sets += Number(ex.sets) || 0; });
+    });
+  });
+  return { ex: n, sets: sets };
+}
+
+function cpTrainingBlocks(dayIdx) {
+  const ar = lang === 'ar';
+  const dn = days();
+  const out = [];
+  const list = dayIdx === 'all' ? [0, 1, 2, 3, 4, 5, 6] : [Number(dayIdx) || 0];
+  if (dayIdx === 'all') {
+    out.push({ t: 'chart', kind: 'bars', title: ar ? 'حجم التمارين في الأسبوع (عدد المجموعات)' : 'Weekly volume (total sets)', labels: list.map(function (i) { return dn[i]; }),
+      series: [{ name: ar ? 'مجموعات' : 'Sets', color: '#0b6b5c', values: list.map(function (i) { return cpDayCount(coachWeek[i]).sets; }) }] });
+  }
+  list.forEach(function (i) {
+    const day = coachWeek[i];
+    const sess = daySessions(day);
+    const c = cpDayCount(day);
+    const isRest = sess.every(function (s) { return s.rest; }) || (!c.ex && !day.title);
+    out.push({ t: 'h', level: 2, text: dn[i] + (day.title ? ' — ' + tr(day.title) : '') });
+    if (isRest && !c.ex) { out.push({ t: 'p', text: ar ? 'يوم راحة' : 'Rest day' }); return; }
+    sess.forEach(function (s, si) {
+      if (s.rest) return;
+      if (sess.length > 1 || s.time) out.push({ t: 'h', level: 3, text: sessionLabel(s, si) + (s.time ? ' · ' + s.time : '') });
+      SECTION_KEYS.forEach(function (k) {
+        const tb = cpExTable((s.sections || {})[k], sectionName(k));
+        if (tb) out.push(tb);
+      });
+    });
+  });
+  return out;
+}
+
+function cpRehabBlocks() {
+  const ar = lang === 'ar';
+  const r = coachRehab;
+  const out = [{ t: 'kv', rows: [
+    [ar ? 'المنطقة' : 'Body part', r.bodyPart], [ar ? 'الإصابة' : 'Injury', r.injury], [ar ? 'ملاحظات' : 'About', r.about],
+    [ar ? 'المرحلة الحالية' : 'Current phase', r.phases[r.currentPhase] ? (r.currentPhase + 1) + ' — ' + r.phases[r.currentPhase].name : '']
+  ] }];
+  if (r.phases.length) {
+    out.push({ t: 'chart', kind: 'bars', title: ar ? 'عدد التمارين في كل مرحلة' : 'Exercises per phase', labels: r.phases.map(function (p, i) { return (i + 1) + ''; }),
+      series: [{ name: ar ? 'تمارين' : 'Exercises', color: '#0b6b5c', colors: r.phases.map(function (p, i) { return i === r.currentPhase ? '#0b6b5c' : '#9fb8b3'; }), values: r.phases.map(function (p) { return p.exercises.length; }) }] });
+  }
+  r.phases.forEach(function (p, i) {
+    out.push({ t: 'h', level: 2, text: (ar ? 'المرحلة ' : 'Phase ') + (i + 1) + (p.name ? ' — ' + p.name : '') + (i === r.currentPhase ? (ar ? '  (الحالية)' : '  (current)') : '') });
+    out.push({ t: 'kv', rows: [[ar ? 'الهدف' : 'Goal', p.goal], [ar ? 'معايير الانتقال' : 'Progression criteria', p.criteria]] });
+    const tb = cpExTable(p.exercises);
+    if (tb) out.push(tb);
+  });
+  if (r.modalities && r.modalities.length) {
+    out.push({ t: 'table', title: ar ? 'جلسات الأجهزة' : 'Modalities', head: ['#', ar ? 'الجهاز / البروتوكول' : 'Modality / protocol'],
+      rows: r.modalities.map(function (m, i) { return [i + 1, typeof m === 'string' ? m : (m.modality || m.protocolId || '')]; }) });
+  }
+  return out;
+}
+
+function cpNutritionBlocks(dayIdx) {
+  const ar = lang === 'ar';
+  const n = coachNutrition;
+  const dn = days();
+  const out = [];
+  const tg = n.targets || {};
+  out.push({ t: 'kv', rows: [[ar ? 'السعرات المستهدفة' : 'Target kcal', tg.kcal], [ar ? 'بروتين (جم)' : 'Protein (g)', tg.protein], [ar ? 'كارب (جم)' : 'Carbs (g)', tg.carbs], [ar ? 'دهون (جم)' : 'Fat (g)', tg.fat]] });
+  const list = dayIdx === 'all' ? [0, 1, 2, 3, 4, 5, 6] : [Number(dayIdx) || 0];
+  const r0 = function (x) { return Math.round(x || 0); };
+  if (dayIdx === 'all') {
+    out.push({ t: 'chart', kind: 'bars', title: ar ? 'السعرات اليومية' : 'Daily calories', labels: list.map(function (i) { return dn[i]; }), max: Math.max(Number(tg.kcal) || 0, 100),
+      series: [{ name: ar ? 'سعرات' : 'kcal', color: '#e08a2b', values: list.map(function (i) { return r0(dayTotals(n.week[i]).kcal); }) }] });
+    out.push({ t: 'chart', kind: 'bars', title: ar ? 'الماكروز اليومية (جم)' : 'Daily macros (g)', labels: list.map(function (i) { return dn[i]; }),
+      series: [
+        { name: ar ? 'بروتين' : 'Protein', color: '#c0392b', values: list.map(function (i) { return r0(dayTotals(n.week[i]).protein); }) },
+        { name: ar ? 'كارب' : 'Carbs', color: '#2d7dd2', values: list.map(function (i) { return r0(dayTotals(n.week[i]).carbs); }) },
+        { name: ar ? 'دهون' : 'Fat', color: '#d4a017', values: list.map(function (i) { return r0(dayTotals(n.week[i]).fat); }) }
+      ] });
+  }
+  list.forEach(function (i) {
+    const day = n.week[i];
+    const tot = dayTotals(day);
+    out.push({ t: 'h', level: 2, text: dn[i] });
+    if (!nutritionDayCount(day)) { out.push({ t: 'p', text: ar ? 'مفيش وجبات متسجلة' : 'No meals planned' }); return; }
+    const rows = [];
+    MEAL_KEYS.forEach(function (k) {
+      (day.meals[k] || []).forEach(function (it, j) {
+        const m = itemMacros(it);
+        rows.push([j === 0 ? mealName(k) : '', foodDisplayName(it), it.grams || '', r0(m.kcal), r0(m.protein), r0(m.carbs), r0(m.fat)]);
+      });
+    });
+    rows.push([ar ? 'الإجمالي' : 'Total', '', '', r0(tot.kcal), r0(tot.protein), r0(tot.carbs), r0(tot.fat)]);
+    out.push({ t: 'table', head: [ar ? 'الوجبة' : 'Meal', ar ? 'الصنف' : 'Food', ar ? 'جرام' : 'g', 'kcal', ar ? 'بروتين' : 'P', ar ? 'كارب' : 'C', ar ? 'دهون' : 'F'], rows: rows });
+  });
+  if (n.supplements && n.supplements.length) {
+    out.push({ t: 'table', title: ar ? 'المكملات' : 'Supplements', head: [ar ? 'المكمل' : 'Supplement', ar ? 'الجرعة' : 'Dose', ar ? 'التوقيت' : 'When', ar ? 'ملاحظة' : 'Note'],
+      rows: n.supplements.map(function (s) { return [s.name || s.supId || '', s.dose || '', s.when || '', s.note || '']; }) });
+  }
+  return out;
+}
+
+function cpPhysioBlocks() {
+  const ar = lang === 'ar';
+  const p = coachPhysio;
+  const out = [{ t: 'kv', rows: [
+    [ar ? 'التشخيص' : 'Diagnosis', p.diagnosis], [ar ? 'الأهداف' : 'Goals', p.goals],
+    [ar ? 'عدد الجلسات المخطط' : 'Planned sessions', p.totalSessions || ''], [ar ? 'جلسات في الأسبوع' : 'Per week', p.perWeek || ''],
+    [ar ? 'جلسات تمت' : 'Sessions done', p.sessions.length || '']
+  ] }];
+  const num = function (v) { return v === '' || v == null || isNaN(Number(v)); };
+  const sess = p.sessions.filter(function (s) { return !num(s.painBefore) && !num(s.painAfter); }).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+  if (sess.length >= 2) {
+    out.push({ t: 'chart', kind: 'line', title: ar ? 'منحنى الألم (قبل / بعد الجلسة)' : 'Pain curve (before / after session)', max: 10, labels: sess.map(function (s) { return s.date; }),
+      series: [{ name: ar ? 'قبل' : 'Before', color: '#c0392b', values: sess.map(function (s) { return Number(s.painBefore); }) }, { name: ar ? 'بعد' : 'After', color: '#0b6b5c', values: sess.map(function (s) { return Number(s.painAfter); }) }] });
+  }
+  const ass = p.assessments.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+  if (ass.length >= 2) {
+    out.push({ t: 'chart', kind: 'line', title: ar ? 'تطور الألم في التقييمات' : 'Pain across assessments', max: 10, labels: ass.map(function (a) { return a.date; }),
+      series: [{ name: ar ? 'الآن' : 'Now', color: '#2d7dd2', values: ass.map(function (a) { return Number(a.painNow) || 0; }) }, { name: ar ? 'الأسوأ' : 'Worst', color: '#c0392b', values: ass.map(function (a) { return Number(a.painWorst) || 0; }) }] });
+  }
+  const res = function (x) { return x === 'pos' || x === 'positive' ? '+' : (x === 'neg' || x === 'negative' ? '−' : (x || '')); };
+  ass.forEach(function (a) {
+    out.push({ t: 'h', level: 2, text: (ar ? 'تقييم ' : 'Assessment ') + a.date });
+    out.push({ t: 'kv', rows: [[ar ? 'الألم الآن' : 'Pain now', a.painNow], [ar ? 'أسوأ ألم' : 'Worst pain', a.painWorst], [ar ? 'المنطقة' : 'Area', a.area], [ar ? 'الوظيفة' : 'Functional', a.functional]] });
+    if (a.rom.length) out.push({ t: 'table', title: ar ? 'مدى الحركة' : 'Range of motion', head: [ar ? 'الحركة' : 'Movement', ar ? 'الجانب' : 'Side', ar ? 'الدرجة' : 'Degrees'], rows: a.rom.map(function (r) { return [phRomName(r.mv), r.side, r.deg]; }) });
+    if (a.strength.length) out.push({ t: 'table', title: ar ? 'قوة العضلات' : 'Muscle strength', head: [ar ? 'العضلة' : 'Muscle', ar ? 'الجانب' : 'Side', ar ? 'الدرجة' : 'Grade'], rows: a.strength.map(function (r) { return [r.muscle, r.side, r.grade === '' ? '' : r.grade + '/5']; }) });
+    if (a.tests.length) out.push({ t: 'table', title: ar ? 'اختبارات خاصة' : 'Special tests', head: [ar ? 'الاختبار' : 'Test', ar ? 'الجانب' : 'Side', ar ? 'النتيجة' : 'Result'], rows: a.tests.map(function (r) { return [r.name, r.side, res(r.result)]; }) });
+  });
+  if (p.sessions.length) {
+    out.push({ t: 'h', level: 2, text: ar ? 'سجل الجلسات' : 'Session log' });
+    out.push({ t: 'table', head: [ar ? 'التاريخ' : 'Date', ar ? 'الأجهزة' : 'Modalities', ar ? 'علاج يدوي' : 'Manual', ar ? 'ألم قبل' : 'Pain before', ar ? 'ألم بعد' : 'Pain after', ar ? 'ملاحظات' : 'Notes'],
+      rows: p.sessions.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).map(function (s) {
+        return [s.date, (s.modalities || []).join('، '), (s.manual || []).map(function (k) { return t('ph_manual_' + k); }).join('، '), s.painBefore, s.painAfter, s.notes];
+      }) });
+  }
+  if (p.homeEx.length) {
+    out.push({ t: 'h', level: 2, text: ar ? 'تمارين البيت' : 'Home exercises' });
+    out.push({ t: 'table', head: [ar ? 'التمرين' : 'Exercise', ar ? 'المجموعات' : 'Sets', ar ? 'التكرار' : 'Reps', ar ? 'ثبات (ث)' : 'Hold (s)', ar ? 'مرات يوميًا' : 'Times/day', ar ? 'ملاحظة' : 'Note'],
+      rows: p.homeEx.map(function (x) { return [x.name, x.sets || '', x.reps, x.hold || '', x.times || '', x.note]; }) });
+  }
+  return out;
+}
+
+function cpBuildDoc(kind, dayIdx) {
+  const ar = lang === 'ar';
+  const name = currentClientName || '';
+  const titles = {
+    training: ar ? 'برنامج التدريب' : 'Training program',
+    rehab: ar ? 'برنامج التأهيل' : 'Rehab program',
+    nutrition: ar ? 'خطة التغذية' : 'Nutrition plan',
+    physio: ar ? 'خطة العلاج الطبيعي' : 'Physiotherapy plan'
+  };
+  const doc = { title: titles[kind], subtitle: name, lang: lang, filename: titles[kind] + (name ? '_' + name : ''), blocks: [] };
+  if (kind === 'training') doc.blocks = cpTrainingBlocks(dayIdx);
+  else if (kind === 'rehab') doc.blocks = cpRehabBlocks();
+  else if (kind === 'nutrition') doc.blocks = cpNutritionBlocks(dayIdx);
+  else doc.blocks = cpPhysioBlocks();
+  return doc;
+}
+
+function cpHasData(kind) {
+  if (kind === 'training') return coachWeek.some(function (d) { return cpDayCount(d).ex > 0; });
+  if (kind === 'rehab') return rehabHasContent(coachRehab);
+  if (kind === 'nutrition') return nutritionHasContent(coachNutrition);
+  return physioHasContent(coachPhysio);
+}
+
+function openClientPrint() {
+  if (!currentClient) return;
+  if (!window.ADAM_PRINT) { alert(lang === 'ar' ? 'محرك الطباعة لسه ما اتحمّلش، جرّب تاني.' : 'Print engine not loaded yet.'); return; }
+  try { saveCurrentDay(); } catch (e) { /* مفيش يوم مفتوح */ }
+  const ar = lang === 'ar';
+  const body = planSheetOpen(ar ? 'طباعة وتصدير البرنامج' : 'Print & export program');
+  const kinds = [['training', ar ? 'التدريب' : 'Training'], ['rehab', ar ? 'التأهيل' : 'Rehab'], ['nutrition', ar ? 'التغذية' : 'Nutrition'], ['physio', ar ? 'العلاج الطبيعي' : 'Physiotherapy']];
+  let kind = 'training';
+  const kSel = document.createElement('select');
+  kinds.forEach(function (k) { const o = document.createElement('option'); o.value = k[0]; o.textContent = k[1] + (cpHasData(k[0]) ? '' : (ar ? ' (فاضي)' : ' (empty)')); kSel.appendChild(o); });
+  const dSel = document.createElement('select');
+  const oAll = document.createElement('option'); oAll.value = 'all'; oAll.textContent = ar ? 'الأسبوع كله' : 'Whole week'; dSel.appendChild(oAll);
+  days().forEach(function (d, i) { const o = document.createElement('option'); o.value = String(i); o.textContent = d; dSel.appendChild(o); });
+  const kL = planEl('label', 'plan-field', ar ? 'إيه اللي يتطبع؟' : 'What to print'); kL.appendChild(kSel);
+  const dL = planEl('label', 'plan-field', ar ? 'اليوم' : 'Day'); dL.appendChild(dSel);
+  const sync = function () { kind = kSel.value; dL.style.display = (kind === 'training' || kind === 'nutrition') ? '' : 'none'; };
+  kSel.addEventListener('change', sync);
+  sync();
+  const go = planEl('button', '', ar ? 'معاينة وطباعة' : 'Preview & print');
+  go.type = 'button';
+  go.addEventListener('click', function () {
+    if (!cpHasData(kind)) { if (!confirm(ar ? 'القسم ده فاضي. تكمّل؟' : 'This section is empty. Continue?')) return; }
+    planSheetClose();
+    window.ADAM_PRINT.open(cpBuildDoc(kind, dSel.value));
+  });
+  body.append(kL, dL, go);
+}
+
+
+/* ============================================================
+   دليل المتخصصين — طلب إدراج صفحتي (اختياري)
+   صاحب الصفحة بيقدّم طلب، والإدارة توافق أو ترفض. التليفون والمستندات
+   اختيارية وبتظهر للزوار بس لو صاحب الصفحة وافق. لازم قواعد
+   directoryRequests تتنشر الأول، وإلا الإرسال هيرجع permission denied.
+   ============================================================ */
+const DIR_KINDS = [
+  ['coach', 'مدرب', 'Coach'], ['specialist', 'أخصائي', 'Specialist'], ['clinic', 'عيادة / مركز', 'Clinic / center'],
+  ['store', 'محل / متجر', 'Store'], ['club', 'نادي', 'Club'], ['gym', 'جيم', 'Gym']
+];
+const DIR_CRED_TYPES = [['certificate', 'شهادة', 'Certificate'], ['license', 'ترخيص مزاولة', 'Practice license'], ['syndicate', 'نقابة', 'Syndicate']];
+const DIR_STATE = { pending: ['في انتظار المراجعة', 'Pending review'], approved: ['اتوافق عليه', 'Approved'], rejected: ['اترفض', 'Rejected'] };
+
+function dirClip(v, n) { return String(v == null ? '' : v).trim().slice(0, n); }
+
+function dirBuildRequest(f) {
+  const out = {
+    action: f.action, kind: f.kind,
+    name: { ar: dirClip(f.nameAr, 80), en: dirClip(f.nameEn, 80) },
+    headline: { ar: dirClip(f.headAr, 120), en: dirClip(f.headEn, 120) },
+    desc: { ar: dirClip(f.descAr, 800), en: dirClip(f.descEn, 800) },
+    places: f.city ? [{ city: dirClip(f.city, 60), area: { ar: dirClip(f.areaAr, 80), en: dirClip(f.areaEn, 80) } }] : [],
+    modes: f.modes.slice(0, 2), langs: f.langs.slice(0, 2),
+    specialties: f.specialties.slice(0, 12).map(function (k) { return dirClip(k, 40); }),
+    services: f.services.split(/[\n،,]+/).map(function (x) { return dirClip(x, 80); }).filter(Boolean).slice(0, 20).map(function (x) { return { ar: x, en: x }; }),
+    ownerEmail: f.ownerEmail, state: 'pending', createdAt: new Date().toISOString()
+  };
+  /* التليفون يتبعت بس لو صاحب الصفحة وافق يعرضه */
+  if (f.showContact && (f.phone || f.whatsapp)) out.contact = { phone: dirClip(f.phone, 30), whatsapp: dirClip(f.whatsapp, 30) };
+  out.credentials = f.credentials.filter(function (c) { return c.title; }).slice(0, 10).map(function (c) {
+    return { type: c.type, title: dirClip(c.title, 100), issuer: dirClip(c.issuer, 100), show: !!c.show };
+  });
+  return out;
+}
+
+async function openDirectoryRequest() {
+  const ar = lang === 'ar';
+  const me = currentProviderEmail;
+  if (!me) return;
+  const body = planSheetOpen(ar ? 'طلب إدراج صفحتي في الدليل' : 'Request a directory listing');
+  const intro = planEl('p', 'hint-text', ar
+    ? 'الإدراج اختياري. بعد ما تبعت الطلب الإدارة بتراجعه وبتوافق أو ترفض. مفيش حاجة بتظهر للزوار إلا بعد الموافقة، ومفيش إيميلك ولا بيانات عملائك بتظهر أبدًا.'
+    : 'Listing is optional. After you send it, the admin reviews it. Nothing is shown to visitors until approved, and your email / client data is never shown.');
+  body.appendChild(intro);
+  const f = { action: 'add', kind: currentProviderSpecialty === 'coach' || !currentProviderSpecialty ? 'coach' : 'specialist', nameAr: '', nameEn: '', headAr: '', headEn: '', descAr: '', descEn: '', city: '', areaAr: '', areaEn: '', modes: ['inperson'], langs: [lang], specialties: (currentProviderSpecialties || []).slice(), services: '', phone: '', whatsapp: '', showContact: false, credentials: [], ownerEmail: me };
+  const field = function (label, input) { const l = planEl('label', 'plan-field', label); l.appendChild(input); body.appendChild(l); return input; };
+  const txt = function (key, ph, area) {
+    const el = document.createElement(area ? 'textarea' : 'input');
+    if (area) el.rows = 3;
+    el.placeholder = ph || '';
+    el.value = f[key] || '';
+    el.addEventListener('input', function () { f[key] = el.value; });
+    return el;
+  };
+  const sel = function (opts, key) {
+    const s = document.createElement('select');
+    opts.forEach(function (o) { const op = document.createElement('option'); op.value = o[0]; op.textContent = ar ? o[1] : o[2]; s.appendChild(op); });
+    s.value = f[key];
+    s.addEventListener('change', function () { f[key] = s.value; });
+    return s;
+  };
+  field(ar ? 'نوع الصفحة' : 'Listing type', sel(DIR_KINDS, 'kind'));
+  field(ar ? 'الطلب' : 'Request', sel([['add', 'إضافة صفحة جديدة', 'Add a new listing'], ['update', 'تعديل صفحتي المنشورة', 'Update my listing'], ['remove', 'إزالة صفحتي من الدليل', 'Remove my listing']], 'action'));
+  field(ar ? 'الاسم (عربي)' : 'Name (Arabic)', txt('nameAr'));
+  field(ar ? 'الاسم (إنجليزي)' : 'Name (English)', txt('nameEn'));
+  field(ar ? 'سطر تعريف قصير (عربي)' : 'Headline (Arabic)', txt('headAr'));
+  field(ar ? 'سطر تعريف قصير (إنجليزي)' : 'Headline (English)', txt('headEn'));
+  field(ar ? 'نبذة (عربي)' : 'About (Arabic)', txt('descAr', '', true));
+  field(ar ? 'نبذة (إنجليزي)' : 'About (English)', txt('descEn', '', true));
+  field(ar ? 'المدينة' : 'City', txt('city'));
+  field(ar ? 'المنطقة (عربي)' : 'Area (Arabic)', txt('areaAr'));
+  field(ar ? 'المنطقة (إنجليزي)' : 'Area (English)', txt('areaEn'));
+  field(ar ? 'الخدمات (افصل بينها بفاصلة أو سطر جديد)' : 'Services (comma or new line)', txt('services', '', true));
+
+  const checks = function (title, opts, key) {
+    const wrap = planEl('div', 'plan-field', title);
+    const row = planEl('div', 'dir-checks');
+    opts.forEach(function (o) {
+      const lab = document.createElement('label');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.checked = f[key].indexOf(o[0]) !== -1;
+      cb.addEventListener('change', function () { f[key] = f[key].filter(function (x) { return x !== o[0]; }); if (cb.checked) f[key].push(o[0]); });
+      lab.append(cb, document.createTextNode(' ' + (ar ? o[1] : o[2])));
+      row.appendChild(lab);
+    });
+    wrap.appendChild(row); body.appendChild(wrap);
+  };
+  checks(ar ? 'طريقة الخدمة' : 'Service mode', [['inperson', 'حضوري', 'In person'], ['online', 'أونلاين', 'Online']], 'modes');
+  checks(ar ? 'اللغات' : 'Languages', [['ar', 'عربي', 'Arabic'], ['en', 'إنجليزي', 'English']], 'langs');
+
+  /* التليفون: اختياري وبموافقة صاحب الصفحة */
+  const contactBox = planEl('div', 'dir-box');
+  contactBox.appendChild(planEl('strong', '', ar ? 'وسيلة التواصل (اختياري)' : 'Contact (optional)'));
+  const showL = document.createElement('label');
+  const showCb = document.createElement('input');
+  showCb.type = 'checkbox';
+  showL.append(showCb, document.createTextNode(' ' + (ar ? 'أوافق أعرض الأرقام دي للزوار' : 'I agree to show these numbers to visitors')));
+  const ph = document.createElement('input'); ph.type = 'tel'; ph.placeholder = ar ? 'تليفون' : 'Phone'; ph.setAttribute('dir', 'ltr');
+  const wa = document.createElement('input'); wa.type = 'tel'; wa.placeholder = 'WhatsApp'; wa.setAttribute('dir', 'ltr');
+  ph.addEventListener('input', function () { f.phone = ph.value; });
+  wa.addEventListener('input', function () { f.whatsapp = wa.value; });
+  showCb.addEventListener('change', function () { f.showContact = showCb.checked; ph.disabled = wa.disabled = !showCb.checked; });
+  ph.disabled = wa.disabled = true;
+  contactBox.append(showL, ph, wa);
+  body.appendChild(contactBox);
+
+  /* المستندات: شهادة / ترخيص / نقابة — كل مستند ليه اختيار "يظهر للزوار" */
+  const credBox = planEl('div', 'dir-box');
+  credBox.appendChild(planEl('strong', '', ar ? 'المستندات (اختياري)' : 'Credentials (optional)'));
+  credBox.appendChild(planEl('p', 'hint-text', ar ? 'حدد أي مستند يظهر للزوار. علامة "تمت المراجعة" بتضيفها الإدارة بعد ما تتأكد.' : 'Choose which credentials visitors can see. The "reviewed" badge is added by the admin after checking.'));
+  const credList = planEl('div', 'dir-creds');
+  const paintCreds = function () {
+    credList.innerHTML = '';
+    f.credentials.forEach(function (c, i) {
+      const row = planEl('div', 'dir-cred');
+      const ty = document.createElement('select');
+      DIR_CRED_TYPES.forEach(function (o) { const op = document.createElement('option'); op.value = o[0]; op.textContent = ar ? o[1] : o[2]; ty.appendChild(op); });
+      ty.value = c.type; ty.addEventListener('change', function () { c.type = ty.value; });
+      const ti = document.createElement('input'); ti.placeholder = ar ? 'اسم المستند' : 'Title'; ti.value = c.title; ti.addEventListener('input', function () { c.title = ti.value; });
+      const is = document.createElement('input'); is.placeholder = ar ? 'الجهة المانحة' : 'Issuer'; is.value = c.issuer; is.addEventListener('input', function () { c.issuer = is.value; });
+      const shL = document.createElement('label'); const sh = document.createElement('input'); sh.type = 'checkbox'; sh.checked = !!c.show; sh.addEventListener('change', function () { c.show = sh.checked; });
+      shL.append(sh, document.createTextNode(' ' + (ar ? 'يظهر للزوار' : 'Show to visitors')));
+      const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'link'; rm.textContent = ar ? 'شيله' : 'Remove';
+      rm.addEventListener('click', function () { f.credentials.splice(i, 1); paintCreds(); });
+      row.append(ty, ti, is, shL, rm);
+      credList.appendChild(row);
+    });
+  };
+  const addCred = document.createElement('button');
+  addCred.type = 'button'; addCred.className = 'secondary'; addCred.textContent = ar ? '+ أضف مستند' : '+ Add credential';
+  addCred.addEventListener('click', function () { if (f.credentials.length >= 10) return; f.credentials.push({ type: 'certificate', title: '', issuer: '', show: false }); paintCreds(); });
+  credBox.append(credList, addCred);
+  body.appendChild(credBox);
+
+  const msg = planEl('p', 'message', '');
+  const send = document.createElement('button');
+  send.type = 'button'; send.textContent = ar ? 'ابعت الطلب' : 'Send request';
+  send.addEventListener('click', async function () {
+    if (f.action !== 'remove' && !(f.nameAr || f.nameEn)) { msg.textContent = ar ? 'اكتب الاسم الأول.' : 'Enter a name first.'; return; }
+    send.disabled = true;
+    try {
+      await addDoc(collection(db, 'directoryRequests'), dirBuildRequest(f));
+      msg.textContent = ar ? 'اتبعت الطلب. هتظهر حالته تحت لما الإدارة تراجعه.' : 'Request sent. Its status will show below once reviewed.';
+      loadMine();
+    } catch (error) {
+      msg.textContent = (ar ? 'ما اتبعتش: ' : 'Not sent: ') + error.message + (/permission/i.test(error.message) ? (ar ? ' — غالبًا قواعد الدليل لسه ما اتنشرتش.' : ' — the directory rules are probably not published yet.') : '');
+    }
+    send.disabled = false;
+  });
+  body.append(send, msg);
+
+  /* طلباتي السابقة */
+  const mine = planEl('div', 'dir-mine');
+  body.appendChild(mine);
+  async function loadMine() {
+    mine.innerHTML = '';
+    try {
+      const snap = await getDocs(query(collection(db, 'directoryRequests'), where('ownerEmail', '==', me)));
+      if (snap.empty) return;
+      mine.appendChild(planEl('strong', '', ar ? 'طلباتي' : 'My requests'));
+      snap.docs.forEach(function (d) {
+        const r = d.data();
+        const row = planEl('div', 'dir-mine-row');
+        const nm = (r.name && (r.name[lang] || r.name.ar || r.name.en)) || '';
+        row.appendChild(planEl('span', '', (nm || '—') + ' · ' + r.action + ' · ' + (DIR_STATE[r.state] ? DIR_STATE[r.state][ar ? 0 : 1] : r.state)));
+        if (r.state === 'pending') {
+          const w = document.createElement('button'); w.type = 'button'; w.className = 'link'; w.textContent = ar ? 'اسحب الطلب' : 'Withdraw';
+          w.addEventListener('click', async function () { try { await deleteDoc(doc(db, 'directoryRequests', d.id)); loadMine(); } catch (e) { msg.textContent = e.message; } });
+          row.appendChild(w);
+        }
+        mine.appendChild(row);
+      });
+    } catch (e) { /* القواعد لسه مش منشورة — مفيش طلبات تتعرض */ }
+  }
+  loadMine();
+}
+
+
+
+/* ============================================================
+   دليل المتخصصين — شاشة الاعتماد (للأدمن بس)
+   بتعرض طلبات الإدراج، والأدمن يوافق أو يرفض ويحدد المستندات "تمت مراجعتها".
+   الموافقة بتكتب directory/{id} عشوائي (من غير إيميل أبدًا).
+   ============================================================ */
+function dirPublicDoc(r, verifiedMap) {
+  const out = {
+    kind: r.kind, name: r.name || {}, headline: r.headline || {}, desc: r.desc || {},
+    places: r.places || [], modes: r.modes || [], langs: r.langs || [], specialties: r.specialties || [], services: r.services || [],
+    credentials: (r.credentials || []).map(function (c, i) { return { c: c, i: i }; }).filter(function (x) { return x.c.show; }).map(function (x) {
+      return { type: x.c.type, title: x.c.title, issuer: x.c.issuer || '', verified: !!verifiedMap[x.i] };
+    }),
+    status: 'live', updatedAt: new Date().toISOString()
+  };
+  if (r.contact && (r.contact.phone || r.contact.whatsapp)) out.contact = { phone: r.contact.phone || '', whatsapp: r.contact.whatsapp || '' };
+  out.verify = out.credentials.some(function (c) { return c.verified; }) ? 'docs' : '';
+  return out;
+}
+
+
+/* ---- ترحيل المتخصصين الحاليين للدليل (معاينة أولًا، ومفيش كتابة إلا بعد ضغطة "انقل") ---- */
+async function dirHashId(email) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('adam-dir:' + String(email).toLowerCase()));
+  return 'm_' + Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('').slice(0, 24);
+}
+
+async function openDirectoryMigration(host) {
+  const ar = lang === 'ar';
+  host.innerHTML = '';
+  const msg = planEl('p', 'message', '');
+  host.appendChild(planEl('p', 'hint-text', ar
+    ? 'هينتقل الاسم والتخصصات فقط. مفيش إيميل ولا تليفون ولا مستندات. الصفحات بتتعمل مخفية، وتقدر تنشرها واحدة واحدة أو كلها.'
+    : 'Only name and specialties are copied — no email, phone or credentials. Pages are created hidden; you can publish them one by one or all.'));
+  let rows = [];
+  try {
+    const snap = await getDocs(collection(db, 'providers'));
+    rows = snap.docs.map(providerFromDoc).filter(function (p) { return p.status !== 'blocked' && providerSpecialties(p).length && (p.name || '').trim(); });
+  } catch (e) { host.appendChild(planEl('p', 'message', e.message)); return; }
+  const list = planEl('div', 'dir-adm');
+  const picks = [];
+  rows.forEach(function (p) {
+    const lab = document.createElement('label');
+    lab.className = 'dir-adm-cred';
+    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = true;
+    picks.push({ p: p, cb: cb });
+    lab.append(cb, document.createTextNode(' ' + p.name + ' · ' + providerSpecialties(p).map(function (k) { return specialtyName(k, lang); }).join('، ')));
+    list.appendChild(lab);
+  });
+  const go = document.createElement('button');
+  go.type = 'button'; go.textContent = ar ? 'انقل المحدد (' + rows.length + ')' : 'Migrate selected (' + rows.length + ')';
+  go.addEventListener('click', async function () {
+    if (!confirm(ar ? 'هيتكتب في مجموعة directory (صفحات مخفية). تكمّل؟' : 'This writes hidden pages to the directory collection. Continue?')) return;
+    go.disabled = true;
+    let made = 0, skipped = 0;
+    try {
+      for (let i = 0; i < picks.length; i++) {
+        if (!picks[i].cb.checked) continue;
+        const p = picks[i].p;
+        const id = await dirHashId(p.email);
+        const ref = doc(db, 'directory', id);
+        const ex = await getDoc(ref);
+        if (ex.exists()) { skipped++; continue; }
+        const specs = providerSpecialties(p);
+        await setDoc(ref, { kind: specs.length === 1 && specs[0] === 'coach' ? 'coach' : 'specialist', name: { ar: p.name, en: p.name }, headline: {}, desc: {}, places: [], modes: [], langs: [], specialties: specs, services: [], credentials: [], status: 'hidden', verify: '', migrated: true, updatedAt: new Date().toISOString() });
+        made++;
+      }
+      msg.textContent = ar ? ('تم: ' + made + ' صفحة جديدة، وتخطّيت ' + skipped + ' موجودة قبل كده.') : ('Done: ' + made + ' created, ' + skipped + ' skipped.');
+    } catch (e) { msg.textContent = (ar ? 'وقف: ' : 'Stopped: ') + e.message; }
+    go.disabled = false;
+  });
+  host.append(list, go, msg);
+}
+
+async function openDirectoryManage(host) {
+  const ar = lang === 'ar';
+  host.innerHTML = '';
+  const msg = planEl('p', 'message', '');
+  let docs = [];
+  try { const snap = await getDocs(collection(db, 'directory')); docs = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); }); }
+  catch (e) { host.appendChild(planEl('p', 'message', e.message)); return; }
+  if (!docs.length) host.appendChild(planEl('p', 'hint-text', ar ? 'مفيش صفحات في الدليل لسه.' : 'No directory pages yet.'));
+  docs.forEach(function (d) {
+    const row = planEl('div', 'dir-mine-row');
+    row.appendChild(planEl('span', '', ((d.name && (d.name[lang] || d.name.ar)) || '—') + ' · ' + d.kind + ' · ' + (d.status === 'live' ? (ar ? 'منشور' : 'live') : (ar ? 'مخفي' : 'hidden'))));
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'link';
+    b.textContent = d.status === 'live' ? (ar ? 'أخفِ' : 'Hide') : (ar ? 'انشر' : 'Publish');
+    b.addEventListener('click', async function () {
+      try { await setDoc(doc(db, 'directory', d.id), { status: d.status === 'live' ? 'hidden' : 'live', updatedAt: new Date().toISOString() }, { merge: true }); openDirectoryManage(host); }
+      catch (e) { msg.textContent = e.message; }
+    });
+    row.appendChild(b);
+    host.appendChild(row);
+  });
+  host.appendChild(msg);
+}
+
+async function openDirectoryAdmin() {
+  if (!isFullAdminAccount()) return;
+  const ar = lang === 'ar';
+  const body = planSheetOpen(ar ? 'اعتماد طلبات الدليل' : 'Directory approvals');
+  const msg = planEl('p', 'message', '');
+  const list = planEl('div', 'dir-adm');
+  const tools = planEl('div', 'dir-mine-row');
+  const migBtn = document.createElement('button'); migBtn.type = 'button'; migBtn.className = 'secondary'; migBtn.textContent = ar ? 'ترحيل المتخصصين الحاليين' : 'Migrate existing specialists';
+  const manBtn = document.createElement('button'); manBtn.type = 'button'; manBtn.className = 'secondary'; manBtn.textContent = ar ? 'صفحات الدليل (نشر/إخفاء)' : 'Directory pages (publish/hide)';
+  const sub = planEl('div', '');
+  migBtn.addEventListener('click', function () { openDirectoryMigration(sub); });
+  manBtn.addEventListener('click', function () { openDirectoryManage(sub); });
+  tools.append(migBtn, manBtn);
+  body.append(tools, sub, msg, list);
+  const nameOf = function (r) { return (r.name && (r.name[lang] || r.name.ar || r.name.en)) || '—'; };
+  async function load() {
+    list.innerHTML = '';
+    let reqs = [];
+    try {
+      const snap = await getDocs(collection(db, 'directoryRequests'));
+      reqs = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
+    } catch (e) { msg.textContent = (ar ? 'ما قدرتش أقرأ الطلبات: ' : 'Cannot read requests: ') + e.message; return; }
+    reqs.sort(function (a, b) { return (a.state === 'pending' ? 0 : 1) - (b.state === 'pending' ? 0 : 1) || String(b.createdAt).localeCompare(String(a.createdAt)); });
+    if (!reqs.length) list.appendChild(planEl('p', 'hint-text', ar ? 'مفيش طلبات.' : 'No requests.'));
+    reqs.forEach(function (r) {
+      const card = planEl('div', 'dir-adm-card');
+      card.appendChild(planEl('strong', '', nameOf(r) + ' · ' + r.kind + ' · ' + r.action));
+      card.appendChild(planEl('div', 'hint-text', r.ownerEmail + ' · ' + (DIR_STATE[r.state] ? DIR_STATE[r.state][ar ? 0 : 1] : r.state)));
+      if (r.headline && (r.headline.ar || r.headline.en)) card.appendChild(planEl('div', '', r.headline[lang] || r.headline.ar || r.headline.en));
+      if (r.contact) card.appendChild(planEl('div', 'hint-text', (ar ? 'تواصل (بموافقة صاحبه): ' : 'Contact (owner agreed): ') + (r.contact.phone || '') + ' ' + (r.contact.whatsapp || '')));
+      const verified = {};
+      (r.credentials || []).forEach(function (c, i) {
+        const row = document.createElement('label');
+        row.className = 'dir-adm-cred';
+        const cb = document.createElement('input'); cb.type = 'checkbox';
+        cb.addEventListener('change', function () { verified[i] = cb.checked; });
+        const cr = DIR_CRED_TYPES.filter(function (x) { return x[0] === c.type; })[0];
+        row.append(cb, document.createTextNode(' ' + (cr ? cr[ar ? 1 : 2] : c.type) + ': ' + c.title + (c.issuer ? ' (' + c.issuer + ')' : '') + ' — ' + (c.show ? (ar ? 'هيظهر للزوار' : 'will be public') : (ar ? 'مخفي (اختيار صاحبه)' : 'hidden (owner choice)')) + (ar ? ' · تمت مراجعته' : ' · reviewed')));
+        card.appendChild(row);
+      });
+      if (r.state === 'pending') {
+        const ok = document.createElement('button'); ok.type = 'button'; ok.textContent = ar ? 'وافق ونشر' : 'Approve & publish';
+        const no = document.createElement('button'); no.type = 'button'; no.className = 'secondary'; no.textContent = ar ? 'ارفض' : 'Reject';
+        ok.addEventListener('click', async function () {
+          ok.disabled = no.disabled = true;
+          try {
+            let dirId = null;
+            if (r.action !== 'add') {
+              const prev = await getDocs(query(collection(db, 'directoryRequests'), where('ownerEmail', '==', r.ownerEmail), where('state', '==', 'approved')));
+              const p = prev.docs.map(function (d) { return d.data(); }).filter(function (x) { return x.dirId; }).sort(function (a, b) { return String(b.decidedAt).localeCompare(String(a.decidedAt)); })[0];
+              dirId = p ? p.dirId : null;
+              if (!dirId) throw new Error(ar ? 'مفيش صفحة منشورة سابقة للعميل ده' : 'No earlier published listing for this owner');
+            }
+            if (r.action === 'remove') {
+              await setDoc(doc(db, 'directory', dirId), { status: 'hidden', updatedAt: new Date().toISOString() }, { merge: true });
+            } else if (r.action === 'update') {
+              await setDoc(doc(db, 'directory', dirId), dirPublicDoc(r, verified), { merge: true });
+            } else {
+              const ref = await addDoc(collection(db, 'directory'), dirPublicDoc(r, verified));
+              dirId = ref.id;
+            }
+            await setDoc(doc(db, 'directoryRequests', r.id), { state: 'approved', dirId: dirId, decidedAt: new Date().toISOString() }, { merge: true });
+            msg.textContent = ar ? 'تمت الموافقة.' : 'Approved.';
+            load();
+          } catch (e) { msg.textContent = (ar ? 'ما تمّتش: ' : 'Failed: ') + e.message; ok.disabled = no.disabled = false; }
+        });
+        no.addEventListener('click', async function () {
+          try { await setDoc(doc(db, 'directoryRequests', r.id), { state: 'rejected', decidedAt: new Date().toISOString() }, { merge: true }); load(); }
+          catch (e) { msg.textContent = e.message; }
+        });
+        card.append(ok, no);
+      }
+      list.appendChild(card);
+    });
+  }
+  load();
+}
+
+
+
+/* ============================================================
+   "استكشف" بالدليل الحقيقي: بيقرأ directory (المنشور بس) من غير ما يحتاج تسجيل دخول.
+   لو القواعد لسه مش منشورة أو مفيش صفحات، القوائم بتفضل "قريبًا".
+   ============================================================ */
+function dirSlug(s) { return 'x_' + String(s || '').trim().toLowerCase().replace(/\s+/g, '_').replace(/[^\w؀-ۿ]/g, '').slice(0, 30); }
+
+function dirToExplore(id, r) {
+  const D = window.ADAM_EXPLORE_DATA || {};
+  const cities = D.CITIES || {};
+  const specsDict = D.SPECIALTIES || {};
+  const cityKey = function (name) {
+    const n = String(name || '').trim().toLowerCase();
+    const hit = Object.keys(cities).filter(function (k) { return String(cities[k].ar).toLowerCase() === n || String(cities[k].en).toLowerCase() === n; })[0];
+    if (hit) return hit;
+    const k = dirSlug(name);
+    if (!cities[k]) cities[k] = { ar: name, en: name };
+    return k;
+  };
+  const kind = r.kind;
+  const places = (r.places || []).filter(function (p) { return p && p.city; });
+  const specs = (r.specialties || []).map(function (k) {
+    if (!specsDict[k]) {
+      const nm = (SPECIALTIES[k] && { ar: specialtyName(k, 'ar'), en: specialtyName(k, 'en') }) || { ar: k, en: k };
+      specsDict[k] = { ar: nm.ar, en: nm.en, kinds: ['coach', 'specialist', 'clinic', 'store', 'club', 'gym'] };
+    }
+    return k;
+  });
+  const creds = Array.isArray(r.credentials) ? r.credentials : [];
+  const checked = r.verify === 'docs' && creds.some(function (c) { return c.verified; });
+  const item = {
+    id: id, kind: kind,
+    name: { ar: (r.name && (r.name.ar || r.name.en)) || '', en: (r.name && (r.name.en || r.name.ar)) || '' },
+    headline: { ar: (r.headline && (r.headline.ar || r.headline.en)) || '', en: (r.headline && (r.headline.en || r.headline.ar)) || '' },
+    about: { ar: (r.desc && (r.desc.ar || r.desc.en)) || '', en: (r.desc && (r.desc.en || r.desc.ar)) || '' },
+    cities: places.map(function (p) { return [cityKey(p.city), [(p.area && (p.area.ar || p.area.en)) || p.city, (p.area && (p.area.en || p.area.ar)) || p.city]]; }),
+    modes: Array.isArray(r.modes) ? r.modes : [], langs: Array.isArray(r.langs) ? r.langs : [], specs: specs,
+    services: (r.services || []).map(function (x) { return { ar: x.ar || x.en || '', en: x.en || x.ar || '' }; }),
+    trust: checked ? 'checked' : 'reviewed', checkedOn: checked ? String(r.updatedAt || '').slice(0, 10) : null,
+    credentials: creds.map(function (c) { return { title: c.title, issuer: c.issuer || '', verified: !!c.verified }; }),
+    sample: false
+  };
+  item.area = item.cities.length ? { ar: item.cities[0][1][0], en: item.cities[0][1][1] } : null;
+  if (r.contact && (r.contact.phone || r.contact.whatsapp)) item.contact = { phone: r.contact.phone || '', whatsapp: r.contact.whatsapp || '' };
+  return item;
+}
+
+window.ADAM_EXPLORE_REAL = {
+  load: async function () {
+    try {
+      const snap = await getDocs(query(collection(db, 'directory'), where('status', '==', 'live')));
+      return snap.docs.map(function (d) { return dirToExplore(d.id, d.data()); }).filter(function (x) { return x.name.ar || x.name.en; });
+    } catch (e) {
+      return [];
+    }
+  }
+};
+
+
 /* المدرب يفتح المخطط الموسمي للعميل من جوه برنامجه */
+document.getElementById('open-print-coach-btn').addEventListener('click', openClientPrint);
+
 document.getElementById('open-plan-coach-btn').addEventListener('click', function () {
   if (!currentClient) return;
   saveCurrentDay();

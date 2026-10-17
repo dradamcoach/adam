@@ -95,6 +95,15 @@ async function loadState() {
     } catch (e) { /* تجاهل */ }
   }
   plus.sessions = plus.sessions || []; plus.checkins = plus.checkins || {}; plus.pain = plus.pain || []; plus.foodq = plus.foodq || {}; plus.chals = plus.chals || {}; plus.fav = plus.fav || {}; plus.rswap = plus.rswap || {}; plus.cart = plus.cart || {}; plus.stretch = plus.stretch || { days: {} }; plus.stretch.days = plus.stretch.days || {}; plus.circ = plus.circ || { list: [] }; plus.circ.list = plus.circ.list || [];
+  /* حماية: لو خطة التمرين المحفوظة ناقصة أو قديمة، نصلحها بدل ما الشاشة تقع */
+  try {
+    const t = plus.train;
+    if (t && typeof t === 'object') {
+      if (!t.params || typeof t.params !== 'object') t.params = { goal: 'fitness', days: 0, equip: 'gym' };
+      if (!Array.isArray(t.days)) t.days = [];
+      t.days = t.days.filter((d) => d && typeof d === 'object' && isFinite(d.wd) && d.wd >= 0 && d.wd <= 6).map((d) => { if (!Array.isArray(d.items)) d.items = []; if (!SPLIT_NAME[d.kind]) d.kind = 'custom'; return d; });
+    } else if (t) plus.train = null;
+  } catch (e) { plus.train = null; }
 }
 
 /* ---------------------------------------------------------------- الإطار */
@@ -577,6 +586,7 @@ function planTrain(el) {
       day.items.forEach((it) => { if (it.blk) { h += '<div class="ap-ex"><span>' + esc(it.blk === 'warm' ? L('إحماء', 'Warm-up') : L('إطالة ختام', 'Cool-down')) + '</span></div>'; return; } const ex = EX_BY_ID[it.id]; if (!ex) return; h += '<button type="button" class="ap-ex' + (it.ss ? ' ap-ssl' : '') + '" data-ex="' + esc(it.id) + '"><span>' + (it.ss ? '+ ' : '') + esc(nameOf(ex.name)) + '</span><em>' + (it.ss ? esc(it.reps) : it.sets + ' × ' + esc(it.reps)) + '</em></button>'; });
       h += '<div class="ap-actions"><button type="button" class="ap-btn small" data-run="' + day.wd + '">' + esc(L('ابدأ التمرين', 'Start workout')) + '</button><button type="button" class="ap-btn small ghost" data-edit="' + day.wd + '">' + esc(L('رتّب وعدّل', 'Edit and reorder')) + '</button></div></div>';
     });
+    h += '<div class="ap-actions"><button type="button" class="ap-btn small ghost" id="ap-manual">' + esc(L('عدّل الجدول بنفسك', 'Edit schedule yourself')) + '</button></div>';
     if (plus.train.params.goal === 'fat') h += '<div class="ap-note">' + esc(L('أضف 15 إلى 20 دقيقة كارديو خفيف بعد كل تمرين.', 'Add 15 to 20 minutes of easy cardio after each session.')) + '</div>';
     h += '<div class="ap-note">' + esc(L('ابدأ بأوزان تقدر تتحكم فيها، وزود تدريجيًا. لو عندك إصابة أو حالة صحية، استشر متخصص قبل ما تبدأ.', 'Start with weights you can control and progress gradually. If you have an injury or health condition, consult a specialist before starting.')) + '</div>';
     el.innerHTML = h;

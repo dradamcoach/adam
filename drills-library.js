@@ -13,7 +13,8 @@ export const DRILL_CATEGORIES = {
   crossfit:     { ar: 'كروس فيت',        en: 'CrossFit' },
   hyrox:        { ar: 'هايروكس',         en: 'HYROX' },
   agility:      { ar: 'دريلات ملاعب',    en: 'Field drills' },
-  conditioning: { ar: 'كارديو وتكييف',   en: 'Cardio & conditioning' }
+  conditioning: { ar: 'كارديو وتكييف',   en: 'Cardio & conditioning' },
+  track:        { ar: 'جري وألعاب قوى ومضمار', en: 'Running & track' }
 };
 
 /* أدوات الملاعب والصالات الوظيفية اللي مش موجودة في مكتبة الحديد */
@@ -518,6 +519,358 @@ export const DRILLS_LIBRARY = [
     howTo: {
       ar: 'اصعد بسرعة وانزل مشي كراحة، ٦-١٠ جولات. متاح لأي حد في أي عمارة — والنزول هو اللي بيوجع العضلة فاهبط بهدوء.',
       en: 'Climb fast and walk down as recovery, 6-10 rounds. Available to anyone with a staircase — the descent causes the soreness, so come down easy.'
+    }
+  },
+
+  /* ==================== جري وألعاب قوى ومضمار — Running & Track ==================== */
+  {
+    id: 'dr_trk_a_skip',
+    name: { ar: 'إيه سكيب (A-Skip)', en: 'A-Skip' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['hamstrings', 'quadriceps'], secondaryMuscles: ['calves', 'abdominals'],
+    howTo: {
+      ar: 'مشية نطّ إيقاعية: ارفع الركبة لمستوى الحوض والكعب للمؤخرة، وانزل القدم تحت مركز الجسم على مشط القدم. ٢-٣ × ٢٠-٣٠م. الهدف ميكانيكا جري سليمة مش سرعة.',
+      en: 'Rhythmic skip: drive the knee to hip height with the foot dorsiflexed, then strike down under the centre of mass on the ball of the foot. 2-3 × 20-30m. It trains running mechanics, not speed.'
+    }
+  },
+  {
+    id: 'dr_trk_b_skip',
+    name: { ar: 'بي سكيب (B-Skip)', en: 'B-Skip' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['hamstrings', 'quadriceps'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: 'زي الإيه سكيب بس مدّ الرجل لقدّام في نهاية رفع الركبة ثم اسحبها لتحت بقوة (حركة «المخلب»). ٢-٣ × ٢٠-٣٠م. بيدرّب الإمساك بالأرض.',
+      en: 'Like the A-Skip, but extend the leg forward at the top of the knee drive, then paw it down and back actively. 2-3 × 20-30m. Trains the ground-contact "pawing" action.'
+    }
+  },
+  {
+    id: 'dr_trk_c_skip',
+    name: { ar: 'سي سكيب (C-Skip)', en: 'C-Skip' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: 'كعب الرجل يطلع للمؤخرة ثم الركبة تتقدّم لقدّام (حركة دايرية). ٢ × ٢٠م. تمرين ربط بين تحمّل الهامسترنج وتوقيت الخطوة.',
+      en: 'Heel recovers to the glute, then the knee swings through (a cycling motion). 2 × 20m. Links hamstring work to stride timing.'
+    }
+  },
+  {
+    id: 'dr_trk_high_knees',
+    name: { ar: 'هاي نيز (رفع الركب)', en: 'High Knees' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['calves', 'abdominals'],
+    howTo: {
+      ar: 'جري في المكان أو للأمام بتردد عالٍ: الركبة لمستوى الحوض ومشط القدم لتحت وزراعين متبادلين. ٣ × ١٠-٢٠م أو ١٠-١٥ ثانية.',
+      en: 'Fast-frequency running in place or forward: knees to hip height, ball-of-foot contacts and a strong arm swing. 3 × 10-20m or 10-15 s.'
+    }
+  },
+  {
+    id: 'dr_trk_butt_kicks',
+    name: { ar: 'بات كيكس (رفع الكعب)', en: 'Butt Kicks' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['hamstrings'], secondaryMuscles: ['calves'],
+    howTo: {
+      ar: 'جري خفيف يلمس فيه الكعب المؤخرة مع بقاء الركبة تحت الحوض. ٣ × ٢٠م. تسخين للهامسترنج وتحسين استرجاع الرجل.',
+      en: 'Light running where the heel lifts to the glute while the knee stays under the hip. 3 × 20m. Warms up the hamstrings and improves leg recovery.'
+    }
+  },
+  {
+    id: 'dr_trk_straight_leg_bound',
+    name: { ar: 'نطّ بالرجل المفرودة', en: 'Straight-Leg Bounds' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['hamstrings', 'glutes'], secondaryMuscles: ['calves', 'lower back'],
+    howTo: {
+      ar: 'ابقى مفرود الركبة وحرّك الرجل من الحوض "خبطة" لتحت وورا (زي المقص). ٢-٣ × ٢٠-٣٠م. بيعلّم الدفع الخلفي للأرض.',
+      en: 'Keep the knee near-straight and swing the whole leg from the hip, clawing down and back. 2-3 × 20-30m. Teaches the backward ground push.'
+    }
+  },
+  {
+    id: 'dr_trk_wicket_run',
+    name: { ar: 'ووكيت ران (حواجز صغيرة)', en: 'Wicket Runs' },
+    category: 'track', equipment: 'hurdles', type: 'distance_time',
+    primaryMuscles: ['hamstrings', 'glutes'], secondaryMuscles: ['calves', 'quadriceps'],
+    howTo: {
+      ar: '٦-٨ حواجز قصيرة (١٥-٢٠سم) متباعدة ٢-٢.٢م للمبتدئ حتى ٢.٦م للمتقدم، اجري فوقها بخطوات سريعة بدون ما تتغير المسافة. ٣-٤ × ٦-٨ حواجز.',
+      en: '6-8 mini-hurdles (15-20cm) spaced ~2.0-2.2m for beginners up to ~2.6m for advanced athletes; run over them with quick, even steps. 3-4 × 6-8 hurdles.'
+    }
+  },
+  {
+    id: 'dr_trk_stride',
+    name: { ar: 'ستريدز (انطلاقات تعافي)', en: 'Strides' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: 'جري مريح ٨٠-١٠٠م: تسارع تدريجي لـ٨٥-٩٠٪ من السرعة بدون إجهاد ثم تخفيف. ٤-٦ × بعد الجري الخفيف. بيحسّن الشكل والأداء بدون تعب.',
+      en: 'Relaxed 80-100m runs: build gradually to ~85-90% speed without straining, then ease off. 4-6 × after an easy run. Improves form without fatigue.'
+    }
+  },
+  {
+    id: 'dr_trk_flying_30',
+    name: { ar: 'جري ٣٠م بسرعة مطلقة (Fly 30)', en: 'Flying 30m Sprint' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['hamstrings', 'glutes'], secondaryMuscles: ['quadriceps', 'calves'],
+    howTo: {
+      ar: 'ابدأ بتسارع ٢٠-٣٠م ثم "منطقة" ٣٠م بأقصى سرعة (علّم بقمعين) ثم تخفيف. راحة كاملة ٤-٦ دقايق. ٣-٤ مرات بس. لأقصى سرعة، مش للتعب.',
+      en: 'Build up over 20-30m, then hit a marked 30m zone at top speed (two cones), then decelerate. Full recovery of 4-6 min. Only 3-4 reps — this is maximum-velocity work, not conditioning.'
+    }
+  },
+  {
+    id: 'dr_trk_block_start',
+    name: { ar: 'انطلاق من البلوك', en: 'Block Starts' },
+    category: 'track', equipment: 'other', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'glutes'], secondaryMuscles: ['hamstrings', 'calves'],
+    howTo: {
+      ar: 'اضبط البلوك (الأمامي ٤٥-٥٠سم والخلفي ٧٥-٨٠سم تقريبًا من الخط)، "على مكانك - إستعد - انطلق"، ادفع بالرجلين مع دفع الجسم لـ٤٥° لأول ٣-٤ خطوات. ٤-٦ × ١٠-٣٠م.',
+      en: 'Set the blocks (front ~45-50cm, rear ~75-80cm behind the line), "set — go", drive with both legs at a ~45° body angle for the first 3-4 steps. 4-6 × 10-30m.'
+    }
+  },
+  {
+    id: 'dr_trk_hill_sprint',
+    name: { ar: 'جري صاعد (طلعات)', en: 'Hill Sprints' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'glutes'], secondaryMuscles: ['calves', 'hamstrings'],
+    howTo: {
+      ar: 'طلعة ميلها ٤-٨٪ لمسافة ٢٠-٤٠م بأقصى جهد ونزول مشي كراحة (٢-٣ دقايق). ٥-٨ مرات. بتقوّي دفع الأرض وبتقلّل ضغط الهامسترنج.',
+      en: 'A 4-8% slope for 20-40m at max effort, walk down as recovery (2-3 min). 5-8 reps. Builds drive and lowers hamstring strain compared to flat max-speed work.'
+    }
+  },
+  {
+    id: 'dr_trk_sprint_30',
+    name: { ar: 'عدو ٣٠م', en: '30m Sprint' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'glutes'], secondaryMuscles: ['hamstrings', 'calves'],
+    howTo: {
+      ar: 'من الثبات (وقفة عالية أو بلوك) ٣٠م بأقصى جهد، تتسجل الزمن. راحة ٣-٥ دقايق. ٣-٥ مرات.',
+      en: 'Maximal 30m from a standing or block start, time each rep. Rest 3-5 min. 3-5 reps.'
+    }
+  },
+  {
+    id: 'dr_trk_sprint_60',
+    name: { ar: 'عدو ٦٠م', en: '60m Sprint' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['hamstrings', 'glutes'], secondaryMuscles: ['quadriceps', 'calves'],
+    howTo: {
+      ar: '٦٠م بأقصى جهد: مرحلة التسارع ثم التثبيت. راحة ٥-٨ دقايق. ٢-٤ مرات. اختبار وتدريب لسرعة ٦٠م.',
+      en: 'Maximal 60m covering acceleration then maintenance. Rest 5-8 min. 2-4 reps. Used both as a test and as training.'
+    }
+  },
+  {
+    id: 'dr_trk_rep_150',
+    name: { ar: 'تكرارات ١٥٠م', en: '150m Repeats' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: '١٥٠م بـ٩٠-٩٥٪ من السرعة القصوى (٣٠م تسارع + ٩٠م سرعة + ٣٠م تخفيف). راحة ٤-٦ دقايق. ٣-٥ مرات. لسرعة التحمّل لعدائي ١٠٠-٢٠٠م.',
+      en: '150m at 90-95% (30m build + 90m float + 30m ease). Rest 4-6 min. 3-5 reps. Speed endurance for 100-200m athletes.'
+    }
+  },
+  {
+    id: 'dr_trk_rep_200',
+    name: { ar: 'تكرارات ٢٠٠م', en: '200m Repeats' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: '٢٠٠م بسرعة السباق أو أبطأ بقليل، راحة ٣-٥ دقايق (أطول للأسرع). ٤-٦ مرات. تحمّل سرعة وتكيّف مع حمض اللاكتيك.',
+      en: '200m at race pace or slightly slower with 3-5 min rest (longer if faster). 4-6 reps. Speed endurance and lactate tolerance.'
+    }
+  },
+  {
+    id: 'dr_trk_rep_300',
+    name: { ar: 'تكرارات ٣٠٠م', en: '300m Repeats' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: '٣٠٠م بـ٩٠-٩٥٪ من أفضل زمن ٤٠٠م (مقسوم)، راحة ٦-١٠ دقايق. ٢-٤ مرات. بيبني سرعة تحمّل خاصة لعدائي ٤٠٠م.',
+      en: '300m at 90-95% of best-400 pace, rest 6-10 min. 2-4 reps. Builds 400m-specific speed endurance.'
+    }
+  },
+  {
+    id: 'dr_trk_rep_400',
+    name: { ar: 'تكرارات ٤٠٠م', en: '400m Repeats' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: '٤٠٠م بسرعة ٨٥-٩٥٪ من أفضل زمن، راحة ٣-٥ دقايق (فترات ثابتة). ٤-٨ مرات. للتحمّل الهوائي واللاهوائي.',
+      en: '400m at 85-95% of best time, rest 3-5 min (fixed). 4-8 reps. Aerobic and anaerobic endurance.'
+    }
+  },
+  {
+    id: 'dr_trk_rep_800',
+    name: { ar: 'تكرارات ٨٠٠م', en: '800m Repeats' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: '٨٠٠م بسرعة سباق ٥ كم إلى ٣ كم، راحة ٢-٣ دقايق جري خفيف. ٣-٥ مرات. للمتوسط والتحمّل.',
+      en: '800m at 5km-to-3km race pace with 2-3 min easy jog. 3-5 reps. Middle-distance and endurance work.'
+    }
+  },
+  {
+    id: 'dr_trk_rep_1000',
+    name: { ar: 'تكرارات ١٠٠٠م', en: '1000m Repeats' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: '١٠٠٠م بسرعة عتبة اللاكتات (تقريبًا سرعة ١٠كم)، راحة ٢-٣ دقايق. ٣-٦ مرات. لتحمّل العتبة.',
+      en: '1000m at threshold (~10k) pace with 2-3 min rest. 3-6 reps. Threshold endurance.'
+    }
+  },
+  {
+    id: 'dr_trk_tempo_100',
+    name: { ar: 'تيمبو ١٠٠م', en: '100m Tempo Runs' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: '١٠٠م بـ٦٥-٧٥٪ بإيقاع مريح ومشي رجوع، ١٠-١٦ مرة. بنية هوائية للعدائين بدون إجهاد عضلي كبير.',
+      en: '100m at 65-75% effort, relaxed, walk back, 10-16 reps. Builds an aerobic base for sprinters with low muscular cost.'
+    }
+  },
+  {
+    id: 'dr_trk_tempo_200',
+    name: { ar: 'تيمبو ٢٠٠م', en: '200m Tempo Runs' },
+    category: 'track', equipment: 'cones', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: '٢٠٠م بـ٧٠-٧٥٪، راحة ٦٠-٩٠ث، ٦-١٠ مرات. تحمّل هوائي مناسب لأسابيع الأساس.',
+      en: '200m at 70-75% with 60-90 s rest, 6-10 reps. Aerobic capacity suited to base-phase weeks.'
+    }
+  },
+  {
+    id: 'dr_trk_easy_run',
+    name: { ar: 'جري خفيف (قاعدة هوائية)', en: 'Easy Run (Aerobic Base)' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['calves', 'glutes'],
+    howTo: {
+      ar: '٢٠-٦٠ دقيقة بنبض ٦٥-٧٥٪ من الأقصى وبإمكانك تتكلم. أساس التحمّل واسترجاع بين الحصص الصعبة.',
+      en: '20-60 min at 65-75% of max HR while still able to talk. The base of endurance and recovery between hard sessions.'
+    }
+  },
+  {
+    id: 'dr_trk_long_run',
+    name: { ar: 'جري طويل', en: 'Long Run' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['calves', 'glutes'],
+    howTo: {
+      ar: 'جري مستمر ٦٠-١٢٠ دقيقة بإيقاع مريح مرة في الأسبوع. زوّد الزمن تدريجيًا (≤١٠٪ في الأسبوع).',
+      en: 'Continuous 60-120 min at a comfortable pace once a week. Increase duration gradually (≤10% per week).'
+    }
+  },
+  {
+    id: 'dr_trk_threshold_run',
+    name: { ar: 'جري عتبة (تمبو)', en: 'Threshold (Tempo) Run' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: '٢٠-٤٠ دقيقة بسرعة "صعب مريح" (قريبة من سباق ١٠-١٥ كم). ممكن مقسّمة لمرتين. بترفع عتبة اللاكتات.',
+      en: '20-40 min at "comfortably hard" pace (near 10-15k race pace); can be split in two. Raises the lactate threshold.'
+    }
+  },
+  {
+    id: 'dr_trk_hurdle_trail',
+    name: { ar: 'دريل رجل الخلف للحواجز', en: 'Hurdle Trail-Leg Drill' },
+    category: 'track', equipment: 'hurdles', type: 'distance_time',
+    primaryMuscles: ['hamstrings', 'glutes'], secondaryMuscles: ['adductors', 'abductors'],
+    howTo: {
+      ar: 'امش/اجري جنب الحاجز وارفع رجل الخلف فقط فوقه (ركبة للجنب ثم للأمام) والجسم مستقيم. ٣ × ٥ حواجز لكل رجل.',
+      en: 'Walk or jog alongside the hurdle and lift only the trail leg over (knee out, then forward) keeping the trunk upright. 3 × 5 hurdles per leg.'
+    }
+  },
+  {
+    id: 'dr_trk_hurdle_lead',
+    name: { ar: 'دريل رجل الأمام للحواجز', en: 'Hurdle Lead-Leg Drill' },
+    category: 'track', equipment: 'hurdles', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'abdominals'],
+    howTo: {
+      ar: 'ركّز على رجل الأمام: ركبة عالية ثم مدّ الرجل فوق الحاجز وارجع بالقدم أسفل بسرعة تحت الجسم. ٣ × ٥ حواجز لكل رجل.',
+      en: 'Focus on the lead leg: high knee, extend over the hurdle then snap the foot down under the body quickly. 3 × 5 hurdles per leg.'
+    }
+  },
+  {
+    id: 'dr_trk_hurdle_3step',
+    name: { ar: '٣ خطوات بين الحواجز', en: '3-Step Hurdle Rhythm' },
+    category: 'track', equipment: 'hurdles', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'hamstrings'], secondaryMuscles: ['glutes', 'calves'],
+    howTo: {
+      ar: 'حواجز بمسافات سباق (١٠٠م حواجز للسيدات ٨.٥م، ١١٠م حواجز للرجال ٩.١٤م) بإيقاع ٣ خطوات بين الحاجز والتاني. ٣-٥ × ٥ حواجز.',
+      en: 'Hurdles at race spacing (100m hurdles women 8.5m, 110m hurdles men 9.14m) with a 3-step rhythm between hurdles. 3-5 × 5 hurdles.'
+    }
+  },
+  {
+    id: 'dr_trk_baton_exchange',
+    name: { ar: 'تسليم واستلام العصا (تتابع)', en: 'Baton Exchange (Relay)' },
+    category: 'track', equipment: 'other', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'glutes'], secondaryMuscles: ['shoulders', 'calves'],
+    howTo: {
+      ar: 'المستلم يبدأ بعلامة (٦-٩ قدم) ويجري عند وصول المسلّم، ويمد ذراعه للخلف ثابتة، والمسلّم يضع العصا في اليد بدون نظر. ٦-١٠ تكرارات.',
+      en: 'The receiver starts at a check-mark (6-9 ft), runs when the passer arrives, then holds a steady backward arm; the passer places the baton without looking. 6-10 reps.'
+    }
+  },
+  {
+    id: 'dr_trk_long_jump_approach',
+    name: { ar: 'تقرّب الوثب الطويل', en: 'Long Jump Approach Run' },
+    category: 'track', equipment: 'other', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'glutes'], secondaryMuscles: ['hamstrings', 'calves'],
+    howTo: {
+      ar: 'اضبط علامات التقرّب (١٠-١٦ خطوة)، جري متسارع ثابت ثم ضغط الخطوة الأخيرة. ٦-١٠ تقرّبات من غير وثب.',
+      en: 'Set run-up marks (10-16 strides), accelerate evenly and set up the final stride. 6-10 run-throughs without jumping.'
+    }
+  },
+  {
+    id: 'dr_trk_triple_jump_hops',
+    name: { ar: 'قفزات الوثب الثلاثي (هوب-ستيب-جامب)', en: 'Triple Jump Phases (Hop-Step-Jump)' },
+    category: 'track', equipment: 'body only', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'glutes'], secondaryMuscles: ['hamstrings', 'calves'],
+    howTo: {
+      ar: 'قفزة على رجل ثم الأخرى ثم هبوط على الاتنين بإيقاع متوازن. ٣-٥ × ٣ قفزات. لعمل فقط بعد قوة كافية وأرض مناسبة.',
+      en: 'Hop on one leg, step to the other, then jump landing on both with balanced rhythm. 3-5 × 3 phases. Only with adequate strength base and a proper surface.'
+    }
+  },
+  {
+    id: 'dr_trk_high_jump_curve',
+    name: { ar: 'تقرّب القفز العالي (منحنى J)', en: 'High Jump J-Curve Approach' },
+    category: 'track', equipment: 'other', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'glutes'], secondaryMuscles: ['calves', 'abdominals'],
+    howTo: {
+      ar: '٨-١٠ خطوات بشكل J: ٣-٤ مستقيمة ثم منحنى مع ميل داخلي، والخطوة الأخيرة قصيرة. ٦-١٠ تقرّبات.',
+      en: '8-10 strides in a J shape: 3-4 straight then a curve with an inward lean and a shortened last step. 6-10 approaches.'
+    }
+  },
+  {
+    id: 'dr_trk_shot_put_glide',
+    name: { ar: 'دفع الجلّة (غلايد)', en: 'Shot Put Glide Drill' },
+    category: 'track', equipment: 'other', type: 'distance_time',
+    primaryMuscles: ['shoulders', 'chest'], secondaryMuscles: ['quadriceps', 'triceps'],
+    howTo: {
+      ar: 'من وضع الظهر للهدف: اغلق بالرجل وادفع بالوزن لقدّام ثم دفع الجلّة بالكتف والذراع. ٣ × ٦ رميات بوزن خفيف.',
+      en: 'From a rear-facing start: glide with the legs, transfer the weight forward, then drive the shot through the shoulder and arm. 3 × 6 throws with a light implement.'
+    }
+  },
+  {
+    id: 'dr_trk_javelin_crossover',
+    name: { ar: 'رمي الرمح (كروس أوفر)', en: 'Javelin Cross-Step Drill' },
+    category: 'track', equipment: 'other', type: 'distance_time',
+    primaryMuscles: ['shoulders', 'abdominals'], secondaryMuscles: ['quadriceps', 'lats'],
+    howTo: {
+      ar: '٥ خطوات كروس مع الرمح للخلف ثم رمية بالصدر والكتف — بدون جري كامل في البداية. ٣ × ٦. وزن/رمح خفيف.',
+      en: '5 cross-steps with the javelin drawn back, then a chest-and-shoulder throw — without a full run-up at first. 3 × 6 with a light implement.'
+    }
+  },
+  {
+    id: 'dr_trk_med_ball_throws',
+    name: { ar: 'رميات كرة طبية للألعاب', en: 'Med-Ball Power Throws' },
+    category: 'track', equipment: 'other', type: 'distance_time',
+    primaryMuscles: ['shoulders', 'abdominals'], secondaryMuscles: ['chest', 'glutes'],
+    howTo: {
+      ar: 'رميات أمامية/من فوق الراس/دوّارة بأقصى سرعة بكرة ٢-٤ كجم، ٣-٤ × ٥-٨. بتحسّن القدرة قبل الرمي والوثب.',
+      en: 'Chest, overhead and rotational throws with a 2-4kg ball at maximum speed, 3-4 × 5-8. Develops power for throwing and jumping events.'
+    }
+  },
+  {
+    id: 'dr_trk_sled_sprint',
+    name: { ar: 'سليد سبرنت (تسارع بمقاومة)', en: 'Sled Sprint' },
+    category: 'track', equipment: 'sled', type: 'distance_time',
+    primaryMuscles: ['quadriceps', 'glutes'], secondaryMuscles: ['hamstrings', 'calves'],
+    howTo: {
+      ar: 'حمل خفيف (١٠-٢٠٪ من وزن الجسم) لـ١٥-٣٠م بأقصى جهد مع ميل للأمام. ٤-٦ مرات. تسارع مش تعب.',
+      en: 'Light load (10-20% body mass) over 15-30m at maximum effort with forward lean. 4-6 reps. For acceleration, not fatigue.'
     }
   }
 ];

@@ -251,7 +251,26 @@
 
   /* Simulates the network. window.__adamExploreFail = N makes the next N calls fail
    * (used by the test script and by ?xerr=1 on explore.html to exercise the error state). */
+  /* Sample listings are shown ONLY when asked for (?data=sample or ADAM_FEATURES.exploreSample = true).
+   * Otherwise the screen shows real listings, which come from window.ADAM_EXPLORE_REAL.load()
+   * (a promise of an array with the same shape as LISTINGS; not wired yet, so it is empty and every
+   * category shows "قريبًا / Coming soon" until a real club, gym, specialist, coach, store or clinic joins). */
+  var SAMPLE = !!(root.ADAM_FEATURES && root.ADAM_FEATURES.exploreSample === true);
+  try {
+    if (/[?&]data=sample\b/.test((root.location && root.location.search) || '')) { SAMPLE = true; root.sessionStorage.setItem('adamExploreSample', '1'); }
+    else if (/[?&]data=real\b/.test((root.location && root.location.search) || '')) { SAMPLE = false; root.sessionStorage.removeItem('adamExploreSample'); }
+    else if (root.sessionStorage.getItem('adamExploreSample') === '1') SAMPLE = true;
+  } catch (e) { /* no storage: the URL / flag decide */ }
+  function fetchReal() {
+    return new Promise(function (resolve, reject) {
+      var real = root.ADAM_EXPLORE_REAL;
+      if (real && typeof real.load === 'function') {
+        Promise.resolve(real.load()).then(function (list) { resolve(Array.isArray(list) ? list : []); }, reject);
+      } else setTimeout(function () { resolve([]); }, 120);
+    });
+  }
   function fetchAll() {
+    if (!SAMPLE) return fetchReal();
     return new Promise(function (resolve, reject) {
       var ms = root.__adamExploreDelay != null ? root.__adamExploreDelay : 350;
       setTimeout(function () {
@@ -267,6 +286,6 @@
 
   root.ADAM_EXPLORE_DATA = {
     KINDS: KINDS, CITIES: CITIES, SPECIALTIES: SPECIALTIES,
-    api: { fetchAll: fetchAll }, isSample: true
+    api: { fetchAll: fetchAll }, isSample: SAMPLE
   };
 })(window);

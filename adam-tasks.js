@@ -27,7 +27,7 @@
 
   var LS_LANG = 'adam-lang', LS_THEME = 'adam-theme', KEY = 'adam-tasks:v1:';
   var STANDALONE = document.documentElement.hasAttribute('data-tasks-standalone');
-  if (!STANDALONE && window.ADAM_FEATURES && window.ADAM_FEATURES.tasks === false) return; /* feature flag (adam-features.js) */
+  if (!STANDALONE && window.ADAM_FEATURES && (window.ADAM_FEATURES.tasks === false || window.ADAM_FEATURES.tasks === 'soon')) return; /* feature flag (adam-features.js) */
   var MAX_TITLE = 120, MAX_NOTE = 400;
 
   /* ---------------------------------------------------------------- icons */

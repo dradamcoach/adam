@@ -46,7 +46,7 @@
       s_coach: 'مدرب', s_specialist: 'أخصائي', s_clinic: 'عيادة أو مركز', s_store: 'متجر', s_club: 'نادي', s_gym: 'جيم',
       filters: 'الفلاتر', f_format: 'الطريقة', f_online: 'أونلاين', f_inperson: 'حضوري', f_lang: 'اللغة', f_ar: 'بالعربي', f_en: 'English',
       f_fav: 'المفضلة', sort: 'ترتيب', sort_rel: 'الأنسب', sort_name: 'الاسم', reset: 'إعادة ضبط الفلاتر',
-      sample_chip: 'تجريبي', details: 'التفاصيل',
+      sample_chip: 'تجريبي', soon: 'قريبًا', soon_t: 'قريبًا', soon_p: 'لسه مفيش قوائم هنا. أول ما الأندية والجيمات والمتخصصين والمدربين والمتاجر والعيادات ينضموا لـ ADAM هتظهر هنا.', soon_pk: 'لسه محدش من القسم ده انضم. هيظهر هنا أول ما ينضم.', details: 'التفاصيل',
       fav_add: 'احفظ في المفضلة', fav_remove: 'شيل من المفضلة', cmp_add: 'قارن', cmp_remove: 'شيل من المقارنة',
       m_online: 'أونلاين', m_inperson: 'حضوري', m_both: 'حضوري وأونلاين', m_online_only: 'أونلاين فقط',
       l_ar: 'العربية', l_en: 'English', l_both: 'العربية والإنجليزية',
@@ -63,6 +63,7 @@
       cmp_title: 'مقارنة', cmp_diff: 'الفروق فقط', cmp_need: 'اختار 2 أو 3 نتايج عشان تقارن بينهم.',
       cmp_r_kind: 'النوع', cmp_r_place: 'المكان', cmp_r_format: 'الطريقة', cmp_r_lang: 'اللغات', cmp_r_spec: 'التخصصات', cmp_r_serv: 'الخدمات', cmp_r_trust: 'حالة المراجعة',
       cmp_back: 'رجوع للمقارنة',
+      d_contact: 'التواصل', d_creds: 'المستندات', d_cred_ok: 'تمت مراجعته',
       d_about: 'نبذة', d_kind: 'النوع', d_place: 'المكان', d_format: 'الطريقة', d_lang: 'اللغات', d_spec: 'التخصصات', d_serv: 'الخدمات', d_trust: 'حالة المراجعة',
       d_sample: 'قائمة تجريبية — الاسم والبيانات مخترعة لتجربة الشاشة.',
       copy: 'انسخ الرابط', copied: 'اتنسخ الرابط', copy_fail: 'مقدرناش ننسخ الرابط — انسخه من هنا:',
@@ -86,7 +87,7 @@
       s_coach: 'Coach', s_specialist: 'Specialist', s_clinic: 'Clinic or center', s_store: 'Store', s_club: 'Club', s_gym: 'Gym',
       filters: 'Filters', f_format: 'Format', f_online: 'Online', f_inperson: 'In person', f_lang: 'Language', f_ar: 'Arabic', f_en: 'English',
       f_fav: 'Favorites', sort: 'Sort', sort_rel: 'Best match', sort_name: 'Name', reset: 'Reset filters',
-      sample_chip: 'Sample', details: 'Details',
+      sample_chip: 'Sample', soon: 'Soon', soon_t: 'Coming soon', soon_p: 'No listings yet. They will appear here as soon as clubs, gyms, specialists, coaches, stores and clinics join ADAM.', soon_pk: 'Nobody from this category has joined yet. They will appear here as soon as they do.', details: 'Details',
       fav_add: 'Save to favorites', fav_remove: 'Remove from favorites', cmp_add: 'Compare', cmp_remove: 'Remove from comparison',
       m_online: 'Online', m_inperson: 'In person', m_both: 'In person and online', m_online_only: 'Online only',
       l_ar: 'Arabic', l_en: 'English', l_both: 'Arabic and English',
@@ -103,6 +104,7 @@
       cmp_title: 'Comparison', cmp_diff: 'Differences only', cmp_need: 'Select 2 or 3 results to compare them.',
       cmp_r_kind: 'Type', cmp_r_place: 'Location', cmp_r_format: 'Format', cmp_r_lang: 'Languages', cmp_r_spec: 'Specialties', cmp_r_serv: 'Services', cmp_r_trust: 'Review status',
       cmp_back: 'Back to comparison',
+      d_contact: 'Contact', d_creds: 'Credentials', d_cred_ok: 'reviewed',
       d_about: 'About', d_kind: 'Type', d_place: 'Location', d_format: 'Format', d_lang: 'Languages', d_spec: 'Specialties', d_serv: 'Services', d_trust: 'Review status',
       d_sample: 'Sample listing — the name and details are invented to try out the screen.',
       copy: 'Copy link', copied: 'Link copied', copy_fail: 'Could not copy the link — copy it from here:',
@@ -270,7 +272,7 @@
           '</div>' +
         '</header>' +
         '<div class="ax-scroll" id="ax-scroll"><div class="ax-wrap">' +
-          '<p class="ax-sample" role="note">' + icon('info-circle') + '<span data-i="sample"></span></p>' +
+          (D.isSample ? '<p class="ax-sample" role="note">' + icon('info-circle') + '<span data-i="sample"></span></p>' : '') +
           '<section class="ax-hero"><h1 id="ax-h1" tabindex="-1" data-i="h1"></h1><p class="ax-lead" data-i="lead"></p></section>' +
           '<form class="ax-search" id="ax-form" role="search" autocomplete="off">' +
             '<label class="ax-field ax-q"><span class="ax-sr" data-i="search_label"></span>' + icon('search') +
@@ -349,12 +351,14 @@
   }
 
   /* -------------------------------------------------------------- render */
+  /* does the whole list hold at least one real listing of this kind (ignoring search and filters)? */
+  function hasKind(k) { return data.some(function (it) { return k === 'all' || it.kind === k; }); }
   function renderTabs() {
     var c = counts(), kinds = ['all'].concat(D.KINDS);
     els.tabs.innerHTML = kinds.map(function (k) {
-      var sel = S.kind === k;
+      var sel = S.kind === k, soon = status === 'ready' && !hasKind(k);
       return '<button type="button" role="tab" id="ax-tab-' + k + '" data-k="' + k + '" aria-selected="' + sel + '" tabindex="' + (sel ? 0 : -1) + '" aria-controls="ax-results">' +
-        (k === 'all' ? icon('compass') : icon(KIND_ICON[k])) + '<span>' + esc(tx('k_' + k)) + '</span> <span class="ax-tn">' + num(status === 'ready' ? c[k] : 0) + '</span></button>';
+        (k === 'all' ? icon('compass') : icon(KIND_ICON[k])) + '<span>' + esc(tx('k_' + k)) + '</span> <span class="ax-tn">' + (soon ? esc(tx('soon')) : num(status === 'ready' ? c[k] : 0)) + '</span></button>';
     }).join('');
   }
   function renderChips() {
@@ -367,7 +371,7 @@
     els.qx.hidden = !els.q.value;
     $('#ax-reset', els.root).disabled = !(activeFilterCount() || S.q);
     $('#ax-reset', els.root).setAttribute('aria-disabled', String(!(activeFilterCount() || S.q)));
-    els.try.innerHTML = (!S.q && status === 'ready') ? '<span class="ax-fl">' + esc(tx('try_label')) + '</span>' + tx('try_q').map(function (q) {
+    els.try.innerHTML = (!S.q && status === 'ready' && data.length) ? '<span class="ax-fl">' + esc(tx('try_label')) + '</span>' + tx('try_q').map(function (q) {
       return '<button type="button" class="ax-sug" data-q="' + esc(q) + '">' + esc(q) + '</button>';
     }).join('') : '';
   }
@@ -399,7 +403,7 @@
     return '<article class="ax-card" data-id="' + esc(it.id) + '" style="--c:' + KIND_HUE[it.kind] + '">' +
       '<div class="ax-ch"><span class="ax-tile">' + icon(KIND_ICON[it.kind]) + '</span>' +
       '<div class="ax-cn"><h2 class="ax-name"><button type="button" class="ax-open" data-open="' + esc(it.id) + '">' + esc(nm) + '</button></h2>' +
-      '<div class="ax-badges"><span class="ax-badge">' + esc(tx('s_' + it.kind)) + '</span><span class="ax-badge ax-smp">' + esc(tx('sample_chip')) + '</span></div></div>' + actsHtml(it, nm, fav, inC) + '</div>' +
+      '<div class="ax-badges"><span class="ax-badge">' + esc(tx('s_' + it.kind)) + '</span>' + (D.isSample ? '<span class="ax-badge ax-smp">' + esc(tx('sample_chip')) + '</span>' : '') + '</div></div>' + actsHtml(it, nm, fav, inC) + '</div>' +
       '<p class="ax-hl">' + esc(L(it.headline)) + '</p>' +
       '<ul class="ax-meta"><li>' + icon('map-pin') + '<span>' + esc(placeText(it)) + '</span></li><li>' + icon(it.modes.length > 1 ? 'world' : (it.modes[0] === 'online' ? 'device-laptop' : 'users')) + '<span>' + esc(formatText(it)) + '</span></li><li>' + icon('language') + '<span>' + esc(langText(it)) + '</span></li></ul>' +
       '<div class="ax-cf">' + trustHtml(it) + '</div></article>';
@@ -422,6 +426,12 @@
     if (status === 'error') {
       els.res.className = 'ax-results ax-one'; els.count.textContent = '';
       els.res.innerHTML = panel('alert-triangle', tx('err_t'), tx('err_p'), '<button type="button" class="ax-btn ax-primary" data-act="retry">' + icon('refresh') + esc(tx('retry')) + '</button>');
+      return;
+    }
+    if (!hasKind(S.kind)) {
+      els.count.innerHTML = '';
+      els.res.className = 'ax-results ax-one';
+      els.res.innerHTML = panel('info-circle', tx('soon_t'), S.kind === 'all' ? tx('soon_p') : tx('soon_pk'), '');
       return;
     }
     list = run();
@@ -474,6 +484,14 @@
   }
 
   /* --------------------------------------------------------------- sheet */
+  function contactHtml(c) {
+    var out = [];
+    var ph = String(c.phone || '').replace(/[^\d+]/g, '');
+    var wa = String(c.whatsapp || '').replace(/[^\d]/g, '');
+    if (ph) out.push('<a class="ax-ltr" href="tel:' + esc(ph) + '">' + esc(c.phone) + '</a>');
+    if (wa) out.push('<a class="ax-ltr" href="https://wa.me/' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp ' + esc(c.whatsapp) + '</a>');
+    return out.join(' · ');
+  }
   function row(label, html) { return '<div class="ax-dr"><dt>' + esc(label) + '</dt><dd>' + html + '</dd></div>'; }
   function chipsOf(arr) { return '<span class="ax-tags">' + arr.map(function (s) { return '<span class="ax-badge">' + esc(s) + '</span>'; }).join('') + '</span>'; }
   function detailHtml(it) {
@@ -490,8 +508,10 @@
         row(tx('d_lang'), esc(langText(it))) +
         row(tx('d_spec'), chipsOf(specLabels(it))) +
         row(tx('d_serv'), '<ul class="ax-ul">' + it.services.map(function (s) { return '<li>' + esc(L(s)) + '</li>'; }).join('') + '</ul>') +
+        (it.contact ? row(tx('d_contact'), contactHtml(it.contact)) : '') +
+        (it.credentials && it.credentials.length ? row(tx('d_creds'), '<ul class="ax-ul">' + it.credentials.map(function (c) { return '<li>' + esc(c.title + (c.issuer ? ' — ' + c.issuer : '') + (c.verified ? ' · ' + tx('d_cred_ok') : '')) + '</li>'; }).join('') + '</ul>') : '') +
         row(tx('d_trust'), trustHtml(it) + '<p class="ax-note">' + esc(it.trust === 'checked' ? tx(isPerson(it.kind) ? 't_explain_checked_p' : 't_explain_checked_o') : tx(isPerson(it.kind) ? 't_explain_reviewed' : 't_explain_reviewed_o')) + '</p>') +
-      '</dl><p class="ax-note ax-smpn">' + icon('info-circle') + esc(tx('d_sample')) + '</p></div>' +
+      '</dl>' + (D.isSample ? '<p class="ax-note ax-smpn">' + icon('info-circle') + esc(tx('d_sample')) + '</p>' : '') + '</div>' +
       '<div class="ax-sh-f">' +
         '<button type="button" class="ax-btn ax-toggle" data-fav="' + esc(it.id) + '" aria-pressed="' + fav + '">' + icon('star') + '<span>' + esc(fav ? tx('fav_remove') : tx('fav_add')) + '</span></button>' +
         '<button type="button" class="ax-btn ax-toggle" data-cmp="' + esc(it.id) + '" aria-pressed="' + inC + '">' + icon('git-compare') + '<span>' + esc(inC ? tx('cmp_remove') : tx('cmp_add')) + '</span></button>' +

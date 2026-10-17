@@ -20,17 +20,17 @@
       new_: 'جديد', v_h: 'كل اللي محتاجه لجسمك في مكان واحد', v_p: 'ابحث، نفّذ مهامك، اتابع تقدّمك، وشوف برنامجك من متخصص حقيقي.',
       v1: 'اكتشف', v1p: 'بحث موحّد في التمارين والأخصائيين', v2: 'مهامك', v2p: 'تمرينك وأكلك ومتابعاتك مرتّبين', v3: 'برنامجك', v3p: 'من مدرب أو أخصائي بيراجعه', v4: 'تقدّمك', v4p: 'أسئلة بسيطة وإجاباتها بالأرقام',
       v_try: 'جرّب من غير حساب', v_note: 'من غير تسجيل — وتقدر تفتح حساب بعدين.',
-      beta: 'تجريبي', hub_h: 'أدواتك الجديدة', hub_p: 'ميزات تجريبية — البيانات اللي فيها أمثلة مش بياناتك الحقيقية لحد ما تتوصّل بالسيرفر.',
+      beta: 'تجريبي', hub_h: 'أدواتك الجديدة', hub_p: 'أدوات جديدة. اللي لسه مش جاهز مكتوب عليه قريبًا، وهيشتغل أول ما يتوصّل ببياناتك الحقيقية.',
       c_explore: 'اكتشف', c_explore_p: 'ابحث في كل حاجة', c_tasks: 'مهامي', c_tasks_p: 'اللي عليك النهاردة', c_progress: 'تقدّمي', c_progress_p: 'أرقامك وإجاباتها', c_builder: 'بناء البرامج', c_builder_p: 'تمرين وتأهيل بمراجعة', c_reports: 'تقارير النتائج', c_reports_p: 'حضور وغياب وترتيب', c_programs: 'برنامجي', c_programs_p: 'شوف برنامجك كلاعب',
-      sample_c: 'بيانات تجريبية'
+      sample_c: 'بيانات تجريبية', soon_c: 'قريبًا', soon_n: 'مش متاح حالياً'
     },
     en: {
       new_: 'New', v_h: 'Everything for your body in one place', v_p: 'Search, do your tasks, follow your progress and see your plan from a real specialist.',
       v1: 'Explore', v1p: 'One search for exercises and specialists', v2: 'Your tasks', v2p: 'Training, food and follow-ups in order', v3: 'Your plan', v3p: 'From a coach or a specialist who reviews it', v4: 'Your progress', v4p: 'Simple questions, answered with numbers',
       v_try: 'Try without an account', v_note: 'No sign-up needed — open an account later if you like.',
-      beta: 'Beta', hub_h: 'Your new tools', hub_p: 'Beta features — their data is sample data, not yours, until they are connected to the server.',
+      beta: 'Beta', hub_h: 'Your new tools', hub_p: 'New tools. Whatever is not ready yet says Soon, and will work as soon as it is connected to your real data.',
       c_explore: 'Explore', c_explore_p: 'Search everything', c_tasks: 'My tasks', c_tasks_p: 'What is due today', c_progress: 'My progress', c_progress_p: 'Your numbers, answered', c_builder: 'Program builder', c_builder_p: 'Training and rehab, reviewed', c_reports: 'Results reports', c_reports_p: 'Attendance, absence, rank', c_programs: 'My plan', c_programs_p: 'See your plan as a player',
-      sample_c: 'Sample data'
+      sample_c: 'Sample data', soon_c: 'Soon', soon_n: 'Not available yet'
     }
   };
   function tx(k) { var l = TX[lang()]; return l[k] != null ? l[k] : TX.ar[k]; }
@@ -63,17 +63,19 @@
   var role = null;
   function cardsFor(kind) {
     var c = [];
-    function link(page, ic, t, p) { return { href: page, ic: ic, t: t, p: p }; }
+    /* a flag can be true (on), false (hidden) or 'soon' (the card stays visible but is greyed out with a "Soon" tag) */
+    function on(k) { return F[k] !== false; }
+    function add(k, card) { if (!on(k)) return; if (F[k] === 'soon') { card.soon = 1; delete card.href; delete card.act; delete card.sample; } c.push(card); }
     if (kind === 'client') {
-      if (F.explore !== false && window.adamExplore) c.push({ act: 'explore', ic: 'search', t: 'c_explore', p: 'c_explore_p' });
-      if (F.tasks !== false && window.adamTasks) c.push({ act: 'tasks', ic: 'checklist', t: 'c_tasks', p: 'c_tasks_p' });
-      if (F.analytics !== false) c.push({ href: 'analytics.html', ic: 'chart-line', t: 'c_progress', p: 'c_progress_p', sample: 1 });
-      if (F.builder !== false) c.push({ href: 'builder.html', ic: 'barbell', t: 'c_programs', p: 'c_programs_p', sample: 1 });
+      if (window.adamExplore || F.explore === 'soon') add('explore', { act: 'explore', ic: 'search', t: 'c_explore', p: 'c_explore_p' });
+      if (window.adamTasks || F.tasks === 'soon') add('tasks', { act: 'tasks', ic: 'checklist', t: 'c_tasks', p: 'c_tasks_p' });
+      add('analytics', { href: 'analytics.html', ic: 'chart-line', t: 'c_progress', p: 'c_progress_p', sample: 1 });
+      add('builder', { href: 'builder.html', ic: 'barbell', t: 'c_programs', p: 'c_programs_p', sample: 1 });
     } else if (kind === 'coach' || kind === 'specialist' || kind === 'admin') {
-      if (F.builder !== false) c.push({ href: 'builder.html', ic: 'barbell', t: 'c_builder', p: 'c_builder_p', sample: 1 });
-      if (F.reports !== false) c.push({ href: 'reports.html', ic: 'file-analytics', t: 'c_reports', p: 'c_reports_p', sample: 1 });
-      if (F.tasks !== false && window.adamTasks) c.push({ act: 'tasks', ic: 'checklist', t: 'c_tasks', p: 'c_tasks_p' });
-      if (F.explore !== false && window.adamExplore) c.push({ act: 'explore', ic: 'search', t: 'c_explore', p: 'c_explore_p' });
+      add('builder', { href: 'builder.html', ic: 'barbell', t: 'c_builder', p: 'c_builder_p', sample: 1 });
+      add('reports', { href: 'reports.html', ic: 'file-analytics', t: 'c_reports', p: 'c_reports_p', sample: 1 });
+      if (window.adamTasks || F.tasks === 'soon') add('tasks', { act: 'tasks', ic: 'checklist', t: 'c_tasks', p: 'c_tasks_p' });
+      if (window.adamExplore || F.explore === 'soon') add('explore', { act: 'explore', ic: 'search', t: 'c_explore', p: 'c_explore_p' });
     }
     return c;
   }
@@ -89,7 +91,8 @@
     var h = old || document.createElement('section');
     h.id = 'adam-v5-hub'; h.className = 'v5-hub'; h.setAttribute('aria-labelledby', 'adam-v5-hh');
     h.innerHTML = '<div class="v5-hhd"><h2 id="adam-v5-hh">' + esc(tx('hub_h')) + '</h2>' + tag() + '</div><p class="v5-hp">' + esc(tx('hub_p')) + '</p><ul class="v5-hg">' + cards.map(function (c, i) {
-      var inner = '<span class="v5-ci">' + icon(c.ic) + '</span><span class="v5-ct"><b>' + esc(tx(c.t)) + '</b><small>' + esc(tx(c.p)) + (c.sample ? ' · ' + esc(tx('sample_c')) : '') + '</small></span>';
+      var inner = '<span class="v5-ci">' + icon(c.ic) + '</span><span class="v5-ct"><b>' + esc(tx(c.t)) + (c.soon ? ' <em class="v5-soon-tag">' + esc(tx('soon_c')) + '</em>' : '') + '</b><small>' + esc(c.soon ? tx('soon_n') : tx(c.p)) + (c.sample ? ' · ' + esc(tx('sample_c')) : '') + '</small></span>';
+      if (c.soon) return '<li><div class="v5-card v5-soon" role="group" aria-disabled="true">' + inner + '</div></li>';
       return '<li>' + (c.href ? '<a class="v5-card" href="' + esc(pageUrl(c.href, kind)) + '">' + inner + '</a>' : '<button type="button" class="v5-card" data-act="' + c.act + '">' + inner + '</button>') + '</li>';
     }).join('') + '</ul>';
     if (!old) {
