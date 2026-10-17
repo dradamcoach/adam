@@ -108,7 +108,6 @@
   function css(rtl) {
     return '@page{size:A4;margin:14mm 12mm}' +
       '*{box-sizing:border-box}svg,img{max-width:100%;height:auto}' +
-      '@media screen and (max-width:760px){body{font-size:10.5px}th,td{padding:2px 3px!important}h1{font-size:16px}.top b{font-size:16px}}' +
       'body{font-family:Tahoma,Arial,"Segoe UI",sans-serif;color:#1b2430;font-size:11.5px;line-height:1.55;margin:0;padding:0;direction:' + (rtl ? 'rtl' : 'ltr') + ';background:#fff}' +
       '.top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid ' + BRAND + ';padding-bottom:6px;margin-bottom:10px}' +
       '.top b{font-size:19px;color:' + BRAND + '}.top small{color:#667;display:block;font-size:11px}' +
@@ -116,7 +115,7 @@
       'h1{font-size:19px;margin:12px 0 4px;color:#102a43}h2{font-size:15px;margin:14px 0 4px;color:' + BRAND + '}h3{font-size:12.5px;margin:10px 0 3px}' +
       'p{margin:4px 0}' +
       'table{border-collapse:collapse;width:100%;margin:6px 0 10px;page-break-inside:auto}tr{page-break-inside:avoid}' +
-      'th{background:#e8f1ef;color:#0a4d42;font-weight:700}th,td{overflow-wrap:anywhere;word-break:break-word;border:1px solid #b9c4c9;padding:3px 6px;text-align:' + (rtl ? 'right' : 'left') + ';vertical-align:top}' +
+      'th{background:#e8f1ef;color:#0a4d42;font-weight:700}th,td{overflow-wrap:break-word;border:1px solid #b9c4c9;padding:3px 6px;text-align:' + (rtl ? 'right' : 'left') + ';vertical-align:top}' +
       'tbody tr:nth-child(even) td{background:#f7faf9}' +
       '.kv td:first-child{width:28%;font-weight:700;background:#f1f6f5}' +
       '.cap{font-weight:700;margin:10px 0 2px}' +
@@ -174,7 +173,7 @@
         '<style>' + css(rtl) + '</style></head><body dir="' + (rtl ? 'rtl' : 'ltr') + '">' + render(doc, 'word') + '</body></html>';
     }
     return '<!doctype html><html lang="' + (rtl ? 'ar' : 'en') + '" dir="' + (rtl ? 'rtl' : 'ltr') + '"><head>' + head +
-      '<meta name="viewport" content="width=device-width,initial-scale=1"><style>' + css(rtl) + 'body{padding:12px}@media print{body{padding:0}}</style></head><body>' + render(doc, 'print') + '</body></html>';
+      '<meta name="viewport" content="width=device-width,initial-scale=1"><style>' + css(rtl) + 'html{background:#e9edf0}body{width:794px;margin:0 auto;padding:18px 22px;min-height:1000px;box-shadow:0 0 6px rgba(0,0,0,.15)}@media print{html{zoom:1!important;background:#fff}body{width:auto;padding:0;margin:0;min-height:0;box-shadow:none}}</style></head><body>' + render(doc, 'print') + '</body></html>';
   }
 
   /* ---------- Excel: SpreadsheetML 2003 (من غير مكتبة) ---------- */
@@ -541,9 +540,22 @@
     frame.title = L('معاينة', 'Preview');
     frame.style.cssText = 'flex:1;width:100%;border:0;background:#fff';
     frame.srcdoc = fullHtml(doc, 'print');
+    var fit = 1, zoomK = 1;
+    var applyZoom = function () {
+      try { frame.contentDocument.documentElement.style.zoom = String(fit * zoomK); } catch (e) {}
+    };
+    frame.addEventListener('load', function () {
+      var w = frame.clientWidth || 794;
+      fit = Math.min(1, (w - 2) / 794);
+      zoomK = 1;
+      applyZoom();
+    });
+    var zoomBy = function (k) { zoomK = Math.max(0.5, Math.min(4, zoomK * k)); applyZoom(); };
     bar.append(
       ttl,
       mk(L('طباعة / PDF', 'Print / PDF'), function () { try { frame.contentWindow.focus(); frame.contentWindow.print(); } catch (e) { window.print(); } }, true),
+      mk('＋', function () { zoomBy(1.25); }),
+      mk('－', function () { zoomBy(0.8); }),
       mk('Word', function () { downloadBytes(base + '.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', buildDocx(doc)); }),
       mk('Excel', function () { downloadBytes(base + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', buildXlsx(doc)); }),
       mk(L('إغلاق', 'Close'), close)
