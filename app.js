@@ -12226,8 +12226,8 @@ function renderHomeSummary() {
     }
   }
 
-  /* التأهيل */
-  if (!ctabRehab.classList.contains('hidden')) {
+  /* التأهيل (كارت الرئيسية بس لو فيه برنامج فعلاً — التبويب نفسه ظاهر دايمًا) */
+  if (!ctabRehab.classList.contains('hidden') && rehabHasContent(clientRehab)) {
     homeCards.appendChild(homeCard(
       'rehab', t('home_today_rehab'), t('home_open_rehab'), '',
       function () { goClientMode('rehab'); }, 'rehab'
@@ -12343,6 +12343,62 @@ function sqSessionTemplateId(sq, stamp) {
   return plan[sqDayIndex(key)] || '';
 }
 
+/* جلسات اليوم (لحد 3): الجلسة الأولى = plan القديم، والتانية والتالتة = plan2 / plan3.
+   اسم الجلسة ووقتها اختياريين في phase.slotInfo[يوم][رقم] = {k:'am|pm|night', t:'HH:MM'}.
+   لو المدرب بدّل اليوم (overrides) التبديل بيحل محل اليوم كله = جلسة واحدة. */
+const SQ_SLOT_KEYS = ['am', 'pm', 'night'];
+function sqSlotName(k) {
+  return k === 'pm' ? sqL('بعد العصر', 'Afternoon') : k === 'night' ? sqL('ليلي', 'Evening') : sqL('صباحي', 'Morning');
+}
+function sqSessionsFor(sq, stamp) {
+  const key = stamp || todayStamp;
+  const out = [];
+  function push(slot, id, info) {
+    const k = SQ_SLOT_KEYS.indexOf(info && info.k) !== -1 ? info.k : SQ_SLOT_KEYS[slot - 1];
+    const tm = info && /^\d{1,2}:\d{2}$/.test(info.t || '') ? info.t : '';
+    out.push({ slot: slot, key: k, label: sqSlotName(k), time: tm, tplId: id, tpl: sqTplFor(sq, id) });
+  }
+  if (sq.overrides && sq.overrides[key] !== undefined) {
+    const o = sq.overrides[key] || '';
+    if (o) push(1, o, null);
+    return out;
+  }
+  const now = sqSeasonNow(sq, key);
+  if (!now || now.before || now.after) return out;
+  const ph = now.phase, d = sqDayIndex(key);
+  const infos = (Array.isArray(ph.slotInfo) && ph.slotInfo[d]) || {};
+  [[1, ph.plan], [2, ph.plan2], [3, ph.plan3]].forEach(function (pair) {
+    const id = Array.isArray(pair[1]) ? (pair[1][d] || '') : '';
+    if (id) push(pair[0], id, infos[pair[0]]);
+  });
+  return out;
+}
+
+/* تمارين كل جلسات اليوم في قايمة واحدة، كل تمرين عليه علامة جلسته (لعنوان القسم) */
+function sqSessionsItems(list) {
+  const out = [];
+  list.forEach(function (s) {
+    sqTemplateItems(s.tpl).forEach(function (it) { it.sess = { n: s.slot, label: s.label, time: s.time, title: templateTitle(s.tpl) }; out.push(it); });
+  });
+  return out;
+}
+/* عنوان جلسة اليوم في القوايم: قالب واحد، أو أسماء الجلسات متجمعة */
+function sqTodayTitle(sq) {
+  const list = sqSessionsFor(sq);
+  if (!list.length) return '';
+  return list.map(function (s) { return templateTitle(s.tpl); }).join(' + ');
+}
+function sqSessHead(it, prev) {
+  if (!it || !it.sess || (prev && prev.sess && prev.sess.n === it.sess.n)) return null;
+  const h = document.createElement('div');
+  h.className = 'sq-sess-head';
+  const nm = document.createElement('b'); nm.textContent = it.sess.label;
+  h.appendChild(nm);
+  if (it.sess.time) { const tm = document.createElement('span'); tm.className = 'sq-sess-time'; tm.textContent = it.sess.time; h.appendChild(tm); }
+  if (it.sess.title) { const tt = document.createElement('span'); tt.className = 'sq-sess-title'; tt.textContent = it.sess.title; h.appendChild(tt); }
+  return h;
+}
+
 function sqTemplateItems(tpl) {
   const out = [];
   if (!tpl) return out;
@@ -12365,6 +12421,13 @@ function sqTemplateItems(tpl) {
   return out;
 }
 
+/* قالب اليوم: يوم مكتوب بإيد المدرب جوه الموسم (season.custom) أو قالب جاهز */
+function sqTplFor(sq, id) {
+  if (!id) return null;
+  const c = sq && sq.season && sq.season.custom && sq.season.custom[id];
+  return c || templateById(id);
+}
+
 function sqPhaseName(key) { return t('sq_phase_' + (SQ_PHASES.indexOf(key) === -1 ? 'off' : key)); }
 
 /* القوالب اللي تنفع للفريق: رياضته + أنواع التدريب + قوالبي */
@@ -12382,6 +12445,12 @@ function sqTemplateSelect(sq, value, planLabel) {
   const rest = document.createElement('option');
   rest.value = ''; rest.textContent = t('sq_rest_day');
   sel.appendChild(rest);
+  const cd = value && sq && sq.season && sq.season.custom && sq.season.custom[value];
+  if (cd) {
+    const co = document.createElement('option');
+    co.value = value; co.textContent = '✎ ' + (templateTitle(cd) || sqL('يوم من عندي', 'My own day'));
+    sel.appendChild(co);
+  }
   sqTemplateChoices(sq).forEach(function (sec) {
     if (!sec.list.length) return;
     const g = document.createElement('optgroup');
@@ -12488,8 +12557,7 @@ function renderSquadsList() {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'sq-item';
-    const tplId = sqSessionTemplateId(sq);
-    const tpl = tplId ? templateById(tplId) : null;
+    const todayTitle = sqTodayTitle(sq);
     const now = sqSeasonNow(sq);
     b.innerHTML = '<span class="sq-item-name"></span><span class="sq-item-meta"></span>';
     b.querySelector('.sq-item-name').textContent = sq.name;
@@ -12498,7 +12566,7 @@ function renderSquadsList() {
       sportName(sq.sport) || '',
       fill('sq_members_n', { n: (sq.members || []).length }),
       now && !now.before && !now.after ? sqPhaseName(now.phase.key) : '',
-      tpl ? t('sq_today') + ': ' + templateTitle(tpl) : t('sq_rest_day')
+      todayTitle ? t('sq_today') + ': ' + todayTitle : t('sq_rest_day')
     ].filter(Boolean).join(' · ');
     b.addEventListener('click', function () { openSquad(sq.id, document.getElementById('squads-screen')); });
     box.appendChild(b);
@@ -13641,7 +13709,8 @@ function renderSquadToday(pane) {
   const usePlan = !!(planLoc && planLoc.entry && (sq.overrides || {})[todayStamp] === undefined);
   const planSess = usePlan ? planLoc.session : null;
   const tplId = usePlan ? '' : sqSessionTemplateId(sq);
-  const tpl = tplId ? templateById(tplId) : null;
+  const tpl = sqTplFor(sq, tplId);
+  const todaySess = usePlan ? [] : sqSessionsFor(sq);
   const hasPlanToday = !!(planLoc && planLoc.entry);
   const planOptLabel = hasPlanToday
     ? (lang === 'ar' ? 'حسب خطة الموسم: ' : 'Season plan: ') + (planLoc.session ? (pv(planLoc.session.title) || t('plan_session')) : t('sq_rest_day'))
@@ -13649,7 +13718,7 @@ function renderSquadToday(pane) {
   const head = document.createElement('div');
   head.className = 'sq-today-head';
   const title = document.createElement('strong');
-  title.textContent = planSess ? (pv(planSess.title) || t('plan_session')) : (tpl ? templateTitle(tpl) : t('sq_rest_day'));
+  title.textContent = planSess ? (pv(planSess.title) || t('plan_session')) : (todaySess.length > 1 ? sqL('النهارده ' + todaySess.length + ' جلسات', todaySess.length + ' sessions today') : (tpl ? templateTitle(tpl) : t('sq_rest_day')));
   head.appendChild(title);
   if (usePlan) {
     const e = planLoc.entry;
@@ -13681,6 +13750,12 @@ function renderSquadToday(pane) {
   }
   pane.appendChild(head);
 
+  if (todaySess.length > 1 && sqIsCoach()) {
+    const mh = document.createElement('p');
+    mh.className = 'hint-text';
+    mh.textContent = sqL('النهارده فيه ' + todaySess.length + ' جلسات. التبديل تحت بيحل محل اليوم كله (جلسة واحدة).', 'Today has ' + todaySess.length + ' sessions. Changing below replaces the whole day (one session).');
+    pane.appendChild(mh);
+  }
   if (sqIsCoach() && !sqCanEdit(sq)) {
     /* المساعد مايغيّرش — بيقترح، والرئيسي يوافق */
     const row = document.createElement('div');
@@ -13726,7 +13801,7 @@ function renderSquadToday(pane) {
     pane.appendChild(row);
   }
 
-  const items = planSess ? planSessionItems(planSess) : (tpl ? sqTemplateItems(tpl) : []);
+  const items = planSess ? planSessionItems(planSess) : (todaySess.length > 1 ? sqSessionsItems(todaySess) : (tpl ? sqTemplateItems(tpl) : []));
   if (!sqIsCoach() && items.length) pane.appendChild(sqMyLogForm(items));
   if (!sqIsCoach()) {
     const injB = document.createElement('button');
@@ -13794,6 +13869,8 @@ function sqItemsPreview(items) {
   const ul = document.createElement('ul');
   ul.className = 'sq-items';
   items.forEach(function (it, ii) {
+    const sh = sqSessHead(it, items[ii - 1]);
+    if (sh) { const sl = document.createElement('li'); sl.className = 'sq-sess-li'; sl.appendChild(sh); ul.appendChild(sl); }
     const gh = sqGroupHead(it, items[ii - 1]);
     if (gh) { const gl = document.createElement('li'); gl.className = 'sq-grp-li'; gl.appendChild(gh); ul.appendChild(gl); }
     const li = document.createElement('li');
@@ -13861,6 +13938,8 @@ function sqMyLogForm(items) {
   box.appendChild(runBar);
   sqPaintRun();
   items.forEach(function (it, i) {
+    const sh = sqSessHead(it, items[i - 1]);
+    if (sh) box.appendChild(sh);
     const gh = sqGroupHead(it, items[i - 1]);
     if (gh) box.appendChild(gh);
     const row = document.createElement('div');
@@ -14031,6 +14110,202 @@ function renderSquadBoard() {
   });
 }
 
+/* يوم في مرحلة الموسم: اختيار (أو يوم من عندك) + شوف التمارين تحته + تعديل وملاحظة */
+/* اسم ووقت الجلسة (صباحي/بعد العصر/ليلي + ساعة اختيارية) */
+function sqSlotMeta(ph, d, slot, lead, onRemove) {
+  ph.slotInfo = Array.isArray(ph.slotInfo) && ph.slotInfo.length === 7 ? ph.slotInfo : [{}, {}, {}, {}, {}, {}, {}];
+  const all = ph.slotInfo[d] = ph.slotInfo[d] || {};
+  const info = all[slot] = all[slot] || {};
+  const box = document.createElement('div');
+  box.className = 'sq-slot-meta';
+  const sel = document.createElement('select');
+  SQ_SLOT_KEYS.forEach(function (k) { const o = document.createElement('option'); o.value = k; o.textContent = sqSlotName(k); sel.appendChild(o); });
+  sel.value = SQ_SLOT_KEYS.indexOf(info.k) !== -1 ? info.k : SQ_SLOT_KEYS[slot - 1];
+  sel.addEventListener('change', function () { info.k = sel.value; });
+  const tm = document.createElement('input');
+  tm.type = 'time'; tm.value = info.t || '';
+  tm.title = sqL('الساعة (اختياري)', 'Time (optional)');
+  tm.addEventListener('input', function () { info.t = tm.value; });
+  box.append(sel, tm);
+  if (slot > 1 && lead && onRemove) {
+    const x = document.createElement('button');
+    x.type = 'button'; x.className = 'link sq-del';
+    x.textContent = sqL('✕ شيل الجلسة', '✕ Remove session');
+    x.addEventListener('click', onRemove);
+    box.appendChild(x);
+  }
+  return box;
+}
+
+function sqSeasonDay(sq, season, ph, d, dayName, lead, slot, showMeta, onRemove) {
+  slot = slot || 1;
+  season.custom = season.custom || {};
+  ph.notes = Array.isArray(ph.notes) ? ph.notes : ['', '', '', '', '', '', ''];
+  const pk = slot === 2 ? 'plan2' : slot === 3 ? 'plan3' : 'plan';
+  if (!Array.isArray(ph[pk])) ph[pk] = ['', '', '', '', '', '', ''];
+  const plan = ph[pk];
+  const wrap = document.createElement('div');
+  wrap.className = 'sq-day-wrap' + (slot > 1 ? ' sq-slot-extra' : '');
+  const row = document.createElement('div');
+  row.className = 'sq-day-row';
+  const lab = document.createElement('span');
+  lab.textContent = slot === 1 ? dayName : '↳ ' + sqL('جلسة ' + (slot === 2 ? 'تانية' : 'تالتة'), slot === 2 ? 'Session 2' : 'Session 3');
+  const sel = sqTemplateSelect({ sport: sq.sport, season: season }, plan[d] || '');
+  if (lead) {
+    const co = document.createElement('option');
+    co.value = '__custom'; co.textContent = sqL('✎ يوم من عندي…', '✎ My own day…');
+    sel.insertBefore(co, sel.children[1] || null);
+  }
+  row.append(lab, sel);
+  const view = document.createElement('button');
+  view.type = 'button'; view.className = 'link sq-day-view';
+  const panel = document.createElement('div');
+  panel.className = 'sq-day-panel hidden';
+  let open = false;
+  const curTpl = function () { return plan[d] ? (season.custom[plan[d]] || templateById(plan[d])) : null; };
+  const isCustom = function () { return !!(plan[d] && season.custom[plan[d]]); };
+  const newId = function () { return 'cd_' + Date.now().toString(36) + d + slot; };
+  const inp = function (type, val, ph2, on, cls) {
+    const i = document.createElement('input');
+    i.type = type; i.value = val == null ? '' : val; if (ph2) i.placeholder = ph2; if (cls) i.className = cls;
+    i.addEventListener('input', function () { on(i.value); });
+    return i;
+  };
+  const paintView = function () {
+    view.textContent = (open ? '▲ ' : '▶ ') + sqL('شوف التمارين', 'See exercises');
+    view.style.display = plan[d] ? '' : 'none';
+  };
+  const paintPanel = function () {
+    panel.innerHTML = '';
+    panel.classList.toggle('hidden', !open);
+    if (!open) return;
+    const tpl = curTpl();
+    if (!tpl) { return; }
+    const items = sqTemplateItems(tpl);
+    if (!isCustom() || !lead) {
+      panel.appendChild(items.length ? sqItemsPreview(items) : Object.assign(document.createElement('p'), { className: 'hint-text', textContent: sqL('مفيش تمارين في اليوم ده.', 'No exercises in this day.') }));
+    }
+    if (slot === 1 && ph.notes[d] && (!lead)) {
+      panel.appendChild(Object.assign(document.createElement('p'), { className: 'hint-text', textContent: '📝 ' + ph.notes[d] }));
+    }
+    if (!lead) return;
+    if (!isCustom()) {
+      const ed = document.createElement('button');
+      ed.type = 'button'; ed.className = 'secondary sq-day-edit';
+      ed.textContent = sqL('✎ عدّل اليوم ده (نسخة ليك، الأصلي ما يتغيّرش)', '✎ Edit this day (your own copy)');
+      ed.addEventListener('click', function () {
+        const id = newId();
+        const secs = {};
+        sqTemplateItems(tpl).forEach(function (it) {
+          (secs[it.sec] = secs[it.sec] || []).push({ name: it.name, libId: it.libId || '', sets: it.sets, reps: it.reps, rest: it.rest, rpe: it.rpe });
+        });
+        const title = templateTitle(tpl);
+        season.custom[id] = { id: id, custom: true, ar: title, en: title, sections: secs };
+        plan[d] = id;
+        refreshSel();
+      });
+      panel.appendChild(ed);
+    } else {
+      const c = season.custom[plan[d]];
+      c.sections = c.sections || {};
+      panel.appendChild(inp('text', templateTitle(c), sqL('اسم اليوم (مثلاً: قوة رجلين)', 'Day name (e.g. Leg strength)'), function (v) {
+        c.ar = v; c.en = v;
+        const o = sel.querySelector('option[value="' + plan[d] + '"]'); if (o) o.textContent = '✎ ' + (v || sqL('يوم من عندي', 'My own day'));
+      }, 'sq-day-title'));
+      panel.appendChild(Object.assign(document.createElement('p'), { className: 'hint-text', textContent: sqL('كل تمرين: الاسم، وتحته المجموعات · التكرار · الراحة', 'Each exercise: name, then sets · reps · rest') }));
+      SECTION_KEYS.forEach(function (sk) {
+        const list = c.sections[sk] = c.sections[sk] || [];
+        const hasAny = list.length > 0;
+        const h = document.createElement('div');
+        h.className = 'sq-day-sec';
+        h.textContent = t('sec_' + sk);
+        if (!hasAny && sk !== 'main') { h.classList.add('quiet'); }
+        panel.appendChild(h);
+        list.forEach(function (src, si) {
+          const r = document.createElement('div');
+          r.className = 'sq-day-ex';
+          r.appendChild(inp('text', src.name || src.en || '', sqL('اسم التمرين', 'Exercise'), function (v) { src.name = v; src.en = ''; src.libId = ''; }, 'ex-name'));
+          r.appendChild(inp('number', src.sets, sqL('مجموعات', 'Sets'), function (v) { src.sets = Math.max(1, parseInt(v, 10) || 1); }, 'ex-n'));
+          r.appendChild(inp('text', src.reps, sqL('تكرار', 'Reps'), function (v) { src.reps = v; }, 'ex-n'));
+          r.appendChild(inp('text', src.rest, sqL('راحة', 'Rest'), function (v) { src.rest = v; }, 'ex-n'));
+          const x = document.createElement('button');
+          x.type = 'button'; x.className = 'link sq-del'; x.textContent = '✕';
+          x.addEventListener('click', function () { list.splice(si, 1); paintPanel(); });
+          r.appendChild(x);
+          panel.appendChild(r);
+        });
+        const add = document.createElement('button');
+        add.type = 'button'; add.className = 'link';
+        add.textContent = sqL('+ أضف تمرين', '+ Add exercise');
+        add.addEventListener('click', function () { list.push({ name: '', sets: 3, reps: '10', rest: '' }); paintPanel(); });
+        panel.appendChild(add);
+      });
+    }
+    if (slot === 1) panel.appendChild(inp('text', ph.notes[d] || '', sqL('ملاحظة على اليوم (اختياري)', 'Day note (optional)'), function (v) { ph.notes[d] = v; }, 'sq-day-note'));
+  };
+  const refreshSel = function () {
+    const nsel = sqTemplateSelect({ sport: sq.sport, season: season }, plan[d] || '');
+    if (lead) {
+      const co = document.createElement('option');
+      co.value = '__custom'; co.textContent = sqL('✎ يوم من عندي…', '✎ My own day…');
+      nsel.insertBefore(co, nsel.children[1] || null);
+    }
+    nsel.addEventListener('change', onSel);
+    row.replaceChild(nsel, sel0.el);
+    sel0.el = nsel;
+    nsel.disabled = !lead;
+    paintView(); paintPanel();
+  };
+  const sel0 = { el: sel };
+  const onSel = function () {
+    const v = sel0.el.value;
+    if (v === '__custom') {
+      const id = newId();
+      season.custom[id] = { id: id, custom: true, ar: '', en: '', sections: { main: [{ name: '', sets: 3, reps: '10', rest: '' }] } };
+      plan[d] = id; open = true;
+      refreshSel();
+      return;
+    }
+    plan[d] = v;
+    paintView(); paintPanel();
+  };
+  sel.addEventListener('change', onSel);
+  view.addEventListener('click', function () { open = !open; paintView(); paintPanel(); });
+  paintView();
+  if (showMeta) wrap.appendChild(sqSlotMeta(ph, d, slot, lead, onRemove));
+  wrap.append(row, view, panel);
+  return wrap;
+}
+
+/* يوم كامل: الجلسة الأولى + لحد جلستين زيادة */
+function sqSeasonDayBlock(sq, season, ph, d, dayName, lead, key, extraOpen, redraw) {
+  const block = document.createElement('div');
+  block.className = 'sq-day-block';
+  const arrOf = function (slot) { return slot === 2 ? ph.plan2 : ph.plan3; };
+  const shown = function (slot) { const a = arrOf(slot); return !!(extraOpen[key + '-' + d + '-' + slot] || (Array.isArray(a) && a[d])); };
+  const multi = shown(2) || shown(3);
+  block.appendChild(sqSeasonDay(sq, season, ph, d, dayName, lead, 1, multi));
+  [2, 3].forEach(function (slot) {
+    if (!shown(slot)) return;
+    block.appendChild(sqSeasonDay(sq, season, ph, d, dayName, lead, slot, true, function () {
+      const a = arrOf(slot); if (Array.isArray(a)) a[d] = '';
+      delete extraOpen[key + '-' + d + '-' + slot];
+      redraw();
+    }));
+  });
+  if (lead) {
+    const next = !shown(2) ? 2 : !shown(3) ? 3 : 0;
+    if (next) {
+      const add = document.createElement('button');
+      add.type = 'button'; add.className = 'link sq-add-slot';
+      add.textContent = next === 2 ? sqL('+ جلسة تانية في اليوم ده', '+ Second session this day') : sqL('+ جلسة تالتة', '+ Third session');
+      add.addEventListener('click', function () { extraOpen[key + '-' + d + '-' + next] = true; redraw(); });
+      block.appendChild(add);
+    }
+  }
+  return block;
+}
+
 /* ---------- الموسم (المدرب) ---------- */
 function renderSquadSeasonEditor(pane) {
   const sq = squadCurrent;
@@ -14066,6 +14341,7 @@ function renderSquadSeasonEditor(pane) {
   const list = document.createElement('div');
   list.className = 'sq-phases';
   pane.appendChild(list);
+  const extraOpen = {};
   const draw = function () {
     list.innerHTML = '';
     season.phases.forEach(function (ph, i) {
@@ -14090,14 +14366,7 @@ function renderSquadSeasonEditor(pane) {
       const plan = Array.isArray(ph.plan) ? ph.plan : ['', '', '', '', '', '', ''];
       ph.plan = plan;
       days().forEach(function (dayName, d) {
-        const row = document.createElement('div');
-        row.className = 'sq-day-row';
-        const lab = document.createElement('span');
-        lab.textContent = dayName;
-        const sel = sqTemplateSelect(sq, plan[d] || '');
-        sel.addEventListener('change', function () { plan[d] = sel.value; });
-        row.append(lab, sel);
-        card.appendChild(row);
+        card.appendChild(sqSeasonDayBlock(sq, season, ph, d, dayName, lead, i, extraOpen, draw));
       });
       list.appendChild(card);
     });
@@ -14117,6 +14386,18 @@ function renderSquadSeasonEditor(pane) {
   save.textContent = t('sq_save_season');
   save.addEventListener('click', async function () {
     season.start = start.value || todayStamp;
+    if (season.custom) {
+      const used = {};
+      season.phases.forEach(function (p) { [p.plan, p.plan2, p.plan3].forEach(function (arr) { (arr || []).forEach(function (id) { if (id) used[id] = 1; }); }); });
+      Object.keys(season.custom).forEach(function (id) { if (!used[id]) delete season.custom[id]; });
+    }
+    season.phases.forEach(function (p) {
+      ['plan2', 'plan3'].forEach(function (k) { if (Array.isArray(p[k]) && !p[k].some(Boolean)) delete p[k]; });
+      if (Array.isArray(p.slotInfo)) {
+        const keep = p.slotInfo.some(function (o) { return o && Object.keys(o).some(function (sl) { const i = o[sl]; return i && (i.t || i.k); }); });
+        if (!keep || (!p.plan2 && !p.plan3)) delete p.slotInfo;
+      }
+    });
     try {
       await setDoc(doc(db, 'squads', sq.id), { season: season }, { merge: true });
       sq.season = season;
@@ -14575,9 +14856,7 @@ function sqLogForForm(email, playerName) {
   save.addEventListener('click', async function () {
     const rpe = Number(inputs.rpe.value) || 0;
     const minutes = Number(inputs.minutes.value) || 0;
-    const tplId = sqSessionTemplateId(sq);
-    const tpl = tplId ? templateById(tplId) : null;
-    const total = tpl ? sqTemplateItems(tpl).length : 0;
+    const total = sqSessionsFor(sq).reduce(function (n, s) { return n + sqTemplateItems(s.tpl).length; }, 0);
     const row = Object.assign({}, existing, {
       email: email, name: playerName, date: todayStamp,
       rpe: inputs.rpe.value, minutes: inputs.minutes.value, hr: inputs.hr.value, kcal: inputs.kcal.value,
@@ -14659,14 +14938,13 @@ async function renderSquadHome() {
   box.classList.toggle('hidden', !list.length);
   box.innerHTML = '';
   list.forEach(function (sq) {
-    const tplId = sqSessionTemplateId(sq);
-    const tpl = tplId ? templateById(tplId) : null;
+    const todayTitle = sqTodayTitle(sq);
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'sq-home-btn';
     b.innerHTML = glyphChip('users', 'sq-home-chip') + '<span class="sq-home-text"><span class="sq-home-kicker"></span><strong></strong></span>';
     b.querySelector('.sq-home-kicker').textContent = fill('sq_home_kicker', { name: sq.name });
-    b.querySelector('strong').textContent = tpl ? t('sq_today') + ': ' + templateTitle(tpl) : t('sq_rest_day');
+    b.querySelector('strong').textContent = todayTitle ? t('sq_today') + ': ' + todayTitle : t('sq_rest_day');
     b.addEventListener('click', function () { openSquad(sq.id, clientScreen); });
     box.appendChild(b);
   });
@@ -15274,7 +15552,8 @@ async function loadClient(email) {
 
     const hasRehab = rehabHasContent(clientRehab);
     const hasNutrition = nutritionHasContent(clientNutrition);
-    ctabRehab.classList.toggle('hidden', !hasRehab);
+    /* التأهيل ظاهر دايمًا في الشريط — لو مفيش برنامج بيفتح صفحة إرشاد (مش بيختفي) */
+    ctabRehab.classList.toggle('hidden', false);
     ctabNutrition.classList.toggle('hidden', false);
     const ctabPhysioEl = document.getElementById('ctab-physio');
     if (ctabPhysioEl) ctabPhysioEl.classList.toggle('hidden', !physioHasContent(clientPhysio));
@@ -17574,7 +17853,13 @@ function showClientRehab() {
     clientRehabTitle.textContent = '';
     clientRehabAbout.classList.add('hidden');
     clientRehabPhases.innerHTML = '';
-    clientRehabPhases.appendChild(clientStateCard('empty', t('no_rehab_title'), t('no_rehab')));
+    const emptyCard = clientStateCard('empty', t('no_rehab_title'), sqL('لسه مفيش برنامج تأهيل ليك. لو عندك إصابة أو ألم، بلّغ فريقك وهيجهّزوا لك برنامج يناسب حالتك.', 'No rehab program yet. If you have an injury or pain, tell your team and they will set one up for you.'));
+    const injBtn = document.createElement('button');
+    injBtn.type = 'button'; injBtn.className = 'state-action';
+    injBtn.textContent = sqL('🩹 بلّغ عن إصابة', '🩹 Report an injury');
+    injBtn.addEventListener('click', function () { const o = document.getElementById('report-injury-btn'); if (o) o.click(); });
+    emptyCard.appendChild(injBtn);
+    clientRehabPhases.appendChild(emptyCard);
     return;
   }
 

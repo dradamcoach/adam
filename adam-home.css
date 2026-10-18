@@ -367,3 +367,36 @@ html[data-br-g] .brand-logo ~ h1, html[data-br-g] body > h1 { color: var(--brand
 .brand-prev[data-br-k="flat"] .brand-prev-card { border-color:transparent; }
 .brand-prev[data-br-r="round"] .brand-prev-card { border-radius:22px; }
 .brand-prev-btn { color:var(--ink) !important; }
+
+
+/* =========================================================
+   ترتيب رئيسية العميل: النهاردة الأول، والأدوات مطويّة
+   (الـ order بس — مفيش حاجة اتشالت، والعنصر الجديد الوحيد زرار "كل الأدوات")
+   ========================================================= */
+#client-home { display: flex; flex-direction: column; }
+#adam-v2 { display: contents; }
+#client-home > *, #adam-v2 > * { order: 12; }
+#client-home > .home-hello { order: 0; }
+#adam-v2 > .av2-search { order: 1; }
+#adam-v2 > .av2-rings { order: 2; }
+#client-home > .first4, #client-home > .push-compat, #client-home > .sq-home, #client-home > .eng-card, #client-home > .eng-recap { order: 3; }
+#client-home > .home-cards { order: 4; }
+#client-home > .week-streak { order: 5; }
+#client-home > .soc-bar, #client-home > .chal-row { order: 6; }
+#client-home > .heat-banner { order: 7; }
+#client-home > .home-tiles { order: 8; }
+#adam-v2 > .av2-sec-tools, #adam-v2 > .av2-grid, #adam-v2 > .av2-more-btn, #adam-v2 > .av2-more { order: 9; }
+#adam-v2 > .av2-sec-team { order: 10; }
+#client-home > .axe { order: 13; }
+#client-home > .home-extra-links { order: 14; }
+#adam-v2 > .av2-fb { order: 15; }
+#adam-v2 { margin: 0; }
+#client-home > * { margin-inline: 0; }
+#adam-v2 > .av2-search { margin: 6px 0 12px; }
+#adam-v2 > .av2-rings { margin-bottom: 12px; }
+
+#adam-v2 .av2-more-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin: 10px 0 4px; padding: 13px; border-radius: 16px; border: 1px dashed rgba(255,255,255,.18); background: rgba(255,255,255,.03); color: var(--ink); font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+#adam-v2 .av2-more-btn svg { width: 18px; height: 18px; transition: transform .25s ease; }
+#adam-v2 .av2-more-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+#adam-v2 .av2-more { display: none; }
+#adam-v2 .av2-more.open { display: block; }

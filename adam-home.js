@@ -30,7 +30,7 @@
     en: { coach: 'Coach', nutritionist: 'Nutritionist', doctor: 'Doctor', rehab: 'Sports rehab', physio: 'Physiotherapy', ortho: 'Orthopaedic doctor', radiology: 'Radiologist', sports_medicine: 'Sports medicine', pharmacist: 'Pharmacist', massage: 'Sports massage', psychologist: 'Sports psychologist' }
   };
   var GRAD = ['#17483d', '#274a73', '#6b4527', '#553a76', '#2c5f5a'];
-  var state = { loaded: false, loading: false, timer: null, idx: 0, list: [], sum: { ready: null }, sumAt: 0 };
+  var state = { moreOpen: false, loaded: false, loading: false, timer: null, idx: 0, list: [], sum: { ready: null }, sumAt: 0 };
 
 
   var ICONS = {
@@ -179,7 +179,7 @@
   function trainersBlock(r, l, tx) {
     if (!state.list.length) return;
     cols = [];
-    var sec = el('div', 'av2-sec'); sec.appendChild(el('b', '', tx.team)); sec.appendChild(el('span', '', String(state.list.length))); r.appendChild(sec);
+    var sec = el('div', 'av2-sec av2-sec-team'); sec.appendChild(el('b', '', tx.team)); sec.appendChild(el('span', '', String(state.list.length))); r.appendChild(sec);
     var used = {};
     var groups = GROUPS.map(function (g) {
       var list = state.list.filter(function (p) { return specKeys(p).some(function (k) { return g[1].indexOf(k) !== -1; }); });
@@ -218,15 +218,36 @@
     r.appendChild(sp);
     r.appendChild(ringsCard());
 
-    var secT = el('div', 'av2-sec'); secT.appendChild(el('b', '', tx.plus)); var pl = el('span', '', 'ADAM+'); pl.setAttribute('dir', 'ltr'); secT.appendChild(pl); r.appendChild(secT);
-    var grid = el('div', 'av2-grid');
-    TILES.forEach(function (t) {
+    var secT = el('div', 'av2-sec av2-sec-tools'); secT.appendChild(el('b', '', tx.plus)); var pl = el('span', '', 'ADAM+'); pl.setAttribute('dir', 'ltr'); secT.appendChild(pl); r.appendChild(secT);
+    var DUP = ['mytrain', 'food', 'rehab']; /* عندها أيقونات في الشريط السفلي */
+    var PRIMARY = ['today', 'plan', 'lib', 'journeys', 'events', 'chal'];
+    var byKey = {}; TILES.forEach(function (t) { byKey[t[0]] = t; });
+    var first = PRIMARY.map(function (k) { return byKey[k]; }).filter(Boolean);
+    var rest = TILES.filter(function (t) { return PRIMARY.indexOf(t[0]) === -1 && DUP.indexOf(t[0]) === -1; });
+    function mkTile(t) {
       var b = el('button', 'av2-tile'); b.type = 'button';
       b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[t[0]] + '</svg><span>' + (l === 'en' ? t[2] : t[1]) + '</span>';
       b.addEventListener('click', function () { goTile(t[0]); });
-      grid.appendChild(b);
-    });
+      return b;
+    }
+    var grid = el('div', 'av2-grid');
+    first.forEach(function (t) { grid.appendChild(mkTile(t)); });
     r.appendChild(grid);
+    /* باقي الأدوات + كروت الاستكشاف: مطويّة تحت زرار واحد */
+    var moreBtn = el('button', 'av2-more-btn'); moreBtn.type = 'button';
+    var moreBox = el('div', 'av2-more');
+    var moreGrid = el('div', 'av2-grid'); rest.forEach(function (t) { moreGrid.appendChild(mkTile(t)); });
+    moreBox.appendChild(moreGrid);
+    function paintMore() {
+      moreBox.classList.toggle('open', state.moreOpen);
+      moreBtn.setAttribute('aria-expanded', state.moreOpen ? 'true' : 'false');
+      moreBtn.innerHTML = '<span>' + (state.moreOpen ? (l === 'en' ? 'Show less' : 'اقفل') : (l === 'en' ? 'All tools (' + rest.length + ')' : 'كل الأدوات (' + rest.length + ')')) + '</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    }
+    moreBtn.addEventListener('click', function () { state.moreOpen = !state.moreOpen; paintMore(); });
+    paintMore();
+    r.appendChild(moreBtn);
+    r.appendChild(moreBox);
+    var realR = r; r = moreBox;
 
     var sec2 = el('div', 'av2-sec'); sec2.appendChild(el('b', '', tx.disc)); sec2.appendChild(el('span', '', tx.sub)); r.appendChild(sec2);
     var a = el('button', 'av2-anat'); a.type = 'button';
@@ -240,6 +261,7 @@
     var bm = el('button', 'av2-anat av2-mech'); bm.type = 'button'; bm.setAttribute('data-adam-open', 'biomech');
     bm.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="46" height="46">' + ICONS.biomech + '</svg><div><b>' + (l === 'en' ? 'Movement mechanics' : 'ميكانيكا الحركة') + '</b><p>' + (l === 'en' ? 'Joints, muscles and the mechanics of every exercise, running and injuries.' : 'المفاصل والعضلات وميكانيكا كل تمرين والجري والإصابات.') + '</p><em>' + (l === 'en' ? 'Open mechanics →' : 'افتح الميكانيكا ←') + '</em></div>';
     r.appendChild(bm);
+    r = realR;
 
 
     trainersBlock(r, l, tx);
