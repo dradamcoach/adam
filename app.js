@@ -13779,7 +13779,16 @@ function sqItemsPreview(items) {
     if (it.grp) li.classList.add('in-grp');
     if (it.media) li.appendChild(sqMediaImg(it));
     const txt = document.createElement('span');
-    txt.textContent = it.name + ' — ' + (it.line ? it.reps : (it.sets + ' × ' + it.reps + (it.rest ? ' · ' + it.rest : '')));
+    txt.className = 'sq-prev-txt';
+    if (it.line && it.chips && it.chips.length > 1) {
+      /* نفس تقسيم شاشة اللاعب: اسم التمرين فوق، والتفاصيل شرائح بتلف على أكتر من سطر */
+      const nmEl = document.createElement('div'); nmEl.className = 'sq-prev-name'; nmEl.textContent = it.name; txt.appendChild(nmEl);
+      const cr = document.createElement('div'); cr.className = 'sq-chips sq-prev-chips';
+      it.chips.forEach(function (c, ci) { const sp = document.createElement('span'); sp.className = 'sq-chip' + (ci === 0 ? ' main' : ''); sp.textContent = c; cr.appendChild(sp); });
+      txt.appendChild(cr);
+    } else {
+      txt.textContent = it.name + ' — ' + (it.line ? it.reps : (it.sets + ' × ' + it.reps + (it.rest ? ' · ' + it.rest : '')));
+    }
     li.appendChild(txt);
     if (it.purpose) { const pp = document.createElement('em'); pp.className = 'sq-item-purpose'; pp.textContent = t('plan_purpose') + ': ' + it.purpose; txt.appendChild(document.createElement('br')); txt.appendChild(pp); }
     ul.appendChild(li);
@@ -18012,9 +18021,40 @@ function fillMealPicker() {
 
 /* ---------- كارت تفاصيل الصنف ---------- */
 const FD_TX = {
-  ar: { close: 'رجوع', per100: 'لكل 100 جرام', kcal: 'سعرات', protein: 'بروتين', carbs: 'كارب', fat: 'دهون', fiber: 'ألياف', sugar: 'سكر', sodium: 'صوديوم', gi: 'المؤشر الجلايسيمي', vit: 'أهم الفيتامينات والمعادن', serv: 'الحصص البيتية', prep: 'طريقة التحضير', when: 'أنسب وقت للأكل', note: 'الأرقام دي تقريبية وبتختلف حسب الطريقة والمكوّنات. استشر أخصائي التغذية لخطة دقيقة.', g: 'جم', mg: 'ملجم', kc: 'سعر', unk: '—' },
-  en: { close: 'Back', per100: 'per 100 g', kcal: 'Calories', protein: 'Protein', carbs: 'Carbs', fat: 'Fat', fiber: 'Fibre', sugar: 'Sugar', sodium: 'Sodium', gi: 'Glycemic index', vit: 'Key vitamins and minerals', serv: 'Household servings', prep: 'Preparation', when: 'Best time to eat', note: 'These numbers are approximate and vary with method and ingredients. Ask your nutrition specialist for an exact plan.', g: 'g', mg: 'mg', kc: 'kcal', unk: '—' }
+  ar: { close: 'رجوع', per100: 'لكل 100 جرام', kcal: 'سعرات', protein: 'بروتين', carbs: 'كارب', fat: 'دهون', fiber: 'ألياف', sugar: 'سكر', sodium: 'صوديوم', gi: 'المؤشر الجلايسيمي', vit: 'أهم الفيتامينات والمعادن', serv: 'الحصص البيتية', prep: 'طريقة التحضير', when: 'أنسب وقت للأكل', note: 'الأرقام دي تقريبية وبتختلف حسب الطريقة والمكوّنات. استشر أخصائي التغذية لخطة دقيقة.', g: 'جم', mg: 'ملجم', kc: 'سعر', unk: '—', swap: 'بدائل بنفس الماكروز', swapHint: 'بدل {g} جم من الصنف ده، تقدر تاكل كمية من واحد من دول فيها نفس {m} تقريبًا. دوس على أي بديل عشان تشوف تفاصيله.', swapNone: 'مفيش بديل قريب في نفس التصنيف.', swapCal: 'السعرات' },
+  en: { close: 'Back', per100: 'per 100 g', kcal: 'Calories', protein: 'Protein', carbs: 'Carbs', fat: 'Fat', fiber: 'Fibre', sugar: 'Sugar', sodium: 'Sodium', gi: 'Glycemic index', vit: 'Key vitamins and minerals', serv: 'Household servings', prep: 'Preparation', when: 'Best time to eat', note: 'These numbers are approximate and vary with method and ingredients. Ask your nutrition specialist for an exact plan.', g: 'g', mg: 'mg', kc: 'kcal', unk: '—', swap: 'Same-macro swaps', swapHint: 'Instead of {g} g of this food, you can eat one of these amounts with about the same {m}. Tap a swap to see its details.', swapNone: 'No close swap in the same category.', swapCal: 'calories' }
 };
+
+/* بدائل الأكل بنفس الماكروز: نفس التصنيف، والكمية بتتحسب عشان تطابق الماكرو الأساسي
+   للصنف (بروتين/كارب/دهون/سعرات)، وبنرتّب حسب أقرب سعرات. عرض بس — مفيش حفظ. */
+function foodSwapKey(food) {
+  const cat = food && food.cat;
+  if (cat === 'protein' || cat === 'dairy') return 'p';
+  if (cat === 'carb' || cat === 'fruit') return 'cb';
+  if (cat === 'fat') return 'f';
+  return 'c';
+}
+
+function foodSwapOptions(food, grams, limit) {
+  if (!food || !food.cat) return [];
+  const g0 = Number(grams) > 0 ? Number(grams) : 100;
+  const key = foodSwapKey(food);
+  const target = (Number(food[key]) || 0) * g0 / 100;
+  if (!(target > 0)) return [];
+  const kcal0 = (Number(food.c) || 0) * g0 / 100;
+  const out = [];
+  allFoods().forEach(function (f) {
+    if (!f || f.id === food.id || f.cat !== food.cat) return;
+    const per = Number(f[key]) || 0;
+    if (per <= 0) return;
+    let gm = Math.round((target / per) * 100 / 5) * 5;
+    if (gm < 10 || gm > 600) return;
+    const kcal = (Number(f.c) || 0) * gm / 100;
+    out.push({ food: f, grams: gm, kcal: kcal, diff: Math.abs(kcal - kcal0) });
+  });
+  out.sort(function (a, b) { return a.diff - b.diff; });
+  return out.slice(0, limit || 5);
+}
 
 function closeFoodDetail() {
   const ov = document.getElementById('food-detail');
@@ -18022,7 +18062,7 @@ function closeFoodDetail() {
   document.body.classList.remove('fd-lock');
 }
 
-function openFoodDetail(food) {
+function openFoodDetail(food, grams) {
   if (!food) return;
   const tx = FD_TX[lang === 'en' ? 'en' : 'ar'];
   const d = foodDetails(food, lang === 'en');
@@ -18060,12 +18100,34 @@ function openFoodDetail(food) {
     });
     h += '</div>';
   }
+  const swapG = Number(grams) > 0 ? Number(grams) : 100;
+  const swaps = foodSwapOptions(food, swapG, 5);
+  const swapKey = foodSwapKey(food);
+  const swapMacro = swapKey === 'p' ? tx.protein : swapKey === 'cb' ? tx.carbs : swapKey === 'f' ? tx.fat : tx.swapCal;
+  h += '<div class="fd-sec">' + esc(tx.swap) + '</div>';
+  if (swaps.length) {
+    h += '<p class="fd-p">' + esc(tx.swapHint.replace('{g}', swapG).replace('{m}', swapMacro)) + '</p><div class="fd-serv">';
+    swaps.forEach(function (row, i) {
+      const nm = row.food[lang] || row.food.ar || row.food.en || '';
+      h += '<div class="fd-sv fd-swap" role="button" tabindex="0" data-swap="' + i + '" style="cursor:pointer"><span>' + esc(nm) + ' <small>(' + row.grams + ' ' + esc(tx.g) + ')</small></span><em>' + Math.round(row.kcal) + ' ' + esc(tx.kc) + '</em></div>';
+    });
+    h += '</div>';
+  } else {
+    h += '<p class="fd-p">' + esc(tx.swapNone) + '</p>';
+  }
   h += '<div class="fd-sec">' + esc(tx.prep) + '</div><ol class="fd-steps">' + d.steps.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>';
   h += '<div class="fd-sec">' + esc(tx.when) + '</div><p class="fd-p">' + esc(d.when) + '</p>';
   h += '<p class="fd-note">' + esc(tx.note) + '</p></div>';
   ov.innerHTML = h;
   ov.setAttribute('dir', lang === 'en' ? 'ltr' : 'rtl');
   ov.querySelector('.fd-back').addEventListener('click', closeFoodDetail);
+  Array.prototype.forEach.call(ov.querySelectorAll('.fd-swap'), function (el) {
+    const row = swaps[Number(el.getAttribute('data-swap'))];
+    if (!row) return;
+    const go = function () { openFoodDetail(row.food, row.grams); };
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
   ov.classList.remove('hidden');
   document.body.classList.add('fd-lock');
   ov.scrollTop = 0;
@@ -18081,7 +18143,7 @@ function foodItemRow(item, list, index, editable, onChange) {
     const icon = document.createElement('span');
     icon.className = 'meal-food-icon has-art';
     icon.innerHTML = foodArt(source);
-    icon.addEventListener('click', function (event) { event.stopPropagation(); openFoodDetail(source); });
+    icon.addEventListener('click', function (event) { event.stopPropagation(); openFoodDetail(source, item.grams); });
     li.appendChild(icon);
   }
 

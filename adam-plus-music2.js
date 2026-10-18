@@ -43,6 +43,7 @@ export const MUSIC_LISTS = [
   P('t2', 'team', 'إحماء قبل المباراة', 'Soccer pregame warm-up', 'https://open.spotify.com/playlist/21KIUOFwCJd10C1PiCkXJ6'),
   P('t3', 'team', 'موسيقى تمرين كرة قدم', 'Football training session songs', 'https://open.spotify.com/playlist/3xrxTFTFShFOQHF01QQLpw'),
   P('t4', 'team', 'حماس يوم المباراة', 'Game day motivation', 'https://open.spotify.com/playlist/1WjUJZVPYJ9RtwKNeOnXmV'),
+  P('t5', 'team', 'تنس وكرة طايرة وريشة (حماس)', 'Tennis / volleyball / badminton motivation', 'https://open.spotify.com/playlist/5YWUD4PqbJisMWXq931FU4'),
   P('w1', 'swim', 'تمرين سباحة', 'Swim training', 'https://open.spotify.com/playlist/62L0Hctw4FkrIWNZqeLCYm'),
   P('w2', 'swim', 'سباحة وتمرين', 'Swimming / workout', 'https://open.spotify.com/playlist/2y3A9P3ZfH9xkoA2T1yeyA'),
   P('w3', 'swim', 'موسيقى للسباحة', 'Music for swimming', 'https://open.spotify.com/playlist/1NZf9RVD8AjMJaQ5avSYje'),

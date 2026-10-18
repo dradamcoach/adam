@@ -1589,3 +1589,9 @@ img.sq-zoomable { cursor: zoom-in; }
 .sq-log-pres.sq-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 4px; }
 .sq-chip { display: inline-block; padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .12); font-size: 12.5px; line-height: 1.5; color: var(--text, #e8edf3); }
 .sq-chip.main { background: rgba(46, 224, 122, .14); border-color: rgba(46, 224, 122, .4); font-weight: 700; font-size: 14px; }
+
+/* معاينة تمارين الجلسة للمدرب: تلف السطور وماتخرجش برا الشاشة */
+.sq-items li { align-items: flex-start; min-width: 0; }
+.sq-items .sq-prev-txt { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; word-break: break-word; line-height: 1.5; }
+.sq-prev-name { font-weight: 700; font-size: 14.5px; }
+.sq-prev-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }

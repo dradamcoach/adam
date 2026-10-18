@@ -119,8 +119,8 @@ export const SUPPLEMENT_LIBRARY = [
     ar: 'إتش إم بي (HMB)', en: 'HMB',
     dose: { ar: '3 جم يوميًا', en: '3 g daily' },
     when: { ar: 'مقسّمة على اليوم', en: 'Split through the day' },
-    use: { ar: 'ممكن يساعد في تقليل فقد العضلة في فترات الراحة أو الإصابة', en: 'May help limit muscle loss during layoffs or injury' },
-    care: { ar: 'فايدته شبه معدومة للمتدرب المتقدم اللي بروتينه كفاية.', en: 'Close to useless for a trained client already eating enough protein.' }
+    use: { ar: 'ممكن يساعد في تقليل فقد العضلة في فترات الراحة أو الإصابة، وعند كبار السن (65+) اللي عندهم ضمور عضلي أو بروتينهم قليل. عند كبار السن أحسن نتيجة بتيجي لما يتاخد مع واي بروتين وتمرين مقاومة، مش لوحده.', en: 'May help limit muscle loss during layoffs or injury, and in older adults (65+) with muscle loss (sarcopenia) or low protein intake. In older adults it works best combined with whey protein and resistance training, not on its own.' },
+    care: { ar: 'فايدته شبه معدومة للمتدرب المتقدم اللي بروتينه كفاية. لكبار السن: الأساس بروتين كفاية في اليوم (الطبيب أو أخصائي التغذية يحدد الكمية) + تمرين مقاومة، والواي وHMB إضافة مش بديل. أي حد عنده مرض كلى أو كبد أو بياخد أدوية مزمنة لازم الطبيب يوافق الأول قبل الواي أو HMB. الكوتش ما يضيفوش لخطة عميل كبير في السن غير بعد موافقة الطبيب أو الأخصائي.', en: 'Close to useless for a trained client already eating enough protein. For older adults the foundation is enough daily protein (amount set by the doctor or dietitian) plus resistance training; whey and HMB are add-ons, not substitutes. Anyone with kidney or liver disease or on long-term medication needs a doctor\'s approval before whey or HMB. Coaches should add it to an older client\'s plan only after a doctor or specialist approves.' }
   },
   {
     id: 'sup_nitrate', cat: 'performance', icon: '🥬', grade: 'moderate',

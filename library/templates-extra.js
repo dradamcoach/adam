@@ -305,6 +305,182 @@ export const SPORT_TEMPLATES_EXTRA = [
     }
   },
   {
+    id: 'tpl_x_home_bodyweight_beginner_a',
+    group: 'none',
+    ar: 'في البيت — مبتدئ بدون أي أدوات (يوم A)',
+    en: 'At home — Beginner, no equipment (Day A)',
+    note: {
+      ar: 'لأي حد مالوش اشتراك جيم: كل التمارين بوزن الجسم وتتعمل في أوضة صغيرة أو على السطح. يتبادل مع يوم B، 3 أيام في الأسبوع. ابدأ بالنسخة الأسهل (ضغط على الحيطة، سكوات لحد الكرسي) وصعّب لما تكمّل كل المجموعات بأداء نظيف.',
+      en: 'For anyone without a gym membership: every exercise uses body weight and fits a small room or a rooftop. Alternate with Day B, three days a week. Start with the easiest version (wall push-up, squat to a chair) and progress once every set is done with clean form.'
+    },
+    sections: {
+      warmup:      [
+        { libId: 'ad_marching_in_place', en: 'Marching in Place', sets: 1, reps: '2min' },
+        { libId: 'ex_arm_circles', en: 'Arm Circles', sets: 1, reps: '15' },
+        { libId: 'ex_leg_swings', en: 'Leg Swings', sets: 1, reps: '10' }
+      ],
+      main:        [
+        { libId: 'ex_bodyweight_squat', en: 'Bodyweight Squat', sets: 3, reps: '10-12', rest: '60s', rpe: '6-7' },
+        { libId: 'wg_wall_push_up', en: 'Wall Push-up', sets: 3, reps: '10-12', rest: '60s', rpe: '6-7' },
+        { libId: 'ex_glute_bridge', en: 'Glute Bridge', sets: 3, reps: '12', rest: '45s' },
+        { libId: 'wg_superman_hold', en: 'Superman Hold', sets: 3, reps: '20s', rest: '45s' },
+        { libId: 'ex_dead_bug', en: 'Dead Bug', sets: 3, reps: '8', rest: '45s' }
+      ],
+      cardio:      [
+        { libId: 'ad_step_jacks', en: 'Step Jacks', sets: 4, reps: '30s', rest: '30s' }
+      ],
+      mobility:    [
+        { libId: 'ex_cat_cow', en: 'Cat-Cow', sets: 2, reps: '8' }
+      ],
+      flexibility: [
+        { libId: 'ex_hamstring_stretch', en: 'Hamstring Stretch', sets: 2, reps: '30s' },
+        { libId: 'ex_hip_flexor_stretch', en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }
+      ]
+    }
+  },
+  {
+    id: 'tpl_x_home_bodyweight_beginner_b',
+    group: 'none',
+    ar: 'في البيت — مبتدئ بدون أي أدوات (يوم B)',
+    en: 'At home — Beginner, no equipment (Day B)',
+    note: {
+      ar: 'يتبادل مع يوم A. لو الضغط على الحيطة بقى سهل انزل لضغط على الركب، ولو الصعود سهل علّي السلمة. مفيش نط في القالب ده عشان يناسب الشقق والمبتدئين.',
+      en: 'Alternates with Day A. When wall push-ups get easy, move to knee push-ups; when step-ups get easy, use a higher step. No jumping in this template, so it suits flats and beginners.'
+    },
+    sections: {
+      warmup:      [
+        { libId: 'ad_marching_in_place', en: 'Marching in Place', sets: 1, reps: '2min' },
+        { libId: 'ex_arm_circles', en: 'Arm Circles', sets: 1, reps: '15' },
+        { libId: 'wg_cat_cow_stretch', en: 'Cat-Cow Stretch', sets: 1, reps: '6' }
+      ],
+      main:        [
+        { libId: 'ex_reverse_lunge', en: 'Reverse Lunge', sets: 3, reps: '8/side', rest: '60s', rpe: '6-7' },
+        { libId: 'wg_knee_push_up', en: 'Knee Push-up', sets: 3, reps: '8-10', rest: '60s', rpe: '6-7' },
+        { libId: 'ex_step_up', en: 'Step-Up', sets: 3, reps: '10/side', rest: '60s' },
+        { libId: 'wg_prone_y_raise', en: 'Prone Y Raise', sets: 3, reps: '10', rest: '45s' },
+        { libId: 'ex_calf_raise', en: 'Calf Raise', sets: 3, reps: '15', rest: '45s' },
+        { libId: 'ex_bird_dog', en: 'Bird Dog', sets: 3, reps: '8/side', rest: '45s' },
+        { libId: 'ex_plank', en: 'Plank', sets: 3, reps: '20-30s', rest: '45s' }
+      ],
+      cardio:      [
+        { libId: 'ad_brisk_walk', en: 'Brisk Walk', sets: 1, reps: '15min' }
+      ],
+      mobility:    [
+        { libId: 'ex_thoracic_rotation', en: 'Thoracic Rotation', sets: 2, reps: '8' }
+      ],
+      flexibility: [
+        { libId: 'ex_quad_stretch', en: 'Quad Stretch', sets: 2, reps: '30s' },
+        { libId: 'ex_childs_pose', en: 'Child\'s Pose', sets: 2, reps: '30s' }
+      ]
+    }
+  },
+  {
+    id: 'tpl_x_women_strength_foundation',
+    group: 'none',
+    ar: 'سيدات — أساسيات القوة (مبتدئة، 18–45 سنة)',
+    en: 'Women — Strength foundations (beginner, 18–45)',
+    note: {
+      ar: 'برنامج مقاومة جسم كامل 2–3 مرات في الأسبوع. أساسيات تمرين المقاومة للسيدات نفس الرجالة: حركات أساسية وزيادة تدريجية في الحمل. ابدئي بوزن تكمّلي بيه كل العدات وفاضلك 2–3 عدات، وزوّدي الوزن خطوة صغيرة لما تكمّلي الحد الأعلى من العدات. في أيام التعب أو ألم الدورة قلّلي الحمل أو المجموعات بدل ما توقفي. الحامل لازم موافقة الطبيب والكوتش يعدّل البرنامج.',
+      en: 'Full-body resistance training 2–3 times a week. The fundamentals of resistance training are the same for women as for men: compound movements and gradual load increases. Start with a load that leaves 2–3 reps in reserve, and add a small step once the top of the rep range is reached. On tired days or during period pain, reduce load or sets rather than stopping. Pregnancy needs a doctor\'s clearance and a coach-adjusted programme.'
+    },
+    sections: {
+      warmup:      [
+        { libId: 'ex_stationary_bike', en: 'Bicycling, Stationary', sets: 1, reps: '5min' },
+        { libId: 'ex_leg_swings', en: 'Leg Swings', sets: 1, reps: '10' },
+        { libId: 'ex_band_pull_apart', en: 'Band Pull-Apart', sets: 2, reps: '15' }
+      ],
+      main:        [
+        { libId: 'ex_goblet_squat', en: 'Goblet Squat', sets: 3, reps: '8-12', rest: '90s', rpe: '7' },
+        { libId: 'ex_romanian_deadlift', en: 'Romanian Deadlift', sets: 3, reps: '8-12', rest: '90s', rpe: '7' },
+        { libId: 'ex_lat_pulldown', en: 'Lat Pulldown', sets: 3, reps: '10-12', rest: '90s' },
+        { libId: 'ex_dumbbell_bench_press', en: 'Dumbbell Bench Press', sets: 3, reps: '8-12', rest: '90s' },
+        { libId: 'ex_hip_thrust', en: 'Hip Thrust', sets: 3, reps: '10-12', rest: '90s' },
+        { libId: 'ex_seated_cable_row', en: 'Seated Cable Row', sets: 2, reps: '10-12', rest: '60s' },
+        { libId: 'ex_farmers_carry', en: 'Farmer\'s Carry', sets: 3, reps: '30m', rest: '60s' }
+      ],
+      cardio:      [
+        { libId: 'ex_stair_climber', en: 'Stair Climber', sets: 1, reps: '10min' }
+      ],
+      mobility:    [
+        { libId: 'ex_dead_bug', en: 'Dead Bug', sets: 2, reps: '8' }
+      ],
+      flexibility: [
+        { libId: 'ex_hip_flexor_stretch', en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }
+      ]
+    }
+  },
+  {
+    id: 'tpl_x_women_45plus_bone',
+    group: 'none',
+    ar: 'سيدات 45+ — قوة وكثافة عظام',
+    en: 'Women 45+ — Strength and bone health',
+    note: {
+      ar: 'لفترة ما حوالين انقطاع الدورة وبعدها: العضلة والعظم بيقلّوا أسرع، والحمل التدريجي التقيل نسبيًا مع حركات فيها تحميل على الرجلين أهم من التمارين الخفيفة الكتير. ابدئي بوزن متوسط وزوّدي بالتدريج على أسابيع. لو فيه هشاشة عظام متشخّصة أو كسر قبل كده أو ضغط/قلب غير منتظم: لازم موافقة الطبيب الأول، وبلاش ثني الظهر لقدام بوزن. الكوتش يراجع ويعدّل قبل ما يسند البرنامج.',
+      en: 'For the years around and after menopause: muscle and bone decline faster, and gradually heavier loading with weight-bearing leg work matters more than lots of light exercise. Start at a moderate load and progress over weeks. With diagnosed osteoporosis, a previous fragility fracture, or uncontrolled blood pressure or heart conditions, get a doctor\'s clearance first and avoid loaded forward spinal flexion. The coach reviews and adapts before assigning.'
+    },
+    sections: {
+      warmup:      [
+        { libId: 'ad_brisk_walk', en: 'Brisk Walk', sets: 1, reps: '5min' },
+        { libId: 'ex_ankle_circles', en: 'Ankle Circles', sets: 1, reps: '10' },
+        { libId: 'ex_bodyweight_squat', en: 'Bodyweight Squat', sets: 2, reps: '10' }
+      ],
+      main:        [
+        { libId: 'ex_leg_press', en: 'Leg Press', sets: 3, reps: '8-10', rest: '2min', rpe: '7' },
+        { libId: 'ex_step_up', en: 'Step-Up', sets: 3, reps: '8/side', rest: '90s' },
+        { libId: 'ex_seated_cable_row', en: 'Seated Cable Row', sets: 3, reps: '8-10', rest: '90s', rpe: '7' },
+        { libId: 'ex_seated_shoulder_press_machine', en: 'Seated Machine Shoulder Press', sets: 3, reps: '8-10', rest: '90s' },
+        { libId: 'ex_hip_thrust', en: 'Hip Thrust', sets: 3, reps: '10', rest: '90s' },
+        { libId: 'ex_farmers_carry', en: 'Farmer\'s Carry', sets: 3, reps: '30m', rest: '60s' },
+        { libId: 'ex_bird_dog', en: 'Bird Dog', sets: 2, reps: '8/side', rest: '45s' }
+      ],
+      cardio:      [
+        { libId: 'ad_brisk_walk', en: 'Brisk Walk', sets: 1, reps: '20min' }
+      ],
+      mobility:    [
+        { libId: 'ex_band_lateral_walk', en: 'Band Lateral Walk', sets: 2, reps: '12' },
+        { libId: 'ex_thoracic_rotation', en: 'Thoracic Rotation', sets: 2, reps: '8' }
+      ],
+      flexibility: [
+        { libId: 'ex_calf_stretch', en: 'Calf Stretch', sets: 2, reps: '30s' },
+        { libId: 'ex_hamstring_stretch', en: 'Hamstring Stretch', sets: 2, reps: '30s' }
+      ]
+    }
+  },
+  {
+    id: 'tpl_x_women_premenstrual_light',
+    group: 'none',
+    ar: 'سيدات — أيام ما قبل الدورة (مقاومة خفيفة + كارديو هادي)',
+    en: 'Women — Premenstrual days (light resistance + easy cardio)',
+    note: {
+      ar: 'يوم بديل للعميلات في الأيام اللي قبل الدورة لو فيه تعب أو تقلّب مزاج أو تقلصات، بدل ما التمرين يقف خالص. حمل متوسط لخفيف (فاضل 3–4 عدات)، وكارديو هادي تقدري تتكلمي فيه. ده مش علاج: لو الأعراض شديدة لدرجة إنها بتعطّل اليوم، أو فيه نزيف غير طبيعي أو ألم شديد، لازم دكتورة نسا. الكوتش يحدد إمتى يتستخدم حسب كلام العميلة.',
+      en: 'A swap-in day for clients in the days before their period if there is fatigue, low mood or cramps, so training eases rather than stops. Moderate-to-light load (3–4 reps in reserve) and easy cardio at a conversational pace. This is not a treatment: if symptoms are severe enough to disrupt daily life, or there is abnormal bleeding or severe pain, refer to a gynaecologist. The coach decides when to use it based on what the client reports.'
+    },
+    sections: {
+      warmup:      [
+        { libId: 'ad_brisk_walk', en: 'Brisk Walk', sets: 1, reps: '5min' },
+        { libId: 'ex_cat_cow', en: 'Cat-Cow', sets: 1, reps: '8' },
+        { libId: 'ex_arm_circles', en: 'Arm Circles', sets: 1, reps: '15' }
+      ],
+      main:        [
+        { libId: 'ex_goblet_squat', en: 'Goblet Squat', sets: 2, reps: '10-12', rest: '90s', rpe: '5-6' },
+        { libId: 'ex_seated_cable_row', en: 'Seated Cable Row', sets: 2, reps: '12', rest: '90s', rpe: '5-6' },
+        { libId: 'ex_glute_bridge', en: 'Glute Bridge', sets: 2, reps: '12', rest: '60s' },
+        { libId: 'ex_dumbbell_shoulder_press', en: 'Dumbbell Shoulder Press', sets: 2, reps: '10-12', rest: '90s', rpe: '5-6' },
+        { libId: 'ex_bird_dog', en: 'Bird Dog', sets: 2, reps: '8/side', rest: '45s' }
+      ],
+      cardio:      [
+        { libId: 'ex_stationary_bike', en: 'Bicycling, Stationary', sets: 1, reps: '15-20min' }
+      ],
+      mobility:    [
+        { libId: 'ex_thoracic_rotation', en: 'Thoracic Rotation', sets: 2, reps: '8' }
+      ],
+      flexibility: [
+        { libId: 'ex_childs_pose', en: 'Child\'s Pose', sets: 2, reps: '45s' },
+        { libId: 'ex_hip_flexor_stretch', en: 'Hip Flexor Stretch', sets: 2, reps: '30s' }
+      ]
+    }
+  },
+  {
     id: 'tpl_x_travel_bands',
     group: 'none',
     ar: 'سفر — أستك مقاومة بس',

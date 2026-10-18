@@ -18,6 +18,90 @@ export const REHAB_TEMPLATES_EXTRA = [
 
   /* ==================== الكتف ==================== */
   {
+    id: 'shoulder_lhb_tendinopathy',
+    bodyPart: 'shoulder',
+    name: { ar: 'التهاب وتر الرأس الطويل للعضلة ذات الرأسين (البايسبس)', en: 'Long-head biceps tendinopathy' },
+    about: {
+      ar: 'ألم في مقدمة الكتف بيزيد مع رفع حاجة قدام الجسم، وثني الكوع بحمل، ولف الساعد لفوق (زي فتح برطمان أو مفك)، وأحيانًا مع الضغط على مقدمة الكتف. كتير بيكون مصاحب لمشاكل أوتار الكفة المدورة أو الاحتكاك تحت عظمة الكتف، فلازم يتقيّم الكتف كله.\n\nالتأهيل بيعتمد على تقليل الأنشطة اللي بتهيّج الوتر لفترة (مش راحة تامة)، وتحميل إيزومتري خفيف، ثم تقوية تدريجية للبايسبس والكفة المدورة وعضلات لوح الكتف، ثم الرجوع للرفع فوق الراس والرياضة.\n\nيتحوّل للطبيب فورًا: لو حصل صوت "طقة" مفاجئ مع كدمة وانتفاخ في نص الدراع (علامة "باي" — شك في قطع الوتر)، أو ضعف واضح في رفع الدراع، أو ألم بالليل مستمر، أو تنميل نازل في الدراع، أو عدم تحسّن بعد 6–8 أسابيع.',
+      en: 'Pain at the front of the shoulder, worse lifting objects in front of the body, bending the elbow under load, and turning the forearm palm-up (like opening a jar or using a screwdriver), sometimes tender to touch at the front of the shoulder. It often coexists with rotator cuff or subacromial problems, so the whole shoulder should be assessed.\n\nRehab relies on temporarily reducing aggravating activities (not complete rest), light isometric loading, then progressive strengthening of the biceps, rotator cuff and scapular muscles, then a return to overhead lifting and sport.\n\nRefer to a doctor urgently after a sudden "pop" with bruising and a bulge in the mid-arm ("Popeye" sign — possible tendon rupture), clear weakness lifting the arm, persistent night pain, numbness running down the arm, or no improvement after 6–8 weeks.'
+    },
+    phases: [
+      { name: { ar: 'تهدئة وإيزومتري', en: 'Settle and isometrics' },
+        goal: { ar: 'تقليل الألم وتحميل الوتر بشكل ثابت من غير حركة مؤلمة', en: 'Reduce pain and load the tendon statically without painful movement' },
+        criteria: { ar: 'الألم في الأنشطة اليومية أقل من 3/10 + التمارين الإيزومترية من غير زيادة ألم لليوم التالي', en: 'Daily-activity pain under 3/10 + isometrics with no next-day increase in pain' },
+        exercises: [
+          { name: { ar: 'ثبات ثني الكوع (إيزومتري) والكوع جنب الجسم', en: 'Isometric elbow flexion, elbow at the side' }, sets: 5, reps: '30 ثانية',
+            goal: { ar: 'تحميل الوتر بدون حركة', en: 'Load the tendon without movement' },
+            primaryMuscles: { ar: 'العضلة ذات الرأسين، العضدية', en: 'Biceps brachii, brachialis' },
+            injuryBenefit: { ar: 'الانقباض الثابت ممكن يقلل ألم الوتر ويحافظ على قوته', en: 'Static contraction may ease tendon pain and maintain strength' } },
+          { name: { ar: 'ثبات لف الساعد لفوق (إيزومتري)', en: 'Isometric supination hold' }, sets: 4, reps: '20 ثانية',
+            goal: { ar: 'تحميل وظيفة اللف بالتدريج', en: 'Gradually load the supination function' },
+            primaryMuscles: { ar: 'العضلة ذات الرأسين، الباسطة الدوّارة', en: 'Biceps brachii, supinator' },
+            injuryBenefit: { ar: 'اللف لفوق من وظايف البايسبس الأساسية وغالبًا بيكون مؤلم', en: 'Supination is a key biceps function and is often painful' } },
+          { name: { ar: 'تثبيت لوح الكتف', en: 'Scapular setting' }, sets: 3, reps: '10 × 5 ثواني',
+            goal: { ar: 'تحسين التحكم في لوح الكتف', en: 'Improve scapular control' },
+            primaryMuscles: { ar: 'شبه المنحرف السفلي والأوسط، المسننة الأمامية', en: 'Lower and middle trapezius, serratus anterior' },
+            injuryBenefit: { ar: 'لوح كتف ثابت بيقلل الحمل على مقدمة الكتف', en: 'A stable shoulder blade reduces load on the front of the shoulder' } },
+          { name: { ar: 'دوران الكتف للخارج إيزومتري على الحيطة', en: 'Isometric external rotation against a wall' }, sets: 4, reps: '30 ثانية',
+            goal: { ar: 'تنشيط الكفة المدورة', en: 'Activate the rotator cuff' },
+            primaryMuscles: { ar: 'تحت الشوكة، المدورة الصغرى', en: 'Infraspinatus, teres minor' },
+            injuryBenefit: { ar: 'الكفة المدورة بتثبّت راس عظمة العضد فبتخفف الضغط على الوتر', en: 'The rotator cuff centres the humeral head, easing pressure on the tendon' } }
+        ] },
+      { name: { ar: 'تقوية تدريجية', en: 'Progressive strengthening' },
+        goal: { ar: 'تقوية البايسبس والكفة المدورة بحمل متدرج', en: 'Strengthen the biceps and rotator cuff with graded load' },
+        criteria: { ar: 'ثني كوع بدمبل خفيف 3 × 12 وألم أقل من 3/10 يهدى خلال 24 ساعة', en: 'Light dumbbell curls 3 × 12 with pain under 3/10 settling within 24 hours' },
+        exercises: [
+          { name: { ar: 'ثني الكوع البطيء بدمبل خفيف (نزول 3–4 ثواني)', en: 'Slow light dumbbell curl (3–4 s lowering)' }, sets: 3, reps: '12',
+            goal: { ar: 'تحميل الوتر في الحركة ببطء', en: 'Load the tendon dynamically and slowly' },
+            primaryMuscles: { ar: 'العضلة ذات الرأسين، العضدية', en: 'Biceps brachii, brachialis' },
+            injuryBenefit: { ar: 'التحميل البطيء بيحفّز تكيّف الوتر بأقل تهيّج', en: 'Slow loading stimulates tendon adaptation with less irritation' } },
+          { name: { ar: 'هامر كيرل', en: 'Hammer curl' }, sets: 3, reps: '12',
+            goal: { ar: 'تقوية ثني الكوع بوضع ساعد مريح', en: 'Strengthen elbow flexion in a comfortable forearm position' },
+            primaryMuscles: { ar: 'العضدية الكعبرية، العضدية', en: 'Brachioradialis, brachialis' },
+            injuryBenefit: { ar: 'بيقلل اللف على الوتر وهو بيبني القوة', en: 'Reduces supination stress while building strength' } },
+          { name: { ar: 'دوران الكتف للخارج بالأستك', en: 'Band external rotation' }, sets: 3, reps: '15',
+            goal: { ar: 'تقوية الكفة المدورة', en: 'Strengthen the rotator cuff' },
+            primaryMuscles: { ar: 'تحت الشوكة، المدورة الصغرى', en: 'Infraspinatus, teres minor' },
+            injuryBenefit: { ar: 'كفة أقوى بتحمي مقدمة الكتف', en: 'A stronger cuff protects the front of the shoulder' } },
+          { name: { ar: 'سحب الأستك للوش (فيس بول)', en: 'Band face pull' }, sets: 3, reps: '15',
+            goal: { ar: 'تقوية عضلات لوح الكتف الخلفية', en: 'Strengthen the posterior scapular muscles' },
+            primaryMuscles: { ar: 'الدالية الخلفية، شبه المنحرف الأوسط، المعينان', en: 'Rear deltoid, middle trapezius, rhomboids' },
+            injuryBenefit: { ar: 'بيوازن الكتف ويقلل ميله لقدام', en: 'Balances the shoulder and reduces forward posture' } }
+        ] },
+      { name: { ar: 'قوة وتحميل فوق الراس', en: 'Strength and overhead loading' },
+        goal: { ar: 'رجوع القوة الكاملة والرفع فوق الراس', en: 'Restore full strength and overhead lifting' },
+        criteria: { ar: 'قوة ثني الكوع ولف الساعد 90% من الجهة السليمة + رفع فوق الراس من غير ألم لليوم التالي', en: 'Elbow flexion and supination strength at 90% of the other side + overhead lifting with no next-day pain' },
+        exercises: [
+          { name: { ar: 'ثني الكوع على بنش مايل (إنكلاين كيرل) بحمل متوسط', en: 'Incline dumbbell curl, moderate load' }, sets: 3, reps: '10',
+            goal: { ar: 'تحميل البايسبس في وضع طويل', en: 'Load the biceps at long length' },
+            primaryMuscles: { ar: 'العضلة ذات الرأسين', en: 'Biceps brachii' },
+            injuryBenefit: { ar: 'بيحضّر الوتر لأوضاع الكتف لورا اللي في الرياضة', en: 'Prepares the tendon for shoulder-extended positions used in sport' } },
+          { name: { ar: 'ضغط دمبل فوق الراس بحمل خفيف لمتوسط', en: 'Light-to-moderate dumbbell overhead press' }, sets: 3, reps: '10',
+            goal: { ar: 'رجوع الرفع فوق الراس', en: 'Return to overhead lifting' },
+            primaryMuscles: { ar: 'الدالية، ثلاثية الرؤوس، المسننة الأمامية', en: 'Deltoids, triceps, serratus anterior' },
+            injuryBenefit: { ar: 'بيدخّل الأوضاع اللي كانت مؤلمة بالتدريج', en: 'Gradually reintroduces previously painful positions' } },
+          { name: { ar: 'سحب دمبل بإيد واحدة (وان آرم رو)', en: 'One-arm dumbbell row' }, sets: 3, reps: '10',
+            goal: { ar: 'قوة السحب', en: 'Pulling strength' },
+            primaryMuscles: { ar: 'العريضة الظهرية، المعينان، ذات الرأسين', en: 'Latissimus dorsi, rhomboids, biceps' },
+            injuryBenefit: { ar: 'السحب فيه شغل للبايسبس بحمل مشترك مع الضهر', en: 'Pulling works the biceps while the back shares the load' } }
+        ] },
+      { name: { ar: 'العودة للرياضة', en: 'Return to sport' },
+        goal: { ar: 'رجوع تدريجي للتمرين والرياضة الكاملة', en: 'Graded return to full training and sport' },
+        criteria: { ar: 'أداء حركات الرياضة (رمي، سحب، ضغط) بكامل الشدة من غير ألم لليوم التالي + موافقة الأخصائي', en: 'Sport movements (throwing, pulling, pressing) at full intensity with no next-day pain + specialist sign-off' },
+        exercises: [
+          { name: { ar: 'عقلة بمساعدة أو سحب لتحت', en: 'Assisted pull-up or lat pulldown' }, sets: 3, reps: '8',
+            goal: { ar: 'رجوع حركات السحب التقيلة', en: 'Return to heavy pulling' },
+            primaryMuscles: { ar: 'العريضة الظهرية، ذات الرأسين', en: 'Latissimus dorsi, biceps' },
+            injuryBenefit: { ar: 'بيختبر تحمّل الوتر لحمل عالي في وضع فوق الراس', en: 'Tests tendon tolerance to high load overhead' } },
+          { name: { ar: 'رمي كورة طبية على الحيطة', en: 'Medicine ball wall throw' }, sets: 3, reps: '8',
+            goal: { ar: 'تحميل سريع للرياضات اللي فيها رمي', en: 'Fast loading for throwing sports' },
+            primaryMuscles: { ar: 'الكتف، الجذع، ذات الرأسين', en: 'Shoulder, trunk, biceps' },
+            injuryBenefit: { ar: 'آخر مرحلة: الوتر بيتحمل السرعة بعد ما يتحمل القوة', en: 'The final stage: the tendon tolerates speed after it tolerates strength' } }
+        ] }
+    ]
+  },
+
+  {
     id: 'shoulder_instability_nonop',
     bodyPart: 'shoulder',
     name: { ar: 'عدم ثبات الكتف (تأهيل تحفظي)', en: 'Shoulder instability — non-operative' },
