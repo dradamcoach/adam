@@ -13728,6 +13728,13 @@ function renderSquadToday(pane) {
 
   const items = planSess ? planSessionItems(planSess) : (tpl ? sqTemplateItems(tpl) : []);
   if (!sqIsCoach() && items.length) pane.appendChild(sqMyLogForm(items));
+  if (!sqIsCoach()) {
+    const injB = document.createElement('button');
+    injB.type = 'button'; injB.className = 'sq-injury-btn';
+    injB.textContent = sqL('🩹 ابلّغ عن إصابة', '🩹 Report an injury');
+    injB.addEventListener('click', function () { openInjuryFromSquad(sq); });
+    pane.appendChild(injB);
+  }
   else if (items.length) pane.appendChild(sqItemsPreview(items));
 
   const board = document.createElement('div');
@@ -13761,6 +13768,20 @@ function sqOpenMedia(src, title, line) {
   lb.addEventListener('click', function (e) { if (e.target === lb || e.target === x) close(); });
   document.body.appendChild(lb);
 }
+/* يفتح شيت التمرين (شرح وصور) من مكتبة التمارين قبل ما اللاعب يبدأ */
+async function sqSeeExercise(libId) {
+  try { await ensureExtraLibrary(); } catch (err) { /* نكمّل */ }
+  const ex = libraryEntryById(libId);
+  if (ex) openExerciseSheet(ex);
+}
+function sqSeeBtn(it) {
+  if (!it || !it.libId) return null;
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'sq-see';
+  b.textContent = sqL('▶ شوف التمرين', '▶ See exercise');
+  b.addEventListener('click', function (e) { e.stopPropagation(); sqSeeExercise(it.libId); });
+  return b;
+}
 function sqMediaImg(it) {
   const img = document.createElement('img');
   img.src = it.media; img.alt = ''; img.loading = 'lazy';
@@ -13790,6 +13811,7 @@ function sqItemsPreview(items) {
       txt.textContent = it.name + ' — ' + (it.line ? it.reps : (it.sets + ' × ' + it.reps + (it.rest ? ' · ' + it.rest : '')));
     }
     li.appendChild(txt);
+    const seeP = sqSeeBtn(it); if (seeP) txt.appendChild(seeP);
     if (it.purpose) { const pp = document.createElement('em'); pp.className = 'sq-item-purpose'; pp.textContent = t('plan_purpose') + ': ' + it.purpose; txt.appendChild(document.createElement('br')); txt.appendChild(pp); }
     ul.appendChild(li);
   });
@@ -13876,6 +13898,7 @@ function sqMyLogForm(items) {
     }
     inputs.append(reps, load);
     main.append(nm, pres);
+    const seeB = sqSeeBtn(it); if (seeB) main.appendChild(seeB);
     if (it.purpose) {
       const pp = document.createElement('div');
       pp.className = 'sq-log-purpose';
@@ -29033,11 +29056,14 @@ document.getElementById('injury-submit-btn').addEventListener('click', async fun
   injuryMessage.textContent = t('saving');
   try {
     const id = 'injury_' + Date.now();
-    const staff = await injuryStaffFor(clientEmail);
+    let staff = await injuryStaffFor(clientEmail);
+    if (injurySquadCtx) staff = staff.concat(injurySquadCtx.staff).filter(function (e, i, all) { return e && all.indexOf(e) === i; }).sort();
     await setDoc(doc(db, 'injuryReports', id), {
       clientEmail: clientEmail,
       clientName: clientName,
       staff: staff,
+      squadId: injurySquadCtx ? injurySquadCtx.id : '',
+      squadName: injurySquadCtx ? injurySquadCtx.name : '',
       bodyParts: selectedInjuryParts.slice(),
       description: injuryDesc.value.trim(),
       scan: injuryScanImage,
@@ -29047,7 +29073,7 @@ document.getElementById('injury-submit-btn').addEventListener('click', async fun
     });
     setStatusMessage(injuryMessage, t('injury_saved'), 'success');
     const reportedParts = selectedInjuryParts.slice();
-    notify(teamEmailsOf(clientRecord), 'injury_new', {
+    notify(teamEmailsOf(clientRecord).concat(injurySquadCtx ? injurySquadCtx.staff : []).filter(function (e, i, all) { return e && all.indexOf(e) === i; }), 'injury_new', {
       target: 'client', about: clientEmail, aboutName: clientName || '',
       params: function () {
         return { name: clientName || clientEmail, parts: reportedParts.map(bodyPartName).join(lang === 'ar' ? '، ' : ', ') };
@@ -29061,14 +29087,25 @@ document.getElementById('injury-submit-btn').addEventListener('click', async fun
   }
 });
 
+/* بلاغ إصابة من جوه فريق (سكواد): بيوصل للمدرب الرئيسي والجهاز الفني للفريق كمان */
+let injurySquadCtx = null;
+function openInjuryFromSquad(sq) {
+  injurySquadCtx = sq ? { id: sq.id, name: sq.name || '', staff: sqLeadAndStaff(sq).map(function (e) { return String(e).toLowerCase(); }) } : null;
+  showScreen(injuryScreen);
+  resetInjuryForm();
+  loadInjuryHistory();
+}
 document.getElementById('report-injury-btn').addEventListener('click', function () {
+  injurySquadCtx = null;
   showScreen(injuryScreen);
   resetInjuryForm();
   loadInjuryHistory();
 });
 
 document.getElementById('injury-back-btn').addEventListener('click', function () {
-  showScreen(clientScreen);
+  const backToSquad = !!injurySquadCtx;
+  injurySquadCtx = null;
+  showScreen(backToSquad ? sqScreen() : clientScreen);
 });
 
 /* ============================ بلاغات الإصابة — شاشة المدرب ============================ */
@@ -40787,11 +40824,16 @@ function planItemParts(it) {
 }
 
 /* جلسة المخطط → نفس شكل عناصر الفريق (عشان تسجيل اللاعب يشتغل عليها) */
+function planKindFallbackName(it, ix) {
+  const k = PLAN_ITEM_KINDS.filter(function (x) { return x.id === it.kind; })[0];
+  return (k ? k[lang] || k.ar : sqL('تمرين', 'Exercise')) + ' ' + (ix + 1);
+}
+
 function planSessionItems(sess) {
-  return ((sess && sess.items) || []).map(function (it) {
+  return ((sess && sess.items) || []).map(function (it, ix) {
     return {
       sec: (it.kind === 'warmup') ? 'warmup' : (it.kind === 'mobility' ? 'mobility' : 'main'),
-      libId: it.libId || '', name: (planGroupLabel(sess, it) ? planGroupLabel(sess, it) + ') ' : '') + planItemName(it), media: planItemMedia(it),
+      libId: it.libId || '', name: (planGroupLabel(sess, it) ? planGroupLabel(sess, it) + ') ' : '') + (planItemName(it) || planKindFallbackName(it, ix)), media: planItemMedia(it),
       sets: Number(it.sets) || 1, reps: planItemLine(it), chips: planItemParts(it), target: it.time ? String(it.time) : '', run: !!(it.kind !== 'wod' && (it.distance || (it.duration && !it.reps))), rest: '', rpe: '', line: true,
       purpose: pv(it.purpose), component: it.component || '',
       grp: (it.grp && sess.groups && sess.groups[it.grp]) ? it.grp : '', gsum: (it.grp && sess.groups && sess.groups[it.grp]) ? planGroupSummary(sess, it.grp) : ''

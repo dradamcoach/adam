@@ -161,7 +161,7 @@ export function close() { TESTS_UI.stopTests(); if (PL && !PL.min) { if (PL.fini
 function go(tab) {
   if (PL && !PL.min) { if (PL.finished) { stopPlayer(); } else { PL.min = true; dockRender(); } }
   if (tab !== 'tests') TESTS_UI.stopTests();
-  curTab = tab; sub = {};
+  curTab = tab; sub = {}; lastDrawTab = '';
   const ov = ensureOverlay();
   ov.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
   $('#ap-title').textContent = 'ADAM+'; $('#ap-title').style.direction = 'ltr';
@@ -170,11 +170,15 @@ function go(tab) {
   try { const tb = $('#ap-tabs'), on = $('#ap-tabs button.on'); if (tb && on) { const r1 = tb.getBoundingClientRect(), r2 = on.getBoundingClientRect(); tb.scrollLeft += (r2.left + r2.width / 2) - (r1.left + r1.width / 2); } } catch (e) { /* تجاهل */ }
   draw();
 }
+/* شاشات بنفضل فيها في نفس مكان التمرير لما نختار حاجة (سؤال اليوم والملف الشخصي) بدل ما نرجع لأول الصفحة */
+let lastDrawTab = '';
+const KEEP_SCROLL = { today: 1, me: 1 };
 function draw() {
   const body = $('#ap-body'); if (!body) return;
+  const keepTop = (KEEP_SCROLL[curTab] && lastDrawTab === curTab && !(PL && !PL.min)) ? body.scrollTop : 0;
   const fn = { music: viewMusic, me: viewMe, journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, circ: viewCirc, tests: (b) => TESTS_UI.viewTests(b), rehab: viewRehab, biomech: viewBio, search: viewSearch }[curTab];
   try { if (PL && !PL.min) viewPlayer(body); else { fn(body); if (curTab !== 'me') { const gb = guestBanner(); if (gb && body.firstElementChild) { body.insertAdjacentHTML('afterbegin', gb); wireGuest(body); } } } } catch (e) { body.innerHTML = '<div class="ap-empty">' + esc(L('حصلت مشكلة في عرض الشاشة', 'Something went wrong showing this screen')) + '</div>'; if (window.console) console.error(e); }
-  body.scrollTop = 0;
+  body.scrollTop = keepTop; lastDrawTab = (PL && !PL.min) ? '' : curTab;
 }
 function chips(items, cur, attr) {
   return '<div class="ap-chips">' + items.map((i) => '<button type="button" class="' + (String(i[0]) === String(cur) ? 'on' : '') + '" data-' + attr + '="' + esc(i[0]) + '">' + esc(i[1]) + '</button>').join('') + '</div>';

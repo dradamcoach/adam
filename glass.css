@@ -1595,3 +1595,7 @@ img.sq-zoomable { cursor: zoom-in; }
 .sq-items .sq-prev-txt { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; word-break: break-word; line-height: 1.5; }
 .sq-prev-name { font-weight: 700; font-size: 14.5px; }
 .sq-prev-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
+
+/* شوف التمرين + بلّغ إصابة في شاشة الفريق */
+.sq-see { display: inline-flex; align-items: center; gap: 4px; margin: 4px 0 2px; padding: 5px 12px; border-radius: 999px; background: rgba(46, 224, 122, .12); border: 1px solid rgba(46, 224, 122, .35); color: #2ee07a; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+.sq-injury-btn { display: block; width: 100%; margin: 14px 0 4px; padding: 12px 14px; border-radius: 14px; background: rgba(245, 158, 11, .12); border: 1px solid rgba(245, 158, 11, .4); color: #fbbf24; font-size: 14.5px; font-weight: 700; cursor: pointer; }
