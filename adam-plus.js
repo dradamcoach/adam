@@ -13,6 +13,8 @@ import { CHALLENGES, WEEKLY, TENMIN, STRETCH_MOVES, STRETCH_ROUTINES, RECIPES } 
 import { TIMER_GUIDE } from './adam-plus-guide.js';
 import { RECIPES_EXTRA } from './adam-plus-recipes2.js';
 import { CIRC_EXTRA } from './adam-plus-circuits2.js';
+import { MUSIC_LISTS, MUSIC_MOODS } from './adam-plus-music2.js';
+import { createTests } from './adam-plus-tests.js';
 import { STRETCH_MOVES_EXTRA, STRETCH_ROUTINES_EXTRA } from './adam-plus-stretch2.js';
 const ALL_MOVES = Object.assign({}, STRETCH_MOVES, STRETCH_MOVES_EXTRA);
 const ALL_ROUTINES = STRETCH_ROUTINES.concat(STRETCH_ROUTINES_EXTRA);
@@ -117,7 +119,7 @@ async function loadState() {
 const TABS = [
   ['me', 'ملفي', 'My profile'], ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
   ['chal', 'تحديات', 'Challenges'], ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['food', 'أكلي', 'My food'],
-  ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['circ', 'محطات وجروب', 'Circuits and group'], ['music', 'أغاني', 'Music'], ['rehab', 'تأهيلي', 'My rehab'],
+  ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['circ', 'محطات وجروب', 'Circuits and group'], ['tests', 'اختبارات', 'Tests'], ['music', 'أغاني', 'Music'], ['rehab', 'تأهيلي', 'My rehab'],
   ['biomech', 'ميكانيكا', 'Mechanics'], ['search', 'بحث', 'Search']
 ];
 let curTab = 'journeys';
@@ -154,10 +156,11 @@ export async function openOwn() {
   if (!plus.train) plus.train = { params: { goal: 'fitness', days: 0, equip: 'gym' }, days: [], seed: 0, created: stamp(), custom: true };
   sub.planTab = 'train'; sub.editTrain = false; sub.manual = { wd: dayIdx(new Date()) }; draw();
 }
-export function close() { if (PL && !PL.min) { if (PL.finished) { stopPlayer(); } else PL.min = true; } dockRender(); const ov = document.getElementById('adam-plus'); if (ov) ov.classList.add('hidden'); document.body.classList.remove('ap-lock'); }
+export function close() { TESTS_UI.stopTests(); if (PL && !PL.min) { if (PL.finished) { stopPlayer(); } else PL.min = true; } dockRender(); const ov = document.getElementById('adam-plus'); if (ov) ov.classList.add('hidden'); document.body.classList.remove('ap-lock'); }
 
 function go(tab) {
   if (PL && !PL.min) { if (PL.finished) { stopPlayer(); } else { PL.min = true; dockRender(); } }
+  if (tab !== 'tests') TESTS_UI.stopTests();
   curTab = tab; sub = {};
   const ov = ensureOverlay();
   ov.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
@@ -169,7 +172,7 @@ function go(tab) {
 }
 function draw() {
   const body = $('#ap-body'); if (!body) return;
-  const fn = { music: viewMusic, me: viewMe, journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, circ: viewCirc, rehab: viewRehab, biomech: viewBio, search: viewSearch }[curTab];
+  const fn = { music: viewMusic, me: viewMe, journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, circ: viewCirc, tests: (b) => TESTS_UI.viewTests(b), rehab: viewRehab, biomech: viewBio, search: viewSearch }[curTab];
   try { if (PL && !PL.min) viewPlayer(body); else { fn(body); if (curTab !== 'me') { const gb = guestBanner(); if (gb && body.firstElementChild) { body.insertAdjacentHTML('afterbegin', gb); wireGuest(body); } } } } catch (e) { body.innerHTML = '<div class="ap-empty">' + esc(L('حصلت مشكلة في عرض الشاشة', 'Something went wrong showing this screen')) + '</div>'; if (window.console) console.error(e); }
   body.scrollTop = 0;
 }
@@ -1097,6 +1100,9 @@ function cue(kind) {
   if (kind === 'done') buzz([200, 100, 200, 100, 300]); else if (kind !== 'tick') buzz(60);
 }
 
+/* اختبارات اللياقة (بيب تست، كوبر، ...) في ملف لوحده */
+const TESTS_UI = createTests({ L: L, esc: esc, plus: () => plus, persist: persist, tone: tone, speak: speak, buzz: buzz, toast: toast, stamp: stamp, draw: () => draw() });
+
 /* ---------- ساعة / حزام نبض بالبلوتوث (Web Bluetooth) ---------- */
 const hr = { on: false, name: '', bpm: 0, max: 0, sum: 0, n: 0, dev: null };
 const hrOk = () => !!(navigator.bluetooth && navigator.bluetooth.requestDevice);
@@ -1391,6 +1397,10 @@ function viewMusic(body) {
   h += '<div class="ap-sec"><b>' + esc(L('أغاني التمرين', 'Workout music')) + '</b></div><div class="ap-card"><p class="ap-p">' + esc(L('الزق لينك قايمة أغاني من Spotify أو يوتيوب أو أنغامي أو SoundCloud، وهتشتغل في مشغّل صغير تقدر تحركه في الشاشة وتسيبه شغال وانت بتتنقل أو بتتمرن.', 'Paste a playlist link from Spotify, YouTube, Anghami or SoundCloud. It plays in a small player you can drag around and leave running while you browse or train.')) + '</p>';
   h += '<div class="apd-in" style="margin:10px 0"><input id="mu-link" type="url" inputmode="url" placeholder="https://" value="' + esc((plus.music && plus.music.link) || '') + '"><button type="button" id="mu-save">' + esc(L('احفظ وشغّل', 'Save and play')) + '</button></div>';
   h += '<div class="ap-actions">' + (link ? '<button type="button" class="ap-btn" id="mu-play">' + esc(L('شغّل المشغّل', 'Open player')) + '</button>' : '') + (coach && coach !== link ? '<button type="button" class="ap-btn ghost" id="mu-coach">' + esc(L('استخدم قايمة مدربك', 'Use my coach playlist')) + '</button>' : '') + (plus.music && plus.music.link ? '<button type="button" class="ap-btn ghost danger" id="mu-clear">' + esc(L('امسح اللينك', 'Remove link')) + '</button>' : '') + '</div></div>';
+  const mood = sub.mmood || 'all';
+  h += '<div class="ap-sec"><b>' + esc(L('قوائم جاهزة', 'Ready playlists')) + '</b><span>' + esc(L('اضغط على قايمة وتشتغل فورًا', 'tap one to play')) + '</span></div><div class="ap-card">' + chips(MUSIC_MOODS.map((m) => [m[0], L(m[1], m[2])]), mood, 'mmood');
+  h += MUSIC_LISTS.filter((x) => mood === 'all' || x.mood === mood).map((x) => '<div class="ap-row" style="margin-top:8px"><b>' + esc(L(x.ar, x.en)) + '</b><span class="mu">' + esc(x.url.indexOf('youtube') !== -1 ? 'YouTube' : 'Spotify') + '</span><button type="button" class="ap-btn small' + (link === x.url ? '' : ' ghost') + '" data-mplay="' + esc(x.id) + '">' + esc(link === x.url ? L('شغّال', 'Playing') : L('شغّل', 'Play')) + '</button></div>').join('');
+  h += '<div class="ap-note">' + esc(L('القوائم دي عامة من أصحابها، ممكن صاحب القايمة يحذفها أو يغيرها. لو قايمة مش بتشتغل جرّب غيرها أو الزق لينكك. سبوتيفاي من غير تسجيل دخول بيشغل مقاطع قصيرة.', 'These are public playlists owned by others and may change or disappear. If one does not play, try another or paste your own link. Spotify without sign-in plays short previews.')) + '</div></div>';
   h += '<div class="ap-sec"><b>' + esc(L('هات لينك قايمة', 'Get a playlist link')) + '</b></div><div class="ap-card"><div class="ap-chips"><a class="ap-chip" target="_blank" rel="noopener" href="https://open.spotify.com/">Spotify</a><a class="ap-chip" target="_blank" rel="noopener" href="https://music.youtube.com/">YouTube Music</a><a class="ap-chip" target="_blank" rel="noopener" href="https://play.anghami.com/">Anghami</a><a class="ap-chip" target="_blank" rel="noopener" href="https://soundcloud.com/">SoundCloud</a></div>';
   h += '<div class="ap-step"><div class="ap-wk">1</div><div class="ap-st"><span class="ap-p">' + esc(L('افتح التطبيق واختار قايمة تمرين.', 'Open the app and pick a workout playlist.')) + '</span></div></div>';
   h += '<div class="ap-step"><div class="ap-wk">2</div><div class="ap-st"><span class="ap-p">' + esc(L('اضغط مشاركة ثم نسخ اللينك.', 'Tap Share, then Copy link.')) + '</span></div></div>';
@@ -1399,6 +1409,8 @@ function viewMusic(body) {
   body.innerHTML = h;
   wireGuest(body);
   const save = (v) => { const c = plClean(v); if (!c) { toast(L('اللينك ده مش مدعوم. استخدم Spotify أو يوتيوب أو أنغامي أو SoundCloud.', 'Unsupported link. Use Spotify, YouTube, Anghami or SoundCloud.')); return; } plus.music = { link: c }; persist(); const box = document.getElementById('apd-music'); if (box) box.innerHTML = ''; musicOn = 'open'; musicRebuild(); dockRender(); draw(); };
+  $$('[data-mmood]', body).forEach((x) => x.addEventListener('click', () => { sub.mmood = x.dataset.mmood; draw(); }));
+  $$('[data-mplay]', body).forEach((x) => x.addEventListener('click', () => { const it = MUSIC_LISTS.find((m) => m.id === x.dataset.mplay); if (it) save(it.url); }));
   $('#mu-save', body).addEventListener('click', () => save($('#mu-link', body).value));
   const pl = $('#mu-play', body); if (pl) pl.addEventListener('click', () => { musicOn = 'open'; musicRebuild(); dockRender(); });
   const co = $('#mu-coach', body); if (co) co.addEventListener('click', () => save(coach));

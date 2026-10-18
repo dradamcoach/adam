@@ -37,6 +37,7 @@ import { MED_LIBRARY_RD, TEMPLATES_MED_RD } from './library/med-rd.js';
 /* رسومات التمارين اللي كانت ناقصة (tools/mannequin.js) */
 import { MEDIA_EXTRA } from './library/media-extra.js';
 import { STICKERS, stickerSvg, EMOJI_GROUPS } from './library/chat-stickers.js';
+import { SWIM_PRESETS, RUN_PRESETS, TIMED_PRESETS } from './library/plan-presets.js';
 import { PLAN_COMPONENTS, PLAN_PERIOD_TYPES, PLAN_WEEK_TYPES, PLAN_LOAD_LEVELS, PLAN_ITEM_KINDS, PLAN_BASES, PLAN_REST_TYPES, PLAN_WOD_FORMATS, PLAN_STROKES, TRACK_DISTANCES, SWIM_DISTANCES } from './library/plan-defs.js';
 import { TEST_CATEGORIES, TEST_RATINGS, TEST_UNITS, EQUIP_CATEGORIES, TACTIC_KINDS, RULE_SECTIONS } from './library/hub-defs.js';
 
@@ -221,6 +222,8 @@ const TEXT = {
     sq_change_today: 'جلسة النهارده (بتتبدّل لليوم ده بس):',
     sq_rest: 'راحة',
     sq_reps_done: 'عدّاتك',
+    sq_time_done: 'زمنك الفعلي',
+    sq_hr_done: 'نبضك',
     sq_load_kg: 'الوزن كجم',
     sq_mark_done: 'خلصته',
     sq_f_minutes: 'الدقايق',
@@ -519,6 +522,9 @@ const TEXT = {
     anatomy_injury_benefit: 'مدى إفادته للإصابة',
     back_generic: 'رجوع',
     tile_preview: 'معاينة كعميل',
+    tile_personal: 'أنا كعميل (تمرين وأكل لنفسي)',
+    personal_note: 'وضعك الشخصي — بياناتك إنت',
+    personal_exit: 'رجوع لحساب العمل',
     tile_preview_coach: 'معاينة كمدرب',
     cpv_pick: 'اختار مدرب تشوف التطبيق بعينه',
     cpv_plain: 'مدرب جديد (من غير براند)',
@@ -2987,6 +2993,8 @@ const TEXT = {
     sq_change_today: 'Today\'s session (changes today only):',
     sq_rest: 'rest',
     sq_reps_done: 'Your reps',
+    sq_time_done: 'Your actual time',
+    sq_hr_done: 'Your heart rate',
     sq_load_kg: 'Load kg',
     sq_mark_done: 'Done',
     sq_f_minutes: 'Minutes',
@@ -3284,6 +3292,9 @@ const TEXT = {
     anatomy_injury_benefit: 'How it helps the injury',
     back_generic: 'Back',
     tile_preview: 'Preview as client',
+    tile_personal: 'Me as a client (train and eat for myself)',
+    personal_note: 'Your personal mode — your own data',
+    personal_exit: 'Back to my work account',
     tile_preview_coach: 'Preview as coach',
     cpv_pick: 'Pick a coach to see the app as they do',
     cpv_plain: 'A new coach (no brand)',
@@ -6209,6 +6220,7 @@ const mylibScreen = document.getElementById('mylib-screen');
 const clientScreen = document.getElementById('client-screen');
 let coachPreviewOn = false; // معاينة كمدرب (للمالك فقط)
 let previewMode = false; // معاينة كعميل (للمالك فقط)
+let personalMode = false; // «أنا كعميل»: المدرب/المتخصص/العامل يستخدم ADAM لنفسه ببياناته الحقيقية
 const foodScreen = document.getElementById('food-screen');
 const supplementsScreen = document.getElementById('supplements-screen');
 const subscriptionScreen = document.getElementById('subscription-screen');
@@ -6958,7 +6970,7 @@ function showScreen(screen) {
     if (s) s.classList.add('hidden');
   });
   screen.classList.remove('hidden');
-  if (previewMode && screen !== clientScreen) { previewMode = false; paintPreviewBar(); }
+  if (previewMode && screen !== clientScreen) { previewMode = false; personalMode = false; paintPreviewBar(); }
   paintNotifBell(screen);
   logoutButton.classList.toggle('hidden', screen === loginScreen || screen === welcomeScreen);
   // الزرار الثابت تحت بيظهر بعد ما زرار الهيرو يعدّي بس — قبل كده
@@ -8132,6 +8144,7 @@ const COACH_TILES = [
   { key: 'brandadm',  icon: 'gear',      labelKey: 'tile_brand_admin',          adminOnly: true, action: 'openBrandAdmin' },
   { key: 'feedback',  icon: 'chat',      labelKey: 'tile_feedback',             action: 'openFeedback' },
   { key: 'previewcoach', icon: 'team',   labelKey: 'tile_preview_coach',        adminOnly: true, action: 'startCoachPreview' },
+  { key: 'personal',  icon: 'profile',   labelKey: 'tile_personal',             action: 'startPersonalClient' },
   { key: 'preview',   icon: 'profile',   labelKey: 'tile_preview',              action: 'startClientPreview' }
 ];
 
@@ -8169,6 +8182,7 @@ function renderCoachTiles() {
       if (origin) { origin.click(); return; }
       if (tile.action === 'openFeedback') { window.open('https://docs.google.com/forms/d/e/1FAIpQLSd3stkXiUZxdfU2vY5c3N9uGk5nHiArkjec5mNKBgAu4oYL7w/viewform', '_blank', 'noopener'); return; }
       if (tile.action === 'startClientPreview') { startClientPreview(); return; }
+      if (tile.action === 'startPersonalClient') { startPersonalClient(); return; }
       if (tile.action === 'startCoachPreview') { startCoachPreview(); return; }
       if (tile.action === 'openBrand') { brandCall('openEditor', currentProviderEmail, { self: currentProviderEmail, kind: currentProviderSpecialty || 'coach' }); return; }
       if (tile.action === 'openDirAdm') { openDirectoryAdmin(); return; }
@@ -10708,6 +10722,7 @@ document.getElementById('rehab-library-btn').addEventListener('click', openLibra
 
 document.getElementById('lib-back-btn').addEventListener('click', function () {
   if (libraryContext === 'plan') {
+    planPendingKind = '';
     showScreen(document.getElementById('plan-screen'));
     return;
   }
@@ -13827,15 +13842,29 @@ function sqMyLogForm(items) {
     nm.textContent = it.name;
     const pres = document.createElement('div');
     pres.className = 'sq-log-pres';
-    pres.textContent = it.line ? it.reps : (it.sets + ' × ' + it.reps + (it.rest ? ' · ' + t('sq_rest') + ' ' + it.rest : '') + (it.rpe ? ' · RPE ' + it.rpe : ''));
+    if (it.line && it.chips && it.chips.length > 1) {
+      pres.classList.add('sq-chips');
+      it.chips.forEach(function (c, ci) { const sp = document.createElement('span'); sp.className = 'sq-chip' + (ci === 0 ? ' main' : ''); sp.textContent = c; pres.appendChild(sp); });
+    } else {
+      pres.textContent = it.line ? it.reps : (it.sets + ' × ' + it.reps + (it.rest ? ' · ' + t('sq_rest') + ' ' + it.rest : '') + (it.rpe ? ' · RPE ' + it.rpe : ''));
+    }
     const inputs = document.createElement('div');
     inputs.className = 'sq-log-inputs';
     const reps = document.createElement('input');
     reps.inputMode = 'numeric'; reps.placeholder = t('sq_reps_done'); reps.value = squadMyLog.items[i].reps || '';
     const load = document.createElement('input');
     load.inputMode = 'decimal'; load.placeholder = t('sq_load_kg'); load.value = squadMyLog.items[i].load || '';
-    reps.addEventListener('input', function () { squadMyLog.items[i].reps = reps.value.trim(); sqQueueSave(); });
-    load.addEventListener('input', function () { squadMyLog.items[i].load = load.value.trim(); sqQueueSave(); });
+    if (it.run) {
+      /* جري/سباحة/زمن: مفيش «عدّات» ولا «وزن» — بنسجّل الزمن الفعلي والنبض في حقول لوحدها
+         عشان مايدخلوش في حساب الحجم (عدّات × وزن) */
+      reps.inputMode = 'text'; reps.placeholder = t('sq_time_done') + (it.target ? ' (' + t('plan_target') + ' ' + it.target + ')' : ''); reps.value = squadMyLog.items[i].time || '';
+      load.inputMode = 'numeric'; load.placeholder = t('sq_hr_done'); load.value = squadMyLog.items[i].hr || '';
+      reps.addEventListener('input', function () { squadMyLog.items[i].time = reps.value.trim(); sqQueueSave(); });
+      load.addEventListener('input', function () { squadMyLog.items[i].hr = load.value.trim(); sqQueueSave(); });
+    } else {
+      reps.addEventListener('input', function () { squadMyLog.items[i].reps = reps.value.trim(); sqQueueSave(); });
+      load.addEventListener('input', function () { squadMyLog.items[i].load = load.value.trim(); sqQueueSave(); });
+    }
     inputs.append(reps, load);
     main.append(nm, pres);
     if (it.purpose) {
@@ -15036,8 +15065,8 @@ function paintPreviewBar() {
     bar.appendChild(btn);
     document.body.appendChild(bar);
   }
-  bar.querySelector('.preview-note').textContent = t('preview_note');
-  bar.querySelector('.preview-exit').textContent = t('preview_exit');
+  bar.querySelector('.preview-note').textContent = t(personalMode ? 'personal_note' : 'preview_note');
+  bar.querySelector('.preview-exit').textContent = t(personalMode ? 'personal_exit' : 'preview_exit');
   bar.style.display = 'flex';
 }
 
@@ -15110,6 +15139,20 @@ async function startClientPreview() {
   await loadClient(user.email.toLowerCase());
 }
 
+/* «أنا كعميل»: نفس شاشة العميل لكن ببيانات المدرب/المتخصص/العامل نفسه، من غير
+   بيانات تجريبية. مفيش مستند عميل بيتعمل ليه تلقائي (touchClientActivity واقفة في الوضع ده)
+   فمش هيظهر في قوايم العملاء ولا يدخل في فترة تجربة أو حظر. برنامجه بيتبني من
+   «برنامجي بنفسي» وبيتحفظ تحت إيميله هو. */
+async function startPersonalClient() {
+  const user = auth.currentUser;
+  if (!user || !user.email || !currentProviderEmail) return;
+  previewMode = true;
+  personalMode = true;
+  showScreen(clientScreen);
+  paintPreviewBar();
+  await loadClient(user.email.toLowerCase());
+}
+
 async function loadClient(email) {
   clientEmail = email;
   progress.textContent = t('loading');
@@ -15141,7 +15184,7 @@ async function loadClient(email) {
     clientNutritionCoach = clientNutrition;
     await loadSelfProgram(email);
     applySelfProgram();
-    if (previewMode) applyPreviewDemo();
+    if (previewMode && !personalMode) applyPreviewDemo();
     await physioLoadClient(email);
 
     // العلامات القديمة كانت أرقام تخص القائمة الواحدة؛ بنحولها لقسم "التمرين الأساسي"
@@ -40646,7 +40689,10 @@ function planBasisText(it) {
   return it.intensity + ' (' + b[lang] + ')';
 }
 
-function planItemLine(it) {
+function planItemLine(it) { return planItemParts(it).join(' · '); }
+
+/* نفس السطر لكن مقسّم لأجزاء — عشان شاشة اللاعب تعرضها كشرائح مفصولة بدل سطر واحد لازق */
+function planItemParts(it) {
   const parts = [];
   let vol = '';
   const sets = Number(it.sets) || 0;
@@ -40675,7 +40721,7 @@ function planItemLine(it) {
     parts.push(t('ex_rest') + ' ' + it.rest + (rt ? ' ' + rt[lang] : ''));
   }
   if (it.setRest) parts.push(t('plan_set_rest') + ' ' + it.setRest);
-  return parts.join(' · ');
+  return parts;
 }
 
 /* جلسة المخطط → نفس شكل عناصر الفريق (عشان تسجيل اللاعب يشتغل عليها) */
@@ -40684,7 +40730,7 @@ function planSessionItems(sess) {
     return {
       sec: (it.kind === 'warmup') ? 'warmup' : (it.kind === 'mobility' ? 'mobility' : 'main'),
       libId: it.libId || '', name: (planGroupLabel(sess, it) ? planGroupLabel(sess, it) + ') ' : '') + planItemName(it), media: planItemMedia(it),
-      sets: Number(it.sets) || 1, reps: planItemLine(it), rest: '', rpe: '', line: true,
+      sets: Number(it.sets) || 1, reps: planItemLine(it), chips: planItemParts(it), target: it.time ? String(it.time) : '', run: !!(it.kind !== 'wod' && (it.distance || (it.duration && !it.reps))), rest: '', rpe: '', line: true,
       purpose: pv(it.purpose), component: it.component || '',
       grp: (it.grp && sess.groups && sess.groups[it.grp]) ? it.grp : '', gsum: (it.grp && sess.groups && sess.groups[it.grp]) ? planGroupSummary(sess, it.grp) : ''
     };
@@ -41598,20 +41644,18 @@ function openPlanSession(key, focusIdx) {
     const adds = planEl('div', 'plan-add-row');
     const fromLib = planEl('button', '', t('plan_add_from_lib'));
     fromLib.type = 'button';
-    fromLib.addEventListener('click', function () { planReplaceIdx = -1; planOpenLibrary(key); });
+    fromLib.addEventListener('click', function () { planReplaceIdx = -1; planPendingKind = ''; planOpenLibrary(key); });
     adds.appendChild(fromLib);
     PLAN_ITEM_KINDS.forEach(function (k) {
       const b = planEl('button', 'secondary', '+ ' + k[lang]);
       b.type = 'button';
-      b.addEventListener('click', function () {
-        const it = { kind: k.id, name: '', sets: k.id === 'wod' ? undefined : 1 };
-        if (it.sets === undefined) delete it.sets;
-        s.items.push(it);
-        planTouch();
-        openPlanSession(key, s.items.length - 1);
-      });
+      b.addEventListener('click', function () { planPickKind(s, key, k); });
       adds.appendChild(b);
     });
+    const blank = planEl('button', 'link', lang === 'ar' ? '+ تمرين فاضي (أكتبه بنفسي)' : '+ Blank item (type my own)');
+    blank.type = 'button';
+    blank.addEventListener('click', function () { planAddBlank(s, key, 'strength'); });
+    adds.appendChild(blank);
     body.appendChild(adds);
     const delS = planEl('button', 'link sq-del', t('plan_del_session'));
     delS.type = 'button';
@@ -41749,7 +41793,7 @@ function planItemCard(s, it, i, key, open) {
   }
   const repBtn = planEl('button', 'secondary', arL ? 'استبدل بتمرين تاني' : 'Replace exercise');
   repBtn.type = 'button';
-  repBtn.addEventListener('click', function () { planReplaceIdx = i; planOpenLibrary(key); });
+  repBtn.addEventListener('click', function () { planReplaceIdx = i; planPendingKind = ''; planOpenLibrary(key); });
   qa.append(repBtn);
   ed.insertBefore(qa, ed.firstChild);
   const gsel = document.createElement('select');
@@ -41868,12 +41912,66 @@ function planItemCard(s, it, i, key, open) {
 
 let planLibTarget = '';
 let planReplaceIdx = -1;
+let planPendingKind = '';
 
-function planOpenLibrary(key) {
+/* كل زرار نوع بيفتح مكتبة جاهزة تناسبه بدل ما يفتح عنصر فاضي */
+const PLAN_KIND_LIB = { strength: 'strength', warmup: 'warmup', mobility: 'mobility', drill: 'speed', wod: 'conditioning' };
+const PLAN_KIND_PRESETS = { swim: SWIM_PRESETS, run: RUN_PRESETS, timed: TIMED_PRESETS };
+
+function planAddBlank(s, key, kindId) {
+  const it = { kind: kindId, name: '', sets: kindId === 'wod' ? undefined : 1 };
+  if (it.sets === undefined) delete it.sets;
+  s.items.push(it);
+  planTouch();
+  openPlanSession(key, s.items.length - 1);
+}
+
+function planPickKind(s, key, k) {
+  if (PLAN_KIND_PRESETS[k.id]) { planOpenPresets(s, key, k); return; }
+  const group = PLAN_KIND_LIB[k.id];
+  if (!group) { planAddBlank(s, key, k.id); return; }
+  planReplaceIdx = -1;
+  planPendingKind = k.id;
+  planOpenLibrary(key, group);
+}
+
+function planOpenPresets(s, key, k) {
+  const list = PLAN_KIND_PRESETS[k.id];
+  const body = planSheetOpen(k[lang]);
+  const ar = lang === 'ar';
+  body.appendChild(planEl('p', 'hint-text', ar ? 'اختار تمرين جاهز يتضاف على طول، وتقدر تعدّل أرقامه بعدها.' : 'Pick a ready item; it is added right away and you can edit the numbers after.'));
+  list.forEach(function (pr) {
+    const row = planEl('button', 'secondary plan-preset', '');
+    row.type = 'button';
+    row.style.cssText = 'display:block;width:100%;text-align:start;margin:6px 0';
+    const line = planItemLine(Object.assign({ kind: k.id }, pr));
+    row.appendChild(planEl('strong', '', ar ? pr.ar : pr.en));
+    row.appendChild(planEl('span', 'plan-item-line', line));
+    row.addEventListener('click', function () {
+      const it = { kind: k.id, name: ar ? pr.ar : pr.en };
+      ['sets', 'reps', 'distance', 'duration', 'stroke', 'rest', 'intensity', 'basis'].forEach(function (f) { if (pr[f] !== undefined && pr[f] !== '') it[f] = pr[f]; });
+      s.items.push(it);
+      planTouch();
+      planSheetClose();
+      openPlanSession(key, s.items.length - 1);
+    });
+    body.appendChild(row);
+  });
+  const lib = planEl('button', 'link', ar ? 'أو اختار من مكتبة التمارين' : 'Or pick from the exercise library');
+  lib.type = 'button';
+  lib.addEventListener('click', function () { planReplaceIdx = -1; planPendingKind = k.id; planOpenLibrary(key, k.id === 'run' ? 'speed' : (k.id === 'timed' ? 'conditioning' : '')); });
+  body.appendChild(lib);
+  const blank = planEl('button', 'link', ar ? 'أو تمرين فاضي أكتبه بنفسي' : 'Or a blank item');
+  blank.type = 'button';
+  blank.addEventListener('click', function () { planSheetClose(); planAddBlank(s, key, k.id); });
+  body.appendChild(blank);
+}
+
+function planOpenLibrary(key, group) {
   planLibTarget = key;
   planSheetClose();
   libraryContext = 'plan';
-  suggestedCategory = '';
+  suggestedCategory = group || '';
   showScreen(libraryScreen);
   loadLibrary();
 }
@@ -41883,12 +41981,17 @@ function planAddLibItem(built) {
   showScreen(document.getElementById('plan-screen'));
   if (!s) return;
   const type = built.exType || '';
-  const kind = (type === 'distance' || type === 'distance_time') ? 'run' : (type === 'time' ? 'timed' : 'strength');
+  let kind = (type === 'distance' || type === 'distance_time') ? 'run' : (type === 'time' ? 'timed' : 'strength');
+  if (planPendingKind && planReplaceIdx < 0) kind = planPendingKind;
+  planPendingKind = '';
   const it = { kind: kind, libId: built.libId || '', sets: Number(built.sets) || 3 };
   if (!it.libId) it.name = built.name || '';
   if (kind === 'strength') { it.reps = String(built.reps || '8'); it.rest = built.rest || '2min'; }
   if (kind === 'run') { it.distance = built.distance || ''; it.rest = built.rest || ''; }
   if (kind === 'timed') { it.duration = built.duration || built.reps || ''; it.rest = built.rest || ''; }
+  if (kind === 'swim') { it.distance = built.distance || ''; it.rest = built.rest || ''; }
+  if (kind === 'warmup' || kind === 'mobility' || kind === 'drill') { if (built.duration) it.duration = built.duration; else if (built.distance) it.distance = built.distance; else it.reps = String(built.reps || '10'); }
+  if (kind === 'wod') { delete it.sets; if (built.duration) it.duration = built.duration; if (built.reps) it.reps = String(built.reps); if (built.distance) it.distance = built.distance; }
   if (planReplaceIdx >= 0 && s.items[planReplaceIdx]) {
     const old = s.items[planReplaceIdx];
     ['component', 'purpose', 'note', 'intensity', 'basis'].forEach(function (f) { if (old[f]) it[f] = old[f]; });
