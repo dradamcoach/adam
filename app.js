@@ -28326,6 +28326,7 @@ function renderAccessResultBox(email, collectionName, data) {
   actionRow.appendChild(blockBtn);
   actionRow.appendChild(clearBtn);
   accessResultBox.appendChild(actionRow);
+  renderRoleManageBox(email);
 
   extendBtn.addEventListener('click', async function () {
     if (!dateInput.value) return;
@@ -28372,6 +28373,150 @@ function renderAccessResultBox(email, collectionName, data) {
       accessMessage.textContent = t('problem') + error.message;
     }
   });
+}
+
+/* ---------- إدارة الدور: عميل ⇄ متخصص + المسح (أدمن بس) ---------- */
+
+/* بيمسح مستندات الحساب ومجموعاته الفرعية. اللي القواعد مش بتسمح بمسحه (زي سجل الأكل
+   والنشاط اللي العميل نفسه بس بيكتبه) بيتعدّ ويتبلّغ عنه بدل ما العملية تقف */
+async function adminWipeAccount(email) {
+  let failed = 0;
+  const kill = async function (ref) { try { await deleteDoc(ref); } catch (e) { failed++; } };
+  const killSub = async function (parent, sub) {
+    try {
+      const snap = await getDocs(collection(db, parent, email, sub));
+      for (const d of snap.docs) await kill(d.ref);
+    } catch (e) { /* مفيش مجموعة فرعية */ }
+  };
+  await killSub('chats', 'messages');
+  await killSub('inbody', 'scans');
+  const names = ['workouts', 'rehab', 'nutrition', 'activity', 'inbody', 'checkins', 'progress', 'foodlog', 'chats', 'providerPublic', 'providers', 'clients'];
+  for (const n of names) {
+    try { const sn = await getDoc(doc(db, n, email)); if (sn.exists()) await kill(doc(db, n, email)); } catch (e) { failed++; }
+  }
+  return failed;
+}
+
+async function renderRoleManageBox(email) {
+  if (!isFullAdminAccount()) return;
+  const ar = lang === 'ar';
+  const box = document.createElement('div');
+  box.className = 'role-box';
+  box.style.cssText = 'margin-top:14px;padding-top:12px;border-top:1px solid var(--line,rgba(255,255,255,.12))';
+  accessResultBox.appendChild(box);
+
+  let cDoc = null, pDoc = null;
+  try { cDoc = await getDoc(doc(db, 'clients', email)); } catch (e) { cDoc = null; }
+  try { pDoc = await getDoc(doc(db, 'providers', email)); } catch (e) { pDoc = null; }
+  const isClient = !!(cDoc && cDoc.exists());
+  const isProv = !!(pDoc && pDoc.exists());
+  const pData = isProv ? pDoc.data() : null;
+  const cData = isClient ? cDoc.data() : null;
+
+  const head = document.createElement('div');
+  head.className = 'ex-name';
+  head.textContent = ar ? 'إدارة الدور والحساب' : 'Role & account';
+  box.appendChild(head);
+
+  const state = document.createElement('p');
+  state.className = 'ex-meta';
+  const roleTxt = isProv
+    ? (ar ? 'متخصص/مدرب' : 'Provider/coach') + (isClient ? (ar ? ' (وعنده بيانات عميل محفوظة)' : ' (client data kept)') : '')
+    : (ar ? 'عميل' : 'Client');
+  state.textContent = (ar ? 'الدور الحالي: ' : 'Current role: ') + roleTxt;
+  box.appendChild(state);
+
+  const msg = document.createElement('p');
+  msg.className = 'message';
+
+  if (email === COACH_EMAIL.toLowerCase() || email === currentProviderEmail) {
+    const p = document.createElement('p');
+    p.className = 'hint-text';
+    p.textContent = ar ? 'ده حسابك (أو حساب صاحب المنصة) — محمي، مينفعش يتحوّل أو يتمسح من هنا.' : 'Protected account.';
+    box.appendChild(p);
+    return;
+  }
+
+  const mkBtn = function (label, cls) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = cls || 'secondary'; b.textContent = label;
+    return b;
+  };
+  const refresh = function () { accessResultBox.innerHTML = ''; document.getElementById('access-lookup-btn').click(); };
+
+  if (!isProv) {
+    const lbl = document.createElement('label');
+    lbl.className = 'field-label';
+    lbl.textContent = ar ? 'حوّله لمتخصص — اختار التخصص:' : 'Make provider — pick specialties:';
+    box.appendChild(lbl);
+    const specBox = document.createElement('div');
+    specBox.className = 'specialty-multi';
+    box.appendChild(specBox);
+    fillSpecialtyCheckboxes(specBox, ['coach']);
+    const up = mkBtn(ar ? 'حوّله لمدرب/متخصص' : 'Promote to provider');
+    box.appendChild(up);
+    up.addEventListener('click', async function () {
+      const specs = readSpecialtyCheckboxes(specBox);
+      if (!specs.length) { msg.textContent = ar ? 'اختار تخصص واحد على الأقل' : 'Pick at least one specialty'; return; }
+      msg.textContent = t('saving');
+      try {
+        await setDoc(doc(db, 'providers', email), {
+          name: (cData && cData.name) || email, email: email,
+          specialty: specs[0], specialties: specs,
+          isMedical: specialtiesHaveFlag(specs, 'medical')
+        }, { merge: true });
+        refresh();
+      } catch (error) { msg.textContent = t('problem') + error.message; }
+    });
+  } else {
+    const down = mkBtn(ar ? 'رجّعه عميل' : 'Make client again');
+    box.appendChild(down);
+    down.addEventListener('click', async function () {
+      msg.textContent = t('saving');
+      try {
+        /* نسخة احتياطية من بيانات المتخصص جوه مستند العميل قبل ما مستند المتخصص يتشال */
+        await setDoc(doc(db, 'clients', email), {
+          email: email, name: (cData && cData.name) || pData.name || email,
+          formerProvider: Object.assign({}, pData, { demotedAt: new Date().toISOString() })
+        }, { merge: true });
+        await deleteDoc(doc(db, 'providers', email));
+        try { await deleteDoc(doc(db, 'providerPublic', email)); } catch (e) { /* عادي */ }
+        refresh();
+      } catch (error) { msg.textContent = t('problem') + error.message; }
+    });
+  }
+
+  const delWrap = document.createElement('div');
+  delWrap.style.marginTop = '12px';
+  const delBtn = mkBtn(ar ? 'امسح الحساب نهائياً' : 'Delete account permanently', 'delete');
+  delWrap.appendChild(delBtn);
+  box.appendChild(delWrap);
+  delBtn.addEventListener('click', function () {
+    delBtn.classList.add('hidden');
+    const warn = document.createElement('p');
+    warn.className = 'hint-text';
+    warn.textContent = ar
+      ? 'هيتمسح مستند الحساب وخططه وتمارينه والشات والمتابعة، ومش بيرجع. حساب الدخول نفسه (Firebase) لازم تمسحه إنت من لوحة Firebase. اكتب الإيميل ده بالظبط للتأكيد: ' + email
+      : 'This deletes the account document, plans, workouts, chat and check-ins. It cannot be undone. Type the email to confirm: ' + email;
+    const inp = document.createElement('input');
+    inp.type = 'email'; inp.placeholder = email; inp.autocomplete = 'off';
+    const go = mkBtn(ar ? 'تأكيد المسح' : 'Confirm delete', 'delete');
+    go.disabled = true;
+    inp.addEventListener('input', function () { go.disabled = inp.value.trim().toLowerCase() !== email; });
+    go.addEventListener('click', async function () {
+      if (inp.value.trim().toLowerCase() !== email) return;
+      go.disabled = true; msg.textContent = t('saving');
+      try {
+        const failed = await adminWipeAccount(email);
+        accessResultBox.innerHTML = ''; accessResultBox.classList.add('hidden');
+        accessMessage.textContent = failed
+          ? (ar ? 'اتمسح الحساب، بس ' + failed + ' عنصر (زي سجل الأكل والنشاط) محتاج مسح يدوي من Firebase.' : 'Deleted; ' + failed + ' items need manual cleanup in Firebase.')
+          : (ar ? 'اتمسح الحساب وبياناته.' : 'Account deleted.');
+      } catch (error) { msg.textContent = t('problem') + error.message; }
+    });
+    delWrap.append(warn, inp, go);
+  });
+  box.appendChild(msg);
 }
 
 /* ============================ المكتبة الطبية ============================ */
