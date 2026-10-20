@@ -1717,3 +1717,10 @@ img.sq-zoomable { cursor: zoom-in; }
 /* ===== إصلاح: شريط الحفظ/الطباعة في المخطط ما يلزقش تحت زرار اللغة والجرس ===== */
 .plan-savebar { top: calc(54px + env(safe-area-inset-top, 0px)); }
 .plan-savebar + .plan-savebar { position: static; }
+
+/* ===== حماية عامة (أندرويد/موبايل): قاعدة style.css «.card li span» كانت بتمنع اللف
+   على أي span جوه أي قائمة في أي شاشة وبتوسّع الصفحة. دلوقتي الكلام بيلف دايماً،
+   والعناصر جوه الصف مش بتتخطى عرضه. ===== */
+.card li span { white-space: normal; min-width: 0; overflow-wrap: anywhere; }
+.card li > * { min-width: 0; }
+.card li button { max-width: 100%; }
