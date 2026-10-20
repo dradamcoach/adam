@@ -15,6 +15,7 @@ import { RECIPES_EXTRA } from './adam-plus-recipes2.js';
 import { CIRC_EXTRA } from './adam-plus-circuits2.js';
 import { MUSIC_LISTS, MUSIC_MOODS } from './adam-plus-music2.js';
 import { createTests } from './adam-plus-tests.js';
+import { createTools } from './adam-plus-tools.js';
 import { STRETCH_MOVES_EXTRA, STRETCH_ROUTINES_EXTRA } from './adam-plus-stretch2.js';
 const ALL_MOVES = Object.assign({}, STRETCH_MOVES, STRETCH_MOVES_EXTRA);
 const ALL_ROUTINES = STRETCH_ROUTINES.concat(STRETCH_ROUTINES_EXTRA);
@@ -119,7 +120,7 @@ async function loadState() {
 const TABS = [
   ['me', 'ملفي', 'My profile'], ['journeys', 'الرحلات', 'Journeys'], ['events', 'الطلعات', 'Events'], ['today', 'سؤال اليوم', 'Daily check-in'],
   ['chal', 'تحديات', 'Challenges'], ['plan', 'خطتي', 'My plan'], ['lib', 'المكتبة', 'Library'], ['food', 'أكلي', 'My food'],
-  ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['circ', 'محطات وجروب', 'Circuits and group'], ['tests', 'اختبارات', 'Tests'], ['music', 'أغاني', 'Music'], ['rehab', 'تأهيلي', 'My rehab'],
+  ['recipes', 'وصفات', 'Recipes'], ['stretch', 'إطالة', 'Stretch'], ['circ', 'محطات وجروب', 'Circuits and group'], ['tests', 'اختبارات', 'Tests'], ['tools', 'أدوات', 'Tools'], ['music', 'أغاني', 'Music'], ['rehab', 'تأهيلي', 'My rehab'],
   ['biomech', 'ميكانيكا', 'Mechanics'], ['search', 'بحث', 'Search']
 ];
 let curTab = 'journeys';
@@ -156,11 +157,12 @@ export async function openOwn() {
   if (!plus.train) plus.train = { params: { goal: 'fitness', days: 0, equip: 'gym' }, days: [], seed: 0, created: stamp(), custom: true };
   sub.planTab = 'train'; sub.editTrain = false; sub.manual = { wd: dayIdx(new Date()) }; draw();
 }
-export function close() { TESTS_UI.stopTests(); if (PL && !PL.min) { if (PL.finished) { stopPlayer(); } else PL.min = true; } dockRender(); const ov = document.getElementById('adam-plus'); if (ov) ov.classList.add('hidden'); document.body.classList.remove('ap-lock'); }
+export function close() { TESTS_UI.stopTests(); TOOLS_UI.stopTools(); if (PL && !PL.min) { if (PL.finished) { stopPlayer(); } else PL.min = true; } dockRender(); const ov = document.getElementById('adam-plus'); if (ov) ov.classList.add('hidden'); document.body.classList.remove('ap-lock'); }
 
 function go(tab) {
   if (PL && !PL.min) { if (PL.finished) { stopPlayer(); } else { PL.min = true; dockRender(); } }
   if (tab !== 'tests') TESTS_UI.stopTests();
+  if (tab !== 'tools') TOOLS_UI.stopTools();
   curTab = tab; sub = {}; lastDrawTab = '';
   const ov = ensureOverlay();
   ov.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
@@ -172,11 +174,11 @@ function go(tab) {
 }
 /* شاشات بنفضل فيها في نفس مكان التمرير لما نختار حاجة (سؤال اليوم والملف الشخصي) بدل ما نرجع لأول الصفحة */
 let lastDrawTab = '';
-const KEEP_SCROLL = { today: 1, me: 1 };
+const KEEP_SCROLL = { today: 1, me: 1, tools: 1 };
 function draw() {
   const body = $('#ap-body'); if (!body) return;
   const keepTop = (KEEP_SCROLL[curTab] && lastDrawTab === curTab && !(PL && !PL.min)) ? body.scrollTop : 0;
-  const fn = { music: viewMusic, me: viewMe, journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, circ: viewCirc, tests: (b) => TESTS_UI.viewTests(b), rehab: viewRehab, biomech: viewBio, search: viewSearch }[curTab];
+  const fn = { music: viewMusic, me: viewMe, journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, circ: viewCirc, tests: (b) => TESTS_UI.viewTests(b), tools: (b) => TOOLS_UI.viewTools(b), rehab: viewRehab, biomech: viewBio, search: viewSearch }[curTab];
   try { if (PL && !PL.min) viewPlayer(body); else { fn(body); if (curTab !== 'me') { const gb = guestBanner(); if (gb && body.firstElementChild) { body.insertAdjacentHTML('afterbegin', gb); wireGuest(body); } } } } catch (e) { body.innerHTML = '<div class="ap-empty">' + esc(L('حصلت مشكلة في عرض الشاشة', 'Something went wrong showing this screen')) + '</div>'; if (window.console) console.error(e); }
   body.scrollTop = keepTop; lastDrawTab = (PL && !PL.min) ? '' : curTab;
 }
@@ -1106,6 +1108,7 @@ function cue(kind) {
 
 /* اختبارات اللياقة (بيب تست، كوبر، ...) في ملف لوحده */
 const TESTS_UI = createTests({ L: L, esc: esc, plus: () => plus, persist: persist, tone: tone, speak: speak, buzz: buzz, toast: toast, stamp: stamp, draw: () => draw() });
+const TOOLS_UI = createTools({ L: L, esc: esc, plus: () => plus, persist: persist, speak: speak, buzz: buzz, toast: toast, stamp: stamp, addDays: addDays, draw: () => draw() });
 
 /* ---------- ساعة / حزام نبض بالبلوتوث (Web Bluetooth) ---------- */
 const hr = { on: false, name: '', bpm: 0, max: 0, sum: 0, n: 0, dev: null };
@@ -1213,7 +1216,7 @@ function finishSession(P) {
   P.sum = { sec: Math.round(P.active), avg: avg, max: hr.max, cnt: P.cnt || 0 };
   plus.sessions = plus.sessions || [];
   plus.sessions.unshift({ d: stamp(), t: P.opt.title || '', s: P.sum.sec, avg: avg, max: hr.max, r: P.cnt || 0 });
-  plus.sessions = plus.sessions.slice(0, 60);
+  plus.sessions = plus.sessions.slice(0, 150);
   persist();
 }
 function plNext() {
@@ -2058,6 +2061,63 @@ function wireGuest(body) {
   const b = $('#ap-gsign', body); if (!b) return;
   b.addEventListener('click', () => { close(); const s = document.getElementById('welcome-start-btn'); if (s) s.click(); });
 }
+/* ===== حمل التدريب: RPE × دقايق (ADAM+) ===== */
+function ldDayMap() {
+  const m = {};
+  (plus.sessions || []).forEach((x) => { const v = Number(x.ld) || 0; if (x.d && v > 0) m[x.d] = (m[x.d] || 0) + v; });
+  return m;
+}
+function ldStats() {
+  const m = ldDayMap(); const today = stamp();
+  const sum = (from, to) => { let t = 0; for (let i = from; i <= to; i++) t += m[addDays(today, -i)] || 0; return t; };
+  const daily = []; for (let i = 6; i >= 0; i--) daily.push(m[addDays(today, -i)] || 0);
+  const acute = sum(0, 6), prev = sum(7, 13), chronic = sum(0, 27) / 4;
+  const mean = daily.reduce((a, b) => a + b, 0) / 7;
+  const sd = Math.sqrt(daily.reduce((a, b) => a + (b - mean) * (b - mean), 0) / 6);
+  const mono = sd > 0 && daily.filter((x) => x > 0).length >= 3 ? mean / sd : null;
+  const days = Object.keys(m).sort(); const first = days[0];
+  const span = first ? Math.round((new Date(today + 'T12:00:00') - new Date(first + 'T12:00:00')) / 864e5) : 0;
+  const acwr = chronic > 0 && span >= 21 ? acute / chronic : null;
+  return { acute: Math.round(acute), prev: Math.round(prev), chronic: Math.round(chronic), acwr: acwr, mono: mono, strain: mono != null ? Math.round(acute * mono) : null, daily: daily, span: span, any: days.length > 0 };
+}
+function ldAdvice(st) {
+  if (!st.any) return [L('سجّل جلساتك كام أسبوع عشان نحسبلك حملك.', 'Log your sessions for a few weeks so we can work out your load.'), ''];
+  if (st.acwr == null) return [L('محتاجين ٣ أسابيع من التسجيل عشان نحسب النسبة بين حمل الأسبوع وحملك المعتاد.', 'We need 3 weeks of logging to compare this week with your usual load.'), ''];
+  if (st.acwr > 1.5) return [L('حملك الأسبوع ده قفز فوق المعتاد. خفّف شوية وزوّد النوم والتعافي لحد ما يهدى.', 'This week jumped well above your usual load. Ease off and prioritise sleep and recovery.'), 'bad'];
+  if (st.acwr < 0.8) return [L('حملك أقل من المعتاد. لو ده مقصود (راحة) تمام، ولو مش مقصود ارجع تدريجيًا.', 'Your load is below your usual. Fine if planned rest; otherwise build back gradually.'), 'warn'];
+  if (st.mono != null && st.mono > 2) return [L('تدريبك متشابه كل يوم. غيّر الشدة بين الأيام وخلّي فيه يوم خفيف.', 'Your days look too similar. Vary intensity and include an easy day.'), 'warn'];
+  return [L('حملك في المنطقة الآمنة مقارنة بالمعتاد.', 'Your load is in the safe zone compared with your usual.'), 'ok'];
+}
+function loadHtml() {
+  const st = ldStats(); const adv = ldAdvice(st);
+  const cell = (v, lb) => '<div class="ap-card" style="flex:1;flex:1 1 42%;min-width:92px;margin:0;text-align:center"><div class="ap-bigt" style="font-size:22px;margin:0">' + esc(v) + '</div><small class="mu">' + esc(lb) + '</small></div>';
+  let h = '<div class="ap-sec"><b>' + esc(L('حمل التدريب', 'Training load')) + '</b></div><div class="ap-card" id="ap-ld">';
+  h += '<p class="ap-p">' + esc(L('حمل الجلسة = المجهود (١ لـ ١٠) × الدقايق. بيساعدك تعرف لو بتزوّد الحمل بسرعة.', 'Session load = effort (1-10) x minutes. It shows whether you are ramping up too fast.')) + '</p>';
+  h += '<div style="display:flex;gap:8px;flex-wrap:wrap">' + cell(st.acute, L('حمل آخر ٧ أيام', '7-day load')) + cell(st.acwr == null ? '—' : st.acwr.toFixed(2), 'ACWR') + cell(st.mono == null ? '—' : st.mono.toFixed(1), L('التكرار', 'Monotony')) + cell(st.strain == null ? '—' : st.strain, L('الإجهاد', 'Strain')) + '</div>';
+  h += '<div class="ap-note" style="margin-top:10px">' + esc(adv[0]) + '</div>';
+  if (st.prev > 0 && st.acute > 0) { const ch = Math.round((st.acute - st.prev) / st.prev * 100); h += '<p class="ap-p mu">' + esc(L('مقارنة بالأسبوع اللي قبله: ', 'Versus last week: ') + (ch > 0 ? '+' : '') + ch + '%') + '</p>'; }
+  h += '<div class="ap-three"><label>' + esc(L('الدقايق', 'Minutes')) + '<input id="ld-m" type="number" min="1" max="600" inputmode="numeric" placeholder="45"></label><label>' + esc(L('المجهود (١-١٠)', 'Effort (1-10)')) + '<input id="ld-r" type="number" min="1" max="10" inputmode="numeric" placeholder="7"></label><label>' + esc(L('التاريخ', 'Date')) + '<input id="ld-d" type="date" value="' + stamp() + '" max="' + stamp() + '"></label></div>';
+  h += '<input id="ld-t" type="text" maxlength="40" placeholder="' + esc(L('اسم الجلسة (اختياري)', 'Session name (optional)')) + '">';
+  h += '<div class="ap-actions"><button type="button" class="ap-btn" id="ld-add">' + esc(L('سجّل الجلسة', 'Log session')) + '</button></div>';
+  const mine = (plus.sessions || []).map((x, i) => [x, i]).filter((a) => a[0].ld > 0).slice(0, 5);
+  if (mine.length) h += mine.map((a) => '<div class="ap-food"><span>' + esc(a[0].t || L('تمرين', 'Workout')) + ' <small class="mu">' + esc(a[0].d) + '</small></span><em>' + a[0].m + esc(L(' د', ' min')) + ' × ' + a[0].rpe + ' = ' + a[0].ld + '</em><button type="button" class="ap-x" data-lddel="' + a[1] + '" aria-label="' + esc(L('امسح', 'Delete')) + '"></button></div>').join('');
+  return h + '</div>';
+}
+function wireLoad(body, re) {
+  const add = $('#ld-add', body); if (!add) return;
+  add.addEventListener('click', () => {
+    const m = Math.round(Number($('#ld-m', body).value)), r = Math.round(Number($('#ld-r', body).value));
+    let d = $('#ld-d', body).value || stamp(); if (d > stamp()) d = stamp();
+    if (!(m >= 1 && m <= 600) || !(r >= 1 && r <= 10)) { toast(L('اكتب دقايق من ١ لـ ٦٠٠ ومجهود من ١ لـ ١٠', 'Enter minutes 1-600 and effort 1-10')); return; }
+    plus.sessions = plus.sessions || [];
+    plus.sessions.push({ d: d, t: ($('#ld-t', body).value || '').trim().slice(0, 40), s: m * 60, m: m, rpe: r, ld: m * r, man: 1 });
+    plus.sessions.sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0));
+    plus.sessions = plus.sessions.slice(0, 150);
+    persist(); toast(L('اتسجلت', 'Logged')); re();
+  });
+  $$('[data-lddel]', body).forEach((b) => b.addEventListener('click', () => { const i = Number(b.dataset.lddel); if (plus.sessions && plus.sessions[i]) { plus.sessions.splice(i, 1); persist(); re(); } }));
+}
+
 function viewMe(body) {
   const pr = plus.profile || {}; const d = Object.assign({ name: '', sex: 'm', age: 28, weight: 80, height: 175, act: 1.375, goal: 'maintain' }, pr, sub.me || {});
   const c = cfg();
@@ -2089,11 +2149,13 @@ function viewMe(body) {
   h += '<div class="ap-step"><div class="ap-wk">2</div><div class="ap-st"><span class="ap-p">' + esc(L('افتح ADAM على Chrome في أندرويد أو الكمبيوتر، وابدأ أي تمرين واضغط "وصّل الساعة" واختار ساعتك.', 'Open ADAM in Chrome on Android or desktop, start a workout, tap "Connect watch" and pick your watch.')) + '</span></div></div>';
   h += '<div class="ap-step"><div class="ap-wk">3</div><div class="ap-st"><span class="ap-p">' + esc(L('آيفون وSafari مش بيدعموا بلوتوث الويب. ساعة Apple مش بتبث النبض بنفسها وتحتاج تطبيق بث تاني.', 'iPhone and Safari do not support Web Bluetooth. Apple Watch does not broadcast heart rate by itself and needs a separate broadcasting app.')) + '</span></div></div>';
   h += '<div class="ap-note">' + esc(hrOk() ? L('المتصفح ده بيدعم البلوتوث.', 'This browser supports Bluetooth.') : L('المتصفح ده مش بيدعم البلوتوث.', 'This browser does not support Bluetooth.')) + '</div></div>';
+  h += loadHtml();
   const ss = plus.sessions || [];
   if (ss.length) h += '<div class="ap-sec"><b>' + esc(L('آخر جلساتي', 'My recent sessions')) + '</b></div><div class="ap-card">' + ss.slice(0, 8).map((x) => '<div class="ap-food"><span>' + esc(x.t || L('تمرين', 'Workout')) + ' <small class="mu">' + esc(x.d) + '</small></span><em>' + Math.max(1, Math.round(x.s / 60)) + esc(L(' د', ' min')) + (x.avg ? ' · ' + x.avg + ' bpm' : '') + '</em></div>').join('') + '</div>';
   body.innerHTML = h;
   wireGuest(body);
   const re = () => viewMe(body);
+  wireLoad(body, re);
   const rd = () => ({ name: ($('#me-name', body) || {}).value || '', phone: (($('#me-phone', body) || {}).value || '').replace(/[^0-9+ ]/g, '').trim(), age: Number(($('#me-age', body) || {}).value) || d.age, weight: Number(($('#me-w', body) || {}).value) || d.weight, height: Number(($('#me-h', body) || {}).value) || d.height });
   const set = (attr, key, num) => $$('[data-' + attr + ']', body).forEach((b) => b.addEventListener('click', () => { sub.me = Object.assign({}, d, rd()); sub.me[key] = num ? Number(b.dataset[attr]) : b.dataset[attr]; re(); }));
   set('mes', 'sex'); set('mea', 'act', true); set('meg', 'goal');
