@@ -7301,6 +7301,10 @@ async function routeUser(user) {
   startNotifListener(email);
   upsertUserRegistry(user);
 
+  /* قراءة مستند العميل بتبدأ دلوقتي بالتوازي مع قراءة المتخصص (بدل ما تستنى لحد ما الأولى تخلص) = أسرع في الدخول.
+     النتيجة بتتحفظ سواء نجحت أو فشلت، عشان ماتطلعش أخطاء غير متعالجة لو المستخدم متخصص */
+  const clientRead = getDoc(doc(db, 'clients', email)).then(function (d) { return { d: d }; }, function (e) { return { e: e }; });
+
   let providerDoc = null;
   try {
     providerDoc = await getDoc(doc(db, 'providers', email));
@@ -7358,15 +7362,17 @@ async function routeUser(user) {
     touchProviderActivity(email);
   } else {
     let clientDoc = null;
-    try {
-      clientDoc = await getDoc(doc(db, 'clients', email));
-    } catch (error) {
+    const clientRes = await clientRead;
+    if (clientRes.e) {
+      const error = clientRes.e;
       clientDoc = null;
       /* مستند اتعمل له من مدرب قبل ما يسجّل = لازم يأكد إيميله الأول */
       if (user.emailVerified === false && error && error.code === 'permission-denied') {
         showVerifyScreen(user);
         return;
       }
+    } else {
+      clientDoc = clientRes.d;
     }
 
     const clientData = (clientDoc && clientDoc.exists()) ? clientDoc.data() : null;

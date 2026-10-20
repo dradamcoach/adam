@@ -1698,3 +1698,22 @@ img.sq-zoomable { cursor: zoom-in; }
 .sq-sess-head b { color: #2ee07a; font-size: 15px; font-weight: 800; }
 .sq-sess-time { font-size: 13px; opacity: .85; direction: ltr; }
 .sq-sess-title { font-size: 13.5px; opacity: .8; margin-inline-start: auto; }
+
+/* ===== إصلاح الأندرويد: شاشة تمرين الفريق (2026-10-20) =====
+   القاعدة العامة في style.css «.card li span» بتخلي أي span جوه li صف واحد من غير لف
+   وبتوسّع الصفحة كلها على الموبايل. هنا بنرجّع اللف لعناصر شاشة الفريق بس. */
+.card .sq-items li { flex-wrap: nowrap; justify-content: flex-start; align-items: flex-start; min-width: 0; max-width: 100%; cursor: default; }
+.card .sq-items li span.sq-prev-txt { display: block; flex: 1 1 0; min-width: 0; max-width: 100%; white-space: normal; color: inherit; font-weight: 400; font-size: 14px; overflow-wrap: anywhere; }
+.card .sq-prev-name { white-space: normal; overflow-wrap: anywhere; }
+.card .sq-items li span.sq-chip, .card .sq-log-row span.sq-chip { display: inline-block; white-space: normal; max-width: 100%; font-weight: 400; font-size: 12.5px; color: var(--text, #e8edf3); gap: 0; }
+.card .sq-items li span.sq-chip.main, .card .sq-log-row span.sq-chip.main { font-weight: 700; font-size: 14px; }
+.card .sq-sess-li span, .card .sq-grp-li span { white-space: normal; }
+.sq-see { max-width: 100%; white-space: normal; text-align: start; }
+.sq-item-purpose { display: block; overflow-wrap: anywhere; }
+.sq-log-main, .sq-log-name, .sq-log-pres { min-width: 0; overflow-wrap: anywhere; }
+.card button.sq-see { width: auto; margin: 4px 0 2px; padding: 5px 12px; font-size: 12.5px; font-weight: 700; background: rgba(46, 224, 122, .12); border: 1px solid rgba(46, 224, 122, .35); color: #2ee07a; box-shadow: none; border-radius: 999px; min-height: 0; }
+@media (max-width: 420px) { .sq-log-inputs { flex-direction: column; } .sq-log-inputs input { width: 100%; } }
+
+/* ===== إصلاح: شريط الحفظ/الطباعة في المخطط ما يلزقش تحت زرار اللغة والجرس ===== */
+.plan-savebar { top: calc(54px + env(safe-area-inset-top, 0px)); }
+.plan-savebar + .plan-savebar { position: static; }
