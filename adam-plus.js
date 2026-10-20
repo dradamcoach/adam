@@ -175,8 +175,15 @@ function go(tab) {
 /* شاشات بنفضل فيها في نفس مكان التمرير لما نختار حاجة (سؤال اليوم والملف الشخصي) بدل ما نرجع لأول الصفحة */
 let lastDrawTab = '';
 const KEEP_SCROLL = { today: 1, me: 1, tools: 1 };
+/* رسمات الشاشات (ADAM art): أي عنصر فيه data-art بيتملي برسمة، من ملف بيتحمّل أول مرة بس */
+function watchArt(root) {
+  if (!root || root.__watch) return; root.__watch = 1;
+  const scan = () => root.querySelectorAll('[data-art]:not([data-on])').forEach((el) => { el.setAttribute('data-on', '1'); import('./adam-art.js').then((m) => { if (el.isConnected) m.art(el.dataset.art, el); }).catch(() => { /* من غير رسمة */ }); });
+  new MutationObserver(scan).observe(root, { childList: true, subtree: true }); scan();
+}
 function draw() {
   const body = $('#ap-body'); if (!body) return;
+  watchArt(body);
   const keepTop = (KEEP_SCROLL[curTab] && lastDrawTab === curTab && !(PL && !PL.min)) ? body.scrollTop : 0;
   const fn = { music: viewMusic, me: viewMe, journeys: viewJourneys, events: viewEvents, today: viewToday, chal: viewChal, plan: viewPlan, lib: viewLib, food: viewFood, recipes: viewRecipes, stretch: viewStretch, circ: viewCirc, tests: (b) => TESTS_UI.viewTests(b), tools: (b) => TOOLS_UI.viewTools(b), rehab: viewRehab, biomech: viewBio, search: viewSearch }[curTab];
   try { if (PL && !PL.min) viewPlayer(body); else { fn(body); if (curTab !== 'me') { const gb = guestBanner(); if (gb && body.firstElementChild) { body.insertAdjacentHTML('afterbegin', gb); wireGuest(body); } } } } catch (e) { body.innerHTML = '<div class="ap-empty">' + esc(L('حصلت مشكلة في عرض الشاشة', 'Something went wrong showing this screen')) + '</div>'; if (window.console) console.error(e); }
@@ -729,7 +736,7 @@ function planNutri(el) {
   const preId = sub.progPre; if (preId && programsAll.some((p) => p.id === preId)) { const pr = programsAll.find((p) => p.id === preId); plus.nutri = Object.assign({}, n || {}, { prog: pr.id, factor: 1, target: progKcal(pr), params: (n && n.params) || null }); sub.progPre = null; persist(); return planNutri(el); }
   if (n && n.prog && !sub.editNutri) return showNutri(el);
   const pf = plus.profile; const d = sub.nd || (n && n.params) || (pf ? { sex: pf.sex, age: pf.age, weight: pf.weight, height: pf.height, act: pf.act, goal: pf.goal, pref: '' } : { sex: 'm', age: 28, weight: 80, height: 175, act: 1.375, goal: 'lose', pref: '' });
-  let h = '<div class="ap-sec"><b>' + esc(L('خطة أكل على قدك', 'A meal plan for you')) + '</b></div><div class="ap-card ap-form">';
+  let h = '<div class="ap-art" data-art="scale"></div><div class="ap-sec"><b>' + esc(L('خطة أكل على قدك', 'A meal plan for you')) + '</b></div><div class="ap-card ap-form">';
   h += '<div class="ap-q"><b>' + esc(L('الجنس', 'Sex')) + '</b>' + chips([['m', L('ذكر', 'Male')], ['f', L('أنثى', 'Female')]], d.sex, 'ns') + '</div>';
   h += '<div class="ap-three"><label>' + esc(L('السن', 'Age')) + '<input id="n-age" type="number" min="14" max="80" value="' + d.age + '"></label><label>' + esc(L('الوزن (كجم)', 'Weight (kg)')) + '<input id="n-w" type="number" min="35" max="250" value="' + d.weight + '"></label><label>' + esc(L('الطول (سم)', 'Height (cm)')) + '<input id="n-h" type="number" min="120" max="230" value="' + d.height + '"></label></div>';
   h += '<div class="ap-q"><b>' + esc(L('مستوى النشاط', 'Activity level')) + '</b>' + chips(ACT.map((a) => [a[0], L(a[1], a[2])]), d.act, 'na') + '</div>';
@@ -1536,7 +1543,7 @@ function viewCirc(body) {
   if (sub.tm) return viewTimerCfg(body);
   const mine = circMy();
   const card = (c) => '<div class="ap-card"><div class="ap-row"><b>' + esc(typeof c.name === 'object' ? nameOf(c.name) : c.name) + '</b></div><small class="mu">' + esc(circInfo(c)) + '</small><div class="ap-actions"><button type="button" class="ap-btn small" data-crun="' + esc(c.id) + '">' + esc(L('ابدأ', 'Start')) + '</button><button type="button" class="ap-btn small ghost" data-cedit="' + esc(c.id) + '">' + esc(c.pre ? L('انسخ وعدّل', 'Copy and edit') : L('عدّل', 'Edit')) + '</button><button type="button" class="ap-btn small ghost" data-cshare="' + esc(c.id) + '">' + esc(L('ابعت للمجموعة', 'Send to group')) + '</button></div></div>';
-  let h = '<div class="ap-sec"><b>' + esc(L('تمرين محطات', 'Station / circuit training')) + '</b><span>' + esc(L('كل محطة بوقت شغل وراحة', 'timed work and rest per station')) + '</span></div>';
+  let h = '<div class="ap-art" data-art="stopwatch"></div><div class="ap-sec"><b>' + esc(L('تمرين محطات', 'Station / circuit training')) + '</b><span>' + esc(L('كل محطة بوقت شغل وراحة', 'timed work and rest per station')) + '</span></div>';
   h += mine.map(card).join('') + CIRC_PRE.map(card).join('');
   h += '<div class="ap-actions"><button type="button" class="ap-btn" id="ap-cnew">' + esc(L('+ اعمل محطات جديدة', '+ Build new stations')) + '</button></div>';
   h += '<div class="ap-sec"><b>' + esc(L('تايمرات الجروب والكروس فيت', 'Group and CrossFit timers')) + '</b><span>' + esc(L('شاشة كبيرة تتشاف من بعيد', 'big screen, readable from afar')) + '</span></div><div class="ap-grid2">';
@@ -2143,7 +2150,7 @@ function viewMe(body) {
   h += '<div class="ap-q"><b>' + esc(L('راحة بين السيتات', 'Rest between sets')) + '</b>' + chips([30, 45, 60, 90, 120].map((n) => [n, n + L(' ث', 's')]), c.rest, 'mers') + '</div>';
   h += '<div class="ap-q"><b>' + esc(L('إحماء قبل كل تمرين', 'Warm-up before every workout')) + '</b>' + chips([['1', L('أيوه', 'Yes')], ['0', L('لأ', 'No')]], c.warm ? '1' : '0', 'mewm') + '</div>';
   h += '<div class="ap-actions"><button type="button" class="ap-btn ghost" id="me-test">' + esc(L('جرّب الصوت', 'Test sound')) + '</button></div></div>';
-  h += '<div class="ap-sec"><b>' + esc(L('ربط الساعة بالبلوتوث', 'Connect a watch via Bluetooth')) + '</b></div><div class="ap-card"><div id="ap-php" class="ap-php">' + hrHtml() + '</div>';
+  h += '<div class="ap-art" data-art="pulse"></div><div class="ap-sec"><b>' + esc(L('ربط الساعة بالبلوتوث', 'Connect a watch via Bluetooth')) + '</b></div><div class="ap-card"><div id="ap-php" class="ap-php">' + hrHtml() + '</div>';
   h += '<p class="ap-p">' + esc(L('هنقرا نبضك لايف أثناء التمرين ونعرض منطقة المجهود ومتوسط النبض بعد الجلسة.', 'We read your heart rate live during workouts and show the effort zone and the session average.')) + '</p>';
   h += '<div class="ap-step"><div class="ap-wk">1</div><div class="ap-st"><span class="ap-p">' + esc(L('على الساعة فعّل "بث النبض" (Garmin: Broadcast Heart Rate، Amazfit/Zepp: مشاركة النبض، Huawei: مشاركة بيانات النبض، Polar/Wahoo وأحزمة الصدر شغالة مباشرة).', 'On the watch enable heart-rate broadcast (Garmin: Broadcast Heart Rate, Amazfit/Zepp and Huawei: share heart rate; Polar/Wahoo chest straps work directly).')) + '</span></div></div>';
   h += '<div class="ap-step"><div class="ap-wk">2</div><div class="ap-st"><span class="ap-p">' + esc(L('افتح ADAM على Chrome في أندرويد أو الكمبيوتر، وابدأ أي تمرين واضغط "وصّل الساعة" واختار ساعتك.', 'Open ADAM in Chrome on Android or desktop, start a workout, tap "Connect watch" and pick your watch.')) + '</span></div></div>';

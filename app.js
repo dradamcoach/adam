@@ -7285,6 +7285,32 @@ logoutButton.addEventListener('click', function () {
 
 onAuthStateChanged(auth, routeUser);
 
+/* رسمات الشاشات الفاضية (مكتبة hairline — MIT). بتتحمّل لما الشاشة الفاضية تظهر بس، فمفيش أثر على سرعة الفتح */
+function addFig(parent, name) { const d = document.createElement('div'); d.className = 'state-art state-fig'; parent.appendChild(d); adamFigure(d, name); return d; }
+const ADAM_ART = { barbell: 1, kettlebell: 1, scale: 1, stopwatch: 1, shoe: 1, pulse: 1, plate: 1, pitch: 1, firstaid: 1, trophy: 1 };
+function adamFigure(host, name) {
+  if (ADAM_ART[name]) {
+    import('./adam-art.js').then(function (m) { if (host.isConnected) m.art(name, host); }).catch(function () { /* من غير رسمة: الكلام لوحده كفاية */ });
+    return;
+  }
+  import('./adam-figures.js').then(function (m) {
+    if (!host.isConnected || !m[name]) return;
+    m[name](host, { theme: 'dark', intensity: 0.5 });
+  }).catch(function () { /* من غير رسمة: الكلام لوحده كفاية */ });
+}
+function showEmptyArt(anchorEl, name, id) {
+  if (!anchorEl || !anchorEl.parentNode) return;
+  let h = document.getElementById(id);
+  if (!h) {
+    h = document.createElement('div');
+    h.id = id; h.className = 'empty-art';
+    anchorEl.parentNode.insertBefore(h, anchorEl);
+  }
+  h.classList.remove('hidden');
+  if (!h.getAttribute('data-on')) { h.setAttribute('data-on', '1'); adamFigure(h, name); }
+}
+function hideEmptyArt(id) { const h = document.getElementById(id); if (h) h.classList.add('hidden'); }
+
 async function routeUser(user) {
   if (!user) {
     currentProviderEmail = '';
@@ -7577,8 +7603,10 @@ async function loadClients() {
       renderClientsChips();
       paintClientsList();
       clientsMessage.textContent = t('no_clients');
+      showEmptyArt(clientsMessage, 'cabinet', 'clients-empty-art');
       return;
     }
+    hideEmptyArt('clients-empty-art');
 
     /*
      * بلاغات الإصابة كانت بتتعرض جوه شاشة العميل بس، يعني المدرب مكانش
@@ -16262,13 +16290,14 @@ async function exitSelfBuilder() {
   setClientMode(mode);
 }
 
-function clientStateCard(kind, title, text) {
+function clientStateCard(kind, title, text, figure) {
   const box = document.createElement('div');
   box.className = 'state-card state-' + kind;
 
   const art = document.createElement('div');
-  art.className = 'state-art';
-  art.innerHTML = STATE_ART[kind] || STATE_ART.empty;
+  art.className = 'state-art' + (figure ? ' state-fig' : '');
+  if (figure) adamFigure(art, figure);
+  else art.innerHTML = STATE_ART[kind] || STATE_ART.empty;
   box.appendChild(art);
 
   const head = document.createElement('div');
@@ -17656,7 +17685,7 @@ function showClientDay() {
   if (day.rest) {
     clientSections.appendChild(clientStateCard('rest', t('rest_title'), t('rest_msg')));
   } else if (total === 0) {
-    clientSections.appendChild(clientStateCard('empty', t('no_plan_title'), t('no_plan')));
+    clientSections.appendChild(clientStateCard('empty', t('no_plan_title'), t('no_plan'), 'barbell'));
     appendOwnWorkout(clientSections);
   } else {
     let order = 0;
@@ -17859,7 +17888,7 @@ function showClientRehab() {
     clientRehabTitle.textContent = '';
     clientRehabAbout.classList.add('hidden');
     clientRehabPhases.innerHTML = '';
-    const emptyCard = clientStateCard('empty', t('no_rehab_title'), sqL('لسه مفيش برنامج تأهيل ليك. لو عندك إصابة أو ألم، بلّغ فريقك وهيجهّزوا لك برنامج يناسب حالتك.', 'No rehab program yet. If you have an injury or pain, tell your team and they will set one up for you.'));
+    const emptyCard = clientStateCard('empty', t('no_rehab_title'), sqL('لسه مفيش برنامج تأهيل ليك. لو عندك إصابة أو ألم، بلّغ فريقك وهيجهّزوا لك برنامج يناسب حالتك.', 'No rehab program yet. If you have an injury or pain, tell your team and they will set one up for you.'), 'firstaid');
     const injBtn = document.createElement('button');
     injBtn.type = 'button'; injBtn.className = 'state-action';
     injBtn.textContent = sqL('🩹 بلّغ عن إصابة', '🩹 Report an injury');
@@ -18521,7 +18550,7 @@ function renderMeals(container, day, editable, onChange) {
 
   const total = nutritionDayCount(day);
   if (!total && !editable) {
-    container.appendChild(clientStateCard('empty', t('no_meals_title'), t('no_meals')));
+    container.appendChild(clientStateCard('empty', t('no_meals_title'), t('no_meals'), 'plate'));
     return;
   }
 
@@ -19881,7 +19910,7 @@ function renderClientMeals(container, day) {
   });
 
   if (!anything && !canLog) {
-    container.appendChild(clientStateCard('empty', t('no_meals_title'), t('no_meals')));
+    container.appendChild(clientStateCard('empty', t('no_meals_title'), t('no_meals'), 'plate'));
   }
 }
 
@@ -19904,7 +19933,7 @@ function showClientNutrition() {
     const waterCard = document.getElementById('cnut-water');
     if (waterCard) waterCard.classList.add('hidden');
     cnutMeals.innerHTML = '';
-    cnutMeals.appendChild(clientStateCard('empty', t('no_nutrition_title'), t('no_nutrition')));
+    cnutMeals.appendChild(clientStateCard('empty', t('no_nutrition_title'), t('no_nutrition'), 'plate'));
     appendOwnBuilder(cnutMeals, 'nutrition');
     return;
   }
@@ -20476,6 +20505,7 @@ function renderBoards(meEmail) {
     const empty = document.createElement('p');
     empty.className = 'empty';
     empty.textContent = t('no_members');
+    addFig(classTodayList, 'pitch');
     classTodayList.appendChild(empty);
   } else {
     members.forEach(function (email) {
@@ -26366,6 +26396,10 @@ function renderChatMessages(messages) {
     const empty = document.createElement('p');
     empty.className = 'chat-empty-note';
     empty.textContent = t('chat_empty_note');
+    const art = document.createElement('div');
+    art.className = 'empty-art';
+    box.appendChild(art);
+    adamFigure(art, 'phone');
     box.appendChild(empty);
     return;
   }
@@ -27349,6 +27383,9 @@ async function showAccessLocked(reason, targetEmail) {
   const messageEl = document.getElementById('trial-ended-message-text');
   const plansBox = document.getElementById('trial-ended-plans');
 
+  let lockArt = document.getElementById('trial-ended-art');
+  if (!lockArt) { lockArt = document.createElement('div'); lockArt.id = 'trial-ended-art'; lockArt.className = 'state-art state-fig'; titleEl.parentNode.insertBefore(lockArt, titleEl); }
+  adamFigure(lockArt, reason === 'trial' ? 'vault' : 'padlock');
   if (reason === 'blocked') {
     titleEl.textContent = t('access_blocked_title');
     messageEl.textContent = t('access_blocked_message');
@@ -29450,6 +29487,8 @@ async function loadInjuryHistory() {
     if (!mine.length) {
       const empty = document.createElement('li');
       empty.textContent = t('no_injury_reports');
+      empty.style.flexDirection = 'column';
+      addFig(empty, 'firstaid');
       injuryHistoryList.appendChild(empty);
       return;
     }
@@ -31351,6 +31390,8 @@ async function loadMyStoreOrders() {
   if (!orders.length) {
     const none = document.createElement('li');
     none.textContent = t('store_no_orders');
+    none.style.flexDirection = 'column';
+    addFig(none, 'basket');
     storeOrdersList.appendChild(none);
     return;
   }
@@ -38533,6 +38574,7 @@ function renderPtsSheet() {
   h.textContent = t('pts_rewards');
   body.appendChild(h);
   if (!rewardsList.length) {
+    addFig(body, 'trophy');
     body.appendChild(Object.assign(document.createElement('p'), { className: 'soc-empty', textContent: t('pts_no_rewards') }));
   }
   const msg = document.createElement('p');

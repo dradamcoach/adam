@@ -301,3 +301,6 @@ a.ap-chip { text-decoration: none; display: inline-block; }
 .ap-hint { margin: 0 0 8px; font-size: 12.5px; color: #8b97a3; line-height: 1.7; }
 .ap-habit span { flex: 1; }
 .ap-hstreak { display: inline-block; margin-inline-start: 6px; font-size: 11px; color: #3ef0b0; }
+
+/* رسمات الشاشات (ADAM art) */
+.ap-art { width: min(240px, 72%); margin: 6px auto 0; --hairline-plate: #0e1520; --hairline-hi: #2ee07a; --hairline-edge: #6fbf93; --hairline-mid: #3f7a5c; --hairline-lo: #2a4a3a; }

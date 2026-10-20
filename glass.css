@@ -1724,3 +1724,14 @@ img.sq-zoomable { cursor: zoom-in; }
 .card li span { white-space: normal; min-width: 0; overflow-wrap: anywhere; }
 .card li > * { min-width: 0; }
 .card li button { max-width: 100%; }
+
+/* رسمات الشاشات الفاضية (hairline): خطوط خضرا على خلفية الكارت، حجم صغير عشان ما تزاحمش */
+.empty-art { width: min(220px, 70%); margin: 10px auto 2px; opacity: .95;
+  --hairline-plate: #0e1520; --hairline-hi: #2ee07a; --hairline-edge: #4b7f64; --hairline-mid: #2f4a3d; --hairline-lo: #223229; }
+.empty-art.hidden { display: none; }
+.chat-empty-note { text-align: center; }
+
+/* رسمة داخل كارت الحالة (فاضي/تأهيل/وجبات): كبيرة ومن غير الدايرة الصغيرة بتاعت الأيقونة */
+.state-art.state-fig { width: min(240px, 78%); height: auto; border-radius: 0; background: none; display: block; margin: 0 auto 6px;
+  --hairline-plate: #0e1520; --hairline-hi: #2ee07a; --hairline-edge: #6fbf93; --hairline-mid: #3f7a5c; --hairline-lo: #2a4a3a; }
+.state-art.state-fig svg { width: 100%; height: 100%; }

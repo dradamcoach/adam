@@ -119,6 +119,7 @@ export function createTools(c) {
     MUSCLES.forEach((m) => { const n = ws[m[0]]; const col = n === 0 ? 'rgba(255,255,255,.18)' : n < 10 ? '#f5c542' : n <= 20 ? '#3ef0b0' : '#e5484d'; h += '<div class="apt-mu"><span>' + esc(L(m[1], m[2])) + '</span><div class="apt-bar"><i style="width:' + Math.min(100, n / 20 * 100) + '%;background:' + col + '"></i></div><b>' + n + '</b></div>'; });
     h += '<div class="ap-note">' + esc(L('أخضر = ١٠ لـ ٢٠ مجموعة في الأسبوع، وده النطاق الشائع للتضخم. مش قاعدة ثابتة، المهم تتناسب مع مستواك وتعافيك.', 'Green = 10-20 sets a week, the common hypertrophy range. Not a fixed rule; match it to your level and recovery.')) + '</div></div>';
     const rec = lifts().slice(0, 6);
+    if (!rec.length) h = '<div class="ap-art" data-art="barbell"></div>' + h;
     if (rec.length) h += '<div class="ap-sec"><b>' + esc(L('آخر التسجيلات', 'Recent entries')) + '</b></div><div class="ap-card">' + rec.map((x, i) => '<div class="ap-food"><span>' + esc(x.ex) + ' <small class="mu">' + esc(x.d) + '</small></span><em>' + x.w + ' kg × ' + x.s + ' × ' + x.r + '</em><button type="button" class="ap-x" data-ldel="' + i + '" aria-label="' + esc(L('امسح', 'Delete')) + '"></button></div>').join('') + '</div>';
     body.innerHTML = h; wireBack(body);
     const inp = $('#apt-lx', body);
@@ -214,7 +215,7 @@ export function createTools(c) {
   const RACES = [[1, '1K'], [3, '3K'], [5, '5K'], [10, '10K'], [21.0975, 'Half'], [42.195, 'Marathon']];
   function viewRun(body) {
     const p = P(); p.runs = Array.isArray(p.runs) ? p.runs : [];
-    let h = back() + '<div class="ap-sec"><b>' + esc(L('تتبع الجري GPS', 'GPS run tracker')) + '</b></div><div class="ap-card">';
+    let h = back() + (R.st === 'idle' ? '<div class="ap-art" data-art="shoe"></div>' : '') + '<div class="ap-sec"><b>' + esc(L('تتبع الجري GPS', 'GPS run tracker')) + '</b></div><div class="ap-card">';
     if (R.err) h += '<div class="ap-note" style="color:#e5484d">' + esc(R.err) + '</div>';
     if (R.st === 'idle') {
       h += '<p class="ap-p">' + esc(L('الـGPS بيشتغل والشاشة مفتوحة بس (قيد المتصفحات). سيب الصفحة مفتوحة وقت الجري، وطلّع الموبايل في الجيب من غير ما تقفل التطبيق. لو عايز تتبع بالخلفية استخدم ساعتك وارفع الملف من ملفي.', 'GPS works while the screen is on (a browser limit). Keep the page open while you run. For background tracking use your watch and import the file.')) + '</p>';
