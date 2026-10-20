@@ -26,7 +26,15 @@ input[type=range]{width:100%}label{font-size:12.5px;color:var(--mut);display:blo
 .hint{color:var(--mut);font-size:13px}.note{font-size:11.5px;color:#d9a441;line-height:1.7}
 footer{padding:2px 12px 8px;color:var(--mut);font-size:10.5px;text-align:center;direction:ltr}
 #tip{position:absolute;bottom:8px;right:10px;font-size:11px;color:#7f93a2;pointer-events:none}
-@media(max-width:820px){#main{flex-direction:column}#stage{flex:none;height:56vh}#side{width:auto;flex:1}}
+@media(max-width:820px){#main{flex-direction:column}#stage{flex:none;height:42vh}#side{width:auto;flex:1}
+#infocard{order:-1;min-height:34vh;border-color:var(--ac)}
+#infocard h3{font-size:14px}
+#info{font-size:16px;line-height:1.95}
+#infocard #ar{font-size:27px;margin-bottom:4px}#infocard #en{font-size:16px}
+#infocard #meta{font-size:15.5px;line-height:1.95;color:#b9c7d2}
+#infocard .hint{font-size:15px}
+#infocard .chip{font-size:15px;padding:11px 14px}}
+@media(min-width:821px){#info{font-size:14px;line-height:1.8}#infocard #ar{font-size:21px}}
 </style></head><body>
 <div id="app">
 <header style="position:relative"><div class="chip" id="lang" style="position:absolute;top:8px;inset-inline-end:12px;padding:5px 12px;font-size:12px">EN</div><h1 id="h1">التشريح ثلاثي الأبعاد</h1><p id="hp">اسحب للدوران، وعجلة الماوس أو القرص بإصبعين للتكبير، واضغط على أي جزء لمعرفة اسمه.</p></header>
@@ -42,7 +50,7 @@ footer{padding:2px 12px 8px;color:var(--mut);font-size:10.5px;text-align:center;
    <div class="row" style="margin-top:8px"><div class="chip" data-v="f">أمام</div><div class="chip" data-v="b">خلف</div><div class="chip" data-v="s">جنب</div></div>
    <div class="row" style="margin-top:6px"><div class="chip" id="spin">دوران تلقائي</div><div class="chip" id="reset">إعادة ضبط</div></div></div>
   <div class="card" id="mscard"><h3 id="msh">ابحث عن عضلة</h3><input type="search" id="msq" autocomplete="off" placeholder="اكتب اسم العضلة… مثلًا اللاتس" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--bd);background:#0f1822;color:var(--tx);font:inherit;font-size:13px"><div class="chips" id="msr" style="margin-top:8px"></div></div>
-   <div class="card"><h3>الجزء المحدد</h3><div id="info"><div class="hint">لسه مختارتش حاجة. اضغط على الجسم.</div></div>
+   <div class="card" id="infocard"><h3>الجزء المحدد</h3><div id="info"><div class="hint">لسه مختارتش حاجة. اضغط على الجسم.</div></div>
    <div class="row" style="margin-top:8px"><div class="chip" id="hide" style="display:none">إخفاء الجزء ده</div><div class="chip" id="showall" style="display:none">إظهار الكل</div></div></div>
   <div class="card note">المحتوى تعليمي وليس بديلاً عن الطبيب.</div>
  </div>
@@ -312,5 +320,10 @@ document.getElementById('info').addEventListener('click',e=>{const b=e.target.cl
 import { BIOMECH_MUSCLES } from '../library/biomech-muscles.js';
 import { BIOMECH_EXN } from '../library/biomech-exnames.js';
 window.BIOMECH_MUSCLES = BIOMECH_MUSCLES; window.BIOMECH_EXN = BIOMECH_EXN;
+</script>
+<script>
+/* لما تختار جزء: كارت الشرح بيطلع فوق ويتفتح كبير */
+(function(){var info=document.getElementById('info'),side=document.getElementById('side');if(!info||!side)return;
+new MutationObserver(function(){if(info.querySelector('.hint'))return;try{side.scrollTo({top:0,behavior:'smooth'})}catch(e){side.scrollTop=0}}).observe(info,{childList:true});})();
 </script>
 </body></html>
